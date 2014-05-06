@@ -167,10 +167,10 @@
 
                                     <p:column headerText="" styleClass="center" style="width:22px;" >
 
-                                        <h:selectBooleanCheckbox id="checkBoxId" disabled="#{item.locked eq 1}" value="#{reassignteamnames.checked[item.fwobnumber]}">
-                                            <p:ajax event="change" update=":frmMain:reassignButtonId" process="@this" listener="#{reassignteamnames.checkReassign}"/>
+                                        <p:selectBooleanCheckbox id="checkBoxId" disabled="#{item.locked eq 1}" value="#{reassignteamnames.checked[item.fwobnumber]}">
+                                            <p:ajax update=":frmMain:reassignButtonId" process="@this" listener="#{reassignteamnames.checkReassign}"/>
                                             <!--<f:ajax event="change" execute="@this" render=":frmMain:reassignButtonId" listener="{reassignteamnames.checkReassign}"/>-->
-                                        </h:selectBooleanCheckbox>
+                                        </p:selectBooleanCheckbox>
                                     </p:column>
 
                                     <p:column headerText="Lock" styleClass="center" style="width:8px;" >

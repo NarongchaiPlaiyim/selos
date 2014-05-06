@@ -28,6 +28,7 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -945,9 +946,9 @@ public class ReassignTeamNames implements Serializable
 
             if(source!= null)
             {
-                log.info("Value:" + ((HtmlSelectBooleanCheckbox) source).getValue());
+                log.info("Value:" + ((SelectBooleanCheckbox) source).getValue());
 
-                String selectedCase= ((HtmlSelectBooleanCheckbox)source).getValue().toString();
+                String selectedCase= ((SelectBooleanCheckbox)source).getValue().toString();
 
                 log.info("Selected Case WobNum : {}",selectedCase);
 
