@@ -178,8 +178,6 @@ public class CompletedCasesWKItems implements Serializable
         this.fromuserid = fromuserid;
     }
 
-
-
     public Date getAppointmentDate() {
         return appointmentDate;
     }

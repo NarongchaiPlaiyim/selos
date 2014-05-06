@@ -254,6 +254,8 @@ public class Decision extends BaseController {
 
     private boolean requestPricing;
     private boolean decisionDialog;
+    private boolean pricingDecisionDialog;
+    private boolean endorseDecisionDialog;
 
     public Decision() {
     }
@@ -274,14 +276,47 @@ public class Decision extends BaseController {
             roleZM_RGM = true;
         }
 
-        if(roleBDM){
-            decisionDialog = false;
-        } else {
-            decisionDialog = true;
-        }
+        decisionDialog = checkDecisionDialog(stepId, roleId);
+        endorseDecisionDialog = checkEndorseDialog(stepId, roleId);
+        pricingDecisionDialog = checkPricingDialog(stepId, roleId);
 
         log.debug("Initial role of user - roleBDM : {}, roleUW : {}, roleZM_RGM : {}, decisionDialog : {}", roleBDM, roleUW, roleZM_RGM, decisionDialog);
 
+    }
+
+    public boolean checkDecisionDialog(long stepId, int roleId){
+        boolean canAccess = false;
+        if(roleId != RoleValue.BDM.id() && roleId != RoleValue.ABDM.id() && roleId != RoleValue.AAD_ADMIN.id() && roleId != RoleValue.AAD_COMITTEE.id() && roleId != RoleValue.SSO.id()){
+            canAccess = true;
+        }
+
+        return canAccess;
+    }
+
+    public boolean checkEndorseDialog(long stepId, int roleId){
+        boolean canAccess = false;
+        if(roleId != RoleValue.BDM.id() && roleId != RoleValue.ABDM.id()){
+            if(roleId == RoleValue.ZM.id()){
+                if(!(stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){
+                    canAccess = true;
+                }
+            } else if (roleId == RoleValue.UW.id()){
+                canAccess = true;
+            }
+        }
+
+        return canAccess;
+    }
+
+    public boolean checkPricingDialog(long stepId, int roleId){
+        boolean canAccess = false;
+        if(roleId != RoleValue.BDM.id() && roleId != RoleValue.ABDM.id()){
+            if(roleId == RoleValue.ZM.id() || roleId == RoleValue.RGM.id() || roleId == RoleValue.GH.id() || roleId == RoleValue.CSSO.id()){
+                canAccess = true;
+            }
+        }
+
+        return canAccess;
     }
 
     public void preRender() {
@@ -1301,14 +1336,9 @@ public class Decision extends BaseController {
 
             //Check valid step to Save Approval
             HttpSession session = FacesUtil.getSession(true);
-            long stepId = 0;
-            long statusId = 0;
-            if (!Util.isNull(session.getAttribute("stepId"))) {
-                stepId = (Long)session.getAttribute("stepId");
-            }
-            if(!Util.isNull(session.getAttribute("statusId"))) {
-                statusId = (Long)session.getAttribute("statusId");
-            }
+            long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+
             HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
 
             if(stepStatusMap != null){
@@ -1316,10 +1346,10 @@ public class Decision extends BaseController {
                         || stepStatusMap.containsKey("Submit to UW2") || stepStatusMap.containsKey("Submit to ZM")){
                     if(decisionDialog){
                         // Save Approval History
-                        if(roleId == RoleValue.ZM.id() || roleId == RoleValue.UW.id()){
+                        if(endorseDecisionDialog){
                             approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
                         }
-                        if(requestPricing){
+                        if(requestPricing && pricingDecisionDialog){
                             // Save Approval History Pricing
                             if(roleId != RoleValue.UW.id()){
                                 approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
@@ -2048,5 +2078,21 @@ public class Decision extends BaseController {
 
     public void setRoleValue(RoleValue roleValue) {
         this.roleValue = roleValue;
+    }
+
+    public boolean isPricingDecisionDialog() {
+        return pricingDecisionDialog;
+    }
+
+    public void setPricingDecisionDialog(boolean pricingDecisionDialog) {
+        this.pricingDecisionDialog = pricingDecisionDialog;
+    }
+
+    public boolean isEndorseDecisionDialog() {
+        return endorseDecisionDialog;
+    }
+
+    public void setEndorseDecisionDialog(boolean endorseDecisionDialog) {
+        this.endorseDecisionDialog = endorseDecisionDialog;
     }
 }

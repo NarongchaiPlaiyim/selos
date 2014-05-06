@@ -1141,9 +1141,9 @@ public class PEDBExecute extends BusinessControl
                     log.info("status code : "+statuscode);
                 }
 
-                /*log.info("Before :{}",completedCasesAppNoList.size());
+                log.info("App Numbers :{}",completedCasesAppNoList.size());
 
-                completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
+                /*completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
                 completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
                 completedCasesAppNoList.retainAll(completedCasesAppNoListByUserId);
 
@@ -1182,7 +1182,7 @@ public class PEDBExecute extends BusinessControl
                 else
                 {
 
-                    if(citizenIdFlag || firstNameFlag || userIdFlag ||lastNameFlag)
+                    if((citizenIdFlag || firstNameFlag || userIdFlag ||lastNameFlag) && (completedCasesAppNoList==null || completedCasesAppNoList.size()==0))
                     {
                         return searchViewList;
                     }
@@ -1231,7 +1231,15 @@ public class PEDBExecute extends BusinessControl
 
                     if(completedCasesWKItems.getCreateBy()!=null)
                     {
-                        peInbox.setAtuserteam(userTeamDAO.teamNameById(userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam().getId()));
+                        if(userDAO.findByUserName(completedCasesWKItems.getCreateBy()) != null)
+                        {
+                            log.info("Create By : {}",completedCasesWKItems.getCreateBy());
+                            if( userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam() != null )
+                            {
+                                peInbox.setAtuserteam(userTeamDAO.teamNameById(userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam().getId()));
+                            }
+
+                        }
                     }
                     else
                     {
