@@ -574,7 +574,7 @@
                                                                      actionListener="#{basicInfo.onInitAddAccount}"
                                                                      update=":basicInfoAccountDlgForm"
                                                                      disabled="#{basicInfo.isDisabled('addOpeningAccountButton')}"
-                                                                     oncomplete="basicInfoAccountDlg.show();">
+                                                                     oncomplete="basicInfoAccountDlg.show();" >
                                                         <p:resetInput target=":basicInfoAccountDlgForm"/>
                                                     </p:commandButton>
                                                 </td>
@@ -618,7 +618,8 @@
                                                                              icon="ui-icon-pencil"
                                                                              action="#{basicInfo.onSelectEditAccount()}"
                                                                              update=":basicInfoAccountDlgForm"
-                                                                             oncomplete="basicInfoAccountDlg.show();">
+                                                                             oncomplete="basicInfoAccountDlg.show();"
+                                                                             disabled="#{basicInfo.isDisabled('saveButton')}">
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                                 <f:setPropertyActionListener value="#{rowIndex}"
@@ -630,7 +631,8 @@
                                                                              icon="ui-icon-trash"
                                                                              oncomplete="confirmDeleteAccountDlg.show()"
                                                                              update=":frmMain:resultTableOpeningAccount"
-                                                                             process="@form">
+                                                                             process="@form"
+                                                                             disabled="#{basicInfo.isDisabled('saveButton')}">
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>

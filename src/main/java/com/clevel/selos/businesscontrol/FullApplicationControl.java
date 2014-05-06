@@ -327,7 +327,7 @@ public class FullApplicationControl extends BusinessControl {
 
         if(workCaseId != 0){
             //workCase = workCaseDAO.findById(workCaseId);
-            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
             if(approvalHistoryApprove==null){
                 throw new Exception("Please make decision before submit.");
             } else {
@@ -751,6 +751,10 @@ public class FullApplicationControl extends BusinessControl {
 
     public void returnAADAdminByBDM(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
+    public void returnAADAdminByUW2(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
     public void completeCase(String queueName, String wobNumber) throws Exception {
