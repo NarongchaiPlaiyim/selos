@@ -215,7 +215,7 @@ public class CustomerInfoSummary implements Serializable {
             boolean isExist = customerInfoControl.checkExistingAll(selectedItemCustomerGuarantor.getId());
             if(isExist){
                 messageHeader = "Information.";
-                message = msg.get("app.message.customer.existing.error");
+                message = msg.get("app.message.customer.existing.error2");
                 severity = "info";
             } else {
             onDelete(selectedItemCustomerGuarantor);

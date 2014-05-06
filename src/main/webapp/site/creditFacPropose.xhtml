@@ -1009,7 +1009,7 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
-                                 required="true">
+                                 required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="##0.00"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -1030,7 +1030,7 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
-                                 required="true">
+                                 required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="##0.00"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -1211,11 +1211,12 @@
         <h:outputText id="jobID" value="#{newCollateralView.jobID}"/>
     </td>
     <td class="right" colspan="2">
-        <p:commandButton value="Edit"
+        <p:commandButton value="Edit" id="editCollBtn"
+                         onclick="blockUI.show()"
                          action="#{creditFacPropose.onEditProposeCollInfo()}"
                          update=":collateralDlgForm"
                          process="@form"
-                         oncomplete="collateralInfoDlg.show();">
+                         oncomplete="blockUI.hide(); collateralInfoDlg.show()">
             <f:setPropertyActionListener value="#{newCollateralView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
             <f:setPropertyActionListener value="#{collIndex.index}"
@@ -1955,6 +1956,12 @@
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
+
+<p:blockUI id="block2" block=":frmMain"
+           widgetVar="blockUI">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </h:form>
 </p:panel>
 
@@ -1998,7 +2005,7 @@
     <ui:param name="formId" value="frmConfirmDeleteCollateralInfo"/>
     <ui:param name="controller" value="#{creditFacPropose}"/>
     <ui:param name="action" value="onDeleteProposeCollInfo"/>
-    <ui:param name="update" value=":frmMain"/>
+    <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
 </ui:include>
 
 <!-- Sub-Collateral Dialog  -->
@@ -2019,7 +2026,7 @@
     <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
     <ui:param name="controller" value="#{creditFacPropose}"/>
     <ui:param name="action" value="onDeleteSubCollateral"/>
-    <ui:param name="update" value=":collateralDlgForm"/>
+    <ui:param name="update" value=":collateralDlgForm,:msgBoxSystemMessagePanel"/>
 </ui:include>
 
 <!-- Propose Guarantor Dialog -->
@@ -2065,16 +2072,25 @@
 
 <!-- Control  All Page-->
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     severity="#{creditFacPropose.severity}"
-                     header="#{creditFacPropose.messageHeader}"
-                     message="#{creditFacPropose.message}"
-                     closable="false" resizable="false"
-                     closeOnEscape="false">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" resizable="false" closeOnEscape="false"
+                     severity="#{creditFacPropose.severity}" header="#{creditFacPropose.messageHeader}" closable="false">
+        <f:facet name="message">
+            <h:outputText value="#{creditFacPropose.message}" escape="false"/>
+        </f:facet>
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+
+    <p:confirmDialog id="msgBoxSystemMessageDialog2" widgetVar="msgBoxSystemMessageDlg2" resizable="false" closeOnEscape="false"
+                     severity="#{creditFacPropose.severity}" header="#{creditFacPropose.messageHeader}" closable="false">
+        <f:facet name="message">
+            <h:outputText value="#{creditFacPropose.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         oncomplete="msgBoxSystemMessageDlg2.hide()"/>
     </p:confirmDialog>
 </p:panel>
 

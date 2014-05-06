@@ -6,6 +6,7 @@ import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.WorkCaseOwner;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -22,6 +23,24 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
     Logger log;
     @Inject
     public WorkCaseOwnerDAO() {
+    }
+
+    public List<WorkCaseOwner> findByWorkCasePreScreenId(int workCasePreScreenId, String userId, int roleId)
+    {
+
+        List<WorkCaseOwner> workCaseOwnerList = createCriteria().add(Restrictions.eq("workCasePrescreenId", workCasePreScreenId))
+                                                    .add(Restrictions.eq("userid",userId)).add(Restrictions.eq("roleid", roleId)).list();
+
+        return workCaseOwnerList;
+    }
+
+    public List<WorkCaseOwner> findByWorkCaseId(int workCaseId, String userId, int roleId)
+    {
+
+        List<WorkCaseOwner> workCaseOwnerList = createCriteria().add(Restrictions.eq("workCaseId", workCaseId))
+                .add(Restrictions.eq("userid",userId)).add(Restrictions.eq("roleid", roleId)).list();
+
+        return workCaseOwnerList;
     }
 
     public List<String> getWorkCaseByWorkCasePrescreenId(Integer workCasePrescreenId){
@@ -82,7 +101,11 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         criteria.add(Restrictions.in("stepId",restrictionsStepList));
 
-        criteria.setProjection(Projections.max("createDate"));
+        //criteria.setProjection(Projections.max("createDate"));
+
+        criteria.addOrder(Order.desc("createDate"));
+
+        criteria.setMaxResults(1);
 
         WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
 

@@ -249,6 +249,23 @@ public class Util implements Serializable {
         }
     }
 
+    public static BigDecimal divide(BigDecimal value, BigDecimal divisor, int round) {
+        if (value == null || divisor == null)
+            return null;
+
+        if (BigDecimal.ZERO.compareTo(divisor) == 0) {
+            log.debug("divide() divisor is zero!");
+            return BigDecimal.ZERO;
+        }
+
+        try {
+            return value.divide(divisor, round, RoundingMode.HALF_UP);
+        } catch (Exception e) {
+            log.error("", e);
+            return BigDecimal.ZERO;
+        }
+    }
+
     public static BigDecimal divide(BigDecimal value, int divisor) {
         if (value == null)
             return null;
@@ -392,6 +409,23 @@ public class Util implements Serializable {
 	    		return defaultValue;
 	    	}
     	}
+    }
+
+    public static int parseInt(Object input, int defaultValue){
+        if(input == null)
+            return defaultValue;
+        else if (input instanceof Integer)
+            return (Integer) input;
+        else {
+            String inputStr = input.toString();
+            if(isEmpty(inputStr))
+                return defaultValue;
+            try{
+                return Integer.parseInt(inputStr);
+            }catch (ClassCastException e){
+                return defaultValue;
+            }
+        }
     }
 
     public static String parseString(Object input, String defaultValue){

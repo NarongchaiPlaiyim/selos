@@ -49,8 +49,6 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
 
     }
 
-
-
     public List<NewCollateralCredit> getListByWorkCase(WorkCase workCase){
         Criteria criteria = createCriteria();
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
@@ -67,13 +65,21 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
     }
 
     public List<NewCollateralCredit> getListByNewCreditFacility(NewCreditFacility newCreditFacility , ProposeType proposeType) {
-        log.info("getListCollRelationByNewGuarantor. (newCreditFacility: {})", newCreditFacility);
+        log.info("getListByNewCreditFacility. (newCreditFacility: {})", newCreditFacility);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.setFetchMode("newCollateral", FetchMode.SELECT);
         return  criteria.list();
+    }
 
+    public List<NewCollateralCredit> getListByNewCreditFacilityId(long newCreditFacilityId , ProposeType proposeType) {
+        log.info("getListByNewCreditFacilityId. (newCreditFacilityId: {})", newCreditFacilityId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility.id", newCreditFacilityId));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.setFetchMode("newCollateral", FetchMode.SELECT);
+        return  criteria.list();
     }
 
 }

@@ -151,7 +151,7 @@ public class PEDBExecute extends BusinessControl
 
     String userName = null;
 
-    ArrayList<PERoster> rosterViewList = null;
+    List<PERoster> rosterViewList = null;
 
     String tableName = null;
 
@@ -576,7 +576,7 @@ public class PEDBExecute extends BusinessControl
         return resultQueryList;
     }
 
-    public ArrayList<PERoster> getRosterQuery(String statusType, String descriptionValues)
+    public List<PERoster> getRosterQuery(String statusType, String descriptionValues)
     {
         rosterViewList = new ArrayList<PERoster>();
         log.info("controler in getRoserQuery of pedbexecute class");
@@ -630,13 +630,36 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster = new PERoster();
 
-                peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
+                if(rs.getObject("ReceivedDate1")!=null)
+                {
+                    peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
+                }
+
+                else
+                {
+                    peRoster.setReceivedDate("") ;
+
+                }
+
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
                 peRoster.setProductGroup(rs.getString("ProductGroup"));
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
-                peRoster.setStepId(Integer.parseInt(rs.getString("Step_Code")));
+                if(rs.getString("Step_Code")!=null && rs.getString("Step_Code").trim().length()>0)
+                {
+                    log.info("Step Code : {}", rs.getString("Step_Code"));
+                    try{
+                        peRoster.setStepId(Integer.parseInt(rs.getString("Step_Code")));
+                    }
+                    catch (NumberFormatException n)
+                    {
+                        log.error("Invalid step id, skipping");
+                        continue;
+                    }
+
+                }
+
                 peRoster.setStatus(rs.getString("Status"));
 
                 if(rs.getString("CurrentUser") != null)
@@ -645,7 +668,17 @@ public class PEDBExecute extends BusinessControl
                 }
 
                 peRoster.setSlastatus(rs.getString("SLAStatus"));
-                peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim());
+
+                if(rs.getObject("SLAEndTime1")!=null)
+                {
+                    peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim()) ;
+                }
+
+                else
+                {
+                    peRoster.setSLAEndTime("") ;
+
+                }
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
@@ -1108,9 +1141,9 @@ public class PEDBExecute extends BusinessControl
                     log.info("status code : "+statuscode);
                 }
 
-                /*log.info("Before :{}",completedCasesAppNoList.size());
+                log.info("App Numbers :{}",completedCasesAppNoList.size());
 
-                completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
+                /*completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
                 completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
                 completedCasesAppNoList.retainAll(completedCasesAppNoListByUserId);
 
@@ -1149,7 +1182,7 @@ public class PEDBExecute extends BusinessControl
                 else
                 {
 
-                    if(citizenIdFlag || firstNameFlag || userIdFlag ||lastNameFlag)
+                    if((citizenIdFlag || firstNameFlag || userIdFlag ||lastNameFlag) && (completedCasesAppNoList==null || completedCasesAppNoList.size()==0))
                     {
                         return searchViewList;
                     }
@@ -1198,7 +1231,15 @@ public class PEDBExecute extends BusinessControl
 
                     if(completedCasesWKItems.getCreateBy()!=null)
                     {
-                        peInbox.setAtuserteam(userTeamDAO.teamNameById(userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam().getId()));
+                        if(userDAO.findByUserName(completedCasesWKItems.getCreateBy()) != null)
+                        {
+                            log.info("Create By : {}",completedCasesWKItems.getCreateBy());
+                            if( userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam() != null )
+                            {
+                                peInbox.setAtuserteam(userTeamDAO.teamNameById(userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam().getId()));
+                            }
+
+                        }
                     }
                     else
                     {
@@ -1395,9 +1436,20 @@ public class PEDBExecute extends BusinessControl
             {
                 PEInbox peInbox = new PEInbox();
 
-                peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
+                if(rs.getObject("ReceivedDate1")!=null)
+                {
+                    peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
+                }
+
+                else
+                {
+                    peInbox.setReceiveddate("");
+                }
+
                 peInbox.setAtuserteam(rs.getString("TeamName"));
+
                 peInbox.setApplicationno(rs.getString("AppNumber"));
+
                 if(peInbox.getApplicationno()!=null)
                 {
 
@@ -1409,7 +1461,16 @@ public class PEDBExecute extends BusinessControl
                     {
                         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(peInbox.getApplicationno());
 
-                        names = searchFirstLastNameDAO.getBorrowerNameByWorkCasePrescreenID(workCasePrescreen.getId());
+                        if(workCasePrescreen != null)
+                        {
+                            names = searchFirstLastNameDAO.getBorrowerNameByWorkCasePrescreenID(workCasePrescreen.getId());
+                        }
+
+                        else
+                        {
+                            names = "";
+                        }
+
                     }
 
                     else
@@ -1440,7 +1501,16 @@ public class PEDBExecute extends BusinessControl
                     peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
                 }
 
-                peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+                if((rs.getObject("AppointmentDate1"))!=null)
+                {
+                    peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+                }
+
+                else
+                {
+                    peInbox.setAppointmentdate("");
+                }
+
                 peInbox.setDoalevel(rs.getString("DOALevel"));
                 peInbox.setAction(rs.getString("PreviousAction"));
                 peInbox.setSlastatus(rs.getString("SLAStatus"));

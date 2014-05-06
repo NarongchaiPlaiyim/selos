@@ -122,8 +122,8 @@ public class FullApplicationControl extends BusinessControl {
         return userList;
     }
 
-    public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
-        bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
+    public void assignToABDM(String queueName, String wobNumber, String abdmUserId) throws Exception {
+        bpmExecutor.assignToABDM(queueName, wobNumber, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
     public void submitToZMPricing(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String queueName, long workCaseId) throws Exception {
@@ -320,6 +320,32 @@ public class FullApplicationControl extends BusinessControl {
         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
+    public void submitFCashZM(String queueName, String wobNumber, long workCaseId) throws Exception {
+        String zmDecisionFlag = "A";
+        //WorkCase workCase;
+        ApprovalHistory approvalHistoryApprove = null;
+
+        if(workCaseId != 0){
+            //workCase = workCaseDAO.findById(workCaseId);
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+            if(approvalHistoryApprove==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+                    approvalHistoryApprove.setSubmit(1);
+                    approvalHistoryApprove.setSubmitDate(new Date());
+                } else {
+                    throw new Exception("Please make decision before submit.");
+                }
+
+                bpmExecutor.submitFCashZM(queueName, wobNumber, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+
+                approvalHistoryDAO.persist(approvalHistoryApprove);
+            }
+        }
+    }
+
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
         String cssoDecisionFlag = "A"; //TODO
         WorkCase workCase;
@@ -513,11 +539,12 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     //Request appraisal after Customer Acceptance
-    public void requestAppraisal(String queueName, String wobNumber, String aadAdminUserName) throws Exception{
+    public void requestAppraisal(long workCasePreScreenId, long workCaseId, String queueName, String wobNumber, String aadAdminUserName) throws Exception{
         //Update Request Appraisal Flag
 
         if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
             try{
+                log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
                 bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
                 log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
@@ -641,9 +668,11 @@ public class FullApplicationControl extends BusinessControl {
             if(!Util.isEmpty(appNumber)){
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
                 log.debug("submitToAADCommittee ::: find workCaseAppraisal : {}", workCaseAppraisal);
-                workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
-                workCaseAppraisalDAO.persist(workCaseAppraisal);
-                log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                if(!Util.isNull(workCaseAppraisal)) {
+                    workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
+                    workCaseAppraisalDAO.persist(workCaseAppraisal);
+                    log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                }
                 long appraisalLocationCode = 0;
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
@@ -662,6 +691,22 @@ public class FullApplicationControl extends BusinessControl {
 
     public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
         bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
+    public String getAADAdmin(long workCaseId, long workCasePreScreenId){
+        String aadAdminName = "";
+        Appraisal appraisal;
+        if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            aadAdminName = appraisal.getAadAdmin()!=null?appraisal.getAadAdmin().getUserName():"";
+            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+        }else if(!Util.isNull(workCasePreScreenId) && !Util.isZero(workCasePreScreenId)){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            aadAdminName = appraisal.getAadAdmin()!=null?appraisal.getAadAdmin().getUserName():"";
+            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+        }
+
+        return aadAdminName;
     }
 
     public String getAADCommittee(long workCaseId, long workCasePreScreenId){
@@ -688,16 +733,20 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
-    public void submitPendingDecision(String queueName, String wobNumber, String remark, String reason) throws Exception{
-        bpmExecutor.submitPendingDecision(queueName, wobNumber, remark, reason, ActionCode.PENDING_FOR_DECISION.getVal());
+    public void submitPendingDecision(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.submitPendingDecision(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.PENDING_FOR_DECISION.getVal());
     }
 
-    public void returnBDMByAAD(String queueName, String wobNumber, String remark, String reason) throws Exception{
-        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_BDM.getVal());
+    public void submitRequestPriceReduction(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.REQUEST_PRICE_REDUCE.getVal());
     }
 
-    public void returnAADAdminByAADCommittee(String queueName, String wobNumber, String remark, String reason) throws Exception{
-        bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    public void returnBDMByAAD(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_BDM.getVal());
+    }
+
+    public void returnAADAdminByAADCommittee(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
     public void returnAADAdminByBDM(String queueName, String wobNumber) throws Exception{
@@ -714,6 +763,11 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitToBDM(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void calculateApprovedPricingDOA(long workCaseId){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        calculatePricingDOA(workCaseId, newCreditFacility);
     }
 
     public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
@@ -884,24 +938,12 @@ public class FullApplicationControl extends BusinessControl {
         return authorizationDOAList;
     }
 
-    public List<Reason> getCancelReasonList() throws Exception{
-        List<Reason> reasons = reasonDAO.getCancelList();
-        if(reasons == null){
-            reasons = new ArrayList<Reason>();
-        }
-
-        return reasons;
+    public void cancelCAFullApp(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
+        bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), getReasonDescription(reasonId), remark);
     }
 
-    public void cancelCAFullApp(long workCaseId, String queueName, int reasonId, String remark) throws Exception {
-        String reasonTxt = "";
-        if(reasonId!=0){
-            Reason reason = reasonDAO.findById(reasonId);
-            if(reason!=null && reason.getId()!=0){
-                reasonTxt = reason.getCode().concat(" - ").concat(reason.getDescription());
-            }
-        }
-        bpmExecutor.cancelCase(0, workCaseId, queueName, ActionCode.CANCEL_CA.getVal(), reasonTxt, remark);
+    public void cancelRequestPriceReduction(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
+        bpmExecutor.cancelRequestPriceReduction(queueName, wobNumber, getReasonDescription(reasonId), remark, ActionCode.CANCEL_REQUEST_PRICE_REDUCTION.getVal());
     }
 
     public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
@@ -912,5 +954,22 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         return reasonList;
+    }
+
+    public String getReasonDescription(int reasonId){
+        String reasonDescription = "";
+        if(!Util.isZero(reasonId)){
+            try {
+                Reason reason = reasonDAO.findById(reasonId);
+                if (!Util.isNull(reason)) {
+                    reasonDescription = reason.getCode() != null ? reason.getCode() : "";
+                    reasonDescription = reason.getDescription() != null ? reasonDescription.concat(" - ").concat(reason.getDescription()) : reasonDescription;
+                }
+            } catch (Exception ex) {
+                log.error("Exception while get reason description : ", ex);
+            }
+        }
+
+        return reasonDescription;
     }
 }

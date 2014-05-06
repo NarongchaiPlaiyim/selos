@@ -88,7 +88,7 @@ public class CustomerAcceptancePre extends BaseController {
         if(checkSession(session)){
             //Check valid step
             stepId = getCurrentStep(session);
-            if(stepId != 2011){
+            if(stepId != 2011 && stepId != 2012){
                 FacesUtil.redirect("/selos/inbox.jsf");
             }
         }

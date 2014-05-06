@@ -11,11 +11,15 @@ public enum Screen {
     //Full Application
     //Basic Info
     BASIC_INFO(2100),
+    DBR_INFO(2830),
 
     //Customer Info
     CUSTOMER_INFO_SUMMARY(3002),
     CUSTOMER_INFO_INDIVIDUAL(3003),
     CUSTOMER_INFO_JURISTIC(3004),
+
+    //Decision
+    DECISION(2920),
     
     //Step 301 Screen //TODO
     InsuranceInfo(3100),

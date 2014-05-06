@@ -64,4 +64,12 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
         List<NewCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
         return newCollateralSubRelatedList;
     }
+
+    public List<NewCollateralSubRelated> findByMainCollSubId(long mainCollSubId,ProposeType proposeType){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateralSub.id", mainCollSubId));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
+        return newCollateralSubRelatedList;
+    }
 }

@@ -23,22 +23,23 @@
                                  <!--value="#{msg.get('app.button.cancel')}"-->
                                  <!--onclick="#{name}.hide()"/>-->
 
-                <p:commandButton id="#{id}OkBtn"
+                <p:commandButton id="#{id}OkBtn" widgetVar="#{id}SaveBtn"
                                  value="#{msg.get('app.button.ok')}"
                                  update="#{update}"
-                                 oncomplete="#{name}.hide()"
+                                 oncomplete="#{name}.hide();#{id}SaveBtn.enable();#{id}CancelBtn.enable()"
+                                 onclick="#{id}SaveBtn.disable();#{id}CancelBtn.disable()"
                                  action="#{controller[action]}"/>
 
-                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                <p:commandButton widgetVar="#{id}CancelBtn"
+                                 value="#{msg.get('app.button.cancel')}"
                                  onclick="#{name}.hide()"/>
             </div>
         </h:form>
-    </p:confirmDialog>
-    <!-- 
-     <p:blockUI widgetVar="#{id}BlockUI" block="#{id}"
-                   trigger=":#{formId}:#{id}OkBtn">
-            LOADING<br/>
+
+        <!--<p:blockUI widgetVar="#{id}BlockUI" block="#{id}"
+                    trigger=":#{formId}:#{id}OkBtn">
+                    LOADING<br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
-      -->
+        </p:blockUI>-->
+    </p:confirmDialog>
 </f:view>

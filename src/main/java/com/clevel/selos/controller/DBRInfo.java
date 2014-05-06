@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.LoanAccountTypeView;
@@ -28,7 +29,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "dbrInfo")
-public class DBRInfo implements Serializable {
+public class DBRInfo extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -84,34 +85,43 @@ public class DBRInfo implements Serializable {
 
     }
 
-    public void preRender() {
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0){
+            checkSession = true;
+        }
 
-        log.info("preRender ::: setSession ");
+        return checkSession;
+    }
 
+
+    public void preRender(){
+        log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-//            userId = session.getAttribute("userId").toString();
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
+
+        if(checkSession(session)){
+            //TODO Check valid step
+            log.debug("preRender ::: Check valid stepId");
+
+        }else{
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        preRender();
-        try{
+        log.debug("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
+
+            loadFieldControl(workCaseId, Screen.DBR_INFO);
 
             selectedItem = new DBRDetailView();
+
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
 
@@ -119,14 +129,10 @@ public class DBRInfo implements Serializable {
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
             }
-            loanAccountTypes = new ArrayList<LoanAccountTypeView>();
-            loanAccountTypes = loanAccountTypeControl.getListLoanTypeByWorkcase(workCaseId);
-            ncbDetails = new ArrayList<NCBDetailView>();
+
+            loanAccountTypes = loanAccountTypeControl.getListLoanTypeByWorkCaseId(workCaseId);
             ncbDetails = ncbInfoControl.getNCBForCalDBR(workCaseId);
-        }catch (Exception e){
-
         }
-
     }
 
     public void initAddDBRDetail() {

@@ -29,7 +29,7 @@ public class LoanAccountTypeControl extends BusinessControl {
 
     }
 
-    public List<LoanAccountTypeView> getListLoanTypeByWorkcase(long workCaseId) {
+    public List<LoanAccountTypeView> getListLoanTypeByWorkCaseId(long workCaseId) {
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         List<AccountType> loanAccountTypes = new ArrayList<AccountType>();
         if(basicInfo.getBorrowerType().getId() != 0){
