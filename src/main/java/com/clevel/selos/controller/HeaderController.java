@@ -542,6 +542,29 @@ public class HeaderController implements Serializable {
         }
     }
 
+    public void onSubmitFCashZM(){
+        log.debug("onSubmitFCashZM ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            fullApplicationControl.submitFCashZM(queueName, wobNumber, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onSubmitFCashZM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onSubmitFCashZM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
     public void onSelectedUWDOALevel(){
         log.debug("selected UW2 DOALevel id : ()",selectedDOALevel);
         try{
@@ -554,7 +577,6 @@ public class HeaderController implements Serializable {
             uw2UserList = new ArrayList<User>();
             log.error("onSelectedUWDOALevel Exception : ",ex);
         }
-
     }
 
     public void onSubmitUW2(){ //Submit From UW1 (no return)

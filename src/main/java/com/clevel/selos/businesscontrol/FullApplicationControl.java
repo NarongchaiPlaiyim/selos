@@ -320,6 +320,32 @@ public class FullApplicationControl extends BusinessControl {
         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
+    public void submitFCashZM(String queueName, String wobNumber, long workCaseId) throws Exception {
+        String zmDecisionFlag = "A";
+        //WorkCase workCase;
+        ApprovalHistory approvalHistoryApprove = null;
+
+        if(workCaseId != 0){
+            //workCase = workCaseDAO.findById(workCaseId);
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+            if(approvalHistoryApprove==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+                    approvalHistoryApprove.setSubmit(1);
+                    approvalHistoryApprove.setSubmitDate(new Date());
+                } else {
+                    throw new Exception("Please make decision before submit.");
+                }
+
+                bpmExecutor.submitFCashZM(queueName, wobNumber, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+
+                approvalHistoryDAO.persist(approvalHistoryApprove);
+            }
+        }
+    }
+
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
         String cssoDecisionFlag = "A"; //TODO
         WorkCase workCase;
