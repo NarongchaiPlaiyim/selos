@@ -149,10 +149,17 @@ public class AppraisalResultControl extends BusinessControl {
         if(Util.isNull(appraisalView.getNewCollateralViewList()) || Util.isZero(appraisalView.getNewCollateralViewList().size())){
             log.debug("-- NewCollateralViewList.size()[{}]", 0);
             log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
-            newCollateralDAO.delete(newCollateralList);
+            for (NewCollateral newCollateral : newCollateralList){
+                newCollateralDAO.delete(newCollateral);
+                log.debug("-- NewCollateral.id[{}] deleted", newCollateral.getId());
+            }
+//            newCollateralDAO.delete(newCollateralList);
         } else {
             log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
-            newCollateralDAO.delete(newCollateralList);
+            for (NewCollateral newCollateral : newCollateralList){
+                newCollateralDAO.delete(newCollateral);
+                log.debug("-- NewCollateral.id[{}] deleted", newCollateral.getId());
+            }
 
             newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
             log.debug("onSaveAppraisalResult ::: saveCollateralData : newCollateralViewList : {}", newCollateralViewList);
