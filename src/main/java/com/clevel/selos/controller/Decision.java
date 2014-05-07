@@ -219,6 +219,7 @@ public class Decision extends BaseController {
     private int rowIndexCollHead;
     private int rowIndexSubColl;
     private boolean flagComs;
+    private boolean flagButtonCollateral;
     private List<PotentialCollateral> potentialCollList;
     private List<PotentialCollateralView> potentialCollViewList;
     private List<CollateralType> collateralTypeList;
@@ -336,7 +337,6 @@ public class Decision extends BaseController {
         } else {
             log.debug("check session failed. redirect to inbox.");
             FacesUtil.redirect("/site/inbox.jsf");
-            return;
         }
     }
 
@@ -390,6 +390,10 @@ public class Decision extends BaseController {
         if (tcgView != null) {
             applyTCG = tcgView.getTCG();
         }
+
+        // init flag value
+        flagComs = false;
+        flagButtonCollateral = true;
 
         // ========== Retrieve Pricing/Fee ========== //
         creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
@@ -916,8 +920,12 @@ public class Decision extends BaseController {
         flagComs = false;
         log.info("selectedApproveCollateral.isComs: {}", selectedApproveCollateral.isComs());
         if (selectedApproveCollateral.isComs()) {
+            flagButtonCollateral = false;
             flagComs = true;
+        } else {
+            flagButtonCollateral = true;
         }
+
         modeEditCollateral = true;
     }
 
@@ -1020,35 +1028,34 @@ public class Decision extends BaseController {
         collateralInfoEdit.setBdmComments(selectedApproveCollateral.getBdmComments());
         collateralInfoEdit.setComs(selectedApproveCollateral.isComs());
 
-        List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         if (selectedApproveCollateral.getNewCollateralHeadViewList() != null && selectedApproveCollateral.getNewCollateralHeadViewList().size() > 0) {
             for (NewCollateralHeadView collateralHeadView : selectedApproveCollateral.getNewCollateralHeadViewList()) {
                 PotentialCollateral potentialCollateral = getPotentialCollateralById(collateralHeadView.getPotentialCollateral().getId());
-                CollateralType collTypePercentLTV = getCollateralTypeById(collateralHeadView.getCollTypePercentLTV().getId());
+//                CollateralType collTypePercentLTV = getCollateralTypeById(collateralHeadView.getCollTypePercentLTV().getId());
+                TCGCollateralType tcgCollateralType = getTCGCollateralTypeById(collateralHeadView.getTcgCollateralType().getId());
                 CollateralType headCollType = getCollateralTypeById(collateralHeadView.getHeadCollType().getId());
+                List<SubCollateralType> subCollateralTypeResult = subCollateralTypeDAO.findByHeadAndSubColDefaultType(headCollType);
 
-                NewCollateralHeadView newCollateralHeadDetailAdd = new NewCollateralHeadView();
-                newCollateralHeadDetailAdd.setPotentialCollateral(potentialCollateral);
-                newCollateralHeadDetailAdd.setCollTypePercentLTV(collTypePercentLTV);
-                newCollateralHeadDetailAdd.setExistingCredit(collateralHeadView.getExistingCredit());
-                newCollateralHeadDetailAdd.setTitleDeed(collateralHeadView.getTitleDeed());
-                newCollateralHeadDetailAdd.setCollateralLocation(collateralHeadView.getCollateralLocation());
-                newCollateralHeadDetailAdd.setAppraisalValue(collateralHeadView.getAppraisalValue());
-                newCollateralHeadDetailAdd.setHeadCollType(headCollType);
-                newCollateralHeadDetailAdd.setInsuranceCompany(collateralHeadView.getInsuranceCompany());
-
-                if (collateralHeadView.getNewCollateralSubViewList() != null && collateralHeadView.getNewCollateralSubViewList().size() > 0) {
-                    List<NewCollateralSubView> newCollateralSubViews = newCollateralSubTransform.copyToNewViews(collateralHeadView.getNewCollateralSubViewList(), false);
-                    newCollateralHeadDetailAdd.setNewCollateralSubViewList(newCollateralSubViews);
+                if(subCollateralTypeResult != null && subCollateralTypeResult.size() > 0){
+                    SubCollateralType subCollateralTypeEdit = subCollateralTypeDAO.findById(subCollateralTypeResult.get(0).getId());
+                    collateralHeadView.setSubCollType(subCollateralTypeEdit);
                 }
 
-                newCollateralHeadViewList.add(newCollateralHeadDetailAdd);
+                collateralHeadView.setPotentialCollateral(potentialCollateral);
+                collateralHeadView.setTcgCollateralType(tcgCollateralType);
+                collateralHeadView.setHeadCollType(headCollType);
             }
         }
-        collateralInfoEdit.setNewCollateralHeadViewList(newCollateralHeadViewList);
+
+        if (flagComs) {
+            selectedApproveCollateral.setComs(false);
+            flagButtonCollateral = false;
+        } else {
+            selectedApproveCollateral.setComs(true);
+            flagButtonCollateral = true;
+        }
 
         if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
-
             List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
             for (ProposeCreditDetailView creditTypeItem : selectedCollateralCrdTypeItems) {
                 proposeCreditDetailViewList.add(creditTypeItem);
@@ -1584,6 +1591,23 @@ public class Decision extends BaseController {
             }
         }
         return returnPotentialColl;
+    }
+
+    private TCGCollateralType getTCGCollateralTypeById(int id) {
+        TCGCollateralType returnTCGCollType = new TCGCollateralType();
+        if (potentialColToTCGColList != null && !potentialColToTCGColList.isEmpty() && id != 0) {
+            for (PotentialColToTCGCol potentialColToTCGCol : potentialColToTCGColList) {
+                if (potentialColToTCGCol.getTcgCollateralType() != null &&
+                    potentialColToTCGCol.getTcgCollateralType().getId() == id) {
+                    returnTCGCollType.setId(potentialColToTCGCol.getTcgCollateralType().getId());
+                    returnTCGCollType.setName(potentialColToTCGCol.getTcgCollateralType().getName());
+                    returnTCGCollType.setDescription(potentialColToTCGCol.getTcgCollateralType().getDescription());
+                    returnTCGCollType.setCode(potentialColToTCGCol.getTcgCollateralType().getCode());
+                    returnTCGCollType.setActive(potentialColToTCGCol.getTcgCollateralType().getActive());
+                }
+            }
+        }
+        return returnTCGCollType;
     }
 
     private CollateralType getCollateralTypeById(int id) {
