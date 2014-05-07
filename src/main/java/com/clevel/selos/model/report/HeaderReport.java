@@ -6,6 +6,9 @@ import com.clevel.selos.report.ReportModel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.inject.Inject;
+import java.util.Date;
+
 public class HeaderReport extends ReportModel{
 
     private String caseStatus;
@@ -40,8 +43,10 @@ public class HeaderReport extends ReportModel{
     private String personalId4;
     private String personalId5;
 
+    private String creditDecision;
+    private Date approvedDate;
 
-
+    @Inject
     public HeaderReport() {
     }
 
@@ -277,6 +282,22 @@ public class HeaderReport extends ReportModel{
         this.personalId5 = personalId5;
     }
 
+    public String getCreditDecision() {
+        return creditDecision;
+    }
+
+    public void setCreditDecision(String creditDecision) {
+        this.creditDecision = creditDecision;
+    }
+
+    public Date getApprovedDate() {
+        return approvedDate;
+    }
+
+    public void setApprovedDate(Date approvedDate) {
+        this.approvedDate = approvedDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -309,6 +330,8 @@ public class HeaderReport extends ReportModel{
                 .append("personalId3", personalId3)
                 .append("personalId4", personalId4)
                 .append("personalId5", personalId5)
+                .append("creditDecision", creditDecision)
+                .append("approvedDate", approvedDate)
                 .toString();
     }
 }

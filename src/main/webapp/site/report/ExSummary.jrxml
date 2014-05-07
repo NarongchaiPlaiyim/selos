@@ -77,19 +77,19 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<staticText>
-					<reportElement uuid="c264f392-bc23-4b93-9373-9f11ad7f3b9a" x="0" y="1" width="135" height="13"/>
+					<reportElement uuid="c264f392-bc23-4b93-9373-9f11ad7f3b9a" x="0" y="0" width="135" height="14"/>
 					<textElement textAlignment="Center">
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[SME Credit Decision [OP Sheet]]]></text>
 				</staticText>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="a7c3484b-d7a0-420b-bc3a-c281069091d9" mode="Opaque" x="4" y="14" width="130" height="10" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<reportElement uuid="ba2f64dd-41e7-415f-a3bd-fceab4c1c972" mode="Opaque" x="2" y="12" width="130" height="28" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA[]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getCreditDecision()]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -114,14 +114,13 @@
 					</textElement>
 					<text><![CDATA[APPROVED]]></text>
 				</staticText>
-				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="3f3328d7-0291-40c0-8390-8a1ef8b55d1b" mode="Opaque" x="3" y="26" width="95" height="10" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				<staticText>
+					<reportElement uuid="6ad8255d-43da-49c5-b57e-07a1d8972b7d" x="4" y="26" width="93" height="14"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[]]></textFieldExpression>
-				</textField>
+					<text><![CDATA[Final-Approved ]]></text>
+				</staticText>
 			</frame>
 			<frame>
 				<reportElement uuid="6a2689ea-9896-4552-8258-b39d095b363d" x="448" y="-1" width="100" height="40"/>
@@ -140,11 +139,11 @@
 				</staticText>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="8034f36a-8548-4ead-8199-473e1e7c1071" mode="Opaque" x="3" y="13" width="95" height="10" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
+					<textElement textAlignment="Center">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA[]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getApprovedDate()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

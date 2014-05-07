@@ -1,11 +1,13 @@
 package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.DecisionControl;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
@@ -40,6 +42,10 @@ public class PDFDecision implements Serializable {
     @Inject
     private AppHeaderView appHeaderView;
 
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+
+    WorkCase workCase;
 
     private List<NewCreditDetailView> newCreditDetailViewList;
 
@@ -1008,6 +1014,7 @@ public class PDFDecision implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+        workCase = workCaseDAO.findById(workCaseId);
 
         if (!Util.isNull(appHeaderView)){
             log.debug("--Header. {}",appHeaderView);
@@ -1032,7 +1039,6 @@ public class PDFDecision implements Serializable {
             log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
 
             for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
-                log.debug("--i. {}",i);
                 switch (i){
                     case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
                              report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
@@ -1050,11 +1056,13 @@ public class PDFDecision implements Serializable {
                              report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
                         break;
                 }
+
+                report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+                report.setApprovedDate(workCase.getCompleteDate());
             }
         } else {
             log.debug("--Header is Null. {}",appHeaderView);
         }
-
 
         return report;
     }

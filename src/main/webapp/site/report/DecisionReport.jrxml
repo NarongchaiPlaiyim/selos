@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a2f0260-1118-46b2-ac1f-b3c5002dac16">
 	<property name="ireport.zoom" value="1.7715610000000048"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1412"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -71,12 +71,12 @@
 					<text><![CDATA[SME Credit Decision [OP Sheet]]]></text>
 				</staticText>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="bf06176e-07d7-4c2c-8267-0086b8b3acae" mode="Opaque" x="4" y="14" width="130" height="10" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<reportElement uuid="bf06176e-07d7-4c2c-8267-0086b8b3acae" mode="Opaque" x="1" y="14" width="133" height="26" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA[]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getCreditDecision()]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -101,14 +101,13 @@
 					</textElement>
 					<text><![CDATA[APPROVED]]></text>
 				</staticText>
-				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="2d4bde75-7b30-4a46-970b-c9df8d6f0dea" mode="Opaque" x="3" y="26" width="95" height="10" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+				<staticText>
+					<reportElement uuid="6ea12195-1312-4829-8e11-a09237cea069" x="5" y="26" width="93" height="14"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[]]></textFieldExpression>
-				</textField>
+					<text><![CDATA[Final-Approved ]]></text>
+				</staticText>
 			</frame>
 			<frame>
 				<reportElement uuid="ed106e59-f441-4d19-bef5-47d85e987879" x="447" y="0" width="100" height="40"/>
@@ -127,11 +126,11 @@
 				</staticText>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="9dc27c6f-3ef2-497b-944e-132bfa980552" mode="Opaque" x="3" y="13" width="95" height="10" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Right">
+					<textElement textAlignment="Center">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
-					<textFieldExpression><![CDATA[]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getApprovedDate()]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

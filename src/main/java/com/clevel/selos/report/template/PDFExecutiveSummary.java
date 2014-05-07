@@ -6,9 +6,11 @@ import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExSummaryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.working.ExSummary;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
@@ -55,9 +57,12 @@ public class PDFExecutiveSummary implements Serializable {
     @Inject
     private AppHeaderView appHeaderView;
 
-//    long workCaseId = 147;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
 
     long workCaseId;
+
+    WorkCase workCase;
 
     @Inject
     public PDFExecutiveSummary() {
@@ -428,7 +433,8 @@ public class PDFExecutiveSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-
+        workCase = workCaseDAO.findById(workCaseId);
+        //Detail 1
         if (!Util.isNull(appHeaderView)){
             log.debug("--Header. {}",appHeaderView);
             report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
@@ -453,7 +459,6 @@ public class PDFExecutiveSummary implements Serializable {
             log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
 
             for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
-                log.debug("--i. {}",i);
                 switch (i){
                     case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
                         report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
@@ -472,6 +477,10 @@ public class PDFExecutiveSummary implements Serializable {
                         break;
                 }
             }
+
+            report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setApprovedDate(workCase.getCompleteDate());
+
         } else {
             log.debug("--Header is Null. {}",appHeaderView);
         }
