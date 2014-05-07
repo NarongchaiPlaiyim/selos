@@ -364,13 +364,13 @@ public class FullApplicationControl extends BusinessControl {
                 throw new Exception("Please make decision before submit.");
             } else {
                 if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
-                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
+                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
                     approvalHistoryApprove.setSubmit(1);
                     approvalHistoryApprove.setSubmitDate(new Date());
                 } else {
                     throw new Exception("Please make decision before submit.");
                 }
-
+                log.debug("submitFCashZM ::: approvalHistory : {}", approvalHistoryApprove);
                 bpmExecutor.submitFCashZM(queueName, wobNumber, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
                 approvalHistoryDAO.persist(approvalHistoryApprove);
