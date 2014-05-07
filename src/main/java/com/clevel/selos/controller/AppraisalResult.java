@@ -368,7 +368,6 @@ public class AppraisalResult implements Serializable {
         log.info("-- onSaveAppraisalResult");
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
-
             appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");

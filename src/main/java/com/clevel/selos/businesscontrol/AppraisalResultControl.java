@@ -131,8 +131,8 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     public void onSaveAppraisalResult(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
+        log.debug("onSaveAppraisalResult ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
-
         //for remove coll
         List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
         if(appraisalView != null && appraisalView.getRemoveCollListId() != null && appraisalView.getRemoveCollListId().size() > 0){
@@ -161,9 +161,9 @@ public class AppraisalResultControl extends BusinessControl {
 
         newCollateralDAO.delete(newCollateralList);
 
-        if(!Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())){
+        if(appraisalView != null && !Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())){
             List<NewCollateralView> newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
-            insertToDB(newCollateralViewList, currentUser);
+            insertToDB(newCollateralViewList, currentUser , workCaseId , workCasePreScreenId);
         }
     }
 
@@ -212,7 +212,7 @@ public class AppraisalResultControl extends BusinessControl {
 
             newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
             log.debug("onSaveAppraisalResult ::: saveCollateralData : newCollateralViewList : {}", newCollateralViewList);
-            insertToDB(newCollateralViewList, currentUser);
+            insertToDB(newCollateralViewList, currentUser, workCaseId, workCasePreScreenId);
             log.debug("onSaveAppraisalResult ::: newCollateralList for save : {}", newCollateralList);
         }
 
@@ -251,8 +251,14 @@ public class AppraisalResultControl extends BusinessControl {
         }
     }
 
-    private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user){
-        log.debug("-- Insert into db");
+    private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user, long workCaseId, long workCasePreScreenId){
+        log.debug("insertToDB ::: newCollateralViewList ::: {} ", newCollateralViewList);
+        if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+            newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }
+
         newCollateralList = Util.safetyList(newCollateralTransform.transformToNewModel(newCollateralViewList, user, newCreditFacility));
         newCollateralDAO.persistProposeTypeA(newCollateralList);
         for(NewCollateral newCollateral : newCollateralList){
@@ -270,6 +276,7 @@ public class AppraisalResultControl extends BusinessControl {
             newCollateralHeadDAO.persist(newCollateralHeadList);
         }
     }
+
     private void clearDB(final List<NewCollateral> newCollateralList){
         log.debug("-- clear db");
         long id;
