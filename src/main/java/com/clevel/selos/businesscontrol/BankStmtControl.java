@@ -959,6 +959,7 @@ public class BankStmtControl extends BusinessControl {
 
         boolean isRoleUW = RoleValue.UW.id() == getUserRoleId();
         boolean isCountIncome;
+
         BigDecimal sumChqRetAmtCountIncomeOfLastSizM = BigDecimal.ZERO;
         BigDecimal sumNetUWofLastSixM = BigDecimal.ZERO;
         BigDecimal sumNetBDMofLastSixM = BigDecimal.ZERO;
