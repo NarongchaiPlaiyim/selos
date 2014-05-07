@@ -357,6 +357,9 @@ public class AppraisalResult implements Serializable {
     }
 
     public void onDeleteCollateralDetailView(){
+        if(selectCollateralDetailView.getId() != 0){
+            appraisalView.getRemoveCollListId().add(selectCollateralDetailView.getId());
+        }
         newCollateralViewList.remove(selectCollateralDetailView);
         log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());
     }

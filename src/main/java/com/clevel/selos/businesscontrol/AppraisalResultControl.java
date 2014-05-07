@@ -130,7 +130,44 @@ public class AppraisalResultControl extends BusinessControl {
         return appraisalView;
     }
 
-    public void onSaveAppraisalResult(final AppraisalView appraisalView, final long workCaseId, final long workCasePreScreenId){
+    public void onSaveAppraisalResult(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
+        User currentUser = getCurrentUser();
+
+        //for remove coll
+        List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
+        if(appraisalView != null && appraisalView.getRemoveCollListId() != null && appraisalView.getRemoveCollListId().size() > 0){
+            for(Long l : appraisalView.getRemoveCollListId()){
+                NewCollateral newCollateral = newCollateralDAO.findById(l);
+                if(newCollateral != null){
+                    newCollateralList.add(newCollateral);
+                }
+            }
+        }
+
+        if(newCollateralList.size() > 0){
+            for(NewCollateral nc : newCollateralList){
+                if(nc.getNewCollateralHeadList() != null && nc.getNewCollateralHeadList().size() > 0){
+                    for(NewCollateralHead nch : nc.getNewCollateralHeadList()){
+                        if(nch.getNewCollateralSubList() != null && nch.getNewCollateralSubList().size() > 0){
+                            for(NewCollateralSub ncs : nch.getNewCollateralSubList()){
+                                List<NewCollateralSubRelated> newCollSub = newCollateralSubRelatedDAO.findByMainCollSubId(ncs.getId());
+                                newCollateralSubRelatedDAO.delete(newCollSub);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        newCollateralDAO.delete(newCollateralList);
+
+        if(!Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())){
+            List<NewCollateralView> newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+            insertToDB(newCollateralViewList, currentUser);
+        }
+    }
+
+    public void onSaveAppraisalResultOld(final AppraisalView appraisalView, final long workCaseId, final long workCasePreScreenId){
         log.info("-- onSaveAppraisalResult begin");
         User currentUser = getCurrentUser();
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
