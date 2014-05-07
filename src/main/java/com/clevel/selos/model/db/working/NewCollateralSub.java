@@ -90,7 +90,7 @@ public class NewCollateralSub implements Serializable {
     @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
     private List<NewCollateralSubOwner> newCollateralSubOwnerList;
 
-    @OneToMany(mappedBy = "newCollateralSub")
+    @OneToMany(mappedBy = "newCollateralSub",cascade=CascadeType.ALL)
     private List<NewCollateralSubRelated> newCollateralSubRelatedList;
 
     @Column(name = "sub_id")

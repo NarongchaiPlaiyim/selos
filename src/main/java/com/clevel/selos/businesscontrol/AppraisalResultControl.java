@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Stateless
@@ -41,6 +42,15 @@ public class AppraisalResultControl extends BusinessControl {
     private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
     private NewCollateralSubDAO newCollateralSubDAO;
+    @Inject
+    private NewCollateralCreditDAO newCollateralCreditDAO;
+
+    @Inject
+    private NewCollateralSubMortgageDAO newCollateralSubMortgageDAO;
+    @Inject
+    private NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
+    @Inject
+    private NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
 
     @Inject
     private AppraisalTransform appraisalTransform;
@@ -149,11 +159,12 @@ public class AppraisalResultControl extends BusinessControl {
         if(Util.isNull(appraisalView.getNewCollateralViewList()) || Util.isZero(appraisalView.getNewCollateralViewList().size())){
             log.debug("-- NewCollateralViewList.size()[{}]", 0);
             log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
-            for (NewCollateral newCollateral : newCollateralList){
-                log.debug("-- NewCollateral.id[{}] ", newCollateral.getId());
-                newCollateralDAO.delete(newCollateral);
-                log.debug("-- deleted");
-            }
+            clearDB(newCollateralList);
+//            for (NewCollateral newCollateral : newCollateralList){
+//                log.debug("-- NewCollateral.id[{}] ", newCollateral.getId());
+//                newCollateralDAO.delete(newCollateral);
+//                log.debug("-- deleted");
+//            }
 //            newCollateralDAO.delete(newCollateralList);
         } else {
             log.debug("-- NewCollateralList.size()[{}]", newCollateralList.size());
@@ -225,17 +236,70 @@ public class AppraisalResultControl extends BusinessControl {
     private void clearDB(final List<NewCollateral> newCollateralList){
         log.debug("-- clear db");
         long id;
+        List<NewCollateralCredit> newCollateralCreditList = null;
+        List<NewCollateralSubMortgage> newCollateralSubMortgageList = null;
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = null;
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = null;
         for(NewCollateral newCollateral : newCollateralList){
             id = newCollateral.getId();
             log.debug("-- NewCollateral.id[{}]", id);
+
             newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(id));
-//            newCollateralHeadDAO.delete(newCollateralHeadList);
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                 id = newCollateralHead.getId();
+
                 newCollateralSubList = Util.safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
-                newCollateralSubDAO.delete(newCollateralSubList);
+                for(NewCollateralSub newCollateralSub : newCollateralSubList){
+
+                    newCollateralSubMortgageList = Util.safetyList(newCollateralSubMortgageDAO.findByNewCollateralSubId(newCollateralSub.getId()));
+                    for(NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgageList){
+                        log.debug("------ NewCollateralSubMortgage.id[{}]", newCollateralSubMortgage.getId());
+                        newCollateralSubMortgageDAO.delete(newCollateralSubMortgage);
+                        log.debug("------ Deleted");
+                    }
+                    newCollateralSub.setNewCollateralSubMortgageList(Collections.<NewCollateralSubMortgage>emptyList());
+
+                    newCollateralSubOwnerList = Util.safetyList(newCollateralSubOwnerDAO.findByNewCollateralSubId(newCollateralSub.getId()));
+                    for(NewCollateralSubOwner newCollateralSubOwner : newCollateralSubOwnerList){
+                        log.debug("------ NewCollateralSubOwner.id[{}]", newCollateralSubOwner.getId());
+                        newCollateralSubOwnerDAO.delete(newCollateralSubOwner);
+                        log.debug("------ Deleted");
+                    }
+                    newCollateralSub.setNewCollateralSubOwnerList(Collections.<NewCollateralSubOwner>emptyList());
+
+                    newCollateralSubRelatedList = Util.safetyList(newCollateralSubRelatedDAO.findByNewCollateralSubId(newCollateralSub.getId()));
+                    for(NewCollateralSubRelated newCollateralSubRelated : newCollateralSubRelatedList){
+                        log.debug("------ NewCollateralSubRelated.id[{}]", newCollateralSubRelated.getId());
+                        newCollateralSubRelatedDAO.delete(newCollateralSubRelated);
+                        log.debug("------ Deleted");
+                    }
+                    newCollateralSub.setNewCollateralSubRelatedList(Collections.<NewCollateralSubRelated>emptyList());
+
+                    log.debug("------ NewCollateralSub.id[{}]", newCollateralSub.getId());
+                    newCollateralSubDAO.persist(newCollateralSub);
+                    newCollateralSubDAO.delete(newCollateralSub);
+                    log.debug("------ Deleted");
+                }
+
+                log.debug("---- NewCollateralHead.id[{}]", newCollateralHead.getId());
+                newCollateralHead.setNewCollateralSubList(Collections.<NewCollateralSub>emptyList());
+                newCollateralHeadDAO.persist(newCollateralHead);
+                newCollateralHeadDAO.delete(newCollateralHead);
+                log.debug("---- Deleted");
             }
-            newCollateralHeadDAO.delete(newCollateralHeadList);
+
+            newCollateralCreditList = Util.safetyList(newCollateralCreditDAO.findByNewCollateralId(id));
+            for(NewCollateralCredit newCollateralCredit : newCollateralCreditList){
+                log.debug("---- NewCollateralCredit.id[{}]", newCollateralCredit.getId());
+                newCollateralCreditDAO.delete(newCollateralCredit);
+                log.debug("---- Deleted");
+            }
+
+            log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
+            newCollateral.setNewCollateralCreditList(Collections.<NewCollateralCredit>emptyList());
+            newCollateralDAO.persist(newCollateral);
+            newCollateralDAO.delete(newCollateral);
+            log.debug("-- Deleted");
         }
     }
 
