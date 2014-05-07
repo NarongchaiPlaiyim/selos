@@ -35,6 +35,17 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
         return newCollateralSubRelates;
 
     }
+
+    public List<NewCollateralSubRelated> findByNewCollateralSubId(final long newCollateralSubId) {
+        log.info("-- findByNewCollateralSubId NewCollateralSubId.id[{}]", newCollateralSubId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateralSub.id", newCollateralSubId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = (List<NewCollateralSubRelated>) criteria.list();
+        log.debug("--NewCollateralSubRelatedList[{}]", newCollateralSubRelatedList);
+        return newCollateralSubRelatedList;
+    }
+
 /*
 
     public List<NewCollateralSubRelated> getListByWorkCase(WorkCase workCase){
