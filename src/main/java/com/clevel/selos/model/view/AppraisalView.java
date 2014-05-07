@@ -45,6 +45,8 @@ public class AppraisalView implements Serializable {
     private User aadCommittee;
     private User aadAdmin;
 
+    private List<Long> removeCollListId;
+
     public AppraisalView(){
         init();
     }
@@ -62,6 +64,7 @@ public class AppraisalView implements Serializable {
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         appraisalContactDetailView = new AppraisalContactDetailView();
+        removeCollListId = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -300,6 +303,14 @@ public class AppraisalView implements Serializable {
 
     public void setAadAdmin(User aadAdmin) {
         this.aadAdmin = aadAdmin;
+    }
+
+    public List<Long> getRemoveCollListId() {
+        return removeCollListId;
+    }
+
+    public void setRemoveCollListId(List<Long> removeCollListId) {
+        this.removeCollListId = removeCollListId;
     }
 
     @Override
