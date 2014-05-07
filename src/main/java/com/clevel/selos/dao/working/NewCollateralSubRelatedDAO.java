@@ -35,6 +35,17 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
         return newCollateralSubRelates;
 
     }
+
+    public List<NewCollateralSubRelated> findByNewCollateralSubId(final long newCollateralSubId) {
+        log.info("-- findByNewCollateralSubId NewCollateralSubId.id[{}]", newCollateralSubId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateralSub.id", newCollateralSubId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = (List<NewCollateralSubRelated>) criteria.list();
+        log.debug("--NewCollateralSubRelatedList[{}]", newCollateralSubRelatedList);
+        return newCollateralSubRelatedList;
+    }
+
 /*
 
     public List<NewCollateralSubRelated> getListByWorkCase(WorkCase workCase){
@@ -69,6 +80,13 @@ public class NewCollateralSubRelatedDAO extends GenericDAO<NewCollateralSubRelat
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralSub.id", mainCollSubId));
         criteria.add(Restrictions.eq("proposeType", proposeType));
+        List<NewCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
+        return newCollateralSubRelatedList;
+    }
+
+    public List<NewCollateralSubRelated> findByMainCollSubId(long mainCollSubId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateralSub.id", mainCollSubId));
         List<NewCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
         return newCollateralSubRelatedList;
     }

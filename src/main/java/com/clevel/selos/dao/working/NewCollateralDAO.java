@@ -23,14 +23,14 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
     public NewCollateralDAO() {
     }
 
-    public void persistProposeTypeA(final List<NewCollateral> newCollateralList){
-        log.info("-- persistProposeTypeA ::: {}", newCollateralList.size());
-        for (NewCollateral newCollateral : newCollateralList) {
-            newCollateral.setAppraisalRequest(2);
-            newCollateral.setProposeType(ProposeType.A);
-        }
-        persist(newCollateralList);
-    }
+//    public void persistProposeTypeA(final List<NewCollateral> newCollateralList){
+//        log.info("-- persistProposeTypeA ::: {}", newCollateralList.size());
+//        for (NewCollateral newCollateral : newCollateralList) {
+//            newCollateral.setAppraisalRequest(2);
+//            newCollateral.setProposeType(ProposeType.A);
+//        }
+//        persist(newCollateralList);
+//    }
 
     public List<NewCollateral> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
         log.info("-- findNewCollateralByNewCreditFacility ::: {}", newCreditFacility.toString());

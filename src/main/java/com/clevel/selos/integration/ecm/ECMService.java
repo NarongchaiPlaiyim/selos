@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.ecm;
 
 import com.clevel.selos.exception.ECMInterfaceException;
-import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.module.DBExecute;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ECMService implements Serializable {
     @Inject
-    @NCB
+    @ECM
     private Logger log;
     @Inject
     private DBExecute dbExecute;

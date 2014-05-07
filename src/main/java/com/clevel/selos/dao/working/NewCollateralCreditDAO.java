@@ -6,6 +6,7 @@ import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.*;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -82,4 +83,13 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         return  criteria.list();
     }
 
+    public List<NewCollateralCredit> findByNewCollateralId(final long newCollateralId) {
+        log.info("-- findByNewCollateral NewCollateral.id[{}]", newCollateralId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateralCredit> newCollateralCreditList = (List<NewCollateralCredit>) criteria.list();
+        log.debug("-- NewCollateralCreditList[{}]", newCollateralCreditList);
+        return newCollateralCreditList;
+    }
 }
