@@ -148,12 +148,15 @@ public class BizInfoSummary extends BaseController {
         HttpSession session = FacesUtil.getSession(true);
 
         if(checkSession(session)){
-            setDisabledValue("ownerName",false);
-            setDisabledValue("expiryDate",true);
-
             workCaseId = (Long)session.getAttribute("workCaseId");
 
             loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY);
+
+            setDisabledValue("ownerName",false);
+            setDisabledValue("expiryDate",true);
+
+            setMandateValue("registrationDate",true);
+            setMandateValue("establishDate",true);
 
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
@@ -197,44 +200,9 @@ public class BizInfoSummary extends BaseController {
                 bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
             }
             onCheckInterview();
+            onChangeEstablishDate();
         }
     }
-
-/*    public void onChangeProvince() {
-        log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
-        if(bizInfoSummaryView.getProvince() != null){
-            Province proSelect = bizInfoSummaryView.getProvince();
-            districtList = districtDAO.getListByProvince(proSelect);
-        } else {
-            bizInfoSummaryView.setDistrict(new District());
-        }
-
-        if(!fromDB){
-            bizInfoSummaryView.setDistrict(new District());
-        }
-        log.info("onChangeProvince :::: districtList.size ::: {}", districtList.size());
-        subDistrictList = new ArrayList<SubDistrict>();
-    }
-
-    public void onChangeDistrict() {
-        log.debug("onChangeDistrict :::: District : {}", bizInfoSummaryView.getDistrict());
-        if(bizInfoSummaryView.getProvince() != null){
-            if(bizInfoSummaryView.getDistrict() != null){
-                District districtSelect = bizInfoSummaryView.getDistrict();
-                subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
-            } else {
-                bizInfoSummaryView.setSubDistrict(new SubDistrict());
-            }
-        } else {
-            bizInfoSummaryView.setDistrict(new District());
-            subDistrictList = new ArrayList<SubDistrict>();
-        }
-
-        if(!fromDB){
-            bizInfoSummaryView.setSubDistrict(new SubDistrict());
-        }
-        log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
-    }*/
 
     public void onChangeProvince() {
         log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
@@ -457,12 +425,24 @@ public class BizInfoSummary extends BaseController {
     public void onChangeRental(){
         if(bizInfoSummaryView.getRental() == 0 ){
             setDisabledValue("ownerName",false);
+            setMandateValue("ownerName",true);
             setDisabledValue("expiryDate",true);
+            setMandateValue("expiryDate",false);
             bizInfoSummaryView.setExpiryDate(null);
         }else if(bizInfoSummaryView.getRental() == 1 ){
             setDisabledValue("ownerName",true);
+            setMandateValue("ownerName",false);
             setDisabledValue("expiryDate",false);
+            setMandateValue("expiryDate",true);
             bizInfoSummaryView.setOwnerName("");
+        }
+    }
+
+    public void onChangeEstablishDate(){
+        if(bizInfoSummaryView.getEstablishDate() != null ) {
+            setMandateValue("establishFrom",true);
+        } else {
+            setMandateValue("establishFrom",false);
         }
     }
 
