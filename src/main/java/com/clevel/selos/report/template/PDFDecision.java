@@ -1,11 +1,14 @@
 package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.DecisionControl;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PDFDecision implements Serializable {
@@ -37,11 +41,19 @@ public class PDFDecision implements Serializable {
     @Inject
     DecisionView decisionView;
 
+    @Inject
+    private AppHeaderView appHeaderView;
+
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+
+    WorkCase workCase;
 
     private List<NewCreditDetailView> newCreditDetailViewList;
 
 
     long workCaseId;
+    private final String SPACE = " ";
 
 
 
@@ -66,7 +78,8 @@ public class PDFDecision implements Serializable {
 
         if(!Util.isNull(workCaseId)){
             decisionView = decisionControl.getDecisionView(workCaseId);
-            log.debug("--decisionView. {}",decisionView);
+            workCase = workCaseDAO.findById(workCaseId);
+            log.debug("--decisionView. {},workCase. {}",decisionView,workCase);
         } else {
             log.debug("--workcaseId is Null. {}",workCaseId);
         }
@@ -998,5 +1011,81 @@ public class PDFDecision implements Serializable {
         priceFeeDecisionReport.setGuarantorBA(Util.convertNullToZERO(decisionView.getGuarantorBA()));
         priceFeeDecisionReport.setReasonForReduction(Util.checkNullString(decisionView.getReasonForReduction()));
         return priceFeeDecisionReport;
+    }
+
+    public HeaderAndFooterReport fillHeader(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        HttpSession session = FacesUtil.getSession(true);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+
+        if (!Util.isNull(appHeaderView)){
+            log.debug("--Header. {}",appHeaderView);
+            report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
+            report.setBdmName(Util.checkNullString(appHeaderView.getBdmName()));
+            report.setBdmPhoneNumber(Util.checkNullString(appHeaderView.getBdmPhoneNumber()));
+            report.setBdmPhoneExtNumber(Util.checkNullString(appHeaderView.getBdmPhoneExtNumber()));
+            report.setBdmZoneName(Util.checkNullString(appHeaderView.getBdmZoneName()));
+            report.setBdmRegionName(Util.checkNullString(appHeaderView.getBdmRegionName()));
+            report.setSubmitDate(Util.checkNullString(appHeaderView.getSubmitDate()));
+            report.setUwName(Util.checkNullString(appHeaderView.getUwName()));
+            report.setUwPhoneNumber(Util.checkNullString(appHeaderView.getUwPhoneNumber()));
+            report.setUwPhoneExtNumber(Util.checkNullString(appHeaderView.getUwPhoneExtNumber()));
+            report.setUwTeamName(Util.checkNullString(appHeaderView.getUwTeamName()));
+            report.setRequestType(Util.checkNullString(appHeaderView.getRequestType()));
+            report.setAppNo(Util.checkNullString(appHeaderView.getAppNo()));
+            report.setAppRefNo(Util.checkNullString(appHeaderView.getAppRefNo()));
+            report.setAppRefDate(Util.checkNullString(appHeaderView.getAppRefDate()));
+            report.setProductGroup(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
+
+            log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
+
+            for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
+                switch (i){
+                    case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                             report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                             report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                             report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                             report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                             report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                }
+
+                report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+                report.setApprovedDate(workCase.getCompleteDate());
+            }
+        } else {
+            log.debug("--Header is Null. {}",appHeaderView);
+        }
+
+        return report;
+    }
+
+    public HeaderAndFooterReport fillFooter(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        String date = Util.createDateAndTimeTh(new Date());
+        log.debug("--Date. {}",date);
+
+        String userName =  decisionControl.getCurrentUserID();
+        log.debug("---------- {}",userName);
+
+        StringBuilder genFooter = new StringBuilder();
+        genFooter = genFooter.append(userName).append(SPACE).append(date);
+        report.setGenFooter(genFooter.toString());
+
+
+
+
+        return report;
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="992d94ee-ab0e-458e-a59a-046b96b4a957">
-	<property name="ireport.zoom" value="0.9313819845887477"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="658"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
+	<property name="ireport.zoom" value="1.5000000000000249"/>
+	<property name="ireport.x" value="39"/>
+	<property name="ireport.y" value="2434"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -31,6 +31,7 @@
 			</style>
 		</conditionalStyle>
 	</style>
+	<parameter name="fillHeader" class="com.clevel.selos.model.report.HeaderAndFooterReport"/>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="borrower" class="java.util.Collection"/>
 	<parameter name="tradeFinance" class="java.util.Collection"/>
@@ -46,36 +47,487 @@
 	<parameter name="bizSupport" class="com.clevel.selos.model.report.BizSupportExSumReport"/>
 	<parameter name="uwDecision" class="com.clevel.selos.model.report.UWDecisionExSumReport"/>
 	<parameter name="decision" class="com.clevel.selos.model.report.DecisionExSumReport"/>
+	<parameter name="fillFooter" class="com.clevel.selos.model.report.HeaderAndFooterReport"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
 	<title>
-		<band height="30">
-			<line>
-				<reportElement uuid="21c6acda-3cfb-45ad-8f7d-1d38471bdba7" x="0" y="19" width="555" height="1" forecolor="#CCCCCC"/>
-			</line>
-			<line>
-				<reportElement uuid="4589f2ca-b930-40c3-892c-1e7830aabbe1" x="0" y="29" width="555" height="1" forecolor="#CCCCCC"/>
-			</line>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="44" splitType="Stretch">
+			<frame>
+				<reportElement uuid="01ce95d7-53a9-4605-a91b-6f0e51bd4e4d" x="0" y="-1" width="212" height="40"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<image>
+					<reportElement uuid="7ee4250b-5fba-4950-bf37-c6577ae42ae9" x="0" y="1" width="210" height="28"/>
+					<imageExpression><![CDATA[$P{path} + "TMBBank_210x28.gif"]]></imageExpression>
+				</image>
+			</frame>
+			<frame>
+				<reportElement uuid="be050c27-c5e6-4df1-839d-601dcd5f0d51" x="212" y="-1" width="136" height="40"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement uuid="c264f392-bc23-4b93-9373-9f11ad7f3b9a" x="0" y="0" width="135" height="14"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[SME Credit Decision [Full Pack]]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="ba2f64dd-41e7-415f-a3bd-fceab4c1c972" mode="Opaque" x="2" y="12" width="130" height="28" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="6" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getCreditDecision()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement uuid="1092eeb9-7046-4926-8148-66319e642c4a" x="348" y="-1" width="100" height="40"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement uuid="ff7d0261-ae6d-46ad-ab18-64b41553a727" x="0" y="0" width="100" height="13"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Decision Status]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1acaf018-5650-48ce-a6a6-54e0b381cc6b" x="0" y="13" width="100" height="13"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[APPROVED]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="6ad8255d-43da-49c5-b57e-07a1d8972b7d" x="4" y="26" width="93" height="14"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Final-Approved ]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement uuid="6a2689ea-9896-4552-8258-b39d095b363d" x="448" y="-1" width="100" height="40"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement uuid="e25d087a-a3ae-4fbc-8954-6b0abd4bb32a" x="0" y="0" width="100" height="13"/>
+					<textElement textAlignment="Center">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Decision Date]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="8034f36a-8548-4ead-8199-473e1e7c1071" mode="Opaque" x="3" y="13" width="95" height="10" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Center">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getApprovedDate()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="208" splitType="Stretch">
+			<frame>
+				<reportElement uuid="99dc4f88-ee5b-4a3f-9d4e-0a126e99ea3a" mode="Opaque" x="0" y="0" width="555" height="178" backcolor="#FFFFFF"/>
+				<staticText>
+					<reportElement uuid="11f8dab0-8267-418a-85da-730077e56520" mode="Opaque" x="2" y="14" width="30" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[BDM :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="02c442cc-28a0-48db-90ea-34b079b3a540" mode="Opaque" x="120" y="14" width="26" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Tel. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="def64aad-0bb5-4401-be0d-fd95f4436ec9" mode="Opaque" x="211" y="14" width="20" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Ext. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="614bbf47-8506-410a-9cfb-a8203253a66a" mode="Opaque" x="280" y="14" width="28" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Zone :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d4d45ae9-38c7-4db5-8e1a-06ef953311c5" mode="Opaque" x="360" y="14" width="38" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Region :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a12f429a-daf6-4204-93ac-ba8517fd2356" mode="Opaque" x="1" y="48" width="60" height="25" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Underwriter :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="657be489-7d5f-4259-b268-0a9481966e36" mode="Opaque" x="131" y="47" width="20" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Tel. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="42dd9f14-8806-4f51-aec6-0bd6f169885d" mode="Opaque" x="227" y="47" width="27" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Ext. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b374d0fe-03e0-4c6a-9097-e110adaa5cb8" mode="Opaque" x="309" y="47" width="30" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Team :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="648da95b-c7b9-4e90-8f91-6a3af4b98bae" mode="Opaque" x="1" y="78" width="42" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[App No. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0d1749bc-6a8c-46fd-9fd4-e1033baa38b7" mode="Opaque" x="173" y="78" width="62" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Ref App No. :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="cbc0086c-a885-4a5a-b66a-c20e0bd51bde" mode="Opaque" x="336" y="78" width="62" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Ref App Date :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d592c05e-6b77-4c71-a19b-6870de5bb818" mode="Opaque" x="445" y="13" width="53" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Status :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="8bedaa21-f4ef-4949-a3c1-4aa697ea1001" mode="Opaque" x="445" y="25" width="53" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Submit Date :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e10b0719-a2c5-4570-91fe-6435561366f8" mode="Opaque" x="439" y="38" width="59" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Request Type :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="7a81363b-087f-4dc9-98d2-e2f076255bdb" mode="Opaque" x="447" y="50" width="51" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Refinance :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="33e8330f-fbf6-4cd2-86d1-66bec8455ea6" mode="Opaque" x="2" y="104" width="73" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Borrower Name :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ab3c0465-9026-4c2e-ba9e-629f0afc2345" mode="Opaque" x="2" y="123" width="70" height="24" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Citizen ID / Registration ID :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="98b8fb30-c19e-468c-bff1-f4324aa2f87e" mode="Opaque" x="2" y="149" width="73" height="11" forecolor="#0066FF" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Product Group :]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="339e85cf-b8f3-41e2-8a64-8565c385a254" x="32" y="15" width="78" height="25"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBdmName()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="7e662c4a-99e5-4569-85aa-db1f5b7c0322" x="150" y="15" width="59" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBdmPhoneNumber()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="df5cc0bd-ebe8-4858-8e6c-0d13bc7726b8" x="233" y="15" width="47" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBdmPhoneExtNumber()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="7c5e26cc-dd5b-4e7e-aee5-a916a6d68440" x="308" y="15" width="52" height="23"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBdmZoneName()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="81e591da-2ebe-4487-8a9b-4388a202ff9b" x="397" y="16" width="48" height="23"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBdmRegionName()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="1771f97a-961a-4e8c-8f28-cab4b229252c" x="61" y="49" width="69" height="25"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getUwName()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="fe08440e-ed13-4a36-a4b0-45ff341c4e8f" x="157" y="49" width="59" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getUwPhoneNumber()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="a4002466-1098-493d-b3d3-9a1d9a9f5891" x="254" y="49" width="47" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getUwPhoneExtNumber()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="cb2c373e-20ba-471d-b31b-91613c982382" x="340" y="49" width="43" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getUwTeamName()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="6c1dd801-a4c9-48c5-ad8d-de2a2069bcbd" x="61" y="80" width="85" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getAppNo()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="7060cd3b-5133-4ac4-b0f1-5d19c941d713" x="235" y="79" width="85" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getAppRefNo()]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="235eebdd-ed18-4709-b888-e2d92999cafc" x="399" y="80" width="85" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getAppRefDate()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="1ef4abe1-0c78-4ee6-a986-bbe8eb0914d0" x="86" y="105" width="85" height="21"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBorrowerName()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="5dcdb094-ccc2-4293-8396-d6017849682e" x="86" y="130" width="85" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="25468c71-4ac5-40ad-b19b-212d274744d3" x="175" y="105" width="85" height="21"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBorrowerName2()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="94b975cc-1d33-4756-afec-4d4fade0f7c9" x="175" y="130" width="85" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId2()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="cd64d78b-2fba-4b89-8c9b-9438ee29d7c2" x="75" y="149" width="88" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getProductGroup()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="f59a40d9-6220-4af2-b4bb-f175d72c0506" x="499" y="13" width="43" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getCaseStatus()]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="fc8a28c1-c551-4625-b1ac-24936b0cf735" x="499" y="25" width="43" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getSubmitDate()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="283872c4-d58d-4acd-b29b-78bab15c68ca" x="499" y="38" width="43" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getRequestType()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="efeaa778-c98c-4f10-a459-a4df0f580feb" x="499" y="51" width="43" height="11"/>
+					<textElement>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getRefinance()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="32c2a6b1-4c62-4c58-a2e3-37f0873e782d" x="265" y="105" width="85" height="21"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBorrowerName3()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="133d0111-7448-49f6-ba83-d5a999fd529c" x="355" y="105" width="85" height="21"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBorrowerName4()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="bfc426d3-84d5-4e2a-9539-a1155214200f" x="445" y="105" width="85" height="22"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getBorrowerName5()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="5d1fa040-fc40-4d68-8719-1f9ed8494305" x="265" y="130" width="85" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId3()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="a2e1c7aa-9276-4efc-8bdc-e2126c5e480e" x="355" y="130" width="85" height="11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId4()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="b2ba39f9-2f41-42cf-aa2e-67cd93d5446f" x="445" y="130" width="85" height="13"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId5()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="95b5b2d9-a4f2-42e6-9ab6-7304fa62b634" x="260" y="148" width="76" height="11"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+				</textField>
+				<staticText>
+					<reportElement uuid="566ca153-f051-4729-93c5-27067ae583ef" x="171" y="148" width="88" height="11" forecolor="#2370C2"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Last Decision #1 App :	]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b439d89f-a1ee-4f33-a037-125bac449949" x="336" y="148" width="103" height="11" forecolor="#2370C2"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Limit Setup Expired Date :	]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="33043da0-8727-4898-8234-027dba0abea2" x="440" y="148" width="76" height="11"/>
+					<textElement verticalAlignment="Top">
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+				</textField>
+			</frame>
 			<staticText>
-				<reportElement uuid="3ff92006-2b7a-44aa-9b71-f36d380d5983" x="0" y="0" width="100" height="20"/>
+				<reportElement uuid="5e616e24-5fec-47dc-99b0-5932a3f9632c" x="0" y="178" width="100" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Executive  Summary]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="a76b4e3f-53ff-4558-9e0c-713a02deae76" x="0" y="207" width="555" height="1" forecolor="#CCCCCC"/>
+			</line>
+			<line>
+				<reportElement uuid="6e5b101e-e619-4342-b086-a12f927b8b46" x="0" y="197" width="555" height="1" forecolor="#CCCCCC"/>
+			</line>
 		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
-	<detail>
-		<band height="80" splitType="Prevent">
+		<band height="67">
 			<frame>
-				<reportElement uuid="cfa39487-fa82-48d2-a892-cacff317c90e" mode="Opaque" x="0" y="0" width="555" height="80" forecolor="#CCCCFF" backcolor="#FFFFFF"/>
+				<reportElement uuid="59721944-6761-432f-bfd7-f8ed5c32075e" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" forecolor="#CCCCFF" backcolor="#FFFFFF"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="3880145d-832e-45ab-916f-fde3eb897e3b" x="0" y="0" width="43" height="12"/>
+					<reportElement uuid="c53854d3-7117-47da-8ad1-529b9a098156" x="0" y="0" width="43" height="12"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -89,7 +541,7 @@
 					<text><![CDATA[Borrower]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="3f760ad3-215b-4609-b9d3-0eb56e194edb" x="0" y="24" width="541" height="46"/>
+					<reportElement uuid="751cc145-a928-4408-91fd-c77f3e87118a" x="0" y="17" width="541" height="46"/>
 					<subreportParameter name="borrower">
 						<subreportParameterExpression><![CDATA[$P{borrower}]]></subreportParameterExpression>
 					</subreportParameter>
@@ -98,9 +550,9 @@
 				</subreport>
 			</frame>
 		</band>
-		<band height="91" splitType="Prevent">
+		<band height="91">
 			<frame>
-				<reportElement uuid="628c86d3-fb16-491e-8df5-2bd7c7cb2085" style="Frame" mode="Opaque" x="0" y="0" width="555" height="91" backcolor="#FFFFFF"/>
+				<reportElement uuid="2978c076-9fa9-499a-b3bf-7718bde72818" style="Frame" mode="Opaque" x="0" y="0" width="555" height="91" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -108,7 +560,7 @@
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="97689985-8098-4d07-a2f9-601f1992e3e3" mode="Opaque" x="0" y="4" width="107" height="20"/>
+					<reportElement uuid="c68c04e5-4f44-4cd4-b033-b5a3ec60bdfc" mode="Opaque" x="0" y="4" width="107" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -123,7 +575,7 @@
 					<text><![CDATA[ชื่อสถานประกอบการ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="2929ad41-eec1-49e1-b5c4-224e3de2c82c" mode="Opaque" x="0" y="24" width="107" height="20"/>
+					<reportElement uuid="db2bc876-a0d4-41da-8e5f-4bdf68121980" mode="Opaque" x="0" y="24" width="107" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -138,7 +590,7 @@
 					<text><![CDATA[ที่อยู่สถานประกอบการ (ไทย)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="22ba3d73-1d26-42d4-b40a-d4d54ef35161" mode="Opaque" x="0" y="44" width="107" height="20"/>
+					<reportElement uuid="d9659780-6719-423e-9a00-1a82e0882705" mode="Opaque" x="0" y="44" width="107" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -153,7 +605,7 @@
 					<text><![CDATA[ที่อยู่สถานประกอบการ (อังกฤษ)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="18560c5f-73cc-4de4-940b-cae3bc47a96b" mode="Opaque" x="0" y="64" width="107" height="20"/>
+					<reportElement uuid="2e0c4597-876b-4e26-b12b-04984021515c" mode="Opaque" x="0" y="64" width="107" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -168,7 +620,7 @@
 					<text><![CDATA[กรรมสิทธิ]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="44236824-203e-45bc-bc03-9dad6eaa797f" mode="Opaque" x="107" y="4" width="448" height="20"/>
+					<reportElement uuid="cf9f4f66-3d03-4584-9f94-960026b70e01" mode="Opaque" x="107" y="4" width="448" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -183,7 +635,7 @@
 					<textFieldExpression><![CDATA[$P{businessLocation}.getBusinessLocationName()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="90fd3911-ea96-4b48-8aeb-b03410a818fb" mode="Opaque" x="107" y="24" width="448" height="20"/>
+					<reportElement uuid="73443be3-072d-4b68-8679-88197f8f359f" mode="Opaque" x="107" y="24" width="448" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -198,7 +650,7 @@
 					<textFieldExpression><![CDATA[$P{businessLocation}.getBusinessLocationAddress()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="6bf4e0af-1386-4388-8d4e-61d297c69451" mode="Opaque" x="107" y="44" width="448" height="20"/>
+					<reportElement uuid="ceb406a6-74a8-45d7-9926-800d6b3ca98c" mode="Opaque" x="107" y="44" width="448" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -213,7 +665,7 @@
 					<textFieldExpression><![CDATA[$P{businessLocation}.getBusinessLocationAddressEN()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="6b91b8df-3611-4feb-88ee-025f173f2685" mode="Opaque" x="107" y="64" width="448" height="20"/>
+					<reportElement uuid="e519248d-b902-4a41-802c-a71507058f4a" mode="Opaque" x="107" y="64" width="448" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -229,9 +681,9 @@
 				</textField>
 			</frame>
 		</band>
-		<band height="67" splitType="Prevent">
+		<band height="67">
 			<frame>
-				<reportElement uuid="7a816d29-af68-4ca7-9a67-d351b4029524" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
+				<reportElement uuid="a9991040-b326-4570-87bc-82dcc4d41c1c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -239,7 +691,7 @@
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="7ffb1a04-3417-4c04-936a-1992627df6de" x="0" y="0" width="84" height="13"/>
+					<reportElement uuid="c63c13fd-d1c9-480c-83b4-6681637c765d" x="0" y="0" width="84" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -253,7 +705,7 @@
 					<text><![CDATA[กรณี Trade Finance]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="791d3629-e00f-45f7-824a-ef0f7b8aaa5a" x="0" y="18" width="541" height="42"/>
+					<reportElement uuid="00772a63-9385-4be8-b41f-cda2f719b20d" x="0" y="18" width="541" height="42"/>
 					<subreportParameter name="tradeFinance">
 						<subreportParameterExpression><![CDATA[$P{tradeFinance}]]></subreportParameterExpression>
 					</subreportParameter>
@@ -262,9 +714,9 @@
 				</subreport>
 			</frame>
 		</band>
-		<band height="190" splitType="Prevent">
+		<band height="190">
 			<frame>
-				<reportElement uuid="82a64e92-741d-4b58-a95b-dba5e95b81ca" style="Frame" mode="Opaque" x="0" y="0" width="555" height="190" backcolor="#FFFFFF"/>
+				<reportElement uuid="5ae701fb-1e6d-498a-9fe1-9498969b1628" style="Frame" mode="Opaque" x="0" y="0" width="555" height="190" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -272,14 +724,14 @@
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="e0768087-ef66-4f0d-8e36-5cd4dc0a3488" x="0" y="0" width="100" height="13"/>
+					<reportElement uuid="5cf9b0f9-ab7d-4204-b973-d12b5c52dead" x="0" y="0" width="100" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[Borrower Characteristic]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="e9390185-9e30-4127-a6c7-5d3e3dbe1677" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="46" width="54" height="20"/>
+					<reportElement uuid="6ce0d656-b914-43f8-ab2e-e310fc66d145" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="46" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -294,7 +746,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getCustomer()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="d0338a86-75a5-4a71-ade3-f2166ff7699a" stretchType="RelativeToBandHeight" mode="Opaque" x="54" y="46" width="30" height="20"/>
+					<reportElement uuid="b20f847f-66a9-40ff-a110-cda85d2ce305" stretchType="RelativeToBandHeight" mode="Opaque" x="54" y="46" width="30" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -309,7 +761,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getCurrentDBR()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="7ab493bf-d172-473a-9384-0965825117a3" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="46" width="32" height="20"/>
+					<reportElement uuid="9eecb415-9cb3-4809-b2e6-92f5fed29cdf" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="46" width="32" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -324,7 +776,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getFinalDBR()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="23ae887c-e966-4e77-90d4-3bc0b924378b" stretchType="RelativeToBandHeight" mode="Opaque" x="116" y="46" width="46" height="20"/>
+					<reportElement uuid="00010572-8426-4534-9786-a6f56fa88342" stretchType="RelativeToBandHeight" mode="Opaque" x="116" y="46" width="46" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -339,7 +791,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getIncome()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="26943cc0-59de-41b9-843f-7cf02fdf89b6" stretchType="RelativeToBandHeight" mode="Opaque" x="162" y="46" width="62" height="20"/>
+					<reportElement uuid="f6a299da-cc20-48d7-bed8-0f5b22065f67" stretchType="RelativeToBandHeight" mode="Opaque" x="162" y="46" width="62" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -354,7 +806,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getRecommendedWCNeed()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="2b7a56f6-d3ad-42b2-bd3c-445550ed5bfb" stretchType="RelativeToBandHeight" mode="Opaque" x="224" y="46" width="46" height="20"/>
+					<reportElement uuid="6ba5ded5-ba1f-4209-bf7f-0d8cb839cc44" stretchType="RelativeToBandHeight" mode="Opaque" x="224" y="46" width="46" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -369,7 +821,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getActualWC()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="b0d1fb22-b4fe-4088-84dd-c0c65bd494e1" stretchType="RelativeToBandHeight" mode="Opaque" x="270" y="46" width="58" height="20"/>
+					<reportElement uuid="f7f30853-ea6a-4152-a756-f32ca55a8a49" stretchType="RelativeToBandHeight" mode="Opaque" x="270" y="46" width="58" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -384,7 +836,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getStartBusinessDate()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="925bbabe-eae7-43bf-904f-6e398eae05bc" stretchType="RelativeToBandHeight" mode="Opaque" x="328" y="46" width="43" height="20"/>
+					<reportElement uuid="c192ba83-8267-4524-b9fa-e4692058908c" stretchType="RelativeToBandHeight" mode="Opaque" x="328" y="46" width="43" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -399,7 +851,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getYearInBusiness()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="255a96bb-054b-4c02-9be2-8a24788fa441" stretchType="RelativeToBandHeight" mode="Opaque" x="371" y="46" width="28" height="20"/>
+					<reportElement uuid="9a6c65a3-a52d-415a-93fe-ffbf254a3a50" stretchType="RelativeToBandHeight" mode="Opaque" x="371" y="46" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -414,7 +866,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getSalePerYearBDM()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="3408e897-bec3-4f82-a976-cad41cbc4ef0" stretchType="RelativeToBandHeight" mode="Opaque" x="399" y="46" width="31" height="20"/>
+					<reportElement uuid="c368a579-6c23-46df-9251-1dd321809bb3" stretchType="RelativeToBandHeight" mode="Opaque" x="399" y="46" width="31" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -429,7 +881,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getSalePerYearUW()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="861efc53-b7e9-4100-8945-90417dd13b9c" stretchType="RelativeToBandHeight" mode="Opaque" x="458" y="46" width="31" height="20"/>
+					<reportElement uuid="4b573b05-7077-4341-be24-04e3faa40fc2" stretchType="RelativeToBandHeight" mode="Opaque" x="458" y="46" width="31" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -444,7 +896,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupSaleUW()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="98754e01-8187-409c-9979-c7a41942d308" stretchType="RelativeToBandHeight" mode="Opaque" x="430" y="46" width="28" height="20"/>
+					<reportElement uuid="c4314d39-dad1-43c1-907e-4bc133f1f481" stretchType="RelativeToBandHeight" mode="Opaque" x="430" y="46" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -459,7 +911,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupSaleBDM()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="8e717c16-0c21-47df-99ba-ccb4545b4394" stretchType="RelativeToBandHeight" mode="Opaque" x="517" y="46" width="38" height="20"/>
+					<reportElement uuid="74b8e3b6-c65e-4eb9-acc7-c34e3e53ca54" stretchType="RelativeToBandHeight" mode="Opaque" x="517" y="46" width="38" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -474,7 +926,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupExposureUW()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="a3e158ad-361e-4755-8932-ae311f76cd8d" stretchType="RelativeToBandHeight" mode="Opaque" x="489" y="46" width="28" height="20"/>
+					<reportElement uuid="425347cc-ac2b-46db-bcaf-46a69b19cedd" stretchType="RelativeToBandHeight" mode="Opaque" x="489" y="46" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -489,7 +941,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupExposureBDM()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="8ad0fb3b-5eb4-421c-81ce-2dd950e4cff1" stretchType="RelativeToBandHeight" mode="Opaque" x="368" y="97" width="41" height="20"/>
+					<reportElement uuid="a11c4814-b5d4-4329-b0c6-66f1bf86ca01" stretchType="RelativeToBandHeight" mode="Opaque" x="368" y="97" width="41" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -504,7 +956,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizSize()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="b56f9de2-2a5d-4ecc-9994-e4e700e3cefd" stretchType="RelativeToBandHeight" mode="Opaque" x="126" y="97" width="46" height="20"/>
+					<reportElement uuid="0e4b2f1b-7c99-44fc-b8f3-111fe04b47ba" stretchType="RelativeToBandHeight" mode="Opaque" x="126" y="97" width="46" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -519,7 +971,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizType()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="40a5ec93-45a1-44e9-95e2-b9fb3828a9a0" stretchType="RelativeToBandHeight" mode="Opaque" x="224" y="97" width="36" height="20"/>
+					<reportElement uuid="9455bc14-afb7-464f-ad1c-c3a1087935dd" stretchType="RelativeToBandHeight" mode="Opaque" x="224" y="97" width="36" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -534,7 +986,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizCode()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="f30a8148-89fc-4bdb-896b-006b64737ec4" stretchType="RelativeToBandHeight" mode="Opaque" x="172" y="97" width="52" height="20"/>
+					<reportElement uuid="10cfa3d3-c8d3-4dba-ba9c-6dfe49a733d7" stretchType="RelativeToBandHeight" mode="Opaque" x="172" y="97" width="52" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -549,7 +1001,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizGroup()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="0fd85e4c-8ca3-4cf8-83d7-b11872b005e7" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="97" width="43" height="20"/>
+					<reportElement uuid="56ee5202-4b33-4d0f-b9cd-e404fe583632" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="97" width="43" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -564,7 +1016,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getNetFixAsset()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="06a1ac7d-bc6f-414f-a722-40f356507127" stretchType="RelativeToBandHeight" mode="Opaque" x="43" y="97" width="40" height="20"/>
+					<reportElement uuid="bf11727b-5760-4d1e-9aae-b9ae2c047f5b" stretchType="RelativeToBandHeight" mode="Opaque" x="43" y="97" width="40" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -579,7 +1031,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getNoOfEmployee()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="50760375-8fa5-495b-9456-59e6d0edc26f" stretchType="RelativeToBandHeight" mode="Opaque" x="260" y="97" width="55" height="20"/>
+					<reportElement uuid="25734d51-e661-446c-aa85-09aa4fd39f47" stretchType="RelativeToBandHeight" mode="Opaque" x="260" y="97" width="55" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -594,7 +1046,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizDesc()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="3c6793ee-6b9e-43d0-ab70-d4f54fa788a2" stretchType="RelativeToBandHeight" mode="Opaque" x="437" y="97" width="31" height="20"/>
+					<reportElement uuid="cfe66078-16f6-465d-a088-614612d2fbc6" stretchType="RelativeToBandHeight" mode="Opaque" x="437" y="97" width="31" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -609,7 +1061,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getUW()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="ef9e1d99-2938-45f2-8ead-9bbfd9423692" stretchType="RelativeToBandHeight" mode="Opaque" x="409" y="97" width="28" height="20"/>
+					<reportElement uuid="56842580-4c9b-47e9-9adc-4630daa4dc74" stretchType="RelativeToBandHeight" mode="Opaque" x="409" y="97" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -624,7 +1076,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBDM()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="264e7b09-e510-436e-9d4f-ed9c9cffa5f1" stretchType="RelativeToBandHeight" mode="Opaque" x="315" y="97" width="53" height="20"/>
+					<reportElement uuid="b85b566f-8e99-462d-b478-a93dbcc2a59b" stretchType="RelativeToBandHeight" mode="Opaque" x="315" y="97" width="53" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -639,7 +1091,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getQualitativeClass()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="767f4df6-3f94-432f-9fd2-538daf827233" stretchType="RelativeToBandHeight" mode="Opaque" x="468" y="97" width="28" height="20"/>
+					<reportElement uuid="49e68008-153a-4715-8a11-8930c13e55c4" stretchType="RelativeToBandHeight" mode="Opaque" x="468" y="97" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -654,7 +1106,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getAR()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="df6d5e11-1dbc-4f4b-af27-0cd1f8fed499" stretchType="RelativeToBandHeight" mode="Opaque" x="83" y="97" width="43" height="20"/>
+					<reportElement uuid="9b15c1ba-4a76-434b-b3f9-8cf401ba8584" stretchType="RelativeToBandHeight" mode="Opaque" x="83" y="97" width="43" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -669,7 +1121,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBizProvince()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="ece5defe-b93a-4289-8dc8-25941372643f" stretchType="RelativeToBandHeight" mode="Opaque" x="496" y="97" width="28" height="20"/>
+					<reportElement uuid="d8821e8c-1b79-4c98-9754-a69307472e4b" stretchType="RelativeToBandHeight" mode="Opaque" x="496" y="97" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -684,7 +1136,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getAP()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="49ed56d6-b1ba-4cd3-8fd8-89f40e8741cd" stretchType="RelativeToBandHeight" mode="Opaque" x="524" y="97" width="31" height="20"/>
+					<reportElement uuid="2e55744f-3a45-4e37-b7f5-d6b0d4e4362c" stretchType="RelativeToBandHeight" mode="Opaque" x="524" y="97" width="31" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -699,7 +1151,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getINV()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="586d3155-eee7-4789-a7a9-3018f44cfbac" x="0" y="164" width="101" height="20"/>
+					<reportElement uuid="a41b76e3-63f2-4b7f-a6c4-09a043cdc3a8" x="0" y="164" width="101" height="20"/>
 					<box>
 						<pen lineWidth="0.0"/>
 						<topPen lineWidth="0.0"/>
@@ -713,7 +1165,7 @@
 					<text><![CDATA[Expiry Date :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="f82e98c9-da0d-4a3e-9a43-928be32a8980" x="0" y="124" width="101" height="20"/>
+					<reportElement uuid="fab521ee-f156-4ae4-b1aa-ef2999e6c0c9" x="0" y="124" width="101" height="20"/>
 					<box>
 						<pen lineWidth="0.0"/>
 						<topPen lineWidth="0.0"/>
@@ -727,7 +1179,7 @@
 					<text><![CDATA[Business Operation Activity :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="11514522-505b-4710-8293-4464329aaeaf" x="0" y="144" width="101" height="20"/>
+					<reportElement uuid="1a20d95a-69dc-4472-9813-21c48c1f5261" x="0" y="144" width="101" height="20"/>
 					<box>
 						<pen lineWidth="0.0"/>
 						<topPen lineWidth="0.0"/>
@@ -741,7 +1193,7 @@
 					<text><![CDATA[Business Permission :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="2979183d-6134-4e59-8b1c-28cddd0feba8" x="101" y="124" width="404" height="20"/>
+					<reportElement uuid="c069ba92-4679-4706-b260-6b6a608dcb18" x="101" y="124" width="404" height="20"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -756,7 +1208,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessOperationActivity()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="3ec83853-9b63-4f4d-81cf-870d5ddf9536" x="101" y="164" width="404" height="20"/>
+					<reportElement uuid="a4cec60d-6377-4a56-a309-0b9b6641d05e" x="101" y="164" width="404" height="20"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -771,7 +1223,7 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getExpiryDate()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="27c76480-fd45-43bb-8e33-6715a76b8dbb" x="101" y="144" width="404" height="20"/>
+					<reportElement uuid="49580639-0ce2-48c3-b4ea-2482d3dcbac7" x="101" y="144" width="404" height="20"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -786,9 +1238,9 @@
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessPermission()]]></textFieldExpression>
 				</textField>
 				<frame>
-					<reportElement uuid="17e6f7e9-e864-4c1d-8ad1-c809bbdf87a2" x="0" y="23" width="555" height="23"/>
+					<reportElement uuid="b4c2eacf-6a18-4943-80a3-16f51d8a2ad3" x="0" y="23" width="555" height="23"/>
 					<staticText>
-						<reportElement uuid="a70ae2f4-1010-4ff1-91ba-fe6a017d3472" mode="Opaque" x="0" y="0" width="54" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="346a3948-0f34-4d8e-9c6f-125867435803" mode="Opaque" x="0" y="0" width="54" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -802,7 +1254,7 @@
 						<text><![CDATA[Customer]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="1a34160b-5e89-48ef-8ffd-8e133326ef92" mode="Opaque" x="54" y="0" width="30" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="192b4a35-f6a8-42e7-96ba-627306b34ace" mode="Opaque" x="54" y="0" width="30" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -816,7 +1268,7 @@
 						<text><![CDATA[DBR Start]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="0ab49c80-4da0-4869-bea4-ceb6e01b7651" mode="Opaque" x="84" y="0" width="32" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="d6709cf7-a167-4acc-9cc4-51bd36f72e5a" mode="Opaque" x="84" y="0" width="32" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -831,7 +1283,7 @@
 Final]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="17e3f7e6-40c6-4003-9a8c-5dea77964935" mode="Opaque" x="116" y="0" width="46" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="5b38a8de-6b50-4a77-a27c-6aff21948fc4" mode="Opaque" x="116" y="0" width="46" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -845,7 +1297,7 @@ Final]]></text>
 						<text><![CDATA[(WC)/Income]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="617ed065-f0e3-44d7-9e8b-79b27b597e2c" mode="Opaque" x="162" y="0" width="62" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="9110e4e8-5640-4c33-924b-edf85e8cca2a" mode="Opaque" x="162" y="0" width="62" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -859,7 +1311,7 @@ Final]]></text>
 						<text><![CDATA[Recommend W/C Need]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="45a7a239-7228-4927-8a15-f18b07e35b0d" mode="Opaque" x="224" y="0" width="46" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="af9db5ec-8d98-4785-bf93-55f5d5b0e1c5" mode="Opaque" x="224" y="0" width="46" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -874,7 +1326,7 @@ Final]]></text>
 W/C]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="e1f5a2db-a261-4ca3-aca3-b7e26882f405" mode="Opaque" x="270" y="0" width="58" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="89d6285b-ba5e-4f69-9434-44f933b37155" mode="Opaque" x="270" y="0" width="58" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -888,7 +1340,7 @@ W/C]]></text>
 						<text><![CDATA[Start Business Date]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="acfcee66-9a79-4d47-8cc0-836924998d43" mode="Opaque" x="328" y="0" width="43" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="afc1123d-d1da-4f57-a3ed-9eb2d39017cd" mode="Opaque" x="328" y="0" width="43" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -902,7 +1354,7 @@ W/C]]></text>
 						<text><![CDATA[Year in Business]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="3f01cce8-015c-40a6-930d-69a7fd452ea5" mode="Opaque" x="371" y="0" width="59" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="a879dd13-cef1-44dc-ae3d-ede5792042fc" mode="Opaque" x="371" y="0" width="59" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -916,7 +1368,7 @@ W/C]]></text>
 						<text><![CDATA[Sale/Year]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="a8c1f27c-c82f-4f7d-88b1-136c7d922359" mode="Opaque" x="371" y="13" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="b7dd0e51-9482-41ea-a6b0-39dd39e79473" mode="Opaque" x="371" y="13" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -930,7 +1382,7 @@ W/C]]></text>
 						<text><![CDATA[BDM]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="a8215cea-c3a6-4e92-900b-14e837146ff6" mode="Opaque" x="399" y="13" width="31" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="2ce7f73e-4ac6-49d0-9e8c-ff901f8b16aa" mode="Opaque" x="399" y="13" width="31" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -944,7 +1396,7 @@ W/C]]></text>
 						<text><![CDATA[UW]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="1918fce5-9a15-4c16-83d1-4aa08c808880" mode="Opaque" x="458" y="13" width="31" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="b469c4c7-c792-4f92-9e98-2f34f7466dbb" mode="Opaque" x="458" y="13" width="31" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -958,7 +1410,7 @@ W/C]]></text>
 						<text><![CDATA[UW]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="4a77e294-1f3e-4e2a-9025-668124413062" mode="Opaque" x="430" y="13" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="b57304ee-7840-4dff-b4e4-59bf36847a72" mode="Opaque" x="430" y="13" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -972,7 +1424,7 @@ W/C]]></text>
 						<text><![CDATA[BDM]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="c4756705-bdb1-4c0c-88b7-41ff7c74285b" mode="Opaque" x="430" y="0" width="59" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="f2992e94-6abe-4bb3-a5c3-af7e9549810a" mode="Opaque" x="430" y="0" width="59" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -986,7 +1438,7 @@ W/C]]></text>
 						<text><![CDATA[Group Sale]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="35670456-0fbc-4e88-9d08-83b91cb7b571" mode="Opaque" x="517" y="13" width="38" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="e2de9c52-5c37-4fb2-8cf8-d4555cb3bfb9" mode="Opaque" x="517" y="13" width="38" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1000,7 +1452,7 @@ W/C]]></text>
 						<text><![CDATA[UW]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="c661c399-6875-4188-9525-6a890f8bed7e" mode="Opaque" x="489" y="13" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="954f30e8-516c-45b1-8121-bacf63af7a84" mode="Opaque" x="489" y="13" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1014,7 +1466,7 @@ W/C]]></text>
 						<text><![CDATA[BDM]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="e031402d-0880-4c09-b1dd-5bab59147a0d" mode="Opaque" x="489" y="0" width="66" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="2b114fbd-8ed1-48c6-b67a-9d316bb04f19" mode="Opaque" x="489" y="0" width="66" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1029,9 +1481,9 @@ W/C]]></text>
 					</staticText>
 				</frame>
 				<frame>
-					<reportElement uuid="dde39459-2c1b-4517-b39f-e903d690a042" x="0" y="66" width="555" height="31"/>
+					<reportElement uuid="29fbaca3-b6df-4fb9-86ff-f247cdfb1adb" x="0" y="66" width="555" height="31"/>
 					<staticText>
-						<reportElement uuid="0eb038c8-51ef-4b33-a2eb-8223910c5f8c" mode="Opaque" x="126" y="8" width="46" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="8d025fb9-00ab-44e5-bf10-bddebba49eb9" mode="Opaque" x="126" y="8" width="46" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1046,7 +1498,7 @@ W/C]]></text>
 Type]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="b11a417f-665a-4c61-b420-631b611dac1f" mode="Opaque" x="468" y="8" width="28" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="c3b333a0-68f1-4874-9a25-9b33d4da9128" mode="Opaque" x="468" y="8" width="28" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1060,7 +1512,7 @@ Type]]></text>
 						<text><![CDATA[AR]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="75eecc0d-3014-43b4-9761-adcf2b3f418f" mode="Opaque" x="43" y="8" width="40" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="045fd5a9-c8f7-4226-86bc-7cbed7c34ec0" mode="Opaque" x="43" y="8" width="40" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1074,7 +1526,7 @@ Type]]></text>
 						<text><![CDATA[No Employee]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="9ce57182-928d-4555-b60d-5cc23d27e75d" mode="Opaque" x="224" y="8" width="36" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="a690ad22-fca1-4127-b4fb-e9c048a74ee5" mode="Opaque" x="224" y="8" width="36" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1088,7 +1540,7 @@ Type]]></text>
 						<text><![CDATA[Business Code]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="a1d8a348-ef9d-4b10-870a-71d6e50e65d6" mode="Opaque" x="409" y="8" width="59" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="3be3e94c-0fcc-4b68-b307-ed5b5a6861a4" mode="Opaque" x="409" y="8" width="59" height="13" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1102,7 +1554,7 @@ Type]]></text>
 						<text><![CDATA[Income factor(%)]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="977bce91-b9bf-4896-aaa3-bf32244551e2" mode="Opaque" x="409" y="21" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="300a3b68-0cef-49b6-bc05-5c54554c2a2a" mode="Opaque" x="409" y="21" width="28" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1116,7 +1568,7 @@ Type]]></text>
 						<text><![CDATA[BDM]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="57df2430-073b-4891-971f-6db6bf1652be" mode="Opaque" x="437" y="21" width="31" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="cca90d72-14d7-4169-9653-00351424cfc6" mode="Opaque" x="437" y="21" width="31" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1130,7 +1582,7 @@ Type]]></text>
 						<text><![CDATA[UW]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="496e09b1-6117-43fb-8925-5690e82bf170" mode="Opaque" x="315" y="8" width="53" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="f5645b4d-4b6e-4ab3-98ab-214ede355e89" mode="Opaque" x="315" y="8" width="53" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1144,7 +1596,7 @@ Type]]></text>
 						<text><![CDATA[Qualitative Status	]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="85db7557-6f86-4ce7-968c-b58362ad0f17" mode="Opaque" x="83" y="8" width="43" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="f1f927d4-648d-4757-b345-7878e1e535a0" mode="Opaque" x="83" y="8" width="43" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1159,7 +1611,7 @@ Type]]></text>
 Area]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="0ac97ba9-c74a-4836-aa8e-5d1494a5bfe9" mode="Opaque" x="260" y="8" width="55" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="48008a0c-030e-4d00-b246-5650db4928fe" mode="Opaque" x="260" y="8" width="55" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1173,7 +1625,7 @@ Area]]></text>
 						<text><![CDATA[Business Description]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="14314f43-0908-44cc-9b38-f02bc29f250c" mode="Opaque" x="172" y="8" width="52" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="46922a60-5b84-48c6-98ed-af89c2ab59ba" mode="Opaque" x="172" y="8" width="52" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1188,7 +1640,7 @@ Area]]></text>
 Group]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="e0e5e6d5-af95-4413-b90c-2f3234fab43c" mode="Opaque" x="0" y="8" width="43" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="f71b6417-7e59-45a9-a94d-376bd0d8337a" mode="Opaque" x="0" y="8" width="43" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1203,7 +1655,7 @@ Group]]></text>
 Asset]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="9ea50d5c-cd34-4452-b8a8-af46944df5ff" mode="Opaque" x="496" y="8" width="28" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="64e68fc6-c891-4db8-8af5-c43ade0f4948" mode="Opaque" x="496" y="8" width="28" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1217,7 +1669,7 @@ Asset]]></text>
 						<text><![CDATA[AP]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="0f7d6270-94bb-471d-9a3f-af8ba593d33d" mode="Opaque" x="368" y="8" width="41" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="3386ef47-23ea-46dd-b20f-0720051c31e0" mode="Opaque" x="368" y="8" width="41" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1231,7 +1683,7 @@ Asset]]></text>
 						<text><![CDATA[ขนาดธุรกิจ]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="00018128-087f-48f1-91b4-d207467aa691" mode="Opaque" x="524" y="8" width="31" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
+						<reportElement uuid="a22619d2-15b7-47fa-8f45-6e8d7a757ac1" mode="Opaque" x="524" y="8" width="31" height="23" forecolor="#FFFFFF" backcolor="#555555"/>
 						<box>
 							<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 							<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1247,9 +1699,9 @@ Asset]]></text>
 				</frame>
 			</frame>
 		</band>
-		<band height="74" splitType="Prevent">
+		<band height="74">
 			<frame>
-				<reportElement uuid="5b75cd4f-7bf3-4033-8b9c-72f98749ea7f" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
+				<reportElement uuid="251ce552-de16-476e-b9fa-1772ce3de10a" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1257,22 +1709,22 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="a3fc204f-e081-4d54-9013-40cac6fceee1" x="0" y="0" width="100" height="13"/>
+					<reportElement uuid="4b366ad6-5ba6-45f0-a8aa-9ef9e0cc0152" x="0" y="0" width="100" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[NCB Record]]></text>
 				</staticText>
 				<subreport>
-					<reportElement uuid="37d624bf-887d-4041-b3e3-70850c89d28b" x="0" y="22" width="541" height="46"/>
+					<reportElement uuid="628db7f0-7eab-489a-be14-b604996236ab" x="0" y="22" width="541" height="46"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{ncbRecord})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "ExSummary_subreportNCB_Record.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
-		<band height="73" splitType="Prevent">
+		<band height="73">
 			<frame>
-				<reportElement uuid="bb48fc1e-c7d7-420a-a220-8d422a4fc212" style="Frame" mode="Opaque" x="0" y="0" width="555" height="73" backcolor="#FFFFFF"/>
+				<reportElement uuid="a9776b4b-f3e5-4fc1-b14f-9ab1555bf163" style="Frame" mode="Opaque" x="0" y="0" width="555" height="73" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1280,7 +1732,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="6d4f3f77-1358-4086-b22e-69443a91314e" x="0" y="0" width="100" height="13"/>
+					<reportElement uuid="cb768345-2e8f-42bc-9eb8-0508749de767" x="0" y="0" width="100" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1294,7 +1746,7 @@ Asset]]></text>
 					<text><![CDATA[Account Movement]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="142c8aae-297e-447b-9596-fd14b2be9064" mode="Opaque" x="0" y="18" width="448" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="4efaf4bb-269f-4d8e-ac0b-7581dd2e067d" mode="Opaque" x="0" y="18" width="448" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1308,7 +1760,7 @@ Asset]]></text>
 					<text><![CDATA[Main OD Account Movement]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="537abbf8-32f9-4b8d-977a-d96d6cf2ad2a" mode="Opaque" x="448" y="18" width="107" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="07dee21f-c652-4c10-84c7-834cb7d9a922" mode="Opaque" x="448" y="18" width="107" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1322,7 +1774,7 @@ Asset]]></text>
 					<text><![CDATA[All Account]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="eeafc881-3757-4d7c-9201-ff489cd627b1" mode="Opaque" x="448" y="28" width="107" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="a698888f-9fd9-4059-bc9a-9e6cca4ef6a8" mode="Opaque" x="448" y="28" width="107" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1336,7 +1788,7 @@ Asset]]></text>
 					<text><![CDATA[Trade Cheque Return]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="e53cdc0a-4bbd-4bfc-8fff-bfe4d5246f87" mode="Opaque" x="448" y="38" width="52" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="7692182b-0d45-46e6-b536-f3d6789a57cb" mode="Opaque" x="448" y="38" width="52" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1350,7 +1802,7 @@ Asset]]></text>
 					<text><![CDATA[Amount]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="cb0dc4e9-83a4-4b18-b2e2-0cf7fc12db4f" mode="Opaque" x="500" y="38" width="55" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="04cdb1ba-2967-49aa-96d6-86ef0ee10e44" mode="Opaque" x="500" y="38" width="55" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1364,7 +1816,7 @@ Asset]]></text>
 					<text><![CDATA[%]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="ecbd288d-f9ed-4e52-86db-73f69ff6fc3e" mode="Opaque" x="0" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="252ad3b6-b97e-49c8-833e-fc77b418bd6c" mode="Opaque" x="0" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1378,7 +1830,7 @@ Asset]]></text>
 					<text><![CDATA[OD Limit]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="83355701-8101-4da1-afe9-32b6d52ed9c9" mode="Opaque" x="54" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="9633a0a8-449c-44c2-bc01-166d8855a8dd" mode="Opaque" x="54" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1392,7 +1844,7 @@ Asset]]></text>
 					<text><![CDATA[Utilization (%)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="c57a5759-6267-473e-8927-5729b4a5f86f" mode="Opaque" x="108" y="28" width="42" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="b33e88f5-58e0-4662-8c53-cf85073969bf" mode="Opaque" x="108" y="28" width="42" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1406,7 +1858,7 @@ Asset]]></text>
 					<text><![CDATA[Swing (%)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="bd01b481-3db0-4673-a51a-884acc47816b" mode="Opaque" x="150" y="28" width="70" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="73d5053c-2679-4407-9d18-74f727c5f7d8" mode="Opaque" x="150" y="28" width="70" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1421,7 +1873,7 @@ Asset]]></text>
 (Times)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="07864794-df99-432f-a468-2ad2bdba0dd8" mode="Opaque" x="220" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="cdaad1af-dd9a-428c-bd96-fb9350492ef7" mode="Opaque" x="220" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1435,7 +1887,7 @@ Asset]]></text>
 					<text><![CDATA[OD Over Limit (Days)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="6fb80449-fa0e-40e0-8118-95d5d31a0cd9" mode="Opaque" x="274" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="d7d139ed-62b2-4373-9562-5d1ea5986e76" mode="Opaque" x="274" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1449,7 +1901,7 @@ Asset]]></text>
 					<text><![CDATA[Cheque Return (Times)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="395048a5-4bff-490e-969a-0d82c6fb1f86" mode="Opaque" x="328" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="15a1a923-879a-4cfb-8602-9ec851f48b65" mode="Opaque" x="328" y="28" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1463,7 +1915,7 @@ Asset]]></text>
 					<text><![CDATA[Cash Flow]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3274f6f6-021f-4f2c-96f4-8b75762ffde5" mode="Opaque" x="382" y="28" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="e8a16789-b65a-4445-a056-25f45204c238" mode="Opaque" x="382" y="28" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1478,7 +1930,7 @@ Asset]]></text>
 (%)]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="d1c7a8b3-e55a-44fe-a7fe-7694b7161099" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="48" width="54" height="20"/>
+					<reportElement uuid="873cdad0-4e15-4996-888b-c66caca1c950" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="48" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1493,7 +1945,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getOdLimit()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="b61a93c3-dae2-40fb-8cc8-b52023970313" stretchType="RelativeToBandHeight" mode="Opaque" x="54" y="48" width="54" height="20"/>
+					<reportElement uuid="f6aa1a15-aede-4f93-b581-54ed8cb14609" stretchType="RelativeToBandHeight" mode="Opaque" x="54" y="48" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1508,7 +1960,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getUtilization()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="5fd53c35-7060-4bec-9468-9c581c2335b8" stretchType="RelativeToBandHeight" mode="Opaque" x="108" y="48" width="42" height="20"/>
+					<reportElement uuid="52f66a17-2958-4a7f-b295-8fa6534f81a2" stretchType="RelativeToBandHeight" mode="Opaque" x="108" y="48" width="42" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1523,7 +1975,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getSwing()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="19f17900-a489-4bf3-8d4a-ce027992616c" stretchType="RelativeToBandHeight" mode="Opaque" x="150" y="48" width="70" height="20"/>
+					<reportElement uuid="f50c7894-da3b-4439-ab2c-3d8c5d0b8fc2" stretchType="RelativeToBandHeight" mode="Opaque" x="150" y="48" width="70" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1538,7 +1990,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getOverLimitTimes()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="b73751b0-bdf7-4841-854e-d5c15fe8c881" stretchType="RelativeToBandHeight" mode="Opaque" x="220" y="48" width="54" height="20"/>
+					<reportElement uuid="cd99bb1c-2050-46f2-a175-32e3b1d320d6" stretchType="RelativeToBandHeight" mode="Opaque" x="220" y="48" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1553,7 +2005,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getOverLimitDays()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="fcb8e576-14fd-45d1-b2dc-4f115fbd4535" stretchType="RelativeToBandHeight" mode="Opaque" x="274" y="48" width="54" height="20"/>
+					<reportElement uuid="9905106c-d92c-4bfc-afa7-ae4521546dd8" stretchType="RelativeToBandHeight" mode="Opaque" x="274" y="48" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1568,7 +2020,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getChequeReturn()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="13ae6d1a-2bef-4498-8a86-0ea3f276f248" stretchType="RelativeToBandHeight" mode="Opaque" x="328" y="48" width="54" height="20"/>
+					<reportElement uuid="af4d8d5f-2325-4876-972d-d97290fe66ed" stretchType="RelativeToBandHeight" mode="Opaque" x="328" y="48" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1583,7 +2035,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getCashFlow()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="06b5eb60-66ac-47e7-ab39-edd96ee33d22" stretchType="RelativeToBandHeight" mode="Opaque" x="382" y="48" width="66" height="20"/>
+					<reportElement uuid="0f466931-6ae0-44c9-aecc-c6cabed77a25" stretchType="RelativeToBandHeight" mode="Opaque" x="382" y="48" width="66" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1598,7 +2050,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getCashFlowLimit()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="27ce40e3-3d31-45bf-9fb0-1cc0bb21fa02" stretchType="RelativeToBandHeight" mode="Opaque" x="448" y="48" width="52" height="20"/>
+					<reportElement uuid="97dd1a21-10e6-41ff-90d8-b9efbc077e3b" stretchType="RelativeToBandHeight" mode="Opaque" x="448" y="48" width="52" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1613,7 +2065,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{accountMovement}.getTradeChequeReturnPercent()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="c9fab46b-afd8-4039-a3f5-2c69c56a237d" stretchType="RelativeToBandHeight" mode="Opaque" x="500" y="48" width="55" height="20"/>
+					<reportElement uuid="49266439-4e31-427a-8033-d66a0690fb24" stretchType="RelativeToBandHeight" mode="Opaque" x="500" y="48" width="55" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1629,9 +2081,9 @@ Asset]]></text>
 				</textField>
 			</frame>
 		</band>
-		<band height="84" splitType="Prevent">
+		<band height="84">
 			<frame>
-				<reportElement uuid="c8f6258d-baa9-42e7-8ea3-bfb785852658" style="Frame" mode="Opaque" x="0" y="0" width="555" height="84" backcolor="#FFFFFF"/>
+				<reportElement uuid="948cf612-de7c-4850-b8a9-6afcbc2ca87b" style="Frame" mode="Opaque" x="0" y="0" width="555" height="84" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1639,7 +2091,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="d4ae14ab-2304-4d56-bc6a-f5602343e9f7" mode="Opaque" x="116" y="29" width="98" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="fec73d86-1c2d-4bcf-9153-1451fa49069b" mode="Opaque" x="116" y="29" width="98" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1653,7 +2105,7 @@ Asset]]></text>
 					<text><![CDATA[Core Asset]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="81ee62ec-4ef7-42c1-8383-1fe9824f4129" mode="Opaque" x="0" y="19" width="305" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="1e7f5c05-0a14-434a-a1f7-063b6d7bd696" mode="Opaque" x="0" y="19" width="305" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1667,7 +2119,7 @@ Asset]]></text>
 					<text><![CDATA[Main OD Account Movement]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="a1aaf785-53b5-473c-a21f-8a832d6923f8" x="0" y="0" width="43" height="13"/>
+					<reportElement uuid="6d46e162-f587-4c5d-9c39-285a58ca00f7" x="0" y="0" width="43" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1681,7 +2133,7 @@ Asset]]></text>
 					<text><![CDATA[Collateral]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="5ad7a5b1-2768-4fa3-9ef8-ec15c046f767" mode="Opaque" x="305" y="29" width="125" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="d2b01e65-3c64-45d4-8d3d-4bbfe3515a91" mode="Opaque" x="305" y="29" width="125" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1695,7 +2147,7 @@ Asset]]></text>
 					<text><![CDATA[Limit Approve]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="b6d6b927-97d4-488f-aca8-10b96e875ebd" mode="Opaque" x="214" y="29" width="91" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="ebce776f-5b49-4dac-b3c5-c88dee5bdc78" mode="Opaque" x="214" y="29" width="91" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1709,7 +2161,7 @@ Asset]]></text>
 					<text><![CDATA[Non Core Asset]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="04c1ac7d-ed79-4dec-beab-d02ce5385ebc" stretchType="RelativeToBandHeight" mode="Opaque" x="430" y="49" width="125" height="20"/>
+					<reportElement uuid="4679aaf3-d761-4911-8f8f-23d196248aba" stretchType="RelativeToBandHeight" mode="Opaque" x="430" y="49" width="125" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1724,7 +2176,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{collateral}.getPercentLTV()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="73d52502-3fb9-4ad4-8b43-2902da07863a" stretchType="RelativeToBandHeight" mode="Opaque" x="305" y="49" width="125" height="20"/>
+					<reportElement uuid="e76862c1-bbc2-4a94-886f-953fc5f5154c" stretchType="RelativeToBandHeight" mode="Opaque" x="305" y="49" width="125" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1739,7 +2191,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{collateral}.getLimitApprove()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="df7336c7-6e53-416c-bc84-d1fd8f93d826" stretchType="RelativeToBandHeight" mode="Opaque" x="116" y="49" width="98" height="20"/>
+					<reportElement uuid="31bd43e9-1b55-46f1-87c6-73315d563a3b" stretchType="RelativeToBandHeight" mode="Opaque" x="116" y="49" width="98" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1754,7 +2206,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{collateral}.getCoreAssetValue()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="dacf151f-f78c-4f7d-a45f-9aa85f710b21" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="49" width="116" height="20"/>
+					<reportElement uuid="91f7ea66-8d0d-474f-88c0-6a0d4fad1da1" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="49" width="116" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1769,7 +2221,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{collateral}.getCashCollateralValue()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="8dd4f090-685f-43c8-b957-3d0920749a41" mode="Opaque" x="305" y="19" width="250" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="05a4ee52-5429-4da5-8630-6b0ef523751d" mode="Opaque" x="305" y="19" width="250" height="10" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1783,7 +2235,7 @@ Asset]]></text>
 					<text><![CDATA[All Account]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="28b40fd2-3f50-4d56-8ac2-58b6b5092219" stretchType="RelativeToBandHeight" mode="Opaque" x="214" y="49" width="91" height="20"/>
+					<reportElement uuid="10e40dbd-ff33-473d-91f3-caed07494c70" stretchType="RelativeToBandHeight" mode="Opaque" x="214" y="49" width="91" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1798,7 +2250,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{collateral}.getNoneCoreAssetValue()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="e45b5167-edb3-4e14-8785-b05cc6497874" mode="Opaque" x="0" y="29" width="116" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="e21a2945-9c2a-4e67-8f48-6d1803f64264" mode="Opaque" x="0" y="29" width="116" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1812,7 +2264,7 @@ Asset]]></text>
 					<text><![CDATA[Cash Collateral]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="e957db77-83e5-4aaf-b7a6-a15b00f3fe2d" mode="Opaque" x="430" y="29" width="125" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="2bfe3d83-aa2d-4349-8688-6b675ab468c0" mode="Opaque" x="430" y="29" width="125" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1827,9 +2279,9 @@ Asset]]></text>
 				</staticText>
 			</frame>
 		</band>
-		<band height="67" splitType="Prevent">
+		<band height="67">
 			<frame>
-				<reportElement uuid="d59b0748-114a-48c5-b680-50e0df908729" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
+				<reportElement uuid="43b52121-28f5-4534-8e2b-21fdeb959a81" style="Frame" mode="Opaque" x="0" y="0" width="555" height="67" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1837,7 +2289,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="6f85c264-3202-488a-97c7-638315c7dd18" mode="Opaque" x="84" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="4af99a6b-da01-4040-b87c-209f65d6e0b4" mode="Opaque" x="84" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1851,7 +2303,7 @@ Asset]]></text>
 					<text><![CDATA[BOT Class]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="584a5ffb-072c-49b7-b79e-99c4bd949c45" x="0" y="0" width="100" height="13"/>
+					<reportElement uuid="e6bf58a5-dda0-4860-8de7-fd14eedc995e" x="0" y="0" width="100" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1865,7 +2317,7 @@ Asset]]></text>
 					<text><![CDATA[Credit Risk Information]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="4b61eb3e-2bcb-44c9-89b9-ee863ca058f6" mode="Opaque" x="270" y="21" width="45" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="91727507-21b0-4834-acbd-055f247b6387" mode="Opaque" x="270" y="21" width="45" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1879,7 +2331,7 @@ Asset]]></text>
 					<text><![CDATA[Last Review Date]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="d15564e7-023c-46f2-b15d-cad340fa023e" mode="Opaque" x="150" y="21" width="120" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="fd11a7d7-4f23-43b5-b337-9419fae600a5" mode="Opaque" x="150" y="21" width="120" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1893,7 +2345,7 @@ Asset]]></text>
 					<text><![CDATA[Reason]]></text>
 				</staticText>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="9e3aa75d-ab4d-49bb-9dd6-7137ccd586b1" stretchType="RelativeToBandHeight" mode="Opaque" x="315" y="41" width="54" height="20"/>
+					<reportElement uuid="cdeb3892-d51e-4cd7-864b-cec001b44716" stretchType="RelativeToBandHeight" mode="Opaque" x="315" y="41" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1908,7 +2360,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getNextReviewDate()]]></textFieldExpression>
 				</textField>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="f7d166e4-63f0-4e3a-919e-06fae7655ce3" stretchType="RelativeToBandHeight" mode="Opaque" x="270" y="41" width="45" height="20"/>
+					<reportElement uuid="3a5d1fdc-287e-4ca5-a510-78d95176fda7" stretchType="RelativeToBandHeight" mode="Opaque" x="270" y="41" width="45" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1923,7 +2375,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getLastReviewDate()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="0a5da152-67c8-43b3-8680-65048aeaef8a" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="41" width="66" height="20"/>
+					<reportElement uuid="01939014-d7f1-4370-b597-3b4aec259c1a" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="41" width="66" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1938,7 +2390,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getBotClass()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="2c3ff729-eb72-4c71-ba2d-b9582616564e" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="41" width="84" height="20"/>
+					<reportElement uuid="597143b8-b03e-401a-bbe4-6c28e5037985" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="41" width="84" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1953,7 +2405,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getRiskCusType()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="9400572a-1a6f-493a-a839-d11b5e82ed5e" stretchType="RelativeToBandHeight" mode="Opaque" x="150" y="41" width="120" height="20"/>
+					<reportElement uuid="24ee92b7-5af5-4587-8098-e457b381ee8a" stretchType="RelativeToBandHeight" mode="Opaque" x="150" y="41" width="120" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1968,7 +2420,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getReason()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="507db5f6-a6ea-4837-beb5-be027c85f0e0" mode="Opaque" x="0" y="21" width="84" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="4c53bc0d-b692-417e-9aac-9610bfce7c1b" mode="Opaque" x="0" y="21" width="84" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1982,7 +2434,7 @@ Asset]]></text>
 					<text><![CDATA[Risk Cust Type]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="33d6c7c1-3b15-4577-882e-0972329fb5a6" mode="Opaque" x="315" y="21" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="fd05ad3e-7354-4675-9be0-0fc71f4b2c2a" mode="Opaque" x="315" y="21" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1996,7 +2448,7 @@ Asset]]></text>
 					<text><![CDATA[Next Review Date]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="38363a07-807b-4dc7-bfc0-4281c75da1eb" stretchType="RelativeToBandHeight" mode="Opaque" x="369" y="41" width="66" height="20"/>
+					<reportElement uuid="4c266366-41ad-4bc4-899a-2f0409c50a5b" stretchType="RelativeToBandHeight" mode="Opaque" x="369" y="41" width="66" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2011,7 +2463,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getExtendedReviewDate()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="5cf00540-6273-430c-b3be-cee6f8bb2579" mode="Opaque" x="369" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="b54b1690-b83f-4934-a78e-120fe39fc795" mode="Opaque" x="369" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2025,7 +2477,7 @@ Asset]]></text>
 					<text><![CDATA[Extended Review Date]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="ecb1bbd9-a3ef-4d58-89db-f25c495fd9e0" stretchType="RelativeToBandHeight" mode="Opaque" x="435" y="41" width="66" height="20"/>
+					<reportElement uuid="ca59b015-f31e-4ed9-9bde-8d1d9a4d8d81" stretchType="RelativeToBandHeight" mode="Opaque" x="435" y="41" width="66" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2040,7 +2492,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getIndirectCountryName()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="a1581318-94e7-44c8-a3a1-5629051dbceb" mode="Opaque" x="435" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="3aacf354-3f03-4c27-912e-3987118cdcff" mode="Opaque" x="435" y="21" width="66" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2054,7 +2506,7 @@ Asset]]></text>
 					<text><![CDATA[Indirect Country Name]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="1241ac5d-3bec-4e4b-9e24-6cf32c32803b" stretchType="RelativeToBandHeight" mode="Opaque" x="501" y="41" width="54" height="20"/>
+					<reportElement uuid="47b5e738-c5f8-4cc4-bfaa-de2e1162e25b" stretchType="RelativeToBandHeight" mode="Opaque" x="501" y="41" width="54" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2069,7 +2521,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{creditRisk}.getPercentExport()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="d9b22c96-28b7-4571-ae36-223371ecb505" mode="Opaque" x="501" y="21" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="933ff5d6-ee87-425c-baa9-ed6ff49b3813" mode="Opaque" x="501" y="21" width="54" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2084,9 +2536,9 @@ Asset]]></text>
 				</staticText>
 			</frame>
 		</band>
-		<band height="97" splitType="Prevent">
+		<band height="97">
 			<frame>
-				<reportElement uuid="663b58b5-decc-479f-a991-c93ca0b8f65c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="97" backcolor="#FFFFFF"/>
+				<reportElement uuid="b47f146f-8228-4365-b0f0-16cdbf912ad5" style="Frame" mode="Opaque" x="0" y="0" width="555" height="97" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2094,7 +2546,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="579d4ae7-a46f-4a78-90c7-ed7968225e17" x="0" y="0" width="150" height="13"/>
+					<reportElement uuid="bf663eae-12e3-44c1-9737-c0bd446f4501" x="0" y="0" width="150" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2108,7 +2560,7 @@ Asset]]></text>
 					<text><![CDATA[ชี้แจงเหตุผลประกอบการขอ deviate]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="24089ad8-592e-4cfe-a549-55ac09f7e670" x="0" y="13" width="220" height="13"/>
+					<reportElement uuid="84f3b1f3-fbc4-4f56-9d01-9b028d20a6f8" x="0" y="13" width="220" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2122,7 +2574,7 @@ Asset]]></text>
 					<text><![CDATA[(Red : ต้องชี้แจง, Yellow : สามารถเลือกที่จะชี้แจงได้)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3ae31b89-bb76-4df6-aa85-e003a4e9d6b1" x="0" y="26" width="122" height="13"/>
+					<reportElement uuid="d3a28314-a84f-4227-9415-e0e76708497e" x="0" y="26" width="122" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2136,7 +2588,7 @@ Asset]]></text>
 					<text><![CDATA[Application LevelNo deviation]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="d99b9f59-5171-4be9-adbf-498bd846db47" mode="Opaque" x="369" y="50" width="186" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="9618557a-306b-4a32-83c5-1f74626c6a9b" mode="Opaque" x="369" y="50" width="186" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2150,7 +2602,7 @@ Asset]]></text>
 					<text><![CDATA[เหตุผลประกอบการขอ Deviate]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="b663051b-f102-4154-af2d-4986e21cc248" mode="Opaque" x="283" y="50" width="86" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="1b1416f5-1e2a-4f34-af85-caaa2406497f" mode="Opaque" x="283" y="50" width="86" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2164,7 +2616,7 @@ Asset]]></text>
 					<text><![CDATA[Name of Customer]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="898a19b5-2d29-46b5-b6a1-886d9cd259c0" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="70" width="28" height="20"/>
+					<reportElement uuid="0505a5b9-c3d2-4a04-8421-b03b1b475ec1" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="70" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2178,7 +2630,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="0db6eae5-10ca-46f2-916e-95c97c7ba912" stretchType="RelativeToBandHeight" mode="Opaque" x="369" y="70" width="186" height="20"/>
+					<reportElement uuid="12177219-0e8a-49cc-bb7e-dfeb8a66f523" stretchType="RelativeToBandHeight" mode="Opaque" x="369" y="70" width="186" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2193,7 +2645,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{decision}.getDeviationReason()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="9089d2ab-a10a-44fc-90c2-cab240a8465c" mode="Opaque" x="0" y="50" width="28" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="8b9d884f-1588-4b0b-8d64-5a4aff2fc329" mode="Opaque" x="0" y="50" width="28" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2207,7 +2659,7 @@ Asset]]></text>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="ea1b4ed3-80da-4d56-88a0-7bee76bec52d" style="Color" stretchType="RelativeToBandHeight" mode="Opaque" x="28" y="70" width="56" height="20"/>
+					<reportElement uuid="782bcdfa-cd40-4e00-bcda-f7fe65cd53de" style="Color" stretchType="RelativeToBandHeight" mode="Opaque" x="28" y="70" width="56" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2222,7 +2674,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{decision}.getFlag()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="a3d8d5bf-6ba6-4a70-9874-25f394ae4be6" mode="Opaque" x="28" y="50" width="56" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="2899ac61-aa32-4af4-8902-b3ce256cea33" mode="Opaque" x="28" y="50" width="56" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2236,7 +2688,7 @@ Asset]]></text>
 					<text><![CDATA[Flag]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="36afe06f-3393-4d0d-9a33-0490f7eef9a6" mode="Opaque" x="84" y="50" width="110" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="ad36809b-d9f4-4498-9b7d-dd3ea3aff3d6" mode="Opaque" x="84" y="50" width="110" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2250,7 +2702,7 @@ Asset]]></text>
 					<text><![CDATA[Group]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="95d528cf-dda9-46ba-8783-2c1ec2c875d0" stretchType="RelativeToBandHeight" mode="Opaque" x="194" y="70" width="89" height="20"/>
+					<reportElement uuid="ea8a1624-1da9-4854-ad87-b6205cec0df7" stretchType="RelativeToBandHeight" mode="Opaque" x="194" y="70" width="89" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2265,7 +2717,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{decision}.getRuleName()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="20f135bc-e9f8-4140-8f21-fe4069c4d0ce" stretchType="RelativeToBandHeight" mode="Opaque" x="283" y="70" width="86" height="20"/>
+					<reportElement uuid="dcc36503-f623-4bd6-977e-2ff025e28082" stretchType="RelativeToBandHeight" mode="Opaque" x="283" y="70" width="86" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2280,7 +2732,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{decision}.getCusName()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="4fcb1ae2-a6ee-4346-9e72-29a7a9ab2cae" mode="Opaque" x="194" y="50" width="89" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="d7ef9b00-f48c-4ed1-9dfa-fe0f4163537c" mode="Opaque" x="194" y="50" width="89" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2294,7 +2746,7 @@ Asset]]></text>
 					<text><![CDATA[Rule Names]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="bfbfd4ca-4ceb-42bd-ad43-e535ca034e18" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="70" width="110" height="20"/>
+					<reportElement uuid="f6051f68-7839-4a36-87f2-651f05d5e919" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="70" width="110" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2309,7 +2761,7 @@ Asset]]></text>
 					<textFieldExpression><![CDATA[$P{decision}.getGroup()]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="8d43bff0-7bd2-416f-b469-12d3fd436323" style="Color" stretchType="RelativeToBandHeight" mode="Opaque" x="112" y="26" width="56" height="13"/>
+					<reportElement uuid="80f45f55-0e35-4598-a459-bdc8bc1593c0" style="Color" stretchType="RelativeToBandHeight" mode="Opaque" x="112" y="26" width="56" height="13"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2325,15 +2777,15 @@ Asset]]></text>
 				</textField>
 			</frame>
 		</band>
-		<band height="108" splitType="Prevent">
+		<band height="108">
 			<frame>
-				<reportElement uuid="410d8025-72eb-492a-a55a-a690ff5b1a2a" mode="Opaque" x="0" y="0" width="555" height="108" backcolor="#FFFFFF"/>
+				<reportElement uuid="d57132c0-be4d-492c-836d-be772a0b3424" style="Frame" mode="Opaque" x="0" y="0" width="555" height="108" backcolor="#FFFFFF"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="13091f9d-b9f9-48d2-b4c1-4e5b351687d7" x="0" y="0" width="194" height="13"/>
+					<reportElement uuid="6bb8ff04-64f6-4a05-9f7d-684b8c11f1ae" x="0" y="0" width="194" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2347,7 +2799,7 @@ Asset]]></text>
 					<text><![CDATA[Business Overview and Support Decision]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="1cdac050-395a-4bfb-a843-e2472e21d917" x="0" y="19" width="176" height="13"/>
+					<reportElement uuid="26db8ade-62a6-418a-a44d-b5136bf3cd51" x="0" y="19" width="176" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2361,7 +2813,7 @@ Asset]]></text>
 					<text><![CDATA[Nature of business : ลักษณะการดำเนินธุรกิจ]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="10237218-a981-4a45-8006-d47eb989cdf4" mode="Opaque" x="6" y="39" width="542" height="60"/>
+					<reportElement uuid="5377b045-b681-45b3-bedc-352a1aea1977" mode="Opaque" x="6" y="39" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2377,9 +2829,9 @@ Asset]]></text>
 				</textField>
 			</frame>
 		</band>
-		<band height="89" splitType="Prevent">
+		<band height="89">
 			<frame>
-				<reportElement uuid="9a20f81a-60de-47f2-a3dc-6f848c0cb91c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="89" backcolor="#FFFFFF"/>
+				<reportElement uuid="da472f29-b076-464d-967f-ace9083a74aa" style="Frame" mode="Opaque" x="0" y="0" width="555" height="89" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2387,14 +2839,14 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="04373913-1026-42ea-8e70-e7def2eb9e70" x="0" y="0" width="346" height="13"/>
+					<reportElement uuid="ddf34f76-f497-4be6-b29b-a0f5874d8375" x="0" y="0" width="346" height="13"/>
 					<textElement>
 						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[Historical and reason of change : ประวัติการเปลียนแปลงพร้อมอธิบายเหตุผลของการเปลี่ยนแปลง]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="14a8d141-d360-419d-b261-0df77742a4c8" mode="Opaque" x="6" y="22" width="542" height="60"/>
+					<reportElement uuid="7e36ef98-f418-4f2b-b125-8b9e106e709d" mode="Opaque" x="6" y="22" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2410,9 +2862,9 @@ Asset]]></text>
 				</textField>
 			</frame>
 		</band>
-		<band height="90" splitType="Prevent">
+		<band height="90">
 			<frame>
-				<reportElement uuid="534233f1-7110-413e-a728-1b5eb4ebe217" style="Frame" mode="Opaque" x="0" y="0" width="555" height="90" backcolor="#FFFFFF"/>
+				<reportElement uuid="29e3f70c-8180-49fe-9114-d48e6c7fceed" style="Frame" mode="Opaque" x="0" y="0" width="555" height="90" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2420,7 +2872,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="c077c0ec-75b5-4e1d-8c4d-98ffd7489d84" x="0" y="0" width="176" height="13"/>
+					<reportElement uuid="bd5d3798-b194-47d8-88c4-4855a3a9ac27" x="0" y="0" width="176" height="13"/>
 					<box>
 						<pen lineWidth="0.0"/>
 						<topPen lineWidth="0.0"/>
@@ -2434,7 +2886,7 @@ Asset]]></text>
 					<text><![CDATA[TMB credit history : ประวัติการใช้สินชื่อกับ TMB]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="60e483ba-4651-42ca-ab65-0149cc2336b5" mode="Opaque" x="6" y="20" width="542" height="60"/>
+					<reportElement uuid="a52d274a-0850-415b-9707-976788dbccd8" mode="Opaque" x="6" y="20" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2450,9 +2902,9 @@ Asset]]></text>
 				</textField>
 			</frame>
 		</band>
-		<band height="93" splitType="Prevent">
+		<band height="93">
 			<frame>
-				<reportElement uuid="b389500f-d085-4153-8248-0707e0e58612" style="Frame" mode="Opaque" x="0" y="0" width="555" height="93" backcolor="#FFFFFF"/>
+				<reportElement uuid="d2f1417d-3b63-4f4d-a987-a67615afc38f" style="Frame" mode="Opaque" x="0" y="0" width="555" height="93" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2460,7 +2912,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="59d075d6-b008-43ed-82a0-213de26350fb" x="0" y="0" width="176" height="13"/>
+					<reportElement uuid="aee9fdd9-ba0b-4d26-9b75-d4c2203582ad" x="0" y="0" width="176" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2474,7 +2926,7 @@ Asset]]></text>
 					<text><![CDATA[Support reason : เหตุผล/ประเด็นสนับสนุนเพิ่มเติม]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="8f2de3f5-d7e9-4d6b-ac10-95f715a03067" mode="Opaque" x="6" y="22" width="542" height="60"/>
+					<reportElement uuid="912ae2d9-2db6-4a29-8210-5a4c918f9384" mode="Opaque" x="6" y="22" width="542" height="60"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2490,9 +2942,9 @@ Asset]]></text>
 				</textField>
 			</frame>
 		</band>
-		<band height="114" splitType="Prevent">
+		<band height="114">
 			<frame>
-				<reportElement uuid="adfb4946-dfad-42c8-8465-b2239f369f1c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="114" backcolor="#FFFFFF"/>
+				<reportElement uuid="39db14fe-e40c-412a-b947-c72ac9b2725c" style="Frame" mode="Opaque" x="0" y="0" width="555" height="114" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2500,7 +2952,7 @@ Asset]]></text>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="754b1412-0fb1-424c-8a30-1f5693bf4499" x="0" y="0" width="116" height="13"/>
+					<reportElement uuid="43b9ae95-77a1-4e0a-af0c-133b5cf13c15" x="0" y="0" width="116" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2514,7 +2966,7 @@ Asset]]></text>
 					<text><![CDATA[ประเด็นสำคัญที่ต้องชี้แจง]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="21a3eaff-648f-495d-b3c6-fc75bf99eba3" x="0" y="20" width="448" height="24"/>
+					<reportElement uuid="172215b7-64d1-479a-bfed-05c2426500b0" x="0" y="20" width="448" height="24"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2528,7 +2980,7 @@ Asset]]></text>
 					<text><![CDATA[RM008 : กรณีมีโกดังสินค้า แต่ไม่มีสต๊อกสินค้า หรือ ธุรกิจดังกล่าวไม่ต้องมีสต๊อกสินค้าเลย หรือกรณีที่ Standard credit term มีระบุสต๊อกแต่ลูกค้าไม่มีการเก็บสต๊อก]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="4ba0cd5d-f503-451f-bb98-ec08290c8cf0" x="468" y="19" width="15" height="13"/>
+					<reportElement uuid="d6a79a6d-8b57-40b0-b445-af0f3f3dd565" x="468" y="19" width="15" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2542,12 +2994,12 @@ Asset]]></text>
 					<text><![CDATA[ตอบ]]></text>
 				</staticText>
 				<image scaleImage="RealSize">
-					<reportElement uuid="b048e37e-b451-48c2-a918-b8d80b90fd22" x="501" y="20" width="16" height="11"/>
+					<reportElement uuid="4fa9dd60-bb83-49d8-b5a1-18970c057eb7" x="501" y="20" width="16" height="11"/>
 					<imageExpression><![CDATA[($P{bizSupport}.getRm008Code()) == 0 ?
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="5bba99e7-bc42-4304-ac31-1ab7689d82a4" x="516" y="19" width="27" height="13"/>
+					<reportElement uuid="a416558c-f9b9-4db0-86b8-e4a19a615927" x="516" y="19" width="27" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2561,7 +3013,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[ไม่ตอบ]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="37516a19-9ca1-4fa0-8aa8-e1b25b577ea9" mode="Opaque" x="6" y="54" width="542" height="45"/>
+					<reportElement uuid="9be457fe-87c8-401a-aa4c-3d745fe2c35f" mode="Opaque" x="6" y="54" width="542" height="45"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2576,15 +3028,15 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getRm008Remark()]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RealSize">
-					<reportElement uuid="189bb94f-9673-4a9c-b8d6-5a7415adbb50" x="452" y="20" width="17" height="11"/>
+					<reportElement uuid="ff5643ef-90ab-44d7-8eed-a1ebcee740d8" x="452" y="20" width="17" height="11"/>
 					<imageExpression><![CDATA[($P{bizSupport}.getRm008Code()) == 1 ?
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 			</frame>
 		</band>
-		<band height="74" splitType="Prevent">
+		<band height="74">
 			<frame>
-				<reportElement uuid="b399504b-fdde-410b-b949-8e54c357c5ea" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
+				<reportElement uuid="3347c677-5354-489c-adc6-7b5ce182cb28" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2592,7 +3044,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="ca21416e-27bb-4044-88b0-bc72d7a47a0c" x="0" y="0" width="409" height="11"/>
+					<reportElement uuid="ed0fd490-543f-4c3e-8a84-5632bdae191a" x="0" y="0" width="409" height="11"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2606,12 +3058,12 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[RM204 : กรณีผู้บริหารหลัก (Main Director) มีชื่ออยู่ในนิติบุคคลไม่ถึง 1 ปี ให้ชี้แจงประสบการณ์ในการทำธุรกิจที่เกี่ยวข้อง]]></text>
 				</staticText>
 				<image scaleImage="RealSize">
-					<reportElement uuid="7fae6641-bf80-43ed-9420-4504c6f6be31" x="501" y="2" width="16" height="11"/>
+					<reportElement uuid="518a6672-8cc6-4347-9a8c-e3205dc828a1" x="501" y="2" width="16" height="11"/>
 					<imageExpression><![CDATA[($P{bizSupport}.getRm204Code()) == 0 ?
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="9f8e3d4a-9306-42d3-87d0-34cc8640a977" mode="Opaque" x="6" y="21" width="542" height="45"/>
+					<reportElement uuid="0d8bc04d-ab71-4d91-b407-48499ad34837" mode="Opaque" x="6" y="21" width="542" height="45"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2626,12 +3078,12 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getRm204Remark()]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RealSize">
-					<reportElement uuid="c8eaa8d3-7a2a-4ee4-85fd-c2f551da5e83" x="452" y="2" width="17" height="11"/>
+					<reportElement uuid="e0581708-09f2-4424-b80f-aa91649cf3a0" x="452" y="2" width="17" height="11"/>
 					<imageExpression><![CDATA[($P{bizSupport}.getRm204Code()) == 1 ?
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="58a9aad6-5fd9-4bfe-bdf3-9ac64afb8f90" x="516" y="1" width="27" height="13"/>
+					<reportElement uuid="10be1ca5-f9f1-4348-ad95-106a23042596" x="516" y="1" width="27" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2645,7 +3097,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[ไม่ตอบ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="4669420a-e58f-4b2c-a654-0454d0b53904" x="468" y="1" width="15" height="13"/>
+					<reportElement uuid="79f2e3c4-c276-4d1f-8be9-6b2224b2a544" x="468" y="1" width="15" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2660,9 +3112,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</staticText>
 			</frame>
 		</band>
-		<band height="72" splitType="Prevent">
+		<band height="72">
 			<frame>
-				<reportElement uuid="e5d5fb1a-7d91-42a0-be5c-26b957ee3572" style="Frame" mode="Opaque" x="0" y="0" width="555" height="72" backcolor="#FFFFFF"/>
+				<reportElement uuid="c5fde0e8-5d4e-42ac-a1a4-d59c9d549478" style="Frame" mode="Opaque" x="0" y="0" width="555" height="72" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2670,7 +3122,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="760d17cf-3602-4381-af31-d126c4d0fc30" x="0" y="0" width="419" height="11"/>
+					<reportElement uuid="c04ab063-f4a8-47c2-8487-86629db7aa6f" x="0" y="0" width="419" height="11"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2684,12 +3136,12 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[RM020 : กรณีไม่สามารถนำส่งสัญญากู้ยืมมาประกอบการพิจารณา ให้ชี้แจงพร้อมนำส่งสัญญาจำนองหรือสัญญาจำนำ]]></text>
 				</staticText>
 				<image scaleImage="RealSize">
-					<reportElement uuid="4e8da9f5-d317-406f-893d-6df629973c41" x="500" y="2" width="17" height="11"/>
+					<reportElement uuid="92995a12-fd05-4b0b-b5db-d3c51eaf825d" x="500" y="2" width="17" height="11"/>
 					<imageExpression><![CDATA[($P{bizSupport}.getRm020Code()) == 0 ?
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="e6d62821-1faa-469f-b26a-bc72e8b7b57f" mode="Opaque" x="6" y="21" width="542" height="45"/>
+					<reportElement uuid="f21355fd-fd6b-4c9a-883f-f53c206229fb" mode="Opaque" x="6" y="21" width="542" height="45"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2704,12 +3156,12 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{bizSupport}.getRm020Remark()]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RealSize">
-					<reportElement uuid="b7ee0b32-f08b-4a34-9117-e7e5e035dd42" x="452" y="2" width="17" height="11"/>
+					<reportElement uuid="40b79c8b-0bdc-490d-bc11-b17df67780b3" x="452" y="2" width="17" height="11"/>
 					<imageExpression><![CDATA[($P{bizSupport}.getRm020Code()) == 1 ?
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="a5c3806d-4911-4f24-bf1e-84daea487fcb" x="516" y="1" width="27" height="13"/>
+					<reportElement uuid="be37bfdb-9687-44fd-9483-6c39061f1030" x="516" y="1" width="27" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2723,7 +3175,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[ไม่ตอบ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="f2f2e327-880a-4432-afd9-734454d5e9bc" x="468" y="1" width="15" height="13"/>
+					<reportElement uuid="3f648b64-4ec3-4ffc-81ca-8b4aa50b01d9" x="468" y="1" width="15" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2738,9 +3190,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</staticText>
 			</frame>
 		</band>
-		<band height="126" splitType="Prevent">
+		<band height="126">
 			<frame>
-				<reportElement uuid="55278db9-2a27-4948-b5f5-4e60801a5e81" style="Frame" mode="Opaque" x="0" y="0" width="555" height="126" backcolor="#FFFFFF"/>
+				<reportElement uuid="3bae90a9-c48b-4429-b0de-753572120e29" style="Frame" mode="Opaque" x="0" y="0" width="555" height="126" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2748,7 +3200,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<staticText>
-					<reportElement uuid="7a664b57-93ac-4367-ac64-e601e43a95bb" x="0" y="0" width="140" height="13"/>
+					<reportElement uuid="87ac2967-edd3-41a8-835a-3433180f7ec3" x="0" y="0" width="140" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2762,7 +3214,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[UW Decision and Explanation]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="eb69317e-27b9-4a41-b8eb-2aa4f64302a2" x="0" y="23" width="84" height="13"/>
+					<reportElement uuid="0594c879-eb58-4098-8a5d-ad706ecabe9a" x="0" y="23" width="84" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2776,7 +3228,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[Approval Authority :]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="bab1512b-a87d-4fca-90dd-05a3bdb9e34d" mode="Opaque" x="84" y="23" width="140" height="13"/>
+					<reportElement uuid="3cf357f4-5bee-4b90-a53c-79828299ebac" mode="Opaque" x="84" y="23" width="140" height="13"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2791,7 +3243,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getName()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="60f2f30d-fd8f-49fe-9f77-513187d8fdc8" x="274" y="23" width="41" height="13"/>
+					<reportElement uuid="fa118d00-1a71-49bf-9472-ae785a0d42f3" x="274" y="23" width="41" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2805,7 +3257,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[UW Code:]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="be0f964d-3959-41ca-97ca-3f9922752b74" mode="Opaque" x="315" y="23" width="115" height="13"/>
+					<reportElement uuid="936f272a-002e-453e-8b52-7c24f7399430" mode="Opaque" x="315" y="23" width="115" height="13"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2820,7 +3272,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getUwCode()]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RealSize">
-					<reportElement uuid="639471f0-f259-4c8b-a3cc-da5707519f17" x="2" y="50" width="16" height="13"/>
+					<reportElement uuid="352fab4d-15b3-4cbd-9b8b-b9ef15453c33" x="2" y="50" width="16" height="13"/>
 					<box>
 						<pen lineColor="#FFFFFF"/>
 						<topPen lineColor="#FFFFFF"/>
@@ -2832,7 +3284,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="71fba778-ae61-4452-b7d2-55e5a046fbd5" x="19" y="49" width="84" height="13"/>
+					<reportElement uuid="ef341ab6-91bf-41e1-aff3-d5689b035a4b" x="19" y="49" width="84" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2846,7 +3298,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[Normal Approve]]></text>
 				</staticText>
 				<image scaleImage="RealSize">
-					<reportElement uuid="8417a0f8-421f-4f2e-b512-a69f8e19ec7d" x="122" y="50" width="16" height="13"/>
+					<reportElement uuid="8b9f73b3-784c-43c5-b0ca-424c1da5a1eb" x="122" y="50" width="16" height="13"/>
 					<box>
 						<pen lineColor="#FFFFFF"/>
 						<topPen lineColor="#FFFFFF"/>
@@ -2858,7 +3310,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="3d99b790-6c30-4aa7-9b27-ddaacdc8cacd" x="140" y="49" width="84" height="13"/>
+					<reportElement uuid="7c38881a-e565-4ee1-8aa7-d86224e60a2a" x="140" y="49" width="84" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2872,7 +3324,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[Deviation     ]]></text>
 				</staticText>
 				<image scaleImage="RealSize">
-					<reportElement uuid="bf171e42-c4cb-484a-b98b-f8c1824b40c0" x="247" y="50" width="16" height="13"/>
+					<reportElement uuid="0a0f440d-f56a-4602-ae0a-b018112b6bc5" x="247" y="50" width="16" height="13"/>
 					<box>
 						<pen lineColor="#FFFFFF"/>
 						<topPen lineColor="#FFFFFF"/>
@@ -2884,7 +3336,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="8e88f7a0-5b8f-43fd-9fc6-d664c33ff344" x="265" y="49" width="84" height="13"/>
+					<reportElement uuid="c4816896-edfd-4f8d-a9ac-349f2126c69b" x="265" y="49" width="84" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2898,7 +3350,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[Reject]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="e1c95240-58d1-4c5e-bb61-2c78efde9660" stretchType="RelativeToBandHeight" mode="Opaque" x="28" y="97" width="496" height="20"/>
+					<reportElement uuid="6c8fd0c4-c1d4-42f2-b554-3548f6d6ab2a" stretchType="RelativeToBandHeight" mode="Opaque" x="28" y="97" width="496" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2913,7 +3365,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getCode() +" - "+ $P{uwDecision}.getDescription()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="50a07bc7-3e2e-4410-871b-2eeb0a8e2599" mode="Opaque" x="28" y="77" width="496" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="f490ad58-d2a2-453a-ab6f-9aac2d5cd69f" mode="Opaque" x="28" y="77" width="496" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2927,7 +3379,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[Code]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="041097d6-1aa4-4827-b51f-31ad964705d8" mode="Opaque" x="0" y="77" width="28" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
+					<reportElement uuid="ad598a74-bdab-4334-85df-4da2da771543" mode="Opaque" x="0" y="77" width="28" height="20" forecolor="#FFFFFF" backcolor="#555555"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2941,7 +3393,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="db0103b3-d8e5-4bda-b00f-0f6aea8d92a9" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="97" width="28" height="20"/>
+					<reportElement uuid="2ad6d370-c30d-4264-8d57-7c34121f3bc4" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="97" width="28" height="20"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2955,9 +3407,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</textField>
 			</frame>
 		</band>
-		<band height="68" splitType="Prevent">
+		<band height="68">
 			<frame>
-				<reportElement uuid="1fa0909a-68b6-49ed-b944-0609237a60af" style="Frame" mode="Opaque" x="0" y="0" width="555" height="68" backcolor="#FFFFFF"/>
+				<reportElement uuid="4f47ee4b-d202-481a-85a3-6d1fd37690a1" style="Frame" mode="Opaque" x="0" y="0" width="555" height="68" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2965,7 +3417,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="c9b7a981-0af1-4a01-95c6-84954aeb9137" mode="Opaque" x="6" y="21" width="518" height="36"/>
+					<reportElement uuid="f755fb05-b302-4dbf-b6d2-860288cce98e" mode="Opaque" x="6" y="21" width="518" height="36"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 						<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2980,7 +3432,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getUwComment()]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="3913a807-bc5d-4dda-9aaf-f9283703e77b" x="0" y="0" width="84" height="13"/>
+					<reportElement uuid="f3dc3290-aa4f-42cc-b2c0-8d6b99b204c4" x="0" y="0" width="84" height="13"/>
 					<box>
 						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
@@ -2996,22 +3448,67 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 			</frame>
 		</band>
 	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
 	<pageFooter>
-		<band height="11">
+		<band height="11" splitType="Stretch">
 			<textField>
-				<reportElement uuid="c54ceb2c-8f2b-4bb0-896d-b72b38e8af84" mode="Transparent" x="535" y="0" width="20" height="11"/>
-				<textElement>
+				<reportElement uuid="31e5995a-188c-4b6c-86f1-7826f654e4ea" mode="Opaque" x="516" y="0" width="26" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="">
+				<reportElement uuid="64131901-e894-41e5-b2e8-dce6ee341833" mode="Opaque" x="542" y="0" width="13" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b619b594-5011-4832-8557-91b8c2eb0344" mode="Opaque" x="43" y="0" width="473" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="2" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillFooter}.getGenFooter()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="ae6ee867-ad2b-4142-9525-0aefb9fd0f7c" x="518" y="0" width="18" height="11"/>
-				<textElement>
+				<reportElement uuid="368d54e5-1ff5-49f8-a65f-fd9878d4e32d" mode="Opaque" x="0" y="0" width="43" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[Page]]></text>
+				<text><![CDATA[PDF Gen. date]]></text>
 			</staticText>
 		</band>
 	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
 </jasperReport>
