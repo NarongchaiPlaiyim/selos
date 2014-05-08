@@ -438,7 +438,6 @@ public class NewCollateralTransform extends Transform {
             newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
-            newCollateralHeadView.setSubCollType(collateralHeaderDetail.getSubCollateralType());
 
             List<NewCollateralSub> newCollateralSubDetails = newCollateralSubDAO.getAllNewSubCollateral(collateralHeaderDetail);
             if (newCollateralSubDetails.size() > 0) {
@@ -484,7 +483,7 @@ public class NewCollateralTransform extends Transform {
             List<NewCollateralSubMortgage> newCollateralSubMortgages = newCollateralSubMortgageDAO.getListNewCollateralSubMortgage(subCollateralDetail);
             List<MortgageTypeView> mortgageTypeViewList = new ArrayList<MortgageTypeView>();
             if (newCollateralSubMortgages != null) {
-                newCollateralSubView.setMortgageList(mortgageTypeViewList);
+                //newCollateralSubView.setMortgageList(mortgageTypeViewList);
                 for (NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgages) {
                     log.info("newCollateralSubMortgage id ::{}", newCollateralSubMortgage.getId());
                     MortgageTypeView mortgageTypeView = mortgageTypeTransform.transformToView(newCollateralSubMortgage.getMortgageType());

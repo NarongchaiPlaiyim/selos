@@ -1,11 +1,14 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.UserAccess;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -17,6 +20,8 @@ import java.util.List;
 public class BaseController implements Serializable {
     @Inject
     MandatoryFieldsControl mandatoryFieldsControl;
+    @Inject
+    UserAccessControl userAccessControl;
     @SELOS
     @Inject
     Logger log;
@@ -115,5 +120,40 @@ public class BaseController implements Serializable {
         }
 
         return workCaseId;
+    }
+
+    //Function for User Access Matrix
+    protected List<UserAccess> loadUserAccessMatrix(int screenId){
+        HttpSession session = FacesUtil.getSession(true);
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        List<UserAccess> userAccessList = userAccessControl.getUserAccessList(stepId, screenId);
+
+        return userAccessList;
+    }
+
+    public boolean checkCanAccess(int screenId){
+        boolean canAccess = false;
+        List<UserAccess> userAccessList = loadUserAccessMatrix(screenId);
+        if(userAccessList.size() > 0){
+            for(UserAccess userAccess : userAccessList){
+                if(userAccess.getAccessFlag() == 1){
+                    canAccess = true;
+                }
+            }
+        }
+
+        return canAccess;
+    }
+
+    private void showMessageRedirect(){
+        RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+    }
+
+    private void showMessageBox(){
+        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+    }
+
+    private void sendCallBackParam(boolean value){
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", value);
     }
 }

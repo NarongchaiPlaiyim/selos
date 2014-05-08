@@ -306,6 +306,20 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    public void submitRGMPriceReduce(String queueName, String wobNumber, String zmPriceRequestFlag, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ZMDecisionFlag", "NA");
+            fields.put("ZMPricingRequestFlag", zmPriceRequestFlag);
+            log.debug("dispatch case for [Submit RGM Price Reduce]...");
+
+            execute(queueName, wobNumber, fields);
+        }
+    }
+
     public void submitFCashZM(String queueName, String wobNumber, String zmDecisionFlag, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){

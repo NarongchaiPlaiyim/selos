@@ -73,7 +73,7 @@ public class BankStmtControl extends BusinessControl {
     BankStmtTransform bankStmtTransform;
 
     public BankStmtSummaryView retrieveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSubmitDate) {
-        return retrieveBankStmtInterface(customerInfoViewList, expectedSubmitDate, RadioValue.NO.value());
+        return retrieveBankStmtInterface(customerInfoViewList, getLastMonthDateBankStmt(expectedSubmitDate), RadioValue.NO.value());
     }
 
     public BankStmtSummaryView retrieveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSubmitDate, int seasonal) {
@@ -959,6 +959,7 @@ public class BankStmtControl extends BusinessControl {
 
         boolean isRoleUW = RoleValue.UW.id() == getUserRoleId();
         boolean isCountIncome;
+
         BigDecimal sumChqRetAmtCountIncomeOfLastSizM = BigDecimal.ZERO;
         BigDecimal sumNetUWofLastSixM = BigDecimal.ZERO;
         BigDecimal sumNetBDMofLastSixM = BigDecimal.ZERO;
