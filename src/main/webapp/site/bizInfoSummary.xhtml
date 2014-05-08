@@ -74,7 +74,8 @@
                                                               required="#{not empty param[addBizInfoSummary.clientId]}">
                                                 <f:selectItem itemLabel="No" itemValue="0"/>
                                                 <f:selectItem itemLabel="Yes" itemValue="1"/>
-                                                <p:ajax process="@this" update=":frmMain:ownerName,:frmMain:expiryDate" listener="#{bizInfoSummary.onChangeRental}"/>
+                                                <p:ajax process="@this" update=":frmMain:ownerName,:frmMain:ownerNameLabel,:frmMain:expiryDateLabel,:frmMain:expiryDate"
+                                                        listener="#{bizInfoSummary.onChangeRental}"/>
                                             </p:selectOneRadio>
 
                                             <p:radioButton id="peropt1" for="isRentRadio" itemIndex="0"/>
@@ -85,7 +86,7 @@
 
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"
                                                            styleClass="title left"/>
-                                            <h:outputText value="#{bizInfoSummary.mandate('ownerName')}" styleClass="require-field"/>
+                                            <h:outputText value="#{bizInfoSummary.mandate('ownerName')}" styleClass="require-field" id="ownerNameLabel"/>
                                             <h:outputText value=" :"/>
 
                                             <p:spacer width="2"/>
@@ -105,7 +106,7 @@
                                             <h:outputLabel for="peropt2" value="Yes" /><p:spacer width="15px" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"
                                                            styleClass="title left"/>
-                                            <h:outputText value="#{bizInfoSummary.mandate('expiryDate')}" styleClass="require-field"/>
+                                            <h:outputText value="#{bizInfoSummary.mandate('expiryDate')}" styleClass="require-field" id="expiryDateLabel"/>
                                             <h:outputText value=" :"/>
 
                                             <clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"
@@ -326,7 +327,6 @@
                                         </td>
                                         <td colspan="3">
                                             <clv:BECalendar id="registrationDate" showOn="button" navigator="true" locale="th_TH"
-                                                            readonlyInput="true"
                                                             disabled="#{bizInfoSummary.isDisabled('registrationDate')}"
                                                             required="#{bizInfoSummary.bizInfoSummaryView.establishDate == null and not empty param[addBizInfoSummary.clientId]}"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
@@ -336,8 +336,8 @@
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
-                                                <p:ajax event="change"  update=":frmMain:registrationDate" />
-                                                <p:ajax event="dateSelect"  update=":frmMain:registrationDate" />
+                                                <p:ajax event="change" update=":frmMain:registrationDate"/>
+                                                <p:ajax event="dateSelect" update=":frmMain:registrationDate"/>
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -349,7 +349,6 @@
                                         </td>
                                         <td style="width: 5%">
                                             <clv:BECalendar id="establishDate" showOn="button" navigator="true" locale="th_TH"
-                                                            readonlyInput="true"
                                                             disabled="#{bizInfoSummary.isDisabled('establishDate')}"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
                                                             yearRange="1950:2100"
@@ -358,13 +357,15 @@
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
-                                                <p:ajax event="change" update=":frmMain:establishDate,:frmMain:referExpId" />
-                                                <p:ajax event="dateSelect" update=":frmMain:establishDate,:frmMain:referExpId" />
+                                                <p:ajax event="change" update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:establishFrom"
+                                                        listener="#{bizInfoSummary.onChangeEstablishDate()}"/>
+                                                <p:ajax event="dateSelect" update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:establishFrom"
+                                                        listener="#{bizInfoSummary.onChangeEstablishDate()}"/>
                                             </clv:BECalendar>
                                         </td>
                                         <td class="title left" style="width: 70px">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
-                                            <h:outputText value="#{bizInfoSummary.mandate('establishFrom')}" styleClass="require-field"/>
+                                            <h:outputText value="#{bizInfoSummary.mandate('establishFrom')}" styleClass="require-field" id="establishFrom"/>
                                             <h:outputText value=" :"/>
                                         </td>
                                         <td>
