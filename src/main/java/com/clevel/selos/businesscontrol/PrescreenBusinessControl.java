@@ -476,20 +476,35 @@ public class PrescreenBusinessControl extends BusinessControl {
                     ncrsModel.setTitleNameCode(TitleName.Mr);
                 }*/
 
-                if(Gender.MALE.value() == customerItem.getGender()){
-                    ncrsModel.setTitleNameCode(TitleName.Mr);
-                } else if(Gender.FEMALE.value() == customerItem.getGender()){
-                    if(customerItem.getMaritalStatus().getSpouseFlag() == 0){ //single
-                        ncrsModel.setTitleNameCode(TitleName.Miss);
-                    } else if(customerItem.getMaritalStatus().getSpouseFlag() == 1){ //married
+
+                if(customerItem.getTitleTh() != null){
+                    if(customerItem.getTitleTh().getCode().equals("1")){
+                        ncrsModel.setTitleNameCode(TitleName.Mr);
+                    } else if(customerItem.getTitleTh().getCode().equals("2")){
                         ncrsModel.setTitleNameCode(TitleName.Mrs);
-                    } else {
-                        log.debug("Spouse != 0 or 1");
+                    } else if(customerItem.getTitleTh().getCode().equals("3")){
                         ncrsModel.setTitleNameCode(TitleName.Miss);
+                    } else {
+                        //send other
+                        if(Gender.MALE.value() == customerItem.getGender()){
+                            ncrsModel.setTitleNameCode(TitleName.Mr);
+                        } else if(Gender.FEMALE.value() == customerItem.getGender()){
+                            if(customerItem.getMaritalStatus().getSpouseFlag() == 0){ //single
+                                ncrsModel.setTitleNameCode(TitleName.Miss);
+                            } else if(customerItem.getMaritalStatus().getSpouseFlag() == 1){ //married
+                                ncrsModel.setTitleNameCode(TitleName.Mrs);
+                            } else {
+                                log.debug("Spouse != 0 or 1");
+                                ncrsModel.setTitleNameCode(TitleName.Miss);
+                            }
+                        } else {
+                            log.debug("Gender != 0 or 1");
+                        }
                     }
-                } else {
-                    log.debug("Gender != 0 or 1");
                 }
+
+
+
 
                 ncrsModel.setFirstName(customerItem.getFirstNameTh());
                 ncrsModel.setLastName(customerItem.getLastNameTh());

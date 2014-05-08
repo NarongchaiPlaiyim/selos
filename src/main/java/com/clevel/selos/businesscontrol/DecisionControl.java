@@ -250,6 +250,7 @@ public class DecisionControl extends BusinessControl {
 
         NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
         if (newCreditFacilityView != null && newCreditFacilityView.getId() != 0) {
+            decisionView.setNewCreditFacilityViewId(newCreditFacilityView.getId());
             decisionView.setCreditCustomerType(
                       newCreditFacilityView.getCreditCustomerType() == 2 ? CreditCustomerType.PRIME
                     : newCreditFacilityView.getCreditCustomerType() == 1 ? CreditCustomerType.NORMAL

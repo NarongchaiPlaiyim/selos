@@ -320,25 +320,57 @@ public class FullApplicationControl extends BusinessControl {
         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }
 
-    public void submitFCashZM(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String zmDecisionFlag = "A";
-        //WorkCase workCase;
+    public void submitToRGMPriceReduce(String queueName, String wobNumber, long workCaseId) throws Exception {
+        String zmPricingRequestFlag = "A";
+        WorkCase workCase;
         ApprovalHistory approvalHistoryApprove = null;
 
         if(workCaseId != 0){
-            //workCase = workCaseDAO.findById(workCaseId);
-            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+            workCase = workCaseDAO.findById(workCaseId);
+            int priceDOALevel = workCase.getPricingDoaLevel();
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
             if(approvalHistoryApprove==null){
                 throw new Exception("Please make decision before submit.");
             } else {
                 if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
-                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+                    if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
+                        zmPricingRequestFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
+                    } else {
+                        zmPricingRequestFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                    }
                     approvalHistoryApprove.setSubmit(1);
                     approvalHistoryApprove.setSubmitDate(new Date());
                 } else {
                     throw new Exception("Please make decision before submit.");
                 }
 
+                bpmExecutor.submitRGMPriceReduce(queueName, wobNumber, zmPricingRequestFlag, ActionCode.SUBMIT_CA.getVal());
+
+                approvalHistoryDAO.persist(approvalHistoryApprove);
+            }
+        }
+    }
+
+    public void submitFCashZM(String queueName, String wobNumber, long workCaseId) throws Exception {
+        String zmDecisionFlag = "A";
+        WorkCase workCase;
+        ApprovalHistory approvalHistoryApprove = null;
+
+        if(workCaseId != 0){
+            //workCase = workCaseDAO.findById(workCaseId);
+            //int priceDOALevel = workCase.getPricingDoaLevel();
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+            if(approvalHistoryApprove==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                    approvalHistoryApprove.setSubmit(1);
+                    approvalHistoryApprove.setSubmitDate(new Date());
+                } else {
+                    throw new Exception("Please make decision before submit.");
+                }
+                log.debug("submitFCashZM ::: approvalHistory : {}", approvalHistoryApprove);
                 bpmExecutor.submitFCashZM(queueName, wobNumber, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
                 approvalHistoryDAO.persist(approvalHistoryApprove);
@@ -751,6 +783,10 @@ public class FullApplicationControl extends BusinessControl {
 
     public void returnAADAdminByBDM(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+    }
+
+    public void returnAADAdminByUW2(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
     public void completeCase(String queueName, String wobNumber) throws Exception {

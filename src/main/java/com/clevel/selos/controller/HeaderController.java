@@ -413,6 +413,29 @@ public class HeaderController implements Serializable {
     }
 
     //---------- Function for Submit CA ( Zone to Region ) -----------//
+    public void onSubmitPriceReduceRGM(){
+        log.debug("onSubmitPriceReduceRM ::: starting...");
+        boolean complete = false;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            fullApplicationControl.submitToRGMPriceReduce(queueName, wobNumber, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onSubmitPriceReduceRM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onSubmitPriceReduceRM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
     public void onSubmitRM(){
         log.debug("onSubmitRM ::: starting...");
         boolean complete = false;
@@ -547,7 +570,7 @@ public class HeaderController implements Serializable {
         boolean complete = false;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            //long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             fullApplicationControl.submitFCashZM(queueName, wobNumber, workCaseId);
@@ -766,12 +789,15 @@ public class HeaderController implements Serializable {
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try {
-            messageHeader = "Information.";
-            message = "Return case success.";
+            fullApplicationControl.returnAADAdminByUW2(queueName, wobNumber, returnAADRemark, returnReasonId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.return.success");
+            showMessageRedirect();
         } catch (Exception ex) {
             log.error("Exception while return to aad committee : ", ex);
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
+            showMessageBox();
         }
     }
 
