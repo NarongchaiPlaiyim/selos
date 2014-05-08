@@ -2,6 +2,7 @@ package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
@@ -17,11 +18,11 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -61,8 +62,11 @@ public class PDFExecutiveSummary implements Serializable {
     private WorkCaseDAO workCaseDAO;
 
     long workCaseId;
-
+    private final String SPACE = " ";
     WorkCase workCase;
+
+    @Inject
+    DecisionControl decisionControl;
 
     @Inject
     public PDFExecutiveSummary() {
@@ -428,8 +432,8 @@ public class PDFExecutiveSummary implements Serializable {
         return uwDecisionExSumReport;
     }
 
-    public HeaderReport fillHeader(){
-        HeaderReport report = new HeaderReport();
+    public HeaderAndFooterReport fillHeader(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
 
         HttpSession session = FacesUtil.getSession(true);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
@@ -484,6 +488,23 @@ public class PDFExecutiveSummary implements Serializable {
         } else {
             log.debug("--Header is Null. {}",appHeaderView);
         }
+        return report;
+    }
+
+    public HeaderAndFooterReport fillFooter(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        String date = Util.createDateAndTimeTh(new Date());
+        log.debug("--Date. {}",date);
+
+        String userName =  decisionControl.getCurrentUserID();
+        log.debug("---------- {}",userName);
+
+        StringBuilder genFooter = new StringBuilder();
+        genFooter = genFooter.append(userName).append(SPACE).append(date);
+        report.setGenFooter(genFooter.toString());
+
+
 
 
         return report;

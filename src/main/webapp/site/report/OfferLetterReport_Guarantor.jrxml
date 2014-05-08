@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.3310000000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+	</parameter>
 	<field name="subCollateralTypeName" class="java.lang.String">
 		<fieldDescription><![CDATA[subCollateralTypeName]]></fieldDescription>
 	</field>
@@ -20,6 +23,10 @@
 	</field>
 	<field name="address" class="java.lang.String">
 		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="approvedGuarantorOfferLetterReport" class="java.util.List"/>
+	<field name="path" class="java.lang.String">
+		<fieldDescription><![CDATA[path]]></fieldDescription>
 	</field>
 	<columnHeader>
 		<band height="24">
@@ -216,7 +223,7 @@
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
@@ -225,6 +232,13 @@
 				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
+		</band>
+		<band height="13">
+			<subreport>
+				<reportElement uuid="8f642151-cafe-4ebd-8a3b-9d0f0c97d193" x="0" y="0" width="555" height="13"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{approvedGuarantorOfferLetterReport})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$F{path} + "OfferLetterReport_Guarantor_ApprovedGuarantor.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
-	<property name="ireport.zoom" value="1.2396694214876234"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.5000000000000249"/>
+	<property name="ireport.x" value="39"/>
+	<property name="ireport.y" value="2434"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -31,7 +31,7 @@
 			</style>
 		</conditionalStyle>
 	</style>
-	<parameter name="fillHeader" class="com.clevel.selos.model.report.HeaderReport"/>
+	<parameter name="fillHeader" class="com.clevel.selos.model.report.HeaderAndFooterReport"/>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="borrower" class="java.util.Collection"/>
 	<parameter name="tradeFinance" class="java.util.Collection"/>
@@ -47,6 +47,7 @@
 	<parameter name="bizSupport" class="com.clevel.selos.model.report.BizSupportExSumReport"/>
 	<parameter name="uwDecision" class="com.clevel.selos.model.report.UWDecisionExSumReport"/>
 	<parameter name="decision" class="com.clevel.selos.model.report.DecisionExSumReport"/>
+	<parameter name="fillFooter" class="com.clevel.selos.model.report.HeaderAndFooterReport"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -81,7 +82,7 @@
 					<textElement textAlignment="Center">
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-					<text><![CDATA[SME Credit Decision [OP Sheet]]]></text>
+					<text><![CDATA[SME Credit Decision [Full Pack]]]></text>
 				</staticText>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="ba2f64dd-41e7-415f-a3bd-fceab4c1c972" mode="Opaque" x="2" y="12" width="130" height="28" backcolor="#FFFFFF"/>
@@ -3453,18 +3454,57 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 	<pageFooter>
 		<band height="11" splitType="Stretch">
 			<textField>
-				<reportElement uuid="e285abae-f4d8-4b9e-858b-0fdd55ce4ed8" mode="Transparent" x="535" y="0" width="20" height="11"/>
-				<textElement>
+				<reportElement uuid="31e5995a-188c-4b6c-86f1-7826f654e4ea" mode="Opaque" x="516" y="0" width="26" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="">
+				<reportElement uuid="64131901-e894-41e5-b2e8-dce6ee341833" mode="Opaque" x="542" y="0" width="13" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b619b594-5011-4832-8557-91b8c2eb0344" mode="Opaque" x="43" y="0" width="473" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="2" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillFooter}.getGenFooter()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="0c0df2b3-a678-4c19-ac5b-59d6c7117adb" x="518" y="0" width="18" height="11"/>
-				<textElement>
+				<reportElement uuid="368d54e5-1ff5-49f8-a65f-fd9878d4e32d" mode="Opaque" x="0" y="0" width="43" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[Page]]></text>
+				<text><![CDATA[PDF Gen. date]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

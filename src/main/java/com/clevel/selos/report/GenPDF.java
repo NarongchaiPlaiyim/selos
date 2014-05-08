@@ -103,11 +103,6 @@ public class GenPDF extends ReportService implements Serializable {
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
-//        String nameOpShect = "_OpSheet.pdf";
-//        String nameExSum = "_ExSum.pdf";
-//        String nameRejectLetter = "_RejectLetter.pdf";
-//        String nameAppraisal = "_AppraisalAppointment.pdf";
-//        String nameOfferLetter = "_OfferLetter.pdf";
         String date = Util.createDateTime(new Date());
         String[] month = date.split("");
         log.debug("--month. {}",month);
@@ -166,7 +161,8 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
         map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
         map.put("decision", pdfExecutiveSummary.fillDecision());
-        map.put("fillHeader",pdfDecision.fillHeader());
+        map.put("fillHeader",pdfExecutiveSummary.fillHeader());
+        map.put("fillFooter",pdfExecutiveSummary.fillFooter());
 
 //        pdfName = "Executive_Summary_Report_";
 
@@ -202,6 +198,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowDetail",pdfDecision.fillFollowDetail());
         map.put("fillPriceFee",pdfDecision.fillPriceFee());
         map.put("fillHeader",pdfDecision.fillHeader());
+        map.put("fillFooter",pdfDecision.fillFooter());
 
         generatePDF(pathDecision, map, reportView.getNameReportOpShect());
     }
@@ -238,7 +235,7 @@ public class GenPDF extends ReportService implements Serializable {
         HashMap map = new HashMap<String, Object>();
         map.put("path",pathsub);
         map.put("fillApprovedCredit",pdfOfferLetter.fillApprovedCredit());
-        map.put("fillGuarantor",pdfOfferLetter.fillGuarantor());
+        map.put("fillGuarantor",pdfOfferLetter.fillGuarantor(pathsub));
         map.put("fillFollowCondition",pdfOfferLetter.fillFollowCondition());
         map.put("fillMasterOfferLetter",pdfOfferLetter.fillMasterOfferLetter());
 

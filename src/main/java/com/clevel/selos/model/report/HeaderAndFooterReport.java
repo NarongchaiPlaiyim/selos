@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.inject.Inject;
 import java.util.Date;
 
-public class HeaderReport extends ReportModel{
+public class HeaderAndFooterReport extends ReportModel{
 
     private String caseStatus;
     private String submitDate;
@@ -46,8 +46,11 @@ public class HeaderReport extends ReportModel{
     private String creditDecision;
     private Date approvedDate;
 
+    //Footer
+    private String genFooter;
+
     @Inject
-    public HeaderReport() {
+    public HeaderAndFooterReport() {
     }
 
     public String getCaseStatus() {
@@ -298,6 +301,14 @@ public class HeaderReport extends ReportModel{
         this.approvedDate = approvedDate;
     }
 
+    public String getGenFooter() {
+        return genFooter;
+    }
+
+    public void setGenFooter(String genFooter) {
+        this.genFooter = genFooter;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -332,6 +343,7 @@ public class HeaderReport extends ReportModel{
                 .append("personalId5", personalId5)
                 .append("creditDecision", creditDecision)
                 .append("approvedDate", approvedDate)
+                .append("genFooter", genFooter)
                 .toString();
     }
 }

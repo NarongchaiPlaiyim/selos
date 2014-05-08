@@ -7,6 +7,7 @@ import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PDFDecision implements Serializable {
@@ -51,6 +53,7 @@ public class PDFDecision implements Serializable {
 
 
     long workCaseId;
+    private final String SPACE = " ";
 
 
 
@@ -75,7 +78,8 @@ public class PDFDecision implements Serializable {
 
         if(!Util.isNull(workCaseId)){
             decisionView = decisionControl.getDecisionView(workCaseId);
-            log.debug("--decisionView. {}",decisionView);
+            workCase = workCaseDAO.findById(workCaseId);
+            log.debug("--decisionView. {},workCase. {}",decisionView,workCase);
         } else {
             log.debug("--workcaseId is Null. {}",workCaseId);
         }
@@ -1009,12 +1013,11 @@ public class PDFDecision implements Serializable {
         return priceFeeDecisionReport;
     }
 
-    public HeaderReport fillHeader(){
-        HeaderReport report = new HeaderReport();
+    public HeaderAndFooterReport fillHeader(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
 
         HttpSession session = FacesUtil.getSession(true);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-        workCase = workCaseDAO.findById(workCaseId);
 
         if (!Util.isNull(appHeaderView)){
             log.debug("--Header. {}",appHeaderView);
@@ -1063,6 +1066,25 @@ public class PDFDecision implements Serializable {
         } else {
             log.debug("--Header is Null. {}",appHeaderView);
         }
+
+        return report;
+    }
+
+    public HeaderAndFooterReport fillFooter(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        String date = Util.createDateAndTimeTh(new Date());
+        log.debug("--Date. {}",date);
+
+        String userName =  decisionControl.getCurrentUserID();
+        log.debug("---------- {}",userName);
+
+        StringBuilder genFooter = new StringBuilder();
+        genFooter = genFooter.append(userName).append(SPACE).append(date);
+        report.setGenFooter(genFooter.toString());
+
+
+
 
         return report;
     }

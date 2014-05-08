@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a2f0260-1118-46b2-ac1f-b3c5002dac16">
-	<property name="ireport.zoom" value="1.7715610000000048"/>
+	<property name="ireport.zoom" value="1.3310000000000035"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="960"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -33,7 +33,8 @@
 	<parameter name="fillTotalMasterReport" class="com.clevel.selos.model.report.TotalDecisionReport"/>
 	<parameter name="fillFollowDetail" class="com.clevel.selos.model.report.FollowUpConditionDecisionReport"/>
 	<parameter name="fillPriceFee" class="com.clevel.selos.model.report.PriceFeeDecisionReport"/>
-	<parameter name="fillHeader" class="com.clevel.selos.model.report.HeaderReport"/>
+	<parameter name="fillHeader" class="com.clevel.selos.model.report.HeaderAndFooterReport"/>
+	<parameter name="fillFooter" class="com.clevel.selos.model.report.HeaderAndFooterReport"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -781,7 +782,7 @@
 				</staticText>
 			</frame>
 		</band>
-		<band height="29">
+		<band height="29" splitType="Prevent">
 			<frame>
 				<reportElement uuid="31c8f019-3396-4f8f-9f3e-906f1a2a1efb" mode="Opaque" x="0" y="0" width="555" height="29"/>
 				<box>
@@ -1323,18 +1324,21 @@
 			</textField>
 		</band>
 		<band height="53">
-			<subreport isUsingCache="true">
-				<reportElement uuid="c92c68d6-565d-4b39-ab8a-d680cc56f0a0" x="0" y="22" width="555" height="31"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedCredit})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposedCredit.jasper"]]></subreportExpression>
-			</subreport>
-			<staticText>
-				<reportElement uuid="09e0d32a-5d59-4bf2-9279-5444b8748d23" x="1" y="8" width="82" height="13"/>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-				</textElement>
-				<text><![CDATA[Proposed Credit]]></text>
-			</staticText>
+			<frame>
+				<reportElement uuid="04908280-6fe9-455c-97dd-34e66457ba3b" x="-1" y="0" width="557" height="53"/>
+				<subreport isUsingCache="true">
+					<reportElement uuid="c92c68d6-565d-4b39-ab8a-d680cc56f0a0" x="1" y="22" width="555" height="31"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillProposedCredit})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subProposedCredit.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="09e0d32a-5d59-4bf2-9279-5444b8748d23" x="1" y="7" width="82" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					</textElement>
+					<text><![CDATA[Proposed Credit]]></text>
+				</staticText>
+			</frame>
 		</band>
 		<band height="15">
 			<staticText>
@@ -1892,20 +1896,59 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<textField>
-				<reportElement uuid="21237357-c8c2-48f9-88f7-ac79a3ccac63" mode="Transparent" x="535" y="0" width="20" height="11"/>
-				<textElement>
+				<reportElement uuid="0642d136-22fa-4e31-8bfa-8913ea3a661a" mode="Opaque" x="516" y="0" width="26" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="">
+				<reportElement uuid="7709af59-f8d1-47ad-ad8b-f3b44524d0bc" mode="Opaque" x="542" y="0" width="13" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f0c530d2-07ea-4efc-bfb4-d1963034a741" mode="Opaque" x="43" y="0" width="473" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="2" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillFooter}.getGenFooter()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="fb7db95a-c41a-464a-b7d6-f254086319b6" x="517" y="0" width="18" height="11"/>
-				<textElement>
+				<reportElement uuid="05444c9c-60bb-43b4-9666-e07a4adb1174" mode="Opaque" x="0" y="0" width="43" height="11"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="5"/>
 				</textElement>
-				<text><![CDATA[Page]]></text>
+				<text><![CDATA[PDF Gen. date]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

@@ -52,6 +52,10 @@ public class Util implements Serializable {
         return createDateStringTH(date, "dd/MM/yyyy");
     }
 
+    public static String createDateAndTimeTh(Date date) {
+        return createDateStringTH(date, "dd/MM/yyyy HH:mm");
+    }
+
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = null;

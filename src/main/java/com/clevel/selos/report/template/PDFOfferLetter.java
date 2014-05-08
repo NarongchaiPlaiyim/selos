@@ -4,10 +4,7 @@ import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.report.ApprovedCreditOfferLetterReport;
-import com.clevel.selos.model.report.CollateralAndGuarantorOfferLetterReport;
-import com.clevel.selos.model.report.FollowConditionOfferletterReport;
-import com.clevel.selos.model.report.OfferLetterReport;
+import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -41,6 +38,7 @@ public class PDFOfferLetter implements Serializable {
     protected BaseRateDAO baseRateDAO;
 
     private long workCaseId;
+    private final String SPACE = " ";
 
     public PDFOfferLetter() {
     }
@@ -104,21 +102,27 @@ public class PDFOfferLetter implements Serializable {
         return reports;
     }
 
-    public List<CollateralAndGuarantorOfferLetterReport> fillGuarantor(){
+    public List<ApprovedCollateralOfferLetterReport> fillGuarantor(String path){
         log.debug("--fillGuarantor");
-        List<CollateralAndGuarantorOfferLetterReport> reports = new ArrayList<CollateralAndGuarantorOfferLetterReport>();
+        List<ApprovedCollateralOfferLetterReport> reports = new ArrayList<ApprovedCollateralOfferLetterReport>();
         List<NewCollateralView> collateralViews = decisionView.getApproveCollateralList();
         StringBuilder collOwnerUW = null;
+        StringBuilder guarantorName = null;
+        ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = null;
 
+        //Approved Guarantor
         List<NewGuarantorDetailView> guarantorDetailViews = decisionView.getApproveGuarantorList();
+        List<ApprovedGuarantorOfferLetterReport> approvedGuarantorOfferLetterReports = new ArrayList<ApprovedGuarantorOfferLetterReport>();
 
+        // Approved Collateral
         if (Util.safetyList(collateralViews).size() > 0){
-            log.debug("--collateralView Size. {}",collateralViews.size());
+            log.debug("--Approved Collateral Size. {}",collateralViews.size());
 
             for(NewCollateralView view : collateralViews){
                 for (NewCollateralHeadView headView : view.getNewCollateralHeadViewList()){
                     for (NewCollateralSubView newCollateralSubView : headView.getNewCollateralSubViewList()){
-                        CollateralAndGuarantorOfferLetterReport collateralAndGuarantorOfferLetterReport = new CollateralAndGuarantorOfferLetterReport();
+                        collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
+                        collateralAndGuarantorOfferLetterReport.setPath(path);
                         collateralAndGuarantorOfferLetterReport.setSubCollateralTypeName(Util.checkNullString(newCollateralSubView.getSubCollateralType().getDescription()));
                         collateralAndGuarantorOfferLetterReport.setTitleDeed(Util.checkNullString(newCollateralSubView.getTitleDeed()));
                         collateralAndGuarantorOfferLetterReport.setMortgageValue(Util.convertNullToZERO(newCollateralSubView.getMortgageValue()));
@@ -127,7 +131,7 @@ public class PDFOfferLetter implements Serializable {
                         for (CustomerInfoView customerInfoView : newCollateralSubView.getCollateralOwnerUWList()){
                             collOwnerUW = new StringBuilder();
                             collOwnerUW = collOwnerUW.append(customerInfoView.getTitleTh().getTitleTh())
-                                    .append(customerInfoView.getFirstNameTh()).append(" ")
+                                    .append(customerInfoView.getFirstNameTh()).append(SPACE)
                                     .append(customerInfoView.getLastNameTh());
                             collateralAndGuarantorOfferLetterReport.setCollateralOwnerUW(Util.checkNullString(collOwnerUW.toString()));
 
@@ -141,13 +145,56 @@ public class PDFOfferLetter implements Serializable {
                         for (MortgageTypeView mortgageTypeView : newCollateralSubView.getMortgageList()){
                             collateralAndGuarantorOfferLetterReport.setMortgageList(Util.checkNullString(mortgageTypeView.getMortgage()));
                         }
-                        reports.add(collateralAndGuarantorOfferLetterReport);
+
+                        if (Util.safetyList(guarantorDetailViews).size() > 0){
+                        log.debug("--Approved Guarantor Size. {}",collateralViews.size());
+                            for(NewGuarantorDetailView guarantorDetailView : guarantorDetailViews){
+                                ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
+
+                                guarantorName = new StringBuilder();
+                                guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh()).append(guarantorDetailView.getGuarantorName().getFirstNameTh())
+                                        .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
+
+                                approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
+                                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getTotalLimitGuaranteeAmount()));
+                                approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
+
+                                collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+                            }
+                        } else {
+                            log.debug("--Approved Guarantor is Null. [{}]",guarantorDetailViews);
+                            ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
+                            approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
+                            collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+                        }
+
+                        reports.add(collateralAndGuarantorOfferLetterReport); ///
                     }
                 }
             }
+        } else if (Util.safetyList(guarantorDetailViews).size() > 0){
+            if (Util.safetyList(guarantorDetailViews).size() > 0){
+            log.debug("--Approved Guarantor Size. {}",guarantorDetailViews.size());
+
+            for(NewGuarantorDetailView guarantorDetailView : guarantorDetailViews){
+                ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
+                collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
+                guarantorName = new StringBuilder();
+                guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh()).append(guarantorDetailView.getGuarantorName().getFirstNameTh())
+                        .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
+
+                approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
+                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getTotalLimitGuaranteeAmount()));
+                approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
+
+                collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+
+                reports.add(collateralAndGuarantorOfferLetterReport);
+                }
+            }
         } else {
-            log.debug("--CollateralViews is Null. [{}]",collateralViews);
-            CollateralAndGuarantorOfferLetterReport collateralAndGuarantorOfferLetterReport = new CollateralAndGuarantorOfferLetterReport();
+            log.debug("--Approved Collateral is Null. [{}],Approved Guarantor is Null. [{}]",collateralViews,guarantorDetailViews);
+            collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
             reports.add(collateralAndGuarantorOfferLetterReport);
         }
 
