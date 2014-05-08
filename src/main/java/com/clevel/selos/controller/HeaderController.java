@@ -52,19 +52,6 @@ public class HeaderController implements Serializable {
     ReasonDAO reasonDAO;
 
     @Inject
-    FullApplicationControl fullApplicationControl;
-    @Inject
-    AppraisalRequestControl appraisalRequestControl;
-    @Inject
-    ReturnControl returnControl;
-    @Inject
-    StepStatusControl stepStatusControl;
-    @Inject
-    ReturnInfoTransform returnInfoTransform;
-    @Inject
-    AppraisalDetailTransform appraisalDetailTransform;
-
-    @Inject
     private CheckMandateDocControl checkMandateDocControl;
     @Inject
     private BRMSControl brmsControl;
@@ -72,13 +59,23 @@ public class HeaderController implements Serializable {
     private UWRuleResultControl uwRuleResultControl;
     @Inject
     private HeaderControl headerControl;
+    @Inject
+    FullApplicationControl fullApplicationControl;
+    @Inject
+    AppraisalRequestControl appraisalRequestControl;
+    @Inject
+    ReturnControl returnControl;
+    @Inject
+    StepStatusControl stepStatusControl;
+
+    @Inject
+    ReturnInfoTransform returnInfoTransform;
+    @Inject
+    AppraisalDetailTransform appraisalDetailTransform;
 
     private ManageButton manageButton;
     private AppHeaderView appHeaderView;
-    private long stepId;
-    private long statusId;
-    private int stageId;
-    private int requestAppraisal;
+
     private int qualitativeType;
     private int pricingDOALevel;
     private List<User> abdmUserList;
@@ -151,8 +148,16 @@ public class HeaderController implements Serializable {
 
     //CheckMandate
     private CheckMandateDocView checkMandateDocView;
+
+    //Session variable
     private long workCaseId;
     private long workCasePreScreenId;
+    private long stepId;
+    private long statusId;
+    private int stageId;
+    private int requestAppraisal;
+    private String queueName;
+    private String wobNumber;
 
     private String messageHeader;
     private String message;
@@ -181,21 +186,10 @@ public class HeaderController implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("HeaderController ::: Creation ");
-        manageButton = new ManageButton();
-        HttpSession session = FacesUtil.getSession(true);
-        long workCasePreScreenId = 0L;
-        long workCaseId = 0L;
-        stepId = 0L;
-        statusId = 0L;
-        stageId = 0;
-        requestAppraisal = 0;
 
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
-        stageId = Util.parseInt(session.getAttribute("stageId"), 0);
-        requestAppraisal = Util.parseInt(session.getAttribute("requestAppraisal"), 0);
+        _loadSessionVariable();
+
+        manageButton = new ManageButton();
 
         log.debug("HeaderController ::: getSession : workCasePreScreenId : {}, workCase = {}, stepId = {}, statusId = {}, stageId = {}", workCasePreScreenId, workCaseId, stepId, statusId, stageId);
         log.debug("HeaderController ::: find active button");
@@ -209,6 +203,7 @@ public class HeaderController implements Serializable {
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
 
+        HttpSession session = FacesUtil.getSession(true);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.debug("HeaderController ::: appHeader : {}", appHeaderView);
 
@@ -227,6 +222,19 @@ public class HeaderController implements Serializable {
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
         }
+    }
+
+    private void _loadSessionVariable(){
+        HttpSession session = FacesUtil.getSession(true);
+
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+        stageId = Util.parseInt(session.getAttribute("stageId"), 0);
+        requestAppraisal = Util.parseInt(session.getAttribute("requestAppraisal"), 0);
+        queueName = Util.parseString(session.getAttribute("queueName"), "");
+        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
     }
 
     public boolean checkButton(String buttonName){
@@ -282,11 +290,9 @@ public class HeaderController implements Serializable {
 
     public void onCancelCA(){
         log.debug("onCancelCA ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             fullApplicationControl.cancelCAFullApp(queueName, wobNumber, reasonId, cancelRemark);
             messageHeader =  msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.cancel.success");
@@ -306,8 +312,7 @@ public class HeaderController implements Serializable {
     public void onOpenSubmitZM(){
         log.debug("onOpenSubmitZM ::: starting...");
         log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
-        HttpSession session = FacesUtil.getSession(true);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        _loadSessionVariable();
         try{
             requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
             if(requestPricing){
@@ -359,20 +364,19 @@ public class HeaderController implements Serializable {
         }
     }
 
+    //---------- Submit CA ( BDM to Zone ) -----------//
     public void onSubmitZM(){
         log.debug("onSubmitZM ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
-                HttpSession session = FacesUtil.getSession(true);
-                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-                String queueName = session.getAttribute("queueName").toString();
-                fullApplicationControl.submitToZMPricing(zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, queueName, workCaseId);
+                fullApplicationControl.submitToZM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
                 showMessageRedirect();
                 complete = true;
-                log.debug("onAssignToABDM ::: success.");
+                log.debug("onSubmitZM ::: success.");
             } catch (Exception ex){
                 messageHeader = msg.get("app.messageHeader.exception");
                 message = Util.getMessageException(ex);
@@ -412,15 +416,12 @@ public class HeaderController implements Serializable {
         }
     }
 
-    //---------- Function for Submit CA ( Zone to Region ) -----------//
+    //---------- Submit CA ( Zone to Region [Price Reduction]) -----------//
     public void onSubmitPriceReduceRGM(){
         log.debug("onSubmitPriceReduceRM ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             fullApplicationControl.submitToRGMPriceReduce(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
@@ -436,14 +437,13 @@ public class HeaderController implements Serializable {
         sendCallBackParam(complete);
     }
 
+    //---------- Submit CA ( Zone to Region ) -----------//
     public void onSubmitRM(){
         log.debug("onSubmitRM ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.submitToRM(queueName, workCaseId);
+            fullApplicationControl.submitToRM(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -458,72 +458,67 @@ public class HeaderController implements Serializable {
         sendCallBackParam(complete);
     }
 
+    //---------- Submit CA ( Region to Group Head ) -----------//
     public void onSubmitGH(){
         log.debug("onSubmitGH ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.submitToGH(queueName, workCaseId);
+            fullApplicationControl.submitToGH(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            showMessageRedirect();
             complete = true;
             log.debug("onSubmitGH ::: success.");
         } catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            showMessageBox();
             log.error("onSubmitGH ::: exception occurred : ", ex);
         }
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        sendCallBackParam(complete);
     }
 
+    //---------- Submit CA ( Group Head to CSSO ) -----------//
     public void onSubmitCSSO(){
         log.debug("onSubmitCSSO ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.submitToCSSO(queueName, workCaseId);
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            fullApplicationControl.submitToCSSO(queueName, wobNumber, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageBox();
             complete = true;
             log.debug("onSubmitCSSO ::: success.");
         } catch (Exception ex){
-            messageHeader = "Exception.";
+            messageHeader = msg.get("app.messageHeader.exception");
             message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-            complete = false;
+            showMessageRedirect();
             log.error("onSubmitCSSO ::: exception occurred : ", ex);
         }
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        sendCallBackParam(complete);
     }
 
+    //---------- Submit CA ( CSSO to UW1 ) -----------//
     public void onSubmitUWFromCSSO(){
         log.debug("onSubmitUWFromCSSO ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
             fullApplicationControl.submitToUWFromCSSO(queueName, workCaseId);
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
             complete = true;
             log.debug("onSubmitUWFromCSSO ::: success.");
         } catch (Exception ex){
-            messageHeader = "Exception.";
+            messageHeader = msg.get("app.messageHeader.exception");
             message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-            complete = false;
+            showMessageBox();
             log.error("onSubmitUWFromCSSO ::: exception occurred : ", ex);
         }
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        sendCallBackParam(complete);
     }
 
     public void onSubmitUWFromZM(){
@@ -549,6 +544,7 @@ public class HeaderController implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
+    //---------- Submit CA ( to UW2 ) -----------//
     public void onOpenSubmitUW2(){
         log.debug("onOpenSubmitUW ::: starting...");
         HttpSession session = FacesUtil.getSession(true);
@@ -559,33 +555,10 @@ public class HeaderController implements Serializable {
             authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
             RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
         } catch (Exception ex){
-            messageHeader = "Exception.";
-            message = "Exception is occurred, cause : "+ex.getMessage();
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }
-
-    public void onSubmitFCashZM(){
-        log.debug("onSubmitFCashZM ::: starting...");
-        boolean complete = false;
-        try{
-            HttpSession session = FacesUtil.getSession(true);
-            //long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-            fullApplicationControl.submitFCashZM(queueName, wobNumber, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitFCashZM ::: success.");
-        } catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitFCashZM ::: exception occurred : ", ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
-        sendCallBackParam(complete);
     }
 
     public void onSelectedUWDOALevel(){
@@ -604,11 +577,10 @@ public class HeaderController implements Serializable {
 
     public void onSubmitUW2(){ //Submit From UW1 (no return)
         log.debug("onSubmitUW2 begin");
+        _loadSessionVariable();
         boolean complete = false;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
 
             if(selectedUW2User != null && !selectedUW2User.equals("")){
@@ -641,40 +613,61 @@ public class HeaderController implements Serializable {
                         log.debug("onSubmitUW2 ::: success.");
                     }
                 }
-                messageHeader = "Information.";
-                message = "Submit case success.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                messageHeader = msg.get("app.messageHeader.info");
+                message = msg.get("app.message.dialog.submit.success");
+                showMessageRedirect();
                 complete = true;
                 log.debug("onSubmitUW2 ::: success.");
             } else {
-                messageHeader = "Exception.";
+                messageHeader = msg.get("app.messageHeader.exception");
                 message = "Submit case failed, cause : UW2 was not selected";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                showMessageBox();
                 complete = false;
                 log.error("onSubmitUW2 ::: submit failed (UW2 not selected)");
             }
         } catch (Exception ex){
-            messageHeader = "Information.";
-            message = "Submit case fail, cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
 
             log.error("onSubmitUW2 ::: exception occurred : ", ex);
         }
 
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        sendCallBackParam(complete);
+    }
+
+    public void onSubmitFCashZM(){
+        log.debug("onSubmitFCashZM ::: starting...");
+        _loadSessionVariable();
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitFCashZM(queueName, wobNumber, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onSubmitFCashZM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onSubmitFCashZM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
     }
 
     /*public void onCancelCA(){
         fullApplicationControl.getUserList(user);
     }*/
 
+
+    //---------- Submit CA ( UW2 [End Case] ) -----------//
     public void onSubmitCA(){ //Submit From UW2
         log.debug("onSubmitCA begin");
+        _loadSessionVariable();
         boolean complete = false;
         try{
             HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
 
             List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
@@ -721,58 +714,6 @@ public class HeaderController implements Serializable {
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
-
-    /*public void onRequestAppraisal(){
-        log.debug("onRequestAppraisal ( bdm input data for aad admin )");
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        try{
-            HttpSession session = FacesUtil.getSession(true);
-            if(session.getAttribute("workCaseId") != null){
-                workCaseId = (Long)session.getAttribute("workCaseId");
-            }
-
-            if(session.getAttribute("workCasePreScreenId") != null){
-                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-            }
-
-            fullApplicationControl.requestAppraisalBDM(workCasePreScreenId, workCaseId);
-            log.debug("onRequestAppraisal ::: save Appraisal Flag completed. Redirect to appraisalRequest.jsf");
-            FacesUtil.redirect("/site/appraisalRequest.jsf");
-
-        } catch (Exception ex){
-            log.error("exception while request appraisal : ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }*/
-
-    /*public void onSubmitAppraisalAdmin(){
-        log.debug("onRequestAppraisal ( submit to AAD admin )");
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        try{
-            HttpSession session = FacesUtil.getSession(true);
-            if(session.getAttribute("workCaseId") != null){
-                workCaseId = (Long)session.getAttribute("workCaseId");
-            }
-            if(session.getAttribute("workCasePreScreenId") != null){
-                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-            }
-
-            fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId);
-
-            messageHeader = "Information.";
-            message = "Request for appraisal success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-        } catch (Exception ex){
-            log.error("exception while request appraisal : ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }*/
 
     public void onOpenReturnAADMByUW2(){
         log.debug("onOpenReturnAADCommittee ( return to AAD Admin from UW2 [ Open dialog ] )");
