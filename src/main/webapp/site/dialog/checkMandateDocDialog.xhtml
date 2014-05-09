@@ -44,7 +44,7 @@
                 </td>
             </tr>
             <ui:repeat value="#{headerController.checkMandateDocView.mandatoryDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
-                <tr>
+                <tr style="#{mandatoryItem.complete == 2 ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}">
                     <td >
                         <p:outputLabel value="#{mandatoryItem.documentType}"/>
                     </td>
@@ -105,7 +105,7 @@
                 </td>
             </tr>
             <ui:repeat value="#{headerController.checkMandateDocView.optionalDocumentsList}" var="optionalItem" varStatus="optionalItemIndex">
-                <tr>
+                <tr style="#{optionalItem.complete == 2 ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}">
                     <td >
                         <p:outputLabel value="#{optionalItem.documentType}"/>
                     </td>
@@ -167,7 +167,7 @@
                 </td>
             </tr>
             <ui:repeat value="#{headerController.checkMandateDocView.otherDocumentsList}" var="otherItem" varStatus="otherItemIndex">
-                <tr>
+                <tr style="#{otherItem.complete == 2 ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}">
                     <td >
                         <p:outputLabel value="#{otherItem.documentType}"/>
                     </td>
