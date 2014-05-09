@@ -234,51 +234,40 @@ public class TCGInfoControl extends BusinessControl {
 
 
     public BigDecimal toCalculateSumAppraisalValue(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
                 sum = sum.add(tcgDetailView.getAppraisalAmount());
             }
         }
-
-        log.debug("sum ::: {} ", sum);
         return sum;
     }
 
 
     public BigDecimal toCalculateSumLtvValue(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
                 sum = sum.add(tcgDetailView.getLtvValue());
             }
         }
-
-        log.debug("sum ::: {} ", sum);
         return sum;
     }
 
     public BigDecimal toCalculateSumAppraisalInThis(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
-            log.debug("tcgDetailView.getProposeInThisRequest() :: {}", tcgDetailView.getProposeInThisRequest());
             if (tcgDetailView != null) {
                 if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
                     sum = sum.add(tcgDetailView.getAppraisalAmount());
                 }
             }
         }
-        log.debug("sum ::: {} ", sum);
-
         return sum;
     }
 
     public BigDecimal toCalculateSumLtvInThis(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
                 if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
@@ -286,8 +275,6 @@ public class TCGInfoControl extends BusinessControl {
                 }
             }
         }
-        log.debug("sum ::: {} ", sum);
-
         return sum;
     }
 

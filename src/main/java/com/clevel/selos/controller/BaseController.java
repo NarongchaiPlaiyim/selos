@@ -36,7 +36,7 @@ public class BaseController implements Serializable {
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
             fieldMap.put(field.getFieldName(), field);
-            log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
+//            log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
         for (FieldsControlView field : dialogFields) {
             dialogFieldMap.put(field.getFieldName(), field);
