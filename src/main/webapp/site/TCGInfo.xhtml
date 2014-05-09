@@ -16,6 +16,7 @@
 </h:head>
 
 <h:body>
+<f:event type="preRenderView" listener="#{tcgInfo.preRender()}" />
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
 <h:form id="frmMain">
 <div id="main_container">
@@ -48,22 +49,29 @@
         <table class="table_noborder">
             <tr>
                 <td class="title" style="min-width: 400px; width: 400px; max-width: 400px;">
-                    <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :"/>
+                    <h:outputText value="#{msg.get('app.tcg.radio.TCG')}"/>
+                    <h:outputText value="#{tcgInfo.mandate('isRequestTCG')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
-                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2">
+                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2"
+                                      disabled="#{tcgInfo.isDisabled('isRequestTCG')}">
                         <f:selectItem itemLabel="No" itemValue="1"/>
                         <f:selectItem itemLabel="Yes" itemValue="2"/>
+                        <p:ajax update="radio,requestLimitRequiredTCG,requestLimitRequiredTCGLabel" listener="#{tcgInfo.onChangeTCG()}" event="click"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')} :"/>
+                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')}"/>
+                    <h:outputText value="#{tcgInfo.mandate('requestLimitRequiredTCG')}" styleClass="require-field" id="requestLimitRequiredTCGLabel"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:inputText id="requestLimitRequiredTCG"
                                  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
+                                 disabled="#{tcgInfo.isDisabled('requestLimitRequiredTCG')}"
                                  style="width:200px;text-align: right"
                                  maxlength="17"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -77,11 +85,14 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')} :"/>
+                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')}"/>
+                    <h:outputText value="#{tcgInfo.mandate('requestLimitNotRequiredTCG')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:inputText id="requestLimitNotRequiredTCG"
                                  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"
+                                 disabled="#{tcgInfo.isDisabled('requestLimitNotRequiredTCG')}"
                                  style="width:200px;text-align: right"
                                  maxlength="17"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -94,11 +105,14 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioUnderSameCollateral')} :"/>
+                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioUnderSameCollateral')}"/>
+                    <h:outputText value="#{tcgInfo.mandate('existingLoanRatioUnderProposeCollateral')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:inputText id="existingLoanRatioUnderSameCollateral"
                                  value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}"
+                                 disabled="#{tcgInfo.isDisabled('existingLoanRatioUnderProposeCollateral')}"
                                  style="width:200px;text-align: right"
                                  maxlength="17"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -111,11 +125,14 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioNotUnderSameCollateral')} :"/>
+                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioNotUnderSameCollateral')}"/>
+                    <h:outputText value="#{tcgInfo.mandate('existingLoanRatioNotUnderProposeCollateral')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:inputText id="existingLoanRatioNotUnderSameCollateral"
                                  value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}"
+                                 disabled="#{tcgInfo.isDisabled('existingLoanRatioNotUnderProposeCollateral')}"
                                  style="width:200px;text-align: right"
                                  maxlength="17"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -129,10 +146,13 @@
             <tr>
                 <td class="title" style="width: 200px;">
                     <h:outputText value="#{msg.get('app.tcg.textBox.tcbFloodAmount')} :"/>
+                    <h:outputText value="#{tcgInfo.mandate('requestTCGFloodAmount')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:inputText id="tcbFloodAmount"
                                  value="#{tcgInfo.TCGView.tcbFloodAmount}"
+                                 disabled="#{tcgInfo.isDisabled('requestTCGFloodAmount')}"
                                  style="width:200px;text-align: right"
                                  maxlength="17"
                                  onkeydown="return onKeyDownMoney(event);"

@@ -28,13 +28,19 @@ public class PotentialColToTCGColDAO extends GenericDAO<PotentialColToTCGCol, In
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("potentialCollateral", potentialCollateral));
         criteria.addOrder(Order.asc("tcgCollateralType.id"));
-
         List<PotentialColToTCGCol> list = criteria.list();
-
-        log.info("getList. (result size: {})", list.size());
-
+        log.info("getListPotentialColToTCGCol. (result size: {})", list.size());
         return list;
+    }
 
+    public List<PotentialColToTCGCol> getListPotentialColToTCGCol(int id) {
+        log.info("getListPotentialColToTCGCol. (id: {})", id);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("potentialCollateral.id", id));
+        criteria.addOrder(Order.asc("tcgCollateralType.id"));
+        List<PotentialColToTCGCol> list = criteria.list();
+        log.info("getListPotentialColToTCGCol. (result size: {})", list.size());
+        return list;
     }
 
     public PotentialColToTCGCol getPotentialColToTCGCol(PotentialCollateral potentialCollateral ,TCGCollateralType tcgCollateralType) {
