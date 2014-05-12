@@ -48,8 +48,6 @@ public class BasicInfoTransform extends Transform {
 
         if(basicInfoView.getId() != 0){
             basicInfo = basicInfoDAO.findById(basicInfoView.getId());
-            basicInfo.setCreateDate(basicInfoView.getCreateDate());
-            basicInfo.setCreateBy(basicInfoView.getCreateBy());
         } else {
             basicInfo.setCreateDate(new Date());
             basicInfo.setCreateBy(user);

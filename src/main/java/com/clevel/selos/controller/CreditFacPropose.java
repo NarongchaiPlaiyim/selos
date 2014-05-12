@@ -3,9 +3,9 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
-import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
-import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
-import com.clevel.selos.dao.working.*;
+import com.clevel.selos.dao.working.FeeDetailDAO;
+import com.clevel.selos.dao.working.NewCreditDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
@@ -42,7 +42,6 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-
 
 @ViewScoped
 @ManagedBean(name = "creditFacPropose")
@@ -102,7 +101,6 @@ public class CreditFacPropose implements Serializable {
     private List<PotentialCollateral> potentialCollList;
     private List<PotentialCollateralView> potentialCollViewList;
     private List<CollateralType> collateralTypeList;
-    private List<CollateralTypeView> collateralTypeViewList;
     private List<PotentialColToTCGCol> potentialColToTCGColList;
     private List<PotentialColToTCGCol> headCollTypeList;
     private List<SubCollateralType> subCollateralTypeList;
@@ -146,7 +144,6 @@ public class CreditFacPropose implements Serializable {
     private List<NewCollateralSubView> newCollateralSubViewList;
     private NewCollateralSubView relatedWithSelected;
     private CustomerInfoView collateralOwnerUW;
-    private List<NewCollateralView> newCollateralViewDelList;
     private boolean flagComs;
     private boolean flagButtonCollateral;
     private boolean editProposeColl;
@@ -182,60 +179,37 @@ public class CreditFacPropose implements Serializable {
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewAll;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewByGroup;
 
-    private List<PricingFee> pricingFeeList;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private CreditRequestTypeDAO creditRequestTypeDAO;
+    @Inject
+    private CountryDAO countryDAO;
+    @Inject
+    private ProductProgramDAO productProgramDAO;
+    @Inject
+    private SubCollateralTypeDAO subCollateralTypeDAO;
+    @Inject
+    private CollateralTypeDAO collateralTypeDAO;
+    @Inject
+    private PotentialCollateralDAO potentialCollateralDAO;
+    @Inject
+    private BaseRateDAO baseRateDAO;
+    @Inject
+    private MortgageTypeDAO mortgageTypeDAO;
+    @Inject
+    private SpecialProgramDAO specialProgramDAO;
+    @Inject
+    private NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    private FeeDetailDAO feeDetailDAO;
+    @Inject
+    private PotentialColToTCGColDAO potentialColToTCGColDAO;
+    @Inject
+    private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
     @Inject
-    WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
-    @Inject
-    CreditRequestTypeDAO creditRequestTypeDAO;
-    @Inject
-    CountryDAO countryDAO;
-    @Inject
-    PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
-    @Inject
-    ProductProgramDAO productProgramDAO;
-    @Inject
-    CreditTypeDAO creditTypeDAO;
-    @Inject
-    PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
-    @Inject
-    ProductFormulaDAO productFormulaDAO;
-    @Inject
-    CustomerDAO customerDAO;
-    @Inject
-    SubCollateralTypeDAO subCollateralTypeDAO;
-    @Inject
-    CollateralTypeDAO collateralTypeDAO;
-    @Inject
-    PotentialCollateralDAO potentialCollateralDAO;
-    @Inject
-    BasicInfoDAO basicInfoDAO;
-    @Inject
-    BaseRateDAO baseRateDAO;
-    @Inject
-    LoanPurposeDAO loanPurposeDAO;
-    @Inject
-    MortgageTypeDAO mortgageTypeDAO;
-    @Inject
-    SpecialProgramDAO specialProgramDAO;
-    @Inject
-    TCGDAO TCGDAO;
-    @Inject
-    ExistingCreditDetailDAO existingCreditDetailDAO;
-    @Inject
-    DisbursementTypeDAO disbursementDAO;
-    @Inject
-    private NewCollateralTransform collateralInfoTransform;
-    @Inject
     private CollateralBizTransform collateralBizTransform;
-    @Inject
-    private ProductTransform productTransform;
-    @Inject
-    private LoanPurposeTransform loanPurposeTransform;
-    @Inject
-    private DisbursementTypeTransform disbursementTypeTransform;
     @Inject
     private CreditRequestTypeTransform creditRequestTypeTransform;
     @Inject
@@ -248,6 +222,19 @@ public class CreditFacPropose implements Serializable {
     private PotentialCollateralTransform potentialCollateralTransform;
     @Inject
     private CollateralTypeTransform collateralTypeTransform;
+    @Inject
+    private SpecialProgramTransform specialProgramTransform;
+    @Inject
+    private ProposeCreditDetailTransform proposeCreditDetailTransform;
+    @Inject
+    private NewCreditTierTransform newCreditTierTransform;
+    @Inject
+    private FeeTransform feeTransform;
+    @Inject
+    private NewCreditDetailTransform newCreditDetailTransform;
+    @Inject
+    private BaseRateTransform baseRateTransform;
+
     @Inject
     private BasicInfoControl basicInfoControl;
     @Inject
@@ -265,31 +252,12 @@ public class CreditFacPropose implements Serializable {
     @Inject
     private DisbursementTypeControl disbursementTypeControl;
     @Inject
-    private SpecialProgramTransform specialProgramTransform;
-    @Inject
-    private COMSInterface comsInterface;
-    @Inject
     private BRMSControl brmsControl;
     @Inject
     private CreditFacExistingControl creditFacExistingControl;
+
     @Inject
-    private ProposeCreditDetailTransform proposeCreditDetailTransform;
-    @Inject
-    private NewCreditTierTransform newCreditTierTransform;
-    @Inject
-    private FeeTransform feeTransform;
-    @Inject
-    private NewCreditDetailTransform newCreditDetailTransform;
-    @Inject
-    private NewCreditDetailDAO newCreditDetailDAO;
-    @Inject
-    private BaseRateTransform baseRateTransform;
-    @Inject
-    private FeeDetailDAO feeDetailDAO;
-    @Inject
-    private PotentialColToTCGColDAO potentialColToTCGColDAO;
-    @Inject
-    private TCGCollateralTypeDAO tcgCollateralTypeDAO;
+    private COMSInterface comsInterface;
 
     public CreditFacPropose(){}
 
@@ -339,7 +307,6 @@ public class CreditFacPropose implements Serializable {
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
                     notRetrievePricing = true;
-                    pricingFeeList = new ArrayList<PricingFee>();
                 } else {
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -429,12 +396,10 @@ public class CreditFacPropose implements Serializable {
         prdGroupToPrdProgramViewByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
     }
 
-    //TODO call coms for retrieve data of Collateral
     public void onCallRetrieveAppraisalReportInfo() {
         String jobId = newCollateralView.getJobID();
         log.debug("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobId);
-        boolean flag = true;
-//        User user = getCurrentUser();
+        boolean flag;
         HttpSession session = FacesUtil.getSession(false);
         User user = null;
         if (session != null) {
@@ -442,7 +407,6 @@ public class CreditFacPropose implements Serializable {
         }
         if (!Util.isNull(jobId) && user != null) {
             flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobId);
-
             if (flag) {
                 try {
                     AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
@@ -459,9 +423,7 @@ public class CreditFacPropose implements Serializable {
                         severity = MessageDialogSeverity.ALERT.severity();
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
-//                    proposeCreditDetailViewList = creditFacProposeControl.findAndGenerateSeqProposeCredits(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
                     newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
-
                 } catch (COMSInterfaceException e) {
                     log.debug("COMSInterfaceException :: ");
                     messageHeader = msg.get("app.messageHeader.error");
@@ -475,9 +437,7 @@ public class CreditFacPropose implements Serializable {
                 severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-
         }
-
         log.debug("onCallRetrieveAppraisalReportInfo End");
     }
 
@@ -504,7 +464,6 @@ public class CreditFacPropose implements Serializable {
                     Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
                     NewFeeDetailView newFeeDetailView;
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
-                        pricingFeeList = standardPricingResponse.getPricingFeeList();
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
                             if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
@@ -681,7 +640,6 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onChangeRequestType() {
-        log.debug("newCreditDetailView.getRequestType() :: {}", newCreditDetailView.getRequestType());
         newCreditDetailView.setProductProgramView(new ProductProgramView());
         newCreditDetailView.setCreditTypeView(new CreditTypeView());
 
@@ -690,20 +648,22 @@ public class CreditFacPropose implements Serializable {
 
         if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {   //change
             prdGroupToPrdProgramViewList = prdGroupToPrdProgramViewAll;
-            cannotEditStandard = false;
             cannotAddTier = false;
+            cannotEditStandard = false;
         } else if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {  //new
             if (productGroup != null) {
                 prdGroupToPrdProgramViewList = prdGroupToPrdProgramViewByGroup;
             }
-            cannotEditStandard = true;
-            if (modeForButton == ModeForButton.ADD) {
+            if (modeForButton == ModeForButton.ADD) { // can not do anything
                 cannotAddTier = true;
+                cannotEditStandard = true;
             } else {
-                if (newCreditDetailView.getNewCreditTierDetailViewList() == null || newCreditDetailView.getNewCreditTierDetailViewList().isEmpty()) {
-                    cannotAddTier = true;
-                } else {
+                cannotAddTier = true;
+                cannotEditStandard = true;
+                if (newCreditDetailView.getNewCreditTierDetailViewList() != null
+                        && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0){
                     cannotAddTier = false;
+                    cannotEditStandard = false;
                 }
             }
         }
@@ -724,8 +684,6 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onAddCreditInfo() {
-        log.debug("onAddCreditInfo ::: ");
-        RequestContext.getCurrentInstance().execute("creditInfoDlg.show()");
         newCreditDetailView = new NewCreditDetailView();
         modeEdit = false;
         modeForButton = ModeForButton.ADD;
@@ -738,17 +696,17 @@ public class CreditFacPropose implements Serializable {
         }
         standardInterestDlg = BigDecimal.ZERO;
         suggestInterestDlg = BigDecimal.ZERO;
+
+        RequestContext.getCurrentInstance().execute("creditInfoDlg.show()");
     }
 
     public void onEditCreditInfo() {
-        log.debug("rowIndex :: {}", rowIndex);
-        log.debug("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
+        log.debug("rowIndex ::: {} , newCreditFacilityView.creditInfoDetailViewList ::: {}", rowIndex, newCreditFacilityView.getNewCreditDetailViewList());
         modeEdit = true;
         modeForButton = ModeForButton.EDIT;
         onChangeRequestType();
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
-
 
         prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(newCreditDetailView.getProductProgramView());
         creditFacProposeControl.calculateInstallment(newCreditDetailView,basicInfoView,tcgView,newCreditFacilityView);
