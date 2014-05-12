@@ -7,7 +7,6 @@ import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.AppraisalContactDetailTransform;
 import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.AppraisalTransform;
 import com.clevel.selos.transform.NewCollateralTransform;
@@ -132,8 +131,8 @@ public class AppraisalRequestControl extends BusinessControl {
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         }
 
-        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}");
         log.debug("onSaveAppraisalRequest ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
+        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
 
         if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
             log.debug("onSaveAppraisalRequest ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);

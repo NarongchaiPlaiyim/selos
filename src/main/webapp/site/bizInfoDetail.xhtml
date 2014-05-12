@@ -37,17 +37,29 @@
                     <div id="content_form">
                         <table class="content_table_form" border="0">
                         <tr>
-                            <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/></td>
+                            <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('businessInfoDetail')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText style="min-width: 381px; width: 381px; max-width: 381px;" value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"/>
+                                <p:inputText style="min-width: 381px; width: 381px; max-width: 381px;"
+                                             value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"
+                                             readonly="#{bizInfoDetail.isDisabled('businessInfoDetail')}"/>
                                 <h:inputHidden value="#{bizInfoDetail.bizInfoDetailView.id}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.tradeType')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.tradeType')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('tradeType')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"  required="#{not empty param[saveButton.clientId]}">
+                                                 readonly="#{bizInfoDetail.isDisabled('tradeType')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"
+                                                 required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessActivityList}"
                                                    var="bizActivity"
@@ -57,10 +69,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizType')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizType')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizType')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu id="bizTypeId" style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizType.id}" required="#{not empty param[saveButton.clientId]}">
+                                                 readonly="#{bizInfoDetail.isDisabled('bizType')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizType.id}"
+                                                 required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessTypeList}"
                                                    var="bizType"
@@ -70,10 +88,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizGroup')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizGroup')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizGroup')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}" required="#{not empty param[saveButton.clientId]}"
+                                                 readonly="#{bizInfoDetail.isDisabled('bizGroup')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}"
+                                                 required="#{not empty param[saveButton.clientId]}"
                                                  id="businessGroupId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessGroupList}"
@@ -85,10 +109,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title" ><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDesc')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDesc')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizDesc')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"  required="#{not empty param[saveButton.clientId]}"
+                                                 readonly="#{bizInfoDetail.isDisabled('bizDesc')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"
+                                                 required="#{not empty param[saveButton.clientId]}"
                                                  id="businessDescriptionId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessDescriptionList}"
@@ -100,27 +130,39 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizCode')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizCode')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizCode')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText id="bizCode" styleClass="large" value="#{bizInfoDetail.bizInfoDetailView.bizCode}" readonly="true"/>
+                                <p:inputText id="bizCode" styleClass="large"
+                                             readonly="#{bizInfoDetail.isDisabled('bizCode')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.bizCode}"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="title">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.incomeFactor')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('incomeFactor')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td style="min-width: 370px; width: 370px; max-width: 370px;">
-                                <p:inputText styleClass="right large" id="incomeFactor" value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}" readonly="true">
+                                <p:inputText styleClass="right large" id="incomeFactor"
+                                             readonly="#{bizInfoDetail.isDisabled('incomeFactor')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update=":frmMain:incomeFactor"/>
                                 </p:inputText>
-                                <p:outputLabel styleClass="title" value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}" style="float: right"/>
+                                <p:panel styleClass="panel title" style="float: right">
+                                    <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}"/>
+                                    <h:outputText value="#{bizInfoDetail.mandate('interviewedIncomeFactior')}" styleClass="require-field"/>
+                                    <h:outputText value=" :"/>
+                                </p:panel>
                             </td>
-                            <!--<td class="title right" style="min-width: 270px; width: 270px; max-width: 270px;">-->
-                                <!--<p:outputLabel value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}"/>-->
-                            <!--</td>-->
                             <td>
                                 <p:inputText style="text-align: right" id="adjustedIncomeFactor"
+                                             readonly="#{bizInfoDetail.isDisabled('interviewedIncomeFactior')}"
                                              value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}"
                                              onkeydown="return onKeyDownMoney(event);"
                                              onkeypress="return onKeyPressMoney(event)"
@@ -134,15 +176,25 @@
                         <tr>
                             <td class="title">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizComment')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('comment')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td colspan="3">
-                                <p:inputText styleClass="large" value="#{bizInfoDetail.bizInfoDetailView.bizComment}" readonly="true"/>
+                                <p:inputText styleClass="large"
+                                             readonly="#{bizInfoDetail.isDisabled('comment')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.bizComment}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentBusiness')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentBusiness')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('percentBusiness')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
+                                <p:inputText styleClass="right" id="percentBiz"
+                                             readonly="#{bizInfoDetail.isDisabled('percentBusiness')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -153,66 +205,59 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizPermission')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="1" class="title">
                                 <table border="0" style="float: left;width: 100%">
                                     <tr>
                                         <td>
-                                            <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
-                                                              required="#{not empty param[saveButton.clientId]}" layout="grid" columns="1">
+                                            <p:selectOneRadio id="bizPermissionRadio"
+                                                              readonly="#{bizInfoDetail.isDisabled('bizPermission')}"
+                                                              value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
+                                                              required="#{not empty param[saveButton.clientId]}"
+                                                              layout="grid" columns="1">
                                                 <f:selectItem itemLabel="No"  itemValue="N" />
                                                 <f:selectItem itemLabel="Yes" itemValue="Y" />
-                                                <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocExpiryDate" listener="#{bizInfoDetail.onChangeBizPermission}"/>
+                                                <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocPermissionLabel,
+                                                                                :frmMain:bizDocExpiryDate,:frmMain:bizDocExpiryDateLabel"
+                                                        listener="#{bizInfoDetail.onChangeBizPermission}"/>
                                             </p:selectOneRadio>
 
                                         </td>
                                         <td style="margin-top: 50px">
                                             <div style="margin-top: 28px; float: right">
                                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>
+                                                <h:outputText value="#{bizInfoDetail.mandate('bizDocPermission')}" styleClass="require-field" id="bizDocPermissionLabel"/>
+                                                <h:outputText value=" :"/>
                                             </div>
-                                            <!--<table border="1" style="margin-top: 28px; float: right;width: auto">-->
-                                                <!--<tr>-->
-                                                    <!--<td class="right">-->
-                                                        <!--<p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>-->
-                                                    <!--</td>-->
-                                                <!--</tr>-->
-                                            <!--</table>-->
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <div style="margin-top: 28px; float: left">
-                                    <p:inputText style="width: 350px" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
-                                                 readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                    <p:inputText style="width: 350px" id="bizDocPermission"
+                                                 readonly="#{bizInfoDetail.isDisabled('bizDocPermission') and bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
                                                  required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">
                                         <p:ajax event="blur" update=":frmMain:bizDocPermission"/>
                                     </p:inputText>
                                 </div>
                             </td>
                         </tr>
-                        <!--<tr>-->
-                            <!--<td class="title"></td>-->
-                            <!--<td class="title right" colspan="2">-->
-                                <!--<p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>-->
-                            <!--</td>-->
-                            <!--<td>-->
-                                <!--<p:inputText id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"-->
-                                             <!--readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"-->
-                                             <!--required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">-->
-                                    <!--<p:ajax event="blur" update=":frmMain:bizDocPermission"/>-->
-                                <!--</p:inputText>-->
-                            <!--</td>-->
-                        <!--</tr>-->
                         <tr>
                             <td colspan="1"></td>
                             <td class="title right">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocExpiryDate')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizDocExpiryDate')}" styleClass="require-field" id="bizDocExpiryDateLabel"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td>
                                 <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
-                                                readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
-                                                disabled="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                                readonly="#{bizInfoDetail.isDisabled('bizDocExpiryDate') and bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
                                                 required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
@@ -225,15 +270,27 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.expIndCountryName')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.expIndCountryName')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('expIndCountryName')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText styleClass="large" id="exportIndirectCountryName" value="#{bizInfoDetail.bizInfoDetailView.expIndCountryName}"/>
+                                <p:inputText styleClass="large" id="exportIndirectCountryName"
+                                             readonly="#{bizInfoDetail.isDisabled('expIndCountryName')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.expIndCountryName}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('percentExpIndCountryName')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText styleClass="large right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
+                                <p:inputText styleClass="large right" id="percentExpIndCountryName"
+                                             readonly="#{bizInfoDetail.isDisabled('percentExpIndCountryName')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
@@ -706,25 +763,40 @@
                                         <th colspan="2" style="width:33%;">Stock</th>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>  </td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountReceivable')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="standardAccountReceivable" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardAccountReceivable"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardAccountReceivable')}"
                                                          value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountPayable')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountPayable')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountPayable')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="standardAccountPayable" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardAccountPayable"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardAccountPayable')}"
                                                          value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardStock')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardStock')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardStock')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="standardStock" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardStock"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardStock')}"
                                                          value="#{bizInfoDetail.bizInfoDetailView.standardStock }">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardStock"/>
@@ -732,38 +804,57 @@
                                         </td>
                                     </tr>
                                     <tr style="background-color: #efefef">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePurchaseAmount')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePurchaseAmount')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('averagePurchaseAmount')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="averagePurchaseAmount" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="averagePurchaseAmount"
+                                                         readonly="#{bizInfoDetail.isDisabled('averagePurchaseAmount')}"
                                                          value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePurchaseAmount"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePayableAmount')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePayableAmount')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('averagePayableAmount')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="averagePayableAmount" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="averagePayableAmount"
+                                                         readonly="#{bizInfoDetail.isDisabled('averagePayableAmount')}"
                                                          value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePayableAmount"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockDurationBDM')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationBDM"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="stockDurationBDM"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockDurationBDM')}"
                                                          onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}"
                                                          required="#{not empty param[saveButton.clientId]}">
-                                                <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationBDM,:frmMain:stockValueBDM" />
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCash')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCash')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentCash')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCash" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="purchasePercentCash"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentCash')}"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
@@ -772,9 +863,14 @@
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCash,:frmMain:purchasePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentCash')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentCash')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"  readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="payablePercentCash"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentCash')}"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
@@ -783,46 +879,72 @@
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCash,:frmMain:payablePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('payablePercentCash')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationUW')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationUW')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockDurationUW')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationUW" value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}" readonly="true">
-                                                <!--readonly="#{bizInfoDetail.readonlyIsUW}"-->
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="stockDurationUW"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockDurationUW')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" />
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #efefef">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentCredit')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentCredit')}"
+                                                         id="purchasePercentCredit"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentCredit')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="payablePercentCredit"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentCredit')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockValueBDM')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockValueBDM')}"
+                                                         id="stockValueBDM"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}"
                                                          required="#{not empty param[saveButton.clientId]}">
-                                                <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueBDM"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentlocal')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentLocal"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentlocal')}"
+                                                         id="purchasePercentLocal"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
@@ -831,9 +953,14 @@
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentLocal,:frmMain:purchasePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentLocal')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentLocal')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentLocal')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentLocal')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentLocal"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentLocal')}"
+                                                         id="payablePercentLocal"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
@@ -842,28 +969,44 @@
                                                 <p:ajax event="blur" update=":frmMain:payablePercentLocal,:frmMain:payablePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('payablePercentLocal')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueUW')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueUW')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockValueUW')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueUW" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockValueUW')}"
+                                                         id="stockValueUW"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}" >
-                                                <!--readonly="#{bizInfoDetail.readonlyIsUW}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueUW"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #efefef">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentForeign')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentForeign')}"
+                                                         id="purchasePercentForeign"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentForeign')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentForeign')}"
+                                                         id="payablePercentForeign"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
@@ -871,18 +1014,28 @@
                                         <td colspan="2" style="width: 25%;line-height: 15px"></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchaseTerm')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchaseTerm')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchaseTerm')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchaseTerm"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchaseTerm')}"
+                                                         id="purchaseTerm"
                                                          onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchaseTerm}">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:purchaseTerm"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payableTerm')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payableTerm')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payableTerm')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payableTerm"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="payableTerm"
+                                                         readonly="#{bizInfoDetail.isDisabled('payableTerm')}"
                                                          onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payableTerm}">
                                                 <f:convertNumber pattern="#,##0"   />
@@ -925,12 +1078,12 @@
     </h:form>
     </p:panel>
 
-    <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"  resizable="false"
+    <p:dialog id="stakeholderViewDialog" header="Stake Holder Information" widgetVar="stakeholderViewDlg" resizable="false"
               modal="true" width="350" height="300">
         <ui:include src="dialog/bizStakeholderDialog.xhtml"/>
     </p:dialog>
 
-    <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg" resizable="false"
+    <p:dialog id="bizProductViewDialog" header="Product Information" widgetVar="bizProductViewDlg" resizable="false"
               modal="true" width="380" height="180">
         <ui:include src="dialog/bizProductDialog.xhtml"/>
     </p:dialog>
