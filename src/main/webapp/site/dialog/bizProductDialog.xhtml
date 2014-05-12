@@ -8,22 +8,28 @@
     <h:form id="bizProductViewDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title" style="width: 200px;"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.productType')}"/><h:outputLabel value="*"
-                                                                                                             styleClass="require-field"/>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productType')}"/>
+                    <h:outputText value="#{bizInfoDetail.mandate('bizProduct.productType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}" required="#{not empty param[saveBizProductBtn.clientId]}"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}"
+                                 required="#{not empty param[saveBizProductBtn.clientId]}"
+                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.productType')}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentSalesVolume')}"/><h:outputLabel
-                        value="*" styleClass="require-field"/></td>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentSalesVolume')}"/>
+                    <h:outputText value="#{bizInfoDetail.mandate('bizProduct.percentSalesVolumn')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
                 <td>
                     <p:inputText id="percentSalesVolume" styleClass="right"
                                  onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                 value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="#{not empty param[saveBizProductBtn.clientId]}">
+                                 value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="#{not empty param[saveBizProductBtn.clientId]}"
+                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.percentSalesVolumn')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentSalesVolume"/>
@@ -32,12 +38,15 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*" styleClass="require-field"/>
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/>
+                    <h:outputText value="#{bizInfoDetail.mandate('bizProduct.percentEBIT')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td>
                     <p:inputText id="percentEBIT" styleClass="right"
                                  onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                 value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="#{not empty param[saveBizProductBtn.clientId]}">
+                                 value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="#{not empty param[saveBizProductBtn.clientId]}"
+                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.percentEBIT')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentEBIT"/>
@@ -45,10 +54,15 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/><h:outputLabel
-                        value="*" styleClass="require-field"/></td>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/>
+                    <h:outputText value="#{bizInfoDetail.mandate('bizProduct.productDetail')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}" required="#{not empty param[saveBizProductBtn.clientId]}"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}"
+                                 required="#{not empty param[saveBizProductBtn.clientId]}"
+                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.productDetail')}"/>
                 </td>
             </tr>
             <tr>
