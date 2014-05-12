@@ -20,17 +20,17 @@ public class WorkCaseOwner implements Serializable
 {
     @Id
     @Column(name = "id")
-    private Integer id;
+    private long id;
     @Column(name = "role_id")
     private Integer roleid;
     @Column(name = "user_id")
     private String userid;
     @Column(name = "workcase_id")
-    private Integer workCaseId;
+    private long workCaseId;
     @Column(name = "step_id")
-    private Integer stepId;
+    private long stepId;
     @Column(name = "workcase_prescreen_id")
-    private Integer workCasePrescreenId;
+    private long workCasePrescreenId;
     @Column(name = "create_by")
     private String createBy;
     @Column(name = "modify_by")
@@ -39,12 +39,52 @@ public class WorkCaseOwner implements Serializable
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    public Date getCreateDate() {
-        return createDate;
+    public long getId() {
+        return id;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Integer getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(Integer roleid) {
+        this.roleid = roleid;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public long getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public long getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(long stepId) {
+        this.stepId = stepId;
+    }
+
+    public long getWorkCasePrescreenId() {
+        return workCasePrescreenId;
+    }
+
+    public void setWorkCasePrescreenId(long workCasePrescreenId) {
+        this.workCasePrescreenId = workCasePrescreenId;
     }
 
     public String getCreateBy() {
@@ -63,54 +103,13 @@ public class WorkCaseOwner implements Serializable
         this.modifyBy = modifyBy;
     }
 
-    public Integer getWorkCasePrescreenId() {
-        return workCasePrescreenId;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setWorkCasePrescreenId(Integer workCasePrescreenId) {
-        this.workCasePrescreenId = workCasePrescreenId;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
-
-    public Integer getRoleid() {
-        return roleid;
-    }
-
-    public void setRoleid(Integer roleid) {
-        this.roleid = roleid;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public Integer getWorkCaseId() {
-        return workCaseId;
-    }
-
-    public void setWorkCaseId(Integer workCaseId) {
-        this.workCaseId = workCaseId;
-    }
-
-    public Integer getStepId() {
-        return stepId;
-    }
-
-    public void setStepId(Integer stepId) {
-        this.stepId = stepId;
-    }
-
 
     @Override
     public String toString() {

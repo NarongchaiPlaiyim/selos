@@ -47,7 +47,7 @@ public class BPMExecutor implements Serializable {
     @Inject
     private CustomerDAO customerDAO;
 
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode, String remark) throws Exception{
+    public void assignChecker(long workCasePreScreenId, String queueName, String wobNumber, String checkerId, long actionCode, String remark) throws Exception{
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);

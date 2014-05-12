@@ -224,7 +224,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
-        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), Util.parseLong(inboxViewSelectItem.getStatuscode(), 0), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
         try

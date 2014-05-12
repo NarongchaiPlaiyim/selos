@@ -6,6 +6,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.UserAccess;
 import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.UserAccessView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
@@ -28,6 +29,7 @@ public class BaseController implements Serializable {
 
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
+    private final HashMap<String, UserAccessView> userAccessMap = new HashMap<String, UserAccessView>();
 
     protected void loadFieldControl(long workCaseId, Screen screenId) {
         List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId);
@@ -36,7 +38,7 @@ public class BaseController implements Serializable {
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
             fieldMap.put(field.getFieldName(), field);
-            log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
+            //log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
         for (FieldsControlView field : dialogFields) {
             dialogFieldMap.put(field.getFieldName(), field);
@@ -123,37 +125,40 @@ public class BaseController implements Serializable {
     }
 
     //Function for User Access Matrix
-    protected List<UserAccess> loadUserAccessMatrix(int screenId){
+    protected void loadUserAccessMatrix(Screen screen){
         HttpSession session = FacesUtil.getSession(true);
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        List<UserAccess> userAccessList = userAccessControl.getUserAccessList(stepId, screenId);
-
-        return userAccessList;
-    }
-
-    public boolean checkCanAccess(int screenId){
-        boolean canAccess = false;
-        List<UserAccess> userAccessList = loadUserAccessMatrix(screenId);
-        if(userAccessList.size() > 0){
-            for(UserAccess userAccess : userAccessList){
-                if(userAccess.getAccessFlag() == 1){
-                    canAccess = true;
-                }
-            }
+        List<UserAccessView> userAccessViewList = userAccessControl.getUserAccessList(stepId, screen.value());
+        userAccessMap.clear();
+        for(UserAccessView userAccessView : userAccessViewList){
+            userAccessMap.put(Integer.toString(userAccessView.getScreenId()), userAccessView);
         }
-
-        return canAccess;
     }
 
-    private void showMessageRedirect(){
+    /*public boolean isDialogMandate(String name) {
+        FieldsControlView field = dialogFieldMap.get(name);
+        if (field == null)
+            return false;
+        return field.isMandate();
+    }*/
+
+    public boolean canAccess(Screen screen){
+        String screenId = Integer.toString(screen.value());
+        UserAccessView userAccessView = userAccessMap.get(screenId);
+        if(userAccessView == null)
+            return false;
+        return userAccessView.isAccessFlag();
+    }
+
+    public void showMessageRedirect(){
         RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
     }
 
-    private void showMessageBox(){
+    public void showMessageBox(){
         RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
     }
 
-    private void sendCallBackParam(boolean value){
+    public void sendCallBackParam(boolean value){
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", value);
     }
 }

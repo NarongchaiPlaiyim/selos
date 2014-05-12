@@ -191,10 +191,15 @@ public class BasicInfo extends BaseController {
         if(checkSession(session)){
             //TODO Check valid step
             log.debug("preRender ::: Check valid stepId");
-
+            loadUserAccessMatrix(Screen.BASIC_INFO);
+            if(!canAccess(Screen.BASIC_INFO)){
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "You don't have permission to access this page. Click 'OK' to redirect to Inbox.";
+                showMessageRedirect();
+            }
         }else{
             log.debug("preRender ::: No session for case found. Redirect to Inbox");
-            FacesUtil.redirect("/site/inbox.jsf");
+            FacesUtil.redirectToInbox();
         }
     }
 

@@ -670,7 +670,7 @@ public class ReassignTeamNames implements Serializable
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getFwobnumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, Util.parseLong(searchViewSelectItem.getStatuscode(), 0), searchViewSelectItem.getFwobnumber());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
             String landingPage = inboxControl.getLandingPage(stepId,0);

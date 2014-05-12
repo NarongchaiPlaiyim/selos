@@ -716,7 +716,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onOpenReturnAADMByUW2(){
-        log.debug("onOpenReturnAADCommittee ( return to AAD Admin from UW2 [ Open dialog ] )");
+        log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
         returnAADRemark = "";
 
@@ -724,7 +724,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onReturnAADMByUW2(){
-        log.debug("onReturnAADCommittee ( return to AAD Committee from UW2 )");
+        log.debug("onReturnAADAdmin ( return to AAD Admin from UW2 )");
         HttpSession session = FacesUtil.getSession(true);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
@@ -735,7 +735,7 @@ public class HeaderController implements Serializable {
             message = msg.get("app.message.dialog.return.success");
             showMessageRedirect();
         } catch (Exception ex) {
-            log.error("Exception while return to aad committee : ", ex);
+            log.error("Exception while return to aad admin : ", ex);
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
             showMessageBox();
