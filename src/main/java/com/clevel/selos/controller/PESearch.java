@@ -379,7 +379,7 @@ public class PESearch implements Serializable
                 {
                     usersList.add(userDetail.getUserName());
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCasePrescreen.getId()).intValue());
 
                     log.debug("Users List work case : {}", usersList.toString());
 

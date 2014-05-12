@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -38,7 +39,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "bizInfoDetail")
-public class BizInfoDetail implements Serializable {
+public class BizInfoDetail extends BaseController {
 
     @NormalMessage
     @Inject
@@ -131,6 +132,7 @@ public class BizInfoDetail implements Serializable {
         docPermisionFlag = false;
         expiryDateFlag = false;
     }
+
     @PostConstruct
     public void onCreation(){
         init();
@@ -151,40 +153,27 @@ public class BizInfoDetail implements Serializable {
                 }
             }
 
-            log.debug("session.getAttribute('bizInfoDetailViewId') {}",session.getAttribute("bizInfoDetailViewId"));
-
-
-            if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
-                bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
-            }else{
-                bizInfoDetailViewId = -1;
-            }
-
-            user = (User)session.getAttribute("user");
-
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-
-
-
-            if(bizInfoSummaryView.getCirculationAmount()!=null){
-                circulationAmount =bizInfoSummaryView.getCirculationAmount().doubleValue();
-            }
-
-            if(bizInfoSummaryView.getProductionCostsAmount()!=null){
-                productionCostsAmount =bizInfoSummaryView.getProductionCostsAmount().doubleValue();
-            }
-            double x = (circulationAmount/365)*30;
-            double y = (productionCostsAmount/365)*30;
 
             if(bizInfoSummaryView.getId() != 0 ){
                 bizInfoSummaryId = bizInfoSummaryView.getId();
-            }else{
+            } else {
                 String url = "bizInfoSummary.jsf";
                 FacesContext fc = FacesContext.getCurrentInstance();
                 ExternalContext ec = fc.getExternalContext();
                 log.debug("redirect to new page");
                 ec.redirect(url);
             }
+
+            if(bizInfoSummaryView.getCirculationAmount() != null){
+                circulationAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+            }
+
+            if(bizInfoSummaryView.getProductionCostsAmount() != null){
+                productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
+            }
+            double x = (circulationAmount/365)*30;
+            double y = (productionCostsAmount/365)*30;
 
             descType = "";
             businessActivityList = businessActivityDAO.findAll();
@@ -196,32 +185,21 @@ public class BizInfoDetail implements Serializable {
             buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
 
             getBusinessInfoListDB();
-            if(bizInfoDetailViewId == -1 ){
 
+            if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
+                bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+            } else {
+                bizInfoDetailViewId = -1;
+            }
+
+            user = (User)session.getAttribute("user");
+
+            if(bizInfoDetailViewId == -1 ){
                 log.debug( "bizInfoDetailView NEW RECORD");
                 bizInfoDetailView = new BizInfoDetailView();
                 bizStakeHolderDetailView = new BizStakeHolderDetailView();
                 bizProductDetailView = new BizProductDetailView();
-
-                bizGroup = new BusinessGroup();
-                bizDesc = new BusinessDescription();
-
-                bizType = new BusinessType();
-                bizActivity = new BusinessActivity();
-
-
-                bizInfoDetailView.setBizDesc(bizDesc);
-                bizInfoDetailView.setBizGroup(bizGroup);
-                bizInfoDetailView.setBizType(bizType);
-                bizInfoDetailView.setBizActivity(bizActivity);
-                bizInfoDetailView.setBizPermission("N");
-
-
-                log.info("bizInfoDetailView____ ",bizInfoDetailView.toString());
-
-
             }else{
-                //
                 log.debug( "bizInfoDetailView FIND BY ID ");
                 bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
 
@@ -271,6 +249,7 @@ public class BizInfoDetail implements Serializable {
             }
             onCheckRole();
 
+            loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL);
         }catch (Exception ex){
             log.error("onCreation Exception : ", ex);
             message = "Exception while load data : " + Util.getMessageException(ex);
@@ -339,14 +318,17 @@ public class BizInfoDetail implements Serializable {
     public void onChangeBizPermission(){
         log.debug("onChangeBizPermission ");
         if(bizInfoDetailView.getBizPermission() != null ){
-            if( bizInfoDetailView.getBizPermission().equals("Y")){
+            if(bizInfoDetailView.getBizPermission().equals("Y")){
                 bizInfoDetailView.setBizDocPermission("");
                 bizInfoDetailView.setBizDocExpiryDate(null);
-            }
-            else{
+                setMandateValue("bizDocPermission",true);
+                setMandateValue("bizDocExpiryDate",true);
+            } else {
                 bizInfoDetailView.setBizPermission("N");
                 bizInfoDetailView.setBizDocPermission("");
                 bizInfoDetailView.setBizDocExpiryDate(null);
+                setMandateValue("bizDocPermission",false);
+                setMandateValue("bizDocExpiryDate",false);
             }
         }
     }
