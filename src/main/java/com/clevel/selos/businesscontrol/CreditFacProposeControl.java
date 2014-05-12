@@ -174,7 +174,8 @@ public class CreditFacProposeControl extends BusinessControl {
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
-                List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
+//                List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
+                List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newCreditList.size() > 0) {
                     log.debug("newCreditFacility.getNewCreditDetailList() :: {}", newCreditFacility.getNewCreditDetailList().size());
                     List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditList);
@@ -182,7 +183,8 @@ public class CreditFacProposeControl extends BusinessControl {
                     newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
                 }
 
-                List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+//                List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+                List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newCollateralDetailList.size() > 0) {
                     log.debug("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
                     List<NewCollateralView> newCollateralViewList = newCollateralTransform.transformsCollateralToView(newCollateralDetailList);
@@ -190,7 +192,8 @@ public class CreditFacProposeControl extends BusinessControl {
                     newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                 }
 
-                List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
+//                List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
+                List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newGuarantorDetails.size() > 0) {
                     log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
                     List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
