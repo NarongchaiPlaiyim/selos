@@ -30,7 +30,7 @@ public class BaseController implements Serializable {
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
 
     protected void loadFieldControl(long workCaseId, Screen screenId) {
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId);
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId, 0, 0);
         List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId);
         fieldMap.clear();
         dialogFieldMap.clear();

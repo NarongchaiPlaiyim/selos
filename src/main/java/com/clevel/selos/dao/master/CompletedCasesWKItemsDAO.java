@@ -64,10 +64,15 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                     .add(Projections.property("completedate"), "completedate")
                     .add(Projections.property("createdate"),"createdate"));
 
+            boolean appNumberCriteria = false;
+
             if(appnumberlist != null)
             {
 
                 criteria.add(Restrictions.in("applicationNo", appnumberlist)) ;  //application number
+
+                appNumberCriteria = true;
+
             }
             if(statusid != 0)
             {
@@ -183,6 +188,11 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
             log.info("completedCasesWKItemsList ::::::::::::{}", completedCasesWKItemsList.size()) ;
 
             //log.info("completedCasesWorkItemsList elements are ::::::::: {}", completedCasesWKItemsList.toString());
+
+            if(appNumberCriteria && appnumberlist.size()<=0)
+            {
+                return completedCasesWKItemsList;
+            }
 
             //search in Prescreen
             List<CompletedCasesWKItems> preScreenCases =  workCasePrescreenDAO.getCompletedCases(appnumberlist,statusid,startfromdate,starttodate,terminatefromdate,terminatetodate,appNumbersSet);
