@@ -56,7 +56,7 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail = new NewGuarantorDetail();
             if (newGuarantorDetailView.getId() != 0) {
                 log.info("Start..  newGuarantorDetail :: view :: {}", newGuarantorDetailView.getId());
-                newGuarantorDetail = newGuarantorDetailDAO.findGuarantorById(newGuarantorDetailView.getId(), ProposeType.P);
+                newGuarantorDetail = newGuarantorDetailDAO.findGuarantorById(newGuarantorDetailView.getId(), proposeType);
                 newGuarantorDetail.setModifyDate(DateTime.now().toDate());
                 newGuarantorDetail.setModifyBy(user);
             } else { // id = 0 create new

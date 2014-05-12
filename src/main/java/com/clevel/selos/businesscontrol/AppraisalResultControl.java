@@ -189,6 +189,7 @@ public class AppraisalResultControl extends BusinessControl {
         } else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         }
+        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
 
         List<NewCollateral> newCollateralList = newCollateralTransform.transformToModelList(newCollateralViewList, user, newCreditFacility);
 
