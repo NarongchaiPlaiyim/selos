@@ -327,8 +327,6 @@ public class BizInfoDetail extends BaseController {
         modeForButton = "add";
     }
 
-
-
     public void onEditBizProductDetailView() {
         log.debug( " onEditBizProductDetailView is {}",selectBizProductDetail);
         modeForButton = "edit";
@@ -362,9 +360,6 @@ public class BizInfoDetail extends BaseController {
         }
     }
 
-    public void onCancelBizProductDetailView(){
-        bizProductDetailView = new BizProductDetailView();
-    }
     public void onSaveBizProductDetailView(){
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
@@ -462,14 +457,10 @@ public class BizInfoDetail extends BaseController {
         onSetRowNoBizStakeHolderDetail();
     }
 
-    public void onCancelBizStakeHolderDetailView(){
-        bizStakeHolderDetailView = new BizStakeHolderDetailView();
-    }
-
     public void onSaveBizStakeHolderDetailView(){
         boolean supplier;
         boolean buyer;
-        BizStakeHolderDetailView  stakeHolderRow;
+        BizStakeHolderDetailView stakeHolderRow;
         boolean complete = onValidateStakeHolder();
         RequestContext context = RequestContext.getCurrentInstance();
         if(complete){
@@ -548,6 +539,14 @@ public class BizInfoDetail extends BaseController {
         stakeHolderMaster.setPercentCash(stakeHolderChild.getPercentCash());
         stakeHolderMaster.setPercentCredit(stakeHolderChild.getPercentCredit());
         stakeHolderMaster.setCreditTerm(stakeHolderChild.getCreditTerm());
+
+        if(stakeHolderChild.getPercentCredit() != null){
+            if(stakeHolderChild.getPercentCredit().compareTo(BigDecimal.ZERO) > 0){
+                setMandateValue("bizSupplier.creditTerm",true);
+            } else {
+                setMandateValue("bizSupplier.creditTerm",false);
+            }
+        }
 
         return stakeHolderMaster;
     }
@@ -705,69 +704,32 @@ public class BizInfoDetail extends BaseController {
         }
     }
 
-    public void onDeleteBizInfoView(){
-        try{
-            log.debug("onDeleteBizInfoView begin");
-            bizInfoDetailControl.onDeleteBizInfoToDB(bizInfoDetailView);
-            messageHeader = msg.get("app.bizInfoDetail.message.header.delete.success");
-            message = msg.get("app.bizInfoDetail.message.body.delete.success");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
-            messageHeader = msg.get("app.bizInfoDetail.message.header.delete.fail");
-            if(ex.getCause() != null){
-                message = msg.get("app.bizInfoDetail.message.body.delete.fail") + ex.getCause().toString();
-            } else {
-                message = msg.get("app.bizInfoDetail.message.body.delete.fail") + ex.getMessage();
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }finally {
-            log.debug("onDeleteBizInfoView end");
-        }
-    }
-
     public void onCancel(){
         FacesUtil.redirect("/site/bizInfoSummary.jsf");
     }
 
-
     public void onCalCashCredit(String point ){
-        double result = 0;
-        BigDecimal resultB;
-
         if(point.equals("stakeHolderDlg")){
-            result = 100 - bizStakeHolderDetailView.getPercentCash().doubleValue();
-            resultB = new BigDecimal(result);
-            bizStakeHolderDetailView.setPercentCredit(resultB);
+            bizStakeHolderDetailView.setPercentCredit(Util.subtract(BigDecimal.valueOf(100),bizStakeHolderDetailView.getPercentCash()));
         }else if(point.equals("purchasePercentCash")){
-            result = 100 - bizInfoDetailView.getPurchasePercentCash().doubleValue();
-            resultB = new BigDecimal(result);
-            bizInfoDetailView.setPurchasePercentCredit(resultB);
+            bizInfoDetailView.setPurchasePercentCredit(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPurchasePercentCash()));
         }else if(point.equals("payablePercentCash")){
-            result = 100 - bizInfoDetailView.getPayablePercentCash().doubleValue();
-            resultB = new BigDecimal(result);
-            bizInfoDetailView.setPayablePercentCredit(resultB);
+            bizInfoDetailView.setPayablePercentCredit(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPayablePercentCash()));
         }else if(point.equals("purchasePercentLocal")){
-            result = 100 - bizInfoDetailView.getPurchasePercentLocal().doubleValue();
-            resultB = new BigDecimal(result);
-            bizInfoDetailView.setPurchasePercentForeign(resultB);
+            bizInfoDetailView.setPurchasePercentForeign(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPurchasePercentLocal()));
         }else if(point.equals("payablePercentLocal")){
-            result = 100 - bizInfoDetailView.getPayablePercentLocal().doubleValue();
-            resultB = new BigDecimal(result);
-            bizInfoDetailView.setPayablePercentForeign(resultB);
+            bizInfoDetailView.setPayablePercentForeign(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPayablePercentLocal()));
         }
-
     }
 
     public void onCalStockValue(){
+        double stockDuBDM = bizInfoDetailView.getStockDurationBDM().doubleValue();
+        double stockValueBDM = (productionCostsAmount/365)*stockDuBDM;
+        bizInfoDetailView.setStockValueBDM( new BigDecimal(stockValueBDM));
 
-    double stockDuBDM =    bizInfoDetailView.getStockDurationBDM().doubleValue();
-    double stockValueBDM = (productionCostsAmount/365)*stockDuBDM;
-    bizInfoDetailView.setStockValueBDM( new BigDecimal(stockValueBDM));
-
-    double stockDuUW =    bizInfoDetailView.getStockDurationUW().doubleValue();
-    double stockValueUW= (productionCostsAmount/365)*stockDuUW;
-    bizInfoDetailView.setStockValueUW( new BigDecimal(stockValueUW));
-
+        double stockDuUW =    bizInfoDetailView.getStockDurationUW().doubleValue();
+        double stockValueUW= (productionCostsAmount/365)*stockDuUW;
+        bizInfoDetailView.setStockValueUW( new BigDecimal(stockValueUW));
     }
 
     public boolean onCheckPermission(){
@@ -781,11 +743,9 @@ public class BizInfoDetail extends BaseController {
             }
             return result;
         } else {
-            log.debug("-- success and result[{}]", result);
             return result;
         }
     }
-
 
     public BizStakeHolderDetailView getBizStakeHolderDetailView() {
         return bizStakeHolderDetailView;
