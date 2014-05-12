@@ -2723,8 +2723,8 @@
                                         <tr>
                                             <td class="title">#{msg.get('app.decision.label.collTypePercentLTV')}</td>
                                             <td class="left" colspan="3">
-                                                <h:outputText value="#{collHead.collTypePercentLTV.description}"
-                                                              rendered="#{not empty collHead.collTypePercentLTV}"/>
+                                                <h:outputText value="#{collHead.tcgCollateralType.description}"
+                                                              rendered="#{not empty collHead.tcgCollateralType}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -3042,8 +3042,8 @@
                                         <tr>
                                             <td class="title">#{msg.get('app.decision.label.collTypePercentLTV')}</td>
                                             <td class="left" colspan="3">
-                                                <h:outputText value="#{collHeader.collTypePercentLTV.description}"
-                                                              rendered="#{not empty collHeader.collTypePercentLTV}"/>
+                                                <h:outputText value="#{collHeader.tcgCollateralType.description}"
+                                                              rendered="#{not empty collHeader.tcgCollateralType}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -3739,7 +3739,7 @@
                         </tr>
                         <h:panelGroup rendered="#{decision.decisionDialog}">
                             <!--APPROVE FOR ENDORSE CA-->
-                            <h:panelGroup rendered="#{decision.roleId != 104 and decision.roleId != 105 and decision.roleId != 106}">
+                            <h:panelGroup rendered="#{decision.endorseDecisionDialog}">
 
                                 <tr>
                                     <td class="center" colspan="2">
@@ -3829,7 +3829,7 @@
                             <tr>
                                 <td colspan="2" style="height:28px;"></td>
                             </tr>
-                            <h:panelGroup rendered="#{decision.requestPricing and not decision.roleUW}">
+                            <h:panelGroup rendered="#{decision.requestPricing and decision.pricingDecisionDialog}">
                                 <tr>
                                     <td class="center" colspan="2">
                                         <div class="ui-datatable ui-widget">

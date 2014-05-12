@@ -23,14 +23,14 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
     public NewCollateralDAO() {
     }
 
-    public void persistProposeTypeA(final List<NewCollateral> newCollateralList){
-        log.info("-- persistProposeTypeA ::: {}", newCollateralList.size());
-        for (NewCollateral newCollateral : newCollateralList) {
-            newCollateral.setAppraisalRequest(2);
-            newCollateral.setProposeType(ProposeType.A);
-        }
-        persist(newCollateralList);
-    }
+//    public void persistProposeTypeA(final List<NewCollateral> newCollateralList){
+//        log.info("-- persistProposeTypeA ::: {}", newCollateralList.size());
+//        for (NewCollateral newCollateral : newCollateralList) {
+//            newCollateral.setAppraisalRequest(2);
+//            newCollateral.setProposeType(ProposeType.A);
+//        }
+//        persist(newCollateralList);
+//    }
 
     public List<NewCollateral> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
         log.info("-- findNewCollateralByNewCreditFacility ::: {}", newCreditFacility.toString());
@@ -83,6 +83,17 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", ProposeType.A));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
+        log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
+    }
+
+    public List<NewCollateral> _findNewCollateralByTypeP(NewCreditFacility newCreditFacility) {
+        log.info("-- _findNewCollateralByTypeP ::: {}", newCreditFacility.toString());
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.P));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());

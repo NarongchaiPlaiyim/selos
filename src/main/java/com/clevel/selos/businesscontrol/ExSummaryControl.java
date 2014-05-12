@@ -183,7 +183,7 @@ public class ExSummaryControl extends BusinessControl {
 
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 if(bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
-                    bizSize = bankStatementSummary.getGrdTotalIncomeGross();
+                    bizSize = Util.multiply(bankStatementSummary.getGrdTotalIncomeGross(),BigDecimal.valueOf(12));
                 }
             } else { // use customer
                 if(cusListView != null && cusListView.size() > 0){
