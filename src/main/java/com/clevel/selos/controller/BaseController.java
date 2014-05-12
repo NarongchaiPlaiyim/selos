@@ -87,7 +87,7 @@ public class BaseController implements Serializable {
         return field.isReadOnly();
     }
 
-    protected boolean checkSession(HttpSession session){
+    public boolean checkSession(HttpSession session){
         boolean checkSession = false;
         if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
                 (Long)session.getAttribute("stepId") != 0){
@@ -156,6 +156,10 @@ public class BaseController implements Serializable {
 
     public void showMessageBox(){
         RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+    }
+
+    public void showMessageNoPermissionBox(){
+        RequestContext.getCurrentInstance().execute("msgBoxNoPermissionDlg.show()");
     }
 
     public void sendCallBackParam(boolean value){

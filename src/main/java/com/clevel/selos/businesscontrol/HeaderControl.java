@@ -94,7 +94,7 @@ public class HeaderControl extends BusinessControl {
                 appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
                 appHeaderView.setAppRefNo(workCasePrescreen.getRefAppNumber());
                 appHeaderView.setAppRefDate("");
-                appHeaderView.setProductGroup(workCasePrescreen.getProductGroup().getName());
+                appHeaderView.setProductGroup(workCasePrescreen.getProductGroup() != null ? workCasePrescreen.getProductGroup().getName() : "");
                 appHeaderView.setCaseStatus(status != null ? status.getName() : "");
                 appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
 

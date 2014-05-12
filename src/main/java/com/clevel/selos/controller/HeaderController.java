@@ -488,13 +488,13 @@ public class HeaderController implements Serializable {
             fullApplicationControl.submitToCSSO(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
-            showMessageBox();
+            showMessageRedirect();
             complete = true;
             log.debug("onSubmitCSSO ::: success.");
         } catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            showMessageRedirect();
+            showMessageBox();
             log.error("onSubmitCSSO ::: exception occurred : ", ex);
         }
         sendCallBackParam(complete);

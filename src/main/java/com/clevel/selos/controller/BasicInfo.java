@@ -19,6 +19,7 @@ import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
@@ -175,62 +176,52 @@ public class BasicInfo extends BaseController {
     public BasicInfo(){
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(checkSession(session)){
-            //TODO Check valid step
-            log.debug("preRender ::: Check valid stepId");
-            loadUserAccessMatrix(Screen.BASIC_INFO);
-            if(!canAccess(Screen.BASIC_INFO)){
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = "You don't have permission to access this page. Click 'OK' to redirect to Inbox.";
-                showMessageRedirect();
-            }
-        }else{
-            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+        if(!checkSession(session))
             FacesUtil.redirectToInbox();
-        }
+    }
+
+    public void initial(){
+        basicInfoView = new BasicInfoView();
+
+        productGroupList = productGroupDAO.findAll();
+        specialProgramList = specialProgramDAO.findAll();
+        requestTypeList = requestTypeDAO.findAll();
+        riskTypeList = riskTypeDAO.findAll();
+        sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
+        bankList = bankDAO.getListRefinance();
+
+        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
+        accountProductList = new ArrayList<BankAccountProduct>();
+        accountPurposeList = accountPurposeDAO.findAll();
+        accountNameList = new ArrayList<CustomerInfoView>();
+        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
     }
 
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
+        initial();
 
         HttpSession session = FacesUtil.getSession(true);
 
         if(checkSession(session)){
-            workCaseId = (Long)session.getAttribute("workCaseId");
+            loadUserAccessMatrix(Screen.BASIC_INFO);
+            if(!canAccess(Screen.BASIC_INFO)){
+                log.debug("You don't have permission to access this page.");
+                showMessageNoPermissionBox();
+                return;
+            }
 
-            loadFieldControl(workCaseId, Screen.BASIC_INFO);
-            fieldsControlInitial();
-
-            basicInfoView = new BasicInfoView();
-
-            productGroupList = productGroupDAO.findAll();
-            specialProgramList = specialProgramDAO.findAll();
-            requestTypeList = requestTypeDAO.findAll();
-            riskTypeList = riskTypeDAO.findAll();
-            sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
-            bankList = bankDAO.getListRefinance();
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
             customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
 
-            bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-            accountProductList = new ArrayList<BankAccountProduct>();
-            accountPurposeList = accountPurposeDAO.findAll();
-            accountNameList = new ArrayList<CustomerInfoView>();
-            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+            loadFieldControl(workCaseId, Screen.BASIC_INFO);
+            fieldsControlInitial();
 
             for(BankAccountPurpose oap : accountPurposeList){
                 BankAccountPurposeView purposeView = new BankAccountPurposeView();
@@ -273,6 +264,9 @@ public class BasicInfo extends BaseController {
             onChangeExistingSMEInit();
             onChangeBAInit();
             onChangeReqLGInit();
+        }else{
+            log.debug("onCreation ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirectToInbox();
         }
     }
 
