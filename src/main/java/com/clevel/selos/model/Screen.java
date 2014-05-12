@@ -15,6 +15,7 @@ public enum Screen {
 //    CUSTOMER_INFO_JURISTIC(3004),
     TCG_INFO(2600),
     BUSINESS_INFO_SUMMARY(2700),
+    BUSINESS_INFO_DETAIL(2710),
     DBR_INFO(2830),
 
     //Decision
