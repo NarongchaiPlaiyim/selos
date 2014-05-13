@@ -515,14 +515,14 @@
                             <tr>
                                 <td class="center" colspan="6">
                                     <p:commandButton id="btnSave"
-                                                     value="#{msg.get('app.saveButton')}"
+                                                     value="#{msg.get('app.button.save')}"
                                                      binding="#{saveButton}"
                                                      styleClass="medium"
                                                      process=":frmMain"
                                                      action="#{appraisalAppointment.onSaveAppraisalAppointment()}"
                                                      update=":frmMain, :msgBoxSystemMessagePanel"/>
 
-                                    <p:commandButton value="#{msg.get('app.cancelButton')}"
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}"
                                                      id="btnCancel"
                                                      styleClass="medium"
                                                      process=":frmMain"

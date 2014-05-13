@@ -26,11 +26,11 @@ public class WorkCaseOwner implements Serializable
     @Column(name = "user_id")
     private String userid;
     @Column(name = "workcase_id")
-    private long workCaseId;
+    private Long workCaseId;
     @Column(name = "step_id")
     private long stepId;
     @Column(name = "workcase_prescreen_id")
-    private long workCasePrescreenId;
+    private Long workCasePrescreenId;
     @Column(name = "create_by")
     private String createBy;
     @Column(name = "modify_by")
@@ -63,11 +63,11 @@ public class WorkCaseOwner implements Serializable
         this.userid = userid;
     }
 
-    public long getWorkCaseId() {
+    public Long getWorkCaseId() {
         return workCaseId;
     }
 
-    public void setWorkCaseId(long workCaseId) {
+    public void setWorkCaseId(Long workCaseId) {
         this.workCaseId = workCaseId;
     }
 
@@ -79,11 +79,11 @@ public class WorkCaseOwner implements Serializable
         this.stepId = stepId;
     }
 
-    public long getWorkCasePrescreenId() {
+    public Long getWorkCasePrescreenId() {
         return workCasePrescreenId;
     }
 
-    public void setWorkCasePrescreenId(long workCasePrescreenId) {
+    public void setWorkCasePrescreenId(Long workCasePrescreenId) {
         this.workCasePrescreenId = workCasePrescreenId;
     }
 
@@ -113,13 +113,16 @@ public class WorkCaseOwner implements Serializable
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("roleid", roleid).
-                append("userid", userid).
-                append("workCaseId", workCaseId).
-                append("stepId", stepId).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("roleid", roleid)
+                .append("userid", userid)
+                .append("workCaseId", workCaseId)
+                .append("stepId", stepId)
+                .append("workCasePrescreenId", workCasePrescreenId)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("createDate", createDate)
+                .toString();
     }
-
 }

@@ -10,11 +10,9 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.relation.StepToStatus;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AppBorrowerHeaderView;
-import com.clevel.selos.model.view.AppHeaderView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.InboxView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.InboxBizTransform;
@@ -37,6 +35,9 @@ public class InboxControl extends BusinessControl {
     BPMInterface bpmInterface;
     @Inject
     BPMExecutor bpmExecutor;
+
+    @Inject
+    StepStatusControl stepStatusControl;
 
     @Inject
     private UserDAO userDAO;
@@ -87,5 +88,15 @@ public class InboxControl extends BusinessControl {
     public void selectCasePoolBox(String queueName, String wobNumber, long actionCode) throws Exception{
         //Send only QueueName, Action, WobNum
         bpmExecutor.selectCase(actionCode, queueName, wobNumber);
+    }
+
+    public PEInbox getNextStep(PEInbox peInbox, long actionCode){
+        StepToStatus stepToStatus = stepStatusControl.getNextStep(Util.parseLong(peInbox.getStepId(), 0), Util.parseLong(peInbox.getStatuscode(), 0), actionCode);
+        if(stepToStatus != null) {
+            peInbox.setStep(Util.parseString(stepToStatus.getStep().getId(), ""));
+            peInbox.setStatuscode(Util.parseString(stepToStatus.getNextStatus().getId(), ""));
+        }
+
+        return peInbox;
     }
 }

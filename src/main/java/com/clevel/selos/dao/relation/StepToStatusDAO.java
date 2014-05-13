@@ -33,4 +33,14 @@ public class StepToStatusDAO extends GenericDAO<StepToStatus, Long> {
         return stepToStatusList;
     }
 
+    public StepToStatus getNextStep(long stepId, long statusId, long actionId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("step", stepId));
+        criteria.add(Restrictions.eq("currentStatus", statusId));
+        criteria.add(Restrictions.eq("action", actionId));
+        StepToStatus stepToStatus = (StepToStatus) criteria.uniqueResult();
+
+        return stepToStatus;
+    }
+
 }

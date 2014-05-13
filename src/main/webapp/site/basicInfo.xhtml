@@ -67,7 +67,7 @@
                                                 </td>
                                                 <td style="width: 200px;">
                                                     <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger"
-                                                                 disabled="#{basicInfo.isDisabled('applicationNo')}"
+                                                                 readonly="#{basicInfo.isDisabled('applicationNo')}"
                                                                  required="#{basicInfo.reqApplicationNo}"/>
                                                 </td>
                                             </tr>
@@ -79,7 +79,7 @@
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger"
-                                                                 disabled="#{basicInfo.isDisabled('refAppNo')}"
+                                                                 readonly="#{basicInfo.isDisabled('refAppNo')}"
                                                                  required="#{basicInfo.reqRefApplicationNo}"/>
                                                 </td>
                                                 <td class="title" style="width: 300px; padding-left: 30px;">
@@ -87,7 +87,7 @@
                                                     <h:outputText value="#{basicInfo.mandate('caNo')}" styleClass="require-field"/>
                                                     <h:outputText value=" : "/>
                                                     <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger"
-                                                                 disabled="#{basicInfo.isDisabled('caNo')}"
+                                                                 readonly="#{basicInfo.isDisabled('caNo')}"
                                                                  required="#{basicInfo.reqCaNo}"/>
                                                 </td>
                                             </tr>
@@ -535,7 +535,7 @@
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{basicInfo.basicInfoView.refName}" styleClass="larger"
-                                                                 disabled="#{basicInfo.isDisabled('referalName')}"
+                                                                 readonly="#{basicInfo.isDisabled('referalName')}"
                                                                  required="#{basicInfo.reqReferralName and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                                 <td class="title" style="width: 200px; padding-left: 30px;">
@@ -545,7 +545,7 @@
                                                     <p:inputText value="#{basicInfo.basicInfoView.refId}" styleClass="larger"
                                                                  onkeydown="return onKeyDownNumber(event);"
                                                                  onkeypress="return onKeyPressNumber(event);"
-                                                                 disabled="#{basicInfo.isDisabled('referalID')}"
+                                                                 readonly="#{basicInfo.isDisabled('referalID')}"
                                                                  required="#{basicInfo.reqReferralID and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                             </tr>
@@ -736,8 +736,6 @@
               modal="true" width="580" height="320" closable="false">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
-
-
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteAccountDialog"/>

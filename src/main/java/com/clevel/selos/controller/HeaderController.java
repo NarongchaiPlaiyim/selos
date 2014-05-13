@@ -35,7 +35,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "headerController")
-public class HeaderController implements Serializable {
+public class HeaderController extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -221,6 +221,12 @@ public class HeaderController implements Serializable {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
+        }
+
+        loadUserAccessMatrix(Screen.BASIC_INFO);
+        if(!canAccess(Screen.BASIC_INFO)){
+            log.debug("You don't have permission to access this page.");
+            showMessageNoPermissionBox();
         }
     }
 
@@ -1741,17 +1747,7 @@ public class HeaderController implements Serializable {
         FacesUtil.redirect("/site/inbox.jsf");
     }
 
-    private void showMessageRedirect(){
-        RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-    }
 
-    private void showMessageBox(){
-        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-    }
-
-    private void sendCallBackParam(boolean value){
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", value);
-    }
 
     public int getQualitativeType() {
         return qualitativeType;

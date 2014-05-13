@@ -286,7 +286,7 @@
                 <td colspan="2" class="center">
                     <p:commandButton id="saveBtn" styleClass="small"
                             binding="#{addRowData}"
-                            value="#{msg.get('app.okButton')}"
+                            value="#{msg.get('app.button.ok')}"
                             actionListener="#{ncbInfo.onSaveNcbRecord()}"
                             process="@form"
                             update=":ncbDlgForm,:frmMain:resultNcbDetail"
@@ -294,7 +294,7 @@
                             disabled="#{ncbInfo.isDisabled('saveButton')}"/>
                     <p:commandButton
                             id="cancelBtn"
-                            value="#{msg.get('app.cancelButton')}"
+                            value="#{msg.get('app.button.cancel')}"
                             styleClass="small"
                             onclick="PF('ncbDlg').hide()"
                             disabled="#{ncbInfo.isDisabled('cancelButton')}"/>
