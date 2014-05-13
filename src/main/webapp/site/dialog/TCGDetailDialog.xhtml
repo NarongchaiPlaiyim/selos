@@ -61,13 +61,14 @@
                     </td>
                     <td>
                         <p:inputText id="appraisalAmount"
-                                     disabled="#{tcgInfo.isDisabled('appraisalAmount')}"
+                                     readonly="#{tcgInfo.isDisabled('appraisalAmount')}"
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
                                      maxlength="17"
                                      onkeydown="return onKeyDownMoney(event);"
-                                     onkeypress="return onKeyPressMoney(event);">
+                                     onkeypress="return onKeyPressMoney(event);"
+                                     onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="blur" update=":tcgDlgForm:appraisalAmount"/>
@@ -82,12 +83,14 @@
                     </td>
                     <td>
                         <p:inputText id="LTVvalue"
-                                     disabled="#{tcgInfo.isDisabled('LTVvalue')}"
+                                     readonly="#{tcgInfo.isDisabled('LTVvalue')}"
                                      value="#{tcgInfo.tcgDetailView.ltvValue}"
                                      maxlength="17"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     readonly="true">
+                                     onkeydown="return onKeyDownMoney(event);"
+                                     onkeypress="return onKeyPressMoney(event);"
+                                     onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"

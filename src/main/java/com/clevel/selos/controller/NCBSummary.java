@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBInfoView;
@@ -29,7 +30,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "ncbSummary")
-public class NCBSummary implements Serializable {
+public class NCBSummary extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -106,6 +107,8 @@ public class NCBSummary implements Serializable {
             if (ncbSumViewList == null) {
                 ncbSumViewList = new ArrayList<NCBInfoView>();
             }
+
+            loadFieldControl(workCaseId, Screen.NCB_SUMMARY);
         }
     }
 
