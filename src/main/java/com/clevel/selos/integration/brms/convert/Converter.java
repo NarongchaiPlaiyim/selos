@@ -217,7 +217,12 @@ public class Converter implements Serializable {
                     uwRulesResult.setRuleOrder("0001");
                 }
                 logger.debug("uwRulesResult : {}", uwRulesResult);
-                uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+                if(_ruleType == UWRuleType.CUS_LEVEL){
+                    String keyMap = uwRulesResult.getRuleOrder().concat(uwRulesResult.getPersonalID());
+                    uwRulesResultMap.put(keyMap, uwRulesResult);
+                } else {
+                    uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+                }
             }
             uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
         }
