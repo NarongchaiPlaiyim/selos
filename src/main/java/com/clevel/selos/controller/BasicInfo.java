@@ -180,8 +180,10 @@ public class BasicInfo extends BaseController {
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(!checkSession(session))
+        if(!checkSession(session)) {
             FacesUtil.redirectToInbox();
+            return;
+        }
     }
 
     public void initial(){
@@ -199,6 +201,8 @@ public class BasicInfo extends BaseController {
         accountPurposeList = accountPurposeDAO.findAll();
         accountNameList = new ArrayList<CustomerInfoView>();
         bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+
+        openAccountView = new OpenAccountView();
     }
 
     @PostConstruct
@@ -209,13 +213,6 @@ public class BasicInfo extends BaseController {
         HttpSession session = FacesUtil.getSession(true);
 
         if(checkSession(session)){
-            loadUserAccessMatrix(Screen.BASIC_INFO);
-            if(!canAccess(Screen.BASIC_INFO)){
-                log.debug("You don't have permission to access this page.");
-                showMessageNoPermissionBox();
-                return;
-            }
-
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
             customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
@@ -253,8 +250,6 @@ public class BasicInfo extends BaseController {
             if(!customerEntity.isChangeQualtiEnable()){
                 setDisabledValue("qualitativeType",true);
             }
-
-            openAccountView = new OpenAccountView();
 
             yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
