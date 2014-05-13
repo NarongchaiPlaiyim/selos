@@ -1243,6 +1243,18 @@ public class BankStmtControl extends BusinessControl {
         User user = getCurrentUser();
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+
+        BankStatementSummary bankStatementSummaryWorkCase = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+        BankStatementSummary bankStatementSummaryWorkCasePreScreen = bankStatementSummaryDAO.findByWorkcasePrescreenId(workCasePrescreenId);
+
+        if(bankStatementSummaryWorkCase!=null && bankStatementSummaryWorkCase.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCase.getId());
+        }
+
+        if(bankStatementSummaryWorkCasePreScreen!=null && bankStatementSummaryWorkCasePreScreen.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCasePreScreen.getId());
+        }
+
         bankStatementSummary.setWorkCase(workCase);
         bankStatementSummary.setWorkCasePrescreen(workCasePrescreen);
         BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStatementSummary);
