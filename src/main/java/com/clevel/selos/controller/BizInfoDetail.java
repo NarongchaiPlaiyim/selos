@@ -182,11 +182,13 @@ public class BizInfoDetail extends BaseController {
 
                 getBusinessInfoListDB();
 
-                if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
-                    bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
-                } else {
-                    bizInfoDetailViewId = -1;
-                }
+
+                bizInfoDetailViewId = Util.parseLong(session.getAttribute("bizInfoDetailViewId"), -1);
+//                if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
+//                    bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+//                } else {
+//                    bizInfoDetailViewId = -1;
+//                }
 
                 user = (User)session.getAttribute("user");
 
