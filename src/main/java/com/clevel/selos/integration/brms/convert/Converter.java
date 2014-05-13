@@ -199,7 +199,7 @@ public class Converter implements Serializable {
                         if(attributeType.getName().equals(BRMSFieldAttributes.UW_RULE_ORDER.value())){
                             uwRulesResult.setRuleOrder(attributeType.getStringValue());
                         }
-                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
+                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID.value())){
                             String _attrValue = attributeType.getStringValue();
                             if(_attrValue != null){
                                 uwRulesResult.setPersonalID(_attrValue);
