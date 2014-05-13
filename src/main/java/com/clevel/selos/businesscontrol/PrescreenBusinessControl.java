@@ -375,7 +375,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
 
                 Integer lastOrder = Integer.MAX_VALUE;
-                Map<String, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<String, PrescreenCusRulesGroupView>();
+                Map<Integer, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<Integer, PrescreenCusRulesGroupView>();
                 for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewMap.values()){
                     if(UWRuleType.GROUP_LEVEL.equals(uwRuleResultDetailView.getUwRuleType())){
                         if(uwRuleResultDetailView.getRuleOrder() == 0)
@@ -408,7 +408,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         _prescreenCusRuleNameViewMap.put( uwRuleResultDetailView.getUwRuleNameView().getId(), _prescreenCusRuleNameView);
 
                         _prescreenCusRulesGroupView.setPrescreenCusRuleNameViewMap(_prescreenCusRuleNameViewMap);
-                        _prescreenCusRulesGroupViewMap.put(_uwRuleGroupView.getId()+"", _prescreenCusRulesGroupView);
+                        _prescreenCusRulesGroupViewMap.put(_uwRuleGroupView.getId(), _prescreenCusRulesGroupView);
 
                         //_customerUWResultDetailMap.put()
                     }
