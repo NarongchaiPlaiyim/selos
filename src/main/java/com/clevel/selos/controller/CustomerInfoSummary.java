@@ -53,10 +53,8 @@ public class CustomerInfoSummary extends BaseController {
     @Inject
     private CustomerInfoControl customerInfoControl;
 
-    //*** Drop down List ***//
     private List<CustomerEntity> customerEntityList;
 
-    //*** View ***//
     private CustomerInfoSummaryView customerInfoSummaryView;
 
     //session
