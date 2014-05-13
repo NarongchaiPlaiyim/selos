@@ -1234,15 +1234,29 @@ public class BankStmtControl extends BusinessControl {
 
         WorkCase workCase = null;
         WorkCasePrescreen workCasePrescreen = null;
+        BankStatementSummary bankStatementSummaryWorkCase = null;
+        BankStatementSummary bankStatementSummaryWorkCasePreScreen = null;
+
         if (workCaseId != 0) {
             workCase = workCaseDAO.findById(workCaseId);
+            bankStatementSummaryWorkCase = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         }
         if (workCasePrescreenId != 0) {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            bankStatementSummaryWorkCasePreScreen = bankStatementSummaryDAO.findByWorkcasePrescreenId(workCasePrescreenId);
         }
         User user = getCurrentUser();
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+
+        if(bankStatementSummaryWorkCase!=null && bankStatementSummaryWorkCase.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCase.getId());
+        }
+
+        if(bankStatementSummaryWorkCasePreScreen!=null && bankStatementSummaryWorkCasePreScreen.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCasePreScreen.getId());
+        }
+
         bankStatementSummary.setWorkCase(workCase);
         bankStatementSummary.setWorkCasePrescreen(workCasePrescreen);
         BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStatementSummary);
