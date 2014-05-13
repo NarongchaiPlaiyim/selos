@@ -19,7 +19,7 @@ public class PrescreenResultView extends PrescreenView {
     private Map<Integer, UWRuleResultDetailView> groupRuleResults;
     private Map<RelationValue, Integer> numberOfCusRelation;
     private Map<String, CustomerInfoSimpleView> customerInfoSimpleViewMap;
-    private Map<Integer, PrescreenCusRulesGroupView> prescreenCusRulesGroupViewMap;
+    private Map<String, PrescreenCusRulesGroupView> prescreenCusRulesGroupViewMap;
 
     public String getInterfaceResult() {
         return interfaceResult;
@@ -93,17 +93,17 @@ public class PrescreenResultView extends PrescreenView {
         this.customerInfoSimpleViewMap = customerInfoSimpleViewMap;
     }
 
-    public Map<Integer, PrescreenCusRulesGroupView> getPrescreenCusRulesGroupViewMap() {
+    public Map<String, PrescreenCusRulesGroupView> getPrescreenCusRulesGroupViewMap() {
         return prescreenCusRulesGroupViewMap;
     }
 
-    public void setPrescreenCusRulesGroupViewMap(Map<Integer, PrescreenCusRulesGroupView> prescreenCusRulesGroupViewMap) {
+    public void setPrescreenCusRulesGroupViewMap(Map<String, PrescreenCusRulesGroupView> prescreenCusRulesGroupViewMap) {
         this.prescreenCusRulesGroupViewMap = prescreenCusRulesGroupViewMap;
     }
 
-    public List<Map.Entry<Integer, PrescreenCusRulesGroupView>> getPrescreenCusRulesGroupViewMapList(){
-        Set<Map.Entry<Integer, PrescreenCusRulesGroupView>> entry = prescreenCusRulesGroupViewMap.entrySet();
-        return new ArrayList<Map.Entry<Integer, PrescreenCusRulesGroupView>>(entry);
+    public List<Map.Entry<String, PrescreenCusRulesGroupView>> getPrescreenCusRulesGroupViewMapList(){
+        Set<Map.Entry<String, PrescreenCusRulesGroupView>> entry = prescreenCusRulesGroupViewMap.entrySet();
+        return new ArrayList<Map.Entry<String, PrescreenCusRulesGroupView>>(entry);
     }
 
     @Override
