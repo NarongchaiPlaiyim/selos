@@ -11,8 +11,8 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
-import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
@@ -37,8 +37,8 @@ public class FullApplicationControl extends BusinessControl {
     Logger log;
 
     @Inject
-    @ExceptionMessage
-    private Message exceptionMessage;
+    @NormalMessage
+    private Message msg;
 
     @Inject
     UserDAO userDAO;
@@ -164,7 +164,7 @@ public class FullApplicationControl extends BusinessControl {
                 approvalHistoryDAO.persist(approvalHistory);
             }
         } else {
-            throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
         }
     }
 
@@ -251,7 +251,7 @@ public class FullApplicationControl extends BusinessControl {
             }
 
         } else {
-            throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
         }
     }
 
@@ -269,7 +269,7 @@ public class FullApplicationControl extends BusinessControl {
                     approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
                     if(approvalHistoryEndorsePricing==null){
-                        throw new Exception(exceptionMessage.get("exception.submit.makedecision.beforesubmit"));
+                        throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
                     } else {
                         if(approvalHistoryEndorsePricing.getApproveDecision() != DecisionType.NO_DECISION.value()){
                             if(priceDOALevel>PricingDOAValue.RGM_DOA.value()){
@@ -283,15 +283,15 @@ public class FullApplicationControl extends BusinessControl {
                             bpmExecutor.submitGH(queueName, wobNumber, rgmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
                             approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
                         } else {
-                            throw new Exception(exceptionMessage.get("exception.submit.makedecision.beforesubmit"));
+                            throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
                         }
                     }
                 }
             } else {
-                throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+                throw new Exception(msg.get("exception.submit.workitem.notfound"));
             }
         } else {
-            throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
         }
     }
 
@@ -309,7 +309,7 @@ public class FullApplicationControl extends BusinessControl {
                     approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
 
                     if(approvalHistoryEndorsePricing==null){
-                        throw new Exception(exceptionMessage.get("exception.submit.makedecision.beforesubmit"));
+                        throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
                     } else {
                         if(approvalHistoryEndorsePricing.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
                             if(priceDOALevel > PricingDOAValue.GH_DOA.value()){
@@ -324,15 +324,15 @@ public class FullApplicationControl extends BusinessControl {
                             approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
 
                         } else {
-                            throw new Exception(exceptionMessage.get("exception.submit.makedecision.beforesubmit"));
+                            throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
                         }
                     }
                 }
             } else {
-                throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+                throw new Exception(msg.get("exception.submit.workitem.notfound"));
             }
         } else {
-            throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
         }
 
 
