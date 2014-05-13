@@ -128,7 +128,7 @@ public class InboxDev implements Serializable {
         }
 
         //*** Get Information for Header ***//
-        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getCaNo());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getStepId(), inboxViewSelectItem.getCaNo());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
         long selectedStepId = inboxViewSelectItem.getStepId();

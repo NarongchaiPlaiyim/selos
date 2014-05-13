@@ -578,6 +578,15 @@
                          action="#{headerController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
+<p:confirmDialog id="msgBoxNoPermissionDialog" widgetVar="msgBoxNoPermissionDlg" styleClass="messageDialog"
+                 header="Warning." closable="false">
+    <f:facet name="message">
+        <h:outputText value="You don't have permission to access this page. Click 'OK' to redirect to Inbox." escape="false"/>
+    </f:facet>
+    <p:commandButton value="OK"
+                     process="@this"
+                     action="#{headerController.onGoToInbox}"/>
+</p:confirmDialog>
 
 <!--End of Message Box -->
 <p:panel id="printReportPanel" styleClass="panel">

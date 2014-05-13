@@ -556,7 +556,7 @@ public class UserDAO extends GenericDAO<User,String> {
             while (iterator1.hasNext()) {
                 WorkCaseOwner workCaseOwner = new WorkCaseOwner();
                 workCaseOwner = (WorkCaseOwner) iterator1.next();
-                if(workCaseOwner.getWorkCaseId()!=null)
+                if(Long.toString(workCaseOwner.getWorkCaseId())!=null)
                 {
 
                     workCaseId = (long) workCaseOwner.getWorkCaseId();
@@ -565,7 +565,7 @@ public class UserDAO extends GenericDAO<User,String> {
 
                 }
 
-                if(workCaseOwner.getWorkCasePrescreenId()!=null)
+                if(Long.toString(workCaseOwner.getWorkCasePrescreenId())!=null)
                 {
                     workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreenId();
 
