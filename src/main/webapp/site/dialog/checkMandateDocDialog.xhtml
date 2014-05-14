@@ -75,7 +75,7 @@
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
-                    <td class="center" style="#{otherItem.complete == 2 ? 'background-color: #F04C05': ''}">
+                    <td class="center" style="#{mandatoryItem.complete == 2 ? 'background-color: #F04C05': ''}">
                         <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or mandatoryItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
@@ -155,7 +155,7 @@
                         <p:selectBooleanCheckbox value="#{optionalItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
-                    <td class="center" style="#{optionalItem.complete == 2 ? 'background-color: #f0071d': ''}">
+                    <td class="center">
                         <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or optionalItem.remarkFlag}"/>
                     </td>
                 </tr>
