@@ -91,12 +91,14 @@ public class InboxControl extends BusinessControl {
     }
 
     public PEInbox getNextStep(PEInbox peInbox, long actionCode){
+        PEInbox tempPeInbox = peInbox;
         StepToStatus stepToStatus = stepStatusControl.getNextStep(Util.parseLong(peInbox.getStepId(), 0), Util.parseLong(peInbox.getStatuscode(), 0), actionCode);
         if(stepToStatus != null) {
-            peInbox.setStep(Util.parseString(stepToStatus.getStep().getId(), ""));
-            peInbox.setStatuscode(Util.parseString(stepToStatus.getNextStatus().getId(), ""));
+            tempPeInbox.setStep(Util.parseString(stepToStatus.getNextStep() != null ? stepToStatus.getNextStep().getName() : "", ""));
+            tempPeInbox.setStepId(Util.parseLong(stepToStatus.getNextStep() != null ? stepToStatus.getNextStep().getId() : 0, 0));
+            tempPeInbox.setStatuscode(Util.parseString(stepToStatus.getNextStatus().getId(), ""));
         }
 
-        return peInbox;
+        return tempPeInbox;
     }
 }

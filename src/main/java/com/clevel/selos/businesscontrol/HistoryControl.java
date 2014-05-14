@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.history.SubmitInfoHistoryDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.history.SubmitInfoHistory;
 import com.clevel.selos.model.view.SubmitInfoView;
 import com.clevel.selos.transform.SubmitInfoTransform;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 @Stateless
 public class HistoryControl extends BusinessControl {
     @Inject
+    @SELOS
     private Logger log;
 
     @Inject
