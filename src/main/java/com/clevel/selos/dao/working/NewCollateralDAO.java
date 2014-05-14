@@ -177,6 +177,15 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         criteria.addOrder(Order.asc("id"));
         NewCollateral newCollateralDetail = (NewCollateral)criteria.uniqueResult();
         log.info("-- newCollateralDetail ::: size : {}", newCollateralDetail.getId());
+
         return newCollateralDetail;
+    }
+
+    public boolean isExist(final long id) {
+        boolean result;
+        log.debug("-- isExist NewCollateral.id[{}]", id);
+        result = isRecordExist(Restrictions.eq("id", id));
+         log.debug("-- Result[{}]", result);
+        return result;
     }
  }
