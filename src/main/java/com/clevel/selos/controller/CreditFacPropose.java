@@ -45,7 +45,7 @@ import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "creditFacPropose")
-public class CreditFacPropose implements Serializable {
+public class CreditFacPropose extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -130,7 +130,6 @@ public class CreditFacPropose implements Serializable {
     private BigDecimal reducePrice;
     private boolean reducePricePanelRendered;
     private boolean cannotEditStandard;
-    private boolean notRetrievePricing;
     private List<Long> deleteCreditIdList;
 
     // for control Propose Collateral
@@ -286,6 +285,9 @@ public class CreditFacPropose implements Serializable {
 
         if (!Util.isNull(workCaseId)) {
             modeForDB = ModeForDB.ADD_DB;
+
+            loadFieldControl(workCaseId, Screen.CREDIT_FACILITY_PROPOSE);
+
             hashSeqCredit = new Hashtable<Integer, Integer>();
             // delete list on save
             deleteCreditIdList = new ArrayList<Long>();
@@ -306,7 +308,9 @@ public class CreditFacPropose implements Serializable {
                     newCreditFacilityView = new NewCreditFacilityView();
                     reducePricePanelRendered = false;
                     cannotEditStandard = true;
-                    notRetrievePricing = true;
+                    if(!isDisabled("retrieveProposeCreditButton")){
+                        setDisabledValue("retrieveProposeCreditButton",true);
+                    }
                 } else {
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -325,7 +329,6 @@ public class CreditFacPropose implements Serializable {
                     log.info("lastSeqNumber :: {}", lastSeqNumber);
 
                     newCreditDetailSeqList = newCreditFacilityView.getNewCreditDetailViewList();
-                    notRetrievePricing = false;
                     if(newCreditDetailSeqList != null && newCreditDetailSeqList.size() > 0){
                         for(NewCreditDetailView ncdv : newCreditDetailSeqList){
                             hashSeqCredit.put(ncdv.getSeq(),ncdv.getUseCount());
@@ -1881,8 +1884,6 @@ public class CreditFacPropose implements Serializable {
 
             exSummaryControl.calForCreditFacility(workCaseId);
 
-            notRetrievePricing = false;
-
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.propose.response.save.success");
             severity = MessageDialogSeverity.INFO.severity();
@@ -2559,14 +2560,6 @@ public class CreditFacPropose implements Serializable {
 
     public void setEditProposeColl(boolean editProposeColl) {
         this.editProposeColl = editProposeColl;
-    }
-
-    public boolean isNotRetrievePricing() {
-        return notRetrievePricing;
-    }
-
-    public void setNotRetrievePricing(boolean notRetrievePricing) {
-        this.notRetrievePricing = notRetrievePricing;
     }
 
     public List<SubCollateralTypeView> getSubCollateralTypeViewList() {
