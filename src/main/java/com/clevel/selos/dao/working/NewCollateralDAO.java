@@ -185,7 +185,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         boolean result;
         log.debug("-- isExist NewCollateral.id[{}]", id);
         result = isRecordExist(Restrictions.eq("id", id));
-         log.debug("-- Result[{}]", result);
+        log.debug("-- Result[{}]", result);
         return result;
     }
  }
