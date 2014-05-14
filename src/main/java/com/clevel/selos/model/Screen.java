@@ -20,6 +20,7 @@ public enum Screen {
     BUSINESS_INFO_DETAIL(2710),
     DBR_INFO(2830),
     CREDIT_FACILITY_PROPOSE(2880),
+    EXECUTIVE_SUMMARY(2910),
 
     //Decision
     DECISION(2920),

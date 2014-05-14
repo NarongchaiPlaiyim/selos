@@ -175,15 +175,6 @@ public class BasicInfo extends BaseController {
     public BasicInfo(){
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
