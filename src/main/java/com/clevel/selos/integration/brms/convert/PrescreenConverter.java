@@ -124,21 +124,17 @@ public class PrescreenConverter extends Converter{
             cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_ID, customerInfo.getSpousePersonalID()));
             cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_RELATIONSHIP_TYPE, customerInfo.getSpouseRelationType()));
 
-            if(customerInfo.isIndividual()){
-                IndividualType individualType = new IndividualType();
-                individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
-                individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
-                individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
-                borrowerType.setIndividual(individualType);
-            }
+            IndividualType individualType = new IndividualType();
+            individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
+            individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
+            individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
+            borrowerType.setIndividual(individualType);
 
             //Set NCB and NCB Equity in Customer Level
             List<NCBReportType> ncbReportTypeList = borrowerType.getNcbReport();
             NCBReportType ncbReportType = new NCBReportType();
             List<AttributeType> ncbAttributeTypeList = ncbReportType.getAttribute();
             ncbAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NCB_FLAG, customerInfo.isNcbFlag()));
-
-
 
             List<NCBAccountType> ncbAccountTypeList = ncbReportType.getNcbAccount();
             List<BRMSNCBAccountInfo> ncbAccountInfoList = customerInfo.getNcbAccountInfoList();
