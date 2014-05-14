@@ -136,7 +136,7 @@ public class AppraisalResultControl extends BusinessControl {
         User currentUser = getCurrentUser();
 
         List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
-        if(appraisalView != null && appraisalView.getRemoveCollListId() != null && appraisalView.getRemoveCollListId().size() > 0){
+        if(!Util.isNull(appraisalView) && !Util.isNull(appraisalView.getRemoveCollListId()) && !Util.isZero(appraisalView.getRemoveCollListId().size())){
             for(Long l : appraisalView.getRemoveCollListId()){
                 NewCollateral newCollateral = newCollateralDAO.findById(l);
                 if(newCollateral != null){
@@ -182,14 +182,14 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user, long workCaseId, long workCasePreScreenId){
-        log.debug("insertToDB ::: newCollateralViewList ::: {} ", newCollateralViewList);
+        log.debug("-- insertIntoDB ::: newCollateralViewList ::: {} ", newCollateralViewList);
         NewCreditFacility newCreditFacility = new NewCreditFacility();
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         } else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         }
-        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
+        log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
 
         List<NewCollateral> newCollateralList = newCollateralTransform.transformToModelList(newCollateralViewList, user, newCreditFacility);
 
@@ -197,6 +197,17 @@ public class AppraisalResultControl extends BusinessControl {
         for (NewCollateral newCollateral : newCollateralList) {
             newCollateral.setAppraisalRequest(2);
             newCollateral.setProposeType(ProposeType.A);
+        }
+
+        for (NewCollateral newCollateral : newCollateralList) {
+            log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
+            if(!newCollateralDAO.isExist(newCollateral.getId())){
+                newCollateralDAO.update(newCollateral);
+                log.debug("-- id[{}] updated", newCollateral.getId());
+            } else {
+                newCollateralDAO.persist(newCollateral);
+                log.debug("-- id[{}] saved", newCollateral.getId());
+            }
         }
         newCollateralDAO.persist(newCollateralList);
 

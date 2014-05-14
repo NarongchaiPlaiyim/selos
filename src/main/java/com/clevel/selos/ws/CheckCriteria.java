@@ -62,7 +62,7 @@ public class CheckCriteria {
 
                             criteriaResponse.setValue(WSBRMSResponse.APPROVE, appId);
 
-                            Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+                            Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
                             for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewMap.values()){
                                 if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED) {
                                     if(uwRuleResultDetailView.getDeviationFlag().getId() == 3){ //Red, with no deviation
