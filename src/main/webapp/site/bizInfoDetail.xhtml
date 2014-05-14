@@ -57,7 +57,7 @@
                             </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 readonly="#{bizInfoDetail.isDisabled('tradeType')}"
+                                                 disabled="#{bizInfoDetail.isDisabled('tradeType')}"
                                                  value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"
                                                  required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -76,7 +76,7 @@
                             </td>
                             <td colspan="3">
                                 <p:selectOneMenu id="bizTypeId" style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 readonly="#{bizInfoDetail.isDisabled('bizType')}"
+                                                 disabled="#{bizInfoDetail.isDisabled('bizType')}"
                                                  value="#{bizInfoDetail.bizInfoDetailView.bizType.id}"
                                                  required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -95,7 +95,7 @@
                             </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 readonly="#{bizInfoDetail.isDisabled('bizGroup')}"
+                                                 disabled="#{bizInfoDetail.isDisabled('bizGroup')}"
                                                  value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}"
                                                  required="#{not empty param[saveButton.clientId]}"
                                                  id="businessGroupId">
@@ -116,7 +116,7 @@
                             </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 readonly="#{bizInfoDetail.isDisabled('bizDesc')}"
+                                                 disabled="#{bizInfoDetail.isDisabled('bizDesc')}"
                                                  value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"
                                                  required="#{not empty param[saveButton.clientId]}"
                                                  id="businessDescriptionId">
@@ -166,6 +166,7 @@
                                              value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}"
                                              onkeydown="return onKeyDownMoney(event);"
                                              onkeypress="return onKeyPressMoney(event)"
+                                             onfocus="removeComma(this)"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
@@ -195,7 +196,10 @@
                                 <p:inputText styleClass="right" id="percentBiz"
                                              readonly="#{bizInfoDetail.isDisabled('percentBusiness')}"
                                              value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
-                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)"
+                                             maxlength="17"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
@@ -215,7 +219,7 @@
                                     <tr>
                                         <td>
                                             <p:selectOneRadio id="bizPermissionRadio"
-                                                              readonly="#{bizInfoDetail.isDisabled('bizPermission')}"
+                                                              disabled="#{bizInfoDetail.isDisabled('bizPermission')}"
                                                               value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
                                                               required="#{not empty param[saveButton.clientId]}"
                                                               layout="grid" columns="1">
@@ -257,7 +261,7 @@
                             </td>
                             <td>
                                 <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
-                                                readonly="#{bizInfoDetail.isDisabled('bizDocExpiryDate') and bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                                disabled="#{bizInfoDetail.isDisabled('bizDocExpiryDate') and bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
                                                 required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
@@ -291,7 +295,9 @@
                                 <p:inputText styleClass="large right" id="percentExpIndCountryName"
                                              readonly="#{bizInfoDetail.isDisabled('percentExpIndCountryName')}"
                                              value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
-                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
@@ -314,7 +320,8 @@
                                                  process="@this"
                                                  actionListener="#{bizInfoDetail.onAddBizProductDetailView()}"
                                                  update=":bizProductViewDlgForm"
-                                                 oncomplete="bizProductViewDlg.show()">
+                                                 oncomplete="bizProductViewDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('addProductButton')}">
                                     <p:resetInput target=":bizProductViewDlgForm" />
                                 </p:commandButton>
                             </td>
@@ -352,7 +359,8 @@
                                                          action="#{bizInfoDetail.onEditBizProductDetailView()}"
                                                          update=":bizProductViewDlgForm"
                                                          process=":frmMain:bizProductViewTable"
-                                                         oncomplete="bizProductViewDlg.show();">
+                                                         oncomplete="bizProductViewDlg.show();"
+                                                         disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                             <f:setPropertyActionListener value="#{bizProductDetailView}"
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
@@ -361,7 +369,8 @@
                                         </p:commandButton>
                                         <p:commandButton title="Remove" process="@this"
                                                          icon="ui-icon-trash"
-                                                         oncomplete="confirmDeleteBizProductDlg.show()" >
+                                                         oncomplete="confirmDeleteBizProductDlg.show()"
+                                                         disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                             <f:setPropertyActionListener value="#{bizProductDetailView}"
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
@@ -388,7 +397,8 @@
                                                  styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('addSupplierButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="1" target="#{bizInfoDetail.stakeType}"/>
 
@@ -462,7 +472,8 @@
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
                                                              update=":stakeholderViewDlgForm,:frmMain:supplierTable"
                                                              process=":frmMain:supplierTable"
-                                                             oncomplete="stakeholderViewDlg.show();">
+                                                             oncomplete="stakeholderViewDlg.show();"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="1"
                                                                              target="#{bizInfoDetail.stakeType}"/>
                                                 <f:setPropertyActionListener value="#{supplierItem}"
@@ -474,7 +485,8 @@
 
                                             <p:commandButton icon="ui-icon-trash"
                                                              title="Remove" process="@this"
-                                                             oncomplete="confirmDeleteStakeholderDlg.show()">
+                                                             oncomplete="confirmDeleteStakeholderDlg.show()"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="#{supplierItem}"
                                                                              target="#{bizInfoDetail.selectStakeHolder}"/>
                                                 <f:setPropertyActionListener value="1"
@@ -490,7 +502,9 @@
 
                                                 <p:column style="background-color:#f4f8b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierTotalPercentBuyVolume" styleClass="right" readonly="true" style="width: 100px"
+                                                        <p:inputText id="supplierTotalPercentBuyVolume" styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentBuyVolume}">
                                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                             <p:ajax event="blur" update=":frmMain:supplierTable:supplierTotalPercentBuyVolume"/>
@@ -500,7 +514,9 @@
 
                                                 <p:column colspan="2"  style="background-color:#f4f8b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierTotalPercentCredit" styleClass="right" readonly="true" style="width: 100px"
+                                                        <p:inputText id="supplierTotalPercentCredit" styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentCredit}">
                                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                             <p:ajax event="blur" update=":frmMain:supplierTable:supplierTotalPercentCredit"/>
@@ -510,7 +526,9 @@
 
                                                 <p:column  style="background-color:#f4f8b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierTotalCreditTerm" styleClass="right" readonly="true" style="width: 100px"
+                                                        <p:inputText id="supplierTotalCreditTerm" styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierTotalCreditTerm}">
                                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
                                                             <p:ajax event="blur" update=":frmMain:supplierTable:supplierTotalCreditTerm"/>
@@ -525,8 +543,13 @@
 
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierUWAdjustPercentCredit" styleClass="right" readonly="true" style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                        <p:inputText id="supplierUWAdjustPercentCredit"
+                                                                     styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustPercentCredit}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -538,7 +561,9 @@
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
                                                         <p:inputText id="supplierUWAdjustCreditTerm" styleClass="right" readonly="true"  style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustCreditTerm}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -570,11 +595,12 @@
                                                  process="@this"
                                                  styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                                 update=":stakeholderViewDlgForm"
+                                                 oncomplete="stakeholderViewDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('addBuyerButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="2"
                                                                  target="#{bizInfoDetail.stakeType}"/>
-
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -647,7 +673,8 @@
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
                                                              update=":stakeholderViewDlgForm,:frmMain:buyerTable"
                                                              process=":frmMain:buyerTable"
-                                                             oncomplete="stakeholderViewDlg.show();">
+                                                             oncomplete="stakeholderViewDlg.show();"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="2"
                                                                              target="#{bizInfoDetail.stakeType}"/>
                                                 <f:setPropertyActionListener value="#{buyerItem}"
@@ -658,8 +685,8 @@
                                             </p:commandButton>
                                             <p:commandButton icon="ui-icon-trash"
                                                              title="Remove" process="@this"
-                                                             oncomplete="confirmDeleteStakeholderDlg.show()">
-
+                                                             oncomplete="confirmDeleteStakeholderDlg.show()"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="#{buyerItem}"
                                                                              target="#{bizInfoDetail.selectStakeHolder}"/>
                                                 <f:setPropertyActionListener value="2"
@@ -710,7 +737,9 @@
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
                                                         <p:inputText id="buyerUWAdjustPercentCredit" styleClass="right" readonly="true" style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustPercentCredit}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -722,7 +751,9 @@
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
                                                         <p:inputText id="buyerUWAdjustCreditTerm" styleClass="right" readonly="true" style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustCreditTerm}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -771,7 +802,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="standardAccountReceivable"
                                                          readonly="#{bizInfoDetail.isDisabled('standardAccountReceivable')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
@@ -784,7 +819,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="standardAccountPayable"
                                                          readonly="#{bizInfoDetail.isDisabled('standardAccountPayable')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
                                             </p:inputText>
@@ -797,7 +836,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="standardStock"
                                                          readonly="#{bizInfoDetail.isDisabled('standardStock')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardStock }">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardStock }"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardStock"/>
                                             </p:inputText>
@@ -812,7 +855,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="averagePurchaseAmount"
                                                          readonly="#{bizInfoDetail.isDisabled('averagePurchaseAmount')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePurchaseAmount"/>
                                             </p:inputText>
@@ -825,7 +872,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="averagePayableAmount"
                                                          readonly="#{bizInfoDetail.isDisabled('averagePayableAmount')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePayableAmount"/>
                                             </p:inputText>
@@ -838,7 +889,9 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="stockDurationBDM"
                                                          readonly="#{bizInfoDetail.isDisabled('stockDurationBDM')}"
-                                                         onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="#,##0"   />
@@ -855,7 +908,10 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="purchasePercentCash"
                                                          readonly="#{bizInfoDetail.isDisabled('purchasePercentCash')}"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -871,7 +927,10 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="payablePercentCash"
                                                          readonly="#{bizInfoDetail.isDisabled('payablePercentCash')}"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -887,7 +946,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="stockDurationUW"
                                                          readonly="#{bizInfoDetail.isDisabled('stockDurationUW')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" />
                                             </p:inputText>
@@ -902,7 +965,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('purchasePercentCredit')}"
                                                          id="purchasePercentCredit"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
@@ -915,7 +982,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="payablePercentCredit"
                                                          readonly="#{bizInfoDetail.isDisabled('payablePercentCredit')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
@@ -928,7 +999,9 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('stockValueBDM')}"
                                                          id="stockValueBDM"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
@@ -945,7 +1018,10 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('purchasePercentlocal')}"
                                                          id="purchasePercentLocal"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -961,7 +1037,10 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('payablePercentLocal')}"
                                                          id="payablePercentLocal"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -977,7 +1056,9 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('stockValueUW')}"
                                                          id="stockValueUW"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}" >
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueUW"/>
@@ -993,7 +1074,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('purchasePercentForeign')}"
                                                          id="purchasePercentForeign"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
@@ -1006,7 +1091,11 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('payablePercentForeign')}"
                                                          id="payablePercentForeign"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
@@ -1022,7 +1111,9 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          readonly="#{bizInfoDetail.isDisabled('purchaseTerm')}"
                                                          id="purchaseTerm"
-                                                         onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchaseTerm}">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:purchaseTerm"/>
@@ -1036,7 +1127,9 @@
                                             <p:inputText styleClass="right" style="width: 95%;"
                                                          id="payableTerm"
                                                          readonly="#{bizInfoDetail.isDisabled('payableTerm')}"
-                                                         onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payableTerm}">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:payableTerm"/>
@@ -1058,9 +1151,12 @@
                                                  value="#{msg.get('app.button.save')}"
                                                  process="@form"
                                                  update=":msgBoxSystemMessagePanel,:frmMain"
-                                                 action="#{bizInfoDetail.onSaveBizInfoView()}"/>
-                                <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                                 oncomplete="confirmChangeScreenSumDlg.show()"/>
+                                                 action="#{bizInfoDetail.onSaveBizInfoView()}"
+                                                 disabled="#{bizInfoDetail.isDisabled('saveButton')}"/>
+                                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                                 styleClass="small"
+                                                 oncomplete="confirmChangeScreenSumDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('cancelButton')}"/>
                             </td>
                         </tr>
                         </table>
@@ -1079,12 +1175,12 @@
     </p:panel>
 
     <p:dialog id="stakeholderViewDialog" header="Stake Holder Information" widgetVar="stakeholderViewDlg" resizable="false"
-              modal="true" width="350" height="300">
+              modal="true" width="280" height="300" closeOnEscape="false" closable="false">
         <ui:include src="dialog/bizStakeholderDialog.xhtml"/>
     </p:dialog>
 
     <p:dialog id="bizProductViewDialog" header="Product Information" widgetVar="bizProductViewDlg" resizable="false"
-              modal="true" width="380" height="180">
+              modal="true" width="380" height="180" closeOnEscape="false" closable="false">
         <ui:include src="dialog/bizProductDialog.xhtml"/>
     </p:dialog>
 

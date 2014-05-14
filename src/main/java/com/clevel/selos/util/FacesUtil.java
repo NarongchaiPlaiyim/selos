@@ -64,6 +64,10 @@ public class FacesUtil implements Serializable {
         }
     }
 
+    public static void redirectToInbox(){
+        redirect("/site/inbox.jsf");
+    }
+
     public static final String getParameter(String name) {
 		Map<String,String> paramMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		if (paramMap == null)

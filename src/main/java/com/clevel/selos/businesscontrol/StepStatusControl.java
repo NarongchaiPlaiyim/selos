@@ -36,4 +36,10 @@ public class StepStatusControl extends BusinessControl {
 
         return stepToStatusMap;
     }
+
+    public StepToStatus getNextStep(long currentStepId, long currentStatusId, long actionId){
+        StepToStatus stepToStatus= stepToStatusDAO.getNextStep(currentStepId, currentStatusId, actionId);
+
+        return stepToStatus;
+    }
 }

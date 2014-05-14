@@ -2569,7 +2569,9 @@
                                 <!-- Propose - Fee Information -->
                                 <p:dataTable id="dtProFeeInfo"
                                              var="feeInfoDetail" value="#{decision.decisionView.proposeFeeInfoList}"
-                                             paginator="false" rowKey="#{feeInfoDetail}" rowIndexVar="rowIndex"
+                                             paginator="false" 
+                                             rowKey="#{feeInfoDetail}" 
+                                             rowIndexVar="rowIndex"
                                              style="width: 100%">
 
                                     <p:columnGroup type="header">
@@ -2585,15 +2587,50 @@
 
                                     <p:column styleClass="center top">#{feeInfoDetail.productProgram}</p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.standardFrontEndFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.standardFrontEndFee ? not empty feeInfoDetail.standardFrontEndFee.percentFee ?
+                                                                         feeInfoDetail.standardFrontEndFee.percentFee : '0.00' : '0.00'} % ,
+                                                             #{not empty feeInfoDetail.standardFrontEndFee ? not empty feeInfoDetail.standardFrontEndFee.feeYear ?
+                                                                         feeInfoDetail.standardFrontEndFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.standardFrontEndFee ? not empty feeInfoDetail.standardFrontEndFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.commitmentFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.commitmentFee ? not empty feeInfoDetail.commitmentFee.percentFee ?
+                                                                         feeInfoDetail.commitmentFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.commitmentFee ? not empty feeInfoDetail.commitmentFee.feeYear ?
+                                                                         feeInfoDetail.commitmentFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.commitmentFee ? not empty feeInfoDetail.commitmentFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.extensionFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.extensionFee ? not empty feeInfoDetail.extensionFee.percentFee ?
+                                                                         feeInfoDetail.extensionFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.extensionFee ? not empty feeInfoDetail.extensionFee.feeYear ?
+                                                                         feeInfoDetail.extensionFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.extensionFee ? not empty feeInfoDetail.extensionFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.prepaymentFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.prepaymentFee ? not empty feeInfoDetail.prepaymentFee.percentFee ?
+                                                                         feeInfoDetail.prepaymentFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.prepaymentFee ? not empty feeInfoDetail.prepaymentFee.feeYear ?
+                                                                         feeInfoDetail.prepaymentFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.prepaymentFee ? not empty feeInfoDetail.prepaymentFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.cancellationFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.cancellationFee ? not empty feeInfoDetail.cancellationFee.percentFee ?
+                                                                         feeInfoDetail.cancellationFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.cancellationFee ? not empty feeInfoDetail.cancellationFee.feeYear ?
+                                                                         feeInfoDetail.cancellationFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.cancellationFee ? not empty feeInfoDetail.cancellationFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
                                 </p:dataTable>
                             </td>

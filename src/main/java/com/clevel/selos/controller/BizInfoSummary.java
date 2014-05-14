@@ -429,12 +429,14 @@ public class BizInfoSummary extends BaseController {
             setDisabledValue("expiryDate",true);
             setMandateValue("expiryDate",false);
             bizInfoSummaryView.setExpiryDate(null);
+            bizInfoSummaryView.setOwnerName("");
         }else if(bizInfoSummaryView.getRental() == 1 ){
             setDisabledValue("ownerName",true);
             setMandateValue("ownerName",false);
             setDisabledValue("expiryDate",false);
             setMandateValue("expiryDate",true);
             bizInfoSummaryView.setOwnerName("");
+            bizInfoSummaryView.setExpiryDate(new Date());
         }
     }
 

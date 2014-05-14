@@ -283,7 +283,7 @@ public class PESearch implements Serializable
                 if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                 {
                     String wobNumber = (String)session.getAttribute("wobNumber");
-                    log.info("unlocking case queue: {}, wobNumber : {}, fetchtype: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                    log.debug("unlocking case queue: {}, wobNumber : {}, fetchtype: {}", session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
                     bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
                 }
                 /*else
@@ -312,13 +312,13 @@ public class PESearch implements Serializable
 
     public List<PEInbox> search()
     {
-        log.info(" Controller comes to PESearch method of search class ");
+        log.debug(" Controller comes to PESearch method of search class ");
 
         try
         {
             searchViewList = pedbExecute.getPESearchList(statusType,applicationNumber,userid,step,status,citizendid,firstname,lastname,date1,date2,date3,date4);
 
-            log.info("searchViewList size is : {}",searchViewList.size());
+            log.debug("searchViewList size is : {}", searchViewList.size());
 
 
 
@@ -337,7 +337,7 @@ public class PESearch implements Serializable
 
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        log.info("userDetails  : "+userDetail);
+        log.debug("userDetails  : {}", userDetail);
 
         if(userDetail == null)
         {
@@ -348,8 +348,8 @@ public class PESearch implements Serializable
         User user = userDAO.findByUserName(userDetail.getUserName());
 
         HttpSession session = FacesUtil.getSession(false);
-        log.info("onSelectInbox ::: setSession ");
-        log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
+        log.debug("onSelectInbox ::: setSession ");
+        log.debug("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
 
         long stepId = searchViewSelectItem.getStepId();
 
@@ -364,7 +364,7 @@ public class PESearch implements Serializable
 
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(searchViewSelectItem.getFwobnumber());
 
-            log.info("in prescreen if. case owner");
+            log.debug("in prescreen if. case owner");
 
             if(userDetail.getRoleId() == RoleValue.GH.id() || userDetail.getRoleId() == RoleValue.CSSO.id()){}
 
@@ -381,15 +381,15 @@ public class PESearch implements Serializable
 
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCasePrescreen.getId()).intValue());
 
-                    log.info("Users List work case : "+usersList.toString());
+                    log.debug("Users List work case : {}", usersList.toString());
 
-                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+                    log.debug("WorkCaseOwnerUsers List : {}", workCaseOwnerUsersList.toString());
 
-                    log.info("Users List Size before"+usersList.size());
+                    log.debug("Users List Size before : {}", usersList.size());
 
                     usersList.retainAll(workCaseOwnerUsersList);
 
-                    log.info("Users List Size after"+usersList.size());
+                    log.debug("Users List Size after : {}", usersList.size());
 
                     if(usersList.size()>0){
 
@@ -397,7 +397,7 @@ public class PESearch implements Serializable
 
                     else
                     {
-                        log.info("You are not authorised to view this case. BDM");
+                        log.debug("You are not authorised to view this case. BDM");
                         message = "You are not Authorised to view this case!";
                         RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                         return;
@@ -412,7 +412,7 @@ public class PESearch implements Serializable
 
                     message = "You are not Authorised to view this case!";
                     RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
-                    log.info("You are not authorised to view this case.(BDM)");
+                    log.debug("You are not authorised to view this case.(BDM)");
                     return;
                     /*FacesUtil.redirect("/site/generic_search.jsf");
                     return;*/
@@ -453,22 +453,22 @@ public class PESearch implements Serializable
 
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(new Long(workCasePrescreen.getId()).intValue());
 
-                    log.info("Users List : "+usersList.toString());
+                    log.debug("Users List : {}", usersList.toString());
 
-                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+                    log.debug("WorkCaseOwnerUsers List : {}", workCaseOwnerUsersList.toString());
 
-                    log.info("Users List Size before"+usersList.size());
+                    log.debug("Users List Size before : {}", usersList.size());
 
                     usersList.retainAll(workCaseOwnerUsersList);
 
-                    log.info("Users List Size "+usersList.size());
+                    log.debug("Users List Size : {}", usersList.size());
 
                     if(usersList.size()>0){}
 
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.(Team type 3,2)");
+                        log.debug("You are not authorised to view this case.(Team type 3,2)");
                         message = "You are not Authorised to view this case!";
                         RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                         return;
@@ -486,7 +486,7 @@ public class PESearch implements Serializable
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case. else after 3 2 ");
+                        log.debug("You are not authorised to view this case. else after 3 2 ");
                         message = "You are not Authorised to view this case!";
                         RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                         return;
@@ -516,15 +516,15 @@ public class PESearch implements Serializable
 
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
 
-                    log.info("Users List work case : "+usersList.toString());
+                    log.debug("Users List work case : {}", usersList.toString());
 
-                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+                    log.debug("WorkCaseOwnerUsers List : {}", workCaseOwnerUsersList.toString());
 
-                    log.info("Users List Size before"+usersList.size());
+                    log.debug("Users List Size before : {}", usersList.size());
 
                     usersList.retainAll(workCaseOwnerUsersList);
 
-                    log.info("Users List Size after"+usersList.size());
+                    log.debug("Users List Size after : {}", usersList.size());
 
                     if(usersList.size()>0){
 
@@ -532,7 +532,7 @@ public class PESearch implements Serializable
 
                     else
                     {
-                        log.info("You are not authorised to view this case. BDM");
+                        log.debug("You are not authorised to view this case. BDM");
                         message = "You are not Authorised to view this case!";
                         RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                         return;
@@ -544,7 +544,7 @@ public class PESearch implements Serializable
                 else
                 {
                     //TODO Alert Box
-                    log.info("You are not authorised to view this case. BDM");
+                    log.debug("You are not authorised to view this case. BDM");
                     message = "You are not Authorised to view this case!";
                     RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                     return;
@@ -585,22 +585,22 @@ public class PESearch implements Serializable
 
                     List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
 
-                    log.info("Users List work case : "+usersList.toString());
+                    log.debug("Users List work case : {}", usersList.toString());
 
-                    log.info("WorkCaseOwnerUsers List :"+workCaseOwnerUsersList.toString());
+                    log.debug("WorkCaseOwnerUsers List : {}", workCaseOwnerUsersList.toString());
 
-                    log.info("Users List Size before"+usersList.size());
+                    log.debug("Users List Size before : {}", usersList.size());
 
                     usersList.retainAll(workCaseOwnerUsersList);
 
-                    log.info("Users List Size after"+usersList.size());
+                    log.debug("Users List Size after : {}", usersList.size());
 
                     if(usersList.size()>0){}
 
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case.3 2 ");
+                        log.debug("You are not authorised to view this case.3 2 ");
                         message = "You are not Authorised to view this case!";
                         RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                         return;
@@ -618,7 +618,7 @@ public class PESearch implements Serializable
                     else
                     {
                         //TODO Alert Box
-                        log.info("You are not authorised to view this case. after 3 2");
+                        log.debug("You are not authorised to view this case. after 3 2");
                         message = "You are not Authorised to view this case!";
                         RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
                         return;
@@ -734,7 +734,7 @@ public class PESearch implements Serializable
         {
             if(searchViewSelectItem.getStepId()!=null && searchViewSelectItem.getStepId() != 0)
             {
-                log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
+                log.debug("locking case queue: {}, wobNumber : {}, fetchtype: {}",searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
                 bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
                 //session.setAttribute("isLocked","true");
             }
@@ -749,7 +749,7 @@ public class PESearch implements Serializable
             return;
         }
 
-        AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getApplicationno());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, Util.parseLong(searchViewSelectItem.getStatuscode(), 0), searchViewSelectItem.getApplicationno());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
 

@@ -32,7 +32,7 @@
             <ui:include src="include/menubar.xhtml"/>
             <!-- End Menu -->
             <div id="content_container">
-                <div id="content_name"><h:outputText value="#{msg.get('app.ncbRecordDetail')}"/></div>
+                <div id="content_name"><h:outputText value="#{msg.get('app.ncbDetail.ncbRecordDetail')}"/></div>
                 <div id="content">
                     <div id="content_info">
                         <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
@@ -46,49 +46,86 @@
                             <td style="padding-left: 10px;">
                                 <table>
                                     <tr>
-                                        <td class="title left" colspan="2"><h:outputText value="#{msg.get('app.ncbSummaryResult')}"/></td>
+                                        <td class="title left" colspan="2">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.ncbSummaryResult')}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title" style="min-width:250px;width: 250px;max-width:250px;"><h:outputText value="#{msg.get('app.ncbCheckingDate')}"/></td>
+                                        <td class="title" style="min-width:250px;width: 250px;max-width:250px;">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.ncbCheckingDate')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('ncbCheckingDate')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
-                                            <p:inputText id="checkingDate" value="#{ncbInfo.ncbInfoView.enquiryDate}" readonly="true" styleClass="largest">
+                                            <p:inputText id="checkingDate"
+                                                         value="#{ncbInfo.ncbInfoView.enquiryDate}"
+                                                         readonly="#{ncbInfo.isDisabled('ncbCheckingDate')}"
+                                                         styleClass="largest">
                                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.noOfNCBCheckIn6months')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('noOfNCBCheckIn6months')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
-                                            <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" readonly="true" styleClass="left largest"/>
+                                            <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}"
+                                                         readonly="#{ncbInfo.isDisabled('noOfNCBCheckIn6months')}"
+                                                         styleClass="left largest"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.paymentClass')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.paymentClass')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('ncbAccountStatusTMB')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
-                                            <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" readonly="true" styleClass="left largest"/>
+                                            <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}"
+                                                         readonly="#{ncbInfo.isDisabled('ncbAccountStatusTMB')}"
+                                                         styleClass="left largest"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.typeOfCurrentPayment')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.typeOfCurrentPayment')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('typeOfCurrentPayment')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
-                                            <p:inputText value="#{ncbInfo.ncbInfoView.currentPaymentType}" readonly="true" styleClass="largest"/>
+                                            <p:inputText value="#{ncbInfo.ncbInfoView.currentPaymentType}"
+                                                         readonly="#{ncbInfo.isDisabled('typeOfCurrentPayment')}"
+                                                         styleClass="largest"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.typeOfHistoryPayment')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.typeOfHistoryPayment')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('typeOfHistoryPayment')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
-                                            <p:inputText value="#{ncbInfo.ncbInfoView.historyPaymentType}" readonly="true" styleClass="largest"/>
+                                            <p:inputText value="#{ncbInfo.ncbInfoView.historyPaymentType}"
+                                                         readonly="#{ncbInfo.isDisabled('typeOfHistoryPayment')}"
+                                                         styleClass="largest"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.NPLFlag')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.NPLFlag')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('NPLFlag')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
                                             <table>
                                                 <tr>
                                                     <td>
                                                         <h:selectOneRadio id="NPLFlag"
                                                                           value="#{ncbInfo.ncbInfoView.nplFlag}"
-                                                                          disabled="true">
+                                                                          disabled="#{ncbInfo.isDisabled('NPLFlag')}">
                                                             <f:selectItem itemLabel="Yes" itemValue="2"/>
                                                             <f:selectItem itemLabel="No" itemValue="1"/>
                                                             <p:ajax event="click"
@@ -97,104 +134,72 @@
                                                                     update=":frmMain"/>
                                                         </h:selectOneRadio>
                                                     </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
-                                                                                 rendered="#{ncbInfo.nplRendered}"
-                                                                                 disabled="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:outputLabel value="#{msg.get('app.isNPLwithTMB')}"
-                                                                       rendered="#{ncbInfo.nplRendered}"
-                                                                       readonly="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:inputText id="nplTMBMonth" rendered="#{ncbInfo.nplRendered}" styleClass="medium"
-                                                                     disabled="true"
-                                                                     value="#{ncbInfo.ncbInfoView.nplTMBMonthStr}"/>
-                                                        <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}"
-                                                                         rendered="#{ncbInfo.nplRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.statMonths}"
-                                                                           var="MonthList"
-                                                                           itemValue="#{MonthList.value}"
-                                                                           itemLabel="#{MonthList.nameTH}"/>
-                                                        </p:selectOneMenu>-->
-                                                    </td>
-                                                    <td>
-                                                        <p:inputText id="nplTMBYear" rendered="#{ncbInfo.nplRendered}" styleClass="small"
-                                                                     disabled="true"
-                                                                     value="#{ncbInfo.ncbInfoView.nplTMBYear}"/>
-                                                        <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}"
-                                                                         rendered="#{ncbInfo.nplRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.yearList}"/>
-                                                        </p:selectOneMenu>-->
-                                                    </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"
-                                                                                 rendered="#{ncbInfo.nplRendered}"
-                                                                                 disabled="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:outputLabel
-                                                                value="#{msg.get('app.isNPLwithOther')}"
-                                                                rendered="#{ncbInfo.nplRendered}"
-                                                                readonly="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:inputText id="nplOtherMonth" rendered="#{ncbInfo.nplRendered}" styleClass="medium"
-                                                                     disabled="true"
-                                                                     value="#{ncbInfo.ncbInfoView.nplOtherMonthStr}"/>
-                                                        <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}"
-                                                                         rendered="#{ncbInfo.nplRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.statMonths}"
-                                                                           var="MonthList"
-                                                                           itemValue="#{MonthList.value}"
-                                                                           itemLabel="#{MonthList.nameTH}"/>
-                                                        </p:selectOneMenu>-->
-                                                    </td>
-                                                    <td>
-                                                        <p:inputText id="nplOtherYear" rendered="#{ncbInfo.nplRendered}" styleClass="small"
-                                                                     disabled="true"
-                                                                     value="#{ncbInfo.ncbInfoView.nplOtherYear}"/>
-                                                        <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}"
-                                                                         rendered="#{ncbInfo.nplRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.yearList}"/>
-                                                        </p:selectOneMenu>-->
-                                                    </td>
-                                                </tr>
-                                                <tr style="display: none">
-                                                    <td colspan="2">
-                                                        <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusMarriageStatus}"/>
-                                                        <h:outputText value="#{ncbInfo.ncbInfoView.enquiry}"/>
-                                                        <h:outputText value="#{ncbInfo.ncbInfoView.ncbLastInfoAsOfDate}"/>
-                                                        <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusName}"/>
-                                                        <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusAddress}"/>
-                                                        <h:outputText value="#{ncbInfo.ncbInfoView.ncbFlag}"/>
-                                                    </td>
+                                                    <p:panel styleClass="panel" rendered="#{ncbInfo.nplRendered}">
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
+                                                                                     disabled="#{ncbInfo.isDisabled('isNPLwithTMB')}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:outputLabel value="#{msg.get('app.ncbDetail.isNPLwithTMB')}"/>
+                                                            <h:outputText value="#{ncbInfo.mandate('isNPLwithTMB')}" styleClass="require-field"/>
+                                                            <h:outputText value=" :"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:inputText id="nplTMBMonth"
+                                                                         styleClass="medium"
+                                                                         readonly="#{ncbInfo.isDisabled('TMBNPLMonth')}"
+                                                                         value="#{ncbInfo.ncbInfoView.nplTMBMonthStr}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:inputText id="nplTMBYear"
+                                                                         styleClass="small"
+                                                                         readonly="#{ncbInfo.isDisabled('TMBNPLYear')}"
+                                                                         value="#{ncbInfo.ncbInfoView.nplTMBYear}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:selectBooleanCheckbox
+                                                                    value="#{ncbInfo.ncbInfoView.nplOtherFlag}"
+                                                                    disabled="#{ncbInfo.isDisabled('isNPLwithOther')}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:outputLabel value="#{msg.get('app.ncbDetail.isNPLwithOther')}"/>
+                                                            <h:outputText value="#{ncbInfo.mandate('isNPLwithOther')}" styleClass="require-field"/>
+                                                            <h:outputText value=" :"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:inputText id="nplOtherMonth"
+                                                                         styleClass="medium"
+                                                                         readonly="#{ncbInfo.isDisabled('OtherNPLMonth')}"
+                                                                         value="#{ncbInfo.ncbInfoView.nplOtherMonthStr}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:inputText id="nplOtherYear"
+                                                                         styleClass="small"
+                                                                         readonly="#{ncbInfo.isDisabled('OtherNPLYear')}"
+                                                                         value="#{ncbInfo.ncbInfoView.nplOtherYear}"/>
+                                                        </td>
+                                                    </p:panel>
                                                 </tr>
                                             </table>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.TDRFlag')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.TDRFlag')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('TDRFlag')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
                                             <table>
                                                 <tr>
                                                     <td>
                                                         <h:selectOneRadio id="tdrFlag"
                                                                           value="#{ncbInfo.ncbInfoView.tdrFlag}"
-                                                                          disabled="true">
+                                                                          disabled="#{ncbInfo.isDisabled('TDRFlag')}">
                                                             <f:selectItem itemLabel="Yes" itemValue="2"/>
                                                             <f:selectItem itemLabel="No" itemValue="1"/>
                                                             <p:ajax event="click"
@@ -203,78 +208,78 @@
                                                                     update=":frmMain"/>
                                                         </h:selectOneRadio>
                                                     </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
-                                                                                 rendered="#{ncbInfo.tdrRendered}"
-                                                                                 disabled="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:outputLabel value="#{msg.get('app.isTDRwithTMB')}"
-                                                                       rendered="#{ncbInfo.tdrRendered}"
-                                                                       readonly="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}"
-                                                                         rendered="#{ncbInfo.tdrRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.statMonths}"
-                                                                           var="MonthList"
-                                                                           itemValue="#{MonthList.value}"
-                                                                           itemLabel="#{MonthList.nameTH}"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                    <td>
-                                                        <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}"
-                                                                         rendered="#{ncbInfo.tdrRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.yearList}"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"
-                                                                                 rendered="#{ncbInfo.tdrRendered}"
-                                                                                 disabled="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:spacer width="10px;" height="20px;"/>
-                                                        <h:outputLabel value="#{msg.get('app.isTDRwithOther')}"
-                                                                       rendered="#{ncbInfo.tdrRendered}"
-                                                                       readonly="true"/>
-                                                    </td>
-                                                    <td>
-                                                        <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}"
-                                                                         rendered="#{ncbInfo.tdrRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.statMonths}"
-                                                                           var="MonthList"
-                                                                           itemValue="#{MonthList.value}"
-                                                                           itemLabel="#{MonthList.nameTH}"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                    <td>
-                                                        <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}"
-                                                                         rendered="#{ncbInfo.tdrRendered}"
-                                                                         disabled="true">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItems value="#{ncbInfo.yearList}"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
+                                                    <p:panel styleClass="panel" rendered="#{ncbInfo.tdrRendered}">
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
+                                                                                     disabled="#{ncbInfo.isDisabled('isTDRwithTMB')}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:outputLabel value="#{msg.get('app.ncbDetail.isTDRwithTMB')}"/>
+                                                            <h:outputText value="#{ncbInfo.mandate('isTDRwithTMB')}" styleClass="require-field"/>
+                                                            <h:outputText value=" :"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}"
+                                                                             disabled="#{ncbInfo.isDisabled('TMBTDRMonth')}">
+                                                                <f:selectItem itemLabel="" itemValue="0"/>
+                                                                <f:selectItems value="#{ncbInfo.statMonths}"
+                                                                               var="MonthList"
+                                                                               itemValue="#{MonthList.value}"
+                                                                               itemLabel="#{MonthList.nameTH}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                        <td>
+                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}"
+                                                                             disabled="#{ncbInfo.isDisabled('TMBTDRYear')}">
+                                                                <f:selectItem itemLabel="" itemValue="0"/>
+                                                                <f:selectItems value="#{ncbInfo.yearList}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"
+                                                                                     disabled="#{ncbInfo.isDisabled('isTDRwithOther')}"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:spacer width="10px;" height="20px;"/>
+                                                            <h:outputLabel value="#{msg.get('app.ncbDetail.isTDRwithOther')}"/>
+                                                            <h:outputText value="#{ncbInfo.mandate('isTDRwithOther')}" styleClass="require-field"/>
+                                                            <h:outputText value=" :"/>
+                                                        </td>
+                                                        <td>
+                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}"
+                                                                             disabled="#{ncbInfo.isDisabled('OtherTDRMonth')}">
+                                                                <f:selectItem itemLabel="" itemValue="0"/>
+                                                                <f:selectItems value="#{ncbInfo.statMonths}"
+                                                                               var="MonthList"
+                                                                               itemValue="#{MonthList.value}"
+                                                                               itemLabel="#{MonthList.nameTH}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                        <td>
+                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}"
+                                                                             disabled="#{ncbInfo.isDisabled('OtherTDRYear')}">
+                                                                <f:selectItem itemLabel="" itemValue="0"/>
+                                                                <f:selectItems value="#{ncbInfo.yearList}"/>
+                                                            </p:selectOneMenu>
+                                                        </td>
+                                                    </p:panel>
                                                 </tr>
                                             </table>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.TDRPaymentCondition')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.TDRPaymentCondition')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('TDRPaymentCondition')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
                                             <p:selectOneMenu id="dlgSattlementStatus" style="min-width:200px;width: 200px;max-width:200px;" size="1"
                                                              value="#{ncbInfo.ncbInfoView.tdrCondition.id}"
-                                                             disabled="true">
+                                                             disabled="#{ncbInfo.isDisabled('TDRPaymentCondition')}">
                                                 <f:selectItem itemLabel="" itemValue="0"/>
                                                 <f:selectItems value="#{ncbInfo.tdrConditionList}"
                                                                 var="dlgTDRConditionList"
@@ -284,11 +289,15 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title top"><h:outputText value="#{msg.get('app.remark')}"/></td>
+                                        <td class="title top">
+                                            <h:outputText value="#{msg.get('app.ncbDetail.remark')}"/>
+                                            <h:outputText value="#{ncbInfo.mandate('remark')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td>
                                             <p:inputTextarea id="ncbRemark" cols="60" rows="3"
                                                              value="#{ncbInfo.ncbInfoView.remark}"
-                                                             disabled="true"/>
+                                                             readonly="#{ncbInfo.isDisabled('remark')}"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -301,7 +310,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:commandButton id="btnAdd" value="#{msg.get('app.addButton')}" styleClass="smaller"
+                                <p:commandButton id="btnAdd" value="#{msg.get('app.button.add')}" styleClass="smaller"
                                                  process="@this"
                                                  actionListener="#{ncbInfo.onAddNcbRecord}"
                                                  update=":ncbDlgForm"
@@ -315,7 +324,6 @@
                                 <table class="content_table_form" style="width:90%">
                                     <tr>
                                         <td>
-                                            <!-- <div class="div_highlighter">-->
                                             <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
                                                          rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex">
                                                 <p:column headerText="#{msg.get('app.ncbDetail.table.label.no')}" style="min-width: 30px; width: 30px; max-width: 30px;">
@@ -415,16 +423,20 @@
                         </tr>
                         <tr>
                             <td colspan="2" class="center">
-                                <p:commandButton id="btnSave" value="#{msg.get('app.saveButton')}"
+                                <p:commandButton id="btnSave"
+                                                 value="#{msg.get('app.button.save')}"
                                                  styleClass="medium"
                                                  process="@form"
                                                  action="#{ncbInfo.onSaveNcb()}"
-                                                 update=":frmMain, :msgBoxSystemMessagePanel"/>
-                                <p:commandButton id="btnCancel" value="#{msg.get('app.cancelButton')}"
+                                                 update=":frmMain, :msgBoxSystemMessagePanel"
+                                                 disabled="#{ncbInfo.isDisabled('saveButton')}"/>
+                                <p:commandButton id="btnCancel"
+                                                 value="#{msg.get('app.button.cancel')}"
                                                  styleClass="medium"
                                                  process="@this"
                                                  action="#{ncbInfo.onCancelNcbInfo()}"
-                                                 update=":frmMain"/>
+                                                 update=":frmMain"
+                                                 disabled="#{ncbInfo.isDisabled('cancelButton')}"/>
                             </td>
                         </tr>
                     </table>

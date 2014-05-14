@@ -199,7 +199,7 @@ public class AppraisalDetailTransform extends Transform {
                 stringBuilder = stringBuilder.append(msg.get("app.appraisal.appraisalDetail.label.purposeReviewBuilding"));
             }
             String result = stringBuilder.toString();
-            if(!Util.isNull(result)){
+            if(!Util.isEmpty(result) && result.length() >= 2){
                 appraisalDetailView.setPurposeReviewAppraisalLabel(result.substring(2, result.length()));
             } else {
                 appraisalDetailView.setPurposeReviewAppraisalLabel("");

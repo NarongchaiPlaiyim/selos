@@ -224,7 +224,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
-        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), Util.parseLong(inboxViewSelectItem.getStatuscode(), 0), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
         try
@@ -268,7 +268,7 @@ public class PESQLAllBoxes implements Serializable
             String wobNumber = inboxViewSelectItem.getFwobnumber();
             inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
             //TODO Reload all value for Inbox Select
-            onSelectInbox();
+            //onSelectInbox();
         } catch (Exception ex){
             log.error("Exception while select case from PoolBox : ", ex);
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");

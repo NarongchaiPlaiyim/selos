@@ -76,7 +76,7 @@ public class ApprovalHistoryTransform extends Transform {
         approvalHistory.setSubmitDate(approvalHistoryView.getSubmitDate());
         approvalHistory.setComments(approvalHistoryView.getComments());
         approvalHistory.setApproveType(approvalHistoryView.getApprovalType());
-        approvalHistory.setApproveDecision(DecisionType.APPROVED == approvalHistoryView.getUwDecision() ? 1 : 0);
+        approvalHistory.setApproveDecision(approvalHistoryView.getUwDecision().getValue());
         approvalHistory.setSubmit(approvalHistoryView.getSubmit());
         return approvalHistory;
     }

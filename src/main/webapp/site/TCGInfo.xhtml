@@ -18,368 +18,378 @@
 <h:body>
 <f:event type="preRenderView" listener="#{tcgInfo.preRender()}" />
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-<h:form id="frmMain">
-<div id="main_container">
-<!-- Start Header Logo -->
-<ui:include src="include/header_logo.xhtml"/>
-<!-- End Header Logo -->
-<!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml"/>
-<!-- End Header Detail -->
-<!-- Start Menu -->
-<ui:include src="include/menubar.xhtml"/>
-<!-- End Menu -->
-<div id="content_container">
-<div id="content_name">#{msg.get('app.tcg.label.header')}</div>
-<div id="content">
-<div id="content_info">
-    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText value="#{tcgInfo.TCGView.modifyBy.userName}"/>,
-        <h:outputText value="#{tcgInfo.TCGView.modifyDate}"/></div>
-</div>
-<div id="content_form">
-<!-- start content -->
-<table class="content_table_form">
-<tr>
-    <td colspan="2"><h2>#{msg.get('app.tcg.label.title')}</h2></td>
-</tr>
-<tr>
-    <td style="width: 70px;"></td>
-    <td>
-        <table class="table_noborder">
+    <h:form id="frmMain">
+        <div id="main_container">
+        <!-- Start Header Logo -->
+        <ui:include src="include/header_logo.xhtml"/>
+        <!-- End Header Logo -->
+        <!-- Start Header Detail -->
+        <ui:include src="include/header_detail.xhtml"/>
+        <!-- End Header Detail -->
+        <!-- Start Menu -->
+        <ui:include src="include/menubar.xhtml"/>
+        <!-- End Menu -->
+        <div id="content_container">
+            <div id="content_name">#{msg.get('app.tcg.label.header')}</div>
+            <div id="content">
+            <div id="content_info">
+                <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                <div id="content_lastupdate">Last update by <h:outputText value="#{tcgInfo.TCGView.modifyBy.userName}"/>,
+                    <h:outputText value="#{tcgInfo.TCGView.modifyDate}"/></div>
+            </div>
+            <div id="content_form">
+            <!-- start content -->
+            <table class="content_table_form">
             <tr>
-                <td class="title" style="min-width: 400px; width: 400px; max-width: 400px;">
-                    <h:outputText value="#{msg.get('app.tcg.radio.TCG')}"/>
-                    <h:outputText value="#{tcgInfo.mandate('isRequestTCG')}" styleClass="require-field"/>
-                    <h:outputText value=" :"/>
-                </td>
-                <td>
-                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2"
-                                      disabled="#{tcgInfo.isDisabled('isRequestTCG')}">
-                        <f:selectItem itemLabel="No" itemValue="1"/>
-                        <f:selectItem itemLabel="Yes" itemValue="2"/>
-                        <p:ajax update="radio,requestLimitRequiredTCG,requestLimitRequiredTCGLabel" listener="#{tcgInfo.onChangeTCG()}" event="click"/>
-                    </p:selectOneRadio>
+                <td colspan="2">
+                    <h2>#{msg.get('app.tcg.label.title')}</h2>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')}"/>
-                    <h:outputText value="#{tcgInfo.mandate('requestLimitRequiredTCG')}" styleClass="require-field" id="requestLimitRequiredTCGLabel"/>
-                    <h:outputText value=" :"/>
-                </td>
+                <td style="width: 70px;"></td>
                 <td>
-                    <p:inputText id="requestLimitRequiredTCG"
-                                 value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
-                                 disabled="#{tcgInfo.isDisabled('requestLimitRequiredTCG')}"
-                                 style="width:200px;text-align: right"
-                                 maxlength="17"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);"
-                                 required="#{not empty param[saveTCG.clientId]}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         type="number"/>
-                        <p:ajax event="blur" update="@this"/>
-                    </p:inputText>
+                    <table class="table_noborder">
+                        <tr>
+                            <td class="title" style="min-width: 400px; width: 400px; max-width: 400px;">
+                                <h:outputText value="#{msg.get('app.tcg.radio.TCG')}"/>
+                                <h:outputText value="#{tcgInfo.mandate('isRequestTCG')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
+                            <td>
+                                <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2"
+                                                  disabled="#{tcgInfo.isDisabled('isRequestTCG')}">
+                                    <f:selectItem itemLabel="No" itemValue="1"/>
+                                    <f:selectItem itemLabel="Yes" itemValue="2"/>
+                                    <p:ajax update="radio,requestLimitRequiredTCG,requestLimitRequiredTCGLabel" listener="#{tcgInfo.onChangeTCG()}" event="click"/>
+                                </p:selectOneRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">
+                                <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')}"/>
+                                <h:outputText value="#{tcgInfo.mandate('requestLimitRequiredTCG')}" styleClass="require-field" id="requestLimitRequiredTCGLabel"/>
+                                <h:outputText value=" :"/>
+                            </td>
+                            <td>
+                                <p:inputText id="requestLimitRequiredTCG"
+                                             value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
+                                             readonly="#{tcgInfo.isDisabled('requestLimitRequiredTCG')}"
+                                             style="width:200px;text-align: right"
+                                             maxlength="17"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)"
+                                             required="#{not empty param[saveTCG.clientId]}">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     type="number"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">
+                                <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')}"/>
+                                <h:outputText value="#{tcgInfo.mandate('requestLimitNotRequiredTCG')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
+                            <td>
+                                <p:inputText id="requestLimitNotRequiredTCG"
+                                             value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"
+                                             readonly="#{tcgInfo.isDisabled('requestLimitNotRequiredTCG')}"
+                                             style="width:200px;text-align: right"
+                                             maxlength="17"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     type="number"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">
+                                <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioUnderSameCollateral')}"/>
+                                <h:outputText value="#{tcgInfo.mandate('existingLoanRatioUnderProposeCollateral')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
+                            <td>
+                                <p:inputText id="existingLoanRatioUnderSameCollateral"
+                                             value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}"
+                                             readonly="#{tcgInfo.isDisabled('existingLoanRatioUnderProposeCollateral')}"
+                                             style="width:200px;text-align: right"
+                                             maxlength="17"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     type="number"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">
+                                <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioNotUnderSameCollateral')}"/>
+                                <h:outputText value="#{tcgInfo.mandate('existingLoanRatioNotUnderProposeCollateral')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
+                            <td>
+                                <p:inputText id="existingLoanRatioNotUnderSameCollateral"
+                                             value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}"
+                                             readonly="#{tcgInfo.isDisabled('existingLoanRatioNotUnderProposeCollateral')}"
+                                             style="width:200px;text-align: right"
+                                             maxlength="17"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     type="number"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" style="width: 200px;">
+                                <h:outputText value="#{msg.get('app.tcg.textBox.tcbFloodAmount')} :"/>
+                                <h:outputText value="#{tcgInfo.mandate('requestTCGFloodAmount')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
+                            <td>
+                                <p:inputText id="tcbFloodAmount"
+                                             value="#{tcgInfo.TCGView.tcbFloodAmount}"
+                                             readonly="#{tcgInfo.isDisabled('requestTCGFloodAmount')}"
+                                             style="width:200px;text-align: right"
+                                             maxlength="17"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     type="number"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')}"/>
-                    <h:outputText value="#{tcgInfo.mandate('requestLimitNotRequiredTCG')}" styleClass="require-field"/>
-                    <h:outputText value=" :"/>
-                </td>
-                <td>
-                    <p:inputText id="requestLimitNotRequiredTCG"
-                                 value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"
-                                 disabled="#{tcgInfo.isDisabled('requestLimitNotRequiredTCG')}"
-                                 style="width:200px;text-align: right"
-                                 maxlength="17"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         type="number"/>
-                        <p:ajax event="blur" update="@this"/>
-                    </p:inputText>
+                <td colspan="2"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="left">
+                    <p:commandButton
+                            id="btnAdd"
+                            value="#{msg.get('app.button.add')}"
+                            styleClass="smaller"
+                            actionListener="#{tcgInfo.onAddCollateralDetail}"
+                            process="@this"
+                            update=":tcgDlgForm"
+                            oncomplete="tcgDlg.show();"
+                            disabled="#{tcgInfo.isDisabled('addCollateralButton')}">
+                        <p:resetInput target=":tcgDlgForm"/>
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioUnderSameCollateral')}"/>
-                    <h:outputText value="#{tcgInfo.mandate('existingLoanRatioUnderProposeCollateral')}" styleClass="require-field"/>
-                    <h:outputText value=" :"/>
-                </td>
+                <td></td>
                 <td>
-                    <p:inputText id="existingLoanRatioUnderSameCollateral"
-                                 value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}"
-                                 disabled="#{tcgInfo.isDisabled('existingLoanRatioUnderProposeCollateral')}"
-                                 style="width:200px;text-align: right"
-                                 maxlength="17"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         type="number"/>
-                        <p:ajax event="blur" update="@this"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioNotUnderSameCollateral')}"/>
-                    <h:outputText value="#{tcgInfo.mandate('existingLoanRatioNotUnderProposeCollateral')}" styleClass="require-field"/>
-                    <h:outputText value=" :"/>
-                </td>
-                <td>
-                    <p:inputText id="existingLoanRatioNotUnderSameCollateral"
-                                 value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}"
-                                 disabled="#{tcgInfo.isDisabled('existingLoanRatioNotUnderProposeCollateral')}"
-                                 style="width:200px;text-align: right"
-                                 maxlength="17"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         type="number"/>
-                        <p:ajax event="blur" update="@this"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title" style="width: 200px;">
-                    <h:outputText value="#{msg.get('app.tcg.textBox.tcbFloodAmount')} :"/>
-                    <h:outputText value="#{tcgInfo.mandate('requestTCGFloodAmount')}" styleClass="require-field"/>
-                    <h:outputText value=" :"/>
-                </td>
-                <td>
-                    <p:inputText id="tcbFloodAmount"
-                                 value="#{tcgInfo.TCGView.tcbFloodAmount}"
-                                 disabled="#{tcgInfo.isDisabled('requestTCGFloodAmount')}"
-                                 style="width:200px;text-align: right"
-                                 maxlength="17"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         type="number"/>
-                        <p:ajax event="blur" update="@this"/>
-                    </p:inputText>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td colspan="2"><p:spacer width="2"/></td>
-</tr>
-<tr>
-    <td></td>
-    <td class="left">
-        <p:commandButton
-                id="btnAdd"
-                value="#{msg.get('app.addButton')}"
-                styleClass="smaller"
-                actionListener="#{tcgInfo.onAddCollateralDetail}"
-                process="@this"
-                update=":tcgDlgForm"
-                oncomplete="tcgDlg.show();">
-            <p:resetInput target=":tcgDlgForm"/>
-        </p:commandButton>
-    </td>
-</tr>
-<tr>
-    <td></td>
-    <td>
-        <table>
-            <tr>
-                <td>
-                    <p:dataTable id="resultCollateralDetail" var="item" value="#{tcgInfo.TCGDetailViewList}"
-                                 paginator="false" rowKey="#{item.TCGDetailView}" rowIndexVar="rowIndex">
+                    <table>
+                        <tr>
+                            <td>
+                                <p:dataTable id="resultCollateralDetail" var="item" value="#{tcgInfo.TCGDetailViewList}"
+                                             paginator="false" rowKey="#{item.TCGDetailView}" rowIndexVar="rowIndex">
 
-                        <p:column headerText=""
-                                  styleClass="center" style="min-width: 20px; width:20px; max-width: 20px;">
-                            <h:outputText value="#{rowIndex+1}"/>
-                        </p:column>
+                                    <p:column headerText=""
+                                              styleClass="center" style="min-width: 20px; width:20px; max-width: 20px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
 
-                        <p:column headerText="#{msg.get('app.tcg.collateral.label.potential')}"
-                                  styleClass="left" style="min-width: 220px; width: 220px; max-width: 220px;">
-                            <h:outputText value="#{item.potentialCollateral.description}"/>
-                        </p:column>
+                                    <p:column headerText="#{msg.get('app.tcg.collateral.label.potential')}"
+                                              styleClass="left" style="min-width: 220px; width: 220px; max-width: 220px;">
+                                        <h:outputText value="#{item.potentialCollateral.description}"/>
+                                    </p:column>
 
-                        <p:column headerText="#{msg.get('app.tcg.collateral.label.collateralCollateralType')}"
-                                  styleClass="left" style="min-width: 220px; width:220px; max-width: 220px;">
-                            <h:outputText value="#{item.tcgCollateralType.description}"/>
-                        </p:column>
+                                    <p:column headerText="#{msg.get('app.tcg.collateral.label.collateralCollateralType')}"
+                                              styleClass="left" style="min-width: 220px; width:220px; max-width: 220px;">
+                                        <h:outputText value="#{item.tcgCollateralType.description}"/>
+                                    </p:column>
 
-                        <p:column headerText="#{msg.get('app.tcg.collateral.label.appraisalAmount')}"
-                                  styleClass="right" style="min-width: 140px; width: 140px; max-width: 140px;">
-                            <h:outputText value="#{item.appraisalAmount}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            </h:outputText>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.tcg.collateral.label.LTVvalue')}"
-                                  styleClass="right" style="min-width: 140px; width: 140px; max-width: 140px;">
-                            <h:outputText value="#{item.ltvValue}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            </h:outputText>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.tcg.collateral.label.isProposeInThisRequest')}"
-                                  styleClass="center" style="min-width: 90px; width: 90px; max-width: 90px;">
-                            <h:outputText value="#{item.proposeInThis}"/>
-                        </p:column>
-
-
-                        <p:column style="min-width: 40px; width: 40px; max-width: 40px;">
-                            <p:commandButton icon="ui-icon-pencil"
-                                             action="#{tcgInfo.onEditCollateralDetail()}"
-                                             process=":frmMain:resultCollateralDetail"
-                                             update=":tcgDlgForm"
-                                             oncomplete="tcgDlg.show();">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{tcgInfo.selectCollateralItem}"/>
-                                <f:setPropertyActionListener value="#{rowIndex}"
-                                                             target="#{tcgInfo.rowIndex}"/>
-                                <p:resetInput target=":tcgDlgForm"/>
-                            </p:commandButton>
-                            <p:commandButton title="Remove"
-                                             icon="ui-icon-trash"
-                                             oncomplete="confirmDeleteTcgDlg.show()">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{tcgInfo.selectCollateralItem}"/>
-                            </p:commandButton>
-                        </p:column>
-
-                        <p:columnGroup type="footer">
-                            <p:row>
-                                <p:column/>
-                                <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}"
-                                          style="text-align:left"/>
-                                <p:column style="text-align:right">
-                                    <f:facet name="footer">
-                                        <h:outputText id="sumAppraisalAmountId"
-                                                      value="#{tcgInfo.TCGView.sumAppraisalAmount}"
-                                                      style="text-align:right">
-                                            <f:convertNumber pattern="#,##0"
-                                                             minFractionDigits="2"
-                                                             maxFractionDigits="2"/>
+                                    <p:column headerText="#{msg.get('app.tcg.collateral.label.appraisalAmount')}"
+                                              styleClass="right" style="min-width: 140px; width: 140px; max-width: 140px;">
+                                        <h:outputText value="#{item.appraisalAmount}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
-                                    </f:facet>
-                                </p:column>
-                                <p:column style="text-align:right">
-                                    <f:facet name="footer">
-                                        <h:outputText id="sumLtvValueId"
-                                                      value="#{tcgInfo.TCGView.sumLtvValue}"
-                                                      style="text-align:right">
-                                            <f:convertNumber pattern="#,##0"
-                                                             minFractionDigits="2"
-                                                             maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </f:facet>
-                                </p:column>
-                                <p:column colspan="2"/>
-                            </p:row>
-                            <p:row>
-                                <p:column/>
-                                <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.totalInThis')}"
-                                          style="text-align:left"/>
-                                <p:column style="text-align:right">
-                                    <f:facet name="footer">
-                                        <h:outputText id="sumInThisAppraisalAmountId"
-                                                      value="#{tcgInfo.TCGView.sumInThisAppraisalAmount}">
-                                            <f:convertNumber pattern="#,##0" minFractionDigits="2"
-                                                             maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </f:facet>
-                                </p:column>
-                                <p:column style="text-align:right">
-                                    <f:facet name="footer">
-                                        <h:outputText id="sumInThisLtvValueId"
-                                                      value="#{tcgInfo.TCGView.sumInThisLtvValue}"
-                                                      style="text-align:right">
-                                            <f:convertNumber pattern="#,##0" minFractionDigits="2"
-                                                             maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </f:facet>
-                                </p:column>
-                                <p:column colspan="2"/>
-                            </p:row>
-                        </p:columnGroup>
+                                    </p:column>
 
-                    </p:dataTable>
+                                    <p:column headerText="#{msg.get('app.tcg.collateral.label.LTVvalue')}"
+                                              styleClass="right" style="min-width: 140px; width: 140px; max-width: 140px;">
+                                        <h:outputText value="#{item.ltvValue}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.get('app.tcg.collateral.label.isProposeInThisRequest')}"
+                                              styleClass="center" style="min-width: 90px; width: 90px; max-width: 90px;">
+                                        <h:outputText value="#{item.proposeInThis}"/>
+                                    </p:column>
+
+
+                                    <p:column style="min-width: 40px; width: 40px; max-width: 40px;">
+                                        <p:commandButton icon="ui-icon-pencil"
+                                                         action="#{tcgInfo.onEditCollateralDetail()}"
+                                                         process=":frmMain:resultCollateralDetail"
+                                                         update=":tcgDlgForm"
+                                                         oncomplete="tcgDlg.show();"
+                                                         disabled="#{tcgInfo.isDisabled('saveButton')}">
+                                            <f:setPropertyActionListener value="#{item}"
+                                                                         target="#{tcgInfo.selectCollateralItem}"/>
+                                            <f:setPropertyActionListener value="#{rowIndex}"
+                                                                         target="#{tcgInfo.rowIndex}"/>
+                                            <p:resetInput target=":tcgDlgForm"/>
+                                        </p:commandButton>
+                                        <p:commandButton title="Remove"
+                                                         icon="ui-icon-trash"
+                                                         oncomplete="confirmDeleteTcgDlg.show()"
+                                                         disabled="#{tcgInfo.isDisabled('saveButton')}">
+                                            <f:setPropertyActionListener value="#{item}"
+                                                                         target="#{tcgInfo.selectCollateralItem}"/>
+                                        </p:commandButton>
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column/>
+                                            <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}"
+                                                      style="text-align:left"/>
+                                            <p:column style="text-align:right">
+                                                <f:facet name="footer">
+                                                    <h:outputText id="sumAppraisalAmountId"
+                                                                  value="#{tcgInfo.TCGView.sumAppraisalAmount}"
+                                                                  style="text-align:right">
+                                                        <f:convertNumber pattern="#,##0"
+                                                                         minFractionDigits="2"
+                                                                         maxFractionDigits="2"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="text-align:right">
+                                                <f:facet name="footer">
+                                                    <h:outputText id="sumLtvValueId"
+                                                                  value="#{tcgInfo.TCGView.sumLtvValue}"
+                                                                  style="text-align:right">
+                                                        <f:convertNumber pattern="#,##0"
+                                                                         minFractionDigits="2"
+                                                                         maxFractionDigits="2"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="2"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column/>
+                                            <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.totalInThis')}"
+                                                      style="text-align:left"/>
+                                            <p:column style="text-align:right">
+                                                <f:facet name="footer">
+                                                    <h:outputText id="sumInThisAppraisalAmountId"
+                                                                  value="#{tcgInfo.TCGView.sumInThisAppraisalAmount}">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                                                         maxFractionDigits="2"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="text-align:right">
+                                                <f:facet name="footer">
+                                                    <h:outputText id="sumInThisLtvValueId"
+                                                                  value="#{tcgInfo.TCGView.sumInThisLtvValue}"
+                                                                  style="text-align:right">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                                                         maxFractionDigits="2"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="2"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+
+                    </table>
+
                 </td>
             </tr>
-
-        </table>
-
-    </td>
-</tr>
-<tr>
-    <td colspan="2">
-        <table class="table_noborder" style="padding-left: 100px;">
             <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}"/>
+                <td colspan="2">
+                    <table class="table_noborder" style="padding-left: 100px;">
+                        <tr>
+                            <td class="title">
+                                <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}"/>
+                            </td>
+                            <td>
+                                <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}">
+                                </h:outputText> %
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title"
+                                style="width: 300px;">
+                                <h:outputText value="#{msg.get('app.tcg.collateral.label.requestTCGAmount')}"/>
+                            </td>
+                            <td>
+                                <h:outputText styleClass="large right" id="requestTCGAmount"
+                                              value="#{tcgInfo.TCGView.requestTCGAmount}" disabled="true">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputText>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
-                <td>
-                    <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}">
-                    </h:outputText> %
-                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><p:separator/></td>
             </tr>
             <tr>
-                <td class="title"
-                    style="width: 300px;">
-                    <h:outputText value="#{msg.get('app.tcg.collateral.label.requestTCGAmount')}"/>
-                </td>
-                <td>
-                    <h:outputText styleClass="large right" id="requestTCGAmount"
-                                  value="#{tcgInfo.TCGView.requestTCGAmount}" disabled="true">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                    </h:outputText>
+                <td colspan="2" class="center">
+                    <p:commandButton value="#{msg.get('app.tcg.button.save')}"
+                                     id="btnSave"
+                                     binding="#{saveTCG}"
+                                     styleClass="medium"
+                                     process=":frmMain"
+                                     action="#{tcgInfo.onSaveTcgInfo()}"
+                                     update=":msgBoxSystemMessagePanel"
+                                     disabled="#{tcgInfo.isDisabled('saveButton')}"/>
+                    <p:commandButton value="#{msg.get('app.tcg.button.Cancel')}"
+                                     id="btnCancel"
+                                     styleClass="medium"
+                                     process=":frmMain"
+                                     action="#{tcgInfo.onCancelTcgInfo()}"
+                                     update=":frmMain"
+                                     disabled="#{tcgInfo.isDisabled('cancelButton')}"/>
                 </td>
             </tr>
-        </table>
-    </td>
-</tr>
 
-<tr>
-    <td colspan="2"><p:separator/></td>
-</tr>
-<tr>
-    <td colspan="2" class="center">
-        <p:commandButton value="#{msg.get('app.tcg.button.save')}"
-                         id="btnSave"
-                         binding="#{saveTCG}"
-                         styleClass="medium"
-                         process=":frmMain"
-                         action="#{tcgInfo.onSaveTcgInfo()}"
-                         update=":msgBoxSystemMessagePanel"/>
-
-        <p:commandButton value="#{msg.get('app.tcg.button.Cancel')}"
-                         id="btnCancel"
-                         styleClass="medium"
-                         process=":frmMain"
-                         action="#{tcgInfo.onCancelTcgInfo()}"
-                         update=":frmMain"/>
-    </td>
-</tr>
-
-</table>
-<!-- end content -->
-</div>
-</div>
-<div id="bottom_line"><!-- --></div>
-</div>
-<div class="clear"></div>
-<!-- Start Footer -->
-<ui:include src="include/footer.xhtml"/>
-<!-- End Footer -->
-<h:inputHidden id="pagename" value="mnuprescreen"/>
-<h:inputHidden id="subpagename" value="submnuprescreen"/>
-</div>
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
-</h:form>
+            </table>
+            <!-- end content -->
+            </div>
+            </div>
+            <div id="bottom_line"><!-- --></div>
+        </div>
+        <div class="clear"></div>
+        <!-- Start Footer -->
+        <ui:include src="include/footer.xhtml"/>
+        <!-- End Footer -->
+        <h:inputHidden id="pagename" value="mnuprescreen"/>
+        <h:inputHidden id="subpagename" value="submnuprescreen"/>
+        </div>
+        <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:form>
 </p:panel>
 
 <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg" closable="false"

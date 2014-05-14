@@ -35,7 +35,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "headerController")
-public class HeaderController implements Serializable {
+public class HeaderController extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -221,6 +221,12 @@ public class HeaderController implements Serializable {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
+        }
+
+        loadUserAccessMatrix(Screen.BASIC_INFO);
+        if(!canAccess(Screen.BASIC_INFO)){
+            log.debug("You don't have permission to access this page.");
+            showMessageNoPermissionBox();
         }
     }
 
@@ -488,13 +494,13 @@ public class HeaderController implements Serializable {
             fullApplicationControl.submitToCSSO(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
-            showMessageBox();
+            showMessageRedirect();
             complete = true;
             log.debug("onSubmitCSSO ::: success.");
         } catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            showMessageRedirect();
+            showMessageBox();
             log.error("onSubmitCSSO ::: exception occurred : ", ex);
         }
         sendCallBackParam(complete);
@@ -716,7 +722,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onOpenReturnAADMByUW2(){
-        log.debug("onOpenReturnAADCommittee ( return to AAD Admin from UW2 [ Open dialog ] )");
+        log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
         returnAADRemark = "";
 
@@ -724,7 +730,7 @@ public class HeaderController implements Serializable {
     }
 
     public void onReturnAADMByUW2(){
-        log.debug("onReturnAADCommittee ( return to AAD Committee from UW2 )");
+        log.debug("onReturnAADAdmin ( return to AAD Admin from UW2 )");
         HttpSession session = FacesUtil.getSession(true);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
@@ -735,7 +741,7 @@ public class HeaderController implements Serializable {
             message = msg.get("app.message.dialog.return.success");
             showMessageRedirect();
         } catch (Exception ex) {
-            log.error("Exception while return to aad committee : ", ex);
+            log.error("Exception while return to aad admin : ", ex);
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
             showMessageBox();
@@ -1741,17 +1747,7 @@ public class HeaderController implements Serializable {
         FacesUtil.redirect("/site/inbox.jsf");
     }
 
-    private void showMessageRedirect(){
-        RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-    }
 
-    private void showMessageBox(){
-        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-    }
-
-    private void sendCallBackParam(boolean value){
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", value);
-    }
 
     public int getQualitativeType() {
         return qualitativeType;
