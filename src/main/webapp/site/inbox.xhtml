@@ -214,7 +214,7 @@
                                      process="@this"
                                      update="frmMain"
                                      onstart="blockInbox.show()"
-                                     oncomplete="msgBoxConfirmDlg.hide()"/>
+                                     onclick="PF('msgBoxConfirmDlg').hide()"/>
                     <p:commandButton value="#{msg.get('app.button.no')}"
                                      process="@this"
                                      oncomplete="msgBoxConfirmDlg.hide()"/>

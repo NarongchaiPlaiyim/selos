@@ -272,9 +272,11 @@ public class PESQLInbox implements Serializable
             //TODO dispatch for Select case
             String queueName = inboxViewSelectItem.getQueuename();
             String wobNumber = inboxViewSelectItem.getFwobnumber();
+            log.debug("onPickUpCase ::: inboxViewSelectItem : {}", inboxViewSelectItem);
             inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
             //TODO Reload all value for Inbox Select
             inboxViewSelectItem = inboxControl.getNextStep(inboxViewSelectItem, ActionCode.ASSIGN_TO_ME.getVal());
+            log.debug("onPickUpCase ::: find next step : {}", inboxViewSelectItem);
             onSelectInbox();
         } catch (Exception ex){
             log.error("Exception while select case from PoolBox : ", ex);

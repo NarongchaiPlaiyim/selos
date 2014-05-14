@@ -222,12 +222,6 @@ public class HeaderController extends BaseController {
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
         }
-
-        loadUserAccessMatrix(Screen.BASIC_INFO);
-        if(!canAccess(Screen.BASIC_INFO)){
-            log.debug("You don't have permission to access this page.");
-            showMessageNoPermissionBox();
-        }
     }
 
     private void _loadSessionVariable(){

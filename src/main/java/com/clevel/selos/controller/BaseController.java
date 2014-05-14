@@ -23,9 +23,6 @@ public class BaseController implements Serializable {
     MandatoryFieldsControl mandatoryFieldsControl;
     @Inject
     UserAccessControl userAccessControl;
-    @SELOS
-    @Inject
-    Logger log;
 
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
@@ -144,10 +141,14 @@ public class BaseController implements Serializable {
 
     public boolean canAccess(Screen screen){
         String screenId = Integer.toString(screen.value());
-        UserAccessView userAccessView = userAccessMap.get(screenId);
-        if(userAccessView == null)
-            return false;
-        return userAccessView.isAccessFlag();
+        if(userAccessMap.containsKey(screenId)){
+            UserAccessView userAccessView = userAccessMap.get(screenId);
+            if(userAccessView == null)
+                return false;
+
+            return userAccessView.isAccessFlag();
+        }
+        return false;
     }
 
     public void showMessageRedirect(){

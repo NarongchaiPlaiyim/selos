@@ -172,16 +172,9 @@ public class BasicInfo extends BaseController {
     private List<CustomerInfoView> accountNameList;
     private CustomerInfoView selectAccountName;
 
+    private boolean permissionCheck;
+
     public BasicInfo(){
-    }
-
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
     }
 
     public void preRender(){
@@ -268,6 +261,10 @@ public class BasicInfo extends BaseController {
             onChangeExistingSMEInit();
             onChangeBAInit();
             onChangeReqLGInit();
+
+            loadUserAccessMatrix(Screen.BASIC_INFO);
+            permissionCheck = canAccess(Screen.BASIC_INFO);
+
         }
     }
 
@@ -1180,5 +1177,13 @@ public class BasicInfo extends BaseController {
 
     public void setSelectAccountName(CustomerInfoView selectAccountName) {
         this.selectAccountName = selectAccountName;
+    }
+
+    public boolean isPermissionCheck() {
+        return permissionCheck;
+    }
+
+    public void setPermissionCheck(boolean permissionCheck) {
+        this.permissionCheck = permissionCheck;
     }
 }
