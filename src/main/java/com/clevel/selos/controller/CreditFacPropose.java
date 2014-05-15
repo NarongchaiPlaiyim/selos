@@ -313,8 +313,7 @@ public class CreditFacPropose extends BaseController {
                     }
                 } else {
                     if(newCreditFacilityView.getNewCreditDetailViewList()==null ||
-                            (newCreditFacilityView.getNewCreditDetailViewList()!=null && newCreditFacilityView.getNewCreditDetailViewList().size()>0)){
-                        setDisabledValue("retrieveProposeCreditButton",false);
+                            (newCreditFacilityView.getNewCreditDetailViewList()!=null && newCreditFacilityView.getNewCreditDetailViewList().isEmpty())){
                         if(!isDisabled("retrieveProposeCreditButton")){
                             setDisabledValue("retrieveProposeCreditButton",true);
                         }
