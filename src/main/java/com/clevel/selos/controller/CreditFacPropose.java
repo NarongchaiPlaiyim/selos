@@ -312,6 +312,13 @@ public class CreditFacPropose extends BaseController {
                         setDisabledValue("retrieveProposeCreditButton",true);
                     }
                 } else {
+                    if(newCreditFacilityView.getNewCreditDetailViewList()==null ||
+                            (newCreditFacilityView.getNewCreditDetailViewList()!=null && newCreditFacilityView.getNewCreditDetailViewList().isEmpty())){
+                        if(!isDisabled("retrieveProposeCreditButton")){
+                            setDisabledValue("retrieveProposeCreditButton",true);
+                        }
+                    }
+
                     log.debug("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                     modeForDB = ModeForDB.EDIT_DB;

@@ -354,6 +354,7 @@
                                         <td style="width: 5%">
                                             <clv:BECalendar id="establishDate" showOn="button" navigator="true" locale="th_TH"
                                                             disabled="#{bizInfoSummary.isDisabled('establishDate')}"
+                                                            required ="#{not empty param[addBizInfoSummary.clientId]}"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
                                                             yearRange="1950:2100"
                                                             pattern="dd/MM/yyyy"
