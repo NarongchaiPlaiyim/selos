@@ -221,7 +221,13 @@ public class BizInfoDetail extends BaseController {
                     onChangeBusinessGroup();
                     onChangeBusinessDesc();
 
-                    sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
+                    try {
+                        sumBizPercent = sumBizPercent -  Util.convertNullToZERO(bizInfoDetailView.getPercentBiz()).doubleValue();
+                    } catch (Exception ex) {
+                        log.debug("Exception while cal sumBizPercent {}", ex);
+                        sumBizPercent = 0;
+                    }
+
                 }
 
                 bizInfoDetailView.setAveragePurchaseAmount( new BigDecimal(y));
@@ -626,15 +632,17 @@ public class BizInfoDetail extends BaseController {
 
     private boolean onValidateStakeHolder(){
         boolean validate  = false;
-        if(!bizStakeHolderDetailView.getName().equals("" )
-                &&!bizStakeHolderDetailView.getPhoneNo().equals("")
-                &&!bizStakeHolderDetailView.getContactYear().equals("")
-                &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
-                &&!bizStakeHolderDetailView.getPercentCash().equals("")
-                &&!bizStakeHolderDetailView.getPercentCredit().equals("")
-                &&!bizStakeHolderDetailView.getCreditTerm().equals("")
-                ){
-            validate = true;
+        if(!Util.isNull(bizStakeHolderDetailView)){
+            if(!bizStakeHolderDetailView.getName().equals("")
+                    &&!bizStakeHolderDetailView.getPhoneNo().equals("")
+                    &&!bizStakeHolderDetailView.getContactYear().equals("")
+                    &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
+                    &&!bizStakeHolderDetailView.getPercentCash().equals("")
+                    &&!bizStakeHolderDetailView.getPercentCredit().equals("")
+                    &&!bizStakeHolderDetailView.getCreditTerm().equals("")
+                    ){
+                return !validate;
+            }
         }
         return validate;
     }

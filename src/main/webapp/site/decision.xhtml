@@ -3777,7 +3777,6 @@
                         <h:panelGroup rendered="#{decision.decisionDialog}">
                             <!--APPROVE FOR ENDORSE CA-->
                             <h:panelGroup rendered="#{decision.endorseDecisionDialog}">
-
                                 <tr>
                                     <td class="center" colspan="2">
                                         <div class="ui-datatable ui-widget">
@@ -3815,7 +3814,7 @@
                                                         <tr>
                                                             <td class="center">
                                                                 <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
-                                                                                  required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
+                                                                                  required="#{decision.roleUW and decision.endorseDecisionDialog and not empty param[saveDecisionBtn.clientId]}"
                                                                                   styleClass="ovr-border">
                                                                     <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
@@ -3904,7 +3903,7 @@
                                                     <tr>
                                                         <td class="center">
                                                             <p:selectOneRadio value="#{decision.approvalHistoryPricingView.uwDecision}"
-                                                                              required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
+                                                                              required="#{decision.roleUW and decision.requestPricing and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
