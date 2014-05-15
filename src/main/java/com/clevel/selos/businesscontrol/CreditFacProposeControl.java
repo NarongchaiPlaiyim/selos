@@ -910,57 +910,47 @@ public class CreditFacProposeControl extends BusinessControl {
         return summary;
     }
 
-    //TODO findLTVPercent
     public BigDecimal findLTVPercent(NewCollateralHeadView newCollateralHeadView, long workCaseId) {
         BigDecimal ltvPercentBig = BigDecimal.ZERO;
-        PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(newCollateralHeadView.getPotentialCollateral().getId());
-        TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(newCollateralHeadView.getTcgCollateralType().getId());
-
-        if ((potentialCollateral != null) && (tcgCollateralType != null)) {
-            PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
-            if (potentialColToTCGCol != null) {
-                log.debug("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
-
-                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-                log.debug("basicInfo ::: {}", basicInfo);
-
-                WorkCase workCase = workCaseDAO.findById(workCaseId);
-                log.debug("workCase ::: {}", workCase);
-
-                if (basicInfo != null && workCase != null) {
-                    log.debug("workCase.getProductGroup ::: {}", workCase.getProductGroup());
-                    if (workCase.getProductGroup() != null && Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
-                        log.debug("getRetentionLTV :::::::");
-                        if (potentialColToTCGCol.getRetentionLTV() != null) {
-                            ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
-                        } else {
-                            if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+        if(newCollateralHeadView != null){
+            if(newCollateralHeadView.getPotentialCollateral() != null && newCollateralHeadView.getPotentialCollateral().getId() != 0 &&
+                    newCollateralHeadView.getTcgCollateralType() != null && newCollateralHeadView.getTcgCollateralType().getId() != 0){
+                PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(newCollateralHeadView.getPotentialCollateral().getId());
+                TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(newCollateralHeadView.getTcgCollateralType().getId());
+                if ((potentialCollateral != null) && (tcgCollateralType != null)) {
+                    PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
+                    if (potentialColToTCGCol != null) {
+                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                        WorkCase workCase = workCaseDAO.findById(workCaseId);
+                        if (basicInfo != null && workCase != null) {
+                            if (workCase.getProductGroup() != null && Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
+                                if (potentialColToTCGCol.getRetentionLTV() != null) {
+                                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
+                                } else {
+                                    if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+                                            Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
+                                            Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                            Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
+                                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                                    } else {
+                                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                                    }
+                                }
+                            } else if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
                                     Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
                                     Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
                                     Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
                                     (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
-                                log.debug("isSpecialLTV - getTenPercentLTV :::::::");
                                 ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
                             } else {
-                                log.debug("isSpecialLTV - getPercentLTV ::::::: ");
                                 ltvPercentBig = potentialColToTCGCol.getPercentLTV();
                             }
                         }
-                    } else if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
-                            Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
-                            Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
-                            Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
-                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
-                        log.debug("getTenPercentLTV :::::::");
-                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
-                    } else {
-                        log.debug("getPercentLTV ::::::: ");
-                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
                     }
                 }
             }
         }
-
         return ltvPercentBig;
     }
 

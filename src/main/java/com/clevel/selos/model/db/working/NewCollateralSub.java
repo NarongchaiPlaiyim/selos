@@ -29,7 +29,7 @@ public class NewCollateralSub implements Serializable {
     @Column(name = "line_no")
     private int lineNo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType collateralTypeType;
 
