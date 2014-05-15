@@ -1,12 +1,12 @@
 package com.clevel.selos.model.db.master;
 
-import com.clevel.selos.model.Screen;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 @Table(name = "mst_user_access")
 public class UserAccess implements Serializable {
     @Id

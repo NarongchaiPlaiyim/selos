@@ -172,6 +172,8 @@ public class BasicInfo extends BaseController {
     private List<CustomerInfoView> accountNameList;
     private CustomerInfoView selectAccountName;
 
+    private boolean permissionCheck;
+
     public BasicInfo(){
     }
 
@@ -259,6 +261,10 @@ public class BasicInfo extends BaseController {
             onChangeExistingSMEInit();
             onChangeBAInit();
             onChangeReqLGInit();
+
+            loadUserAccessMatrix(Screen.BASIC_INFO);
+            permissionCheck = canAccess(Screen.BASIC_INFO);
+
         }
     }
 
@@ -1171,5 +1177,13 @@ public class BasicInfo extends BaseController {
 
     public void setSelectAccountName(CustomerInfoView selectAccountName) {
         this.selectAccountName = selectAccountName;
+    }
+
+    public boolean isPermissionCheck() {
+        return permissionCheck;
+    }
+
+    public void setPermissionCheck(boolean permissionCheck) {
+        this.permissionCheck = permissionCheck;
     }
 }

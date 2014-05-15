@@ -168,18 +168,18 @@ public class AppraisalResultControl extends BusinessControl {
         }
     }
 
-    private void updateWRKNewColl(final List<NewCollateralView> newCollateralViewList, final User user){
-        log.debug("-- updateWRKNewColl");
-        newCollateralList = Util.safetyList(newCollateralTransform.transformToModel(newCollateralViewList, user, newCreditFacility));
-        for(NewCollateral newCollateral : newCollateralList){
-            if(!Util.isZero(newCollateral.getId())){
-                newCollateral =  newCollateralDAO.findById(newCollateral.getId());
-                newCollateral.setAppraisalRequest(2);
-                newCollateral.setProposeType(ProposeType.P);
-                newCollateralDAO.save(newCollateral);
-            }
-        }
-    }
+//    private void updateWRKNewColl(final List<NewCollateralView> newCollateralViewList, final User user){
+//        log.debug("-- updateWRKNewColl");
+//        newCollateralList = Util.safetyList(newCollateralTransform.transformToModel(newCollateralViewList, user, newCreditFacility));
+//        for(NewCollateral newCollateral : newCollateralList){
+//            if(!Util.isZero(newCollateral.getId())){
+//                newCollateral =  newCollateralDAO.findById(newCollateral.getId());
+//                newCollateral.setAppraisalRequest(2);
+//                newCollateral.setProposeType(ProposeType.P);
+//                newCollateralDAO.save(newCollateral);
+//            }
+//        }
+//    }
 
     private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user, long workCaseId, long workCasePreScreenId){
         log.debug("-- insertIntoDB ::: newCollateralViewList ::: {} ", newCollateralViewList);
@@ -193,24 +193,32 @@ public class AppraisalResultControl extends BusinessControl {
 
         List<NewCollateral> newCollateralList = newCollateralTransform.transformToModelList(newCollateralViewList, user, newCreditFacility);
 
-//        newCollateralDAO.persistProposeTypeA(newCollateralList);
-        for (NewCollateral newCollateral : newCollateralList) {
-            newCollateral.setAppraisalRequest(2);
-            newCollateral.setProposeType(ProposeType.A);
-        }
-
         for (NewCollateral newCollateral : newCollateralList) {
             log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
+
             if(!newCollateralDAO.isExist(newCollateral.getId())){
-                newCollateralDAO.update(newCollateral);
-                log.debug("-- id[{}] updated", newCollateral.getId());
-            } else {
+                log.debug("-- Insert into new record of NewCollateral");
+                log.debug("-- processing one step...");
+                newCollateral.setAppraisalRequest(2);
+                newCollateral.setProposeType(ProposeType.A);
                 newCollateralDAO.persist(newCollateral);
                 log.debug("-- id[{}] saved", newCollateral.getId());
+            } else {
+                log.debug("-- Update to exist record of NewCollateral.id[{}]", newCollateral.getId());
+                log.debug("-- processing first step...");
+//                newCollateralDAO.delete(newCollateralDAO.findById(newCollateral.getId()));
+                NewCollateral model = newCollateralDAO.findById(newCollateral.getId());
+                model.setAppraisalRequest(2);
+                model.setProposeType(ProposeType.A);
+                model.setNewCreditFacility(newCollateral.getNewCreditFacility());
+//                model.setNewCollateralHeadList(newCollateral.getNewCollateralHeadList());
+                model.setNewCollateralHeadList(Collections.EMPTY_LIST);
+                log.debug("-- Model[{}]", model.toString());
+                log.debug("-- processing second step...");
+                newCollateralDAO.persist(model);
+                log.debug("-- id[{}] updated", model.getId());
             }
         }
-        newCollateralDAO.persist(newCollateralList);
-
         for(NewCollateral newCollateral : newCollateralList){
             List<NewCollateralHead> newCollateralHeadList = Util.safetyList(newCollateral.getNewCollateralHeadList());
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){

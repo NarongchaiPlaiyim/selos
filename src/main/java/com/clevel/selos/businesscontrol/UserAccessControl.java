@@ -32,6 +32,7 @@ public class UserAccessControl extends BusinessControl {
     public List<UserAccessView> getUserAccessList(long stepId, int screenId){
         List<UserAccessView> userAccessViewList = new ArrayList<UserAccessView>();
         int roleId = getCurrentUser().getRole().getId();
+        log.debug("getUserAccessList ::: stepId : {}, screenId : {}, roleId : {}", stepId, screenId, roleId);
         List<UserAccess> userAccessList = userAccessDAO.getUserAccess(stepId, screenId, roleId);
 
         if(userAccessList != null && userAccessList.size() > 0){
