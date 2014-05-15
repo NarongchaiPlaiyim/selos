@@ -469,69 +469,67 @@ public class BizInfoDetail extends BaseController {
         boolean supplier;
         boolean buyer;
         BizStakeHolderDetailView stakeHolderRow;
-        boolean complete = onValidateStakeHolder();
         RequestContext context = RequestContext.getCurrentInstance();
-        if(complete){
-            if(modeForButton.equalsIgnoreCase("add")){
-                if(stakeType.equals("1")){
-                    bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
-                    supplierDetailList.add(bizStakeHolderDetailView);
-                    supplier =calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                     if(!supplier){
-                         supplierDetailList.remove(bizStakeHolderDetailView);
-                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                         messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
-                         message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
-                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                         complete = false;
-                     }
-                }else if(stakeType.equals("2")){
-                    log.debug( " add buyer 1 ");
-                     bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
-                     buyerDetailList.add(bizStakeHolderDetailView);
-                    log.debug( " add buyer 2 ");
-                     buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                    log.debug( " add buyer 3 ");
-                     if(!buyer){
-                         log.debug( " add buyer * ");
-                         buyerDetailList.remove(bizStakeHolderDetailView);
-                         calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                         messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
-                         message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
-                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                         complete = false;
-                     }
-                    log.debug( " buyerlist size " + buyerDetailList.size());
-                }
-            }else if(modeForButton.equalsIgnoreCase("edit")){
-                if(stakeType.equals("1")){
-                     stakeHolderRow = supplierDetailList.get(rowIndex);
-                     stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
-                     supplierDetailList.set(rowIndex, stakeHolderRow);
-                     supplier = calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                     if(!supplier){
-                         stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
-                         supplierDetailList.set(rowIndex,stakeHolderRow);
-                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                         messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
-                         message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
-                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                         complete = false;
-                     }
-                }else if(stakeType.equals("2")){
-                    stakeHolderRow = buyerDetailList.get(rowIndex);
-                    stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
-                    buyerDetailList.set(rowIndex, stakeHolderRow);
-                    buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                    if(!buyer){
-                        stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
-                        buyerDetailList.set(rowIndex,stakeHolderRow);
-                        calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                        messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
-                        message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
-                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                        complete = false;
-                    }
+        boolean complete = true;
+        if(modeForButton.equalsIgnoreCase("add")){
+            if(stakeType.equals("1")){
+                bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
+                supplierDetailList.add(bizStakeHolderDetailView);
+                supplier =calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                 if(!supplier){
+                     supplierDetailList.remove(bizStakeHolderDetailView);
+                     calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                     messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                     message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
+                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                     complete = false;
+                 }
+            }else if(stakeType.equals("2")){
+                log.debug( " add buyer 1 ");
+                 bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
+                 buyerDetailList.add(bizStakeHolderDetailView);
+                log.debug( " add buyer 2 ");
+                 buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                log.debug( " add buyer 3 ");
+                 if(!buyer){
+                     log.debug( " add buyer * ");
+                     buyerDetailList.remove(bizStakeHolderDetailView);
+                     calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                     messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                     message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
+                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                     complete = false;
+                 }
+                log.debug( " buyerlist size " + buyerDetailList.size());
+            }
+        }else if(modeForButton.equalsIgnoreCase("edit")){
+            if(stakeType.equals("1")){
+                 stakeHolderRow = supplierDetailList.get(rowIndex);
+                 stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
+                 supplierDetailList.set(rowIndex, stakeHolderRow);
+                 supplier = calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                 if(!supplier){
+                     stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
+                     supplierDetailList.set(rowIndex,stakeHolderRow);
+                     calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                     messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                     message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
+                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                     complete = false;
+                 }
+            }else if(stakeType.equals("2")){
+                stakeHolderRow = buyerDetailList.get(rowIndex);
+                stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
+                buyerDetailList.set(rowIndex, stakeHolderRow);
+                buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                if(!buyer){
+                    stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
+                    buyerDetailList.set(rowIndex,stakeHolderRow);
+                    calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                    message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    complete = false;
                 }
             }
         }
@@ -628,21 +626,6 @@ public class BizInfoDetail extends BaseController {
             log.debug(" stakeType ===== 2.5" );
         }
         return true;
-    }
-
-    private boolean onValidateStakeHolder(){
-        boolean validate  = false;
-        if(!bizStakeHolderDetailView.getName().equals("" )
-                &&!bizStakeHolderDetailView.getPhoneNo().equals("")
-                &&!bizStakeHolderDetailView.getContactYear().equals("")
-                &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
-                &&!bizStakeHolderDetailView.getPercentCash().equals("")
-                &&!bizStakeHolderDetailView.getPercentCredit().equals("")
-                &&!bizStakeHolderDetailView.getCreditTerm().equals("")
-                ){
-            validate = true;
-        }
-        return validate;
     }
 
     public void onSetRowNoBizStakeHolderDetail(){
