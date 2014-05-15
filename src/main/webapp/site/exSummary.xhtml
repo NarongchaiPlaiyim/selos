@@ -1029,7 +1029,8 @@
                                                      process="@this"
                                                      actionListener="#{executiveSummary.onInitAddDeviate}"
                                                      update=":exSumDeviateDlgForm"
-                                                     oncomplete="exSumDeviateDlg.show();">
+                                                     oncomplete="exSumDeviateDlg.show();"
+                                                     disabled="#{executiveSummary.isDisabled('addDeviateResultButton')}">
                                         <p:resetInput target=":exSumDeviateDlgForm"/>
                                     </p:commandButton>
                                 </td>
@@ -1040,7 +1041,6 @@
                                                  var="itemDecision" value="#{executiveSummary.exSummaryView.exSumDecisionListView}"
                                                  paginator="false" rowKey="#{itemDecision}"
                                                  rowIndexVar="rowIndex">
-
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column style="width:30px;"/>
@@ -1080,7 +1080,8 @@
 
                                         <p:column styleClass="center">
                                             <p:inputTextarea value="#{itemDecision.deviationReason}" style="width: 100%; margin-top: 5px; margin-left: -3px;"
-                                                             required="#{itemDecision.flag == 'RED'}"/>
+                                                             required="#{itemDecision.flag == 'RED'}"
+                                                             readonly="#{executiveSummary.isDisabled('decision.deviationReason')}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -1090,7 +1091,8 @@
                                                                  action="#{executiveSummary.onSelectEditDeviate()}"
                                                                  update=":exSumDeviateDlgForm"
                                                                  oncomplete="exSumDeviateDlg.show();"
-                                                                 rendered="#{itemDecision.canEdit}">
+                                                                 rendered="#{itemDecision.canEdit}"
+                                                                 disabled="#{executiveSummary.isDisabled('result.actionLists')}">
                                                     <f:setPropertyActionListener value="#{itemDecision}"
                                                                                  target="#{executiveSummary.selectDeviateDecision}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
@@ -1103,7 +1105,8 @@
                                                                  oncomplete="confirmDeleteDeviateDecisionDlg.show()"
                                                                  update=":frmMain:decisionTable"
                                                                  process="@form"
-                                                                 rendered="#{itemDecision.canEdit}">
+                                                                 rendered="#{itemDecision.canEdit}"
+                                                                 disabled="#{executiveSummary.isDisabled('result.actionLists')}">
                                                     <f:setPropertyActionListener value="#{itemDecision}"
                                                                                  target="#{executiveSummary.selectDeviateDecision}"/>
                                                 </p:commandButton>
@@ -1139,12 +1142,15 @@
                             <tr>
                                 <td colspan="2" style="text-align: left">
                                     <h:outputText value="#{msg.get('app.exSummary.label.natureOfBusiness')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('natureOfBusiness')}" styleClass="require-field"/>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.natureOfBusiness}">
+                                    <p:inputTextarea cols="170" rows="5"
+                                                     value="#{executiveSummary.exSummaryView.natureOfBusiness}"
+                                                     readonly="#{executiveSummary.isDisabled('natureOfBusiness')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1153,12 +1159,15 @@
                             <tr>
                                 <td colspan="2" style="text-align: left">
                                     <h:outputText value="#{msg.get('app.exSummary.label.historicalAndReasonOfChange')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('historicalAndReasonOfChange')}" styleClass="require-field"/>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}">
+                                    <p:inputTextarea cols="170" rows="5"
+                                                     value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}"
+                                                     readonly="#{executiveSummary.isDisabled('historicalAndReasonOfChange')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1167,12 +1176,15 @@
                             <tr>
                                 <td colspan="2" style="text-align: left">
                                     <h:outputText value="#{msg.get('app.exSummary.label.tmbCreditHistory')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('tmbCreditHistory')}" styleClass="require-field"/>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.tmbCreditHistory}">
+                                    <p:inputTextarea cols="170" rows="5"
+                                                     value="#{executiveSummary.exSummaryView.tmbCreditHistory}"
+                                                     readonly="#{executiveSummary.isDisabled('tmbCreditHistory')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1181,12 +1193,15 @@
                             <tr>
                                 <td colspan="2" style="text-align: left">
                                     <h:outputText value="#{msg.get('app.exSummary.label.supportReason')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('Support Reason')}" styleClass="require-field"/>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <p:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.supportReason}">
+                                    <p:inputTextarea cols="170" rows="5"
+                                                     value="#{executiveSummary.exSummaryView.supportReason}"
+                                                     readonly="#{executiveSummary.isDisabled('Support Reason')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1201,9 +1216,12 @@
                             <tr>
                                 <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM008Code')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('RM008Code')}" styleClass="require-field"/>
                                 </td>
                                 <td>
-                                    <h:selectOneRadio id="RM008" value="#{executiveSummary.exSummaryView.rm008Code}">
+                                    <h:selectOneRadio id="RM008"
+                                                      value="#{executiveSummary.exSummaryView.rm008Code}"
+                                                      disabled="#{executiveSummary.isDisabled('RM008Code')}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                         <p:ajax update="RM008,rm008remark" listener="#{executiveSummary.onChangeRM008()}" event="click"/>
@@ -1214,8 +1232,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <p:inputTextarea id="rm008remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
-                                                     disabled="#{executiveSummary.exSummaryView.rm008Code == 0}">
+                                    <p:inputTextarea id="rm008remark" cols="170" rows="3"
+                                                     value="#{executiveSummary.exSummaryView.rm008Remark}"
+                                                     readonly="#{executiveSummary.isDisabled('RM008Remark')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1224,9 +1243,12 @@
                             <tr>
                                 <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM204Code')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('RM024Code')}" styleClass="require-field"/>
                                 </td>
                                 <td>
-                                    <h:selectOneRadio id="RM204" value="#{executiveSummary.exSummaryView.rm204Code}">
+                                    <h:selectOneRadio id="RM204"
+                                                      value="#{executiveSummary.exSummaryView.rm204Code}"
+                                                      disabled="#{executiveSummary.isDisabled('RM024Code')}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                         <p:ajax update="RM204,rm204remark" listener="#{executiveSummary.onChangeRM204()}" event="click"/>
@@ -1237,8 +1259,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <p:inputTextarea id="rm204remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
-                                                     disabled="#{executiveSummary.exSummaryView.rm204Code == 0}">
+                                    <p:inputTextarea id="rm204remark" cols="170" rows="3"
+                                                     value="#{executiveSummary.exSummaryView.rm204Remark}"
+                                                     readonly="#{executiveSummary.isDisabled('RM024Remark')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1247,9 +1270,12 @@
                             <tr>
                                 <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM020Code')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('RM020Code')}" styleClass="require-field"/>
                                 </td>
                                 <td>
-                                    <h:selectOneRadio id="RM020" value="#{executiveSummary.exSummaryView.rm020Code}">
+                                    <h:selectOneRadio id="RM020"
+                                                      value="#{executiveSummary.exSummaryView.rm020Code}"
+                                                      disabled="#{executiveSummary.isDisabled('RM020Code')}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                         <p:ajax update="RM020,rm020remark" listener="#{executiveSummary.onChangeRM020()}" event="click"/>
@@ -1260,8 +1286,9 @@
 
                             <tr>
                                 <td colspan="4" style="text-align: left; width: 100%">
-                                    <p:inputTextarea id="rm020remark" cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
-                                                     disabled="#{executiveSummary.exSummaryView.rm020Code == 0}">
+                                    <p:inputTextarea id="rm020remark" cols="170" rows="3"
+                                                     value="#{executiveSummary.exSummaryView.rm020Remark}"
+                                                     readonly="#{executiveSummary.isDisabled('RM020Remark')}">
                                         <f:validateLength maximum="500" />
                                     </p:inputTextarea>
                                 </td>
@@ -1289,12 +1316,14 @@
                             <tr>
                                 <td style="text-align: left;width:200px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.label.approveAuthority')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('approveAuthority')}" styleClass="require-field"/>
+                                    <h:outputText value=" :"/>
                                 </td>
                                 <td style="text-align: left; width:200px;">
                                     <p:selectOneMenu styleClass="largest" size="1"
                                                      style="width: 200px; max-width: 200px; min-width: 200px"
                                                      value="#{executiveSummary.exSummaryView.approveAuthority.id}"
-                                                     disabled="#{not executiveSummary.roleUW}">
+                                                     disabled="#{executiveSummary.isDisabled('approveAuthority')}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{executiveSummary.authorizationDOAList}"
                                                        var="authoriz"
@@ -1304,15 +1333,20 @@
                                 </td>
                                 <td style="text-align: right; width: 150px; padding-right: 30px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.label.uwCode')}"/>
+                                    <h:outputText value="#{executiveSummary.mandate('uwCode')}" styleClass="require-field"/>
+                                    <h:outputText value=" :"/>
                                 </td>
                                 <td style="width: 150px;">
-                                    <p:inputText value="#{executiveSummary.exSummaryView.uwCode}" readonly="true"/>
+                                    <p:inputText value="#{executiveSummary.exSummaryView.uwCode}"
+                                                 readonly="#{executiveSummary.isDisabled('uwCode')}"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4" style="text-align: left">
-                                    <h:selectOneRadio id="decision" value="#{executiveSummary.exSummaryView.decision}"
-                                                      disabled="#{not executiveSummary.roleUW}">
+                                    <h:selectOneRadio id="decision"
+                                                      value="#{executiveSummary.exSummaryView.decision}"
+                                                      disabled="#{executiveSummary.isDisabled('decision')}"
+                                                      required="#{executiveSummary.mandate('decision')}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.normal.approve')}     " itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.deviation')}     " itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.reject')}" itemValue="3"/>
@@ -1325,7 +1359,7 @@
                                     <p:selectOneMenu styleClass="largest" size="1" id="reasonList"
                                                      style="width: 900px; min-width: 900px; max-width: 900px;"
                                                      value="#{executiveSummary.reason.id}"
-                                                     disabled="#{not executiveSummary.roleUW}">
+                                                     disabled="#{executiveSummary.isDisabled('Deviate Code')}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                         <f:selectItems value="#{executiveSummary.reasonList}" var="reasonItem"
                                                        itemDescription="#{reasonItem.description}"
@@ -1334,13 +1368,15 @@
                                     </p:selectOneMenu>
                                 </td>
                                 <td style="text-align: left">
-                                    <p:commandButton value="#{msg.get('app.button.add')}" styleClass="small" process="@form"
-                                                     action="#{executiveSummary.onAddReason()}" update=":frmMain"
-                                                     disabled="#{not executiveSummary.roleUW}"/>
+                                    <p:commandButton value="#{msg.get('app.button.add')}"
+                                                     styleClass="small" process="@form"
+                                                     action="#{executiveSummary.onAddReason()}"
+                                                     update=":frmMain"
+                                                     disabled="#{executiveSummary.isDisabled('add Deviate Code Reject Code')}"/>
                                 </td>
                             </tr>
 
-                            <!-- //Flag -->
+                            <!-- Flag -->
                             <tr>
                                 <td colspan="6" style="padding-top: 10px;">
                                     <p:dataTable id="deviateTable" value="#{executiveSummary.exSummaryView.deviateCode}"
@@ -1371,7 +1407,7 @@
                                                              oncomplete="confirmDeleteDeviateDlg.show()"
                                                              update=":frmMain:deviateTable"
                                                              process="@form"
-                                                             disabled="#{not executiveSummary.roleUW}">
+                                                             disabled="#{executiveSummary.isDisabled('add Deviate Code Reject Code')}">
                                                 <f:setPropertyActionListener value="#{itemUWDecision}"
                                                                              target="#{executiveSummary.selectDeviate}"/>
                                             </p:commandButton>
@@ -1393,8 +1429,8 @@
                 <!-- UW Comment -->
                 <tr>
                     <td colspan="2" style="text-align: left" class="title">
-                        <h:outputText
-                                value="#{msg.get('app.exSummary.label.uwComment')}"/>
+                        <h:outputText value="#{msg.get('app.exSummary.label.uwComment')}"/>
+                        <h:outputText value="#{executiveSummary.mandate('uwComment')}" styleClass="require-field"/>
                     </td>
                 </tr>
                 <tr>
@@ -1402,7 +1438,7 @@
                         <p:inputTextarea cols="170"
                                          rows="7"
                                          value="#{executiveSummary.exSummaryView.uwComment}"
-                                         disabled="#{not executiveSummary.roleUW}"/>
+                                         disabled="#{executiveSummary.isDisabled('uwComment')}"/>
                     </td>
                 </tr>
 
@@ -1417,10 +1453,13 @@
                     <td colspan="4" class="center">
                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller"
                                          process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
-                                         actionListener="#{executiveSummary.onSaveExecutiveSummary}" binding="#{saveBtn}"/>
+                                         actionListener="#{executiveSummary.onSaveExecutiveSummary}"
+                                         binding="#{saveBtn}"
+                                         disabled="#{executiveSummary.isDisabled('saveButton')}"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                          process="@form" update=":frmMain"
-                                         actionListener="#{executiveSummary.onCreation}"/>
+                                         actionListener="#{executiveSummary.onCreation}"
+                                         disabled="#{executiveSummary.isDisabled('cancelButton')}"/>
                     </td>
                 </tr>
                 </table>
