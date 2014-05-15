@@ -79,6 +79,20 @@ public class BizInfoDetailView implements Serializable {
         this.bizType = new BusinessType();
         this.bizActivity = new BusinessActivity();
         this.bizPermission = "N";
+        this.adjustedIncomeFactor = BigDecimal.ZERO;
+        this.incomeAmount = BigDecimal.ZERO;
+        this.percentBiz = BigDecimal.ZERO;
+        this.percentExpIndCountryName = BigDecimal.ZERO;
+        this.supplierTotalPercentBuyVolume = BigDecimal.ZERO;
+        this.supplierTotalPercentCredit = BigDecimal.ZERO;
+        this.supplierTotalCreditTerm = BigDecimal.ZERO;
+        this.supplierUWAdjustPercentCredit = BigDecimal.ZERO;
+        this.supplierUWAdjustCreditTerm = BigDecimal.ZERO;
+        this.buyerTotalPercentBuyVolume = BigDecimal.ZERO;
+        this.buyerTotalPercentCredit = BigDecimal.ZERO;
+        this.buyerTotalCreditTerm = BigDecimal.ZERO;
+        this.buyerUWAdjustPercentCredit = BigDecimal.ZERO;
+        this.buyerUWAdjustCreditTerm = BigDecimal.ZERO;
         this.standardAccountReceivable = BigDecimal.ZERO;
         this.averagePurchaseAmount = BigDecimal.ZERO;
         this.purchasePercentCash = BigDecimal.ZERO;
@@ -98,6 +112,7 @@ public class BizInfoDetailView implements Serializable {
         this.stockDurationUW = BigDecimal.ZERO;
         this.stockValueBDM = BigDecimal.ZERO;
         this.stockValueUW = BigDecimal.ZERO;
+        this.weightIncomeFactor = BigDecimal.ZERO;
     }
 
     public long getId() {

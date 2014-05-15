@@ -152,6 +152,8 @@ public class BizInfoDetail extends BaseController {
 
                 bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
+                loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL);
+
                 if(bizInfoSummaryView.getId() != 0 ){
                     bizInfoSummaryId = bizInfoSummaryView.getId();
                 } else {
@@ -184,11 +186,6 @@ public class BizInfoDetail extends BaseController {
 
 
                 bizInfoDetailViewId = Util.parseLong(session.getAttribute("bizInfoDetailViewId"), -1);
-//                if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
-//                    bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
-//                } else {
-//                    bizInfoDetailViewId = -1;
-//                }
 
                 user = (User)session.getAttribute("user");
 
@@ -196,7 +193,7 @@ public class BizInfoDetail extends BaseController {
                     bizInfoDetailView = new BizInfoDetailView();
                     bizStakeHolderDetailView = new BizStakeHolderDetailView();
                     bizProductDetailView = new BizProductDetailView();
-                }else{
+                } else {
                     bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
 
                     if(!Util.isNull(bizInfoDetailView.getBizProductDetailViewList()) && bizInfoDetailView.getBizProductDetailViewList().size() > 0) {
@@ -218,29 +215,28 @@ public class BizInfoDetail extends BaseController {
                         bizInfoDetailView.setBizDocExpiryDate(null);
                     }
 
-                    onChangeBusinessGroup();
-                    onChangeBusinessDesc();
+                    onChangeBusinessGroupInitial();
 
-                    sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
+                    if(Util.subtract(BigDecimal.valueOf(sumBizPercent),bizInfoDetailView.getPercentBiz()) != null){
+                        sumBizPercent = Util.subtract(BigDecimal.valueOf(sumBizPercent),bizInfoDetailView.getPercentBiz()).doubleValue();
+                    }
                 }
 
-                bizInfoDetailView.setAveragePurchaseAmount( new BigDecimal(y));
-                bizInfoDetailView.setAveragePayableAmount( new BigDecimal(x));
+                bizInfoDetailView.setAveragePurchaseAmount(new BigDecimal(y));
+                bizInfoDetailView.setAveragePayableAmount(new BigDecimal(x));
                 bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
 
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-                if(supplierDetailList.size()>0){
+                if(supplierDetailList.size() > 0){
                     calSumBizStakeHolderDetailView(supplierDetailList,"1");
                 }
 
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-                if(buyerDetailList.size()>0){
+                if(buyerDetailList.size() > 0){
                     calSumBizStakeHolderDetailView(buyerDetailList,"2");
                 }
-
                 onCheckRole();
-
-                loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL);
+                onChangeBizPermission();
             }catch (Exception ex){
                 log.error("onCreation Exception : ", ex);
                 message = "Exception while load data : " + Util.getMessageException(ex);
@@ -274,12 +270,18 @@ public class BizInfoDetail extends BaseController {
 
             bizInfoDetailView.setBizCode("");
             bizInfoDetailView.setIncomeFactor(null);
-            bizInfoDetailView.setAdjustedIncomeFactor(null);
+            bizInfoDetailView.setAdjustedIncomeFactor(BigDecimal.ZERO);
             bizInfoDetailView.setBizComment("");
             bizInfoDetailView.setBizPermission("");
             bizInfoDetailView.setBizDocPermission("");
             bizInfoDetailView.setBizDocExpiryDate(null);
-            bizInfoDetailView.setPercentBiz(null);
+            bizInfoDetailView.setPercentBiz(BigDecimal.ZERO);
+        }
+    }
+
+    public void onChangeBusinessGroupInitial(){
+        if(bizInfoDetailView.getBizGroup() != null){
+            businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(bizInfoDetailView.getBizGroup());
         }
     }
 
@@ -312,13 +314,17 @@ public class BizInfoDetail extends BaseController {
                 bizInfoDetailView.setBizDocPermission("");
                 bizInfoDetailView.setBizDocExpiryDate(null);
                 setMandateValue("bizDocPermission",true);
+                setDisabledValue("bizDocPermission",false);
                 setMandateValue("bizDocExpiryDate",true);
+                setDisabledValue("bizDocExpiryDate",false);
             } else {
                 bizInfoDetailView.setBizPermission("N");
                 bizInfoDetailView.setBizDocPermission("");
                 bizInfoDetailView.setBizDocExpiryDate(null);
                 setMandateValue("bizDocPermission",false);
+                setDisabledValue("bizDocPermission",true);
                 setMandateValue("bizDocExpiryDate",false);
+                setDisabledValue("bizDocExpiryDate",true);
             }
         }
     }
@@ -659,7 +665,9 @@ public class BizInfoDetail extends BaseController {
 
     public void onSaveBizInfoView(){
         try{
-            sumBizPercent = sumBizPercent +  bizInfoDetailView.getPercentBiz().doubleValue();
+            if(Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()) != null){
+                sumBizPercent = Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()).doubleValue();
+            }
             if(sumBizPercent>100.001){
                 sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
                 messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
@@ -667,13 +675,13 @@ public class BizInfoDetail extends BaseController {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
+
             if(bizInfoDetailView.getId() == 0){
                 bizInfoDetailView.setCreateBy(user);
                 bizInfoDetailView.setCreateDate(DateTime.now().toDate());
             }
 
             if(onCheckPermission()){
-
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
