@@ -25,6 +25,9 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
+    @Column(name = "request_appraisal_require", columnDefinition = "int default 0")
+    private int requestAppraisalRequire;
+
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
 
@@ -123,6 +126,14 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setUwDOA2(AuthorizationDOA uwDOA2) {
         this.uwDOA2 = uwDOA2;
+    }
+
+    public int getRequestAppraisalRequire() {
+        return requestAppraisalRequire;
+    }
+
+    public void setRequestAppraisalRequire(int requestAppraisalRequire) {
+        this.requestAppraisalRequire = requestAppraisalRequire;
     }
 
     @Override

@@ -132,9 +132,10 @@ public class FullApplicationControl extends BusinessControl {
     public void submitToZM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, long workCaseId) throws Exception {
         WorkCase workCase = null;
         String productGroup = "";
-        int requestType = 0;
         String deviationCode = "";
         String resultCode = "G"; //TODO: get result code
+        int requestType = 0;
+        int appraisalRequestRequire = 0;
         BigDecimal totalCommercial = BigDecimal.ZERO;
         BigDecimal totalRetail = BigDecimal.ZERO;
         User user = getCurrentUser();
@@ -143,6 +144,7 @@ public class FullApplicationControl extends BusinessControl {
             if(workCase != null && workCase.getProductGroup() != null){
                 productGroup = workCase.getProductGroup().getName();
                 requestType = workCase.getRequestType().getId();
+                appraisalRequestRequire = workCase.getRequestAppraisalRequire();
 
                 //TODO: get total com and retail
 
@@ -150,7 +152,7 @@ public class FullApplicationControl extends BusinessControl {
                     deviationCode = "AD"; //TODO:
                 }
 
-                bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
+                bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
 
                 //Insert Approval History
                 ApprovalHistory approvalHistory = new ApprovalHistory();
@@ -941,12 +943,47 @@ public class FullApplicationControl extends BusinessControl {
                 requestPricing = 0;
             }*/
 
+            //Check for Appraisal Require
+            int appraisalRequire = calculateAppraisalRequest(newCreditFacility);
+
             log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setRequestPricing(requestPricing);
             workCase.setPricingDoaLevel(pricingDOALevel.value());
+            workCase.setRequestAppraisalRequire(appraisalRequire);
             workCaseDAO.persist(workCase);
         }
+    }
+
+    public int calculateAppraisalRequest(NewCreditFacility newCreditFacility){
+        int appraisalRequire = 0;
+        int appraisalRequireCount = 0;
+        if(!Util.isNull(newCreditFacility)){
+            if(!Util.isNull(newCreditFacility.getNewCollateralDetailList()) && newCreditFacility.getNewCollateralDetailList().size() > 0){
+                for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                    if(!Util.isNull(newCollateral.getNewCollateralHeadList()) && newCollateral.getNewCollateralHeadList().size() > 0){
+                        for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+                            if(!Util.isNull(newCollateralHead.getHeadCollType()) && newCollateralHead.getHeadCollType().getId() != 0){
+                                if(newCollateralHead.getHeadCollType().getAppraisalRequire() == 1){
+                                    if(!Util.isNull(newCollateral.getAppraisalDate())){
+                                        if(Util.calAge(newCollateral.getAppraisalDate()) > 1){
+                                            appraisalRequireCount = appraisalRequireCount + 1;
+                                        }
+                                    } else {
+                                        appraisalRequireCount = appraisalRequireCount + 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(appraisalRequireCount > 0){
+            appraisalRequire = 1;
+        }
+
+        return appraisalRequire;
     }
 
     public boolean getRequestPricing(long workCaseId){

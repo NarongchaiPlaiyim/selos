@@ -213,7 +213,7 @@ public class BPMExecutor implements Serializable {
 
     public void submitZM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId,
                          BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,
-                         String productGroup, String deviationCode, int requestType, long actionCode) throws Exception{
+                         String productGroup, String deviationCode, int requestType, int appraisalRequestRequire, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
@@ -237,6 +237,7 @@ public class BPMExecutor implements Serializable {
                 fields.put("DeviationCode", deviationCode);
             }
             fields.put("RequestType", String.valueOf(requestType));
+            fields.put("AppraisalReq", String.valueOf(appraisalRequestRequire));
 
             log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -371,6 +372,7 @@ public class BPMExecutor implements Serializable {
             fields.put("UW2DOALevel", uw2DOALevel);
             fields.put("UW1DecisionFlag", decisionFlag);
             fields.put("UWRG001Flag", haveRG001);
+            fields.put("AppraisalReq", String.valueOf(workCase.getRequestAppraisalRequire()));
 
             log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 

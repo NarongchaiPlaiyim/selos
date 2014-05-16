@@ -97,6 +97,7 @@ public class InboxControl extends BusinessControl {
             tempPeInbox.setStep(Util.parseString(stepToStatus.getNextStep() != null ? stepToStatus.getNextStep().getName() : "", ""));
             tempPeInbox.setStepId(Util.parseLong(stepToStatus.getNextStep() != null ? stepToStatus.getNextStep().getId() : 0, 0));
             tempPeInbox.setStatuscode(Util.parseString(stepToStatus.getNextStatus().getId(), ""));
+            tempPeInbox.setQueuename("Inbox(0)");
         }
 
         return tempPeInbox;

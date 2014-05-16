@@ -19,6 +19,8 @@ public class CollateralType implements Serializable {
     private String code;
     @Column(name = "description", length = 200)
     private String description;
+    @Column(name = "appraisal_require", columnDefinition = "int default 0")
+    private int appraisalRequire;
     @Column(name = "active")
     private int active;
 
@@ -49,6 +51,14 @@ public class CollateralType implements Serializable {
         this.description = description;
     }
 
+    public int getAppraisalRequire() {
+        return appraisalRequire;
+    }
+
+    public void setAppraisalRequire(int appraisalRequire) {
+        this.appraisalRequire = appraisalRequire;
+    }
+
     public int getActive() {
         return active;
     }
@@ -63,6 +73,7 @@ public class CollateralType implements Serializable {
                 .append("id", id)
                 .append("code", code)
                 .append("description", description)
+                .append("appraisalRequire", appraisalRequire)
                 .append("active", active)
                 .toString();
     }

@@ -524,9 +524,9 @@ public class PEDBExecute extends BusinessControl
 
             while (rs.next())
             {
-                log.info("in while .. ");
+                //log.info("in while .. ");
                 PEInbox peInbox = new PEInbox();
-                log.info("in while");
+                //log.info("in while");
                 peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                 peInbox.setAtuserteam(rs.getString("TeamName"));
                 peInbox.setApplicationno(rs.getString("AppNumber"));
@@ -557,7 +557,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setFetchType(fetchType);
                 resultQueryList.add(peInbox);
 
-                log.info("resultQueryList pedbexecute class is : {}",resultQueryList);
+                //log.info("resultQueryList pedbexecute class is : {}",resultQueryList);
 
                 peInbox = null;
 
