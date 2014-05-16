@@ -836,7 +836,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return newCreditFacilityView;
     }
 
-    //TODO find summary for compare
     public BigDecimal calSum2ForCompareSum1(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
         BigDecimal num1 = BigDecimal.valueOf(20000000);      //20,000,000
         BigDecimal num2 = BigDecimal.valueOf(35000000);      //35,000,000
@@ -859,15 +858,15 @@ public class CreditFacProposeControl extends BusinessControl {
         List<NewCollateralView> newCollateralViewList = newCreditFacilityView.getNewCollateralViewList();
         if (newCollateralViewList != null && newCollateralViewList.size() > 0) {
             for (NewCollateralView collateralView : newCollateralViewList) {
-                List<NewCollateralHeadView> collHeadViewList = collateralView.getNewCollateralHeadViewList();
-                if (collHeadViewList != null && collHeadViewList.size() > 0) {
-                    for (NewCollateralHeadView collHeadView : collHeadViewList) {
-                        PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
-
-                        if (potentialCollateral.getId() != 0) {
-                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                flag_for_core_asset = true;
-                                break;
+                if(collateralView != null && collateralView.getNewCollateralHeadViewList() != null && collateralView.getNewCollateralHeadViewList().size() > 0){
+                    for (NewCollateralHeadView collHeadView : collateralView.getNewCollateralHeadViewList()) {
+                        if(collHeadView.getPotentialCollateral() != null){
+                            PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
+                            if (potentialCollateral.getId() != 0) {
+                                if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                    flag_for_core_asset = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -888,8 +887,6 @@ public class CreditFacProposeControl extends BusinessControl {
                 summary = Util.subtract(num1, newCreditFacilityView.getExistingSMELimit());   //20 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             }
         }
-
-
         return summary;
     }
 
