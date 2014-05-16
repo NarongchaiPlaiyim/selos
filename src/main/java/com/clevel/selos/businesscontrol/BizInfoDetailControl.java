@@ -83,50 +83,30 @@ public class BizInfoDetailControl extends BusinessControl {
 
         User user = getCurrentUser();
 
-        if(bizInfoDetailView.getId() == 0){
-            bizInfoDetailView.setCreateBy(user);
-            bizInfoDetailView.setCreateDate(DateTime.now().toDate());
-        }
-        bizInfoDetailView.setModifyBy(user);
-
         try {
-            log.info("onSaveBizInfoToDB begin");
-
             bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
 
-            bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
+            bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView, user);
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
-
             bizInfoDetailDAO.persist(bizInfoDetail);
-            log.info("bizInfoDetailDAO persist end id is {}",bizInfoDetail.getId());
-
 
             supplierDetailList = bizInfoDetailView.getSupplierDetailList();
             buyerDetailList = bizInfoDetailView.getBuyerDetailList();
             bizProductDetailViewList = bizInfoDetailView.getBizProductDetailViewList();
             bizProductDetailList = new ArrayList<BizProductDetail>();
 
-//            if (bizProductDetailViewList.size() > 0) {
-                List<BizProductDetail> bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
-                bizProductDetailDAO.delete(bizProductDetailLisDelete);
-//            }
+            List<BizProductDetail> bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
+            bizProductDetailDAO.delete(bizProductDetailLisDelete);
 
             for (BizProductDetailView aBizProductDetailViewList : bizProductDetailViewList) {
                 bizProductDetailViewTemp = aBizProductDetailViewList;
                 bizProductDetailTemp = bizProductDetailTransform.transformToModel(bizProductDetailViewTemp, bizInfoDetail);
                 bizProductDetailList.add(bizProductDetailTemp);
             }
-
             bizProductDetailDAO.persist(bizProductDetailList);
-            log.info("bizProductDetailDAO persist end");
 
-
-//            if (supplierDetailList.size() > 0) {
-                List<BizStakeHolderDetail> bizSupplierListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
-
-                bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
-                log.info("supplierDetailList delete end {}",bizSupplierListDelete.size());
-//            }
+            List<BizStakeHolderDetail> bizSupplierListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
+            bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
 
             bizSupplierList = new ArrayList<BizStakeHolderDetail>();
             for (BizStakeHolderDetailView aSupplierDetailList : supplierDetailList) {
@@ -136,12 +116,8 @@ public class BizInfoDetailControl extends BusinessControl {
                 bizSupplierList.add(bizStakeHolderDetailTemp);
             }
             bizStakeHolderDetailDAO.persist(bizSupplierList);
-            log.info("bizSupplierListDetailDAO persist end");
-
-//            if (buyerDetailList.size() > 0) {
-                List<BizStakeHolderDetail> bizBuyerListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "2");
-                bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
-//            }
+            List<BizStakeHolderDetail> bizBuyerListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "2");
+            bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
 
             bizBuyerList = new ArrayList<BizStakeHolderDetail>();
             for(BizStakeHolderDetailView bizStakeHolderDetailView : buyerDetailList){
@@ -151,10 +127,7 @@ public class BizInfoDetailControl extends BusinessControl {
             }
 
             bizStakeHolderDetailDAO.persist(bizBuyerList);
-            log.info("bizBuyerListDetailDAO persist end");
-
             bizInfoDetailView.setId(bizInfoDetail.getId());
-
             onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
             return bizInfoDetailView;
         } catch (Exception e) {

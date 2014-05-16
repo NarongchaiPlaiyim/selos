@@ -1264,6 +1264,21 @@ public class BankStmtControl extends BusinessControl {
         return bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
     }
 
+    public BankStmtSummaryView saveBankStmtSumFullApp(BankStmtSummaryView bankStmtSummaryView, long workCaseId) {
+        log.debug("saveBankStmtSumFullApp() bankStmtSummaryView.id: {}, workCaseId: {}", bankStmtSummaryView.getId(), workCaseId);
+        BankStmtSummaryView returnBankStmtSumView = null;
+        if (workCaseId != 0) {
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            BankStatementSummary bankStmtSumForPersist = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+            bankStmtSumForPersist.setWorkCase(workCase);
+            BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStmtSumForPersist);
+            log.debug("After persist BankStatementSummary: {}", returnBankStmtSummary);
+            returnBankStmtSumView = bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
+        }
+        return returnBankStmtSumView;
+    }
+
     public void deleteBankStmtById(long bankStmtId) {
         log.debug("deleteBankStmt() bankStmtId: {}", bankStmtId);
         if (bankStmtId != 0) {

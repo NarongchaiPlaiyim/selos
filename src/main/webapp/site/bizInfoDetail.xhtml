@@ -167,6 +167,7 @@
                                              onkeydown="return onKeyDownMoney(event);"
                                              onkeypress="return onKeyPressMoney(event)"
                                              onfocus="removeComma(this)"
+                                             maxlength="6"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
@@ -199,7 +200,7 @@
                                              onkeydown="return onKeyDownMoney(event);"
                                              onkeypress="return onKeyPressMoney(event);"
                                              onfocus="removeComma(this)"
-                                             maxlength="17"
+                                             maxlength="6"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
@@ -1221,10 +1222,12 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
+
     <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
         LOADING<br />
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+
     </h:body>
 </f:view>
 </html>
