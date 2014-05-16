@@ -3903,7 +3903,7 @@
                                                     <tr>
                                                         <td class="center">
                                                             <p:selectOneRadio value="#{decision.approvalHistoryPricingView.uwDecision}"
-                                                                              required="#{decision.roleUW and decision.requestPricing and not empty param[saveDecisionBtn.clientId]}"
+                                                                              required="#{not decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
