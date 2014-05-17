@@ -292,7 +292,6 @@ public class MandateFieldTransform extends Transform{
         if(mandateFieldConditionDetailView.getId() > 0)
             mandateFieldConditionDetail = mandateFieldConditionDetailDAO.findById(mandateFieldConditionDetailView.getId());
 
-        mandateFieldConditionDetail.setMandateField(transformToModel(mandateFieldConditionDetailView.getMandateFieldView()));
         return mandateFieldConditionDetail;
     }
 }

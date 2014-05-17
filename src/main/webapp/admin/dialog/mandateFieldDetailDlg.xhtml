@@ -91,7 +91,7 @@
     <tr>
         <td colspan="2" class="center">
             <p:commandButton id="okBtn" styleClass="small"
-                             value="#{msg.get('app.okButton')}"
+                             value="#{msg.get('app.button.ok')}"
                              actionListener="#{mandateFieldSubmit.onUpdateMandateFieldDetail()}"
                              process="@form"
                              update=":mandateFieldDetailFrm,:frmMain:fieldName_tbl"
@@ -100,7 +100,7 @@
 
             <p:commandButton
                     id="cancelBtn"
-                    value="#{msg.get('app.cancelButton')}"
+                    value="#{msg.get('app.button.cancel')}"
                     styleClass="small"
                     onclick="#{name}.hide();"/>
         </td>

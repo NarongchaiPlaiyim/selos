@@ -13,6 +13,8 @@ import com.clevel.selos.transform.StepTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
@@ -160,6 +162,7 @@ public class MandateFieldControl extends BusinessControl {
     }
 
     public List<MandateFieldConditionView> getMandateConditionList(MandateFieldClassView mandateFieldClassView){
+        logger.info("-- begin getMandateConditionList: {}", mandateFieldClassView);
         List<MandateFieldConditionView> mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
         if(mandateFieldClassView.getId() > 0){
             List<MandateFieldCondition> mandateFieldConditionList = mandateFieldConditionDAO.findByClass(mandateFieldClassView.getId());
@@ -169,14 +172,14 @@ public class MandateFieldControl extends BusinessControl {
             }
 
             for(MandateFieldCondition mandateFieldCondition : mandateFieldConditionList){
-                if(mandateFieldCondition.getDependCondition() != null){
+                if(mandateFieldCondition.getDependCondition() > 0){
                     MandateFieldConditionView _toUpdate = null;
                     MandateFieldConditionView _toDepend = null;
                     for(MandateFieldConditionView conditionView : mandateFieldConditionViewList){
                         if(conditionView.getId() == mandateFieldCondition.getId()){
                             _toUpdate = conditionView;
                         }
-                        if(conditionView.getId() == mandateFieldCondition.getDependCondition().getId()){
+                        if(conditionView.getId() == mandateFieldCondition.getDependCondition()){
                             _toDepend = conditionView;
                         }
                     }
@@ -187,39 +190,47 @@ public class MandateFieldControl extends BusinessControl {
             }
 
         }
+        logger.info("-- end getMandateConditionList return {}", mandateFieldConditionViewList);
         return mandateFieldConditionViewList;
     }
 
     public void saveAllMandateField(MandateFieldClassView mandateFieldClassView, List<MandateFieldView> mandateFieldViewList, List<MandateFieldConditionView> mandateFieldConditionViewList){
         logger.debug("-- begin saveAllMandateField");
-        MandateFieldClass mandateFieldClass = saveMandateField(mandateFieldClassView, mandateFieldViewList);
-        logger.debug("save succeed mandateFieldClass: {}", mandateFieldClass);
-
-        saveMandateCondition(mandateFieldClass, mandateFieldConditionViewList);
-
+        MandateFieldClass mandateFieldClass = saveMandateFieldClass(mandateFieldClassView);
+        List<MandateField> mandateFieldList = saveMandateField(mandateFieldClass, mandateFieldViewList);
+        saveMandateCondition(mandateFieldClass, mandateFieldList, mandateFieldConditionViewList);
         logger.debug("-- end saveAllMandateField");
-
     }
 
-    private MandateFieldClass saveMandateField(MandateFieldClassView mandateFieldClassView, List<MandateFieldView> mandateFieldViewList){
+    private MandateFieldClass saveMandateFieldClass(MandateFieldClassView mandateFieldClassView){
         logger.debug("-- begin saveMandateFieldClass {}", mandateFieldClassView);
         MandateFieldClass mandateFieldClass = null;
+
         if(mandateFieldClassView != null){
             mandateFieldClass = mandateFieldTransform.transformToModel(mandateFieldClassView);
             mandateFieldClass = mandateFieldClassDAO.persist(mandateFieldClass);
-            for(MandateFieldView mandateFieldView : mandateFieldViewList){
-                if(mandateFieldView.isNeedUpdate()){
-                    logger.debug("-- saveMandateFieldDetail {}", mandateFieldView);
-                    MandateField mandateField = mandateFieldTransform.transformToModel(mandateFieldView, mandateFieldClass);
-                    mandateFieldDAO.persist(mandateField);
-                }
-            }
         }
         logger.debug("-- end saveMandateFieldClass");
         return mandateFieldClass;
     }
 
-    private void saveMandateCondition(MandateFieldClass mandateFieldClass, List<MandateFieldConditionView> mandateFieldConditionViewList){
+    private List<MandateField> saveMandateField(MandateFieldClass mandateFieldClass, List<MandateFieldView> mandateFieldViewList){
+        List<MandateField> mandateFieldList = new ArrayList<MandateField>();
+        if(mandateFieldViewList != null){
+            for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                MandateField mandateField = mandateFieldTransform.transformToModel(mandateFieldView, mandateFieldClass);
+                if(mandateFieldView.isNeedUpdate()){
+                    logger.debug("-- saveMandateFieldDetail {}", mandateFieldView);
+                    mandateFieldDAO.persist(mandateField);
+                }
+                mandateFieldList.add(mandateField);
+            }
+        }
+        logger.info("-- end saveMandateField: {}", mandateFieldList);
+        return mandateFieldList;
+    }
+
+    private void saveMandateCondition(MandateFieldClass mandateFieldClass, List<MandateField> mandateFieldList, List<MandateFieldConditionView> mandateFieldConditionViewList){
         List<MandateFieldCondition> mandateFieldConditionList = new ArrayList<MandateFieldCondition>();
         for(MandateFieldConditionView mandateFieldConditionView : mandateFieldConditionViewList){
 
@@ -232,10 +243,21 @@ public class MandateFieldControl extends BusinessControl {
 
             for(MandateFieldConditionDetailView mandateFieldConditionDetailView : mandateFieldConditionView.getConditionDetailViewList()){
                 MandateFieldConditionDetail mandateFieldConditionDetail = mandateFieldTransform.transformToModel(mandateFieldConditionDetailView);
-                mandateFieldConditionDetail.setMandateFieldCondition(mandateFieldCondition);
-                if(mandateFieldConditionDetailView.isNeedUpdate()){
+
+                if(mandateFieldConditionDetailView.getMandateFieldView() != null){
+                    for(MandateField mandateField : mandateFieldList){
+                        logger.info("mandateField {}", mandateField);
+                        logger.info("mandateFieldList {}", mandateFieldConditionDetailView.getMandateFieldView());
+                        if(mandateField.getFieldName().equals(mandateFieldConditionDetailView.getMandateFieldView().getFieldName())){
+                            mandateFieldConditionDetail.setMandateField(mandateField);
+                            break;
+                        }
+                    }
                     mandateFieldConditionDetail.setMandateFieldCondition(mandateFieldCondition);
-                    mandateFieldConditionDetailDAO.persist(mandateFieldConditionDetail);
+                    if(mandateFieldConditionDetailView.isNeedUpdate()){
+                        mandateFieldConditionDetail.setMandateFieldCondition(mandateFieldCondition);
+                        mandateFieldConditionDetailDAO.persist(mandateFieldConditionDetail);
+                    }
                 }
             }
         }
@@ -253,7 +275,7 @@ public class MandateFieldControl extends BusinessControl {
                     }
                 }
                 if(toUpdate != null && toDepend != null){
-                    toUpdate.setDependCondition(toDepend);
+                    toUpdate.setDependCondition(toDepend.getId());
                     mandateFieldConditionDAO.persist(toUpdate);
                 }
             }
@@ -269,6 +291,10 @@ public class MandateFieldControl extends BusinessControl {
 
         if(deletedMandateFieldConditionViewList != null){
             for (MandateFieldConditionView mandateFieldConditionView : deletedMandateFieldConditionViewList){
+                for(MandateFieldConditionDetailView conditionDetailView : mandateFieldConditionView.getConditionDetailViewList()){
+                    if(conditionDetailView.getId() > 0)
+                        mandateFieldConditionDetailDAO.deleteById(conditionDetailView.getId());
+                }
                 mandateFieldConditionDAO.deleteById(mandateFieldConditionView.getId());
             }
         }
@@ -364,7 +390,7 @@ public class MandateFieldControl extends BusinessControl {
 
     public void deleteMandateFieldConStepAction(List<MandateFieldConditionView> delectedMandateConViewList, StepView stepView, ActionView actionView){
         logger.info("-- begin deleteMandateFieldConStepAction {}, {}, {}", delectedMandateConViewList, stepView, actionView);
-        if(delectedMandateConViewList != null & delectedMandateConViewList.size() > 0){
+        if(delectedMandateConViewList != null && delectedMandateConViewList.size() > 0){
             for(MandateFieldConditionView conditionView : delectedMandateConViewList){
                 MandateFieldConStepAction mandateFieldConStepAction = mandateFieldConStepActionDAO.findByActionAndCon(stepView.getId(), actionView.getId(), conditionView.getId());
                 if(mandateFieldConStepAction != null)

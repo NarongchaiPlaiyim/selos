@@ -36,9 +36,8 @@ public class MandateFieldCondition implements Serializable{
     @Enumerated(EnumType.STRING)
     private MandateDependType dependType;
 
-    @ManyToOne
-    @JoinColumn(name = "depend_con_id")
-    private MandateFieldCondition dependCondition;
+    @Column(name = "depend_con_id")
+    private long dependCondition = 0;
 
     @OneToMany(mappedBy = "mandateFieldCondition")
     private List<MandateFieldConditionDetail> mandateFieldConditionDetailList;
@@ -91,11 +90,11 @@ public class MandateFieldCondition implements Serializable{
         this.dependType = dependType;
     }
 
-    public MandateFieldCondition getDependCondition() {
+    public long getDependCondition() {
         return dependCondition;
     }
 
-    public void setDependCondition(MandateFieldCondition dependCondition) {
+    public void setDependCondition(long dependCondition) {
         this.dependCondition = dependCondition;
     }
 

@@ -7,9 +7,9 @@
                      severity="alert" widgetVar="#{name}">
         <h:form id="#{formId}">
             <div class="onRight">
-                <p:commandButton value="#{msg.get('app.okButton')}" update="#{update}" oncomplete="#{name}.hide()"
+                <p:commandButton value="#{msg.get('app.button.ok')}" update="#{update}" oncomplete="#{name}.hide()"
                                  action="#{controller[action]}"/>
-                <p:commandButton value="#{msg.get('app.cancelButton')}" onclick="#{name}.hide()"/>
+                <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="#{name}.hide()"/>
             </div>
         </h:form>
     </p:confirmDialog>

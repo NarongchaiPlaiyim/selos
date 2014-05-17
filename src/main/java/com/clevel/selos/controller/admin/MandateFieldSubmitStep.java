@@ -114,6 +114,7 @@ public class MandateFieldSubmitStep {
         }
         wrkMandateFieldClassStepActionView = new MandateFieldClassStepActionView();
         updatedMode = false;
+        selectedMandateFieldClassStepActionId = -1;
     }
 
     public void onOpenUpdateStepActionField(){
@@ -195,14 +196,15 @@ public class MandateFieldSubmitStep {
         log.info("-- begin onAddStepActionField");
         MandateFieldClassStepActionView _toUpd = new MandateFieldClassStepActionView();
         _toUpd.updateValues(wrkMandateFieldClassStepActionView);
-
         List<MandateFieldClassStepActionView> classStepActionViewList = mandateFieldStepActionView.getClassStepActionViewList();
         for(MandateFieldClassStepActionView classStepActionView : classStepActionViewList){
             if(classStepActionView.getId() == _toUpd.getId()){
                 classStepActionViewList.remove(classStepActionView);
                 _toUpd.setNeedUpdate(Boolean.TRUE);
+                break;
             }
         }
+
         mandateFieldControl.deleteMandateFieldStepAction(mandateFieldViewList, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
         mandateFieldControl.deleteMandateFieldConStepAction(mandateFieldConditionViewList, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
         mandateFieldControl.saveMandateFieldClassStepAction(wrkMandateFieldClassStepActionView, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
@@ -407,7 +409,6 @@ public class MandateFieldSubmitStep {
     public List<MandateFieldClassView> getMandateFieldClassViewList() {
         if(mandateFieldClassViewList == null){
             mandateFieldClassViewList = mandateFieldControl.getMandateFieldClass();
-
         }
         if(!updatedMode && mandateFieldStepActionView.getClassStepActionViewList() != null){
             List<MandateFieldClassView> _temp = new ArrayList<MandateFieldClassView>();
@@ -422,6 +423,7 @@ public class MandateFieldSubmitStep {
                 if(!skip)
                     _temp.add(mandateFieldClassView);
             }
+            return _temp;
         }
         return mandateFieldClassViewList;
     }

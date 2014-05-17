@@ -313,8 +313,14 @@ public class ActionValidationControl extends BusinessControl{
         }
     }
 
+    private boolean checkCondition(Object object, long conditionId){
+        MandateFieldCondition condition = mandateFieldConditionDAO.findById(conditionId);
+        return checkCondition(object, condition);
+    }
+
     private boolean checkCondition(Object object, MandateFieldCondition condition){
         logger.debug("-- begin checkCondition object:{}, mandateFieldCondition: {}, validationResultMap: {}", object, condition, validationResultMap);
+
         List<MandateFieldConditionDetail> conditionDetailList = condition.getMandateFieldConditionDetailList();
         boolean isPassCondition = Boolean.TRUE;
         StringBuilder stringBuilder = new StringBuilder();
