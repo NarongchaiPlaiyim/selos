@@ -715,6 +715,27 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
+    public void onOpenReturnBDMByZM(){
+        log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        returnRemark = "";
+
+        RequestContext.getCurrentInstance().execute("returnBDM_ZMDlg.show()");
+    }
+
+    public void onReturnBDMByZM(){
+        log.debug("onReturnBDMByZM ( return to BDM from ZM )");
+        HttpSession session = FacesUtil.getSession(true);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        try{
+            
+        }catch (Exception ex){
+
+        }
+    }
+
     public void onOpenReturnAADMByUW2(){
         log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
