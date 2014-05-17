@@ -112,7 +112,7 @@
                     <p:commandButton
                             id="addCollOwnerUWButton"
                             binding="#{addCollOwnerUW}"
-                            value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                            value="#{msg.get('app.button.add')}"
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddCollateralOwnerUW()}"
                             process=":subCollateralDlgForm"
@@ -190,7 +190,7 @@
                     <p:commandButton
                             id="addMortgageTypeButton"
                             binding="#{addMortgageType}"
-                            value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                            value="#{msg.get('app.button.add')}"
                             styleClass="smaller"
                             actionListener="#{creditFacPropose.onAddMortgageType()}"
                             process="@form"
@@ -266,7 +266,7 @@
                 <td>
                     <p:commandButton
                             id="addRelatedWithButton"
-                            value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                            value="#{msg.get('app.button.add')}"
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddRelatedWith()}"
                             process="@form"
