@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
+    <h:form id="mandateConditionDetailFrm">
+        <p:scrollPanel style="height:200px" styleClass="panel-dialog" id="mandateConditionPanel"
+                       mode="native" rendered="#{not empty mandateFieldSubmit.wrkMandateConditionDetView}">
+            <p:messages />
+            <table class="content_form" style="width:100%">
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="mandateConditionDetailField" value="#{msg.get('app.mandateField.condition.detail.fieldName')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="mandateConditionDetailField" size="1" styleClass="largest"
+                                         value="#{mandateFieldSubmit.selectedMandateFieldViewId}">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+                            <f:selectItems value="#{mandateFieldSubmit.mandateFieldList}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="baseValue" value="#{msg.get('app.mandateField.condition.detail.baseValue')}" />
+                    </td>
+                    <td>
+                        <p:inputText value="#{mandateFieldSubmit.wrkMandateConditionDetView.baseValue}" id="baseValue" style="width: 200px;"></p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton id="okBtn" styleClass="small"
+                                         value="#{msg.get('app.button.ok')}"
+                                         actionListener="#{mandateFieldSubmit.onAddMandateConditionDetail()}"
+                                         process="@form"
+                                         update=":mandateConditionDetailFrm,:mandateConditionFrm:conditionDetail_tble"
+                                         oncomplete="handleDialogRequest(xhr, status, args,'p_mandateConditionDetailDlg')"
+                                />
+                        <p:commandButton
+                                id="cancelBtn"
+                                value="#{msg.get('app.button.cancel')}"
+                                styleClass="small"
+                                onclick="#{name}.hide();"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+            </table>
+        </p:scrollPanel>
+    </h:form>
+</ui:composition>

@@ -78,11 +78,12 @@
         <tr>
             <td class="title left" style="background-color: #ffffff;width: 150px">
                 <h:outputText value="#{msg.get('app.credit.facility.propose.label.WCNeed')}"/>
+                <h:outputText value="#{creditFacPropose.mandate('WCNeed')}" styleClass="require-field"/>
             </td>
             <td class="left" style="background-color: #ffffff;width: 170px">
                 <p:inputText value="#{creditFacPropose.newCreditFacilityView.WCNeed}"
                              maxlength="14"
-                             readonly="true"
+                             readonly="#{creditFacPropose.isDisabled('WCNeed')}"
                              style="width:170px;text-align: right">
                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                      type="number"/>
@@ -93,11 +94,12 @@
 
             <td class="title left" style="background-color: #ffffff;width: 170px">
                 <h:outputText value="#{msg.get('app.credit.facility.propose.label.totalWCdebit')}"/>
+                <h:outputText value="#{creditFacPropose.mandate('totalWCdebit')}" styleClass="require-field"/>
             </td>
             <td class="left" style="background-color: #ffffff;width: 170px">
                 <p:inputText value="#{creditFacPropose.newCreditFacilityView.totalWcDebit}"
                              maxlength="14"
-                             readonly="true"
+                             readonly="#{creditFacPropose.isDisabled('totalWCdebit')}"
                              style="width:170px;text-align: right">
                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                      type="number"/>
@@ -108,11 +110,12 @@
 
             <td class="title left" style="background-color: #ffffff;width: 190px">
                 <h:outputText value="#{msg.get('app.credit.facility.propose.label.WCNeedDiffer')}"/>
+                <h:outputText value="#{creditFacPropose.mandate('WCNeedDiffer')}" styleClass="require-field"/>
             </td>
             <td class="left" style="background-color: #ffffff">
                 <p:inputText value="#{creditFacPropose.newCreditFacilityView.WCNeedDiffer}"
                              maxlength="14"
-                             readonly="true"
+                             readonly="#{creditFacPropose.isDisabled('WCNeedDiffer')}"
                              style="width:170px;text-align: right">
                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                      type="number"/>
@@ -127,11 +130,12 @@
 
             <td class="title left" style="background-color: #e6e6e6;;width: 190px">
                 <h:outputText value="#{msg.get('app.credit.facility.propose.label.totalWCTMB')}"/>
+                <h:outputText value="#{creditFacPropose.mandate('totalWCTMB')}" styleClass="require-field"/>
             </td>
             <td class="left" style="background-color: #e6e6e6;">
                 <p:inputText value="#{creditFacPropose.newCreditFacilityView.totalWcTmb}"
                              maxlength="14"
-                             readonly="true"
+                             readonly="#{creditFacPropose.isDisabled('totalWCTMB')}"
                              style="width:170px;text-align: right">
                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                      type="number"/>
@@ -159,11 +163,12 @@
                     <tr>
                         <td class="title right" style="width: 40px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.limit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case1WC.limit')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1WcLimit}"
                                          maxlength="17"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case1WC.limit')}"
                                          style="text-align: right">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                  type="number"/>
@@ -174,11 +179,12 @@
 
                         <td class="title right" style="width: 200px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.minLimit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case1WC.minLimit')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1WcMinLimit}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case1WC.minLimit')}"
                                          style="text-align: right">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                  type="number"/>
@@ -188,13 +194,13 @@
                         </td>
 
                         <td class="title right" style="width: 120px">
-                            <h:outputText
-                                    value="#{msg.get('app.credit.facility.propose.label.case1WC.50CoreWC')}"/>
+                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.50CoreWC')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case1WC.50CoreWC')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1Wc50CoreWc}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case1WC.50CoreWC')}"
                                          style="text-align: right">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                  type="number"/>
@@ -205,11 +211,12 @@
 
                         <td class="title right" style="width: 190px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.debitCoreWC')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case1WC.debitCoreWC')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1WcDebitCoreWc}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case1WC.debitCoreWC')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -236,11 +243,12 @@
                     <tr>
                         <td class="title right" style="width: 40px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.limit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case2WC.limit')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case2WcLimit}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case2WC.limit')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -253,11 +261,12 @@
 
                         <td class="title right" style="width: 200px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.minLimit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case2WC.minLimit')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case2WcMinLimit}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case2WC.minLimit')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -270,11 +279,12 @@
 
                         <td class="title right" style="width: 120px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.50CoreWC')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case2WC.50CoreWC')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case2Wc50CoreWc}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case2WC.50CoreWC')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -287,11 +297,12 @@
 
                         <td class="title right" style="width: 190px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.debitCoreWC')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case2WC.debitCoreWC')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case2WcDebitCoreWc}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case2WC.debitCoreWC')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -317,11 +328,12 @@
                     <tr>
                         <td class="title right" style="width: 40px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.limit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case3WC.limit')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case3WcLimit}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case3WC.limit')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -334,11 +346,12 @@
 
                         <td class="title right" style="width: 200px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.minLimit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case3WC.minLimit')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case3WcMinLimit}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case3WC.minLimit')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -351,11 +364,12 @@
 
                         <td class="title right" style="width: 120px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.50CoreWC')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case3WC.50CoreWC')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case3Wc50CoreWc}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case3WC.50CoreWC')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -368,11 +382,12 @@
 
                         <td class="title right" style="width: 190px">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.debitCoreWC')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('case3WC.debitCoreWC')}" styleClass="require-field"/>
                         </td>
                         <td style="padding: 0">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.case3WcDebitCoreWc}"
                                          maxlength="14"
-                                         readonly="true"
+                                         readonly="#{creditFacPropose.isDisabled('case3WC.debitCoreWC')}"
                                          styleClass="right">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -409,13 +424,15 @@
         <tr>
             <td class="title" colspan="2">
                 <h:outputText value="#{msg.get('app.credit.facility.propose.label.proposedPurposed.caption')}"/>
+                <h:outputText value="#{creditFacPropose.mandate('creditCusType')}" styleClass="require-field"/>
             </td>
         </tr>
 
         <tr>
             <td class="left" colspan="2">
                 <p:selectOneRadio id="creditCustomerTypeValue"
-                                  value="#{creditFacPropose.newCreditFacilityView.creditCustomerType}">
+                                  value="#{creditFacPropose.newCreditFacilityView.creditCustomerType}"
+                                  disabled="#{creditFacPropose.isDisabled('creditCusType')}">
                     <f:selectItem itemLabel="#{msg.get('app.credit.facility.propose.radio.creditCusType.normal')}"
                                   itemValue="1"/>
                     <f:selectItem itemLabel="#{msg.get('app.credit.facility.propose.radio.creditCusType.prime')}"
@@ -429,21 +446,21 @@
                 <table class="table_noborder">
                     <tr>
                         <td class="title">
-                            <h:outputText
-                                    value="#{msg.get('app.credit.facility.propose.label.proposed.credit.loanRequestType')}"/>
+                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.proposed.credit.loanRequestType')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('loanRequestType')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:selectOneMenu id="creditRequest"
                                              value="#{creditFacPropose.newCreditFacilityView.loanRequestType.id}"
                                              style="width: 200px;"
+                                             disabled="#{creditFacPropose.isDisabled('loanRequestType')}"
                                              required="#{not empty param[onsaveNewFacility.clientId]}">
                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                 <f:selectItems value="#{creditFacPropose.creditRequestTypeViewList}" var="creditRequest"
                                                itemLabel="#{creditRequest.name}"
                                                itemValue="#{creditRequest.id}"/>
-                                <p:ajax event="change"
-                                        process="@this"
-                                        update="@this"/>
+                                <p:ajax event="change" process="@this" update="@this"/>
                             </p:selectOneMenu>
                         </td>
                     </tr>
@@ -457,11 +474,14 @@
                     <tr>
                         <td class="title">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.investedCountry')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('investedCountry')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:selectOneMenu id="countryItem"
                                              value="#{creditFacPropose.newCreditFacilityView.investedCountry.id}"
                                              style="width: 200px;"
+                                             disabled="#{creditFacPropose.isDisabled('investedCountry')}"
                                              required="#{not empty param[onsaveNewFacility.clientId]}">
                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                 <f:selectItems value="#{creditFacPropose.countryViewList}" var="country"
@@ -483,6 +503,7 @@
                     <tr>
                         <td class="title">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.existingSMELimit')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('existingSMELimit')}" styleClass="require-field"/>
                         </td>
                         <td class="left">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
@@ -491,7 +512,8 @@
                                          required="#{not empty param[onsaveNewFacility.clientId]}"
                                          style="width:200px;text-align: right"
                                          onkeydown="return onKeyDownMoney(event);"
-                                         onkeypress="return onKeyPressMoney(event);">
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         readonly="#{creditFacPropose.isDisabled('existingSMELimit')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                  type="number"/>
                                 <p:ajax event="blur" update="@this"/>
@@ -499,8 +521,8 @@
 
                             <p:spacer width="10" height="0"/>
 
-                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.maximumSMELimit')}"
-                                          styleClass="title"/>
+                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.maximumSMELimit')}" styleClass="title"/>
+                            <h:outputText value="#{creditFacPropose.mandate('maximumSMELimit')}" styleClass="require-field"/>
                             <p:spacer width="5" height="0"/>
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
                                          required="#{not empty param[onsaveNewFacility.clientId]}"
@@ -509,7 +531,7 @@
                                          style="width:200px;text-align: right"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
-                                         disabled="true">
+                                         readonly="#{creditFacPropose.isDisabled('maximumSMELimit')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                  type="number"/>
                                 <p:ajax event="blur" update="@this"/>
@@ -894,82 +916,105 @@
                     <tr>
                         <td class="left" style="background-color: #ffffff;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactName')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.contactName')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
-                            <p:inputText styleClass="large"
-                                         value="#{creditFacPropose.newCreditFacilityView.contactName}"/>
+                            <p:inputText styleClass="large" value="#{creditFacPropose.newCreditFacilityView.contactName}"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.contactName')}"/>
 
                             <p:spacer width="10" height="0"/>
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactPhoneNo')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.contactPhoneNo')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                             <p:spacer width="5" height="0"/>
-                            <p:inputMask value="#{creditFacPropose.newCreditFacilityView.contactPhoneNo}" mask="(999)999-9999"/>
+                            <p:inputMask value="#{creditFacPropose.newCreditFacilityView.contactPhoneNo}" mask="(999)999-9999"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.contactPhoneNo')}"/>
 
                             <p:spacer width="10" height="0"/>
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.interService')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.interService')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                             <p:spacer width="5" height="0"/>
-                            <p:inputText styleClass="large"
-                                         value="#{creditFacPropose.newCreditFacilityView.interService}"/>
+                            <p:inputText styleClass="large" value="#{creditFacPropose.newCreditFacilityView.interService}"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.interService')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="left" style="background-color: #e6e6e6;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.currentAddress')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.currentAddress')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #e6e6e6;">
-                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.currentAddress}"
-                                         style="width:70%"/>
+                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.currentAddress}" style="width:70%"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.currentAddress')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="left" style="background-color: #ffffff;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.registerredAddress')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.registerredAddress')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
-                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.registeredAddress}"
-                                         style="width:70%">
-                            </p:inputText>
+                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.registeredAddress}" style="width:70%"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.registerredAddress')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="left" style="background-color: #e6e6e6;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.emailAddress')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.emailAddress')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #e6e6e6;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.import')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.import')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
+
                             <p:spacer width="5" height="0"/>
-                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.importMail}"
-                                         styleClass="large"/>
+
+                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.importMail}" styleClass="large"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.import')}"/>
 
                             <p:spacer width="10" height="0"/>
+
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.export')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.export')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
+
                             <p:spacer width="5" height="0"/>
-                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.exportMail}"
-                                         styleClass="large"/>
+
+                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.exportMail}" styleClass="large"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.export')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="left" style="background-color: #ffffff;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.depositBranchCode')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.depositBranchCode')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
-                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.depositBranchCode}"
-                                         styleClass="large">
-                            </p:inputText>
+                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.depositBranchCode}" styleClass="large"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.depositBranchCode')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="left" style="background-color: #e6e6e6;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.ownerBranchCode')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('trade.ownerBranchCode')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #e6e6e6">
-                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.ownerBranchCode}"
-                                         styleClass="large">
-                            </p:inputText>
+                            <p:inputText value="#{creditFacPropose.newCreditFacilityView.ownerBranchCode}" styleClass="large"
+                                                            readonly="#{creditFacPropose.isDisabled('trade.ownerBranchCode')}"/>
                         </td>
                     </tr>
                 </table>
@@ -1002,6 +1047,8 @@
                     <tr>
                         <td class="left" style="width: 280px;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.intFeeDOA')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('intFeeDOA')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="width: 190px;">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.intFeeDOA}"
@@ -1010,7 +1057,8 @@
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
                                          styleClass="right"
-                                         required="#{not empty param[onsaveNewFacility.clientId]}">
+                                         required="#{not empty param[onsaveNewFacility.clientId]}"
+                                         readonly="#{creditFacPropose.isDisabled('intFeeDOA')}">
                                 <f:convertNumber pattern="##0.00"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -1023,6 +1071,8 @@
 
                         <td class="left" style="width: 300px;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.frontendFeeDOA')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('frontendFeeDOA')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="width: 190px;">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.frontendFeeDOA}"
@@ -1031,7 +1081,8 @@
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
                                          styleClass="right"
-                                         required="#{not empty param[onsaveNewFacility.clientId]}">
+                                         required="#{not empty param[onsaveNewFacility.clientId]}"
+                                         readonly="#{creditFacPropose.isDisabled('frontendFeeDOA')}">
                                 <f:convertNumber pattern="##0.00"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -1044,6 +1095,8 @@
 
                         <td class="left" style="width: 130px;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorBA')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('guarantorBA')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="width: 190px;">
                             <p:inputText value="#{creditFacPropose.newCreditFacilityView.guarantorBA}"
@@ -1051,7 +1104,8 @@
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
-                                         style="width:200px;text-align: right">
+                                         style="width:200px;text-align: right"
+                                         readonly="#{creditFacPropose.isDisabled('guarantorBA')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                  type="number"/>
                                 <p:ajax event="blur" update="@this"/>
@@ -1062,11 +1116,14 @@
                     <tr>
                         <td class="left" style="width: 250px;">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.reasonForReduction')}"/>
+                            <h:outputText value="#{creditFacPropose.mandate('reasonForReduction')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" colspan="5">
                             <p:inputTextarea value="#{creditFacPropose.newCreditFacilityView.reasonForReduction}"
                                              rows="3" cols="150"
-                                             autoResize="false"/>
+                                             autoResize="false"
+                                             readonly="#{creditFacPropose.isDisabled('reasonForReduction')}"/>
                         </td>
                     </tr>
                 </table>
@@ -1187,7 +1244,8 @@
                         process="@form"
                         actionListener="#{creditFacPropose.onAddProposeCollInfo}"
                         update=":collateralDlgForm"
-                        oncomplete="collateralInfoDlg.show();">
+                        oncomplete="collateralInfoDlg.show();"
+                        disabled="#{creditFacPropose.isDisabled('addProposeCollateralButton')}">
                     <p:resetInput target=":collateralDlgForm"/>
                 </p:commandButton>
             </td>
@@ -1217,7 +1275,8 @@
                                  action="#{creditFacPropose.onEditProposeCollInfo()}"
                                  update=":collateralDlgForm"
                                  process="@form"
-                                 oncomplete="blockUI.hide(); collateralInfoDlg.show()">
+                                 oncomplete="blockUI.hide(); collateralInfoDlg.show()"
+                                 disabled="#{creditFacPropose.isDisabled('collateral.editButton')}">
                     <f:setPropertyActionListener value="#{newCollateralView}"
                                                  target="#{creditFacPropose.selectCollateralDetailView}"/>
                     <f:setPropertyActionListener value="#{collIndex.index}"
@@ -1227,7 +1286,8 @@
                 <p:spacer width="10" height="0"/>
                 <p:commandButton value="Remove"
                                  process="@form"
-                                 oncomplete="confirmDeleteCollateralInfoDlg.show()">
+                                 oncomplete="confirmDeleteCollateralInfoDlg.show()"
+                                 disabled="#{creditFacPropose.isDisabled('collateral.deleteButton')}">
                     <f:setPropertyActionListener value="#{newCollateralView}"
                                                  target="#{creditFacPropose.selectCollateralDetailView}"/>
                 </p:commandButton>
@@ -1402,8 +1462,6 @@
                     <td class="left">
                         <h:outputText value="#{not empty CollateralHeaderDetailView.tcgCollateralType ?
                                                                        CollateralHeaderDetailView.tcgCollateralType.description : ''}"/>
-        <!--                <h:outputText value="#{not empty CollateralHeaderDetailView.collTypePercentLTV ?
-                                                                       CollateralHeaderDetailView.collTypePercentLTV.description : ''}"/>-->
                     </td>
                 </tr>
 
@@ -1624,12 +1682,13 @@
             <td class="left" colspan="2">
                 <p:commandButton
                         id="addGuarantorButton"
-                        value="#{msg.get('app.credit.facility.propose.button.addGuarantorButton')}"
+                        value="#{msg.get('app.button.add')}"
                         styleClass="smaller"
                         actionListener="#{creditFacPropose.onAddGuarantorInfo()}"
                         process="@form"
                         update=":guarantorDlgForm"
-                        oncomplete="guarantorInfoDlg.show();">
+                        oncomplete="guarantorInfoDlg.show();"
+                        disabled="#{creditFacPropose.isDisabled('addGuarantorButton')}">
                     <p:resetInput target=":guarantorDlgForm"/>
                 </p:commandButton>
             </td>
@@ -1721,7 +1780,8 @@
                                          action="#{creditFacPropose.onEditGuarantorInfo()}"
                                          update=":guarantorDlgForm"
                                          process="@form"
-                                         oncomplete="guarantorInfoDlg.show();">
+                                         oncomplete="guarantorInfoDlg.show();"
+                                         disabled="#{creditFacPropose.isDisabled('guarantor.actionList')}">
                             <f:setPropertyActionListener value="#{newGuarantorDetailView}"
                                                          target="#{creditFacPropose.newGuarantorDetailViewItem}"/>
                             <f:setPropertyActionListener value="#{rowIndex}"
@@ -1731,7 +1791,8 @@
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          process="@form"
-                                         oncomplete="confirmDeleteGuarantorInfoDlg.show()">
+                                         oncomplete="confirmDeleteGuarantorInfoDlg.show()"
+                                         disabled="#{creditFacPropose.isDisabled('guarantor.actionList')}">
                             <f:setPropertyActionListener value="#{newGuarantorDetailView}"
                                                          target="#{creditFacPropose.newGuarantorDetailViewItem}"/>
                         </p:commandButton>
@@ -1783,12 +1844,13 @@
             <td class="left" colspan="2">
                 <p:commandButton
                         id="addConditionButton"
-                        value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                        value="#{msg.get('app.button.add')}"
                         styleClass="smaller"
                         actionListener="#{creditFacPropose.onAddConditionInfo()}"
                         process="@form"
                         update=":conditionDlgForm"
-                        oncomplete="conditionDlg.show();">
+                        oncomplete="conditionDlg.show();"
+                        disabled="#{creditFacPropose.isDisabled('addConditionButton')}">
                     <p:resetInput target=":conditionDlgForm"/>
                 </p:commandButton>
             </td>
@@ -1832,7 +1894,8 @@
                         <p:commandButton title="Remove"
                                          icon="ui-icon-trash"
                                          process="@this"
-                                         oncomplete="confirmDeleteConditionInfoDlg.show()">
+                                         oncomplete="confirmDeleteConditionInfoDlg.show()"
+                                         disabled="#{creditFacPropose.isDisabled('condition.actionList')}">
                             <f:setPropertyActionListener value="#{conditionInfoItem}"
                                                          target="#{creditFacPropose.selectConditionItem}"/>
                         </p:commandButton>
@@ -1864,9 +1927,12 @@
                     <tr>
                         <td class="left" style="background-color: #ffffff">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.relatedTMBLending')}"/>
+                            <h:outputText value="#{basicInfo.mandate('relatedTMBLending')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
-                            <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.relatedTMBLending}">
+                            <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.relatedTMBLending}"
+                                              disabled="#{basicInfo.isDisabled('relatedTMBLending')}">
                                 <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
                                 <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
                             </p:selectOneRadio>
@@ -1875,12 +1941,13 @@
 
                     <tr>
                         <td class="left">
-                            <h:outputText
-                                    value="#{msg.get('app.credit.facility.propose.label.25percentShareRelatedTMBLending')}"/>
+                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.25percentShareRelatedTMBLending')}"/>
+                            <h:outputText value="#{basicInfo.mandate('25percentShareRelatedTMBLending')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
-                            <p:selectOneRadio
-                                    value="#{creditFacPropose.newCreditFacilityView.twentyFivePercentShareRelatedTMBLending}">
+                            <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.twentyFivePercentShareRelatedTMBLending}"
+                                              disabled="#{basicInfo.isDisabled('25percentShareRelatedTMBLending')}">
                                 <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
                                 <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
                             </p:selectOneRadio>
@@ -1890,9 +1957,12 @@
                     <tr>
                         <td class="left" style="background-color: #ffffff">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.singleLendingLimit')}"/>
+                            <h:outputText value="#{basicInfo.mandate('singleLendingLimit')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
-                            <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.singleLendingLimit}">
+                            <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.singleLendingLimit}"
+                                              disabled="#{basicInfo.isDisabled('singleLendingLimit')}">
                                 <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
                                 <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
                             </p:selectOneRadio>
@@ -1932,14 +2002,16 @@
                                  styleClass="smaller"
                                  process="@form"
                                  update=":frmMain, :msgBoxSystemMessagePanel"
-                                 actionListener="#{creditFacPropose.onSaveCreditFacPropose()}"/>
+                                 actionListener="#{creditFacPropose.onSaveCreditFacPropose()}"
+                                 disabled="#{creditFacPropose.isDisabled('saveButton')}"/>
                 <p:spacer width="10" height="0"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"
                                  id="btnCancel"
                                  process="@form"
                                  update=":frmMain"
-                                 actionListener="#{creditFacPropose.onCreation}"/>
+                                 actionListener="#{creditFacPropose.onCreation}"
+                                 disabled="#{creditFacPropose.isDisabled('cancelButton')}"/>
             </td>
         </tr>
     </table>

@@ -26,8 +26,17 @@ public class MandateFieldDAO extends GenericDAO<MandateField, Long> {
         criteria.add(Restrictions.eq("step", step));
         criteria.add(Restrictions.eq("status", status));
         criteria.add(Restrictions.eq("action", action));
-        List<MandateField> mandateFieldConfigureList = criteria.list();
-        logger.debug("retrun List<MandateFieldConfigure> {}", mandateFieldConfigureList);
-        return mandateFieldConfigureList;
+        List<MandateField> mandateFieldList = criteria.list();
+        logger.debug("retrun List<mandateFieldList> {}", mandateFieldList);
+        return mandateFieldList;
+    }
+
+    public List<MandateField> findByClass(long mandateFieldClassId){
+        logger.debug("-- begin findByClass mandateFieldClassId: {}", mandateFieldClassId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("mandateFieldClass.id", mandateFieldClassId));
+        List<MandateField> mandateFieldList = criteria.list();
+        logger.debug("-- end findByClass return: {}", mandateFieldList);
+        return mandateFieldList;
     }
 }

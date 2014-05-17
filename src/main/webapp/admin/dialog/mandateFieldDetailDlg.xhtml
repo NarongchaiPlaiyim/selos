@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
+<h:form id="mandateFieldDetailFrm">
+<p:scrollPanel style="height:400px" styleClass="panel-dialog" id="mandateFieldPanel"
+               mode="native"
+               rendered="#{not empty mandateFieldSubmit.wrkMandateFieldView}">
+<p:messages />
+<table class="content_form">
+<tr>
+    <td class="title" style="width: 200px;">
+        <p:outputLabel for="fieldNameDlg" value="#{msg.get('app.mandateField.field.name')}" />
+    </td>
+    <td>
+        <p:inputText id="fieldNameDlg" readonly="true" value="#{mandateFieldSubmit.wrkMandateFieldView.fieldName}"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel for="fieldDescDlg" value="#{msg.get('app.mandateField.field.desc')}" />
+    </td>
+    <td>
+        <p:inputText id="fieldDescDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.fieldDesc}"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel for="pageDlg" value="#{msg.get('app.mandateField.field.pageName')}" />
+    </td>
+    <td>
+        <p:inputText id="pageDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.page}" maxlength="100"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel for="minValueDlg" value="#{msg.get('app.mandateField.field.min')}" />
+    </td>
+    <td>
+        <p:inputText id="minValueDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.minValue}" maxlength="100"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel for="maxValueDlg" value="#{msg.get('app.mandateField.field.max')}" />
+    </td>
+    <td>
+        <p:inputText id="maxValueDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.maxValue}" maxlength="100"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel for="matchedValueDlg" value="#{msg.get('app.mandateField.field.match')}" />
+    </td>
+    <td>
+        <h:selectOneRadio id="matchedEmpty"
+                          value="#{mandateFieldSubmit.wrkMandateFieldView.matchedEmpty}">
+            <f:selectItem itemLabel="N/A" itemValue="0"/>
+            <f:selectItem itemLabel="Empty" itemValue="2"/>
+            <f:selectItem itemLabel="Other" itemValue="1"/>
+            <p:ajax event="click"
+                    process=":mandateFieldDetailFrm:matchedEmpty"
+                    update=":mandateFieldDetailFrm:matchedValueDlg"/>
+        </h:selectOneRadio>
+        <p:inputText id="matchedValueDlg" readonly="#{mandateFieldSubmit.wrkMandateFieldView.matchedEmpty != 1}" value="#{mandateFieldSubmit.wrkMandateFieldView.matchedValue}" maxlength="100"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel for="notMatchedValueDlg" value="#{msg.get('app.mandateField.field.notmatch')}" />
+    </td>
+    <td>
+        <h:selectOneRadio id="notMatchedEmpty"
+                          value="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedEmpty}">
+            <f:selectItem itemLabel="N/A" itemValue="0"/>
+            <f:selectItem itemLabel="Empty" itemValue="2"/>
+            <f:selectItem itemLabel="Other" itemValue="1"/>
+            <p:ajax event="click"
+                    process=":mandateFieldDetailFrm:notMatchedEmpty"
+                    update=":mandateFieldDetailFrm:notMatchedValueDlg"/>
+        </h:selectOneRadio>
+        <p:inputText id="notMatchedValueDlg" readonly="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedEmpty != 1}" value="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedValue}" maxlength="100"/>
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <p:spacer></p:spacer>
+    </td>
+</tr>
+    <tr>
+        <td colspan="2" class="center">
+            <p:commandButton id="okBtn" styleClass="small"
+                             value="#{msg.get('app.button.ok')}"
+                             actionListener="#{mandateFieldSubmit.onUpdateMandateFieldDetail()}"
+                             process="@form"
+                             update=":mandateFieldDetailFrm,:frmMain:fieldName_tbl"
+                             oncomplete="handleDialogRequest(xhr, status, args,'p_mandateFieldDlg')"
+                             />
+
+            <p:commandButton
+                    id="cancelBtn"
+                    value="#{msg.get('app.button.cancel')}"
+                    styleClass="small"
+                    onclick="#{name}.hide();"/>
+        </td>
+    </tr>
+<tr>
+    <td colspan="2">
+        <p:spacer></p:spacer>
+    </td>
+</tr>
+</table>
+</p:scrollPanel>
+    <p:blockUI widgetVar="blockMandateFieldPanel" block="mandateFieldDetailFrm" trigger=":mandateFieldDetailFrm:okBtn">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</h:form>
+</ui:composition>

@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.view.StepView;
 
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,5 +84,26 @@ public class StepTransform extends Transform {
             stepViewList.add(transformToView(step));
         }
         return stepViewList;
+    }
+
+    public List<SelectItem> transformToSelectItem(List<Step> stepList) {
+        List<SelectItem> selectItemList = new ArrayList<SelectItem>();
+        for(Step step : stepList){
+            SelectItem selectItem = new SelectItem();
+            selectItem.setValue(step.getId());
+            selectItem.setLabel(step.getName());
+            selectItem.setDescription(step.getDescription());
+            selectItemList.add(selectItem);
+        }
+
+        return selectItemList;
+    }
+
+    public StepView transformToView(SelectItem selectItem){
+        StepView stepView = new StepView();
+        stepView.setId((Long)selectItem.getValue());
+        stepView.setName(selectItem.getLabel());
+        stepView.setDescription(selectItem.getDescription());
+        return stepView;
     }
 }
