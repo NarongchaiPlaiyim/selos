@@ -9,93 +9,70 @@
         <!--<link type="text/css" rel="stylesheet" href="resources/css/style.css"/>-->
         <h:outputStylesheet library="css" name="style.css" target="head" />
     </h:head>
-    <h:body>
+    <h:body styleClass="body_login" >
         <!--Application version: @versionNumber@-->
-        <p:panel id="pnl_maincontainer">
+        <p:panel id="pnl_maincontainer_login">
+            <h:form id="frmMain">
             <div id="main_container_login">
                 <!--Start Head Logo-->
-                <!--<ui:include src="site/include/header_logo.xhtml">-->
-<!--                <div id="header_logo">
-                    <div id="header_logo_image">
-                        <img src="resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application"/>
-                        &lt;!&ndash;<h:graphicImage library="images" name="shared/header_logo.jpg" />&ndash;&gt;
-                    </div>
-                </div>-->
-
                 <div id="content_container_login">
-                    <h:form>
-                        <div id="login_box">
-                            <table cellpadding="0" cellspacing="0" style="min-width: 700px; max-width: 700px; width: 700px;" border="0" >
-                                <tr>
-                                    <!--<td colspan="100%"><img src="resources/images/login/login_logo.png"></img></td>-->
-                                    <td colspan="100%"><h:graphicImage library="images" name="login/login_logo.png" /></td>
-                                </tr>
-                                <tr><td colspan="100%" style="height:25px;"></td></tr>
-                                <tr>
-                                    <!--<td rowspan="4" style="width:327px;"><img src="resources/images/login/login_img.jpg"></img></td>-->
-                                    <td rowspan="4" style="width:327px;"><h:graphicImage library="images" name="login/login_img.jpg" /></td>
-                                    <!--<td rowspan="4" style="width:17px;"><img src="resources/images/login/login_hor_separate.jpg"></img></td>-->
-                                    <td rowspan="4" style="width:17px;"><h:graphicImage library="images" name="login/login_hor_separate.jpg" /></td>
-                                    <td rowspan="4" style="width:37px;"></td>
-                                    <!--<td rowspan="4" style="width:53px; padding-top:12px;"><img src="resources/images/login/login_usr_psw.jpg"></img></td>-->
-                                    <td rowspan="4" style="width:53px; padding-top:12px;"><h:graphicImage library="images" name="login/login_usr_psw.jpg" /></td>
-                                    <!--<td style="wdith:241px;"><img src="resources/images/login/login_signup.jpg"></img></td>-->
-                                    <td style="wdith:241px;"><h:graphicImage library="images" name="login/login_signup.jpg" /></td>
-                                </tr>
-                                <tr>
-                                    <td style="height:53px;">
-                                        <p:inputText value="#{loginBean.userName}" styleClass="login-inp" style="font-size: 18px!important;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p:password value="#{loginBean.password}" styleClass="login-inp" style="font-size: 18px!important;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:right; align:right; padding-right:42px;">
-                                        <p:commandButton value="Login" action="#{loginBean.login}" ajax="false"
-                                                         styleClass="login-button"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="100%" style="height:38px;" valign="top">
-                                        <div style="font-size:10px; color: #E11837; font-weight: bold; text-align:center;"><h:outputText value="#{loginBean.loginExceptionMessage}"/></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!--<td colspan="100%"><img src="resources/images/login/login_ver_separate.jpg"></img></td>-->
-                                    <td colspan="100%"><h:graphicImage library="images" name="login/login_ver_separate.jpg" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="100%">
-                                        <p id="ca_web_version" class="iso_message" style="font-size:9px; line-height:10px; padding-left:10px; margin:0 10px 0 10px; color: #757575;">
-                                            This system is for the use of authorised users only. User activity may also be monitored.
-                                            Users of this system expressly consent to such monitoring and are advised that if such monitoring reveals possible criminal activity, security staff may provide
-                                            the evidence of such monitoring to law enforcement officials.
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </h:form>
-                    <!--<h:form>
-                        <p:panel header="Login v.#{msg.get('app.version')}">
-                            <h:panelGrid columns="2">
-                                <h:outputText value="username: "/>
-                                <p:inputText value="#{loginBean.userName}"/>
-                                <h:outputText value="password: "/>
-                                <p:password value="#{loginBean.password}"/>
-
-                            </h:panelGrid>
-                            <p:commandButton value="Login" action="#{loginBean.login}" ajax="false"
-                                             style="width: 150px;"/>
-                            <h:outputText value="#{loginBean.loginExceptionMessage}"/>
-                        </p:panel>
-
-                    </h:form>-->
+                    <div id="login_box">
+                        <table cellpadding="0" cellspacing="0" style="min-width: 700px; max-width: 700px; width: 700px;" border="0" >
+                            <tr>
+                                <!--<td colspan="100%"><img src="resources/images/login/login_logo.png"></img></td>-->
+                                <td colspan="100%"><h:graphicImage library="images" name="login/login_logo.png" /></td>
+                            </tr>
+                            <tr><td colspan="100%" style="height:25px;"></td></tr>
+                            <tr>
+                                <!--<td rowspan="4" style="width:327px;"><img src="resources/images/login/login_img.jpg"></img></td>-->
+                                <td rowspan="4" style="width:327px;"><h:graphicImage library="images" name="login/login_img.jpg" /></td>
+                                <!--<td rowspan="4" style="width:17px;"><img src="resources/images/login/login_hor_separate.jpg"></img></td>-->
+                                <td rowspan="4" style="width:17px;"><h:graphicImage library="images" name="login/login_hor_separate.jpg" /></td>
+                                <td rowspan="4" style="width:37px;"></td>
+                                <!--<td rowspan="4" style="width:53px; padding-top:12px;"><img src="resources/images/login/login_usr_psw.jpg"></img></td>-->
+                                <td rowspan="4" style="width:53px; padding-top:12px;"><h:graphicImage library="images" name="login/login_usr_psw.jpg" /></td>
+                                <!--<td style="wdith:241px;"><img src="resources/images/login/login_signup.jpg"></img></td>-->
+                                <td style="wdith:241px;"><h:graphicImage library="images" name="login/login_signup.jpg" /></td>
+                            </tr>
+                            <tr>
+                                <td style="height:53px;">
+                                    <p:inputText value="#{loginBean.userName}" required="true"  styleClass="login-inp" style="font-size: 18px!important;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p:password value="#{loginBean.password}" required="true" autocomplete="false" styleClass="login-inp" style="font-size: 18px!important;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right; align:right; padding-right:42px;">
+                                    <p:commandButton id="btnLogin" value="Login" action="#{loginBean.login}" ajax="false"
+                                                     styleClass="login-button"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="height:38px;" valign="top">
+                                    <div style="font-size:10px; color: #E11837; font-weight: bold; text-align:center;"><h:outputText value="#{loginBean.loginExceptionMessage}"/></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--<td colspan="100%"><img src="resources/images/login/login_ver_separate.jpg"></img></td>-->
+                                <td colspan="100%"><h:graphicImage library="images" name="login/login_ver_separate.jpg" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%">
+                                    <p id="ca_web_version" class="iso_message" style="font-size:9px; line-height:10px; padding-left:10px; margin:0 10px 0 10px; color: #757575;">
+                                        This system is for the use of authorised users only. User activity may also be monitored.
+                                        Users of this system expressly consent to such monitoring and are advised that if such monitoring reveals possible criminal activity, security staff may provide
+                                        the evidence of such monitoring to law enforcement officials.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    </div>
                 </div>
-            </div>
+            </h:form>
         </p:panel>
     </h:body>
 </f:view>

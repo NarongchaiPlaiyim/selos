@@ -35,9 +35,9 @@
                                  binding="#{btnSubmitCancelCA}"
                                  value="#{msg.get('app.button.submit')}"
                                  actionListener="#{headerController.onCancelCA()}"
-                                 oncomplete="handleRequestDialog(xhr, status, args, 'cancelCADlg')"
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'cancelCADlg')"
                                  process="@form"
-                                 update=":frmMain:cancelCADlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                                 update=":frmMain:cancelCADlgPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
                                  styleClass="small" onclick="PF('cancelCADlg').hide()"/>
             </td>

@@ -43,11 +43,11 @@
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
                                  actionListener="#{headerController.onRequestAppraisalCustomerAccepted()}"
-                                 oncomplete="handleRequestDialog(xhr, status, args, 'reqAppr_BDMDlg')"
+                                 oncomplete="reqAppr_BDMDlg.hide()"
                                  process="@form"
                                  update=":frmMain:reqAppr_BDMPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                 styleClass="small" onclick="reqAppr_BDMDlg.hide()"/>
+                                 styleClass="small" onclick="PF('reqAppr_BDMDlg').hide()"/>
             </td>
         </tr>
     </table>

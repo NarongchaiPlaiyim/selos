@@ -5,7 +5,10 @@ import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.*;
+import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.RLOSInterface;
+import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
@@ -18,10 +21,11 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
+import com.clevel.selos.model.db.master.Relation;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
@@ -349,7 +353,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                 Map<RelationValue, Integer> _numberOfCusRelationMap = new TreeMap<RelationValue, Integer>();
                 Map<String, CustomerInfoSimpleView> _customerInfoSimpleMap = new TreeMap<String, CustomerInfoSimpleView>();
-                List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+                List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
                 for(Customer customer : customerList){
                     if((customer.getRelation() != null) && (customer.getRelation().getId() != RelationValue.INDIRECTLY_RELATED.value())){
                         CustomerInfoSimpleView _customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
@@ -367,8 +371,9 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
 
 
-                Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+                Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
                 Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
+                Map<Integer, String> checkCountRuleNameMap = new HashMap<Integer, String>();
 
                 Integer lastOrder = Integer.MAX_VALUE;
                 Map<Integer, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<Integer, PrescreenCusRulesGroupView>();
@@ -379,14 +384,17 @@ public class PrescreenBusinessControl extends BusinessControl {
                         else
                             _groupUWResultDetailMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
                     } else {
-
                         UWRuleGroupView _uwRuleGroupView = uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView();
                         PrescreenCusRulesGroupView _prescreenCusRulesGroupView = _prescreenCusRulesGroupViewMap.get(_uwRuleGroupView.getId());
                         if(_prescreenCusRulesGroupView == null){
                             _prescreenCusRulesGroupView = new PrescreenCusRulesGroupView();
                         }
                         _prescreenCusRulesGroupView.setUwRuleGroupView(_uwRuleGroupView);
-                        _prescreenCusRulesGroupView.setNumberOfRuleName(_prescreenCusRulesGroupView.getNumberOfRuleName() + 1);
+
+                        if(!checkCountRuleNameMap.containsKey(uwRuleResultDetailView.getUwRuleNameView().getId())){
+                            checkCountRuleNameMap.put(uwRuleResultDetailView.getUwRuleNameView().getId(), uwRuleResultDetailView.getCustomerInfoSimpleView().getCitizenId());
+                            _prescreenCusRulesGroupView.setNumberOfRuleName(_prescreenCusRulesGroupView.getNumberOfRuleName() + 1);
+                        }
 
                         Map<Integer, PrescreenCusRuleNameView> _prescreenCusRuleNameViewMap = _prescreenCusRulesGroupView.getPrescreenCusRuleNameViewMap();
                         if(_prescreenCusRuleNameViewMap == null)
@@ -472,6 +480,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     ncrsModel.setTitleNameCode(TitleName.Mr);
                 }*/
 
+
                 if(customerItem.getTitleTh() != null){
                     if(customerItem.getTitleTh().getCode().equals("1")){
                         ncrsModel.setTitleNameCode(TitleName.Mr);
@@ -481,9 +490,26 @@ public class PrescreenBusinessControl extends BusinessControl {
                         ncrsModel.setTitleNameCode(TitleName.Miss);
                     } else {
                         //send other
-                        ncrsModel.setTitleNameCode(TitleName.Other);
+                        if(Gender.MALE.value() == customerItem.getGender()){
+                            ncrsModel.setTitleNameCode(TitleName.Mr);
+                        } else if(Gender.FEMALE.value() == customerItem.getGender()){
+                            if(customerItem.getMaritalStatus().getSpouseFlag() == 0){ //single
+                                ncrsModel.setTitleNameCode(TitleName.Miss);
+                            } else if(customerItem.getMaritalStatus().getSpouseFlag() == 1){ //married
+                                ncrsModel.setTitleNameCode(TitleName.Mrs);
+                            } else {
+                                log.debug("Spouse != 0 or 1");
+                                ncrsModel.setTitleNameCode(TitleName.Miss);
+                            }
+                        } else {
+                            log.debug("Gender != 0 or 1");
+                        }
                     }
                 }
+
+
+
+
                 ncrsModel.setFirstName(customerItem.getFirstNameTh());
                 ncrsModel.setLastName(customerItem.getLastNameTh());
                 ncrsModel.setCitizenId(customerItem.getCitizenId());
@@ -1312,8 +1338,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for BPM *** //
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode) throws Exception {
-        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode, "");
+    public void assignChecker(long workCasePreScreenId, String queueName, String wobNumber, String checkerId, long actionCode) throws Exception {
+        bpmExecutor.assignChecker(workCasePreScreenId, queueName, wobNumber, checkerId, actionCode, "");
     }
 
     public void cancelCase(String queueName, String wobNumber, long actionCode, String reason, String remark) throws Exception {

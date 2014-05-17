@@ -2,24 +2,27 @@ package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExSummaryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.working.ExSummary;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,9 +55,18 @@ public class PDFExecutiveSummary implements Serializable {
     @Inject
     ExSummary exSummary;
 
-//    long workCaseId = 147;
+    @Inject
+    private AppHeaderView appHeaderView;
+
+    @Inject
+    private WorkCaseDAO workCaseDAO;
 
     long workCaseId;
+    private final String SPACE = " ";
+    WorkCase workCase;
+
+    @Inject
+    DecisionControl decisionControl;
 
     @Inject
     public PDFExecutiveSummary() {
@@ -418,5 +430,83 @@ public class PDFExecutiveSummary implements Serializable {
             log.debug("exSumReasonViews in Method fillUWDecision is Null. {}",exSumReasonViews);
         }
         return uwDecisionExSumReport;
+    }
+
+    public HeaderAndFooterReport fillHeader(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        HttpSession session = FacesUtil.getSession(true);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+        workCase = workCaseDAO.findById(workCaseId);
+        //Detail 1
+        if (!Util.isNull(appHeaderView)){
+            log.debug("--Header. {}",appHeaderView);
+            report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
+            report.setBdmName(Util.checkNullString(appHeaderView.getBdmName()));
+            report.setBdmPhoneNumber(Util.checkNullString(appHeaderView.getBdmPhoneNumber()));
+            report.setBdmPhoneExtNumber(Util.checkNullString(appHeaderView.getBdmPhoneExtNumber()));
+            report.setBdmZoneName(Util.checkNullString(appHeaderView.getBdmZoneName()));
+            report.setBdmRegionName(Util.checkNullString(appHeaderView.getBdmRegionName()));
+            report.setSubmitDate(Util.checkNullString(appHeaderView.getSubmitDate()));
+            report.setUwName(Util.checkNullString(appHeaderView.getUwName()));
+            report.setUwPhoneNumber(Util.checkNullString(appHeaderView.getUwPhoneNumber()));
+            report.setUwPhoneExtNumber(Util.checkNullString(appHeaderView.getUwPhoneExtNumber()));
+            report.setUwTeamName(Util.checkNullString(appHeaderView.getUwTeamName()));
+            report.setRequestType(Util.checkNullString(appHeaderView.getRequestType()));
+            report.setAppNo(Util.checkNullString(appHeaderView.getAppNo()));
+            report.setAppRefNo(Util.checkNullString(appHeaderView.getAppRefNo()));
+            report.setAppRefDate(Util.checkNullString(appHeaderView.getAppRefDate()));
+            report.setProductGroup(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
+
+
+            log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
+
+            for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
+                switch (i){
+                    case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                    case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                        report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                        break;
+                }
+            }
+
+            report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setApprovedDate(workCase.getCompleteDate());
+
+        } else {
+            log.debug("--Header is Null. {}",appHeaderView);
+        }
+        return report;
+    }
+
+    public HeaderAndFooterReport fillFooter(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        String date = Util.createDateAndTimeTh(new Date());
+        log.debug("--Date. {}",date);
+
+        String userName =  decisionControl.getCurrentUserID();
+        log.debug("---------- {}",userName);
+
+        StringBuilder genFooter = new StringBuilder();
+        genFooter = genFooter.append(userName).append(SPACE).append(date);
+        report.setGenFooter(genFooter.toString());
+
+
+
+
+        return report;
     }
 }

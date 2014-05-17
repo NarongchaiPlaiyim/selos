@@ -1052,6 +1052,7 @@ public class BRMSControl extends BusinessControl {
             Juristic juristic = customer.getJuristic();
             customerInfo.setIndividual(Boolean.FALSE);
             customerInfo.setPersonalID(juristic.getRegistrationId());
+            customerInfo.setAgeMonths(DateTimeUtil.monthBetween2Dates(juristic.getRegisterDate(), checkDate));
         } else if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
             Individual individual = customer.getIndividual();
             customerInfo.setIndividual(Boolean.TRUE);

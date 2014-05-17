@@ -97,4 +97,12 @@
             </table>-->
         </div>
     </div>
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function(){
+            var permissionCheck = $('#frmMain\\:permissionCheck').val();
+            if(permissionCheck == 'false'){
+                PF('msgBoxNoPermissionDlg').show();
+            }
+        })
+    </script>
 </ui:composition>

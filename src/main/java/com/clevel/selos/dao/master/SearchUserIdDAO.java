@@ -41,7 +41,7 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
 
         log.info("workcaseidlist size is : {}",workCaseIdList.size());
 
-        Iterator iterator = workCaseIdList.iterator();
+/*        Iterator iterator = workCaseIdList.iterator();
 
         int id;
 
@@ -63,7 +63,7 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
             log.info("id value is : {}",id);
 
             log.info("workcaseid value is : {}",workcaseid);
-        }
+        }*/
 
         return workCaseIdList;
 

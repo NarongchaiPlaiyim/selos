@@ -296,4 +296,20 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
 		criteria.add(Restrictions.eq("r.canBeAttorney", true));
 		return criteria.list();
 	}
+
+    public List<Customer> findCustomerIdByWorkCaseId(Long workCaseId)
+    {
+
+        Criteria criteria = createCriteria();
+
+        criteria.add(Restrictions.eq("workCase.id",workCaseId.longValue()));
+
+        criteria.add(Restrictions.eq("relation.id",RelationValue.BORROWER.value()));
+
+        List<Customer> list = criteria.list();
+
+        log.info("in getcustomer id list size : {}",list.size());
+
+        return criteria.list();
+    }
 }

@@ -8,6 +8,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.UWRuleName;
@@ -38,7 +39,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "executiveSummary")
-public class ExecutiveSummary implements Serializable {
+public class ExecutiveSummary extends BaseController {
 
     @Inject
     @SELOS
@@ -60,8 +61,6 @@ public class ExecutiveSummary implements Serializable {
     private String messageHeader;
     private String message;
     private String severity;
-
-    private boolean isRoleUW;
 
     private ExSummaryView exSummaryView;
 
@@ -107,20 +106,17 @@ public class ExecutiveSummary implements Serializable {
     public ExecutiveSummary() {
     }
 
-
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid step
+            log.debug("preRender ::: Check valid stepId");
+
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -130,62 +126,44 @@ public class ExecutiveSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
-                }
-                return;
-            }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
-            return;
-        }
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
 
-        reasonList = new ArrayList<Reason>();
-        authorizationDOAList = authorizationDOADAO.findAll();
+            reasonList = new ArrayList<Reason>();
+            authorizationDOAList = authorizationDOADAO.findAll();
 
-        reason = new ExSumReasonView();
+            reason = new ExSumReasonView();
 
-        customerInfoViewList = exSummaryControl.getCustomerList(workCaseId);
+            customerInfoViewList = exSummaryControl.getCustomerList(workCaseId);
 
-        exSumDecisionView = new ExSumDecisionView();
+            exSumDecisionView = new ExSumDecisionView();
 
-        uwRuleNameList = uwRuleNameDAO.findAll();
+            uwRuleNameList = uwRuleNameDAO.findAll();
 
-        exSummaryView = new ExSummaryView();
-        exSummaryView.reset();
-        exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
-
-        if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
             exSummaryView.reset();
-        }
+            exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
 
-        exSummaryView.setUwCode("6500000000");
+            if(exSummaryView == null){
+                exSummaryView = new ExSummaryView();
+                exSummaryView.reset();
+            }
 
-        //for reasonList
-        if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
-            reasonList = reasonDAO.getDeviateList();
-        } else if(exSummaryView.getDecision() == 3){
-            reasonList = reasonDAO.getRejectList();
-        } else {
-            reasonList = new ArrayList<Reason>();
-        }
+            exSummaryView.setUwCode("6500000000");
 
-        User user = (User) session.getAttribute("user");
-        if(user != null && user.getRole() != null && user.getRole().getId() == RoleValue.UW.id()){
-            isRoleUW = true;
-        } else {
-            isRoleUW = false;
+            //for reasonList
+            if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
+                reasonList = reasonDAO.getDeviateList();
+            } else if(exSummaryView.getDecision() == 3){
+                reasonList = reasonDAO.getRejectList();
+            } else {
+                reasonList = new ArrayList<Reason>();
+            }
+
+            loadFieldControl(workCaseId, Screen.EXECUTIVE_SUMMARY);
+            onChangeRM008();
+            onChangeRM020();
+            onChangeRM204();
         }
     }
 
@@ -253,18 +231,27 @@ public class ExecutiveSummary implements Serializable {
     public void onChangeRM008(){
         if(exSummaryView.getRm008Code() == 0){
             exSummaryView.setRm008Remark("");
+            setDisabledValue("RM008Remark",true);
+        } else {
+            setDisabledValue("RM008Remark",false);
         }
     }
 
     public void onChangeRM204(){
         if(exSummaryView.getRm204Code() == 0){
             exSummaryView.setRm204Remark("");
+            setDisabledValue("RM024Remark",true);
+        } else {
+            setDisabledValue("RM024Remark",false);
         }
     }
 
     public void onChangeRM020(){
         if(exSummaryView.getRm020Code() == 0){
             exSummaryView.setRm020Remark("");
+            setDisabledValue("RM020Remark",true);
+        } else {
+            setDisabledValue("RM020Remark",false);
         }
     }
 
@@ -385,14 +372,6 @@ public class ExecutiveSummary implements Serializable {
 
     public void setSeverity(String severity) {
         this.severity = severity;
-    }
-
-    public boolean isRoleUW() {
-        return isRoleUW;
-    }
-
-    public void setRoleUW(boolean roleUW) {
-        isRoleUW = roleUW;
     }
 
     public List<CustomerInfoView> getCustomerInfoViewList() {

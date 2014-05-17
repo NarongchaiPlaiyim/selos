@@ -65,4 +65,10 @@ public class StepStatusControl extends BusinessControl {
         List<SelectItem> actionSelectItemList = actionTransform.transformToSelectItem(actionList);
         return actionSelectItemList;
     }
+
+    public StepToStatus getNextStep(long currentStepId, long currentStatusId, long actionId){
+        StepToStatus stepToStatus= stepToStatusDAO.getNextStep(currentStepId, currentStatusId, actionId);
+
+        return stepToStatus;
+    }
 }

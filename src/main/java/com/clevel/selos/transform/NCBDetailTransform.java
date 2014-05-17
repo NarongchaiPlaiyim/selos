@@ -7,6 +7,7 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -62,11 +63,11 @@ public class NCBDetailTransform extends Transform {
             ncbDetail.setAsOfDate(ncbDetailViewItem.getDateOfInfo());
             ncbDetail.setLastReStructureDate(ncbDetailViewItem.getDateOfDebtRestructuring());
             ncbDetail.setInstallment(ncbDetailViewItem.getInstallment());
-            ncbDetail.setRefinanceFlag(ncbDetailViewItem.getRefinanceFlag());
+            ncbDetail.setRefinanceFlag(ncbDetailViewItem.getRefinanceCheck() == true ? 2:1);
             ncbDetail.setOutstanding(ncbDetailViewItem.getOutstanding());
             ncbDetail.setOutstandingIn12Month(ncbDetailViewItem.getNoOfOutstandingPaymentIn12months());
             ncbDetail.setLimit(ncbDetailViewItem.getLimit());
-            ncbDetail.setWcFlag(ncbDetailViewItem.getWcFlag());
+            ncbDetail.setWcFlag(ncbDetailViewItem.getWcCheck() == true ? 2:1);
             ncbDetail.setOverLimit(ncbDetailViewItem.getNoOfOverLimit());
             ncbDetail.setCanToEdit(ncbDetailViewItem.isCanToEdit());
 

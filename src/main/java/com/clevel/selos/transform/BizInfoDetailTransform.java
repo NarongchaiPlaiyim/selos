@@ -1,27 +1,36 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.model.db.master.BusinessActivity;
 import com.clevel.selos.model.db.master.BusinessType;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import org.joda.time.DateTime;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BizInfoDetailTransform extends Transform {
+    @Inject
+    private BizInfoDetailDAO bizInfoDetailDAO;
 
-    public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView) {
+    public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView, User user) {
 
         BizInfoDetail bizInfoDetail = new BizInfoDetail();
 
         if (bizInfoDetailView.getId() != 0) {
-            bizInfoDetail.setId(bizInfoDetailView.getId());
-        } else if (bizInfoDetailView.getId() == 0) {
-            bizInfoDetail.setCreateBy(bizInfoDetailView.getCreateBy());
-            bizInfoDetail.setCreateDate(bizInfoDetailView.getCreateDate());
+            bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailView.getId());
+        } else {
+            bizInfoDetail.setCreateBy(user);
+            bizInfoDetail.setCreateDate(new Date());
         }
+
+        bizInfoDetail.setModifyBy(user);
+        bizInfoDetail.setModifyDate(new Date());
 
         bizInfoDetail.setBizInfoText(bizInfoDetailView.getBizInfoText());
         bizInfoDetail.setBusinessActivity(bizInfoDetailView.getBizActivity());
@@ -35,11 +44,7 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setPercentBiz(bizInfoDetailView.getPercentBiz());
         bizInfoDetail.setBizPermission(bizInfoDetailView.getBizPermission());
         bizInfoDetail.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
-
-
         bizInfoDetail.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
-
-
         bizInfoDetail.setExpIndCountryName(bizInfoDetailView.getExpIndCountryName());
         bizInfoDetail.setPercentExpIndCountryName(bizInfoDetailView.getPercentExpIndCountryName());
         bizInfoDetail.setSupplierTotalPercentBuyVolume(bizInfoDetailView.getSupplierTotalPercentBuyVolume());
@@ -72,10 +77,6 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setStockValueBDM(bizInfoDetailView.getStockValueBDM());
         bizInfoDetail.setStockValueUW(bizInfoDetailView.getStockValueUW());
         bizInfoDetail.setIncomeAmount(bizInfoDetailView.getIncomeAmount());
-
-        bizInfoDetail.setModifyBy(bizInfoDetailView.getModifyBy());
-        bizInfoDetail.setModifyDate(DateTime.now().toDate());
-
         bizInfoDetail.setIsMainDetail(bizInfoDetailView.getIsMainDetail());
 
         return bizInfoDetail;

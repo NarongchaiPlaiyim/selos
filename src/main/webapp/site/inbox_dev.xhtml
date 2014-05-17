@@ -15,7 +15,7 @@
 
     <h:body>
         <p:panel id="pnl_maincontainer">
-            <h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
+            <h:form id="frmMain" style="position: absolute; min-height: 100%; height: 100%;">
                 <div id="main_container">
                     <!-- Start Header Logo -->
                     <ui:include src="include/header_logo.xhtml"/>
@@ -40,7 +40,7 @@
                                                     <h:outputText value="#{rowIndex+1}"/>
                                                 </p:column>
 
-                                                <p:column headerText="CA No." styleClass="center" style="width: 130px;">
+                                                <p:column headerText="CA No." sortBy="caNo" styleClass="center" style="width: 130px;">
                                                     <h:outputText value="#{item.caNo}"/>
                                                 </p:column>
 

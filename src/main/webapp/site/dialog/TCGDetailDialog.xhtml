@@ -10,10 +10,13 @@
             <table class="content_form">
                 <tr>
                     <td class="title" style="width: 300px;">
-                        <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.potential')}"/> :
+                        <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.potential')}"/>
+                        <h:outputText value="#{tcgInfo.mandate('potential')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td style="width: 300px;">
                         <p:selectOneMenu id="potentialCollateralType"
+                                         disabled="#{tcgInfo.isDisabled('potential')}"
                                          value="#{tcgInfo.tcgDetailView.potentialCollateral.id}"
                                          size="1"
                                          style="min-width: 250px; width: 250px; max-width: 250px;"
@@ -30,10 +33,13 @@
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.collateralType')} :"/>
+                        <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.collateralType')}"/>
+                        <h:outputText value="#{tcgInfo.mandate('collateralType')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
                         <p:selectOneMenu id="potentialColToTCG"
+                                         disabled="#{tcgInfo.isDisabled('collateralType')}"
                                          value="#{tcgInfo.tcgDetailView.tcgCollateralType.id}"
                                          styleClass="largest"
                                          size="1"
@@ -49,16 +55,20 @@
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')} :"/>
+                        <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')}"/>
+                        <h:outputText value="#{tcgInfo.mandate('appraisalAmount')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
                         <p:inputText id="appraisalAmount"
+                                     readonly="#{tcgInfo.isDisabled('appraisalAmount')}"
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
                                      maxlength="17"
                                      onkeydown="return onKeyDownMoney(event);"
-                                     onkeypress="return onKeyPressMoney(event);">
+                                     onkeypress="return onKeyPressMoney(event);"
+                                     onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="blur" update=":tcgDlgForm:appraisalAmount"/>
@@ -67,15 +77,20 @@
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')} :"/>
+                        <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')}"/>
+                        <h:outputText value="#{tcgInfo.mandate('LTVvalue')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
                         <p:inputText id="LTVvalue"
+                                     readonly="#{tcgInfo.isDisabled('LTVvalue')}"
                                      value="#{tcgInfo.tcgDetailView.ltvValue}"
                                      maxlength="17"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     readonly="true">
+                                     onkeydown="return onKeyDownMoney(event);"
+                                     onkeypress="return onKeyPressMoney(event);"
+                                     onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
@@ -85,10 +100,13 @@
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.tcg.dlg.radio.isProposeInThisRequest')} :"/>
+                        <h:outputText value="#{msg.get('app.tcg.dlg.radio.isProposeInThisRequest')}"/>
+                        <h:outputText value="#{tcgInfo.mandate('isProposeInThisRequest')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td>
                         <p:selectOneRadio id="proposeInThisRequestRadio"
+                                          disabled="#{tcgInfo.isDisabled('isProposeInThisRequest')}"
                                           value="#{tcgInfo.tcgDetailView.proposeInThisRequest}">
                             <f:selectItem itemLabel="No" itemValue="1"/>
                             <f:selectItem itemLabel="Yes" itemValue="2"/>

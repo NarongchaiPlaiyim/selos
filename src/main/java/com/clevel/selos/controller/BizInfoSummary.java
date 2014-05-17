@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
@@ -38,7 +39,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "bizInfoSummary")
-public class BizInfoSummary implements Serializable {
+public class BizInfoSummary extends BaseController {
 
     @NormalMessage
     @Inject
@@ -73,8 +74,6 @@ public class BizInfoSummary implements Serializable {
     private String messageHeader;
     private String message;
     private String redirect;
-    private boolean disableOwnerName;
-    private boolean disableExpiryDate;
 
     @Inject
     @SELOS
@@ -116,136 +115,94 @@ public class BizInfoSummary implements Serializable {
     private long workCaseId;
 
     public BizInfoSummary() {
-
     }
+
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
 
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid step
+            log.debug("preRender ::: Check valid stepId");
+
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation bizInfoSum");
-        disableOwnerName = false;
-        disableExpiryDate = true;
-
         log.debug("onCreation");
 
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
-                }
-                return;
-            }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}", ex);
-            }
-            return;
-        }
+        if(checkSession(session)){
+            workCaseId = (Long)session.getAttribute("workCaseId");
 
-        log.debug("info WorkCaseId is: {}", workCaseId);
+            loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY);
 
-        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            setDisabledValue("ownerName",false);
+            setDisabledValue("expiryDate",true);
 
-        provinceList = provinceDAO.getListOrderByParameter("name");
-        districtList = new ArrayList<District>();
-        subDistrictList = new ArrayList<SubDistrict>();
+            setMandateValue("registrationDate",true);
+            setMandateValue("establishDate",true);
 
-        countryList = countryDAO.findAll();
-        referredExperienceList = referredExperienceDAO.findAll();
+            bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
-        if(Util.isNull(bizInfoSummaryView)) {
-            log.info("bizInfoSummaryView == null ");
-            fromDB = false;
-            bizInfoSummaryView = new BizInfoSummaryView();
-
-            Country country = new Country();
-
-            country.setId(211);
-            bizInfoSummaryView.setCountry(country);
-            bizInfoSummaryView.setProvince(new Province());
-            bizInfoSummaryView.setDistrict(new District());
-            bizInfoSummaryView.setSubDistrict(new SubDistrict());
-            bizInfoSummaryView.setReferredExperience(new ReferredExperience());
-            bizInfoSummaryView.setSumIncomeAmount(BigDecimal.ZERO);
-            bizInfoSummaryView.setSumIncomePercent(BigDecimal.ZERO);
-            bizInfoSummaryView.setSumWeightAR(BigDecimal.ZERO);
-            bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
-            bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
-            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
-            bizInfoSummaryView.setCirculationAmount(BigDecimal.ZERO);
-            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
-            bizInfoSummaryView.setWeightIncomeFactor(BigDecimal.ZERO);
-        } else {
-            log.info("bizInfoSummaryView != null ");
-            fromDB = true;
-            getBusinessInfoListDB();
-            onChangeProvinceEdit();
-            onChangeDistrictEdit();
-            onChangeRental();
-            onCalSummaryTable();
-            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
-        }
-        onCheckInterview();
-    }
-
-/*    public void onChangeProvince() {
-        log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
-        if(bizInfoSummaryView.getProvince() != null){
-            Province proSelect = bizInfoSummaryView.getProvince();
-            districtList = districtDAO.getListByProvince(proSelect);
-        } else {
-            bizInfoSummaryView.setDistrict(new District());
-        }
-
-        if(!fromDB){
-            bizInfoSummaryView.setDistrict(new District());
-        }
-        log.info("onChangeProvince :::: districtList.size ::: {}", districtList.size());
-        subDistrictList = new ArrayList<SubDistrict>();
-    }
-
-    public void onChangeDistrict() {
-        log.debug("onChangeDistrict :::: District : {}", bizInfoSummaryView.getDistrict());
-        if(bizInfoSummaryView.getProvince() != null){
-            if(bizInfoSummaryView.getDistrict() != null){
-                District districtSelect = bizInfoSummaryView.getDistrict();
-                subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
-            } else {
-                bizInfoSummaryView.setSubDistrict(new SubDistrict());
-            }
-        } else {
-            bizInfoSummaryView.setDistrict(new District());
+            provinceList = provinceDAO.getListOrderByParameter("name");
+            districtList = new ArrayList<District>();
             subDistrictList = new ArrayList<SubDistrict>();
-        }
 
-        if(!fromDB){
-            bizInfoSummaryView.setSubDistrict(new SubDistrict());
+            countryList = countryDAO.findAll();
+            referredExperienceList = referredExperienceDAO.findAll();
+
+            if(Util.isNull(bizInfoSummaryView)) {
+                log.info("bizInfoSummaryView == null ");
+                fromDB = false;
+                bizInfoSummaryView = new BizInfoSummaryView();
+
+                Country country = new Country();
+
+                country.setId(211);
+                bizInfoSummaryView.setCountry(country);
+                bizInfoSummaryView.setProvince(new Province());
+                bizInfoSummaryView.setDistrict(new District());
+                bizInfoSummaryView.setSubDistrict(new SubDistrict());
+                bizInfoSummaryView.setReferredExperience(new ReferredExperience());
+                bizInfoSummaryView.setSumIncomeAmount(BigDecimal.ZERO);
+                bizInfoSummaryView.setSumIncomePercent(BigDecimal.ZERO);
+                bizInfoSummaryView.setSumWeightAR(BigDecimal.ZERO);
+                bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
+                bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
+                bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
+                bizInfoSummaryView.setCirculationAmount(BigDecimal.ZERO);
+                bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
+                bizInfoSummaryView.setWeightIncomeFactor(BigDecimal.ZERO);
+            } else {
+                log.info("bizInfoSummaryView != null ");
+                fromDB = true;
+                getBusinessInfoListDB();
+                onChangeProvinceEdit();
+                onChangeDistrictEdit();
+                onChangeRental();
+                onCalSummaryTable();
+                bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
+            }
+            onCheckInterview();
+            onChangeEstablishDate();
         }
-        log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
-    }*/
+    }
 
     public void onChangeProvince() {
         log.info("onChangeProvince :::: Province  : {} ", bizInfoSummaryView.getProvince());
@@ -467,13 +424,27 @@ public class BizInfoSummary implements Serializable {
 
     public void onChangeRental(){
         if(bizInfoSummaryView.getRental() == 0 ){
-            disableExpiryDate = true;
-            disableOwnerName = false;
+            setDisabledValue("ownerName",false);
+            setMandateValue("ownerName",true);
+            setDisabledValue("expiryDate",true);
+            setMandateValue("expiryDate",false);
             bizInfoSummaryView.setExpiryDate(null);
-        }else if(bizInfoSummaryView.getRental() == 1 ){
-            disableExpiryDate = false;
-            disableOwnerName = true;
             bizInfoSummaryView.setOwnerName("");
+        }else if(bizInfoSummaryView.getRental() == 1 ){
+            setDisabledValue("ownerName",true);
+            setMandateValue("ownerName",false);
+            setDisabledValue("expiryDate",false);
+            setMandateValue("expiryDate",true);
+            bizInfoSummaryView.setOwnerName("");
+            bizInfoSummaryView.setExpiryDate(new Date());
+        }
+    }
+
+    public void onChangeEstablishDate(){
+        if(bizInfoSummaryView.getEstablishDate() != null ) {
+            setMandateValue("establishFrom",true);
+        } else {
+            setMandateValue("establishFrom",false);
         }
     }
 
@@ -662,22 +633,6 @@ public class BizInfoSummary implements Serializable {
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
         this.currentDateDDMMYY = currentDateDDMMYY;
-    }
-
-    public boolean isDisableExpiryDate() {
-        return disableExpiryDate;
-    }
-
-    public void setDisableExpiryDate(boolean disableExpiryDate) {
-        this.disableExpiryDate = disableExpiryDate;
-    }
-
-    public boolean isDisableOwnerName() {
-        return disableOwnerName;
-    }
-
-    public void setDisableOwnerName(boolean disableOwnerName) {
-        this.disableOwnerName = disableOwnerName;
     }
 
     public boolean isReadonlyInterview() {

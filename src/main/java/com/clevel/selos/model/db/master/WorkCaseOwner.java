@@ -3,10 +3,7 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,30 +20,71 @@ public class WorkCaseOwner implements Serializable
 {
     @Id
     @Column(name = "id")
-    private Integer id;
+    private long id;
     @Column(name = "role_id")
     private Integer roleid;
     @Column(name = "user_id")
     private String userid;
     @Column(name = "workcase_id")
-    private Integer workCaseId;
+    private Long workCaseId;
     @Column(name = "step_id")
-    private Integer stepId;
+    private long stepId;
     @Column(name = "workcase_prescreen_id")
-    private Integer workCasePrescreenId;
+    private Long workCasePrescreenId;
     @Column(name = "create_by")
     private String createBy;
     @Column(name = "modify_by")
     private String modifyBy;
     @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    public Date getCreateDate() {
-        return createDate;
+    public long getId() {
+        return id;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Integer getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(Integer roleid) {
+        this.roleid = roleid;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public Long getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(Long workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public long getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(long stepId) {
+        this.stepId = stepId;
+    }
+
+    public Long getWorkCasePrescreenId() {
+        return workCasePrescreenId;
+    }
+
+    public void setWorkCasePrescreenId(Long workCasePrescreenId) {
+        this.workCasePrescreenId = workCasePrescreenId;
     }
 
     public String getCreateBy() {
@@ -65,64 +103,26 @@ public class WorkCaseOwner implements Serializable
         this.modifyBy = modifyBy;
     }
 
-    public Integer getWorkCasePrescreenId() {
-        return workCasePrescreenId;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setWorkCasePrescreenId(Integer workCasePrescreenId) {
-        this.workCasePrescreenId = workCasePrescreenId;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
-
-    public Integer getRoleid() {
-        return roleid;
-    }
-
-    public void setRoleid(Integer roleid) {
-        this.roleid = roleid;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public Integer getWorkCaseId() {
-        return workCaseId;
-    }
-
-    public void setWorkCaseId(Integer workCaseId) {
-        this.workCaseId = workCaseId;
-    }
-
-    public Integer getStepId() {
-        return stepId;
-    }
-
-    public void setStepId(Integer stepId) {
-        this.stepId = stepId;
-    }
-
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("roleid", roleid).
-                append("userid", userid).
-                append("workCaseId", workCaseId).
-                append("stepId", stepId).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("roleid", roleid)
+                .append("userid", userid)
+                .append("workCaseId", workCaseId)
+                .append("stepId", stepId)
+                .append("workCasePrescreenId", workCasePrescreenId)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("createDate", createDate)
+                .toString();
     }
-
 }

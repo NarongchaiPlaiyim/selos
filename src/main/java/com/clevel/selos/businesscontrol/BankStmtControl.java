@@ -73,7 +73,7 @@ public class BankStmtControl extends BusinessControl {
     BankStmtTransform bankStmtTransform;
 
     public BankStmtSummaryView retrieveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSubmitDate) {
-        return retrieveBankStmtInterface(customerInfoViewList, expectedSubmitDate, RadioValue.NO.value());
+        return retrieveBankStmtInterface(customerInfoViewList, getLastMonthDateBankStmt(expectedSubmitDate), RadioValue.NO.value());
     }
 
     public BankStmtSummaryView retrieveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSubmitDate, int seasonal) {
@@ -959,6 +959,7 @@ public class BankStmtControl extends BusinessControl {
 
         boolean isRoleUW = RoleValue.UW.id() == getUserRoleId();
         boolean isCountIncome;
+
         BigDecimal sumChqRetAmtCountIncomeOfLastSizM = BigDecimal.ZERO;
         BigDecimal sumNetUWofLastSixM = BigDecimal.ZERO;
         BigDecimal sumNetBDMofLastSixM = BigDecimal.ZERO;
@@ -977,10 +978,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(tmbBankStmtView.getBankStmtDetailViewList())) {
                 if (isCountIncome) {
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
+                    sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                    sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
                 }
 
-                sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
-                sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
             }
 
         }
@@ -999,10 +1000,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(othBankStmtView.getBankStmtDetailViewList())) {
                 if (isCountIncome) {
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
+                    sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                    sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
                 }
 
-                sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
-                sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
             }
 
         }
@@ -1020,8 +1021,8 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
 
-//        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), Util.ONE_HUNDRED);
-        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(grdTotalTrdChqRetAmount, isRoleUW ? grdTotalIncomeNetUW : grdTotalIncomeNetBDM), Util.ONE_HUNDRED);
+        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM), Util.ONE_HUNDRED);
+//        BigDecimal grdTotalTrdChqRetPercent = Util.multiply(Util.divide(grdTotalTrdChqRetAmount, isRoleUW ? grdTotalIncomeNetUW : grdTotalIncomeNetBDM), Util.ONE_HUNDRED);
         if (grdTotalTrdChqRetPercent != null) {
             grdTotalTrdChqRetPercent = grdTotalTrdChqRetPercent.setScale(2, RoundingMode.HALF_UP);
         }
@@ -1233,20 +1234,49 @@ public class BankStmtControl extends BusinessControl {
 
         WorkCase workCase = null;
         WorkCasePrescreen workCasePrescreen = null;
+        BankStatementSummary bankStatementSummaryWorkCase = null;
+        BankStatementSummary bankStatementSummaryWorkCasePreScreen = null;
+
         if (workCaseId != 0) {
             workCase = workCaseDAO.findById(workCaseId);
+            bankStatementSummaryWorkCase = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         }
         if (workCasePrescreenId != 0) {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            bankStatementSummaryWorkCasePreScreen = bankStatementSummaryDAO.findByWorkcasePrescreenId(workCasePrescreenId);
         }
         User user = getCurrentUser();
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+
+        if(bankStatementSummaryWorkCase!=null && bankStatementSummaryWorkCase.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCase.getId());
+        }
+
+        if(bankStatementSummaryWorkCasePreScreen!=null && bankStatementSummaryWorkCasePreScreen.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCasePreScreen.getId());
+        }
+
         bankStatementSummary.setWorkCase(workCase);
         bankStatementSummary.setWorkCasePrescreen(workCasePrescreen);
         BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStatementSummary);
         log.debug("persist BankStatementSummary: {}", bankStatementSummary);
         return bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
+    }
+
+    public BankStmtSummaryView saveBankStmtSumFullApp(BankStmtSummaryView bankStmtSummaryView, long workCaseId) {
+        log.debug("saveBankStmtSumFullApp() bankStmtSummaryView.id: {}, workCaseId: {}", bankStmtSummaryView.getId(), workCaseId);
+        BankStmtSummaryView returnBankStmtSumView = null;
+        if (workCaseId != 0) {
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            BankStatementSummary bankStmtSumForPersist = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+            bankStmtSumForPersist.setWorkCase(workCase);
+            BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStmtSumForPersist);
+            log.debug("After persist BankStatementSummary: {}", returnBankStmtSummary);
+            returnBankStmtSumView = bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
+        }
+        return returnBankStmtSumView;
     }
 
     public void deleteBankStmtById(long bankStmtId) {

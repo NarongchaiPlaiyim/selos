@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
@@ -28,7 +29,7 @@ import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSummary")
-public class CustomerInfoSummary implements Serializable {
+public class CustomerInfoSummary extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -52,10 +53,8 @@ public class CustomerInfoSummary implements Serializable {
     @Inject
     private CustomerInfoControl customerInfoControl;
 
-    //*** Drop down List ***//
     private List<CustomerEntity> customerEntityList;
 
-    //*** View ***//
     private CustomerInfoSummaryView customerInfoSummaryView;
 
     //session
@@ -72,19 +71,26 @@ public class CustomerInfoSummary implements Serializable {
     public CustomerInfoSummary(){
     }
 
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if( (Long)session.getAttribute("workCaseId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
+    }
+
     public void preRender(){
         log.debug("preRender");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(checkSession(session)){
+            //TODO Check valid step
+            log.debug("preRender ::: Check valid stepId");
+
         }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -94,30 +100,15 @@ public class CustomerInfoSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
+        if(checkSession(session)){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            if(workCaseId == 0){
-                try{
-                    FacesUtil.redirect("/site/inbox.jsf");
-                }catch (Exception ex){
-                    log.error("Exception :: {}",ex);
-                }
-                return;
-            }
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
-            return;
+
+            loadFieldControl(workCaseId, Screen.CUSTOMER_INFO_SUMMARY);
+
+            customerEntityList = customerEntityDAO.findAll();
+            customerInfoSummaryView = new CustomerInfoSummaryView();
+            customerInfoSummaryView = customerInfoControl.getCustomerInfoSummary(workCaseId);
         }
-
-        customerEntityList = customerEntityDAO.findAll();
-        customerInfoSummaryView = new CustomerInfoSummaryView();
-
-        customerInfoSummaryView = customerInfoControl.getCustomerInfoSummary(workCaseId);
     }
 
     public String onLinkToEditBorrower() {
