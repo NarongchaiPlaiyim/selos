@@ -12,7 +12,8 @@ import java.io.Serializable;
 @Table(name = "mst_mandate_fields")
 public class MandateField implements Serializable{
     @Id
-    @Column(name = "id")
+    @SequenceGenerator(name = "SEQ_MST_MAND_FIELD", sequenceName = "SEQ_MST_MAND_FIELD", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAND_FIELD")
     private long id;
 
     @ManyToOne

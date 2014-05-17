@@ -12,11 +12,13 @@ public class MandateFieldConditionView implements Serializable {
 
     private long id;
     private MandateConditionType mandateConditionType;
+    private String name;
     private String conditionDesc;
-    private String className;
+    private MandateFieldClassView mandateFieldClassView;
     private MandateDependType dependType;
     private MandateFieldConditionView dependCondition;
     private List<MandateFieldConditionDetailView> conditionDetailViewList;
+    private boolean needUpdate;
 
     public long getId() {
         return id;
@@ -24,6 +26,14 @@ public class MandateFieldConditionView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public MandateConditionType getMandateConditionType() {
@@ -42,12 +52,12 @@ public class MandateFieldConditionView implements Serializable {
         this.conditionDesc = conditionDesc;
     }
 
-    public String getClassName() {
-        return className;
+    public MandateFieldClassView getMandateFieldClassView() {
+        return mandateFieldClassView;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setMandateFieldClassView(MandateFieldClassView mandateFieldClassView) {
+        this.mandateFieldClassView = mandateFieldClassView;
     }
 
     public MandateDependType getDependType() {
@@ -74,16 +84,36 @@ public class MandateFieldConditionView implements Serializable {
         this.conditionDetailViewList = conditionDetailViewList;
     }
 
+    public boolean isNeedUpdate() {
+        return needUpdate;
+    }
+
+    public void setNeedUpdate(boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
+    public void updateValues(MandateFieldConditionView view){
+        id = view.id;
+        name = view.name;
+        mandateConditionType = view.mandateConditionType;
+        conditionDesc = view.conditionDesc;
+        mandateFieldClassView = view.mandateFieldClassView;
+        dependType = view.dependType;
+        dependCondition = view.dependCondition;
+        conditionDetailViewList = view.conditionDetailViewList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mandateConditionType", mandateConditionType)
                 .append("conditionDesc", conditionDesc)
-                .append("className", className)
+                .append("mandateFieldClassView", mandateFieldClassView)
                 .append("dependType", dependType)
                 .append("dependCondition", dependCondition)
                 .append("conditionDetailViewList", conditionDetailViewList)
+                .append("needUpdate", needUpdate)
                 .toString();
     }
 }

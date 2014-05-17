@@ -3,19 +3,17 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_mandate_fields")
+@Table(name = "mst_mandate_fields_class")
 public class MandateFieldClass implements Serializable{
 
     @Id
-    @Column(name = "id")
-    private int id;
+    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_CLASS", sequenceName = "SEQ_MST_MAN_FIELD_CLASS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_CLASS")
+    private long id;
 
     @Column(name = "class_name", length = 150)
     private String className;
@@ -29,11 +27,11 @@ public class MandateFieldClass implements Serializable{
     @Column(name = "active", length = 1, columnDefinition = "int default 1")
     private boolean active;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -15,7 +15,7 @@
     </h:head>
 
     <h:body>
-        <f:event type="preRenderView" listener="#{manageMandateSubmit.preRender()}" />
+        <f:event type="preRenderView" listener="#{mandateFieldSubmit.preRender()}" />
 
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
             <h:form id="frmMain">
@@ -40,7 +40,7 @@
                                     <tr></tr>
                                     <tr>
                                         <td colspan="100%">
-                                            <p:dataTable id='className_tbl' value="#{manageMandateSubmit.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
+                                            <p:dataTable id='className_tbl' value="#{mandateFieldSubmit.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
                                             <p:column styleClass="center">
                                                 <h:outputText value="#{rowIndex+1}"
                                                               style="min-width: 20px; max-width: 20px; width: 20px;"/>
@@ -61,9 +61,9 @@
                                             <p:column styleClass="center" style="width:30px;">
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{manageMandateSubmit.onLinkEditMandateFieldDetail()}" onclick="blockUI.show()">
+                                                                 action="#{mandateFieldSubmit.onLinkEditMandateFieldDetail()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{mandateClassView}"
-                                                                                 target="#{manageMandateSubmit.selectedMandateClassView}"/>
+                                                                                 target="#{mandateFieldSubmit.selectedMandateClassView}"/>
                                                 </p:commandButton>
                                             </p:column>
                                         </p:dataTable>

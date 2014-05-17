@@ -6,17 +6,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class MandateFieldClassView implements Serializable{
-    private int id;
-    private String className;
-    private String classDescription;
-    private String pageName;
-    private boolean active;
+    protected long id;
+    protected String className;
+    protected String classDescription;
+    protected String pageName;
+    protected boolean active;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -1,21 +1,21 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.MandateFieldClassDAO;
+import com.clevel.selos.dao.master.MandateFieldConditionDAO;
+import com.clevel.selos.dao.master.MandateFieldConditionDetailDAO;
+import com.clevel.selos.dao.master.MandateFieldDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserSysParameterKey;
-import com.clevel.selos.model.db.master.MandateField;
-import com.clevel.selos.model.db.master.MandateFieldClass;
-import com.clevel.selos.model.db.master.MandateFieldCondition;
-import com.clevel.selos.model.db.master.MandateFieldConditionDetail;
-import com.clevel.selos.model.view.MandateFieldClassView;
-import com.clevel.selos.model.view.MandateFieldConditionDetailView;
-import com.clevel.selos.model.view.MandateFieldConditionView;
-import com.clevel.selos.model.view.MandateFieldView;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MandateFieldTransform extends Transform{
 
@@ -27,6 +27,14 @@ public class MandateFieldTransform extends Transform{
     private ActionTransform actionTransform;
     @Inject
     private StepTransform stepTransform;
+    @Inject
+    private MandateFieldDAO mandateFieldDAO;
+    @Inject
+    private MandateFieldClassDAO mandateFieldClassDAO;
+    @Inject
+    private MandateFieldConditionDAO mandateFieldConditionDAO;
+    @Inject
+    private MandateFieldConditionDetailDAO mandateFieldConditionDetailDAO;
 
     @Inject
     public MandateFieldTransform(){
@@ -93,9 +101,10 @@ public class MandateFieldTransform extends Transform{
 
         MandateFieldConditionView mandateFieldConditionView = new MandateFieldConditionView();
         mandateFieldConditionView.setId(mandateFieldCondition.getId());
-        mandateFieldConditionView.setClassName(mandateFieldCondition.getClassName());
+        mandateFieldConditionView.setName(mandateFieldCondition.getName());
+        mandateFieldConditionView.setMandateFieldClassView(transformToView(mandateFieldCondition.getMandateFieldClass()));
         mandateFieldConditionView.setConditionDesc(mandateFieldCondition.getConditionDesc());
-        mandateFieldConditionView.setDependCondition(transformToView(mandateFieldCondition.getDependCondition()));
+
         mandateFieldConditionView.setDependType(mandateFieldCondition.getDependType());
         mandateFieldConditionView.setMandateConditionType(mandateFieldCondition.getMandateConditionType());
 
@@ -104,6 +113,8 @@ public class MandateFieldTransform extends Transform{
             if(conditionDetail != null)
                 conditionDetailViewList.add(transformToView(conditionDetail));
         }
+
+        mandateFieldConditionView.setConditionDetailViewList(conditionDetailViewList);
 
         logger.debug("-- end transformToView()");
         return mandateFieldConditionView;
@@ -121,5 +132,167 @@ public class MandateFieldTransform extends Transform{
 
         logger.debug("-- end transformToView return ", mandateFieldConditionDetailView);
         return mandateFieldConditionDetailView;
+    }
+
+    public MandateFieldStepActionView transformToView(List<MandateFieldStepAction> fieldStepActionList, List<MandateFieldConStepAction> conStepActionList){
+
+        List<MandateFieldClassStepActionView> mandateFieldClassStepActionViewList = new ArrayList<MandateFieldClassStepActionView>();
+        Map<String, MandateFieldClassStepActionView> fieldClassStepActionViewMap = new HashMap<String, MandateFieldClassStepActionView>();
+        if(fieldStepActionList != null){
+            for(MandateFieldStepAction mandateFieldStepAction : fieldStepActionList){
+                if(mandateFieldStepAction.getMandateField() != null){
+                    MandateField mandateField = mandateFieldStepAction.getMandateField();
+                    MandateFieldClass mandateFieldClass = mandateField.getMandateFieldClass();
+
+                    if(mandateFieldClass != null){
+                        MandateFieldClassStepActionView fieldClassStepActionView = fieldClassStepActionViewMap.get(mandateFieldClass.getClassName());
+                        if(fieldClassStepActionView == null){
+                            fieldClassStepActionView = new MandateFieldClassStepActionView();
+                            fieldClassStepActionView.setId(mandateFieldClass.getId());
+                            fieldClassStepActionView.setPageName(mandateFieldClass.getPageName());
+                            fieldClassStepActionView.setClassDescription(mandateFieldClass.getClassDescription());
+                            fieldClassStepActionView.setClassName(mandateFieldClass.getClassName());
+                            fieldClassStepActionView.setActive(mandateFieldClass.isActive());
+                        }
+                        List<MandateFieldView> mandateFieldViewList = fieldClassStepActionView.getMandateFieldViewList();
+                        if(mandateFieldViewList == null)
+                            mandateFieldViewList = new ArrayList<MandateFieldView>();
+
+                        mandateFieldViewList.add(transformToView(mandateFieldStepAction.getMandateField()));
+                        fieldClassStepActionView.setMandateFieldViewList(mandateFieldViewList);
+
+                        fieldClassStepActionViewMap.put(fieldClassStepActionView.getClassName(), fieldClassStepActionView);
+                    }
+                }
+            }
+
+            mandateFieldClassStepActionViewList.addAll(fieldClassStepActionViewMap.values());
+        }
+
+        if(conStepActionList != null){
+            for(MandateFieldConStepAction conStepAction : conStepActionList){
+                if(conStepAction.getMandateFieldCondition() != null){
+                    MandateFieldCondition mandateFieldCondition = conStepAction.getMandateFieldCondition();
+                    MandateFieldClass mandateFieldClass = mandateFieldCondition.getMandateFieldClass();
+
+                    if(mandateFieldClass != null){
+                        MandateFieldClassStepActionView fieldClassStepActionView = fieldClassStepActionViewMap.get(mandateFieldClass.getClassName());
+                        if(fieldClassStepActionView == null){
+                            fieldClassStepActionView = new MandateFieldClassStepActionView();
+                            fieldClassStepActionView.setId(mandateFieldClass.getId());
+                            fieldClassStepActionView.setPageName(mandateFieldClass.getPageName());
+                            fieldClassStepActionView.setClassDescription(mandateFieldClass.getClassDescription());
+                            fieldClassStepActionView.setClassName(mandateFieldClass.getClassName());
+                            fieldClassStepActionView.setActive(mandateFieldClass.isActive());
+                        }
+                        List<MandateFieldConditionView> mandateFieldConditionViewList = fieldClassStepActionView.getMandateFieldConditionViewList();
+                        if(mandateFieldConditionViewList == null)
+                            mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
+
+                        mandateFieldConditionViewList.add(transformToView(mandateFieldCondition));
+                        fieldClassStepActionView.setMandateFieldConditionViewList(mandateFieldConditionViewList);
+
+                        fieldClassStepActionViewMap.put(fieldClassStepActionView.getClassName(), fieldClassStepActionView);
+                    }
+                }
+            }
+
+        }
+
+        MandateFieldStepActionView mandateFieldStepActionView = null;
+        if(fieldStepActionList != null && fieldStepActionList.size() > 0){
+            MandateFieldStepAction mandateFieldStepAction = fieldStepActionList.get(0);
+            mandateFieldStepActionView = new MandateFieldStepActionView();
+            mandateFieldStepActionView.setStepView(stepTransform.transformToView(mandateFieldStepAction.getStep()));
+            mandateFieldStepActionView.setActionView(actionTransform.transformToView(mandateFieldStepAction.getAction()));
+            mandateFieldStepActionView.setClassStepActionViewList(mandateFieldClassStepActionViewList);
+        }
+        return mandateFieldStepActionView;
+    }
+
+    public MandateFieldClass transformToModel(MandateFieldClassView mandateFieldClassView){
+        if(mandateFieldClassView == null)
+            return null;
+
+        MandateFieldClass mandateFieldClass = new MandateFieldClass();
+        if(mandateFieldClassView.getId() > 0)
+            mandateFieldClass = mandateFieldClassDAO.findById(mandateFieldClassView.getId());
+        mandateFieldClass.setClassName(mandateFieldClassView.getClassName());
+        mandateFieldClass.setClassDescription(mandateFieldClassView.getClassDescription());
+        mandateFieldClass.setPageName(mandateFieldClassView.getPageName());
+        mandateFieldClass.setActive(mandateFieldClassView.isActive());
+        return mandateFieldClass;
+    }
+
+    public MandateField transformToModel(MandateFieldView mandateFieldView, MandateFieldClass mandateFieldClass){
+        if(mandateFieldView == null)
+            return null;
+
+        MandateField mandateField = new MandateField();
+        if(mandateFieldView.getId() > 0)
+            mandateField = mandateFieldDAO.findById(mandateFieldView.getId());
+
+        mandateField.setMandateFieldType(mandateFieldView.getMandateFieldType());
+        mandateField.setPage(mandateFieldView.getPage());
+        mandateField.setFieldDescription(mandateFieldView.getFieldDesc());
+        mandateField.setFieldName(mandateFieldView.getFieldName());
+        mandateField.setMandateFieldClass(mandateFieldClass);
+        mandateField.setMinValue(mandateFieldView.getMinValue());
+        mandateField.setMaxValue(mandateFieldView.getMaxValue());
+
+        if(mandateFieldView.getMatchedEmpty() == RadioValue.YES.value()){
+            mandateField.setMatchedValue(UserSysParameterKey.STATIC_EMPTY.key());
+        } else if(mandateFieldView.getMatchedEmpty() == RadioValue.NOT_SELECTED.value()){
+            mandateField.setMatchedValue(null);
+        } else {
+            mandateField.setMatchedValue(mandateFieldView.getMatchedValue());
+        }
+
+        if(mandateFieldView.getNotMatchedEmpty() == RadioValue.YES.value()){
+            mandateField.setNotMatchedValue(UserSysParameterKey.STATIC_EMPTY.key());
+        } else if(mandateFieldView.getNotMatchedEmpty() == RadioValue.NOT_SELECTED.value()){
+            mandateField.setNotMatchedValue(null);
+        } else {
+            mandateField.setNotMatchedValue(mandateFieldView.getNotMatchedValue());
+        }
+
+        return mandateField;
+
+    }
+
+    public MandateField transformToModel(MandateFieldView mandateFieldView){
+        MandateField mandateField = new MandateField();
+        if(mandateFieldView.getId() > 0)
+            mandateField = mandateFieldDAO.findById(mandateFieldView.getId());
+        return mandateField;
+    }
+
+    public MandateFieldCondition transformToModel(MandateFieldConditionView mandateFieldConditionView){
+        if(mandateFieldConditionView == null)
+            return null;
+
+        MandateFieldCondition mandateFieldCondition = new MandateFieldCondition();
+
+        if(mandateFieldConditionView.getId() > 0){
+            mandateFieldCondition = mandateFieldConditionDAO.findById(mandateFieldConditionView.getId());
+        }
+
+        mandateFieldCondition.setName(mandateFieldConditionView.getName());
+        mandateFieldCondition.setMandateConditionType(mandateFieldConditionView.getMandateConditionType());
+        mandateFieldCondition.setConditionDesc(mandateFieldConditionView.getConditionDesc());
+        mandateFieldCondition.setDependType(mandateFieldConditionView.getDependType());
+        return mandateFieldCondition;
+    }
+
+    public MandateFieldConditionDetail transformToModel(MandateFieldConditionDetailView mandateFieldConditionDetailView){
+        if(mandateFieldConditionDetailView == null)
+            return null;
+
+        MandateFieldConditionDetail mandateFieldConditionDetail = new MandateFieldConditionDetail();
+        if(mandateFieldConditionDetailView.getId() > 0)
+            mandateFieldConditionDetail = mandateFieldConditionDetailDAO.findById(mandateFieldConditionDetailView.getId());
+
+        mandateFieldConditionDetail.setMandateField(transformToModel(mandateFieldConditionDetailView.getMandateFieldView()));
+        return mandateFieldConditionDetail;
     }
 }

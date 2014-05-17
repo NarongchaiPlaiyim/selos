@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 
 import com.clevel.selos.model.MandateFieldType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.UserSysParameterKey;
 import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.Step;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +26,7 @@ public class MandateFieldView implements Serializable{
     private int matchedEmpty;
     private String notMatchedValue;
     private int notMatchedEmpty;
+    private boolean needUpdate;
 
     public long getId() {
         return id;
@@ -137,6 +140,14 @@ public class MandateFieldView implements Serializable{
         this.notMatchedEmpty = notMatchedEmpty;
     }
 
+    public boolean isNeedUpdate() {
+        return needUpdate;
+    }
+
+    public void setNeedUpdate(boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
     public void updateValues(MandateFieldView view){
         id = view.id;
         fieldName = view.fieldName;
@@ -144,11 +155,21 @@ public class MandateFieldView implements Serializable{
         page = view.page;
         minValue = view.minValue;
         maxValue = view.maxValue;
-        matchedValue = view.matchedValue;
-        matchedEmpty = view.matchedEmpty;
-        notMatchedValue = view.notMatchedValue;
-        notMatchedEmpty = view.notMatchedEmpty;
 
+        matchedEmpty = view.matchedEmpty;
+        if(view.matchedEmpty == RadioValue.YES.value()){
+            matchedValue = UserSysParameterKey.STATIC_EMPTY.key();
+        } else {
+            matchedValue = view.matchedValue;
+        }
+
+        notMatchedEmpty = view.notMatchedEmpty;
+        if(view.notMatchedEmpty == RadioValue.YES.value()){
+            notMatchedValue = UserSysParameterKey.STATIC_EMPTY.key();
+        } else {
+            notMatchedValue = view.notMatchedValue;
+        }
+        needUpdate = view.needUpdate;
     }
 
     @Override
@@ -168,6 +189,7 @@ public class MandateFieldView implements Serializable{
                 .append("matchedEmpty", matchedEmpty)
                 .append("notMatchedValue", notMatchedValue)
                 .append("notMatchedEmpty", notMatchedEmpty)
+                .append("needUpdate", needUpdate)
                 .toString();
     }
 

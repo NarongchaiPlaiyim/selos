@@ -14,24 +14,30 @@ import java.util.List;
 public class MandateFieldCondition implements Serializable{
 
     @Id
-    @Column(name = "id")
+    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_COND", sequenceName = "SEQ_MST_MAN_FIELD_COND", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_COND")
     private long id;
 
     @Column(name = "condition_type", length = 100)
     @Enumerated(EnumType.STRING)
     private MandateConditionType mandateConditionType;
 
+    @Column(name = "condition_name", length = 30)
+    private String name;
+
     @Column(name = "description", length = 200)
     private String conditionDesc;
 
-    @Column(name = "class_name", length = 200)
-    private String className;
+    @OneToOne
+    @JoinColumn(name = "class_id")
+    private MandateFieldClass mandateFieldClass;
 
     @Column(name = "depend_type", length = 100)
     @Enumerated(EnumType.STRING)
     private MandateDependType dependType;
 
-    @Column(name = "depent_con_id", length = 100)
+    @ManyToOne
+    @JoinColumn(name = "depend_con_id")
     private MandateFieldCondition dependCondition;
 
     @OneToMany(mappedBy = "mandateFieldCondition")
@@ -43,6 +49,14 @@ public class MandateFieldCondition implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public MandateConditionType getMandateConditionType() {
@@ -61,12 +75,12 @@ public class MandateFieldCondition implements Serializable{
         this.conditionDesc = conditionDesc;
     }
 
-    public String getClassName() {
-        return className;
+    public MandateFieldClass getMandateFieldClass() {
+        return mandateFieldClass;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setMandateFieldClass(MandateFieldClass mandateFieldClass) {
+        this.mandateFieldClass = mandateFieldClass;
     }
 
     public MandateDependType getDependType() {
@@ -98,8 +112,11 @@ public class MandateFieldCondition implements Serializable{
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mandateConditionType", mandateConditionType)
+                .append("name", name)
                 .append("conditionDesc", conditionDesc)
-                .append("className", className)
+                .append("mandateFieldClass", mandateFieldClass)
+                .append("dependType", dependType)
+                .append("dependCondition", dependCondition)
                 .append("mandateFieldConditionDetailList", mandateFieldConditionDetailList)
                 .toString();
     }

@@ -31,7 +31,7 @@ public class MandateFieldDAO extends GenericDAO<MandateField, Long> {
         return mandateFieldList;
     }
 
-    public List<MandateField> findByClass(int mandateFieldClassId){
+    public List<MandateField> findByClass(long mandateFieldClassId){
         logger.debug("-- begin findByClass mandateFieldClassId: {}", mandateFieldClassId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("mandateFieldClass.id", mandateFieldClassId));

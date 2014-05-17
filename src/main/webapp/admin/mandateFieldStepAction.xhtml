@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <title>SE-LOS : Manage Mandate Field</title>
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{mandateFieldSubmitStep.preRender()}" />
+
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_admin.xhtml" />
+                    <!-- End Header Logo -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar_admin.xhtml" />
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{msg.get('app.mandate.step.header')}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                    <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                                </div>
+                            </div>
+                            <div id="content_form">
+                                <!-- start content -->
+                                <table class="content_table_form">
+                                    <tr>
+                                        <td colspan="100%"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <h2><h:outputText value="#{msg.get('app.mandate.step.search')}"/></h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:250px;" class="title">
+                                            <h:outputText value="#{msg.get('app.mandate.step.step.label')}"/>
+                                        </td>
+                                        <td>
+                                            <p:selectOneMenu id="stepId" size="1" styleClass="largest_s"
+                                                             value="#{mandateFieldSubmitStep.selectedStepId}">
+                                                <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                                                <f:selectItems value="#{mandateFieldSubmitStep.stepItemList}"/>
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:250px;" class="title">
+                                            <h:outputText value="#{msg.get('app.mandate.step.action.label')}"/>
+                                        </td>
+                                        <td>
+                                            <p:selectOneMenu id="actionId" size="1" styleClass="largest"
+                                                             value="#{mandateFieldSubmitStep.selectedActionId}">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+                                                <f:selectItems value="#{mandateFieldSubmitStep.actionItemList}"/>
+                                            </p:selectOneMenu>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%" class="center">
+                                            <p:commandButton id="searchBtn" value="#{msg.get('app.button.search')}"
+                                                             styleClass="small"
+                                                             process="@form"
+                                                             action="#{mandateFieldSubmitStep.onSearchStepAction}"
+                                                             update=":frmMain, :frmMain:stepResult_pnl">
+                                            </p:commandButton>
+                                            <p:commandButton id="resetBtn" value="#{msg.get('app.button.reset')}"
+                                                             styleClass="small"
+                                                             process="@this"
+                                                             action="#{mandateFieldSubmitStep.onReset}"
+                                                             update=":frmMain:stepResult_pnl">
+                                            </p:commandButton>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"><!-- --></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <h:panelGroup id="stepResult_pnl" rendered="#{mandateFieldSubmitStep.mandateFieldStepActionView != null}"  style="border:0; margin:0; padding: 0;">
+                                                <table class="content_table_form">
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h2><h:outputText value="#{msg.get('app.mandate.step.action.detail.header')}"/></h2>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><p:commandButton id="addStepActionBtn" value="#{msg.get('app.button.add')}"
+                                                                                         process="@this"
+                                                                                         oncomplete="p_manageStepActionDlg.show();"
+                                                                                         action="#{mandateFieldSubmitStep.onOpenAddStepActionField}"
+                                                                                         update=":manageStepActionDlg">
+                                                            <p:resetInput target=":manageStepActionDlg" />
+                                                        </p:commandButton>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <p:dataTable id='stepAction_tbl' styleClass="full_table" value="#{mandateFieldSubmitStep.mandateFieldStepActionView.classStepActionViewList}"
+                                                                         var="fieldStepAction" rowIndexVar="rowIndex">
+                                                                <p:column styleClass="center">
+                                                                    <h:outputText value="#{rowIndex+1}"
+                                                                                  style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                                                                </p:column>
+                                                                <p:column headerText="#{msg.get('app.mandate.step.step.label')}">
+                                                                    <h:outputText value="#{mandateFieldSubmitStep.mandateFieldStepActionView.stepView.name}"/>
+                                                                </p:column>
+                                                                <p:column
+                                                                        headerText="#{msg.get('app.mandate.step.action.label')}">
+                                                                    <h:outputText value="#{mandateFieldSubmitStep.mandateFieldStepActionView.actionView.name}"/>
+                                                                </p:column>
+                                                                <p:column
+                                                                        headerText="#{msg.get('app.mandate.step.className')}">
+                                                                    <h:outputText value="#{fieldStepAction.className}"/>
+                                                                </p:column>
+                                                                <p:column style='width:50px' styleClass="center">
+                                                                    <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+                                                                                     process="@this"
+                                                                                     oncomplete="p_manageStepActionDlg.show();"
+                                                                                     action="#{mandateFieldSubmitStep.onOpenUpdateStepActionField}"
+                                                                                     update=":manageStepActionDlg"
+                                                                                     style="margin-right:0px !important">
+                                                                        <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedMandateFieldClassStepActionId}" value="#{rowIndex}" />
+                                                                        <p:resetInput target=":manageStepActionDlg" />
+                                                                    </p:commandButton>
+                                                                    <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+                                                                                     onstart="handleOnStartOpenCfmDlg();"
+                                                                                     oncomplete="handleOnCompleteOpenCfmDlg(args,p_deleteMandateFieldDlg);"
+                                                                                     process="@form"
+                                                                                     update=":frmMain:stepAction_tbl">
+                                                                        <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedMandateFieldClassStepActionId}" value="#{rowIndex}" />
+                                                                    </p:commandButton>
+                                                                </p:column>
+
+                                                            </p:dataTable>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                    </tr>
+                                </table>
+                                <!-- end content -->
+                            </div>
+                        </div>
+                        <div id="bottom_line"><!-- --></div>
+                    </div>
+                    <div class="clear"></div>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer_admin.xhtml" />
+                    <!-- End Footer -->
+                </div>
+
+            </h:form>
+        </p:panel>
+        <p:blockUI widgetVar="blockFrmMain" block="frmMain" trigger=":frmMain:searchBtn">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="deleteMandateFieldDlg"/>
+            <ui:param name="name" value="p_deleteMandateFieldDlg"/>
+            <ui:param name="formId" value="deleteMandateFieldFrm"/>
+            <ui:param name="controller" value="#{mandateFieldSubmitStep}"/>
+            <ui:param name="action" value="onDeleteStepActionField"/>
+            <ui:param name="update" value=":frmMain:stepResult_pnl"/>
+        </ui:include>
+
+        <p:dialog id='manageStepActionDlg' widgetVar="p_manageStepActionDlg"
+                  header="#{msg.get('app.mandate.step.action.manage.header')}"
+                  onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
+                  modal='true' closeOnEscape="true" closable="true"
+                  dynamic="true" width="650">
+            <ui:include src="dialog/manageMandateStepActionDlg.xhtml">
+                <ui:param name="name" value="p_manageStepActionDlg"/>
+            </ui:include>
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

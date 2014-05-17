@@ -1,6 +1,7 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
         xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
     <h:outputStylesheet name="css/jquery.menu.css" />
@@ -20,29 +21,16 @@
 
     <div id="selosmenu" class="selosmenu">
         <ul>
-            <h:panelGroup id="pnl_menu_inbox" styleClass="panel">
-                <li id="mnuadmin">
-                    <a href="#{request.contextPath}/admin/mandateFieldSum.xhtml" title="#{msg.get('app.menu.mandate.field')}">#{msg.get('app.menu.mandate.field')}</a>
-                    <!--ul>
-
-                            <li id="submnu_#{inboxName.inbox_name}">
-                                <a href="inbox.jsf?id=#{inboxName.inbox_name}">#{inboxName.inbox_name}(<h:outputText value="#{peDBCount.PEInboxCount(inboxName.inbox_name)}"/>)</a>
-                            </li>
-
-                    </ul-->
-                </li>
-            </h:panelGroup>
-            <!--h:panelGroup id="pnl_menu_search" styleClass="panel">
-                <li id="mnusearch">
-                    <a href="generic_search.jsf" title="Search">Search</a>
+            <h:panelGroup id="pnl_menu_mandatefield" rendered="true" styleClass="panel">
+                <li id="mnuMandatefield">
+                    <a href="#{request.contextPath}/admin/mandateFieldSum.jsf" title="#{msg.get('app.menu.mandate.field')}">#{msg.get('app.menu.mandate.field')}</a>
                     <ul>
-                        <li id="submnu_search"><a href="generic_search.jsf" title="Search">Search</a></li>
-                        <li id="submnu_reassign"><a href="generic_reassign.jsf" title="Reassign">Reassign</a></li>
-                        <li id="submnu_changeowner"><a href="generic_changeowner.jsf" title="Change Owner">Change Owner</a></li>
-                        <li id="submnu_trackca"><a href="generic_track_ca.jsf" title="Track CA">Track CA</a></li>
+                        <li id="subMandateFieldDetail"><a href="#{request.contextPath}/admin/mandateFieldSum.jsf">#{msg.get('app.menu.mandate.field.detail')}</a></li>
+                        <li id="subMandateFieldStep"><a href="#{request.contextPath}/admin/mandateFieldStepAction.jsf"
+                                                           title="#{msg.get('app.menu.mandate.field.step.action')}">#{msg.get('app.menu.mandate.field.step.action')}</a></li>
                     </ul>
                 </li>
-            </h:panelGroup-->
+            </h:panelGroup>
         </ul>
         <br style="clear: left"/>
     </div>

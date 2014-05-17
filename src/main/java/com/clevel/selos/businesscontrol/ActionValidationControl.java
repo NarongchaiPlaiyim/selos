@@ -1,14 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.MandateFieldClassDAO;
 import com.clevel.selos.dao.master.MandateFieldConditionDAO;
 import com.clevel.selos.dao.master.MandateFieldDAO;
 import com.clevel.selos.dao.master.MandateFieldStepActionDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.MandateField;
-import com.clevel.selos.model.db.master.MandateFieldCondition;
-import com.clevel.selos.model.db.master.MandateFieldConditionDetail;
-import com.clevel.selos.model.db.master.MandateFieldStepAction;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.ActionValidationResult;
 import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.model.view.MandateFieldView;
@@ -23,6 +21,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.lang.reflect.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +37,9 @@ public class ActionValidationControl extends BusinessControl{
 
     @Inject
     private MandateFieldDAO mandateFieldDAO;
+
+    @Inject
+    private MandateFieldClassDAO mandateFieldClassDAO;
 
     @Inject
     MandateFieldStepActionDAO mandateFieldStepActionDAO;
@@ -286,7 +288,8 @@ public class ActionValidationControl extends BusinessControl{
 
         String className = object.getClass().getName();
 
-        List<MandateFieldCondition> mandateFieldConditionList = mandateFieldConditionDAO.findByClassName(className);
+        MandateFieldClass mandateFieldClass = mandateFieldClassDAO.findByClassName(className);
+        List<MandateFieldCondition> mandateFieldConditionList = mandateFieldConditionDAO.findByClass(mandateFieldClass);
         if(mandateFieldConditionList != null && mandateFieldConditionList.size() > 0){
             for(MandateFieldCondition condition : mandateFieldConditionList){
                 logger.info("There is condition setting");
@@ -321,7 +324,7 @@ public class ActionValidationControl extends BusinessControl{
         if(!condition.getDependType().equals(MandateDependType.NO_DEPENDENCY)){
             ConditionResult conditionResult = conditionResultMap.get(condition.getId());
             if(conditionResult != null){
-                if(condition.getDependType() == MandateDependType.DEPENDS_TRUE){
+                if(condition.getDependType() == MandateDependType.DEPEND_TRUE){
                     if(conditionResult.isPass)
                         dependResult = true;
                 } else if(condition.getDependType() == MandateDependType.DEPEND_FALSE){

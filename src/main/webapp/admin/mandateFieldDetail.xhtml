@@ -15,7 +15,7 @@
     </h:head>
 
     <h:body>
-        <f:event type="preRenderView" listener="#{manageMandateSubmit.preRender()}" />
+        <f:event type="preRenderView" listener="#{mandateFieldSubmit.preRender()}" />
 
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
             <h:form id="frmMain">
@@ -26,6 +26,7 @@
                     <!-- Start Menu -->
                     <ui:include src="include/menubar_admin.xhtml" />
                     <!-- End Menu -->
+                    <h:panelGroup id="full_main_container" layout="block">
                     <div id="content_container">
                         <div id="content_name">#{msg.get('app.mandateField.header')}</div>
                         <div id="content">
@@ -39,7 +40,7 @@
                                 <table class="content_table_form">
                                     <tr>
                                         <td colspan="100%">
-                                            <h2><h:outputText value="#{msg.get('app.baInfo.bapa.title')}" /></h2>
+                                            <h2><h:outputText value="#{msg.get('app.menu.mandate.field.detail')}" /></h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -47,7 +48,7 @@
                                             <h:outputText value="#{msg.get('app.mandateField.class.name')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText value="#{manageMandateSubmit.selectedMandateClassView.className}" id="className"
+                                            <p:inputText value="#{mandateFieldSubmit.selectedMandateClassView.className}" id="className"
                                                          readonly="true" style="width: 300px; max-width: 300px; min-width: 300px;"></p:inputText>
                                         </td>
                                     </tr>
@@ -56,7 +57,7 @@
                                             <h:outputText value="#{msg.get('app.mandateField.class.description')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText value="#{manageMandateSubmit.selectedMandateClassView.classDescription}" id="classDescription"
+                                            <p:inputText value="#{mandateFieldSubmit.selectedMandateClassView.classDescription}" id="classDescription"
                                                           style="width: 200px; max-width: 200px; min-width: 200px;"></p:inputText>
                                         </td>
                                     </tr>
@@ -65,7 +66,7 @@
                                             <h:outputText value="#{msg.get('app.mandateField.class.pageName')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText value="#{manageMandateSubmit.selectedMandateClassView.pageName}" id="pageName"
+                                            <p:inputText value="#{mandateFieldSubmit.selectedMandateClassView.pageName}" id="pageName"
                                                          onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                          style="width: 200px; max-width: 200px; min-width: 200px;"></p:inputText>
                                         </td>
@@ -75,7 +76,7 @@
                                             <h:outputText value="#{msg.get('app.mandateField.class.active')}"/>
                                         </td>
                                         <td>
-                                            <p:selectOneRadio id="radio" value="#{manageMandateSubmit.selectedMandateClassView.active}" layout="grid" columns="2">
+                                            <p:selectOneRadio id="radio" value="#{mandateFieldSubmit.selectedMandateClassView.active}" layout="grid" columns="2">
                                                 <f:selectItem itemLabel="No" itemValue="false"/>
                                                 <f:selectItem itemLabel="Yes" itemValue="true"/>
                                             </p:selectOneRadio>
@@ -88,12 +89,85 @@
                                     </tr>
                                     <tr>
                                         <td colspan="100%">
-                                            <h:outputText value="#{msg.get('app.mandateField.field.header')}"/>
+                                            <h2><h:outputText value="#{msg.get('app.mandateField.condition.header')}"/></h2>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="100%">
-                                            <p:dataTable id='fieldName_tbl' value="#{manageMandateSubmit.mandateFieldViewList}" var="mandateFieldView" rowIndexVar="rowIndex">
+                                            <p:commandButton id="addConditionButton" value="#{msg.get('app.button.add')}"
+                                                             process="@this"
+                                                             oncomplete="p_mandateConditionDlg.show();"
+                                                             action="#{mandateFieldSubmit.onOpenAddMandateCondition}"
+                                                             update=":mandateConditionDlg">
+
+                                                <p:resetInput target=":mandateConditionDlg" />
+                                            </p:commandButton>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <p:dataTable id='condition_tbl' styleClass="full_table" value="#{mandateFieldSubmit.mandateFieldConViewList}" var="mandateFieldCon" rowIndexVar="rowCondIndex">
+                                                <p:column styleClass="center">
+                                                    <h:outputText value="#{rowCondIndex+1}"
+                                                                  style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.condition.name')}">
+                                                    <h:outputText value="#{mandateFieldCon.name}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.condition.desc')}">
+                                                    <h:outputText value="#{mandateFieldCon.conditionDesc}"/>
+                                                </p:column>
+                                                <p:column
+                                                        headerText="#{msg.get('app.mandateField.condition.type')}">
+                                                    <h:outputText value="#{msg.get(mandateFieldCon.mandateConditionType.desc)}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.condition.depend.type')}">
+                                                    <h:outputText value="#{msg.get(mandateFieldCon.dependType.desc)}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.mandateField.condition.depend.condition')}">
+                                                    <h:outputText value="#{mandateFieldCon.dependCondition.name}"/>
+                                                </p:column>
+                                                <p:column style='width:50px' styleClass="center">
+                                                    <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+                                                                     process="@this"
+                                                                     oncomplete="p_mandateConditionDlg.show();"
+                                                                     action="#{mandateFieldSubmit.onOpenUpdateMandateCondition}"
+                                                                     update=":mandateConditionDlg"
+                                                                     style="margin-right:0px !important">
+                                                        <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateConViewId}" value="#{rowCondIndex}" />
+                                                        <p:resetInput target=":mandateConditionDlg" />
+                                                    </p:commandButton>
+
+                                                    <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+                                                                     process="@this"
+                                                                     action="#{mandateFieldSubmit.onDeleteMandateCondition}"
+                                                                     update=":frmMain:condition_tbl"
+                                                                     style="margin-right:0px !important">
+                                                        <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateConViewId}" value="#{rowCondIndex}" />
+                                                        <p:resetInput target=":mandateConditionDlg" />
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <div class="cell_spacer"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"><!-- --></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <h2><h:outputText value="#{msg.get('app.mandateField.field.header')}"/></h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <p:dataTable id='fieldName_tbl' styleClass="full_table" value="#{mandateFieldSubmit.mandateFieldViewList}" var="mandateFieldView" rowIndexVar="rowIndex">
                                                 <p:column styleClass="center">
                                                     <h:outputText value="#{rowIndex+1}"
                                                                   style="min-width: 20px; max-width: 20px; width: 20px;"/>
@@ -124,10 +198,10 @@
                                                     <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                                                                      process="@this"
                                                                      oncomplete="p_mandateFieldDlg.show();"
-                                                                     action="#{manageMandateSubmit.onOpenUpdateMandateFieldDetail}"
+                                                                     action="#{mandateFieldSubmit.onOpenUpdateMandateFieldDetail}"
                                                                      update=":mandateFieldDlg"
                                                                      style="margin-right:0px !important">
-                                                            <f:setPropertyActionListener target="#{manageMandateSubmit.selectedMandateFieldViewId}" value="#{rowIndex}" />
+                                                        <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateFieldViewId}" value="#{rowIndex}" />
                                                         <p:resetInput target=":mandateFieldDlg" />
                                                     </p:commandButton>
                                                 </p:column>
@@ -135,19 +209,32 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td colspan="100%"><p:spacer width="5"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"><!-- --></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%"><p:spacer width="5"/></td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="100%" class="center">
-                                            <!--p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}"
+                                            <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}"
                                                              styleClass="medium"
                                                              onstart="handleOnStartOpenCfmDlg();"
-                                                             oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveBAInformationDlg);"
-                                                             update=":frmMain:full_main_container,:result_dialog"
-                                                             disabled="#{baInfo.isDisabled('saveButton')}"
+                                                             oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveMandateFieldDlg);"
+                                                             process="@form"
+                                                             update=":frmMain:full_main_container"
                                                     />
                                             <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}"
                                                              styleClass="medium"
-                                                             oncomplete="p_cancelBADlg.show()"
-                                                             disabled="#{baInfo.isDisabled('cancelButton')}"
-                                                    /-->
+                                                             onstart="handleOnStartOpenCfmDlg();"
+                                                             oncomplete="handleOnCompleteOpenCfmDlg(args,p_cancelMandateFieldDlg);"
+                                                             process="@form"
+
+                                                    />
                                         </td>
                                     </tr>
                                 </table>
@@ -160,9 +247,8 @@
                     <!-- Start Footer -->
                     <ui:include src="include/footer_admin.xhtml" />
                     <!-- End Footer -->
+                    </h:panelGroup>
                 </div>
-
-
             </h:form>
         </p:panel>
         <p:blockUI block=":frmMain" widgetVar="blockUI">
@@ -170,20 +256,49 @@
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
 
-        <!--<ui:include src="dialog/confirmEditDlg.xhtml">
-            <ui:param name="id" value="saveBAInformationDlg"/>
-            <ui:param name="name" value="p_saveBAInformationDlg"/>
-            <ui:param name="formId" value="saveBAInformationFrm"/>
-            <ui:param name="controller" value="#{baInfo}"/>
-            <ui:param name="action" value="onSaveBAInformation"/>
+        <ui:include src="dialog/confirmUpdateDlg.xhtml">
+            <ui:param name="id" value="saveMandateFieldDlg"/>
+            <ui:param name="name" value="p_saveMandateFieldDlg"/>
+            <ui:param name="formId" value="saveMandateFieldFrm"/>
+            <ui:param name="controller" value="#{mandateFieldSubmit}"/>
+            <ui:param name="action" value="onSaveAllMandateField"/>
             <ui:param name="update" value=":frmMain:full_main_container"/>
-        </ui:include-->
+        </ui:include>
+        <ui:include src="dialog/confirmCancelDlg.xhtml">
+            <ui:param name="id" value="cancelMandateFieldDlg"/>
+            <ui:param name="name" value="p_cancelMandateFieldDlg"/>
+            <ui:param name="formId" value="cancelMandateFieldFrm"/>
+            <ui:param name="controller" value="#{mandateFieldSubmit}"/>
+            <ui:param name="action" value="onCancelMandateField"/>
+            <ui:param name="update" value=":frmMain:full_main_container"/>
+        </ui:include>
+
         <p:dialog id='mandateFieldDlg' widgetVar="p_mandateFieldDlg"
                   header="#{msg.get('app.mandateField.field.update.header')}"
                   onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
                   modal='true' closeOnEscape="true" closable="true"
                   dynamic="true" width="550">
-            <ui:include src="dialog/mandateFieldDetailDlg.xhtml" />
+            <ui:include src="dialog/mandateFieldDetailDlg.xhtml">
+                <ui:param name="name" value="p_mandateFieldDlg"/>
+            </ui:include>
+        </p:dialog>
+        <p:dialog id='mandateConditionDlg' widgetVar="p_mandateConditionDlg"
+                  header="#{msg.get('app.mandateField.condition.update.header')}"
+                  onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
+                  modal='true' closeOnEscape="true" closable="true"
+                  dynamic="true" width="700">
+            <ui:include src="dialog/mandateConditionDlg.xhtml">
+                <ui:param name="name" value="p_mandateConditionDlg"/>
+            </ui:include>
+        </p:dialog>
+        <p:dialog id='mandateConditionDetailDlg' widgetVar="p_mandateConditionDetailDlg"
+                  header="#{msg.get('app.mandateField.condition.detail.add.header')}"
+                  onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
+                  modal='true' closeOnEscape="true" closable="true"
+                  dynamic="true" width="550">
+            <ui:include src="dialog/mandateConditionDetailDlg.xhtml">
+                <ui:param name="name" value="p_mandateConditionDetailDlg"/>
+            </ui:include>
         </p:dialog>
     </h:body>
 </f:view>

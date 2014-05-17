@@ -11,7 +11,8 @@ import java.io.Serializable;
 public class MandateFieldConditionDetail implements Serializable{
 
     @Id
-    @Column(name = "id")
+    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_COND_DET", sequenceName = "SEQ_MST_MAN_FIELD_COND_DET", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_COND_DET")
     private long id;
 
     @ManyToOne

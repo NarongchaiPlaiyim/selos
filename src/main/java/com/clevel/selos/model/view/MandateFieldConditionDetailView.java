@@ -10,6 +10,7 @@ public class MandateFieldConditionDetailView implements Serializable{
     private long id;
     private MandateFieldView mandateFieldView;
     private String baseValue;
+    private boolean needUpdate = false;
 
     public long getId() {
         return id;
@@ -35,12 +36,28 @@ public class MandateFieldConditionDetailView implements Serializable{
         this.baseValue = baseValue;
     }
 
+    public boolean isNeedUpdate() {
+        return needUpdate;
+    }
+
+    public void setNeedUpdate(boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
+    public void updateValues(MandateFieldConditionDetailView view){
+        id = view.id;
+        mandateFieldView = view.mandateFieldView;
+        baseValue = view.baseValue;
+        needUpdate = view.needUpdate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mandateFieldView", mandateFieldView)
                 .append("baseValue", baseValue)
+                .append("needUpdate", needUpdate)
                 .toString();
     }
 }

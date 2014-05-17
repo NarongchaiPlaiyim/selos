@@ -6,7 +6,7 @@
 <h:form id="mandateFieldDetailFrm">
 <p:scrollPanel style="height:400px" styleClass="panel-dialog" id="mandateFieldPanel"
                mode="native"
-               rendered="#{not empty manageMandateSubmit.wrkMandateFieldView}">
+               rendered="#{not empty mandateFieldSubmit.wrkMandateFieldView}">
 <p:messages />
 <table class="content_form">
 <tr>
@@ -14,7 +14,7 @@
         <p:outputLabel for="fieldNameDlg" value="#{msg.get('app.mandateField.field.name')}" />
     </td>
     <td>
-        <p:inputText id="fieldNameDlg" readonly="true" value="#{manageMandateSubmit.wrkMandateFieldView.fieldName}"/>
+        <p:inputText id="fieldNameDlg" readonly="true" value="#{mandateFieldSubmit.wrkMandateFieldView.fieldName}"/>
     </td>
 </tr>
 <tr>
@@ -22,7 +22,7 @@
         <p:outputLabel for="fieldDescDlg" value="#{msg.get('app.mandateField.field.desc')}" />
     </td>
     <td>
-        <p:inputText id="fieldDescDlg" value="#{manageMandateSubmit.wrkMandateFieldView.fieldDesc}"/>
+        <p:inputText id="fieldDescDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.fieldDesc}"/>
     </td>
 </tr>
 <tr>
@@ -30,7 +30,7 @@
         <p:outputLabel for="pageDlg" value="#{msg.get('app.mandateField.field.pageName')}" />
     </td>
     <td>
-        <p:inputText id="pageDlg" value="#{manageMandateSubmit.wrkMandateFieldView.page}" maxlength="100"/>
+        <p:inputText id="pageDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.page}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -38,7 +38,7 @@
         <p:outputLabel for="minValueDlg" value="#{msg.get('app.mandateField.field.min')}" />
     </td>
     <td>
-        <p:inputText id="minValueDlg" value="#{manageMandateSubmit.wrkMandateFieldView.minValue}" maxlength="100"/>
+        <p:inputText id="minValueDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.minValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -46,7 +46,7 @@
         <p:outputLabel for="maxValueDlg" value="#{msg.get('app.mandateField.field.max')}" />
     </td>
     <td>
-        <p:inputText id="maxValueDlg" value="#{manageMandateSubmit.wrkMandateFieldView.maxValue}" maxlength="100"/>
+        <p:inputText id="maxValueDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.maxValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -55,15 +55,15 @@
     </td>
     <td>
         <h:selectOneRadio id="matchedEmpty"
-                          value="#{manageMandateSubmit.wrkMandateFieldView.matchedEmpty}">
+                          value="#{mandateFieldSubmit.wrkMandateFieldView.matchedEmpty}">
             <f:selectItem itemLabel="N/A" itemValue="0"/>
             <f:selectItem itemLabel="Empty" itemValue="2"/>
             <f:selectItem itemLabel="Other" itemValue="1"/>
             <p:ajax event="click"
                     process=":mandateFieldDetailFrm:matchedEmpty"
-                    update=":mandateFieldDetailFrm"/>
+                    update=":mandateFieldDetailFrm:matchedValueDlg"/>
         </h:selectOneRadio>
-        <p:inputText id="matchedValueDlg" readonly="#{manageMandateSubmit.wrkMandateFieldView.matchedEmpty != 1}" value="#{manageMandateSubmit.wrkMandateFieldView.matchedValue}" maxlength="100"/>
+        <p:inputText id="matchedValueDlg" readonly="#{mandateFieldSubmit.wrkMandateFieldView.matchedEmpty != 1}" value="#{mandateFieldSubmit.wrkMandateFieldView.matchedValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -72,15 +72,15 @@
     </td>
     <td>
         <h:selectOneRadio id="notMatchedEmpty"
-                          value="#{manageMandateSubmit.wrkMandateFieldView.notMatchedEmpty}">
+                          value="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedEmpty}">
             <f:selectItem itemLabel="N/A" itemValue="0"/>
             <f:selectItem itemLabel="Empty" itemValue="2"/>
             <f:selectItem itemLabel="Other" itemValue="1"/>
             <p:ajax event="click"
                     process=":mandateFieldDetailFrm:notMatchedEmpty"
-                    update=":mandateFieldDetailFrm"/>
+                    update=":mandateFieldDetailFrm:notMatchedValueDlg"/>
         </h:selectOneRadio>
-        <p:inputText id="notMatchedValueDlg" readonly="#{manageMandateSubmit.wrkMandateFieldView.notMatchedEmpty != 1}" value="#{manageMandateSubmit.wrkMandateFieldView.notMatchedValue}" maxlength="100"/>
+        <p:inputText id="notMatchedValueDlg" readonly="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedEmpty != 1}" value="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -90,19 +90,19 @@
 </tr>
     <tr>
         <td colspan="2" class="center">
-            <p:commandButton id="saveBtn" styleClass="small"
-                             binding="#{manageMandateSubmit.wrkMandateFieldView}"
+            <p:commandButton id="okBtn" styleClass="small"
                              value="#{msg.get('app.okButton')}"
-                             actionListener="#{manageMandateSubmit.onSaveMandateFieldDetail()}"
+                             actionListener="#{mandateFieldSubmit.onUpdateMandateFieldDetail()}"
                              process="@form"
-                             update=":mandateFieldDetailFrm,:frmMain:resultNcbDetail"
-                             oncomplete="handleNCBInfoRequest(xhr, status, args)"/>
+                             update=":mandateFieldDetailFrm,:frmMain:fieldName_tbl"
+                             oncomplete="handleDialogRequest(xhr, status, args,'p_mandateFieldDlg')"
+                             />
 
             <p:commandButton
                     id="cancelBtn"
                     value="#{msg.get('app.cancelButton')}"
                     styleClass="small"
-                    onclick="PF('ncbDlg').hide()"/>
+                    onclick="#{name}.hide();"/>
         </td>
     </tr>
 <tr>
@@ -112,9 +112,9 @@
 </tr>
 </table>
 </p:scrollPanel>
-</h:form>
-    <p:blockUI widgetVar="blockMandateFieldPanel" block="mandateFieldPanel" trigger=":mandateFieldDetailFrm:saveBtn">
+    <p:blockUI widgetVar="blockMandateFieldPanel" block="mandateFieldDetailFrm" trigger=":mandateFieldDetailFrm:okBtn">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+</h:form>
 </ui:composition>

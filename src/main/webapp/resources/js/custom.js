@@ -860,12 +860,6 @@ function handleSubmitAADCDialogRequest(xhr, status, args) {
     }
 }
 
-function handleMandateFieldDlgRequest(xhr, status, args, obj) {
-    if (args.functionComplete) {
-        obj.hide();
-    }
-}
-
 // Credit Facility Propose Credit Dialog
 function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;

@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
+    <h:form id="stepActionFrm">
+        <p:scrollPanel style="height:500px" styleClass="panel-dialog" id="mandateStepActionPanel"
+                       mode="native" rendered="#{not empty mandateFieldSubmitStep.mandateFieldStepActionView}">
+            <p:messages />
+            <table class="content_form" style="width:100%">
+                <tr>
+                    <td class="title" style="width: 200px;">
+                        <p:outputLabel for="step" value="#{msg.get('app.mandate.step.step.label')}" />
+                    </td>
+                    <td>
+                        <p:inputText id="step" styleClass="largest_m" maxlength="30" required="true" value="#{mandateFieldSubmitStep.mandateFieldStepActionView.stepView.name}" readonly="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width: 200px;">
+                        <p:outputLabel for="action" value="#{msg.get('app.mandate.step.action.label')}" />
+                    </td>
+                    <td>
+                        <p:inputText id="action" styleClass="largest_l" value="#{mandateFieldSubmitStep.mandateFieldStepActionView.actionView.name}" readonly="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="classSelect" value="#{msg.get('app.mandate.step.className')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="classSelect" size="1" styleClass="largest_l"
+                                         value="#{mandateFieldSubmitStep.selectedClassViewId}" required="true" disabled="#{mandateFieldSubmitStep.disableClassChange}">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{mandateFieldSubmitStep.mandateFieldClassViewList}" var="classView"
+                                           itemLabel="#{classView.className}" itemValue="#{classView.id}"/>
+                            <p:ajax event="change" update=":stepActionFrm:fieldSelect, :stepActionFrm:classSelect, :stepActionFrm:conditionSelect"
+                                    process="@this" listener="#{mandateFieldSubmitStep.onChangeClassView}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.mandate.step.action.select.condition')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="conditionSelect" size="1" styleClass="largest"
+                                         value="#{mandateFieldSubmitStep.selectedConditionId}" required="true">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{mandateFieldSubmitStep.mandateFieldConditionViewList}" var="conditionView"
+                                           itemLabel="#{conditionView.name}" itemValue="#{conditionView.id}"/>
+                            <p:ajax event="change"
+                                    process="@this" listener="#{mandateFieldSubmitStep.onChangeCondition}"/>
+                        </p:selectOneMenu><p:commandButton id="addConditionBtn" value="#{msg.get('app.button.add')}"
+                                                           process="@this"
+                                                           action="#{mandateFieldSubmitStep.onSelectCondition}"
+                                                           update=":stepActionFrm:selectCondition_tbl, :stepActionFrm:classSelect, :stepActionFrm:conditionSelect">
+                    </p:commandButton>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%">
+                        <p:dataTable id='selectCondition_tbl' styleClass="full_table" value="#{mandateFieldSubmitStep.wrkMandateFieldClassStepActionView.mandateFieldConditionViewList}"
+                                     var="mandateConditionView" rowIndexVar="rowIndex" scrollable="true" scrollHeight="150">
+                            <p:column styleClass="center">
+                                <h:outputText value="#{rowIndex+1}"
+                                              style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                            </p:column>
+                            <p:column headerText="#{msg.get('app.mandateField.condition.name')}">
+                                <h:outputText value="#{mandateConditionView.name}"/>
+                            </p:column>
+                            <p:column
+                                    headerText="#{msg.get('app.mandateField.condition.desc')}">
+                                <h:outputText value="#{mandateConditionView.conditionDesc}"/>
+                            </p:column>
+                            <p:column style='width:50px' styleClass="center">
+                                <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+                                                 process="@this"
+                                                 action="#{mandateFieldSubmitStep.onDeleteCondition}"
+                                                 update=":stepActionFrm:selectFieldName_tbl, :stepActionFrm:fieldSelect, :stepActionFrm:classSelect"
+                                                 style="margin-right:0px !important">
+                                    <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedConditionId}" value="#{rowIndex}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%">
+                        <p:separator/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.mandate.step.action.select.fieldname')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="fieldSelect" size="1" styleClass="largest"
+                                         value="#{mandateFieldSubmitStep.selectedFieldViewId}" required="true">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{mandateFieldSubmitStep.mandateFieldViewList}" var="fieldView"
+                                           itemLabel="#{fieldView.fieldName}" itemValue="#{fieldView.id}"/>
+                            <p:ajax event="change"
+                                    process="@this" listener="#{mandateFieldSubmitStep.onChangeFieldView}"/>
+                        </p:selectOneMenu><p:commandButton id="addFieldBtn" value="#{msg.get('app.button.add')}"
+                                         process="@this"
+                                         action="#{mandateFieldSubmitStep.onSelectFieldName}"
+                                         update=":stepActionFrm:selectFieldName_tbl, :stepActionFrm:classSelect, :stepActionFrm:fieldSelect">
+                        </p:commandButton>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%">
+                        <p:dataTable id='selectFieldName_tbl' styleClass="full_table" value="#{mandateFieldSubmitStep.wrkMandateFieldClassStepActionView.mandateFieldViewList}"
+                                     var="mandateFieldView" rowIndexVar="rowIndex" scrollable="true" scrollHeight="150">
+                            <p:column styleClass="center">
+                                <h:outputText value="#{rowIndex+1}"
+                                              style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                            </p:column>
+                            <p:column headerText="#{msg.get('app.mandateField.field.name')}">
+                                <h:outputText value="#{mandateFieldView.fieldName}"/>
+                            </p:column>
+                            <p:column
+                                    headerText="#{msg.get('app.mandateField.field.desc')}">
+                                <h:outputText value="#{mandateFieldView.fieldDesc}"/>
+                            </p:column>
+                            <p:column style='width:50px' styleClass="center">
+                                <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+                                                 process="@this"
+                                                 action="#{mandateFieldSubmitStep.onDeleteFieldName}"
+                                                 update=":stepActionFrm:selectFieldName_tbl, :stepActionFrm:fieldSelect, :stepActionFrm:classSelect"
+                                                 style="margin-right:0px !important">
+                                    <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedViewId}" value="#{rowIndex}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton id="okBtn" styleClass="small"
+                                         value="#{msg.get('app.okButton')}"
+                                         actionListener="#{mandateFieldSubmitStep.onAddStepActionField}"
+                                         process="@form"
+                                         update=":stepActionFrm,:frmMain:stepAction_tbl"
+                                         oncomplete="handleDialogRequest(xhr, status, args,'p_manageStepActionDlg')"
+                                />
+                        <p:commandButton
+                                id="cancelBtn"
+                                value="#{msg.get('app.cancelButton')}"
+                                styleClass="small"
+                                onclick="#{name}.hide();"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+            </table>
+        </p:scrollPanel>
+        <p:blockUI widgetVar="blockStepActionFrm" block="stepActionFrm" trigger=":stepActionFrm:okBtn, :stepActionFrm:addFieldBtn">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:form>
+</ui:composition>
