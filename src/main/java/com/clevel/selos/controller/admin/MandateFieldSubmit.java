@@ -35,6 +35,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -90,11 +91,18 @@ public class MandateFieldSubmit implements Serializable {
 
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 
+        URL scanURL = null;
+        try{
+            URL url = ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext());
+            scanURL = new URL(url.toString()+"../../../lib/selos-lib.jar");
+        }catch (Exception ex){
+            log.error("Cannot Build the URL");
+        }
 
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
                 //.setUrls(ClasspathHelper.forPackage("" + packageName))
-                .setUrls(ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext()))
+                .setUrls(ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext()), scanURL)
                 //.setUrls(ClasspathHelper.forPackage(ec.getRequestContextPath() + packageName))
                 .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName))));
 
