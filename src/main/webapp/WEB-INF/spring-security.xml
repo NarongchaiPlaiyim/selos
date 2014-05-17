@@ -9,7 +9,7 @@
                             http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
     <http auto-config="false">
-        <intercept-url pattern="/admin/**" access="ROLE_SYSTEM"/>
+        <intercept-url pattern="/admin/**" access="ROLE_SYSTEM,ROLE_ADMIN"/>
         <intercept-url pattern="/site/**"
                        access="ROLE_SYSTEM,ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_GH,ROLE_CSSO,ROLE_UW,ROLE_SSO,ROLE_AAD,ROLE_AADC,ROLE_CC,ROLE_IC,ROLE_DC,ROLE_DEM,ROLE_DEC,ROLE_TCG,ROLE_LARBC,ROLE_CO1,ROLE_CO2,ROLE_LS,ROLE_LSM,ROLE_LD"/>
         <intercept-url pattern="/isa/**" access="ROLE_ISA"/>

@@ -1,0 +1,39 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <h:outputStylesheet name="css/jquery.menu.css" />
+    <h:outputScript library="js" name="jquery.menu.js" />
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            selosmenu.init({
+                mainmenuid: "selosmenu", //menu DIV id
+                orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+                classname: 'selosmenu'//, //class added to menu's outer DIV
+            });
+        });
+        //]]>
+    </script>
+
+    <div id="selosmenu" class="selosmenu">
+        <ul>
+            <h:panelGroup id="pnl_menu_mandatefield" rendered="true" styleClass="panel">
+                <li id="mnuMandatefield">
+                    <a href="#{request.contextPath}/admin/mandateFieldSum.jsf" title="#{msg.get('app.menu.mandate.field')}">#{msg.get('app.menu.mandate.field')}</a>
+                    <ul>
+                        <li id="subMandateFieldDetail"><a href="#{request.contextPath}/admin/mandateFieldSum.jsf">#{msg.get('app.menu.mandate.field.detail')}</a></li>
+                        <li id="subMandateFieldStep"><a href="#{request.contextPath}/admin/mandateFieldStepAction.jsf"
+                                                           title="#{msg.get('app.menu.mandate.field.step.action')}">#{msg.get('app.menu.mandate.field.step.action')}</a></li>
+                    </ul>
+                </li>
+            </h:panelGroup>
+        </ul>
+        <br style="clear: left"/>
+    </div>
+    <div id="menu_sub" style="height: 14px;"><!-- --></div>
+    <div class="clear"></div>
+</ui:composition>

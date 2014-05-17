@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
+    <h:form id="mandateConditionFrm">
+        <p:scrollPanel style="height:360px" styleClass="panel-dialog" id="mandateConditionPanel"
+                       mode="native" rendered="#{not empty mandateFieldSubmit.wrkMandateConditionView}">
+            <p:messages />
+            <table class="content_form" style="width:100%">
+                <tr>
+                    <td class="title" style="width: 200px;">
+                        <p:outputLabel for="conditionName" value="#{msg.get('app.mandateField.condition.name')}" />
+                    </td>
+                    <td>
+                        <p:inputText id="conditionName" styleClass="largest_m" maxlength="30" required="true" value="#{mandateFieldSubmit.wrkMandateConditionView.name}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width: 200px;">
+                        <p:outputLabel for="conditionDesc" value="#{msg.get('app.mandateField.condition.desc')}" />
+                    </td>
+                    <td>
+                        <p:inputText id="conditionDesc" styleClass="largest_l" value="#{mandateFieldSubmit.wrkMandateConditionView.conditionDesc}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="mandateConditionType" value="#{msg.get('app.mandateField.condition.type')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="mandateConditionType" size="1" styleClass="largest_l"
+                                          value="#{mandateFieldSubmit.wrkMandateConditionView.mandateConditionType}" required="true">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{enumGeneralControl.mandateConditionType}" var="mandateConditionType"
+                                           itemLabel="#{msg.get(mandateConditionType.desc)}" itemValue="#{mandateConditionType}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="mandateDependType" value="#{msg.get('app.mandateField.condition.depend.type')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="mandateDependType" size="1" styleClass="largest_l"
+                                          value="#{mandateFieldSubmit.wrkMandateConditionView.dependType}">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{enumGeneralControl.mandateDependType}" var="mandateDependType"
+                                           itemLabel="#{msg.get(mandateDependType.desc)}" itemValue="#{mandateDependType}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="dependCondition" value="#{msg.get('app.mandateField.condition.depend.condition')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="dependCondition" size="1" styleClass="largest"
+                                         value="#{mandateFieldSubmit.selectedMandateDependCondViewId}">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+                            <f:selectItems value="#{mandateFieldSubmit.conditionList}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title"><p:outputLabel for="conditionDetail_tble" value="#{msg.get('app.mandateField.condition.detail')}" /></td>
+                    <td>
+                        <p:commandButton id="addConditionDetailButton" value="#{msg.get('app.button.add')}"
+                                         process="@this"
+                                         oncomplete="p_mandateConditionDetailDlg.show();"
+                                         action="#{mandateFieldSubmit.onOpenAddMandateConditionDetail}"
+                                         update=":mandateConditionDetailDlg">
+
+                            <p:resetInput target=":mandateConditionDetailDlg" />
+                        </p:commandButton>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:dataTable id='conditionDetail_tble' styleClass="full_table" value="#{mandateFieldSubmit.wrkMandateConditionView.conditionDetailViewList}" var="conditionDetail" rowIndexVar="conditionRowIndex">
+                            <p:column styleClass="center">
+                                <h:outputText value="#{conditionRowIndex+1}"
+                                              style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                            </p:column>
+                            <p:column headerText="#{msg.get('app.mandateField.condition.detail.fieldName')}">
+                                <h:outputText value="#{conditionDetail.mandateFieldView.fieldName}"/>
+                            </p:column>
+                            <p:column
+                                    headerText="#{msg.get('app.mandateField.condition.detail.baseValue')}">
+                                <h:outputText value="#{conditionDetail.baseValue}"/>
+                            </p:column>
+                            <p:column style='width:50px' styleClass="center">
+                                <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+                                                 process="@this"
+                                                 oncomplete="p_mandateConditionDetailDlg.show();"
+                                                 action="#{mandateFieldSubmit.onOpenUpdateMandateConditionDetail}"
+                                                 update=":mandateConditionDetailDlg"
+                                                 style="margin-right:0px !important">
+                                    <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateConDetailViewId}" value="#{conditionRowIndex}" />
+                                    <p:resetInput target=":mandateConditionDetailDlg" />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+                                                 process="@this"
+                                                 action="#{mandateFieldSubmit.onDeleteMandateConditionDetail}"
+                                                 update=":mandateConditionFrm:conditionDetail_tble"
+                                                 style="margin-right:0px !important">
+                                    <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateConDetailViewId}" value="#{conditionRowIndex}" />
+                                    <p:resetInput target=":mandateConditionDetailDlg" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton id="okBtn" styleClass="small"
+                                         value="#{msg.get('app.button.ok')}"
+                                         actionListener="#{mandateFieldSubmit.onAddMandateCondition()}"
+                                         process="@form"
+                                         update=":mandateConditionFrm,:frmMain:condition_tbl"
+                                         oncomplete="handleDialogRequest(xhr, status, args,'p_mandateConditionDlg')"
+                                />
+
+                        <p:commandButton
+                                id="cancelBtn"
+                                value="#{msg.get('app.button.cancel')}"
+                                styleClass="small"
+                                onclick="#{name}.hide();"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:spacer></p:spacer>
+                    </td>
+                </tr>
+            </table>
+        </p:scrollPanel>
+        <p:blockUI widgetVar="blockMandateConditionFrm" block="mandateConditionFrm" trigger=":mandateConditionFrm:okBtn, :mandateConditionFrm:addConditionDetailButton">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:form>
+</ui:composition>

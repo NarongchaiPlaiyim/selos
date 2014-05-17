@@ -7,12 +7,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_man_fields_step_action")
-public class MandateFieldStepAction implements Serializable{
+@Table(name = "mst_mandate_con_step_action")
+public class MandateFieldConStepAction implements Serializable{
 
     @Id
-    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_STEP", sequenceName = "SEQ_MST_MAN_FIELD_STEP", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_STEP")
+    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_COND_STEP", sequenceName = "SEQ_MST_MAN_FIELD_COND_STEP", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_COND_STEP")
     private long id;
 
     @ManyToOne
@@ -24,8 +24,8 @@ public class MandateFieldStepAction implements Serializable{
     private Step step;
 
     @ManyToOne
-    @JoinColumn(name = "mandate_fields_id")
-    private MandateField mandateField;
+    @JoinColumn(name = "mandate_con_id")
+    private MandateFieldCondition mandateFieldCondition;
 
     public long getId() {
         return id;
@@ -51,12 +51,12 @@ public class MandateFieldStepAction implements Serializable{
         this.step = step;
     }
 
-    public MandateField getMandateField() {
-        return mandateField;
+    public MandateFieldCondition getMandateFieldCondition() {
+        return mandateFieldCondition;
     }
 
-    public void setMandateField(MandateField mandateField) {
-        this.mandateField = mandateField;
+    public void setMandateFieldCondition(MandateFieldCondition mandateFieldCondition) {
+        this.mandateFieldCondition = mandateFieldCondition;
     }
 
     @Override
@@ -65,6 +65,7 @@ public class MandateFieldStepAction implements Serializable{
                 .append("id", id)
                 .append("action", action)
                 .append("step", step)
+                .append("mandateFieldCondition", mandateFieldCondition)
                 .toString();
     }
 }
