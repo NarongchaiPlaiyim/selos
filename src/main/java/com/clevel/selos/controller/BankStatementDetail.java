@@ -10,6 +10,7 @@ import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -108,7 +109,6 @@ public class BankStatementDetail extends BaseController {
     private long workCaseId;
 
     private boolean bankAccTypeSelectRequired;
-    private boolean roleUW;
     private boolean clickSaveSuccess;
 
     public BankStatementDetail() {
@@ -149,6 +149,8 @@ public class BankStatementDetail extends BaseController {
         if (checkSession(session)) {
             workCaseId = (Long)session.getAttribute("workCaseId");
 
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL);
+
             if (FacesUtil.getSessionMapValue("bankStmtSumView") != null &&
                 FacesUtil.getSessionMapValue("isTmbBank") != null &&
                 FacesUtil.getSessionMapValue("lastMonthDate") != null &&
@@ -163,20 +165,11 @@ public class BankStatementDetail extends BaseController {
 
                 log.debug("Passed parameters from Bank statement summary ::: bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
                         isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
-
-                // set Role
-                int roleId = bankStmtControl.getUserRoleId();
-                if (RoleValue.UW.id() == roleId) {
-                    roleUW = true;
-                }
-
                 initViewFormAndSelectItems();
                 checkRequiredBankAccTypeSelected();
                 clickSaveSuccess = false;
             }
-
         }
-
     }
 
     private void initViewFormAndSelectItems() {
@@ -416,14 +409,6 @@ public class BankStatementDetail extends BaseController {
 
     public void setBankAccTypeSelectRequired(boolean bankAccTypeSelectRequired) {
         this.bankAccTypeSelectRequired = bankAccTypeSelectRequired;
-    }
-
-    public boolean isRoleUW() {
-        return roleUW;
-    }
-
-    public void setRoleUW(boolean roleUW) {
-        this.roleUW = roleUW;
     }
 
     public String getSeverity() {
