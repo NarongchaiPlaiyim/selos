@@ -31,6 +31,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
@@ -89,10 +90,12 @@ public class MandateFieldSubmit implements Serializable {
 
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 
+
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
                 //.setUrls(ClasspathHelper.forPackage("" + packageName))
-                .setUrls(ClasspathHelper.forPackage(ec.getRequestContextPath() + packageName))
+                .setUrls(ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext()))
+                //.setUrls(ClasspathHelper.forPackage(ec.getRequestContextPath() + packageName))
                 .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName))));
 
         Set<Class<?>> classesSet = reflections.getSubTypesOf(java.lang.Object.class);
