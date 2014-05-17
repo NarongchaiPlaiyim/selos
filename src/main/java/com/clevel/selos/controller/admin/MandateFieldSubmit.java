@@ -87,9 +87,12 @@ public class MandateFieldSubmit implements Serializable {
         preRenderCheck = false;
         String packageName = "com.clevel.selos.model.db.working";
 
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
-                .setUrls(ClasspathHelper.forPackage(packageName))
+                //.setUrls(ClasspathHelper.forPackage("" + packageName))
+                .setUrls(ClasspathHelper.forPackage(ec.getRequestContextPath() + packageName))
                 .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName))));
 
         Set<Class<?>> classesSet = reflections.getSubTypesOf(java.lang.Object.class);
