@@ -723,14 +723,14 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().execute("returnBDM_ZMDlg.show()");
     }
 
-    public void onReturnBDMByZM(){
+    public void onReturnBDMByBU(){
         log.debug("onReturnBDMByZM ( return to BDM from ZM )");
         HttpSession session = FacesUtil.getSession(true);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try{
-            
+
         }catch (Exception ex){
 
         }

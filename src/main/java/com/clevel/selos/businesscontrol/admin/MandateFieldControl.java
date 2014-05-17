@@ -61,8 +61,7 @@ public class MandateFieldControl extends BusinessControl {
         logger.info("number of mandateFieldClass: {}", mandateFieldClassList.size());
         Map<String, MandateFieldClassView> mandateFieldClassViewMap = new TreeMap<String, MandateFieldClassView>();
         for(Class clazz : classSet){
-            if(!clazz.getName().contains("Abstract"))
-            {
+            if(!(clazz.getName().contains("Abstract")||clazz.getName().endsWith("_"))){
                 MandateFieldClassView mandateFieldClassView = null;
                 MandateFieldClass matchedClass = null;
                 for(MandateFieldClass mandateFieldClass : mandateFieldClassList){
