@@ -19,6 +19,7 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public WorkCaseOwnerDAO() {
     }
