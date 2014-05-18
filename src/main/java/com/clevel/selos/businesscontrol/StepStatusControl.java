@@ -8,7 +8,6 @@ import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.StepToStatus;
-import com.clevel.selos.model.view.StepView;
 import com.clevel.selos.transform.ActionTransform;
 import com.clevel.selos.transform.StepTransform;
 import org.slf4j.Logger;

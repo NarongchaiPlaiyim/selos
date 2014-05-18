@@ -1,12 +1,12 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class BAPAInfoView implements Serializable {
     private static final long serialVersionUID = -8964123899265413304L;

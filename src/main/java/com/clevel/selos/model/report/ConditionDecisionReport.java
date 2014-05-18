@@ -1,10 +1,6 @@
 package com.clevel.selos.model.report;
 
 import com.clevel.selos.report.ReportModel;
-
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

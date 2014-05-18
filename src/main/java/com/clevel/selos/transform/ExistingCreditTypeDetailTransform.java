@@ -2,7 +2,9 @@ package com.clevel.selos.transform;
 
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.ExistingCollateralDetail;
+import com.clevel.selos.model.db.working.ExistingCreditTypeDetail;
+import com.clevel.selos.model.db.working.ExistingGuarantorDetail;
 import com.clevel.selos.model.view.ExistingCreditTypeDetailView;
 import com.clevel.selos.util.Util;
 

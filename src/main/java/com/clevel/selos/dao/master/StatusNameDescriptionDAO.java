@@ -2,17 +2,17 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.SearchCitizenId;
 import com.clevel.selos.model.db.master.StatusNameDescription;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.hibernate.Criteria;
 
 public class StatusNameDescriptionDAO extends GenericDAO<StatusNameDescription,String>
 {

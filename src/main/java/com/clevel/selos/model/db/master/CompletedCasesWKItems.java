@@ -3,7 +3,6 @@ package com.clevel.selos.model.db.master;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.security.Timestamp;
 import java.util.Date;
 
 @Entity

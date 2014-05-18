@@ -1,8 +1,8 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.ActionView;
 import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.view.ActionView;
 import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;

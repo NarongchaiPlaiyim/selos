@@ -14,12 +14,13 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name="mandateFieldSubmitStep")
-public class MandateFieldSubmitStep {
+public class MandateFieldSubmitStep implements Serializable {
     @Inject
     @ADMIN
     private Logger log;

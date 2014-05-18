@@ -1,14 +1,13 @@
 package com.clevel.selos.dao.working;
 
-import java.util.List;
-
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.PerfectReviewType;
+import com.clevel.selos.model.db.working.PerfectionReview;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.PerfectReviewType;
-import com.clevel.selos.model.db.working.PerfectionReview;
+import java.util.List;
 
 public class PerfectionReviewDAO extends GenericDAO<PerfectionReview, Long>{
 	

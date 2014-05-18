@@ -13,10 +13,8 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.TeamTypeValue;
 import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.TeamType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
@@ -32,15 +30,13 @@ import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -197,9 +193,11 @@ public class PESearch implements Serializable
 
         WorkCase workCase = workCaseDAO.findByAppNumber(searchViewSelectItem.getApplicationno());
         if(workCase == null){
+            log.debug("onSelectSearch ::: select by workCase ...");
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(searchViewSelectItem.getApplicationno());
             wrkCaseId = 0;
             if(workCasePrescreen != null) {
+                log.debug("onSelectSearch ::: select by workCasePreScreen ...");
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 createBy = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
             }
@@ -209,25 +207,42 @@ public class PESearch implements Serializable
             createBy = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
         }
 
-        if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id()))
+        log.debug("onSelectSearch ::: wrkCaseId : {}, wrkCasePreScreenId : {}, createBy : {}", wrkCaseId, wrkCasePreScreenId, createBy);
+
+        if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id())) {
             accessAuthorize = true;
+            log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
+            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+        }
 
         if(!accessAuthorize && (!Util.isNull(user.getTeam()) &&
-                (user.getTeam().getTeam_type() == TeamTypeValue.GROUP_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.CSSO.value())))
+                (user.getTeam().getTeam_type() == TeamTypeValue.GROUP_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.CSSO.value()))) {
             accessAuthorize = true;
+            log.debug("onSelectSearch ::: after check by TEAM_GROUP_HEAD, TEAM_CSSO ,, user team = : {}", user.getTeam() != null ? user.getTeam().getTeam_type() : "NULL");
+            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+        }
 
-        if(!accessAuthorize && createBy.equalsIgnoreCase(user.getId()))
-                accessAuthorize = true;
-
-        if(!accessAuthorize && checkAuthorizeWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, user.getId()))
+        if(!accessAuthorize && createBy.equalsIgnoreCase(user.getId())) {
             accessAuthorize = true;
+            log.debug("onSelectSearch ::: after check by USER_ID ,, user id = : {}", user.getId());
+            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+        }
+
+        if(!accessAuthorize && checkAuthorizeWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, user.getId())) {
+            accessAuthorize = true;
+            log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
+            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+        }
 
         if(!accessAuthorize && !Util.isNull(user.getTeam()) &&
-                (user.getTeam().getTeam_type() == TeamTypeValue.TEAM_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.TEAM_LEAD.value()))
-            if(checkAuthorizeTeam(wrkCasePreScreenId, wrkCaseId, user))
+                (user.getTeam().getTeam_type() == TeamTypeValue.TEAM_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.TEAM_LEAD.value())) {
+            if (checkAuthorizeTeam(wrkCasePreScreenId, wrkCaseId, user))
                 accessAuthorize = true;
+            log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
+            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+        }
 
-        if(accessAuthorize){
+        if(!accessAuthorize){
             log.debug("You are not authorised to view this case. else after 3 2 ");
             message = "You are not Authorised to view this case!";
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
@@ -340,6 +355,7 @@ public class PESearch implements Serializable
 
     public boolean checkAuthorizeWorkCaseOwner(long workCasePreScreenId, long workCaseId, String userId){
         int workCaseSize = workCaseOwnerDAO.findWorkCaseOwner(workCasePreScreenId, workCaseId, userId);
+        log.debug("checkAuthorizeWorkCaseOwner ::: workCaseSize : {}", workCaseSize);
 
         if(workCaseSize > 0)
             return true;

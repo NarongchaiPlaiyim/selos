@@ -13,8 +13,6 @@ import com.clevel.selos.transform.StepTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
@@ -61,8 +59,7 @@ public class MandateFieldControl extends BusinessControl {
         logger.info("number of mandateFieldClass: {}", mandateFieldClassList.size());
         Map<String, MandateFieldClassView> mandateFieldClassViewMap = new TreeMap<String, MandateFieldClassView>();
         for(Class clazz : classSet){
-            if(!clazz.getName().contains("Abstract"))
-            {
+            if(!(clazz.getName().contains("Abstract")||clazz.getName().endsWith("_"))){
                 MandateFieldClassView mandateFieldClassView = null;
                 MandateFieldClass matchedClass = null;
                 for(MandateFieldClass mandateFieldClass : mandateFieldClassList){

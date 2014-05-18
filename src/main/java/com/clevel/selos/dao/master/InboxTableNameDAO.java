@@ -4,16 +4,15 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.InboxTableName;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.transform.Transformers;
-
-import java.util.Iterator;
-import java.util.List;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class InboxTableNameDAO extends GenericDAO<InboxTableName,Integer>

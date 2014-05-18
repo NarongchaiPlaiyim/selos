@@ -9,7 +9,6 @@ import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
-import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -20,9 +19,7 @@ import com.clevel.selos.transform.AccountStatusTransform;
 import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.transform.BankTransform;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -33,8 +30,9 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "bankStatementDetail")

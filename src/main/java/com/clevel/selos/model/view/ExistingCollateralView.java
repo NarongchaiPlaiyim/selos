@@ -2,7 +2,6 @@ package com.clevel.selos.model.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 public class ExistingCollateralView implements Serializable {

@@ -1,16 +1,11 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.ApproveResult;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.BAPaymentMethodValue;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ReturnInfoView implements Serializable {
     private static final long serialVersionUID = -7436809341917602008L;

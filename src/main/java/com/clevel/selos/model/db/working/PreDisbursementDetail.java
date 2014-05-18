@@ -1,14 +1,11 @@
 package com.clevel.selos.model.db.working;
 
 
-import javax.persistence.*;
-
+import com.clevel.selos.model.db.master.PreDisbursementData;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.clevel.selos.model.db.master.PreDisbursementData;
-import com.clevel.selos.model.db.master.User;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 

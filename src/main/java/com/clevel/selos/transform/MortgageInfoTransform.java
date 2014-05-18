@@ -1,11 +1,5 @@
 package com.clevel.selos.transform;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import com.clevel.selos.dao.master.MortgageLandOfficeDAO;
 import com.clevel.selos.dao.master.MortgageOSCompanyDAO;
 import com.clevel.selos.model.AttorneyRelationType;
@@ -15,6 +9,11 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MortgageInfo;
 import com.clevel.selos.model.db.working.MortgageInfoMortgage;
 import com.clevel.selos.model.view.MortgageInfoView;
+
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 public class MortgageInfoTransform extends Transform {
 	private static final long serialVersionUID = 4808917448140179209L;

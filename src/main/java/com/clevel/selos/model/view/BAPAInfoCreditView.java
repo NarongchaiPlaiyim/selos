@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 import com.clevel.selos.model.BAPAType;
 import com.clevel.selos.util.Util;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCreditView> {
 	private static final long serialVersionUID = 891498608677139945L;

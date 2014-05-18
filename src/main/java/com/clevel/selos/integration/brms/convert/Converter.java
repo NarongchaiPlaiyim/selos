@@ -2,10 +2,10 @@ package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
+import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.BRMSYesNo;
-import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.model.DocLevel;
 import com.clevel.selos.model.UWRuleType;
 import com.clevel.selos.util.Util;

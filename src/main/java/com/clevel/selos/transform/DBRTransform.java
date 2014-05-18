@@ -5,8 +5,6 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.DBR;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.DBRView;
-import com.clevel.selos.util.DateTimeUtil;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;

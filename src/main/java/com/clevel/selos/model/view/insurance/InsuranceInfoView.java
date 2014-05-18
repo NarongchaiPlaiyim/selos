@@ -1,11 +1,11 @@
 package com.clevel.selos.model.view.insurance;
 
+import com.clevel.selos.model.view.NewCollateralView;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.clevel.selos.model.view.NewCollateralView;
 
 public class InsuranceInfoView implements Serializable {
     private List<InsuranceInfoSectionView> sectionList;

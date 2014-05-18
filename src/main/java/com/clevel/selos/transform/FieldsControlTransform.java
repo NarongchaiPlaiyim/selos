@@ -1,6 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.FieldsControl;
 import com.clevel.selos.model.view.FieldsControlView;
 
 import javax.inject.Inject;

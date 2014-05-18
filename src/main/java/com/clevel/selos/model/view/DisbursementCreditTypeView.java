@@ -6,8 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 public class DisbursementCreditTypeView implements Serializable{
 
