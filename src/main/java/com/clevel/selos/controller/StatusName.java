@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.StatusIdBasedOnStepId;
 import com.clevel.selos.model.db.master.StatusNameDescription;
 import com.clevel.selos.system.Config;
 import org.slf4j.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;

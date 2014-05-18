@@ -9,7 +9,6 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NewConditionDetailTransform extends Transform {

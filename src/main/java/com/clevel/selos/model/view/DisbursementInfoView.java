@@ -1,13 +1,13 @@
 package com.clevel.selos.model.view;
 
 
+import com.clevel.selos.model.db.master.User;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.clevel.selos.model.db.master.User;
 
 public class DisbursementInfoView implements Serializable{
 

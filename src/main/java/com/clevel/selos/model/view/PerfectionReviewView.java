@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.clevel.selos.model.PerfectReviewStatus;
 import com.clevel.selos.model.PerfectReviewType;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class PerfectionReviewView implements Serializable {
 	private static final long serialVersionUID = -50884450485089001L;

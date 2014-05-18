@@ -2,7 +2,10 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.MandateField;
+import com.clevel.selos.model.db.master.Status;
+import com.clevel.selos.model.db.master.Step;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;

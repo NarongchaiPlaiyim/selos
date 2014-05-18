@@ -10,7 +10,6 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
-import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;

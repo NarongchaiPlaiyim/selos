@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.WorkCase;

@@ -3,14 +3,10 @@ package com.clevel.selos.businesscontrol.isa;
 import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.integration.SELOS;
 import org.slf4j.Logger;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
 
 public class ImportService extends BusinessControl {
 

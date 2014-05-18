@@ -1,10 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.working.AgreementInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
@@ -13,6 +8,10 @@ import com.clevel.selos.model.db.working.AgreementInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.AgreementInfoView;
 import com.clevel.selos.transform.AgreementInfoTransform;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 @Stateless
 public class AgreementSignContractControl extends BusinessControl{

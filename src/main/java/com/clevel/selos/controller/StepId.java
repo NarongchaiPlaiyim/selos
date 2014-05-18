@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.StepNameIdDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.StepNameId;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +12,6 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import com.clevel.selos.model.db.master.StepNameId;
 
 @ViewScoped
 @ManagedBean(name = "stepid")

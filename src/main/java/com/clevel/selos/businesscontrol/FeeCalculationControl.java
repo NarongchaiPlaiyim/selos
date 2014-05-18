@@ -1,38 +1,21 @@
 package com.clevel.selos.businesscontrol;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
-import com.clevel.selos.dao.working.FeeCollectionAccountDAO;
-import com.clevel.selos.dao.working.FeeCollectionDetailDAO;
-import com.clevel.selos.dao.working.FeeDetailDAO;
-import com.clevel.selos.dao.working.FeeSummaryDAO;
-import com.clevel.selos.dao.working.OpenAccountDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.FeePaymentMethod;
 import com.clevel.selos.model.db.master.FeeType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.FeeCollectionAccount;
-import com.clevel.selos.model.db.working.FeeCollectionDetail;
-import com.clevel.selos.model.db.working.FeeDetail;
-import com.clevel.selos.model.db.working.FeeSummary;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.FeeCollectionAccountView;
 import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.model.view.FeeSummaryView;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Stateless
 public class FeeCalculationControl extends BusinessControl {

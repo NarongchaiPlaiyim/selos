@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public class UWRuleResponseView implements Serializable{
     private ActionResult actionResult;

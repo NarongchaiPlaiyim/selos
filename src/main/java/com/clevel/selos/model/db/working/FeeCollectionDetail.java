@@ -1,21 +1,11 @@
 package com.clevel.selos.model.db.working;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.clevel.selos.model.db.master.FeePaymentMethod;
 import com.clevel.selos.model.db.master.FeeType;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "wrk_fee_collection_detail")

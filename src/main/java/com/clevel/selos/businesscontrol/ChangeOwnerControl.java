@@ -1,14 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.master.WorkCaseOwner;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;

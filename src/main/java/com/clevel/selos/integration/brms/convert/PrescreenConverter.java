@@ -6,13 +6,12 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.param.UnderwritingRequest;
 import com.tmbbank.enterprise.model.*;
-
-
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class PrescreenConverter extends Converter{
     @Inject

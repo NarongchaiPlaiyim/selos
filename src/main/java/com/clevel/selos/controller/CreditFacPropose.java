@@ -39,7 +39,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -92,15 +91,11 @@ public class CreditFacPropose extends BaseController {
     private List<BaseRate> baseRateList;
     private List<CollateralTypeView> collTypeViewList;
     private List<CollateralTypeView> headCollTypeViewList;
-    private List<CollateralType> headCollateralTypeList;
-    private List<PotentialCollateral> potentialCollateralList;
     private List<MortgageType> mortgageTypeList;
     private List<MortgageTypeView> mortgageTypeViewList;
     private List<NewCollateralSubView> relatedWithAllList;
     private List<CustomerInfoView> collateralOwnerUwAllList;
-    private List<PotentialCollateral> potentialCollList;
     private List<PotentialCollateralView> potentialCollViewList;
-    private List<CollateralType> collateralTypeList;
     private List<PotentialColToTCGCol> potentialColToTCGColList;
     private List<PotentialColToTCGCol> headCollTypeList;
     private List<SubCollateralType> subCollateralTypeList;
@@ -2043,38 +2038,6 @@ public class CreditFacPropose extends BaseController {
             }
         }
         return returnDisbursementType;
-    }
-
-    private PotentialCollateral getPotentialCollateralById(int id) {
-        PotentialCollateral returnPotentialColl = new PotentialCollateral();
-        if (potentialCollList != null && !potentialCollList.isEmpty() && id != 0) {
-            for (PotentialCollateral potentialCollateral : potentialCollList) {
-                if (potentialCollateral.getId() == id) {
-                    returnPotentialColl.setId(potentialCollateral.getId());
-                    returnPotentialColl.setName(potentialCollateral.getName());
-                    returnPotentialColl.setDescription(potentialCollateral.getDescription());
-                    returnPotentialColl.setActive(potentialCollateral.getActive());
-                    break;
-                }
-            }
-        }
-        return returnPotentialColl;
-    }
-
-    private CollateralType getCollateralTypeById(int id) {
-        CollateralType returnCollType = new CollateralType();
-        if (collateralTypeList != null && !collateralTypeList.isEmpty() && id != 0) {
-            for (CollateralType collateralType : collateralTypeList) {
-                if (collateralType.getId() == id) {
-                    returnCollType.setId(collateralType.getId());
-                    returnCollType.setCode(collateralType.getCode());
-                    returnCollType.setDescription(collateralType.getDescription());
-                    returnCollType.setActive(collateralType.getActive());
-                    break;
-                }
-            }
-        }
-        return returnCollType;
     }
 
     private SubCollateralType getSubCollTypeById(int id) {

@@ -6,7 +6,6 @@ import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
-
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
@@ -15,7 +14,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,51 +1,25 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.master.MortgageLandOfficeDAO;
 import com.clevel.selos.dao.master.MortgageOSCompanyDAO;
-import com.clevel.selos.dao.working.CustomerAttorneyDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.MortgageInfoCollOwnerDAO;
-import com.clevel.selos.dao.working.MortgageInfoCollSubDAO;
-import com.clevel.selos.dao.working.MortgageInfoCreditDAO;
-import com.clevel.selos.dao.working.MortgageInfoDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.AttorneyType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageLandOffice;
 import com.clevel.selos.model.db.master.MortgageOSCompany;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.CustomerAttorney;
-import com.clevel.selos.model.db.working.MortgageInfo;
-import com.clevel.selos.model.db.working.MortgageInfoCollOwner;
-import com.clevel.selos.model.db.working.MortgageInfoCollSub;
-import com.clevel.selos.model.db.working.MortgageInfoCredit;
-import com.clevel.selos.model.db.working.NewCollateralCredit;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.CreditDetailSimpleView;
-import com.clevel.selos.model.view.CustomerAttorneySelectView;
-import com.clevel.selos.model.view.CustomerAttorneyView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
-import com.clevel.selos.model.view.MortgageInfoCollSubView;
-import com.clevel.selos.model.view.MortgageInfoView;
-import com.clevel.selos.transform.CreditDetailSimpleTransform;
-import com.clevel.selos.transform.CustomerAttorneyTransform;
-import com.clevel.selos.transform.CustomerTransform;
-import com.clevel.selos.transform.MortgageInfoCollOwnerTransform;
-import com.clevel.selos.transform.MortgageInfoCollSubTransform;
-import com.clevel.selos.transform.MortgageInfoTransform;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.transform.*;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Stateless
 public class MortgageDetailControl extends BusinessControl {

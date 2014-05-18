@@ -4,10 +4,11 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.brms.convert.*;
-import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.*;
-
+import com.clevel.selos.integration.brms.model.response.DocAppraisalResponse;
+import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
+import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.util.Util;
@@ -16,11 +17,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.xml.namespace.QName;
 import java.io.Serializable;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 @Default
 public class BRMSInterfaceImpl implements BRMSInterface, Serializable {

@@ -1,22 +1,17 @@
 package com.clevel.selos.transform;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.GuarantorInfo;
-import com.clevel.selos.model.db.working.NewGuarantorCredit;
-import com.clevel.selos.model.db.working.NewGuarantorDetail;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CreditDetailSimpleView;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.GuarantorInfoFullView;
 import com.clevel.selos.model.view.GuarantorInfoView;
 import com.clevel.selos.util.Util;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class GuarantorInfoTransform extends Transform {
 	private static final long serialVersionUID = 3517311808190408041L;

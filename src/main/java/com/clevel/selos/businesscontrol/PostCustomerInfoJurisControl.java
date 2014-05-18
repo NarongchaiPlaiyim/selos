@@ -1,19 +1,17 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerInfoPostJurisView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class PostCustomerInfoJurisControl extends BusinessControl {

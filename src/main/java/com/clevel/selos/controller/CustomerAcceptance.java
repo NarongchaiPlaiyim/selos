@@ -1,26 +1,6 @@
 package com.clevel.selos.controller;
 
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
@@ -31,13 +11,23 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.ContactRecordDetailView;
-import com.clevel.selos.model.view.CustomerAcceptanceView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.model.view.TCGInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name="customerAcceptance")

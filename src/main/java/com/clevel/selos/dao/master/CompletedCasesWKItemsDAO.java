@@ -4,15 +4,13 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CompletedCasesWKItems;
-import com.clevel.selos.model.db.master.StatusIdBasedOnStepId;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
-import org.hibernate.Criteria;
+
 import javax.inject.Inject;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

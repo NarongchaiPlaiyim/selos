@@ -5,11 +5,11 @@ import com.clevel.selos.dao.working.NewCollateralHeadDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
-import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.NewCollateral;
+import com.clevel.selos.model.db.working.NewCollateralHead;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.view.AppraisalDetailView;
-import com.clevel.selos.model.view.NewCollateralHeadView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.Util;
@@ -17,7 +17,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

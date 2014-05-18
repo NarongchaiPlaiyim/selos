@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.clevel.selos.model.MortgageSignLocationType;
 import com.clevel.selos.model.RadioValue;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class AgreementInfoView implements Serializable {
 	private static final long serialVersionUID = -427693013067255002L;

@@ -3,7 +3,6 @@ package com.clevel.selos.transform;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CalLimitType;
 import com.clevel.selos.model.CreditCategory;
-import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;

@@ -5,9 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class UWRulesResponse implements Serializable {
     private String decisionID;
