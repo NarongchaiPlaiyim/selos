@@ -265,7 +265,8 @@ public class BRMSControl extends BusinessControl {
         BigDecimal borrowerGroupIncome = BigDecimal.ZERO;
 
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workcasePrescreenId);
-        actionValidationControl.validate(customerList);
+        //Validate Customer List
+        actionValidationControl.validate(customerList, Customer.class);
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList) {
             if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -280,7 +281,9 @@ public class BRMSControl extends BusinessControl {
         //2. Set BankStatement Info
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkcasePrescreenId(workcasePrescreenId);
+        //validate bankStatementSummary
         if(bankStatementSummary != null){
+            actionValidationControl.validate(bankStatementSummary);
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
             for(BankStatement bankStatement : bankStatementList){
                 accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
@@ -297,6 +300,7 @@ public class BRMSControl extends BusinessControl {
         List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
 
+        actionValidationControl.validate(prescreenFacilityList, PrescreenFacility.class);
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
             accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
@@ -319,6 +323,8 @@ public class BRMSControl extends BusinessControl {
 
         /*Start Set Business Info List*/
         List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
+        actionValidationControl.validate(businessList, PrescreenBusiness.class);
+
         List<BRMSBizInfo> bizInfoList = new ArrayList<BRMSBizInfo>();
         for(PrescreenBusiness prescreenBusiness : businessList){
             bizInfoList.add(getBRMSBizInfo(prescreenBusiness));
@@ -357,53 +363,14 @@ public class BRMSControl extends BusinessControl {
         return uwRuleResponseView;
     }
 
-    private UWRulesResponse getTestUWRulesResponse(){
-        UWRulesResponse uwRulesResponse = new UWRulesResponse();
-        uwRulesResponse.setActionResult(ActionResult.SUCCESS);
-        Map<String, UWRulesResult> uwRuleResultMap = new HashMap<String, UWRulesResult>();
-
-        String[][] strings = {{"Decision_Matrix_Final",             "N", "G", "", "1001", "Group Result", ""},
-                {"NCB_Delinquency_Status_Current_TMB", "", "G", "", "1002", "", "0303540000361"},
-                {"NCB_Delinquency_Status_Current_Non_TMB", "", "G", "", "1003", "", "0303540000361"},
-                              {"NCB_Delinquency_Status_Current", "", "G", "", "1004", "", "0303540000361"},
-                              {"NCB_Delinquency_Status_Ever_Juristic_TMB", "", "G", "", "1005", "", "0303540000361"},
-                {"NCB_Delinquency_Status_Ever_Juristic_Non_TMB", "", "G", "", "1006", "", "0303540000361"},
-                {"NCB_Delinquency_Status_Ever_Juristic", "", "G", "", "1007", "", "0303540000361"},
-                {"NCB_Account_Status_TMB", "", "G", "", "1008", "", "0303540000361"},
-                {"NCB_Account_Status_Non_TMB", "", "G", "", "1009", "", "0303540000361"},
-                {"NCB_Account_Status", "", "G", "", "1010", "", "0303540000361"},
-                {"Compliance_Section48", "", "G", "", "1011", "", "0303540000361"},
-                {"Compliance_Section49", "", "G", "", "1012", "", "0303540000361"},
-                {"Guarantee_Prohibited", "", "G", "", "1013", "Group_Result", ""},
-                {"Compliance_Connected_Person", "", "G", "", "1014", "Group Result", ""},
-                {"Compliance_KYC_Warning", "", "G", "", "1015", "Group Result", ""},
-                {"Compliance_KYC_Sanction", "", "G", "", "1016", "Group Result", ""},
-                {"Compliance_KYC", "", "G", "", "1017", "Group Result", ""},
-                {"Fraud_Status", "", "G", "", "1018", "Group Result", ""},
-                {"Litigation_Status", "", "G", "", "1019", "Group Result", ""}};
-
-        for(int i=0; i< 19; i++){
-            UWRulesResult uwRulesResult = new UWRulesResult();
-            uwRulesResult.setRuleName(strings[i][0]);
-            uwRulesResult.setRejectGroupCode(strings[i][1]);
-            uwRulesResult.setColor(strings[i][2]);
-            uwRulesResult.setDeviationFlag(strings[i][3]);
-            uwRulesResult.setRuleOrder(strings[i][4]);
-            //uwRulesResult.setType(UWRuleType.lookup(strings[i][5]));
-            uwRulesResult.setPersonalID(strings[i][6]);
-            uwRuleResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
-        }
-
-        uwRulesResponse.setUwRulesResultMap(uwRuleResultMap);
-
-        return uwRulesResponse;
-    }
-
-    public UWRuleResponseView getFullApplicationResult(long workCaseId){
+    public UWRuleResponseView getFullApplicationResult(long workCaseId, long actionId){
         logger.debug("getFullApplicationResult from workcaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        actionValidationControl.loadActionValidation(workCase.getStep().getId(), actionId);
+        actionValidationControl.validate(workCase);
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         //1. Set Customer Information, NCB Account, TMB Account Info, Customer CSI (Warning List)
@@ -411,6 +378,9 @@ public class BRMSControl extends BusinessControl {
         BigDecimal shareHolderRatio = BigDecimal.ZERO;
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+
+        actionValidationControl.validate(customerInfoList);
+
         for(Customer customer : customerList){
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value() &&
@@ -429,7 +399,9 @@ public class BRMSControl extends BusinessControl {
         //2. Set BankStatement Info
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+
         List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
+        actionValidationControl.validate(bankStatementSummary);
         for(BankStatement bankStatement : bankStatementList){
             accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
         }
@@ -438,6 +410,7 @@ public class BRMSControl extends BusinessControl {
         //3. Set Biz Info
         List<BRMSBizInfo> brmsBizInfoList = new ArrayList<BRMSBizInfo>();
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(bizInfoSummary);
         List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
         for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
             brmsBizInfoList.add(getBRMSBizInfo(bizInfoDetail));
@@ -446,8 +419,11 @@ public class BRMSControl extends BusinessControl {
 
         //4. Set TMB Account Request
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(newCreditFacility);
+
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(decision);
 
         ProposeType _proposeType = ProposeType.P;
         if(workCase.getStep() != null)
@@ -460,11 +436,14 @@ public class BRMSControl extends BusinessControl {
         else if(_proposeType.equals(ProposeType.A)){
             if(newCreditFacility.getLoanRequestType() != null)
                 applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
+            if(decision != null)
+                applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
         }
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
         List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
+        actionValidationControl.validate(newCreditDetailList, NewCreditDetail.class);
+
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(NewCreditDetail newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
@@ -478,8 +457,9 @@ public class BRMSControl extends BusinessControl {
 
         //5. Set TMB Coll Level
         List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, _proposeType);
-        List<BRMSCollateralInfo> collateralInfoList = new ArrayList<BRMSCollateralInfo>();
+        actionValidationControl.validate(newCollateralList, NewCollateral.class);
 
+        List<BRMSCollateralInfo> collateralInfoList = new ArrayList<BRMSCollateralInfo>();
         for(NewCollateral newCollateral : newCollateralList){
             List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
@@ -517,8 +497,13 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCollateralInfoList(collateralInfoList);
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(basicInfo);
+
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(tcg);
+        actionValidationControl.validate(dbr);
+
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
         applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
@@ -531,6 +516,8 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
 
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
+        actionValidationControl.validate(workCaseAppraisal);
+
         if(workCaseAppraisal != null){
             AppraisalStatus appraisalStatus = AppraisalStatus.lookup(workCaseAppraisal.getAppraisalResult());
             applicationInfo.setPassAppraisalProcess(appraisalStatus.booleanValue());
@@ -546,6 +533,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(exSummary);
 
         if(ProposeType.P.equals(_proposeType)){
             applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalIncomeNetBDM());
@@ -560,6 +548,8 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(existingCreditFacility);
+
         applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
         applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
         applicationInfo.setTotalNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
@@ -604,18 +594,29 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
-        UWRulesResponse uwRulesResponse = brmsInterface.checkFullApplicationRule(applicationInfo);
-        logger.debug("-- end getFullApplicationResult return {}", uwRulesResponse);
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+        ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
+        if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
+
+            UWRulesResponse uwRulesResponse = brmsInterface.checkFullApplicationRule(applicationInfo);
+
+            logger.debug("-- end getFullApplicationResult return {}", uwRulesResponse);
+
+            //Transform to View//
+            uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
+            uwRuleResponseView.setReason(uwRulesResponse.getReason());
+            if(uwRulesResponse.getUwRulesResultMap() != null && uwRulesResponse.getUwRulesResultMap().size() > 0){
+                UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
+                uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
+            }
+        } else {
+            uwRuleResponseView.setActionResult(actionValidationResult.getActionResult());
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(actionValidationResult.getMandateFieldMessageViewList());
+        }
+
         //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
-        //Transform to View//
-        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
-        uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
-        uwRuleResponseView.setReason(uwRulesResponse.getReason());
-        if(uwRulesResponse.getUwRulesResultMap() != null && uwRulesResponse.getUwRulesResultMap().size() > 0){
-            UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRulesResponse.getUwRulesResultMap(), customerList);
-            uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
-        }
         logger.debug("-- uwRuleResponseView : {}", uwRuleResponseView);
 
         return uwRuleResponseView;
