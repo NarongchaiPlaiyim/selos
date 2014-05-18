@@ -123,6 +123,28 @@ public class MandateFieldSubmit implements Serializable {
         preRenderCheck = true;
     }
 
+    public void onOpenAddMandateClassList(){
+
+        selectedMandateClassView = null;
+
+        for(MandateFieldClassView mandateFieldClassView : mandateFieldClassViewList){
+            if(mandateFieldClassView.getClassName().equals(ArrayList.class.getName())){
+                selectedMandateClassView = mandateFieldClassView;
+            }
+        }
+
+        if(selectedMandateClassView == null){
+            selectedMandateClassView.setClassName(ArrayList.class.getName());
+            selectedMandateClassView.setActive(Boolean.TRUE);
+        }
+
+        wrkMandateFieldView = new MandateFieldView();
+        wrkMandateFieldView.setFieldName("size");
+        wrkMandateFieldView.setMandateFieldClassView(selectedMandateClassView);
+        wrkMandateFieldView.setNotMatchedEmpty(2);
+
+    }
+
     public String onLinkEditMandateFieldDetail(){
         if (selectedMandateClassView == null){
             log.info("selectedMandateClassView : {}", selectedMandateClassView);

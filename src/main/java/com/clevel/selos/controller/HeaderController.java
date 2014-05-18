@@ -1689,7 +1689,7 @@ public class HeaderController extends BaseController {
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             try{
-                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId);
+                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId, 1009);
                 log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
                     if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){

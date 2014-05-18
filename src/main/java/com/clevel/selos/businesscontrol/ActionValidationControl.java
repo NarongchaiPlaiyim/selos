@@ -63,10 +63,6 @@ public class ActionValidationControl extends BusinessControl{
     private final static String ACTION_DATA_MIN_MAX_INCORRECT = "1155";
     private final static String ACTION_DATA_MATCHED_INCORRECT = "1156";
     private final static String ACTION_DATA_NOT_MATCHED_INCORRECT = "1157";
-    private final static String CONDITION_AND = "1158";
-    private final static String CONDITION_OR = "1159";
-    private final static String CONDITION_DEPEND_FALSE = "1160";
-    private final static String CONDITION_DEPEND_TRUE = "1161";
     private final static String CONDITION_BASE = "1162";
 
     private Map<String, List<MandateFieldView>> mandateFieldViewMap;
