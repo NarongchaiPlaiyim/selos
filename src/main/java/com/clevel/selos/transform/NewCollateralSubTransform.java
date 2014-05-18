@@ -1,9 +1,8 @@
 package com.clevel.selos.transform;
-import com.clevel.selos.dao.working.NewCollateralSubDAO;
+
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.NewCollateralHead;
 import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.view.NewCollateralSubView;
 import com.clevel.selos.util.Util;

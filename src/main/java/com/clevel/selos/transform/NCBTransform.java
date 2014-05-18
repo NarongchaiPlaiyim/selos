@@ -4,7 +4,6 @@ import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.TDRCondition;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -13,7 +12,6 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 

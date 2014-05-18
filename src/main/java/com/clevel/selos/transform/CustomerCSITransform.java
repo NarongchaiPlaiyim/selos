@@ -1,16 +1,10 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.CustomerCSI;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.CustomerCSIView;
-import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerCSIView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CustomerCSITransform extends Transform {

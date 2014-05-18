@@ -4,8 +4,6 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserSysParameterKey;
-import com.clevel.selos.model.db.master.Action;
-import com.clevel.selos.model.db.master.Step;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

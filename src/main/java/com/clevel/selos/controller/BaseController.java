@@ -2,15 +2,12 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.UserAccessControl;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.UserAccess;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.UserAccessView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;

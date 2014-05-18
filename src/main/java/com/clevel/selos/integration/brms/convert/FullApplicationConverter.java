@@ -3,22 +3,15 @@ package com.clevel.selos.integration.brms.convert;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
-import com.clevel.selos.integration.brms.model.response.UWRulesResult;
-import com.clevel.selos.model.UWRuleType;
-import com.clevel.selos.util.Util;
-import com.tmbbank.enterprise.model.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
-import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
-import com.ilog.rules.param.UnderwritingResult;
-
+import com.tmbbank.enterprise.model.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class FullApplicationConverter extends Converter{
 

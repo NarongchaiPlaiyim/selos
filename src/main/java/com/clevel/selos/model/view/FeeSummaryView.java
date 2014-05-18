@@ -1,9 +1,9 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.clevel.selos.model.RadioValue;
 
 public class FeeSummaryView implements Serializable  {
 	private static final long serialVersionUID = 2241253912774072062L;

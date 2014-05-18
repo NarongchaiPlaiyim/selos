@@ -1,25 +1,5 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.GuarantorDetailControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
@@ -31,6 +11,20 @@ import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.GuarantorInfoFullView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "guarantorDetail")

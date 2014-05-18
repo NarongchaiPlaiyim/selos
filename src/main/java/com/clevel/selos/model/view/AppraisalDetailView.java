@@ -1,15 +1,10 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.inject.Inject;
-import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 public class AppraisalDetailView implements Serializable {
     private long id;

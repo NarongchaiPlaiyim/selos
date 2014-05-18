@@ -7,7 +7,6 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.BizInfoDetailView;
-import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

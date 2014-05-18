@@ -4,16 +4,12 @@ import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.StepLandingPageDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.StepToStatus;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.Util;
@@ -21,9 +17,6 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Stateless
 public class InboxControl extends BusinessControl {

@@ -1,11 +1,10 @@
 package com.clevel.selos.model.report;
 
 import com.clevel.selos.report.ReportModel;
-
-import java.math.BigDecimal;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
 
 
 public class TotalDecisionReport extends ReportModel{

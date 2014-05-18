@@ -4,14 +4,11 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.ExistingCreditFacilityDAO;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
-import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.CustomerOblAccountInfo;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
@@ -27,7 +24,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 
 public class ObligationBizTransform extends BusinessTransform {
