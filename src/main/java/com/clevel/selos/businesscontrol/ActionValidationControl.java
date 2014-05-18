@@ -108,8 +108,9 @@ public class ActionValidationControl extends BusinessControl{
         return mandateFieldViewMap.size();
     }
 
-    public void validate(Object object, String parameterizedName){
-        logger.debug("-- begin valide(object:{}, paramenterizedName:{}", object, parameterizedName);
+    public void validate(Object object, Class parameterizedClass){
+        logger.debug("-- begin valide(object:{}, paramenterizedName:{}", object, parameterizedClass.getName());
+        String parameterizedName = parameterizedClass.getName();
 
         if(object != null){
             Class objectClass = object.getClass();
