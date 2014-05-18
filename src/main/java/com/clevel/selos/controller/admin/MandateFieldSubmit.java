@@ -94,8 +94,8 @@ public class MandateFieldSubmit implements Serializable {
         URL scanURL = null;
         try{
             URL url = ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext());
-
-            scanURL = new URL(url.toString()+"../../../lib/selos-lib.jar");
+            scanURL = url;
+            //scanURL = new URL(url.toString()+"../../../lib/selos-lib.jar");
             log.info("-- URL {}", scanURL.toString());
 
         }catch (Exception ex){
@@ -104,9 +104,7 @@ public class MandateFieldSubmit implements Serializable {
 
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
-                //.setUrls(ClasspathHelper.forPackage("" + packageName))
                 .setUrls(ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext()), scanURL)
-                //.setUrls(ClasspathHelper.forPackage(ec.getRequestContextPath() + packageName))
                 .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName))));
 
         Set<Class<?>> classesSet = reflections.getSubTypesOf(java.lang.Object.class);
