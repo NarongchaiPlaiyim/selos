@@ -68,13 +68,16 @@ public class StatusName implements Serializable
 
     public List<StatusNameDescription> valueChangeMethod(ValueChangeEvent e)
     {
-        log.info("step id value is  ::::::::::: {}",e.getNewValue().toString() );
 
-        statusnamelist = new ArrayList<StatusNameDescription>();
+        if(e!=null && e.getNewValue()!=null)
+        {
+            log.info("step id value is  ::::::::::: {}",e.getNewValue().toString() );
 
-        statustype =   e.getNewValue().toString();
+            statusnamelist = new ArrayList<StatusNameDescription>();
 
-         int stepid = 0;
+            statustype =   e.getNewValue().toString();
+
+            int stepid = 0;
 
             try
             {
@@ -138,15 +141,15 @@ public class StatusName implements Serializable
             }
             catch(Exception exception)
             {
-              log.info("exception occured :{}",exception);
+                log.info("exception occured :{}",exception);
             }
             finally
             {
 
             }
-            return statusnamelist;
 
-
+        }
+        return statusnamelist;
     }
 
     public List<StatusNameDescription> valueChangeMethod1(ValueChangeEvent e)

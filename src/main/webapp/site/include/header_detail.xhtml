@@ -165,7 +165,7 @@
             <!--Return to AAD Admin ( UW2 )-->
             <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                              title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016}"
+                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisal == 1}"
                              actionListener="#{headerController.onOpenReturnAADMByUW2()}"
                              update=":frmMain:returnAADM_UW2Panel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
@@ -715,7 +715,7 @@
 </p:panel>
 
 <p:panel id="returnAADM_UW2Panel" styleClass="panel"
-         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016}">
+         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisal == 1}">
     <p:dialog id="returnAADM_UW2Dialog" widgetVar="returnAADM_UW2Dlg" header="Return to AAD Admin"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="160" closable="false">

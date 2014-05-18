@@ -797,6 +797,10 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_BDM.getVal());
     }
 
+    public void returnBDMByBU(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
+        bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.REVISE_CA.getVal());
+    }
+
     public void returnAADAdminByAADCommittee(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
         bpmExecutor.returnCase(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
