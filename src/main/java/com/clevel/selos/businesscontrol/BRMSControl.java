@@ -436,7 +436,8 @@ public class BRMSControl extends BusinessControl {
         else if(_proposeType.equals(ProposeType.A)){
             if(newCreditFacility.getLoanRequestType() != null)
                 applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
+            if(decision != null)
+                applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
         }
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
