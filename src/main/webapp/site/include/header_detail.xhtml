@@ -367,8 +367,8 @@
             <!-- Cancel Parallel Appraisal -->
             <p:commandButton id="btnCancelReqAppr_BDM" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel Appraisal Request') and headerController.stepId == 2007}"
-                             onclick="">
-                <!--TODO SHOW CANCEL DIALOG-->
+                             actionListener="#{headerController.onOpenCancelAppraisalRequest()}"
+                             oncomplete="cancelReqApprDlg.show()">
             </p:commandButton>
             <!-- Submit to AAD Admin [ From BDM ] -->
             <p:commandButton id="btnReturnAADM_BDM" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
@@ -643,6 +643,14 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="460" height="160" closable="false">
         <ui:include src="/site/dialog/cancelCA.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="cancelReqApprPanel" styleClass="panel">
+    <p:dialog id="cancelReqApprDialog" widgetVar="cancelReqApprDlg" header="Cancel Request Appraisal"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/cancelRequestAppraisal.xhtml"/>
     </p:dialog>
 </p:panel>
 
