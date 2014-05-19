@@ -26,6 +26,8 @@ import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.bouncycastle.ocsp.Req;
+import org.hibernate.Criteria;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -390,22 +392,12 @@ public class ReassignTeamNames implements Serializable
         HttpSession session = FacesUtil.getSession(false);
         try
         {
-            /*if(session.getAttribute("isLocked")!=null)
+
+            if(session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
             {
-
-                String isLocked = (String) session.getAttribute("isLocked");
-
-                if(isLocked.equalsIgnoreCase("true"))
-                {*/
-                    String wobNumber = (String)session.getAttribute("wobNumber");
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
-                /*}
-                else
-                {
-                    session.removeAttribute("isLocked");
-                }
-
-            }*/
+                String wobNumber = (String)session.getAttribute("wobNumber");
+                bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+            }
         }
         catch (Exception e)
         {
@@ -688,63 +680,6 @@ public class ReassignTeamNames implements Serializable
             log.error("Error while opening case",e);
         }
 
-        /*userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        log.info("userDetails  : "+userDetail);
-
-        if(userDetail == null)
-        {
-            FacesUtil.redirect("/login.jsf");
-            return;
-        }
-
-        HttpSession session = FacesUtil.getSession(false);
-        log.info("onSelectInbox ::: setSession ");
-        log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
-
-        if(!Util.isEmpty(Long.toString(searchViewSelectItem.getWorkCasePreScreenId()))){
-            session.setAttribute("workCasePreScreenId", searchViewSelectItem.getWorkCasePreScreenId());
-        } else {
-            session.setAttribute("workCasePreScreenId", 0);
-        }
-        if(!Util.isEmpty(Long.toString(searchViewSelectItem.getWorkCaseId()))){
-            session.setAttribute("workCaseId", searchViewSelectItem.getWorkCaseId());
-        } else {
-            session.setAttribute("workCaseId", 0);
-        }
-
-        session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-        session.setAttribute("statusId", Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
-        session.setAttribute("stepId", searchViewSelectItem.getStepId());
-        session.setAttribute("queuename",searchViewSelectItem.getQueuename());
-        session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
-        session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
-
-        try
-        {
-
-            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            session.setAttribute("isLocked","true");
-
-        }
-        catch (Exception e)
-        {
-            log.error("Error while Locking case in queue : {}, wobNumber : {}",searchViewSelectItem.getQueuename(), searchViewSelectItem.getFwobnumber(), e);
-        }
-
-       *//* AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getWorkCasePreScreenId(), searchViewSelectItem.getWorkCaseId());
-        session.setAttribute("appHeaderInfo", appHeaderView);*//*
-
-        long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = inboxControl.getLandingPage(selectedStepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
-
-        if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-            FacesUtil.redirect(landingPage);
-            return;
-        } else {
-
-        }*/
-
     }
 
     public List<User> changeUserNameBasedOnTeamName(AjaxBehaviorEvent ajaxBehaviorEvent)
@@ -889,9 +824,6 @@ public class ReassignTeamNames implements Serializable
                 checked.clear();
                 setChecked(checked);
                 reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
-                log.info("before execute dialog..");
-                RequestContext.getCurrentInstance().execute("successDlg.show()");
-                log.info("after execute dialog..");
             }
             log.info("reassignsearchviewlist size is :::::: {}",reassignSearchViewList.size());
 
@@ -911,10 +843,14 @@ public class ReassignTeamNames implements Serializable
 
             setPopupremark("");
 
+            RequestContext.getCurrentInstance().execute("successDlg.show()");
+
+            return;
+
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            log.error("Error while reassigning : ",e);
         }
         finally
         {
@@ -927,6 +863,18 @@ public class ReassignTeamNames implements Serializable
     {
 
         log.info("Selected User Name : {}",selectedUserName);
+
+        popupselectedteamname= "";
+
+        setPopupselectedteamname("");
+
+        popupselectedusername = "";
+
+        setPopupselectedusername("");
+
+        popupremark = "";
+
+        setPopupremark("");
 
         if(selectedUserName.equalsIgnoreCase("ALL"))
         {
@@ -978,6 +926,15 @@ public class ReassignTeamNames implements Serializable
                 else
                 {
                     disableReassign =true;
+
+                    log.info("Reassign Button disabled : {}",disableReassign);
+                }
+
+                if(noOfCases >5 )
+                {
+                    disableReassign =true;
+
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
 
                     log.info("Reassign Button disabled : {}",disableReassign);
                 }
