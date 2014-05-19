@@ -1,32 +1,52 @@
 package com.clevel.selos.model.view;
 
 
+import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.Step;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class MandateFieldClassStepActionView extends MandateFieldClassView implements Serializable{
+public class MandateFieldClassStepActionView implements Serializable{
 
-    protected List<MandateFieldView> mandateFieldViewList;
-    protected List<MandateFieldConditionView> mandateFieldConditionViewList;
+    private long id;
+    private ActionView actionView;
+    private StepView stepView;
+    private MandateFieldClassView mandateFieldClassView;
     private boolean needUpdate = false;
 
-    public List<MandateFieldView> getMandateFieldViewList() {
-        return mandateFieldViewList;
+    public long getId() {
+        return id;
     }
 
-    public void setMandateFieldViewList(List<MandateFieldView> mandateFieldViewList) {
-        this.mandateFieldViewList = mandateFieldViewList;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public List<MandateFieldConditionView> getMandateFieldConditionViewList() {
-        return mandateFieldConditionViewList;
+    public ActionView getActionView() {
+        return actionView;
     }
 
-    public void setMandateFieldConditionViewList(List<MandateFieldConditionView> mandateFieldConditionViewList) {
-        this.mandateFieldConditionViewList = mandateFieldConditionViewList;
+    public void setActionView(ActionView actionView) {
+        this.actionView = actionView;
+    }
+
+    public StepView getStepView() {
+        return stepView;
+    }
+
+    public void setStepView(StepView stepView) {
+        this.stepView = stepView;
+    }
+
+    public MandateFieldClassView getMandateFieldClassView() {
+        return mandateFieldClassView;
+    }
+
+    public void setMandateFieldClassView(MandateFieldClassView mandateFieldClassView) {
+        this.mandateFieldClassView = mandateFieldClassView;
     }
 
     public boolean isNeedUpdate() {
@@ -37,21 +57,14 @@ public class MandateFieldClassStepActionView extends MandateFieldClassView imple
         this.needUpdate = needUpdate;
     }
 
-    public void updateValues(MandateFieldClassStepActionView view){
-        id = view.id;
-        className = view.className;
-        classDescription = view.classDescription;
-        pageName = view.pageName;
-        active = view.active;
-        mandateFieldViewList = view.mandateFieldViewList;
-        mandateFieldConditionViewList = view.mandateFieldConditionViewList;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append(super.toString())
-                .append("mandateFieldViewList", mandateFieldViewList)
+                .append("id", id)
+                .append("actionView", actionView)
+                .append("stepView", stepView)
+                .append("mandateFieldClassView", mandateFieldClassView)
+                .append("needUpdate", needUpdate)
                 .toString();
     }
 }

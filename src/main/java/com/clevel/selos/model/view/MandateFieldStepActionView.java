@@ -10,7 +10,7 @@ public class MandateFieldStepActionView implements Serializable{
 
     private StepView stepView;
     private ActionView actionView;
-    private List<MandateFieldClassStepActionView> classStepActionViewList;
+    private List<MandateFieldClassSAAdminView> classSAAdminViewList;
 
     public StepView getStepView() {
         return stepView;
@@ -28,12 +28,12 @@ public class MandateFieldStepActionView implements Serializable{
         this.actionView = actionView;
     }
 
-    public List<MandateFieldClassStepActionView> getClassStepActionViewList() {
-        return classStepActionViewList;
+    public List<MandateFieldClassSAAdminView> getClassSAAdminViewList() {
+        return classSAAdminViewList;
     }
 
-    public void setClassStepActionViewList(List<MandateFieldClassStepActionView> classStepActionViewList) {
-        this.classStepActionViewList = classStepActionViewList;
+    public void setClassSAAdminViewList(List<MandateFieldClassSAAdminView> classSAAdminViewList) {
+        this.classSAAdminViewList = classSAAdminViewList;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MandateFieldStepActionView implements Serializable{
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("stepView", stepView)
                 .append("actionView", actionView)
-                .append("classStepActionViewList", classStepActionViewList)
+                .append("classStepActionViewList", classSAAdminViewList)
                 .toString();
     }
 }

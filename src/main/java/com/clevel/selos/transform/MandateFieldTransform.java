@@ -136,8 +136,8 @@ public class MandateFieldTransform extends Transform{
 
     public MandateFieldStepActionView transformToView(List<MandateFieldStepAction> fieldStepActionList, List<MandateFieldConStepAction> conStepActionList){
 
-        List<MandateFieldClassStepActionView> mandateFieldClassStepActionViewList = new ArrayList<MandateFieldClassStepActionView>();
-        Map<String, MandateFieldClassStepActionView> fieldClassStepActionViewMap = new HashMap<String, MandateFieldClassStepActionView>();
+        List<MandateFieldClassSAAdminView> mandateFieldClassStepActionViewList = new ArrayList<MandateFieldClassSAAdminView>();
+        Map<String, MandateFieldClassSAAdminView> fieldClassSAAdminViewMap = new HashMap<String, MandateFieldClassSAAdminView>();
         if(fieldStepActionList != null){
             for(MandateFieldStepAction mandateFieldStepAction : fieldStepActionList){
                 if(mandateFieldStepAction.getMandateField() != null){
@@ -145,28 +145,28 @@ public class MandateFieldTransform extends Transform{
                     MandateFieldClass mandateFieldClass = mandateField.getMandateFieldClass();
 
                     if(mandateFieldClass != null){
-                        MandateFieldClassStepActionView fieldClassStepActionView = fieldClassStepActionViewMap.get(mandateFieldClass.getClassName());
-                        if(fieldClassStepActionView == null){
-                            fieldClassStepActionView = new MandateFieldClassStepActionView();
-                            fieldClassStepActionView.setId(mandateFieldClass.getId());
-                            fieldClassStepActionView.setPageName(mandateFieldClass.getPageName());
-                            fieldClassStepActionView.setClassDescription(mandateFieldClass.getClassDescription());
-                            fieldClassStepActionView.setClassName(mandateFieldClass.getClassName());
-                            fieldClassStepActionView.setActive(mandateFieldClass.isActive());
+                        MandateFieldClassSAAdminView fieldClassSAAdminView = fieldClassSAAdminViewMap.get(mandateFieldClass.getClassName());
+                        if(fieldClassSAAdminView == null){
+                            fieldClassSAAdminView = new MandateFieldClassSAAdminView();
+                            fieldClassSAAdminView.setId(mandateFieldClass.getId());
+                            fieldClassSAAdminView.setPageName(mandateFieldClass.getPageName());
+                            fieldClassSAAdminView.setClassDescription(mandateFieldClass.getClassDescription());
+                            fieldClassSAAdminView.setClassName(mandateFieldClass.getClassName());
+                            fieldClassSAAdminView.setActive(mandateFieldClass.isActive());
                         }
-                        List<MandateFieldView> mandateFieldViewList = fieldClassStepActionView.getMandateFieldViewList();
+                        List<MandateFieldView> mandateFieldViewList = fieldClassSAAdminView.getMandateFieldViewList();
                         if(mandateFieldViewList == null)
                             mandateFieldViewList = new ArrayList<MandateFieldView>();
 
                         mandateFieldViewList.add(transformToView(mandateFieldStepAction.getMandateField()));
-                        fieldClassStepActionView.setMandateFieldViewList(mandateFieldViewList);
+                        fieldClassSAAdminView.setMandateFieldViewList(mandateFieldViewList);
 
-                        fieldClassStepActionViewMap.put(fieldClassStepActionView.getClassName(), fieldClassStepActionView);
+                        fieldClassSAAdminViewMap.put(fieldClassSAAdminView.getClassName(), fieldClassSAAdminView);
                     }
                 }
             }
 
-            mandateFieldClassStepActionViewList.addAll(fieldClassStepActionViewMap.values());
+            mandateFieldClassStepActionViewList.addAll(fieldClassSAAdminViewMap.values());
         }
 
         if(conStepActionList != null){
@@ -176,23 +176,23 @@ public class MandateFieldTransform extends Transform{
                     MandateFieldClass mandateFieldClass = mandateFieldCondition.getMandateFieldClass();
 
                     if(mandateFieldClass != null){
-                        MandateFieldClassStepActionView fieldClassStepActionView = fieldClassStepActionViewMap.get(mandateFieldClass.getClassName());
-                        if(fieldClassStepActionView == null){
-                            fieldClassStepActionView = new MandateFieldClassStepActionView();
-                            fieldClassStepActionView.setId(mandateFieldClass.getId());
-                            fieldClassStepActionView.setPageName(mandateFieldClass.getPageName());
-                            fieldClassStepActionView.setClassDescription(mandateFieldClass.getClassDescription());
-                            fieldClassStepActionView.setClassName(mandateFieldClass.getClassName());
-                            fieldClassStepActionView.setActive(mandateFieldClass.isActive());
+                        MandateFieldClassSAAdminView fieldClassSAAdminView = fieldClassSAAdminViewMap.get(mandateFieldClass.getClassName());
+                        if(fieldClassSAAdminView == null){
+                            fieldClassSAAdminView = new MandateFieldClassSAAdminView();
+                            fieldClassSAAdminView.setId(mandateFieldClass.getId());
+                            fieldClassSAAdminView.setPageName(mandateFieldClass.getPageName());
+                            fieldClassSAAdminView.setClassDescription(mandateFieldClass.getClassDescription());
+                            fieldClassSAAdminView.setClassName(mandateFieldClass.getClassName());
+                            fieldClassSAAdminView.setActive(mandateFieldClass.isActive());
                         }
-                        List<MandateFieldConditionView> mandateFieldConditionViewList = fieldClassStepActionView.getMandateFieldConditionViewList();
+                        List<MandateFieldConditionView> mandateFieldConditionViewList = fieldClassSAAdminView.getMandateFieldConditionViewList();
                         if(mandateFieldConditionViewList == null)
                             mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
 
                         mandateFieldConditionViewList.add(transformToView(mandateFieldCondition));
-                        fieldClassStepActionView.setMandateFieldConditionViewList(mandateFieldConditionViewList);
+                        fieldClassSAAdminView.setMandateFieldConditionViewList(mandateFieldConditionViewList);
 
-                        fieldClassStepActionViewMap.put(fieldClassStepActionView.getClassName(), fieldClassStepActionView);
+                        fieldClassSAAdminViewMap.put(fieldClassSAAdminView.getClassName(), fieldClassSAAdminView);
                     }
                 }
             }
@@ -205,7 +205,7 @@ public class MandateFieldTransform extends Transform{
             mandateFieldStepActionView = new MandateFieldStepActionView();
             mandateFieldStepActionView.setStepView(stepTransform.transformToView(mandateFieldStepAction.getStep()));
             mandateFieldStepActionView.setActionView(actionTransform.transformToView(mandateFieldStepAction.getAction()));
-            mandateFieldStepActionView.setClassStepActionViewList(mandateFieldClassStepActionViewList);
+            mandateFieldStepActionView.setClassSAAdminViewList(mandateFieldClassStepActionViewList);
         }
         return mandateFieldStepActionView;
     }

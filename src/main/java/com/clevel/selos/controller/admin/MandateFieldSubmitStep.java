@@ -42,13 +42,13 @@ public class MandateFieldSubmitStep implements Serializable {
     private List<MandateFieldClassView> mandateFieldClassViewList = null;
     private List<MandateFieldView> mandateFieldViewList = null;
     private List<MandateFieldConditionView> mandateFieldConditionViewList = null;
-    private MandateFieldClassStepActionView wrkMandateFieldClassStepActionView = null;
+    private MandateFieldClassSAAdminView wrkMandateFieldClassSAAdminView = null;
 
     private long selectedStepActionViewId = -1;
     private long selectedFieldViewId = -1;
     private long selectedClassViewId = -1;
     private long selectedConditionId = -1;
-    private long selectedMandateFieldClassStepActionId = -1;
+    private long selectedMandateFieldSAAdminId = -1;
 
     private long selectedStepId = -1;
     private long selectedActionId = -1;
@@ -110,20 +110,20 @@ public class MandateFieldSubmitStep implements Serializable {
 
     public void onOpenAddStepActionField(){
         log.info("-- begin onOpenAddStepActionField mandateFieldStepActionView:{}", mandateFieldStepActionView);
-        if(mandateFieldStepActionView.getClassStepActionViewList() == null){
-            mandateFieldStepActionView.setClassStepActionViewList(new ArrayList<MandateFieldClassStepActionView>());
+        if(mandateFieldStepActionView.getClassSAAdminViewList() == null){
+            mandateFieldStepActionView.setClassSAAdminViewList(new ArrayList<MandateFieldClassSAAdminView>());
         }
-        wrkMandateFieldClassStepActionView = new MandateFieldClassStepActionView();
+        wrkMandateFieldClassSAAdminView = new MandateFieldClassSAAdminView();
         updatedMode = false;
-        selectedMandateFieldClassStepActionId = -1;
+        selectedMandateFieldSAAdminId = -1;
     }
 
     public void onOpenUpdateStepActionField(){
-        log.info("-- begin onOpenUpdateStepActionField: {}", selectedMandateFieldClassStepActionId);
-        if(selectedMandateFieldClassStepActionId >= 0){
-            if(mandateFieldStepActionView.getClassStepActionViewList() != null){
-                wrkMandateFieldClassStepActionView = mandateFieldStepActionView.getClassStepActionViewList().get((int)selectedMandateFieldClassStepActionId);
-                selectedClassViewId = wrkMandateFieldClassStepActionView.getId();
+        log.info("-- begin onOpenUpdateStepActionField: {}", selectedMandateFieldSAAdminId);
+        if(selectedMandateFieldSAAdminId >= 0){
+            if(mandateFieldStepActionView.getClassSAAdminViewList() != null){
+                wrkMandateFieldClassSAAdminView = mandateFieldStepActionView.getClassSAAdminViewList().get((int)selectedMandateFieldSAAdminId);
+                selectedClassViewId = wrkMandateFieldClassSAAdminView.getId();
                 updatedMode = true;
             }
         }
@@ -131,12 +131,12 @@ public class MandateFieldSubmitStep implements Serializable {
     }
 
     public void onDeleteStepActionField(){
-        log.info("-- begin onDeleteStepActionField: {}", selectedMandateFieldClassStepActionId);
-        if(selectedMandateFieldClassStepActionId >= 0){
-            if(mandateFieldStepActionView.getClassStepActionViewList() != null){
-                wrkMandateFieldClassStepActionView = mandateFieldStepActionView.getClassStepActionViewList().get((int)selectedMandateFieldClassStepActionId);
-                mandateFieldControl.deleteMandateFieldClassStepActionView(wrkMandateFieldClassStepActionView, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
-                mandateFieldStepActionView.getClassStepActionViewList().remove((int)selectedMandateFieldClassStepActionId);
+        log.info("-- begin onDeleteStepActionField: {}", selectedMandateFieldSAAdminId);
+        if(selectedMandateFieldSAAdminId >= 0){
+            if(mandateFieldStepActionView.getClassSAAdminViewList() != null){
+                wrkMandateFieldClassSAAdminView = mandateFieldStepActionView.getClassSAAdminViewList().get((int)selectedMandateFieldSAAdminId);
+                mandateFieldControl.deleteMandateFieldClassSAAdmin(wrkMandateFieldClassSAAdminView, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
+                mandateFieldStepActionView.getClassSAAdminViewList().remove((int)selectedMandateFieldSAAdminId);
             }
         }
     }
@@ -146,11 +146,11 @@ public class MandateFieldSubmitStep implements Serializable {
         if(selectedClassViewId > 0){
             for(MandateFieldClassView mandateFieldClassView : mandateFieldClassViewList){
                 if(mandateFieldClassView.getId() == selectedClassViewId){
-                    wrkMandateFieldClassStepActionView = new MandateFieldClassStepActionView();
-                    wrkMandateFieldClassStepActionView.setId(mandateFieldClassView.getId());
-                    wrkMandateFieldClassStepActionView.setActive(mandateFieldClassView.isActive());
-                    wrkMandateFieldClassStepActionView.setClassName(mandateFieldClassView.getClassName());
-                    wrkMandateFieldClassStepActionView.setPageName(mandateFieldClassView.getPageName());
+                    wrkMandateFieldClassSAAdminView = new MandateFieldClassSAAdminView();
+                    wrkMandateFieldClassSAAdminView.setId(mandateFieldClassView.getId());
+                    wrkMandateFieldClassSAAdminView.setActive(mandateFieldClassView.isActive());
+                    wrkMandateFieldClassSAAdminView.setClassName(mandateFieldClassView.getClassName());
+                    wrkMandateFieldClassSAAdminView.setPageName(mandateFieldClassView.getPageName());
                     break;
                 }
             }
@@ -160,9 +160,9 @@ public class MandateFieldSubmitStep implements Serializable {
 
     private void _initFieldConditionDropdown(){
         //Query Field list from MST and then filter the selected one out.
-        mandateFieldViewList = mandateFieldControl.getMandateFieldDB(wrkMandateFieldClassStepActionView);
-        if(wrkMandateFieldClassStepActionView.getMandateFieldViewList() != null){
-            for(MandateFieldView selectedMandateFieldView : wrkMandateFieldClassStepActionView.getMandateFieldViewList()){
+        mandateFieldViewList = mandateFieldControl.getMandateFieldDB(wrkMandateFieldClassSAAdminView);
+        if(wrkMandateFieldClassSAAdminView.getMandateFieldViewList() != null){
+            for(MandateFieldView selectedMandateFieldView : wrkMandateFieldClassSAAdminView.getMandateFieldViewList()){
                 for(MandateFieldView mstMandateFieldView : mandateFieldViewList){
                     if(selectedMandateFieldView.getId() == mstMandateFieldView.getId()){
                         mandateFieldViewList.remove(mstMandateFieldView);
@@ -173,9 +173,9 @@ public class MandateFieldSubmitStep implements Serializable {
         }
 
         //Query Condition list from MST and then filter the selected one out.
-        mandateFieldConditionViewList = mandateFieldControl.getMandateConditionList(wrkMandateFieldClassStepActionView);
-        if(wrkMandateFieldClassStepActionView.getMandateFieldConditionViewList() != null){
-            for(MandateFieldConditionView selectedConditionView : wrkMandateFieldClassStepActionView.getMandateFieldConditionViewList()){
+        mandateFieldConditionViewList = mandateFieldControl.getMandateConditionList(wrkMandateFieldClassSAAdminView);
+        if(wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList() != null){
+            for(MandateFieldConditionView selectedConditionView : wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList()){
                 for(MandateFieldConditionView mstConditionView : mandateFieldConditionViewList){
                     if(selectedConditionView.getId() == mstConditionView.getId()){
                         mandateFieldConditionViewList.remove(mstConditionView);
@@ -195,12 +195,12 @@ public class MandateFieldSubmitStep implements Serializable {
 
     public void onAddStepActionField(){
         log.info("-- begin onAddStepActionField");
-        MandateFieldClassStepActionView _toUpd = new MandateFieldClassStepActionView();
-        _toUpd.updateValues(wrkMandateFieldClassStepActionView);
-        List<MandateFieldClassStepActionView> classStepActionViewList = mandateFieldStepActionView.getClassStepActionViewList();
-        for(MandateFieldClassStepActionView classStepActionView : classStepActionViewList){
-            if(classStepActionView.getId() == _toUpd.getId()){
-                classStepActionViewList.remove(classStepActionView);
+        MandateFieldClassSAAdminView _toUpd = new MandateFieldClassSAAdminView();
+        _toUpd.updateValues(wrkMandateFieldClassSAAdminView);
+        List<MandateFieldClassSAAdminView> classStepActionViewList = mandateFieldStepActionView.getClassSAAdminViewList();
+        for(MandateFieldClassSAAdminView classSAAdminView : classStepActionViewList){
+            if(classSAAdminView.getId() == _toUpd.getId()){
+                classStepActionViewList.remove(classSAAdminView);
                 _toUpd.setNeedUpdate(Boolean.TRUE);
                 break;
             }
@@ -208,19 +208,19 @@ public class MandateFieldSubmitStep implements Serializable {
 
         mandateFieldControl.deleteMandateFieldStepAction(mandateFieldViewList, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
         mandateFieldControl.deleteMandateFieldConStepAction(mandateFieldConditionViewList, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
-        mandateFieldControl.saveMandateFieldClassStepAction(wrkMandateFieldClassStepActionView, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
+        mandateFieldControl.saveMandateFieldClassSAAdmin(wrkMandateFieldClassSAAdminView, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
         classStepActionViewList.add(_toUpd);
-        mandateFieldStepActionView.setClassStepActionViewList(classStepActionViewList);
+        mandateFieldStepActionView.setClassSAAdminViewList(classStepActionViewList);
 
         updatedMode = false;
         selectedClassViewId = -1;
         selectedStepActionViewId = -1;
         selectedFieldViewId = -1;
         selectedConditionId = -1;
-        selectedMandateFieldClassStepActionId = -1;
+        selectedMandateFieldSAAdminId = -1;
         selectedStepId = -1;
         selectedActionId = -1;
-        wrkMandateFieldClassStepActionView = null;
+        wrkMandateFieldClassSAAdminView = null;
         log.info("-- end onAddMandateCondition before update function complete");
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
@@ -228,8 +228,8 @@ public class MandateFieldSubmitStep implements Serializable {
     public boolean isDisableClassChange(){
         if(updatedMode)
             return updatedMode;
-        if(wrkMandateFieldClassStepActionView != null && wrkMandateFieldClassStepActionView.getMandateFieldViewList() != null && wrkMandateFieldClassStepActionView.getMandateFieldViewList().size() > 0){
-            if(wrkMandateFieldClassStepActionView.getMandateFieldConditionViewList() != null && wrkMandateFieldClassStepActionView.getMandateFieldConditionViewList().size() > 0){
+        if(wrkMandateFieldClassSAAdminView != null && wrkMandateFieldClassSAAdminView.getMandateFieldViewList() != null && wrkMandateFieldClassSAAdminView.getMandateFieldViewList().size() > 0){
+            if(wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList() != null && wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList().size() > 0){
                 return true;
             }
         }
@@ -239,7 +239,7 @@ public class MandateFieldSubmitStep implements Serializable {
     public void onSelectCondition(){
         log.info("-- begin onSelectCondition", selectedConditionId);
         if(selectedConditionId > 0){
-            List<MandateFieldConditionView> selectedConditionViewList = wrkMandateFieldClassStepActionView.getMandateFieldConditionViewList();
+            List<MandateFieldConditionView> selectedConditionViewList = wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList();
             if(selectedConditionViewList == null)
                 selectedConditionViewList = new ArrayList<MandateFieldConditionView>();
 
@@ -250,7 +250,7 @@ public class MandateFieldSubmitStep implements Serializable {
                     break;
                 }
             }
-            wrkMandateFieldClassStepActionView.setMandateFieldConditionViewList(selectedConditionViewList);
+            wrkMandateFieldClassSAAdminView.setMandateFieldConditionViewList(selectedConditionViewList);
         }
         selectedConditionId = -1;
     }
@@ -258,7 +258,7 @@ public class MandateFieldSubmitStep implements Serializable {
     public void onSelectFieldName(){
         log.info("-- onSelectFieldName {}", selectedFieldViewId);
         if(selectedFieldViewId > 0){
-            List<MandateFieldView> selectedFieldViewList = wrkMandateFieldClassStepActionView.getMandateFieldViewList();
+            List<MandateFieldView> selectedFieldViewList = wrkMandateFieldClassSAAdminView.getMandateFieldViewList();
             if(selectedFieldViewList == null)
                 selectedFieldViewList = new ArrayList<MandateFieldView>();
 
@@ -269,7 +269,7 @@ public class MandateFieldSubmitStep implements Serializable {
                     break;
                 }
             }
-            wrkMandateFieldClassStepActionView.setMandateFieldViewList(selectedFieldViewList);
+            wrkMandateFieldClassSAAdminView.setMandateFieldViewList(selectedFieldViewList);
         }
         selectedFieldViewId = -1;
     }
@@ -277,7 +277,7 @@ public class MandateFieldSubmitStep implements Serializable {
     public void onDeleteFieldName(){
         log.info("-- onDeleteFileName {}", selectedFieldViewId);
         if(selectedFieldViewId >= 0){
-            List<MandateFieldView> selectedFieldViewList = wrkMandateFieldClassStepActionView.getMandateFieldViewList();
+            List<MandateFieldView> selectedFieldViewList = wrkMandateFieldClassSAAdminView.getMandateFieldViewList();
             MandateFieldView selectedMandateFieldView = selectedFieldViewList.get((int)selectedFieldViewId);
             selectedFieldViewList.remove(selectedMandateFieldView);
             mandateFieldViewList.add(selectedMandateFieldView);
@@ -288,7 +288,7 @@ public class MandateFieldSubmitStep implements Serializable {
     public void onDeleteCondition(){
         log.info("-- onDeleteCondition {}", selectedConditionId);
         if(selectedConditionId >= 0){
-            List<MandateFieldConditionView> selectedConditionViewList = wrkMandateFieldClassStepActionView.getMandateFieldConditionViewList();
+            List<MandateFieldConditionView> selectedConditionViewList = wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList();
             MandateFieldConditionView selectedMandateFieldView = selectedConditionViewList.get((int)selectedConditionId);
             selectedConditionViewList.remove(selectedMandateFieldView);
             mandateFieldConditionViewList.add(selectedMandateFieldView);
@@ -305,10 +305,10 @@ public class MandateFieldSubmitStep implements Serializable {
         selectedStepActionViewId = -1;
         selectedFieldViewId = -1;
         selectedConditionId = -1;
-        selectedMandateFieldClassStepActionId = -1;
+        selectedMandateFieldSAAdminId = -1;
         selectedStepId = -1;
         selectedActionId = -1;
-        wrkMandateFieldClassStepActionView = null;
+        wrkMandateFieldClassSAAdminView = null;
     }
 
     public MandateFieldStepActionView getMandateFieldStepActionView() {
@@ -379,12 +379,12 @@ public class MandateFieldSubmitStep implements Serializable {
         this.selectedConditionId = selectedConditionId;
     }
 
-    public long getSelectedMandateFieldClassStepActionId() {
-        return selectedMandateFieldClassStepActionId;
+    public long getSelectedMandateFieldSAAdminId() {
+        return selectedMandateFieldSAAdminId;
     }
 
-    public void setSelectedMandateFieldClassStepActionId(long selectedMandateFieldClassStepActionId) {
-        this.selectedMandateFieldClassStepActionId = selectedMandateFieldClassStepActionId;
+    public void setSelectedMandateFieldSAAdminId(long selectedMandateFieldSAAdminId) {
+        this.selectedMandateFieldSAAdminId = selectedMandateFieldSAAdminId;
     }
 
     public long getSelectedStepId() {
@@ -411,12 +411,12 @@ public class MandateFieldSubmitStep implements Serializable {
         if(mandateFieldClassViewList == null){
             mandateFieldClassViewList = mandateFieldControl.getMandateFieldClass();
         }
-        if(!updatedMode && mandateFieldStepActionView.getClassStepActionViewList() != null){
+        if(!updatedMode && mandateFieldStepActionView.getClassSAAdminViewList() != null){
             List<MandateFieldClassView> _temp = new ArrayList<MandateFieldClassView>();
             for(MandateFieldClassView mandateFieldClassView : mandateFieldClassViewList){
                 boolean skip = false;
-                for(MandateFieldClassStepActionView mandateFieldClassStepActionView : mandateFieldStepActionView.getClassStepActionViewList()){
-                    if(mandateFieldClassView.getId() == mandateFieldClassStepActionView.getId()){
+                for(MandateFieldClassSAAdminView mandateFieldClassSAAdminView : mandateFieldStepActionView.getClassSAAdminViewList()){
+                    if(mandateFieldClassView.getId() == mandateFieldClassSAAdminView.getId()){
                         skip = true;
                         break;
                     }
@@ -433,12 +433,12 @@ public class MandateFieldSubmitStep implements Serializable {
         this.mandateFieldClassViewList = mandateFieldClassViewList;
     }
 
-    public MandateFieldClassStepActionView getWrkMandateFieldClassStepActionView() {
-        return wrkMandateFieldClassStepActionView;
+    public MandateFieldClassSAAdminView getWrkMandateFieldClassSAAdminView() {
+        return wrkMandateFieldClassSAAdminView;
     }
 
-    public void setWrkMandateFieldClassStepActionView(MandateFieldClassStepActionView wrkMandateFieldClassStepActionView) {
-        this.wrkMandateFieldClassStepActionView = wrkMandateFieldClassStepActionView;
+    public void setWrkMandateFieldClassSAAdminView(MandateFieldClassSAAdminView wrkMandateFieldClassSAAdminView) {
+        this.wrkMandateFieldClassSAAdminView = wrkMandateFieldClassSAAdminView;
     }
 
     public List<MandateFieldView> getMandateFieldViewList() {

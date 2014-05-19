@@ -334,13 +334,18 @@ public class MandateFieldControl extends BusinessControl {
         return mandateFieldStepActionView;
     }
 
+    public void saveMandateFieldClassStepAction(MandateFieldClassStepActionView mandateFieldClassStepActionView){
+        logger.info("-- begin saveMandateFieldClassStepAction: {}", mandateFieldClassStepActionView);
 
-    public void saveMandateFieldClassStepAction(MandateFieldClassStepActionView mandateFieldClassStepActionView, StepView stepView, ActionView actionView){
-        if(mandateFieldClassStepActionView != null){
+
+    }
+
+    public void saveMandateFieldClassSAAdmin(MandateFieldClassSAAdminView mandateFieldClassSAAdminView, StepView stepView, ActionView actionView){
+        if(mandateFieldClassSAAdminView != null){
             Step step = stepDAO.findById(stepView.getId());
             Action action = actionDAO.findById(actionView.getId());
-            saveMandateFieldStepAction(mandateFieldClassStepActionView.getMandateFieldViewList(), step, action);
-            saveMandateFieldConStepAction(mandateFieldClassStepActionView.getMandateFieldConditionViewList(), step, action);
+            saveMandateFieldStepAction(mandateFieldClassSAAdminView.getMandateFieldViewList(), step, action);
+            saveMandateFieldConStepAction(mandateFieldClassSAAdminView.getMandateFieldConditionViewList(), step, action);
         }
     }
 
@@ -419,9 +424,9 @@ public class MandateFieldControl extends BusinessControl {
 
     }
 
-    public void deleteMandateFieldClassStepActionView(MandateFieldClassStepActionView mandateFieldClassStepActionView, StepView stepView, ActionView actionView){
-        mandateFieldClassStepActionView.getMandateFieldViewList();
-        deleteMandateFieldStepAction(mandateFieldClassStepActionView.getMandateFieldViewList(), stepView, actionView);
-        deleteMandateFieldConStepAction(mandateFieldClassStepActionView.getMandateFieldConditionViewList(), stepView, actionView);
+    public void deleteMandateFieldClassSAAdmin(MandateFieldClassSAAdminView mandateFieldClassSAAdminView, StepView stepView, ActionView actionView){
+        mandateFieldClassSAAdminView.getMandateFieldViewList();
+        deleteMandateFieldStepAction(mandateFieldClassSAAdminView.getMandateFieldViewList(), stepView, actionView);
+        deleteMandateFieldConStepAction(mandateFieldClassSAAdminView.getMandateFieldConditionViewList(), stepView, actionView);
     }
 }
