@@ -5,7 +5,6 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
         xmlns:clv="http://clevel.com/ui">
 
 <h:head>
@@ -62,13 +61,16 @@
                     <tr>
                         <td class="title" style="min-width: 170px; width: 170px; max-width: 170px;">
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.countIncome')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('isNotCountIncome')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1150px; width: 1150px; max-width: 1150px;' : ''}">
                             <table border="0">
                                 <tr>
                                     <td style="border-style: none !important;">
                                         <p:selectBooleanCheckbox id="countIncome"
-                                                                 value="#{bankStatementDetail.bankStmtView.notCountIncome}"/>
+                                                                 value="#{bankStatementDetail.bankStmtView.notCountIncome}"
+                                                                 disabled="#{bankStatementDetail.isDisabled('isNotCountIncome')}"/>
                                     </td>
                                     <td style="border-style: none !important; padding-left: 5px;">
                                         <h:outputText value="#{msg.get('app.bankStmtDetail.checkbox.isNotCountIncome')}"/>
@@ -81,10 +83,13 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.bankName')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('bankName')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.bankView.code}"
-                                             required="#{not empty param[saveButton.clientId]}">
+                                             required="#{not empty param[saveButton.clientId]}"
+                                             disabled="#{bankStatementDetail.isDisabled('bankName')}">
                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                 <f:selectItems value="#{bankStatementDetail.bankViewList}" var="bank"
                                                itemLabel="#{bank.bankName}" itemValue="#{bank.code}"/>
@@ -95,17 +100,22 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.branchName')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('branchName')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText value="#{bankStatementDetail.bankStmtView.branchName}"
                                          required="#{not empty param[saveButton.clientId]}"
-                                         styleClass="large"/>
+                                         styleClass="large"
+                                         readonly="#{bankStatementDetail.isDisabled('branchName')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountType')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('accountType')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <table border="0" style="float:left; border-collapse:separate; border-spacing:0;">
@@ -114,11 +124,11 @@
                                         <p:selectOneMenu id="bankAccountTypeSelect"
                                                          value="#{bankStatementDetail.bankStmtView.bankAccountTypeId}"
                                                          style="width:160px;"
-                                                         required="#{bankStatementDetail.bankAccTypeSelectRequired}">
+                                                         required="#{bankStatementDetail.bankAccTypeSelectRequired}"
+                                                         disabled="#{bankStatementDetail.isDisabled('accountType')}">
                                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                             <f:selectItems value="#{bankStatementDetail.bankAccTypeViewList}" var="bankAccType"
                                                            itemLabel="#{bankAccType.name}" itemValue="#{bankAccType.id}"/>
-
                                             <p:ajax event="change" listener="#{bankStatementDetail.onChangeBankAccTypeSelected()}"
                                                     process="@this" update=":frmMain:otherAccountTypeSelect"/>
                                         </p:selectOneMenu>
@@ -126,17 +136,19 @@
                                     <td>
                                         <p:spacer width="50" height="0"/>
                                         <h:outputText value="#{msg.get('app.bankStmtDetail.label.otherType')}" styleClass="title"/>
+                                        <h:outputText value="#{bankStatementDetail.mandate('otherType')}" styleClass="require-field"/>
+                                        <h:outputText value=" :"/>
                                         <p:spacer width="50" height="0"/>
                                     </td>
                                     <td>
                                         <p:selectOneMenu id="otherAccountTypeSelect"
                                                          value="#{bankStatementDetail.bankStmtView.otherAccountType}"
                                                          style="width:160px;"
-                                                         required="#{bankStatementDetail.bankAccTypeSelectRequired}">
+                                                         required="#{bankStatementDetail.bankAccTypeSelectRequired}"
+                                                         disabled="#{bankStatementDetail.isDisabled('otherType')}">
                                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                             <f:selectItems value="#{bankStatementDetail.othBankAccTypeViewList}" var="othBankAccType"
                                                            itemLabel="#{othBankAccType.name}" itemValue="#{othBankAccType.id}"/>
-
                                             <p:ajax event="change" listener="#{bankStatementDetail.onChangeOthAccTypeSelected()}"
                                                     process="@this" update=":frmMain:bankAccountTypeSelect"/>
                                         </p:selectOneMenu>
@@ -150,32 +162,41 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountNumber')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('accountNumber')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputMask value="#{bankStatementDetail.bankStmtView.accountNumber}"
                                          mask="999-9-99999-9"
-                                         styleClass="large"/>
+                                         styleClass="large"
+                                         readonly="#{bankStatementDetail.isDisabled('accountNumber')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountName')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('accountName')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText value="#{bankStatementDetail.bankStmtView.accountName}"
                                          required="#{not empty param[saveButton.clientId]}"
-                                         styleClass="large"/>
+                                         styleClass="large"
+                                         readonly="#{bankStatementDetail.isDisabled('accountName')}"/>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountStatus')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('accountStatus')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.accountStatusView.id}"
-                                             required="#{not empty param[saveButton.clientId]}">
+                                             required="#{not empty param[saveButton.clientId]}"
+                                             disabled="#{bankStatementDetail.isDisabled('accountStatus')}">
                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                 <f:selectItems value="#{bankStatementDetail.accStatusViewList}" var="accStatus"
                                                itemLabel="#{accStatus.status}" itemValue="#{accStatus.id}"/>
@@ -186,22 +207,19 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountCharacteristic')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('accountCharacteristic')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:selectOneRadio value="#{bankStatementDetail.bankStmtView.accountCharacteristic}"
-                                              required="#{not empty param[saveButton.clientId]}">
+                                              required="#{not empty param[saveButton.clientId]}"
+                                              disabled="#{bankStatementDetail.isDisabled('accountCharacteristic')}">
                                 <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.borrowersAccount')}" itemValue="1"/>
                                 <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.mainDirectorAccount')}" itemValue="2"/>
                                 <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.confederateAccount')}" itemValue="3"/>
                             </p:selectOneRadio>
                         </td>
                     </tr>
-
-                    <!--<tr>-->
-                        <!--<td class="right" colspan="2">-->
-                            <!--<h:outputText value="#{msg.get('app.bankStmtDetail.bahtUnit')}"/>-->
-                        <!--</td>-->
-                    <!--</tr>-->
 
                     <tr>
                         <td class="left" colspan="2">
@@ -233,14 +251,20 @@
 
                                                 <tbody class="ui-datatable-data ui-widget-content" style="background:none;">
                                                     <tr>
-                                                        <td class="left" style="background:none;">#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}</td>
+                                                        <td class="left" style="background:none;">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('overLimitAmount')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.overLimitAmount}"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitAmount')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -248,15 +272,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.grossCreditBalance')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.grossCreditBalance')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('grossCreditBalance')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.grossCreditBalance}"
                                                                              maxlength="18"
                                                                              onclick="this.select();"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('grossCreditBalance')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -264,15 +294,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfCreditTxn')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.numberOfCreditTxn')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('numberOfCreditTxn')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.numberOfCreditTxn}"
                                                                              maxlength="9"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('numberOfCreditTxn')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -283,16 +319,21 @@
                                                         <td colspan="#{bankStatementDetail.numberOfMonths + 1}" class="cell_spacer"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.excludeListBDM')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.excludeListBDM')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('excludeListBDM')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.excludeListBDM}"
                                                                              maxlength="18"
-                                                                             readonly="#{bankStatementDetail.roleUW}"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('excludeListBDM')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -300,16 +341,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.excludeListUW')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.excludeListUW')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('excludeListUW')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.excludeListUW}"
                                                                              maxlength="18"
-                                                                             readonly="#{not bankStatementDetail.roleUW}"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('excludeListUW')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -317,15 +363,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.creditAmountBDM')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.creditAmountBDM')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('creditAmountBDM')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.creditAmountBDM}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('creditAmountBDM')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -333,15 +384,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.creditAmountUW')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.creditAmountUW')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('creditAmountUW')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.creditAmountUW}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('creditAmountUW')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -349,15 +405,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditBDM')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditBDM')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('timesOfAverageCreditBDM')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.timesOfAvgCreditBDM}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('timesOfAverageCreditBDM')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -365,15 +426,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditUW')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditUW')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('timesOfAverageCreditUW')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.timesOfAvgCreditUW}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('timesOfAverageCreditUW')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -384,15 +450,21 @@
                                                         <td colspan="#{bankStatementDetail.numberOfMonths + 1}" class="cell_spacer"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.debitAmount')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.debitAmount')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('debitAmount')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.debitAmount}"
                                                                              maxlength="18"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('debitAmount')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -400,15 +472,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfDebitTxn')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.numberOfDebitTxn')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('numberOfDebitTxn')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.numberOfDebitTxn}"
                                                                              maxlength="9"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('numberOfDebitTxn')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -419,7 +497,10 @@
                                                         <td colspan="#{bankStatementDetail.numberOfMonths + 1}" class="cell_spacer"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMaxBalance')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.dateOfMaxBalance')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('dateOfMaxBalance')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
@@ -429,21 +510,28 @@
                                                                                 value="#{item.dateOfMaxBalance}"
                                                                                 locale="th_TH"
                                                                                 readonlyInput="true"
-                                                                                styleClass="calendar_right">
+                                                                                styleClass="calendar_right"
+                                                                                disabled="#{bankStatementDetail.isDisabled('dateOfMaxBalance')}">
                                                                 </clv:BECalendar>
                                                             </td>
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.maxBalance')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.maxBalance')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('maxBalance')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.maxBalance}"
                                                                              maxlength="18"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownNegMoney(event);"
+                                                                             onkeypress="return onKeyPressNegMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('maxBalance')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -451,7 +539,10 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMinBalance')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.dateOfMinBalance')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('dateOfMinBalance')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
@@ -461,21 +552,28 @@
                                                                                 value="#{item.dateOfMinBalance}"
                                                                                 locale="th_TH"
                                                                                 readonlyInput="true"
-                                                                                styleClass="calendar_right">
+                                                                                styleClass="calendar_right"
+                                                                                disabled="#{bankStatementDetail.isDisabled('dateOfMinBalance')}">
                                                                 </clv:BECalendar>
                                                             </td>
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.minBalance')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.minBalance')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('minBalance')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.minBalance}"
                                                                              maxlength="18"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownNegMoney(event);"
+                                                                             onkeypress="return onKeyPressNegMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('minBalance')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -483,15 +581,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.monthBalance')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.monthBalance')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('monthBalance')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.monthBalance}"
                                                                              maxlength="18"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownNegMoney(event);"
+                                                                             onkeypress="return onKeyPressNegMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('monthBalance')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -502,15 +606,21 @@
                                                         <td colspan="#{bankStatementDetail.numberOfMonths + 1}" class="cell_spacer"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfChequeReturn')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.numberOfChequeReturn')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('numberOfChequeReturn')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.numberOfChequeReturn}"
                                                                              maxlength="9"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('numberOfChequeReturn')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -518,15 +628,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.chequeReturnAmount')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.chequeReturnAmount')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('chequeReturnAmount')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.chequeReturnAmount}"
                                                                              maxlength="18"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('chequeReturnAmount')}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -534,15 +650,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitTimes')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitTimes')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('overLimitTimes')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.overLimitTimes}"
                                                                              maxlength="9"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitTimes')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -550,15 +672,21 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitDays')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitDays')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('overLimitDays')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.overLimitDays}"
                                                                              maxlength="9"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitDays')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -566,15 +694,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.swingPercent')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.swingPercent')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('swingPercent')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.swingPercent}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('swingPercent')}">
                                                                     <f:convertNumber pattern="#,##0.##"
                                                                                      minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
@@ -584,15 +717,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.utilizationPercent')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.utilizationPercent')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('utilizationPercent')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.utilizationPercent}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('utilizationPercent')}">
                                                                     <f:convertNumber pattern="#,##0.##"
                                                                                      minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
@@ -605,15 +743,20 @@
                                                         <td colspan="#{bankStatementDetail.numberOfMonths + 1}" class="cell_spacer"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.grossInflowPerLimit')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.grossInflowPerLimit')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('grossInflowPerLimit')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.grossInflowPerLimit}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('grossInflowPerLimit')}">
                                                                     <f:convertNumber pattern="#,##0.##"
                                                                                      minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
@@ -623,15 +766,20 @@
                                                         </ui:repeat>
                                                     </tr>
                                                     <tr>
-                                                        <td class="left">#{msg.get('app.bankStmtDetail.table.row.totalTransaction')}</td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.totalTransaction')}"/>
+                                                            <h:outputText value="#{bankStatementDetail.mandate('totalTransaction')}" styleClass="require-field"/>
+                                                        </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.totalTransaction}"
-                                                                             readonly="true"
                                                                              onclick="this.select()"
-                                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                                             styleClass="right">
+                                                                             onkeydown="return onKeyDownMoney(event);"
+                                                                             onkeypress="return onKeyPressMoney(event);"
+                                                                             onfocus="removeComma(this)"
+                                                                             styleClass="right"
+                                                                             readonly="#{bankStatementDetail.isDisabled('totalTransaction')}">
                                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -658,14 +806,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgIncomeGross')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageIncomeGross')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="avgIncomeGross"
                                          value="#{bankStatementDetail.bankStmtView.avgIncomeGross}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageIncomeGross')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -675,14 +827,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgIncomeNetBDM')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageIncomeNetBDM')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="avgIncomeNetBDM"
                                          value="#{bankStatementDetail.bankStmtView.avgIncomeNetBDM}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageIncomeNetBDM')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -692,14 +848,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgIncomeNetUW')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageIncomeNetUW')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="avgIncomeNetUW"
                                          value="#{bankStatementDetail.bankStmtView.avgIncomeNetUW}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageIncomeNetUW')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -709,14 +869,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgWithdrawAmount')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageDrawAmount')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="avgWithDrawAmount"
                                          value="#{bankStatementDetail.bankStmtView.avgWithDrawAmount}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageDrawAmount')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -726,14 +890,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.swingPercent')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageSwingPercent')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="swingPercent"
                                          value="#{bankStatementDetail.bankStmtView.avgSwingPercent}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageSwingPercent')}">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2" maxFractionDigits="2"
                                                  maxIntegerDigits="14"/>
@@ -745,14 +913,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.utilizationPercent')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageUtilizationPercent')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="utilizationPercent"
                                          value="#{bankStatementDetail.bankStmtView.avgUtilizationPercent}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageUtilizationPercent')}">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2" maxFractionDigits="2"
                                                  maxIntegerDigits="14"/>
@@ -764,14 +936,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgGrossInflowPerLimit')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('averageGrossInflowPerLimit')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="avgGrossInflowPerLimit"
                                          value="#{bankStatementDetail.bankStmtView.avgGrossInflowPerLimit}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('averageGrossInflowPerLimit')}">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2" maxFractionDigits="2"
                                                  maxIntegerDigits="14"/>
@@ -783,14 +959,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.chequeReturn')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('chequeReturn')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="chequeReturn"
                                          value="#{bankStatementDetail.bankStmtView.chequeReturn}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('chequeReturn')}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -800,14 +980,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.trdChequeReturnAmount')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('tradeChequeReturnAmount')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="trdChequeReturnAmount"
                                          value="#{bankStatementDetail.bankStmtView.trdChequeReturnAmount}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('tradeChequeReturnAmount')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -817,14 +1001,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.overLimitTimes')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('overLimitTimes')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="overLimitTimes"
                                          value="#{bankStatementDetail.bankStmtView.overLimitTimes}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('overLimitTimes')}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -834,14 +1022,18 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.overLimitDays')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('overLimitDays')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:inputText id="overLimitDays"
                                          value="#{bankStatementDetail.bankStmtView.overLimitDays}"
-                                         readonly="true"
                                          onclick="this.select()"
-                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width:200px;">
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
+                                         onfocus="removeComma(this)"
+                                         styleClass="right" style="width:200px;"
+                                         readonly="#{bankStatementDetail.isDisabled('overLimitDays')}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -851,9 +1043,13 @@
                     <tr>
                         <td class="title" >
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.remark')}"/>
+                            <h:outputText value="#{bankStatementDetail.mandate('remark')}" styleClass="require-field"/>
+                            <h:outputText value=" :"/>
                         </td>
                         <td class="left">
-                            <p:inputTextarea value="#{bankStatementDetail.bankStmtView.remark}" rows="5" cols="100" autoResize="false"/>
+                            <p:inputTextarea value="#{bankStatementDetail.bankStmtView.remark}"
+                                             rows="5" cols="100" autoResize="false"
+                                             readonly="#{bankStatementDetail.isDisabled('remark')}"/>
                         </td>
                     </tr>
 
@@ -875,13 +1071,15 @@
                                              actionListener="#{bankStatementDetail.onSave()}"
                                              process="@form"
                                              update=":frmMain,:msgBoxSystemMessagePanel"
-                                             styleClass="smaller"/>
+                                             styleClass="smaller"
+                                             disabled="#{bankStatementDetail.isDisabled('saveButton')}"/>
                             <p:spacer width="10" height="0"/>
                             <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                              actionListener="#{bankStatementDetail.onCancel()}"
                                              process="@form"
                                              update=":frmMain"
-                                             styleClass="smaller"/>
+                                             styleClass="smaller"
+                                             disabled="#{bankStatementDetail.isDisabled('cancelButton')}"/>
                         </td>
                     </tr>
                 </table>

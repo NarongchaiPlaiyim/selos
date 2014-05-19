@@ -1,25 +1,18 @@
 package com.clevel.selos.transform;
 
-import java.util.Date;
-
-import javax.inject.Inject;
-
 import com.clevel.selos.dao.working.BAPAInfoDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.db.master.Bank;
-import com.clevel.selos.model.db.master.BorrowingType;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.RequestType;
-import com.clevel.selos.model.db.master.RiskType;
-import com.clevel.selos.model.db.master.SpecialProgram;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoView;
 import org.slf4j.Logger;
+
+import javax.inject.Inject;
+import java.util.Date;
 
 public class BasicInfoTransform extends Transform {
     @SELOS

@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;

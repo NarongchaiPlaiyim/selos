@@ -1,0 +1,16 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+    <p:confirmDialog id="#{id}" header="#{msg.get('app.messageHeader.info')}" message="#{msg.get('dialog.delete.confirm.message')}"
+                     showEffect="fade" hideEffect="fade" width="250"
+                     severity="alert" widgetVar="#{name}">
+        <h:form id="#{formId}">
+            <div class="onRight">
+                <p:commandButton value="#{msg.get('app.button.ok')}" update="#{update}" oncomplete="#{name}.hide()"
+                                 action="#{controller[action]}"/>
+                <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="#{name}.hide()"/>
+            </div>
+        </h:form>
+    </p:confirmDialog>
+</f:view>

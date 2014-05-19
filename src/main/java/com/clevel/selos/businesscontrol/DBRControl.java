@@ -1,15 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.controller.CreditFacPropose;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.transform.DBRDetailTransform;
@@ -21,11 +18,8 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Stateless
 public class DBRControl extends BusinessControl {

@@ -1,8 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
@@ -12,11 +12,14 @@ import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAc
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.BankStatement;
+import com.clevel.selos.model.db.working.BankStatementSummary;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ActionStatusTransform;
 import com.clevel.selos.transform.BankStmtTransform;

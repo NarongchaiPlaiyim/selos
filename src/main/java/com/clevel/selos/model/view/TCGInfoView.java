@@ -1,15 +1,9 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.User;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.clevel.selos.model.db.master.User;
 
 
 public class TCGInfoView implements Serializable{

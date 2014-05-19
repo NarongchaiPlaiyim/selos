@@ -6,7 +6,6 @@ import com.clevel.selos.integration.coms.db.CollateralDecisionDetail;
 import com.clevel.selos.integration.coms.db.CollateralJobLevel;
 import com.clevel.selos.integration.coms.db.HeadCollateral;
 import com.clevel.selos.integration.coms.db.SubCollateral;
-import com.clevel.selos.integration.coms.model.AddressType;
 import com.clevel.selos.integration.coms.tool.DBContext;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;

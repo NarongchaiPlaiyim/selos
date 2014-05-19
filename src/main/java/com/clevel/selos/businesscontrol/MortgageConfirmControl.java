@@ -1,14 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.working.MortgageInfoDAO;
 import com.clevel.selos.dao.working.MortgageSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -21,6 +12,13 @@ import com.clevel.selos.model.view.MortgageInfoView;
 import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.transform.MortgageInfoTransform;
 import com.clevel.selos.transform.MortgageSummaryTransform;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Stateless
 public class MortgageConfirmControl extends BusinessControl {

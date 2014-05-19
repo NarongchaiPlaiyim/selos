@@ -28,7 +28,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -713,6 +712,27 @@ public class HeaderController extends BaseController {
         }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onOpenReturnBDMByZM(){
+        log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        returnRemark = "";
+
+        RequestContext.getCurrentInstance().execute("returnBDM_ZMDlg.show()");
+    }
+
+    public void onReturnBDMByBU(){
+        log.debug("onReturnBDMByZM ( return to BDM from ZM )");
+        HttpSession session = FacesUtil.getSession(true);
+        String queueName = Util.parseString(session.getAttribute("queueName"), "");
+        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        try{
+
+        }catch (Exception ex){
+
+        }
     }
 
     public void onOpenReturnAADMByUW2(){
@@ -1669,7 +1689,7 @@ public class HeaderController extends BaseController {
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             try{
-                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId);
+                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId, 1009);
                 log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
                     if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){

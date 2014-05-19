@@ -1,9 +1,9 @@
 package com.clevel.selos.model.view.insurance;
 
+import com.clevel.selos.model.view.NewCollateralHeadView;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import com.clevel.selos.model.view.NewCollateralHeadView;
 
 public class InsuranceInfoSectionView implements Serializable {
     private NewCollateralHeadView newCollateralHeadView = new NewCollateralHeadView();

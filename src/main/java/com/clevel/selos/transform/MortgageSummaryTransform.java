@@ -1,12 +1,12 @@
 package com.clevel.selos.transform;
 
-import java.util.Date;
-
 import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MortgageSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.MortgageSummaryView;
+
+import java.util.Date;
 
 public class MortgageSummaryTransform extends Transform {
     private static final long serialVersionUID = 1462353182914169301L;

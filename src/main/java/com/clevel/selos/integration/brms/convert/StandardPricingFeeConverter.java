@@ -1,24 +1,23 @@
 package com.clevel.selos.integration.brms.convert;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.BRMSAccountRequested;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.PricingFee;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-import com.tmbbank.enterprise.model.*;
+import com.clevel.selos.model.FeeLevel;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
-import com.clevel.selos.model.FeeLevel;
+import com.tmbbank.enterprise.model.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class StandardPricingFeeConverter extends Converter{
 

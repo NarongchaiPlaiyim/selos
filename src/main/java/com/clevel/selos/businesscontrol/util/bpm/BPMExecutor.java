@@ -6,8 +6,10 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Action;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.Prescreen;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
@@ -16,8 +18,6 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -213,7 +213,7 @@ public class BPMExecutor implements Serializable {
 
     public void submitZM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId,
                          BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,
-                         String productGroup, String deviationCode, int requestType, long actionCode) throws Exception{
+                         String productGroup, String deviationCode, int requestType, int appraisalRequestRequire, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
@@ -237,6 +237,7 @@ public class BPMExecutor implements Serializable {
                 fields.put("DeviationCode", deviationCode);
             }
             fields.put("RequestType", String.valueOf(requestType));
+            fields.put("AppraisalReq", String.valueOf(appraisalRequestRequire));
 
             log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -371,6 +372,7 @@ public class BPMExecutor implements Serializable {
             fields.put("UW2DOALevel", uw2DOALevel);
             fields.put("UW1DecisionFlag", decisionFlag);
             fields.put("UWRG001Flag", haveRG001);
+            fields.put("AppraisalReq", String.valueOf(workCase.getRequestAppraisalRequire()));
 
             log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 

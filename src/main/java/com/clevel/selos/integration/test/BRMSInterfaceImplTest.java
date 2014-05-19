@@ -3,16 +3,15 @@ package com.clevel.selos.integration.test;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.*;
+import com.clevel.selos.integration.brms.model.response.DocAppraisalResponse;
+import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 @Alternative
 public class BRMSInterfaceImplTest implements BRMSInterface {

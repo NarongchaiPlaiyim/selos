@@ -7,14 +7,10 @@ import com.clevel.selos.dao.master.UWDeviationFlagDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.UWResultColor;
-import com.clevel.selos.model.db.master.UWDeviationFlag;
-import com.clevel.selos.model.db.working.UWRuleResultDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.UWRuleResponseView;
 import com.clevel.selos.model.view.UWRuleResultDetailView;
 import com.clevel.selos.model.view.UWRuleResultSummaryView;
-import com.clevel.selos.util.Util;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -52,7 +48,7 @@ public class CheckCriteria {
             WorkCase workCase = workCaseDAO.findByAppNumber(appId);
             if(workCase!=null){
                 try{
-                    UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCase.getId());
+                    UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCase.getId(), 1009);
                     log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                     if(uwRuleResponseView != null){
                         if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){

@@ -1,15 +1,15 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.master.WorkCaseOwner;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -72,7 +72,7 @@ public class ChangeOwnerControl extends BusinessControl {
                 if(workCase !=  null)
                 {
 
-                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCaseId(Integer.parseInt(Long.toString(workCase.getId())), currentUser, currentRoleId);
+                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCaseId(Util.parseLong(workCase.getId(), 0), currentUser, currentRoleId);
 
                     log.info("WorkCase List obtained : {}, WobNumber : {}",workCaseOwnerList.size(), wobNumbers[i]);
 
@@ -98,7 +98,7 @@ public class ChangeOwnerControl extends BusinessControl {
                 if(workCasePrescreen!=null)
                 {
 
-                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(Integer.parseInt(Long.toString(workCasePrescreen.getId())), currentUser, currentRoleId);
+                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(Util.parseLong(workCasePrescreen.getId(), 0), currentUser, currentRoleId);
 
                     log.info("WorkCasePreScreen List obtained : {}, WobNumber : {}",workCaseOwnerList.size(), wobNumbers[i]);
 
@@ -132,7 +132,7 @@ public class ChangeOwnerControl extends BusinessControl {
 
                     if(workCasePrescreen !=null)
                     {
-                        List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(Integer.parseInt(Long.toString(workCasePrescreen.getId())), currentUser, currentRoleId);
+                        List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(Util.parseLong(workCasePrescreen.getId(), 0), currentUser, currentRoleId);
 
                         log.info("WorkCasePreScreen List obtained : {}, WobNumber : {}",workCaseOwnerList.size(), wobNumbers[i]);
 

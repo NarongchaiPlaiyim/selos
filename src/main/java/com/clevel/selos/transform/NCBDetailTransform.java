@@ -7,7 +7,6 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
-import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

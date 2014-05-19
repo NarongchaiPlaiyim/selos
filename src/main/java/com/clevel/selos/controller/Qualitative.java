@@ -6,8 +6,6 @@ import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.db.master.QualityLevel;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -15,7 +13,6 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.sun.istack.internal.Nullable;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 

@@ -1,10 +1,5 @@
 package com.clevel.selos.transform;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import com.clevel.selos.dao.master.BankAccountProductDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
@@ -12,16 +7,12 @@ import com.clevel.selos.dao.working.OpenAccountDAO;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountName;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.BankAccountPurposeView;
-import com.clevel.selos.model.view.BankAccountTypeView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.OpenAccountFullView;
-import com.clevel.selos.model.view.OpenAccountView;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenAccountTransform extends Transform {
     private static final long serialVersionUID = -709756394277635355L;

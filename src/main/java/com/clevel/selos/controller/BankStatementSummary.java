@@ -10,11 +10,11 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -24,9 +24,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import javax.swing.*;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "bankStatementSummary")
@@ -83,7 +84,6 @@ public class BankStatementSummary extends BaseController {
     private String currentDateDDMMYY;
     private List<BankAccountTypeView> othBankAccTypeViewList;
     private int yesValue;
-    private boolean disableRefresh;
     private int actionNo;
 
     // Variables for control
@@ -130,6 +130,8 @@ public class BankStatementSummary extends BaseController {
             log.debug("Init default value and load necessary data.");
 
             workCaseId = (Long)session.getAttribute("workCaseId");
+
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_SUMMARY);
 
             // Check Role (ABDM/BDM)
             int roleId = bankStmtControl.getUserRoleId();
@@ -245,7 +247,11 @@ public class BankStatementSummary extends BaseController {
                 countRefresh += 1;
             }
             // check disable refresh button
-            disableRefresh = countRefresh >= MAX_REFRESH_TIME;
+            if(!isDisabled("refreshButton")){
+                if(countRefresh >= MAX_REFRESH_TIME){
+                   setDisabledValue("refreshButton", true);
+                }
+            }
         }
 
         if (workCaseId != 0) {
@@ -863,14 +869,6 @@ public class BankStatementSummary extends BaseController {
 
     public void setLastThreeMonth3(Date lastThreeMonth3) {
         this.lastThreeMonth3 = lastThreeMonth3;
-    }
-
-    public boolean isDisableRefresh() {
-        return disableRefresh;
-    }
-
-    public void setDisableRefresh(boolean disableRefresh) {
-        this.disableRefresh = disableRefresh;
     }
 
     public String getConfirmMessageHeader() {

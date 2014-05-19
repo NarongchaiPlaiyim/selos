@@ -1483,9 +1483,10 @@ public class Decision extends BaseController {
                         if(endorseDecisionDialog){
                             approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
                         }
+
                         if(requestPricing && pricingDecisionDialog){
                             // Save Approval History Pricing
-                            if(roleId != RoleValue.UW.id()){
+                            if(roleId != RoleValue.UW.id()) {
                                 approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
                             }
                         }
@@ -1493,7 +1494,7 @@ public class Decision extends BaseController {
                 }
             }
 
-            onCreation();
+            //onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
