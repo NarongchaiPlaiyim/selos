@@ -25,6 +25,7 @@ public class MandateFieldView implements Serializable{
     private String notMatchedValue;
     private int notMatchedEmpty;
     private boolean needUpdate;
+    private String parameterizedName;
 
     public long getId() {
         return id;
@@ -144,6 +145,14 @@ public class MandateFieldView implements Serializable{
 
     public void setNeedUpdate(boolean needUpdate) {
         this.needUpdate = needUpdate;
+    }
+
+    public String getParameterizedName() {
+        return parameterizedName;
+    }
+
+    public void setParameterizedName(String parameterizedName) {
+        this.parameterizedName = parameterizedName;
     }
 
     public void updateValues(MandateFieldView view){
