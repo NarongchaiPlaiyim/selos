@@ -169,6 +169,14 @@
                              actionListener="#{headerController.onOpenReturnAADMByUW2()}"
                              update=":frmMain:returnAADM_UW2Panel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
+            <!--Revise CA ( Return from BU ) -->
+            <p:commandButton id="btnReturnBDM_BU" value="#{msg.get('app.header.button.reviseCA')}"
+                             title="#{msg.get('app.header.button.reviseCA')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Revise CA')}"
+                             actionListener="#{headerController.onOpenReturnBDMByBU}"
+                             update=":frmMain:returnBDM_BUPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
+
+            </p:commandButton>
             <!--_________ Submit Case ___________ -->
             <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
             <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -359,8 +367,8 @@
             <!-- Cancel Parallel Appraisal -->
             <p:commandButton id="btnCancelReqAppr_BDM" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel Appraisal Request') and headerController.stepId == 2007}"
-                             onclick="">
-                <!--TODO SHOW CANCEL DIALOG-->
+                             actionListener="#{headerController.onOpenCancelAppraisalRequest()}"
+                             oncomplete="cancelReqApprDlg.show()">
             </p:commandButton>
             <!-- Submit to AAD Admin [ From BDM ] -->
             <p:commandButton id="btnReturnAADM_BDM" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
@@ -638,6 +646,14 @@
     </p:dialog>
 </p:panel>
 
+<p:panel id="cancelReqApprPanel" styleClass="panel">
+    <p:dialog id="cancelReqApprDialog" widgetVar="cancelReqApprDlg" header="Cancel Request Appraisal"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/cancelRequestAppraisal.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 <p:panel id="returnBDMPanel" styleClass="panel">
     <p:dialog id="returnBDMDialog" widgetVar="returnBDMDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -693,6 +709,15 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="160" closable="false">
         <ui:include src="/site/dialog/returnBDMByAADDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="returnBDM_BUPanel" styleClass="panel"
+         rendered="#{headerController.checkButton('Revise CA')}">
+    <p:dialog id="returnBDM_BUDialog" widgetVar="returnBDM_BUDlg" header="Revise CA"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="430" height="160" closable="false">
+        <ui:include src="/site/dialog/returnBDMByBU.xhtml"/>
     </p:dialog>
 </p:panel>
 
