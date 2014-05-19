@@ -1,13 +1,14 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.master.WorkCaseOwner;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -41,6 +42,9 @@ public class ChangeOwnerControl extends BusinessControl {
 
     @Inject
     UserDAO userDAO;
+
+    @Inject
+    RoleDAO roleDAO;
 
     @Inject
     public ChangeOwnerControl(){
@@ -83,9 +87,9 @@ public class ChangeOwnerControl extends BusinessControl {
 
                         WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                        workCaseOwner.setUserid(changeUser);
+                        workCaseOwner.setUser(userDAO.findById(changeUser));
 
-                        workCaseOwner.setRoleid(newRoleId);
+                        workCaseOwner.setRole(roleDAO.findById(newRoleId));
 
                         workCaseOwnerDAO.persist(workCaseOwner);
 
@@ -109,11 +113,11 @@ public class ChangeOwnerControl extends BusinessControl {
 
                         WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                        log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreenId());
+                        log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreen().getId());
 
-                        workCaseOwner.setUserid(changeUser);
+                        workCaseOwner.setUser(userDAO.findById(changeUser));
 
-                        workCaseOwner.setRoleid(newRoleId);
+                        workCaseOwner.setRole(roleDAO.findById(newRoleId));
 
                         log.info("Work Case updated , New User : {}, Role:{}",changeUser, newRoleId);
                         log.info("WorkCaseOwner : {}",workCaseOwner);
@@ -143,11 +147,11 @@ public class ChangeOwnerControl extends BusinessControl {
 
                             WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                            log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreenId());
+                            log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreen().getId());
 
-                            workCaseOwner.setUserid(changeUser);
+                            workCaseOwner.setUser(userDAO.findById(changeUser));
 
-                            workCaseOwner.setRoleid(newRoleId);
+                            workCaseOwner.setRole(roleDAO.findById(newRoleId));
 
                             workCaseOwnerDAO.persist(workCaseOwner);
 

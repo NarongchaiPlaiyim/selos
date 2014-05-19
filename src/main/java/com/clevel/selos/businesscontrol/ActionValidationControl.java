@@ -57,6 +57,7 @@ public class ActionValidationControl extends BusinessControl{
     MandateFieldTransform mandateFieldTransform;
 
     private final static String ACTION_DATA_REQUIRED = "1151";
+    private final static String ACTION_DATA_INCORRECT = "1152";
     private final static String ACTION_DATA_MIN_INCORRECT = "1153";
     private final static String ACTION_DATA_MAX_INCORRECT = "1154";
     private final static String ACTION_DATA_MIN_MAX_INCORRECT = "1155";
@@ -368,7 +369,7 @@ public class ActionValidationControl extends BusinessControl{
 
                     if(conditionDetail.getBaseValue() == null){
                         ValidationResult validationResult = validationResultMap.get(mandateField.getId());
-                        if(validationResult != null){
+                        if(validationResult != null) {
                             isPassCondition = validationResult.isPass;
                             stringBuilder.append(validationResult.message);
                             dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);

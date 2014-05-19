@@ -153,6 +153,7 @@ public class NewCollateralSubTransform extends Transform {
             newCollateralSubView.setCollID(originalNewCollSubView.getCollID());
             newCollateralSubView.setHeadCollID(originalNewCollSubView.getHeadCollID());
             newCollateralSubView.setSubCollateralType(originalNewCollSubView.getSubCollateralType());
+            newCollateralSubView.setHeadCollType(originalNewCollSubView.getHeadCollType());
             newCollateralSubView.setAddress(originalNewCollSubView.getAddress());
             newCollateralSubView.setLandOffice(originalNewCollSubView.getLandOffice());
             newCollateralSubView.setTitleDeed(originalNewCollSubView.getTitleDeed());
@@ -173,6 +174,7 @@ public class NewCollateralSubTransform extends Transform {
             newCollateralSubView.setUsage(originalNewCollSubView.getUsage());
             newCollateralSubView.setTypeOfUsage(originalNewCollSubView.getTypeOfUsage());
             newCollateralSubView.setLineNo(originalNewCollSubView.getLineNo());
+            newCollateralSubView.setSubId(originalNewCollSubView.getSubId());
         }
         return newCollateralSubView;
     }

@@ -249,17 +249,21 @@ public class CheckMandateDocControl extends BusinessControl{
         if(!Util.isZero(workCaseId)){
             log.info("-- onSaveMandateDoc ::: workCaseId : {}", workCaseId);
             mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCaseIdAndRole(workCaseId, user.getRole().getId()));
+            workCase = workCaseDAO.findById(workCaseId);
         } else {
             log.info("-- onSaveMandateDoc ::: workCasePreScreenId : {}", workCasePreScreenId);
             mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCasePreScreenIdAndRole(workCasePreScreenId, user.getRole().getId()));
+            workCasePrescreen = workCasePrescreenDAO.findById(workCaseId);
         }
 
         if(!Util.isZero(mandateDocList.size())){
             delete(mandateDocList);
         }
         mandateDocList = null;
-        mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCaseId, user.getRole()));
-        save(mandateDocList);
+        mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCase, workCasePrescreen, user.getRole()));
+        if(!Util.isZero(mandateDocList.size())){
+            save(mandateDocList);
+        }
     }
 
 
@@ -869,17 +873,23 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- save start");
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
         try {
-            mandateDocDAO.persist(mandateDocList);
+            for(MandateDoc mandateDoc : mandateDocList){
+                mandateDocDAO.persist(mandateDoc);
+                log.debug("-- MandateDoc[{}]", mandateDoc);
+            }
             log.debug("-- save stop");
         } catch (Exception e) {
-            log.error("-- Exception wile save data reason is {}", e.getMessage());
+            log.error("-- Exception while save data reason is {}", e.getMessage());
         }
     }
     private void delete(final List<MandateDoc> mandateDocList){
         log.debug("-- delete start");
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
         try {
-            mandateDocDAO.delete(mandateDocList);
+            for(MandateDoc mandateDoc : mandateDocList){
+                mandateDocDAO.delete(mandateDoc);
+                log.debug("-- MandateDoc.id[{}] deleted", mandateDoc.getId());
+            }
             log.debug("-- delete stop");
         } catch (Exception e) {
             log.error("-- Exception wile delete data reason is {}", e.getMessage());

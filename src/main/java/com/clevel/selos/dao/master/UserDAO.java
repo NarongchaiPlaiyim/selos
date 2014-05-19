@@ -5,7 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
-import com.clevel.selos.model.db.master.WorkCaseOwner;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.db.relation.RelTeamUserDetails;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -413,6 +413,7 @@ public class UserDAO extends GenericDAO<User,String> {
         List<String>listOfAllUsers = null;
         listOfAllUsers = new ArrayList<String>();
         int selectRoleId = Integer.parseInt(selectedRoleId);
+
         try {
 
 
@@ -471,9 +472,6 @@ public class UserDAO extends GenericDAO<User,String> {
         }
         return listOfAllUsers;
     }
-
-
-
 
 
     public String getChangeOwnerWorkItems(String teamLeadName, String selectedRole, String selectUserName, List<String> userList)
@@ -546,7 +544,7 @@ public class UserDAO extends GenericDAO<User,String> {
             // criteriaForWorkCaseId.setProjection(Projections.projectionList().add(Projections.property("workCaseId"), "workCaseId")).add(Restrictions.eq("roleid",roleId)).add(Restrictions.in("userid", uIdsList)).setResultTransformer(Transformers.aliasToBean(WorkCaseOwner.class));
             if(uIdsList != null )
             {
-                criteriaForWorkCaseId.setProjection(Projections.projectionList().add(Projections.property("workCaseId"), "workCaseId").add(Projections.property("workCasePrescreenId"), "workCasePrescreenId")).add(Restrictions.eq("roleid", selectedRoleId)).add(Restrictions.in("userid", uIdsList)).setResultTransformer(Transformers.aliasToBean(WorkCaseOwner.class));
+                criteriaForWorkCaseId.setProjection(Projections.projectionList().add(Projections.property("workCase"), "workCase").add(Projections.property("workCasePrescreen"), "workCasePrescreen")).add(Restrictions.eq("role.id", selectedRoleId)).add(Restrictions.in("user.id", uIdsList)).setResultTransformer(Transformers.aliasToBean(WorkCaseOwner.class));
 
                 workCaseIdList = criteriaForWorkCaseId.list();
             }
@@ -555,18 +553,18 @@ public class UserDAO extends GenericDAO<User,String> {
             while (iterator1.hasNext()) {
                 WorkCaseOwner workCaseOwner = new WorkCaseOwner();
                 workCaseOwner = (WorkCaseOwner) iterator1.next();
-                if(Long.toString(workCaseOwner.getWorkCaseId())!=null)
+                if(workCaseOwner.getWorkCase()!=null)
                 {
 
-                    workCaseId = (long) workCaseOwner.getWorkCaseId();
+                    workCaseId = (long) workCaseOwner.getWorkCase().getId();
                     log.info("workCaseId is ::::::{}" , workCaseId);
                     WorkCaseList.add(workCaseId);
 
                 }
 
-                if(Long.toString(workCaseOwner.getWorkCasePrescreenId())!=null)
+                if(workCaseOwner.getWorkCasePrescreen()!=null)
                 {
-                    workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreenId();
+                    workCasePrescreenId = (long)workCaseOwner.getWorkCasePrescreen().getId();
 
                     log.info("workCasePrescreenId is ::::::{}" , workCasePrescreenId);
 
