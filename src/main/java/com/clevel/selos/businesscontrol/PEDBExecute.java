@@ -5,19 +5,18 @@ import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
-import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.view.PEInbox;
+import com.clevel.selos.model.view.PERoster;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.InboxBizTransform;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -496,9 +495,9 @@ public class PEDBExecute extends BusinessControl
 
             while (rs.next())
             {
-                log.info("in while .. ");
+                //log.info("in while .. ");
                 PEInbox peInbox = new PEInbox();
-                log.info("in while");
+                //log.info("in while");
                 peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                 peInbox.setAtuserteam(rs.getString("TeamName"));
                 peInbox.setApplicationno(rs.getString("AppNumber"));
@@ -529,7 +528,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setFetchType(fetchType);
                 resultQueryList.add(peInbox);
 
-                log.info("resultQueryList pedbexecute class is : {}",resultQueryList);
+                //log.info("resultQueryList pedbexecute class is : {}",resultQueryList);
 
                 peInbox = null;
 

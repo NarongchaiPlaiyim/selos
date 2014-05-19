@@ -353,7 +353,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                 Map<RelationValue, Integer> _numberOfCusRelationMap = new TreeMap<RelationValue, Integer>();
                 Map<String, CustomerInfoSimpleView> _customerInfoSimpleMap = new TreeMap<String, CustomerInfoSimpleView>();
-                List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+                List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
                 for(Customer customer : customerList){
                     if((customer.getRelation() != null) && (customer.getRelation().getId() != RelationValue.INDIRECTLY_RELATED.value())){
                         CustomerInfoSimpleView _customerInfoSimpleView = customerTransform.transformToSimpleView(customer);
@@ -371,8 +371,9 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
 
 
-                Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+                Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
                 Map<Integer, UWRuleResultDetailView> _groupUWResultDetailMap = new TreeMap<Integer, UWRuleResultDetailView>();
+                Map<Integer, String> checkCountRuleNameMap = new HashMap<Integer, String>();
 
                 Integer lastOrder = Integer.MAX_VALUE;
                 Map<Integer, PrescreenCusRulesGroupView> _prescreenCusRulesGroupViewMap = new TreeMap<Integer, PrescreenCusRulesGroupView>();
@@ -383,14 +384,17 @@ public class PrescreenBusinessControl extends BusinessControl {
                         else
                             _groupUWResultDetailMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
                     } else {
-
                         UWRuleGroupView _uwRuleGroupView = uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView();
                         PrescreenCusRulesGroupView _prescreenCusRulesGroupView = _prescreenCusRulesGroupViewMap.get(_uwRuleGroupView.getId());
                         if(_prescreenCusRulesGroupView == null){
                             _prescreenCusRulesGroupView = new PrescreenCusRulesGroupView();
                         }
                         _prescreenCusRulesGroupView.setUwRuleGroupView(_uwRuleGroupView);
-                        _prescreenCusRulesGroupView.setNumberOfRuleName(_prescreenCusRulesGroupView.getNumberOfRuleName() + 1);
+
+                        if(!checkCountRuleNameMap.containsKey(uwRuleResultDetailView.getUwRuleNameView().getId())){
+                            checkCountRuleNameMap.put(uwRuleResultDetailView.getUwRuleNameView().getId(), uwRuleResultDetailView.getCustomerInfoSimpleView().getCitizenId());
+                            _prescreenCusRulesGroupView.setNumberOfRuleName(_prescreenCusRulesGroupView.getNumberOfRuleName() + 1);
+                        }
 
                         Map<Integer, PrescreenCusRuleNameView> _prescreenCusRuleNameViewMap = _prescreenCusRulesGroupView.getPrescreenCusRuleNameViewMap();
                         if(_prescreenCusRuleNameViewMap == null)
@@ -1334,8 +1338,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for BPM *** //
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode) throws Exception {
-        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode, "");
+    public void assignChecker(long workCasePreScreenId, String queueName, String wobNumber, String checkerId, long actionCode) throws Exception {
+        bpmExecutor.assignChecker(workCasePreScreenId, queueName, wobNumber, checkerId, actionCode, "");
     }
 
     public void cancelCase(String queueName, String wobNumber, long actionCode, String reason, String remark) throws Exception {

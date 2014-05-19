@@ -1,45 +1,21 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Language;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.LastUpdateDataView;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
-import com.clevel.selos.dao.master.AddressTypeDAO;
-import com.clevel.selos.dao.master.BusinessTypeDAO;
-import com.clevel.selos.dao.master.CountryDAO;
-import com.clevel.selos.dao.master.DistrictDAO;
-import com.clevel.selos.dao.master.DocumentTypeDAO;
-import com.clevel.selos.dao.master.MaritalStatusDAO;
-import com.clevel.selos.dao.master.NationalityDAO;
-import com.clevel.selos.dao.master.ProvinceDAO;
-import com.clevel.selos.dao.master.RaceDAO;
-import com.clevel.selos.dao.master.RelationDAO;
-import com.clevel.selos.dao.master.SubDistrictDAO;
-import com.clevel.selos.dao.master.TitleDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Language;
-import com.clevel.selos.model.db.master.AddressType;
-import com.clevel.selos.model.db.master.BusinessType;
-import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.MaritalStatus;
-import com.clevel.selos.model.db.master.Nationality;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.Race;
-import com.clevel.selos.model.db.master.Relation;
-import com.clevel.selos.model.db.master.SubDistrict;
-import com.clevel.selos.model.db.master.Title;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.LastUpdateDataView;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Stateless

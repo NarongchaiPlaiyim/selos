@@ -1,12 +1,11 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name = "wrk_case")
@@ -24,6 +23,9 @@ public class WorkCase extends AbstractWorkCase{
     @OneToOne
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
+
+    @Column(name = "request_appraisal_require", columnDefinition = "int default 0")
+    private int requestAppraisalRequire;
 
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
@@ -123,6 +125,14 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setUwDOA2(AuthorizationDOA uwDOA2) {
         this.uwDOA2 = uwDOA2;
+    }
+
+    public int getRequestAppraisalRequire() {
+        return requestAppraisalRequire;
+    }
+
+    public void setRequestAppraisalRequire(int requestAppraisalRequire) {
+        this.requestAppraisalRequire = requestAppraisalRequire;
     }
 
     @Override

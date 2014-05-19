@@ -25,7 +25,6 @@ import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
-import com.sun.istack.internal.Nullable;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -2472,7 +2471,8 @@ public class PrescreenMaker implements Serializable {
         boolean complete = false;
         try {
             if(prescreenView.getCheckerId() != null && !prescreenView.getCheckerId().equals("")) {
-                prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, prescreenView.getCheckerId(), ActionCode.ASSIGN_TO_CHECKER.getVal());
+                HttpSession session = FacesUtil.getSession(true);
+                prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, Util.parseString(session.getAttribute("wobNumber"),""), prescreenView.getCheckerId(), ActionCode.ASSIGN_TO_CHECKER.getVal());
                 complete = true;
                 messageHeader = "Information.";
                 message = "Assign to checker complete.";

@@ -26,6 +26,7 @@
         </style>
     </h:head>
     <h:body>
+    <f:event type="preRenderView" listener="#{creditFacExisting.preRender()}" />
         <p:panel id="pnl_maincontainer" style="position:absolute;">
             <h:form id="frmMain">
                 <div id="main_container">
@@ -64,7 +65,8 @@
                                                         styleClass="smaller"
                                                         process="@this"
                                                         actionListener="#{creditFacExisting.onRefreshExistingCredit()}"
-                                                        update=":frmMain, :msgBoxSystemMessagePanel">
+                                                        update=":frmMain, :msgBoxSystemMessagePanel"
+                                                        disabled="#{creditFacExisting.isDisabled('refreshExistingCreditButton')}">
                                                     </p:commandButton>
                                                 </td>
 
@@ -82,12 +84,13 @@
                                         <td colspan="2">
                                             <p:commandButton
                                                 id="addBorrowerCommercialCreditbtn"
-                                                value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                value="#{msg.get('app.button.add')}"
                                                 styleClass="smaller"
                                                 actionListener="#{creditFacExisting.onAddCommercialCredit()}"
                                                 process="@this"
                                                 update=":existingCreditDlgForm"
-                                                oncomplete="existingCreditDlg.show();">
+                                                oncomplete="existingCreditDlg.show();"
+                                                disabled="#{creditFacExisting.isDisabled('addCreditButton')}">
                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
                                                 <p:resetInput target=":existingCreditDlgForm"/>
                                             </p:commandButton>
@@ -104,14 +107,14 @@
                                             </tr>
                                             <tr>
                                                 <th class="ui-state-default" style="width: 30px"></th>
-                                                <th class="ui-state-default" style="width: 200px" >Account</th>
+                                                <th class="ui-state-default" style="width: 200px">#{msg.get('app.decision.tb.th.account')}</th>
                                                 <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.productProgram')}</th>
                                                 <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.creditType')}</th>
                                                 <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.code')}</th>
                                                 <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.limit')}</th>
                                                 <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.outstanding')}</th>
                                                 <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                <th class="ui-state-default" style="width: 90px">int/fee</th>
+                                                <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.intFeePercent')}</th>
                                                 <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
                                                 <th class="ui-state-default" style="width: 50px"></th>
                                             </tr>
@@ -216,10 +219,12 @@
                                                                         fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) :
                                                                         not empty borrowerCredit.existingSplitLineDetailViewList and fn:length(borrowerCredit.existingSplitLineDetailViewList) gt 0 ?
                                                                         fn:length(borrowerCredit.existingSplitLineDetailViewList)+1 : '1'}">
-                                                            <p:commandButton icon="ui-icon-pencil" rendered="#{borrowerCredit.existingCreditFrom==1}"
+                                                            <p:commandButton icon="ui-icon-pencil"
+                                                                             rendered="#{borrowerCredit.existingCreditFrom == 1}"
                                                                              action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                              update=":existingCreditDlgForm"
-                                                                             oncomplete="existingCreditDlg.show();">
+                                                                             oncomplete="existingCreditDlg.show();"
+                                                                             disabled="#{creditFacExisting.isDisabled('borrower.actionList')}">
                                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
                                                                 <f:setPropertyActionListener value="#{borrowerCredit}"
                                                                                              target="#{creditFacExisting.selectCreditDetail}"/>
@@ -228,8 +233,9 @@
                                                                 <p:resetInput target=":existingCreditDlgForm"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
-                                                                             icon="ui-icon-trash" rendered="#{borrowerCredit.existingCreditFrom==1}"
-                                                                             oncomplete="confirmDeleteExistingCreditDetailDlg.show()">
+                                                                             icon="ui-icon-trash" rendered="#{borrowerCredit.existingCreditFrom == 1}"
+                                                                             oncomplete="confirmDeleteExistingCreditDetailDlg.show()"
+                                                                             disabled="#{creditFacExisting.isDisabled('borrower.actionList')}">
                                                                 <f:setPropertyActionListener value="#{borrowerCredit}"
                                                                                              target="#{creditFacExisting.selectCreditDetail}"/>
                                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
@@ -345,12 +351,13 @@
                                         <td colspan="2">
                                             <p:commandButton
                                                     id="addConditionButton"
-                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    value="#{msg.get('app.button.add')}"
                                                     styleClass="smaller"
                                                     actionListener="#{creditFacExisting.onAddConditionDetail()}"
                                                     process="@this"
                                                     update=":conditionDlgForm"
-                                                    oncomplete="conditionDlg.show();">
+                                                    oncomplete="conditionDlg.show();"
+                                                    disabled="#{creditFacExisting.isDisabled('addConditionButton')}">
                                                 <p:resetInput target=":conditionDlgForm"/>
                                             </p:commandButton>
                                         </td>
@@ -393,7 +400,8 @@
                                                 <p:column styleClass="top">
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
-                                                                     oncomplete="confirmDeleteConditionDetailDlg.show()">
+                                                                     oncomplete="confirmDeleteConditionDetailDlg.show()"
+                                                                     disabled="#{creditFacExisting.isDisabled('condition.actionList')}">
                                                         <f:setPropertyActionListener value="#{conditionDetailItem}"
                                                                                      target="#{creditFacExisting.selectConditionItem}"/>
                                                     </p:commandButton>
@@ -669,8 +677,7 @@
                                             <table class="table_content" style="width:100%">
                                                 <tr>
                                                     <td style="text-align: left;min-width:645px;width:645px;max-width:645px;background-color:#f4f8b6;" class="title">
-                                                        <h:outputText
-                                                                value="#{msg.get('app.decision.totalCommAndOBOD')}"/>
+                                                        <h:outputText value="#{msg.get('app.decision.totalCommAndOBOD')}"/>
                                                     </td>
                                                     <td style="text-align: left;background-color:#f4f8b6;">
                                                         <h:outputText value="#{creditFacExisting.existingCreditFacilityView.totalBorrowerComOBOD}"
@@ -716,14 +723,15 @@
                                         <td>
                                             <p:commandButton
                                                     id="addRelatedCommercialCreditbtn"
-                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    value="#{msg.get('app.button.add')}"
                                                     styleClass="smaller"
                                                     actionListener="#{creditFacExisting.onAddCommercialCredit()}"
                                                     process="@this"
                                                     update=":existingCreditDlgForm"
-                                                    oncomplete="existingCreditDlg.show();">
+                                                    oncomplete="existingCreditDlg.show();"
+                                                    disabled="#{creditFacExisting.isDisabled('addRelatedCreditButton')}">
                                                 <p:resetInput target=":existingCreditDlgForm"/>
-                                                <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
+                                                <f:setPropertyActionListener value="related" target="#{creditFacExisting.typeOfList}" />
                                             </p:commandButton>
                                         </td>
                                     </tr>
@@ -850,11 +858,13 @@
                                                                             fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) :
                                                                             not empty relatedCredit.existingSplitLineDetailViewList and fn:length(relatedCredit.existingSplitLineDetailViewList) gt 0 ?
                                                                             fn:length(relatedCredit.existingSplitLineDetailViewList)+1 : '1'}">
-                                                                        <p:commandButton icon="ui-icon-pencil" rendered="#{relatedCredit.existingCreditFrom==1}"
+                                                                        <p:commandButton icon="ui-icon-pencil"
+                                                                                         rendered="#{relatedCredit.existingCreditFrom == 1}"
                                                                                          action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                                          process="@this"
                                                                                          update=":existingCreditDlgForm"
-                                                                                         oncomplete="existingCreditDlg.show();">
+                                                                                         oncomplete="existingCreditDlg.show();"
+                                                                                         disabled="#{creditFacExisting.isDisabled('related.actionList')}">
                                                                             <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
                                                                             <f:setPropertyActionListener value="#{relatedCredit}"
                                                                                                          target="#{creditFacExisting.selectCreditDetail}"/>
@@ -864,8 +874,10 @@
                                                                         </p:commandButton>
 
                                                                         <p:commandButton title="Remove"
-                                                                                         icon="ui-icon-trash" rendered="#{relatedCredit.existingCreditFrom==1}"
-                                                                                         oncomplete="confirmDeleteExistingCreditDetailDlg.show()">
+                                                                                         icon="ui-icon-trash"
+                                                                                         rendered="#{relatedCredit.existingCreditFrom==1}"
+                                                                                         oncomplete="confirmDeleteExistingCreditDetailDlg.show()"
+                                                                                         disabled="#{creditFacExisting.isDisabled('related.actionList')}">
                                                                             <f:setPropertyActionListener value="#{relatedCredit}"
                                                                                                          target="#{creditFacExisting.selectCreditDetail}"/>
                                                                             <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
@@ -1364,12 +1376,13 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:commandButton  value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
-                                                              styleClass="smaller"
+                                            <p:commandButton value="#{msg.get('app.button.add')}"
+                                                             styleClass="smaller"
                                                              action="#{creditFacExisting.onAddExistingCollateral()}"
                                                              process="@this"
                                                              update=":existingCollateralBorrowerDlgForm"
-                                                             oncomplete="existingCollateralBorrowerDlg.show();">
+                                                             oncomplete="existingCollateralBorrowerDlg.show();"
+                                                             disabled="#{creditFacExisting.isDisabled('addBorrowerCollateralButton')}">
                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfListCollateral}" />
                                                 <p:resetInput target=":existingCollateralBorrowerDlgForm"/>
                                             </p:commandButton>
@@ -1466,7 +1479,8 @@
                                                                      action="#{creditFacExisting.onEditExistingCollateral()}"
                                                                      process="@this"
                                                                      update=":existingCollateralBorrowerDlgForm"
-                                                                     oncomplete="existingCollateralBorrowerDlg.show();">
+                                                                     oncomplete="existingCollateralBorrowerDlg.show();"
+                                                                     disabled="#{creditFacExisting.isDisabled('borrower.actionLists')}">
                                                         <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfListCollateral}" />
                                                         <f:setPropertyActionListener value="#{borrowerCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
@@ -1476,7 +1490,8 @@
                                                     </p:commandButton>
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
-                                                                     oncomplete="confirmDeleteExistingCollateralDlg.show()">
+                                                                     oncomplete="confirmDeleteExistingCollateralDlg.show()"
+                                                                     disabled="#{creditFacExisting.isDisabled('borrower.actionLists')}">
                                                         <f:setPropertyActionListener value="#{borrowerCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfListCollateral}" />
@@ -1517,12 +1532,13 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:commandButton  value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                            <p:commandButton  value="#{msg.get('app.button.add')}"
                                                               styleClass="smaller"
                                                               action="#{creditFacExisting.onAddExistingCollateral()}"
                                                               process="@this"
                                                               update=":existingCollateralRelatedDlgForm"
-                                                              oncomplete="existingCollateralRelatedDlg.show();">
+                                                              oncomplete="existingCollateralRelatedDlg.show();"
+                                                              disabled="#{creditFacExisting.isDisabled('addRelatedCollateralButton')}">
                                                 <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfListCollateral}" />
                                                 <p:resetInput target=":existingCollateralRelatedDlgForm"/>
                                             </p:commandButton>
@@ -1619,7 +1635,8 @@
                                                                      action="#{creditFacExisting.onEditExistingCollateral()}"
                                                                      process="@this"
                                                                      update=":existingCollateralRelatedDlgForm"
-                                                                     oncomplete="existingCollateralRelatedDlg.show();">
+                                                                     oncomplete="existingCollateralRelatedDlg.show();"
+                                                                     disabled="#{creditFacExisting.isDisabled('related.actionLists')}}">
                                                         <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfListCollateral}" />
                                                         <f:setPropertyActionListener value="#{relatedCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
@@ -1629,7 +1646,8 @@
                                                     </p:commandButton>
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
-                                                                     oncomplete="confirmDeleteExistingCollateralDlg.show()">
+                                                                     oncomplete="confirmDeleteExistingCollateralDlg.show()"
+                                                                     disabled="#{creditFacExisting.isDisabled('related.actionLists')}}">
                                                         <f:setPropertyActionListener value="#{relatedCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfListCollateral}" />
@@ -1682,12 +1700,13 @@
                                         <td>
                                             <p:commandButton
                                                     id="addBorrowerExistingGuarantorbtn"
-                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    value="#{msg.get('app.button.add')}"
                                                     styleClass="smaller"
                                                     actionListener="#{creditFacExisting.onAddExistingGuarantor()}"
                                                     process="@this"
                                                     update=":existingGuarantorDlgForm"
-                                                    oncomplete="existingGuarantorDlg.show();">
+                                                    oncomplete="existingGuarantorDlg.show();"
+                                                    disabled="#{creditFacExisting.isDisabled('addGuarantorButton')}">
                                                 <p:resetInput target=":existingGuarantorDlgForm"/>
                                             </p:commandButton>
                                         </td>
@@ -1739,7 +1758,8 @@
                                                                      action="#{creditFacExisting.onEditExistingGuarantor()}"
                                                                      process="@this"
                                                                      update=":existingGuarantorDlgForm"
-                                                                     oncomplete="existingGuarantorDlg.show();">
+                                                                     oncomplete="existingGuarantorDlg.show();"
+                                                                     disabled="#{creditFacExisting.isDisabled('guarantor.actionList')}">
                                                         <f:setPropertyActionListener value="#{existingGuarantor}"
                                                                                      target="#{creditFacExisting.selectGuarantorDetail}"/>
                                                         <f:setPropertyActionListener value="#{rowIndex}"
@@ -1749,7 +1769,8 @@
 
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
-                                                                     oncomplete="confirmDeleteExistingGuarantorDlg.show()">
+                                                                     oncomplete="confirmDeleteExistingGuarantorDlg.show()"
+                                                                     disabled="#{creditFacExisting.isDisabled('guarantor.actionList')}">
                                                         <f:setPropertyActionListener value="#{existingGuarantor}"
                                                                                      target="#{creditFacExisting.selectGuarantorDetail}"/>
                                                     </p:commandButton>
@@ -1787,12 +1808,14 @@
                                                              styleClass="smaller"
                                                              process="@form"
                                                              update=":frmMain, :msgBoxSystemMessagePanel"
-                                                             actionListener="#{creditFacExisting.onSaveCreditFacExisting()}"/>
+                                                             actionListener="#{creditFacExisting.onSaveCreditFacExisting()}"
+                                                             disabled="#{creditFacExisting.isDisabled('saveButton')}"/>
                                             <p:commandButton value="#{msg.get('app.button.cancel')}"
                                                              styleClass="small"
                                                              id="btnCancel"
                                                              process="@form" update=":frmMain"
-                                                             actionListener="#{creditFacExisting.onCreation}"/>
+                                                             actionListener="#{creditFacExisting.onCreation}"
+                                                             disabled="#{creditFacExisting.isDisabled('saveButton')}"/>
 
                                         </td>
                                     </tr>

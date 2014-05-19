@@ -1,9 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.clevel.selos.dao.working.*;
+import com.clevel.selos.dao.working.NewCreditDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NewCreditDetail;
@@ -11,11 +9,12 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.LimitSetupView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.transform.NewCreditDetailTransform;
-
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class LimitSetupControl extends BusinessControl {

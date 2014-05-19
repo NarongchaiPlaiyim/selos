@@ -13,15 +13,12 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class DecisionControl extends BusinessControl {
@@ -66,6 +63,8 @@ public class DecisionControl extends BusinessControl {
     private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
     private ProductFormulaDAO productFormulaDAO;
+    @Inject
+    private NewCollateralSubDAO newCollateralSubDAO;
 
     //Transform
     @Inject
@@ -99,17 +98,23 @@ public class DecisionControl extends BusinessControl {
     public DecisionControl() {
     }
 
-    public DecisionView saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
+    public Map<String, Object> saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
         log.debug("saveApproveAndConditionData() workCase: {}", workCase);
+        Map<String, Object> returnMapVal = null;
+
         if (workCase != null) {
             User currentUser = getCurrentUser();
 
+            returnMapVal = new HashMap<String, Object>();
+
             // Decision Follow up Condition
             if (decisionView.getDecisionFollowConditionViewList() != null && decisionView.getDecisionFollowConditionViewList().size() > 0) {
-                log.debug("Before persist - DecisionFollowConditionViews: {}", decisionView.getDecisionFollowConditionViewList());
-                List<DecisionFollowCondition> returnConditionList = decisionFollowConditionDAO.persistAndReturn(decisionFollowConditionTransform.transformToModel(decisionView.getDecisionFollowConditionViewList(), workCase));
-                log.debug("After persist - DecisionFollowConditions: {}", returnConditionList);
-                decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(returnConditionList));
+                log.debug("Pre-persist -> DecisionFollowConditionViews: {}", decisionView.getDecisionFollowConditionViewList());
+                List<DecisionFollowCondition> decFollowConList = decisionFollowConditionTransform.transformToModel(decisionView.getDecisionFollowConditionViewList(), workCase);
+                decisionFollowConditionDAO.persist(decFollowConList);
+//                decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
+                log.debug("Post-persist -> decFollowConList: {}", decFollowConList);
+                returnMapVal.put("decFollowConList", decFollowConList);
             }
 
             NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
@@ -117,10 +122,12 @@ public class DecisionControl extends BusinessControl {
 
             // Approve Credit Detail
             if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
-                log.debug("Before persist - ApproveCreditViews: {}", decisionView.getApproveCreditList());
-                List<NewCreditDetail> returnCreditList = newCreditDetailDAO.persistAndReturn(newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, currentUser, workCase, ProposeType.A));
-                log.debug("After persist - ApproveCredits: {}", returnCreditList);
-                decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(returnCreditList));
+                log.debug("Pre-persist -> ApproveCreditViews: {}", decisionView.getApproveCreditList());
+                List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, currentUser, workCase, ProposeType.A);
+                newCreditDetailDAO.persist(newCreditDetailList);
+//                decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(newCreditDetailList));
+                log.debug("Post-persist -> newCreditDetailList: {}", newCreditDetailList);
+                returnMapVal.put("newCreditDetailList", newCreditDetailList);
             }
 
             // Approve Guarantor Detail
@@ -131,46 +138,93 @@ public class DecisionControl extends BusinessControl {
                     newGuarantorRelationDAO.delete(relationDeleteList);
                 }
 
-                log.debug("Before persist - ApproveGuarantorViews: {}", decisionView.getApproveGuarantorList());
-                List<NewGuarantorDetail> returnGuarantorList = newGuarantorDetailDAO.persistAndReturn(newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, currentUser, ProposeType.A));
-                log.debug("After persist - ApproveGuarantors: {}", returnGuarantorList);
-                decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(returnGuarantorList));
+                log.debug("Pre-persist -> ApproveGuarantorViews: {}", decisionView.getApproveGuarantorList());
+                List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, currentUser, ProposeType.A);
+                newGuarantorDetailDAO.persist(newGuarantorDetailList);
+//                decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
+                log.debug("Post-persist -> newGuarantorDetailList: {}", newGuarantorDetailList);
+                returnMapVal.put("newGuarantorDetailList", newGuarantorDetailList);
             }
-
-            //--- Need to Delete SubMortgage from CollateralSubMortgages before Insert new
-            List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListByWorkCase(workCase, ProposeType.A);
-            log.debug("Before delete - old newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
-            newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-            log.debug("After delete - old newCollateralSubMortgages :: size :: {}", newCollateralSubMortgages.size());
-
-            //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-            List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase, ProposeType.A);
-            log.debug("Before delete :: old newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
-            newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
-            log.debug("After delete :: old newCollateralSubOwnerList :: size :: {}", newCollateralSubOwnerList.size());
-
-            //--- Need to Delete SubOwner from newCollateralSubRelatedList before Insert new
-//            List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.P);
-//            log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
-//            newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
-//            log.debug("before :: newCollateralSubRelatedList :: size :: {}",newCollateralSubRelatedList.size());
 
             // Approve Collateral
             if (decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0) {
-                List<NewCollateralCredit> relationCollDelList = newCollateralRelationDAO.getListByNewCreditFacility(newCreditFacility, ProposeType.A);
-                if(relationCollDelList != null && relationCollDelList.size() > 0) {
-                    log.info("Collateral Relation - deleteList size ::: {}", relationCollDelList.size());
-                    newCollateralRelationDAO.delete(relationCollDelList);
+
+                List<NewCollateral> tmpNewCollateralList = newCollateralDAO.findNewCollateralByTypeA(newCreditFacility);
+
+                if (tmpNewCollateralList != null && tmpNewCollateralList.size() > 0) {
+
+                    for (NewCollateral newCollateral : tmpNewCollateralList) {
+                        // delete old collateral relation
+                        if (newCollateral.getNewCollateralCreditList() != null) {
+                            newCollateralRelationDAO.delete(newCollateral.getNewCollateralCreditList());
+                            newCollateral.setNewCollateralCreditList(Collections.<NewCollateralCredit>emptyList());
+                        }
+
+                        List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
+                        for (NewCollateralHead newCollateralHead : newCollateralHeadList) {
+                            List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
+                            for (NewCollateralSub newCollateralSub : newCollateralSubList) {
+                                newSubCollMortgageDAO.delete(newCollateralSub.getNewCollateralSubMortgageList());
+                                newCollateralSubOwnerDAO.delete(newCollateralSub.getNewCollateralSubOwnerList());
+                                newCollateralSub.setNewCollateralSubMortgageList(Collections.<NewCollateralSubMortgage>emptyList());
+                                newCollateralSub.setNewCollateralSubOwnerList(Collections.<NewCollateralSubOwner>emptyList());
+                            }
+                        }
+
+                        newCollateralDAO.persist(newCollateral);
+                    }
                 }
 
-                log.debug("Before persist - ApproveCollateralViews: {}", decisionView.getApproveCollateralList());
-                List<NewCollateral> returnCollateralList = newCollateralDAO.persistAndReturn(newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, currentUser, workCase, ProposeType.A));
-                log.debug("After persist - ApproveCollateral: {}", returnCollateralList);
-                decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(returnCollateralList));
+                log.debug("Pre-persist -> ApproveCollateralViews: {}", decisionView.getApproveCollateralList());
+                List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, currentUser, workCase, ProposeType.A);
+                newCollateralDAO.persist(newCollateralList);
+//                decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(newCollateralList));
+                log.debug("Post-persist -> newCollateralList: {}", newCollateralList);
+                returnMapVal.put("newCollateralList", newCollateralList);
+
             }
 
         }
-        return decisionView;
+
+        return returnMapVal;
+    }
+
+    public void saveRelatedSubColl(WorkCase workCase, List<NewCollateralView> approveCollateralList) {
+
+        if (workCase != null && approveCollateralList != null && approveCollateralList.size() > 0) {
+            //remove all relate in this work case
+            List<NewCollateralSubRelated> newCollateralSubRelatedList = newCollateralSubRelatedDAO.getListByWorkCase(workCase, ProposeType.A);
+            if (newCollateralSubRelatedList != null) {
+                newCollateralSubRelatedDAO.delete(newCollateralSubRelatedList);
+            }
+
+            //save related sub coll
+            for (NewCollateralView newCollateralView : approveCollateralList) {
+                if (newCollateralView.getNewCollateralHeadViewList() != null && newCollateralView.getNewCollateralHeadViewList().size() > 0) {
+
+                    for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
+                        if (newCollateralHeadView.getNewCollateralSubViewList() != null && newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
+
+                            for (NewCollateralSubView newCollateralSubView : newCollateralHeadView.getNewCollateralSubViewList()) {
+                                NewCollateralSub mainNewCollSub = newCollateralSubDAO.findBySubId(newCollateralSubView.getSubId());
+                                if (newCollateralSubView.getRelatedWithList() != null && newCollateralSubView.getRelatedWithList().size() > 0) {
+
+                                    for (NewCollateralSubView related : newCollateralSubView.getRelatedWithList()) {
+                                        NewCollateralSub relatedNewCollSub = newCollateralSubDAO.findBySubId(related.getSubId());
+                                        NewCollateralSubRelated newCollateralSubRelated = new NewCollateralSubRelated();
+                                        newCollateralSubRelated.setWorkCase(workCase);
+                                        newCollateralSubRelated.setNewCollateralSub(mainNewCollSub);
+                                        newCollateralSubRelated.setNewCollateralSubRelated(relatedNewCollSub);
+                                        newCollateralSubRelated.setProposeType(ProposeType.A);
+                                        newCollateralSubRelatedDAO.persist(newCollateralSubRelated);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public ApprovalHistoryView saveApprovalHistory(ApprovalHistoryView approvalHistoryView, WorkCase workCase) {
@@ -307,7 +361,13 @@ public class DecisionControl extends BusinessControl {
                 List<NewCollateral> approveCollateralList = newCollateralDAO.findNewCollateral(workCaseId, ProposeType.A);
                 decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(approveCollateralList));
 
-                List<NewGuarantorDetail> approveGuarantorList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, ProposeType.A);
+//                List<NewGuarantorDetail> approveGuarantorList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, ProposeType.A);
+                List<NewGuarantorDetail> approveGuarantorList;
+                if (newCreditFacilityView != null && newCreditFacilityView.getId() != 0) {
+                    approveGuarantorList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacId(newCreditFacilityView.getId(), ProposeType.A);
+                } else {
+                    approveGuarantorList = new ArrayList<NewGuarantorDetail>();
+                }
                 decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(approveGuarantorList));
 
                 decisionView.setApproveTotalCreditLimit(decision.getTotalApproveCredit());

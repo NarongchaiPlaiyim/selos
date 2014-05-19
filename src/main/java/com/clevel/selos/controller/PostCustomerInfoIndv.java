@@ -1,15 +1,23 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.PostCustomerInfoIndvControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.AttorneyRelationType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.SelectableDataModel;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,31 +28,10 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.model.SelectableDataModel;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.businesscontrol.PostCustomerInfoIndvControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.AttorneyRelationType;
-import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.CustomerAttorneySelectView;
-import com.clevel.selos.model.view.CustomerAttorneyView;
-import com.clevel.selos.model.view.CustomerInfoPostAddressView;
-import com.clevel.selos.model.view.CustomerInfoPostIndvView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "postCustomerInfoIndv")

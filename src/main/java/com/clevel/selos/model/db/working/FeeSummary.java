@@ -1,12 +1,11 @@
 package com.clevel.selos.model.db.working;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.*;
-
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "wrk_fee_summary")

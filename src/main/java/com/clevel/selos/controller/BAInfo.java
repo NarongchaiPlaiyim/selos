@@ -1,29 +1,5 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.model.ListDataModel;
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.SelectableDataModel;
-import org.slf4j.Logger;
-
 import com.clevel.selos.businesscontrol.BAPAInfoControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
@@ -34,14 +10,26 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
-import com.clevel.selos.model.view.BAPAInfoCreditToSelectView;
-import com.clevel.selos.model.view.BAPAInfoCreditView;
-import com.clevel.selos.model.view.BAPAInfoCustomerView;
-import com.clevel.selos.model.view.BAPAInfoView;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.SelectableDataModel;
+import org.slf4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name="baInfo")

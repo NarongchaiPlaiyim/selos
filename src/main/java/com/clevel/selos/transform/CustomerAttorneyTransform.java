@@ -1,27 +1,14 @@
 package com.clevel.selos.transform;
 
-import javax.inject.Inject;
-
-import com.clevel.selos.dao.master.CountryDAO;
-import com.clevel.selos.dao.master.DistrictDAO;
-import com.clevel.selos.dao.master.DocumentTypeDAO;
-import com.clevel.selos.dao.master.MaritalStatusDAO;
-import com.clevel.selos.dao.master.NationalityDAO;
-import com.clevel.selos.dao.master.ProvinceDAO;
-import com.clevel.selos.dao.master.RaceDAO;
-import com.clevel.selos.dao.master.SubDistrictDAO;
-import com.clevel.selos.dao.master.TitleDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.AttorneyType;
 import com.clevel.selos.model.Gender;
-import com.clevel.selos.model.db.working.Address;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.CustomerAttorney;
-import com.clevel.selos.model.db.working.Individual;
-import com.clevel.selos.model.db.working.Juristic;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerAttorneySelectView;
 import com.clevel.selos.model.view.CustomerAttorneyView;
+
+import javax.inject.Inject;
 
 public class CustomerAttorneyTransform extends Transform {
 	

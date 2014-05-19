@@ -1,8 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
@@ -12,11 +12,14 @@ import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAc
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.BankStatement;
+import com.clevel.selos.model.db.working.BankStatementSummary;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ActionStatusTransform;
 import com.clevel.selos.transform.BankStmtTransform;
@@ -1234,20 +1237,49 @@ public class BankStmtControl extends BusinessControl {
 
         WorkCase workCase = null;
         WorkCasePrescreen workCasePrescreen = null;
+        BankStatementSummary bankStatementSummaryWorkCase = null;
+        BankStatementSummary bankStatementSummaryWorkCasePreScreen = null;
+
         if (workCaseId != 0) {
             workCase = workCaseDAO.findById(workCaseId);
+            bankStatementSummaryWorkCase = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         }
         if (workCasePrescreenId != 0) {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            bankStatementSummaryWorkCasePreScreen = bankStatementSummaryDAO.findByWorkcasePrescreenId(workCasePrescreenId);
         }
         User user = getCurrentUser();
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+
+        if(bankStatementSummaryWorkCase!=null && bankStatementSummaryWorkCase.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCase.getId());
+        }
+
+        if(bankStatementSummaryWorkCasePreScreen!=null && bankStatementSummaryWorkCasePreScreen.getId()!=0){
+            bankStatementSummaryDAO.deleteById(bankStatementSummaryWorkCasePreScreen.getId());
+        }
+
         bankStatementSummary.setWorkCase(workCase);
         bankStatementSummary.setWorkCasePrescreen(workCasePrescreen);
         BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStatementSummary);
         log.debug("persist BankStatementSummary: {}", bankStatementSummary);
         return bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
+    }
+
+    public BankStmtSummaryView saveBankStmtSumFullApp(BankStmtSummaryView bankStmtSummaryView, long workCaseId) {
+        log.debug("saveBankStmtSumFullApp() bankStmtSummaryView.id: {}, workCaseId: {}", bankStmtSummaryView.getId(), workCaseId);
+        BankStmtSummaryView returnBankStmtSumView = null;
+        if (workCaseId != 0) {
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            BankStatementSummary bankStmtSumForPersist = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+            bankStmtSumForPersist.setWorkCase(workCase);
+            BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStmtSumForPersist);
+            log.debug("After persist BankStatementSummary: {}", returnBankStmtSummary);
+            returnBankStmtSumView = bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
+        }
+        return returnBankStmtSumView;
     }
 
     public void deleteBankStmtById(long bankStmtId) {

@@ -9,7 +9,6 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
 import com.clevel.selos.security.encryption.EncryptionService;
@@ -40,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.List;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped

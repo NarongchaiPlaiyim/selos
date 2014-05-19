@@ -10,7 +10,6 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
-import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
@@ -202,29 +201,81 @@ public class PESQLInbox implements Serializable
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
 
-        long stepId = inboxViewSelectItem.getStepId();
-        String appNumber = inboxViewSelectItem.getApplicationno();
+        long stepId = Util.parseLong(inboxViewSelectItem.getStepId(), 0);
+        long statusId = Util.parseLong(inboxViewSelectItem.getStatuscode(), 0);
         long wrkCasePreScreenId = 0L;
         long wrkCaseId = 0L;
         long wrkCaseAppraisalId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
-        String queueName = inboxViewSelectItem.getQueuename();
+        int fetchType = Util.parseInt(inboxViewSelectItem.getFetchType(), 0);
+        String appNumber = Util.parseString(inboxViewSelectItem.getApplicationno(), "");
+        String queueName = Util.parseString(inboxViewSelectItem.getQueuename(), "0");
+        String wobNumber = Util.parseString(inboxViewSelectItem.getFwobnumber(), "");
+        String caseOwner = Util.parseString(inboxViewSelectItem.getAtuser(), "");
 
         try {
 
             try{
                 //Try to Lock case
                 log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
-                bpmInterfaceImpl.lockCase(queueName,inboxViewSelectItem.getFwobnumber(),inboxViewSelectItem.getFetchType());
+                bpmInterfaceImpl.lockCase(queueName, wobNumber, inboxViewSelectItem.getFetchType());
                 /*session.setAttribute("isLocked","true");*/
             } catch (Exception e) {
-                log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
+                log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, wobNumber, e);
                 message = "Another User is Working on this case!! Please Retry Later.";
                 RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             }
 
-            if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            if(stepId != 0){
+                Step step = stepDAO.findById(stepId);
+                stageId = step != null ? step.getStage().getId() : 0;
+            }
+
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            if(!Util.isNull(workCase)){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
+
+            if(Util.isTrue(requestAppraisalFlag)){
+                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+            }
+
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+            session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("wobNumber", wobNumber);
+            session.setAttribute("statusId", statusId);
+            session.setAttribute("fetchType", fetchType);
+            session.setAttribute("stepId", stepId);
+            session.setAttribute("stageId", stageId);
+            session.setAttribute("caseOwner", caseOwner);
+            session.setAttribute("queueName", queueName);
+
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, inboxViewSelectItem.getApplicationno());
+            session.setAttribute("appHeaderInfo", appHeaderView);
+
+            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
+
+            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
+
+            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
+                FacesUtil.redirect(landingPage);
+                return;
+            } else {
+                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
+                message = "Can not find landing page for step [" + stepId + "]";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            }
+
+            /*if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 if(workCasePrescreen != null){
                     wrkCasePreScreenId = workCasePrescreen.getId();
@@ -260,47 +311,7 @@ public class PESQLInbox implements Serializable
                 }
                 session.setAttribute("workCaseId", wrkCaseId);
                 session.setAttribute("requestAppraisal", requestAppraisalFlag);
-            }
-
-            session.setAttribute("wobNumber", inboxViewSelectItem.getFwobnumber());
-            session.setAttribute("statusId", Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
-
-            if(Util.isNull(inboxViewSelectItem.getFetchType())) {
-                session.setAttribute("fetchType",0);
-            } else {
-                session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
-            }
-
-            if(stepId != 0){
-                Step step = stepDAO.findById(stepId);
-                stageId = step != null ? step.getStage().getId() : 0;
-            }
-
-            session.setAttribute("stepId", stepId);
-            session.setAttribute("stageId", stageId);
-            session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
-
-            if(Util.isNull(queueName)) {
-                session.setAttribute("queueName", "0");
-            } else {
-                session.setAttribute("queueName", queueName);
-            }
-
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, inboxViewSelectItem.getApplicationno());
-            session.setAttribute("appHeaderInfo", appHeaderView);
-
-            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
-
-            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
-
-            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-                FacesUtil.redirect(landingPage);
-                return;
-            } else {
-                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
-                FacesUtil.redirect("/site/inbox.jsf");
-            }
-
+            }*/
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
             //message = "Another User is Working on this case!! Please Retry Later.";
@@ -318,8 +329,11 @@ public class PESQLInbox implements Serializable
             //TODO dispatch for Select case
             String queueName = inboxViewSelectItem.getQueuename();
             String wobNumber = inboxViewSelectItem.getFwobnumber();
+            log.debug("onPickUpCase ::: inboxViewSelectItem : {}", inboxViewSelectItem);
             inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
             //TODO Reload all value for Inbox Select
+            inboxViewSelectItem = inboxControl.getNextStep(inboxViewSelectItem, ActionCode.ASSIGN_TO_ME.getVal());
+            log.debug("onPickUpCase ::: find next step : {}", inboxViewSelectItem);
             onSelectInbox();
         } catch (Exception ex){
             log.error("Exception while select case from PoolBox : ", ex);

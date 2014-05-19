@@ -2,10 +2,10 @@ package com.clevel.selos.integration;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
-import com.clevel.selos.integration.brms.model.response.*;
+import com.clevel.selos.integration.brms.model.response.DocAppraisalResponse;
+import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
 import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
-
-import java.util.List;
+import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 
 public interface BRMSInterface {
     public UWRulesResponse checkPreScreenRule(BRMSApplicationInfo applicationInfo) throws ValidationException;

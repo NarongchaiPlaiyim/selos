@@ -16,8 +16,7 @@ import com.clevel.selos.integration.brms.model.response.StandardPricingResponse;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -151,6 +150,14 @@ public class Decision extends BaseController {
     private FeeTransform feeTransform;
     @Inject
     private NewCreditTierTransform newCreditTierTransform;
+    @Inject
+    private NewCreditDetailTransform newCreditDetailTransform;
+    @Inject
+    private NewCollateralTransform newCollateralTransform;
+    @Inject
+    private NewGuarantorDetailTransform newGuarantorDetailTransform;
+    @Inject
+    private DecisionFollowConditionTransform decisionFollowConditionTransform;
 
     // Session
     private long workCaseId;
@@ -1426,10 +1433,34 @@ public class Decision extends BaseController {
             if (roleUW) {
                 // Delete List
                 //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                //decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
+                Map<String, Object> resultMapVal = decisionControl.saveApproveAndConditionData(decisionView, workCase);
+                if (resultMapVal != null) {
+                    if (resultMapVal.get("decFollowConList") != null) {
+                        List<DecisionFollowCondition> decFollowConList = (List<DecisionFollowCondition>) resultMapVal.get("decFollowConList");
+                        decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
+                    }
+
+                    if (resultMapVal.get("newCreditDetailList") != null) {
+                        List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) resultMapVal.get("newCreditDetailList");
+                        decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(newCreditDetailList));
+                    }
+
+                    if (resultMapVal.get("newGuarantorDetailList") != null) {
+                        List<NewGuarantorDetail> newGuarantorDetailList = (List<NewGuarantorDetail>) resultMapVal.get("newGuarantorDetailList");
+                        decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
+                    }
+
+                    if (resultMapVal.get("newCollateralList") != null) {
+                        List<NewCollateral> newCollateralList = (List<NewCollateral>) resultMapVal.get("newCollateralList");
+                        decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(newCollateralList));
+                    }
+                }
+
                 // Calculate Total Approve
-                //decisionControl.calculateTotalApprove(decisionView);
+                decisionControl.calculateTotalApprove(decisionView);
+
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 
@@ -1452,9 +1483,10 @@ public class Decision extends BaseController {
                         if(endorseDecisionDialog){
                             approvalHistoryView = decisionControl.saveApprovalHistory(approvalHistoryView, workCase);
                         }
+
                         if(requestPricing && pricingDecisionDialog){
                             // Save Approval History Pricing
-                            if(roleId != RoleValue.UW.id()){
+                            if(roleId != RoleValue.UW.id()) {
                                 approvalHistoryPricingView = decisionControl.saveApprovalHistoryPricing(approvalHistoryPricingView, workCase);
                             }
                         }
@@ -1462,13 +1494,14 @@ public class Decision extends BaseController {
                 }
             }
 
-            onCreation();
+            //onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
             severity = MessageDialogSeverity.INFO.severity();
         }
         catch (Exception e) {
+            log.debug("", e);
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
             message = "Save Decision data failed. Cause : " + Util.getMessageException(e);

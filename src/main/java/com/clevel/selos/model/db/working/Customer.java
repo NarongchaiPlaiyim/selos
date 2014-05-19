@@ -2,12 +2,10 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.util.Util;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;

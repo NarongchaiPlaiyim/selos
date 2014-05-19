@@ -69,9 +69,26 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
         return userList;
     }
 
+    public int findWorkCaseOwner(long workCasePreScreenId, long workCaseId, String userId){
+        Criteria criteria = createCriteria();
+        if(workCasePreScreenId != 0) {
+            criteria.add(Restrictions.eq("workCasePrescreenId", workCasePreScreenId));
+        }
+        if(workCaseId != 0){
+            criteria.add(Restrictions.eq("workCaseId", workCaseId));
+        }
+        criteria.add(Restrictions.eq("userid", userId));
+
+        List<WorkCaseOwner> workCaseOwnerList = criteria.list();
+
+        if(workCaseOwnerList == null)
+            workCaseOwnerList = new ArrayList<WorkCaseOwner>();
+
+        return workCaseOwnerList.size();
+    }
+
     //Function for AppHeader
     public List<String> getWorkCaseByWorkCaseId(long workCaseId){
-
         Criteria criteria = createCriteria();
 
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
@@ -122,5 +139,17 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         return workCaseOwner;
 
+    }
+
+    public String getUW1(long stepId, long workCaseId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("stepId", stepId));
+        criteria.add(Restrictions.eq("workCaseId", workCaseId));
+        WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
+
+        if(workCaseOwner != null){
+            return workCaseOwner.getUserid();
+        }
+        return "";
     }
 }

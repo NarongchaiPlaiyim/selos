@@ -6,10 +6,7 @@ import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.system.message.Message;
@@ -26,13 +23,9 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -424,16 +417,16 @@ public class BizInfoSummary extends BaseController {
 
     public void onChangeRental(){
         if(bizInfoSummaryView.getRental() == 0 ){
-            setDisabledValue("ownerName",false);
-            setMandateValue("ownerName",true);
-            setDisabledValue("expiryDate",true);
-            setMandateValue("expiryDate",false);
+            setDisabledValue("ownerName", false);
+            setMandateValue("ownerName", true);
+            setDisabledValue("expiryDate", true);
+            setMandateValue("expiryDate", false);
             bizInfoSummaryView.setExpiryDate(null);
         }else if(bizInfoSummaryView.getRental() == 1 ){
-            setDisabledValue("ownerName",true);
-            setMandateValue("ownerName",false);
-            setDisabledValue("expiryDate",false);
-            setMandateValue("expiryDate",true);
+            setDisabledValue("ownerName", true);
+            setMandateValue("ownerName", false);
+            setDisabledValue("expiryDate", false);
+            setMandateValue("expiryDate", true);
             bizInfoSummaryView.setOwnerName("");
         }
     }

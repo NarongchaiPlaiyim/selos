@@ -6,7 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;

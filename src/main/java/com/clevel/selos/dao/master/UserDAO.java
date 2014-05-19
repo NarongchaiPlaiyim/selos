@@ -17,8 +17,11 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 
-import java.util.*;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class UserDAO extends GenericDAO<User,String> {
     @Inject

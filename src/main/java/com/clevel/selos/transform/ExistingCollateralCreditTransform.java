@@ -3,10 +3,10 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.ExistingCreditDetail;
-import com.clevel.selos.model.db.working.ExistingCreditTypeDetail;
 import com.clevel.selos.model.db.working.ExistingCollateralCredit;
 import com.clevel.selos.model.db.working.ExistingCollateralDetail;
+import com.clevel.selos.model.db.working.ExistingCreditDetail;
+import com.clevel.selos.model.db.working.ExistingCreditTypeDetail;
 import com.clevel.selos.model.view.ExistingCreditTypeDetailView;
 import org.slf4j.Logger;
 

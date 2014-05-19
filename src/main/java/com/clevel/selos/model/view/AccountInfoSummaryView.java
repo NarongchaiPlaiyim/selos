@@ -1,9 +1,9 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.User;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.clevel.selos.model.db.master.User;
 
 public class AccountInfoSummaryView implements Serializable {
 	private static final long serialVersionUID = -8089859901828967895L;

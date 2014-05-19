@@ -10,11 +10,11 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -24,13 +24,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import javax.swing.*;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "bankStatementSummary")
-public class BankStatementSummary implements Serializable {
+public class BankStatementSummary extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -83,7 +84,6 @@ public class BankStatementSummary implements Serializable {
     private String currentDateDDMMYY;
     private List<BankAccountTypeView> othBankAccTypeViewList;
     private int yesValue;
-    private boolean disableRefresh;
     private int actionNo;
 
     // Variables for control
@@ -108,12 +108,30 @@ public class BankStatementSummary implements Serializable {
     public BankStatementSummary() {
     }
 
-    private void preRender() {
-        log.info("preRender ::: setSession ");
-
+    public void preRender() {
+        log.info("preRender");
         HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+
+        if (checkSession(session)) {
+            log.debug("preRender ::: Found session for case.");
+        }
+        else {
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
+        }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        log.debug("onCreation");
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(checkSession(session)){
+            log.debug("Init default value and load necessary data.");
+
+            workCaseId = (Long)session.getAttribute("workCaseId");
+
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_SUMMARY);
 
             // Check Role (ABDM/BDM)
             int roleId = bankStmtControl.getUserRoleId();
@@ -121,75 +139,60 @@ public class BankStatementSummary implements Serializable {
                 isABDM_BDM = true;
             }
 
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-            } catch (Exception e) {
-                log.info("Exception :: {}", e);
+            yesValue = RadioValue.YES.value();
+            isRetrieveSuccess = false;
+            hasDataFromRetrieve = false;
+            isNotAlignWithPrevData = false;
+            bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
+            othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
+
+            log.debug("Find Bank statement summary by workCaseId: {}", workCaseId);
+            summaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
+            if (summaryView != null && summaryView.getId() != 0) {
+                log.debug("Bank statement summary was found.");
+
+                seasonalFlag = summaryView.getSeasonal();
+                expectedSubmitDate = summaryView.getExpectedSubmitDate();
+                currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
+
+                lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+                lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
+                lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
+
+                // calculate and provide source of collateral proof
+                for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
+                    bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
+                    bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
+                }
+
+                for (BankStmtView othBankStmtView : Util.safetyList(summaryView.getOthBankStmtViewList())) {
+                    bankStmtControl.calSourceOfCollateralProof(othBankStmtView);
+                    bankStmtSrcOfCollateralProofList.add(othBankStmtView);
+                }
+
+                // calculate total and grand total summary
+                bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
             }
+            else {
+                log.debug("Bank statement summary was NOT found, Create new data.");
+                seasonalFlag = RadioValue.NOT_SELECTED.value();
+                expectedSubmitDate = getCurrentDate();
+                currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+
+                summaryView = new BankStmtSummaryView();
+                summaryView.setSeasonal(seasonalFlag);
+                summaryView.setExpectedSubmitDate(expectedSubmitDate);
+
+                lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+                lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
+                lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
+            }
+
+            numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
+            lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+            log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
         }
 
-    }
-
-    @PostConstruct
-    public void onCreation() {
-        preRender();
-
-        log.debug("Init default value and load necessary data.");
-        yesValue = RadioValue.YES.value();
-        isRetrieveSuccess = false;
-        hasDataFromRetrieve = false;
-        isNotAlignWithPrevData = false;
-        bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
-        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
-
-        log.debug("Find Bank statement summary by workCaseId: {}", workCaseId);
-        summaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
-        if (summaryView != null && summaryView.getId() != 0) {
-            log.debug("Bank statement summary was found.");
-
-            seasonalFlag = summaryView.getSeasonal();
-            expectedSubmitDate = summaryView.getExpectedSubmitDate();
-            currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
-
-            lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-            lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
-            lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
-
-            // calculate and provide source of collateral proof
-            for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
-                bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
-                bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
-            }
-
-            for (BankStmtView othBankStmtView : Util.safetyList(summaryView.getOthBankStmtViewList())) {
-                bankStmtControl.calSourceOfCollateralProof(othBankStmtView);
-                bankStmtSrcOfCollateralProofList.add(othBankStmtView);
-            }
-
-            // calculate total and grand total summary
-            bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-        }
-        else {
-            log.debug("Bank statement summary was NOT found, Create new data.");
-            seasonalFlag = RadioValue.NOT_SELECTED.value();
-            expectedSubmitDate = getCurrentDate();
-            currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
-
-            summaryView = new BankStmtSummaryView();
-            summaryView.setSeasonal(seasonalFlag);
-            summaryView.setExpectedSubmitDate(expectedSubmitDate);
-
-            lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-            lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
-            lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
-        }
-
-        numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
-        lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
-        log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
     }
 
     public void onChangeSeasonalFlag() {
@@ -244,7 +247,11 @@ public class BankStatementSummary implements Serializable {
                 countRefresh += 1;
             }
             // check disable refresh button
-            disableRefresh = countRefresh >= MAX_REFRESH_TIME;
+            if(!isDisabled("refreshButton")){
+                if(countRefresh >= MAX_REFRESH_TIME){
+                   setDisabledValue("refreshButton", true);
+                }
+            }
         }
 
         if (workCaseId != 0) {
@@ -511,7 +518,7 @@ public class BankStatementSummary implements Serializable {
             }
 
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, (isRetrieveSuccess && hasDataFromRetrieve));
-            summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+            bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
 
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
@@ -862,14 +869,6 @@ public class BankStatementSummary implements Serializable {
 
     public void setLastThreeMonth3(Date lastThreeMonth3) {
         this.lastThreeMonth3 = lastThreeMonth3;
-    }
-
-    public boolean isDisableRefresh() {
-        return disableRefresh;
-    }
-
-    public void setDisableRefresh(boolean disableRefresh) {
-        this.disableRefresh = disableRefresh;
     }
 
     public String getConfirmMessageHeader() {

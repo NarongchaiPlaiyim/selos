@@ -7,255 +7,301 @@
         xmlns:clv="http://clevel.com/ui">
 <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 <p:panel id="ncbDlgPanel" styleClass="panel-dialog">
-<h:form id="ncbDlgForm">
-<table class="content_form">
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.loanAccountType')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu id="dlgType"
-                         value="#{ncbInfo.ncbDetailView.accountType.id}"
-                         style="width: 200px;"
-                         size="1"
-                         required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{ncbInfo.accountTypeList}"
-                           var="dlgAccountTypeList"
-                           itemLabel="#{dlgAccountTypeList.name}"
-                           itemValue="#{dlgAccountTypeList.id}"/>
+    <h:form id="ncbDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.loanAccountType')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('loanAccountType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="dlgType"
+                                     value="#{ncbInfo.ncbDetailView.accountType.id}"
+                                     style="width: 200px;"
+                                     size="1"
+                                     required="#{not empty param[addRowData.clientId]}"
+                                     disabled="#{ncbInfo.isDisabled('loanAccountType')}">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{ncbInfo.accountTypeList}"
+                                       var="dlgAccountTypeList"
+                                       itemLabel="#{dlgAccountTypeList.name}"
+                                       itemValue="#{dlgAccountTypeList.id}"/>
 
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.isTMBAccount')}"/>
-    </td>
-    <td>
-        <p:selectOneRadio id="radioTmbAccount" value="#{ncbInfo.ncbDetailView.TMBAccount}"
-                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
-                           var="tmbAccVar" itemLabel="#{tmbAccVar.shortName()}" itemValue="#{tmbAccVar.value()}"/>
-        </p:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.loanAccountStatus')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu id="dlgStatus"
-                         value="#{ncbInfo.ncbDetailView.accountStatus.id}"
-                         style="width: 200px;"
-                         size="1"
-                         required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{ncbInfo.accountStatusList}"
-                           var="dlgAccountStatusList"
-                           itemLabel="#{dlgAccountStatusList.name}"
-                           itemValue="#{dlgAccountStatusList.id}"/>
-        </p:selectOneMenu>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.isTMBAccount')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('isTMBAccount')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneRadio id="radioTmbAccount" value="#{ncbInfo.ncbDetailView.TMBAccount}"
+                                      required="#{not empty param[addRowData.clientId]}"
+                                      disabled="#{ncbInfo.isDisabled('isTMBAccount')}">
+                        <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                                       var="tmbAccVar" itemLabel="#{tmbAccVar.shortName()}" itemValue="#{tmbAccVar.value()}"/>
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.loanAccountStatus')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('loanAccountStatus')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="dlgStatus"
+                                     value="#{ncbInfo.ncbDetailView.accountStatus.id}"
+                                     style="width: 200px;"
+                                     size="1"
+                                     required="#{not empty param[addRowData.clientId]}"
+                                     disabled="#{ncbInfo.isDisabled('loanAccountStatus')}">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{ncbInfo.accountStatusList}"
+                                       var="dlgAccountStatusList"
+                                       itemLabel="#{dlgAccountStatusList.name}"
+                                       itemValue="#{dlgAccountStatusList.id}"/>
+                    </p:selectOneMenu>
 
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.dateOfInfo')}"/>
-    </td>
-    <td>
-        <clv:BECalendar value="#{ncbInfo.ncbDetailView.dateOfInfo}"
-                        id="dateOfInfo"
-                        showOn="button"
-                        pattern="dd/MM/yyyy"
-                        yearRange="1950:2100"
-                        mindate="01/01/1950"
-                        navigator="true"
-                        locale="th_TH"
-                        showButtonPanel="true"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.accountOpenDate')}"/>
-    </td>
-    <td>
-        <clv:BECalendar value="#{ncbInfo.ncbDetailView.accountOpenDate}"
-                        id="accountOpenDate"
-                        showOn="button"
-                        pattern="dd/MM/yyyy"
-                        yearRange="1950:2100"
-                        mindate="01/01/1950"
-                        navigator="true"
-                        locale="th_TH"
-                        showButtonPanel="true"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.limit')}"/>
-    </td>
-    <td>
-        <p:inputText id="limit" style="text-align: right" maxlength="18"
-                     value="#{ncbInfo.ncbDetailView.limit}"
-                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
-                     required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-            <p:ajax event="blur" update=":ncbDlgForm:limit"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.outstanding')}"/>
-    </td>
-    <td>
-        <p:inputText id="outstanding" style="text-align: right" maxlength="18"
-                     value="#{ncbInfo.ncbDetailView.outstanding}"
-                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
-                     required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-            <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.installment')}"/>
-    </td>
-    <td>
-        <p:inputText id="installment" style="text-align: right" maxlength="18"
-                     value="#{ncbInfo.ncbDetailView.installment}"
-                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
-                     required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-            <p:ajax event="blur" update=":ncbDlgForm:installment"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.dateOfDebtRestructuring')}"/>
-    </td>
-    <td>
-        <clv:BECalendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}" id="dateOfDebtRestructuring"
-                        showOn="button"
-                        pattern="dd/MM/yyyy"
-                        yearRange="1950:2100"
-                        mindate="01/01/1950"
-                        navigator="true"
-                        locale="th_TH"
-                        showButtonPanel="true"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.typeOfCurrentPayment')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu id="currentPayment"
-                         value="#{ncbInfo.ncbDetailView.currentPayment.id}"
-                         style="width: 200px;"
-                         size="1"
-                         required="true">
-            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{ncbInfo.settlementStatusList}"
-                           var="dlgtdrCurrentList"
-                           itemLabel="#{dlgtdrCurrentList.name}"
-                           itemValue="#{dlgtdrCurrentList.id}"/>
-        </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.dateOfInfo')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('InfoAsOfDate')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <clv:BECalendar value="#{ncbInfo.ncbDetailView.dateOfInfo}"
+                                    id="dateOfInfo"
+                                    showOn="button"
+                                    pattern="dd/MM/yyyy"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    navigator="true"
+                                    locale="th_TH"
+                                    showButtonPanel="true"
+                                    disabled="#{ncbInfo.isDisabled('InfoAsOfDate')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.accountOpenDate')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('accountOpenDate')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <clv:BECalendar value="#{ncbInfo.ncbDetailView.accountOpenDate}"
+                                    id="accountOpenDate"
+                                    showOn="button"
+                                    pattern="dd/MM/yyyy"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    navigator="true"
+                                    locale="th_TH"
+                                    showButtonPanel="true"
+                                    disabled="#{ncbInfo.isDisabled('accountOpenDate')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.limit')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('limit')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:inputText id="limit" style="text-align: right" maxlength="18"
+                                 value="#{ncbInfo.ncbDetailView.limit}"
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
+                                 required="#{not empty param[addRowData.clientId]}"
+                                 readonly="#{ncbInfo.isDisabled('limit')}">
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                        <p:ajax event="blur" update=":ncbDlgForm:limit"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.outstanding')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('outstanding')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:inputText id="outstanding" style="text-align: right" maxlength="18"
+                                 value="#{ncbInfo.ncbDetailView.outstanding}"
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
+                                 required="#{not empty param[addRowData.clientId]}"
+                                 readonly="#{ncbInfo.isDisabled('outstanding')}">
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                        <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.installment')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('installment')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:inputText id="installment" style="text-align: right" maxlength="18"
+                                 value="#{ncbInfo.ncbDetailView.installment}"
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
+                                 required="#{not empty param[addRowData.clientId]}"
+                                 readonly="#{ncbInfo.isDisabled('installment')}">
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                        <p:ajax event="blur" update=":ncbDlgForm:installment"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.dateOfDebtRestructuring')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('dateOfDebtRestructuring')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <clv:BECalendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}" id="dateOfDebtRestructuring"
+                                    showOn="button"
+                                    pattern="dd/MM/yyyy"
+                                    yearRange="1950:2100"
+                                    mindate="01/01/1950"
+                                    navigator="true"
+                                    locale="th_TH"
+                                    showButtonPanel="true"
+                                    disabled="#{ncbInfo.isDisabled('dateOfDebtRestructuring')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.typeOfCurrentPayment')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('typeOfCurrentPayment')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="currentPayment"
+                                     value="#{ncbInfo.ncbDetailView.currentPayment.id}"
+                                     style="width: 200px;"
+                                     size="1"
+                                     required="#{not empty param[addRowData.clientId]}"
+                                     disabled="#{ncbInfo.isDisabled('typeOfCurrentPayment')}">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{ncbInfo.settlementStatusList}"
+                                       var="dlgtdrCurrentList"
+                                       itemLabel="#{dlgtdrCurrentList.name}"
+                                       itemValue="#{dlgtdrCurrentList.id}"/>
+                    </p:selectOneMenu>
 
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.typeOfHistoryPayment')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu id="historyPayment"
-                         value="#{ncbInfo.ncbDetailView.historyPayment.id}"
-                         style="width: 200px;"
-                         size="1"
-                         required="true">
-            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-            <f:selectItems value="#{ncbInfo.settlementStatusList}"
-                           var="dlgHistoryList"
-                           itemLabel="#{dlgHistoryList.name}"
-                           itemValue="#{dlgHistoryList.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.noOfOutstandingPaymentIn12months')}"/>
-    </td>
-    <td>
-        <p:inputText name="noOfOutstandingPaymentIn12months" style="text-align: right" maxlength="2"
-                     value="#{ncbInfo.ncbDetailView.noOfOutstandingPaymentIn12months}"
-                     required="#{not empty param[addRowData.clientId]}"
-                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)"
-                     integerOnly="true">
-            <p:ajax event="blur" update="@this" process="@this"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.noOfOverLimit')}"/>
-    </td>
-    <td>
-        <p:inputText name="noOfOverLimit" style="text-align: right" maxlength="2"
-                     value="#{ncbInfo.ncbDetailView.noOfOverLimit}"
-                     required="#{not empty param[addRowData.clientId]}"
-                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)"
-                     integerOnly="true">
-            <p:ajax event="blur" update="@this" process="@this"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.refinanceFlag')}"/>
-    </td>
-    <td>
-        <p:selectOneRadio id="radioRefinanceFlag" value="#{ncbInfo.ncbDetailView.refinanceFlag}"
-                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
-                           var="refinanceVar" itemLabel="#{refinanceVar.shortName()}" itemValue="#{refinanceVar.value()}"/>
-        </p:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 280px;">
-        <h:outputText value="#{msg.get('app.dlg.wcFlag')}"/>
-    </td>
-    <td>
-        <p:selectOneRadio id="radioWCFlag" value="#{ncbInfo.ncbDetailView.wcFlag}"
-                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
-                           var="wcVar" itemLabel="#{wcVar.shortName()}" itemValue="#{wcVar.value()}"/>
-        </p:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td colspan="2" class="center">
-        <p:commandButton id="saveBtn" styleClass="small"
-                binding="#{addRowData}"
-                value="#{msg.get('app.okButton')}"
-                actionListener="#{ncbInfo.onSaveNcbRecord()}"
-                process="@form"
-                update=":ncbDlgForm,:frmMain:resultNcbDetail"
-                oncomplete="handleNCBInfoRequest(xhr, status, args)"/>
-
-        <p:commandButton
-                id="cancelBtn"
-                value="#{msg.get('app.cancelButton')}"
-                styleClass="small"
-                onclick="PF('ncbDlg').hide()"/>
-    </td>
-</tr>
-</table>
-</h:form>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.typeOfHistoryPayment')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('typeOfHistoryPayment')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="historyPayment"
+                                     value="#{ncbInfo.ncbDetailView.historyPayment.id}"
+                                     style="width: 200px;"
+                                     size="1"
+                                     required="#{not empty param[addRowData.clientId]}"
+                                     disabled="#{ncbInfo.isDisabled('typeOfHistoryPayment')}">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{ncbInfo.settlementStatusList}"
+                                       var="dlgHistoryList"
+                                       itemLabel="#{dlgHistoryList.name}"
+                                       itemValue="#{dlgHistoryList.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.noOfOutstandingPaymentIn12months')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('noOfOutstandingPaymentIn12months')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:inputText name="noOfOutstandingPaymentIn12months" style="text-align: right" maxlength="2"
+                                 value="#{ncbInfo.ncbDetailView.noOfOutstandingPaymentIn12months}"
+                                 required="#{not empty param[addRowData.clientId]}"
+                                 onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)"
+                                 integerOnly="true"
+                                 readonly="#{ncbInfo.isDisabled('noOfOutstandingPaymentIn12months')}">
+                        <p:ajax event="blur" update="@this" process="@this"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.noOfOverLimit')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('noOfOverLimit')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:inputText name="noOfOverLimit" style="text-align: right" maxlength="2"
+                                 value="#{ncbInfo.ncbDetailView.noOfOverLimit}"
+                                 required="#{not empty param[addRowData.clientId]}"
+                                 onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)"
+                                 integerOnly="true"
+                                 readonly="#{ncbInfo.isDisabled('noOfOverLimit')}">
+                        <p:ajax event="blur" update="@this" process="@this"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.refinanceFlag')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('refinanceFlag')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneRadio id="radioRefinanceFlag" value="#{ncbInfo.ncbDetailView.refinanceFlag}"
+                                      required="#{not empty param[addRowData.clientId]}"
+                                      disabled="#{ncbInfo.isDisabled('refinanceFlag')}">
+                        <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                                       var="refinanceVar" itemLabel="#{refinanceVar.shortName()}" itemValue="#{refinanceVar.value()}"/>
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 280px;">
+                    <h:outputText value="#{msg.get('app.ncbDetail.dlg.wcFlag')}"/>
+                    <h:outputText value="#{ncbInfo.mandate('wcFlag')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
+                </td>
+                <td>
+                    <p:selectOneRadio id="radioWCFlag" value="#{ncbInfo.ncbDetailView.wcFlag}"
+                                      required="#{not empty param[addRowData.clientId]}"
+                                      disabled="#{ncbInfo.isDisabled('wcFlag')}">
+                        <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                                       var="wcVar" itemLabel="#{wcVar.shortName()}" itemValue="#{wcVar.value()}"/>
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton id="saveBtn" styleClass="small"
+                            binding="#{addRowData}"
+                            value="#{msg.get('app.button.ok')}"
+                            actionListener="#{ncbInfo.onSaveNcbRecord()}"
+                            process="@form"
+                            update=":ncbDlgForm,:frmMain:resultNcbDetail"
+                            oncomplete="handleNCBInfoRequest(xhr, status, args)"
+                            disabled="#{ncbInfo.isDisabled('saveButton')}"/>
+                    <p:commandButton
+                            id="cancelBtn"
+                            value="#{msg.get('app.button.cancel')}"
+                            styleClass="small"
+                            onclick="PF('ncbDlg').hide()"
+                            disabled="#{ncbInfo.isDisabled('cancelButton')}"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
 </p:panel>
 <p:blockUI widgetVar="blockNcbDlg" block="ncbDlgPanel" trigger=":ncbDlgForm:saveBtn">
     LOADING<br/>

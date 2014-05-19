@@ -1,56 +1,24 @@
 package com.clevel.selos.businesscontrol;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.master.BankAccountProductDAO;
 import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankBranchDAO;
-import com.clevel.selos.dao.working.AccountInfoSummaryDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
-import com.clevel.selos.dao.working.NewCreditDetailDAO;
-import com.clevel.selos.dao.working.OpenAccountCreditDAO;
-import com.clevel.selos.dao.working.OpenAccountDAO;
-import com.clevel.selos.dao.working.OpenAccountDepositDAO;
-import com.clevel.selos.dao.working.OpenAccountNameDAO;
-import com.clevel.selos.dao.working.OpenAccountPurposeDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.BankAccountProduct;
-import com.clevel.selos.model.db.master.BankAccountPurpose;
-import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.db.master.BankBranch;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.AccountInfoSummary;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountCredit;
-import com.clevel.selos.model.db.working.OpenAccountDeposit;
-import com.clevel.selos.model.db.working.OpenAccountName;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.AccountInfoSummaryView;
-import com.clevel.selos.model.view.MortgageSummaryView;
-import com.clevel.selos.model.view.OpenAccountCreditView;
-import com.clevel.selos.model.view.OpenAccountFullView;
-import com.clevel.selos.model.view.OpenAccountNameView;
-import com.clevel.selos.model.view.OpenAccountPurposeView;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.AccountInfoSummaryTransform;
 import com.clevel.selos.transform.CreditDetailSimpleTransform;
 import com.clevel.selos.transform.OpenAccountTransform;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.*;
 
 @Stateless
 public class AccountInfoControl extends BusinessControl implements Serializable {

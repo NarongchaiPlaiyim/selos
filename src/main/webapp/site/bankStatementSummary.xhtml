@@ -29,6 +29,7 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{bankStatementSummary.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -56,9 +57,12 @@
                         <tr>
                             <td class="title" style="min-width: 143px; width: 143px; max-width: 143px;">
                                 <h:outputText value="#{msg.get('app.bankStmtSum.label.seasonal')}"/>
+                                <h:outputText value="#{bankStatementSummary.mandate('seasonalFlag')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
-                                <p:selectOneRadio value="#{bankStatementSummary.seasonalFlag}">
+                                <p:selectOneRadio value="#{bankStatementSummary.seasonalFlag}"
+                                                  disabled="#{bankStatementSummary.isDisabled('seasonalFlag')}">
                                     <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                     <p:ajax event="change"
@@ -72,6 +76,8 @@
                         <tr>
                             <td class="title">
                                 <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
+                                <h:outputText value="#{bankStatementSummary.mandate('expectedSubmissionDate')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td class="left">
                                 <table border="0">
@@ -86,7 +92,8 @@
                                                             locale="th_TH"
                                                             readonlyInput="true"
                                                             required="#{not empty param[saveButton.clientId] || not empty param[refreshButton.clientId]}"
-                                                            styleClass="calendar_right">
+                                                            styleClass="calendar_right"
+                                                            disabled="#{bankStatementSummary.isDisabled('expectedSubmissionDate')}">
                                                 <p:ajax event="dateSelect"
                                                         listener="#{bankStatementSummary.onChangeExpectedSubmitDate()}"
                                                         process="@this"
@@ -96,7 +103,7 @@
                                         <td style="border-style: none !important; padding-left: 5px;">
                                             <p:commandButton id="btnRefresh" value="#{msg.get('app.button.refresh')}"
                                                              binding="#{refreshButton}"
-                                                             disabled="#{bankStatementSummary.disableRefresh}"
+                                                             disabled="#{bankStatementSummary.isDisabled('refreshButton')}"
                                                              action="#{bankStatementSummary.onConfirmBeforeAction()}"
                                                              process="@form"
                                                              update=":frmMain,:msgBoxSystemMessagePanel,:confirmActionDialog"
@@ -124,7 +131,8 @@
                                                  action="#{bankStatementSummary.onConfirmBeforeAction()}"
                                                  process="@form"
                                                  update=":frmMain,:msgBoxSystemMessagePanel,:confirmActionDialog"
-                                                 styleClass="smaller">
+                                                 styleClass="smaller"
+                                                 disabled="#{bankStatementSummary.isDisabled('addTMBBankStmtButton')}">
                                     <f:setPropertyActionListener value="3" target="#{bankStatementSummary.actionNo}"/>
                                 </p:commandButton>
                             </td>
@@ -281,14 +289,15 @@
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditTmbBankStmt()}"
                                                                          onclick="blockUI.show()"
-                                                                         onsuccess="blockUI.hide()">
+                                                                         onsuccess="blockUI.hide()"
+                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.actionLists')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
-
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                          icon="ui-icon-trash"
-                                                                         oncomplete="confirmDeleteBankStmtDlg.show()">
+                                                                         oncomplete="confirmDeleteBankStmtDlg.show()"
+                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.actionLists')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
@@ -345,7 +354,8 @@
                                                                      action="#{bankStatementSummary.onConfirmBeforeAction()}"
                                                                      process="@form"
                                                                      update=":frmMain,:msgBoxSystemMessagePanel,:confirmActionDialog"
-                                                                     styleClass="smaller">
+                                                                     styleClass="smaller"
+                                                                     disabled="#{bankStatementSummary.isDisabled('addOtherBankStmtButton')}">
                                                         <f:setPropertyActionListener value="4" target="#{bankStatementSummary.actionNo}"/>
                                                     </p:commandButton>
                                                 </td>
@@ -495,14 +505,16 @@
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditOthBankStmt()}"
                                                                          onclick="blockUI.show()"
-                                                                         onsuccess="blockUI.hide()">
+                                                                         onsuccess="blockUI.hide()"
+                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.actionLists')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
 
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                          icon="ui-icon-trash"
-                                                                         oncomplete="confirmDeleteBankStmtDlg.show()">
+                                                                         oncomplete="confirmDeleteBankStmtDlg.show()"
+                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.actionLists')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>

@@ -37,17 +37,29 @@
                     <div id="content_form">
                         <table class="content_table_form" border="0">
                         <tr>
-                            <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/></td>
+                            <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('businessInfoDetail')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText style="min-width: 381px; width: 381px; max-width: 381px;" value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"/>
+                                <p:inputText style="min-width: 381px; width: 381px; max-width: 381px;"
+                                             value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"
+                                             readonly="#{bizInfoDetail.isDisabled('businessInfoDetail')}"/>
                                 <h:inputHidden value="#{bizInfoDetail.bizInfoDetailView.id}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.tradeType')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.tradeType')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('tradeType')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"  required="#{not empty param[saveButton.clientId]}">
+                                                 disabled="#{bizInfoDetail.isDisabled('tradeType')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"
+                                                 required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessActivityList}"
                                                    var="bizActivity"
@@ -57,10 +69,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizType')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizType')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizType')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu id="bizTypeId" style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizType.id}" required="#{not empty param[saveButton.clientId]}">
+                                                 disabled="#{bizInfoDetail.isDisabled('bizType')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizType.id}"
+                                                 required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessTypeList}"
                                                    var="bizType"
@@ -70,10 +88,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizGroup')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizGroup')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizGroup')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}" required="#{not empty param[saveButton.clientId]}"
+                                                 disabled="#{bizInfoDetail.isDisabled('bizGroup')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}"
+                                                 required="#{not empty param[saveButton.clientId]}"
                                                  id="businessGroupId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessGroupList}"
@@ -85,10 +109,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title" ><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDesc')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDesc')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizDesc')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
                                 <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
-                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"  required="#{not empty param[saveButton.clientId]}"
+                                                 disabled="#{bizInfoDetail.isDisabled('bizDesc')}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"
+                                                 required="#{not empty param[saveButton.clientId]}"
                                                  id="businessDescriptionId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessDescriptionList}"
@@ -100,30 +130,44 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizCode')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizCode')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizCode')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText id="bizCode" styleClass="large" value="#{bizInfoDetail.bizInfoDetailView.bizCode}" readonly="true"/>
+                                <p:inputText id="bizCode" styleClass="large"
+                                             readonly="#{bizInfoDetail.isDisabled('bizCode')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.bizCode}"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="title">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.incomeFactor')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('incomeFactor')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td style="min-width: 370px; width: 370px; max-width: 370px;">
-                                <p:inputText styleClass="right large" id="incomeFactor" value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}" readonly="true">
+                                <p:inputText styleClass="right large" id="incomeFactor"
+                                             readonly="#{bizInfoDetail.isDisabled('incomeFactor')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update=":frmMain:incomeFactor"/>
                                 </p:inputText>
-                                <p:outputLabel styleClass="title" value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}" style="float: right"/>
+                                <p:panel styleClass="panel title" style="float: right">
+                                    <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}"/>
+                                    <h:outputText value="#{bizInfoDetail.mandate('interviewedIncomeFactior')}" styleClass="require-field"/>
+                                    <h:outputText value=" :"/>
+                                </p:panel>
                             </td>
-                            <!--<td class="title right" style="min-width: 270px; width: 270px; max-width: 270px;">-->
-                                <!--<p:outputLabel value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}"/>-->
-                            <!--</td>-->
                             <td>
                                 <p:inputText style="text-align: right" id="adjustedIncomeFactor"
+                                             readonly="#{bizInfoDetail.isDisabled('interviewedIncomeFactior')}"
                                              value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}"
                                              onkeydown="return onKeyDownMoney(event);"
                                              onkeypress="return onKeyPressMoney(event)"
+                                             onfocus="removeComma(this)"
+                                             maxlength="6"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
@@ -134,16 +178,29 @@
                         <tr>
                             <td class="title">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizComment')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('comment')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td colspan="3">
-                                <p:inputText styleClass="large" value="#{bizInfoDetail.bizInfoDetailView.bizComment}" readonly="true"/>
+                                <p:inputText styleClass="large"
+                                             readonly="#{bizInfoDetail.isDisabled('comment')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.bizComment}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentBusiness')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentBusiness')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('percentBusiness')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
-                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
+                                <p:inputText styleClass="right" id="percentBiz"
+                                             readonly="#{bizInfoDetail.isDisabled('percentBusiness')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)"
+                                             maxlength="6"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
@@ -153,66 +210,59 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizPermission')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="1" class="title">
                                 <table border="0" style="float: left;width: 100%">
                                     <tr>
                                         <td>
-                                            <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
-                                                              required="#{not empty param[saveButton.clientId]}" layout="grid" columns="1">
+                                            <p:selectOneRadio id="bizPermissionRadio"
+                                                              disabled="#{bizInfoDetail.isDisabled('bizPermission')}"
+                                                              value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
+                                                              required="#{not empty param[saveButton.clientId]}"
+                                                              layout="grid" columns="1">
                                                 <f:selectItem itemLabel="No"  itemValue="N" />
                                                 <f:selectItem itemLabel="Yes" itemValue="Y" />
-                                                <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocExpiryDate" listener="#{bizInfoDetail.onChangeBizPermission}"/>
+                                                <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocPermissionLabel,
+                                                                                :frmMain:bizDocExpiryDate,:frmMain:bizDocExpiryDateLabel"
+                                                        listener="#{bizInfoDetail.onChangeBizPermission}"/>
                                             </p:selectOneRadio>
 
                                         </td>
                                         <td style="margin-top: 50px">
                                             <div style="margin-top: 28px; float: right">
                                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>
+                                                <h:outputText value="#{bizInfoDetail.mandate('bizDocPermission')}" styleClass="require-field" id="bizDocPermissionLabel"/>
+                                                <h:outputText value=" :"/>
                                             </div>
-                                            <!--<table border="1" style="margin-top: 28px; float: right;width: auto">-->
-                                                <!--<tr>-->
-                                                    <!--<td class="right">-->
-                                                        <!--<p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>-->
-                                                    <!--</td>-->
-                                                <!--</tr>-->
-                                            <!--</table>-->
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                             <td>
                                 <div style="margin-top: 28px; float: left">
-                                    <p:inputText style="width: 350px" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
-                                                 readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                    <p:inputText style="width: 350px" id="bizDocPermission"
+                                                 readonly="#{bizInfoDetail.isDisabled('bizDocPermission') and bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
                                                  required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">
                                         <p:ajax event="blur" update=":frmMain:bizDocPermission"/>
                                     </p:inputText>
                                 </div>
                             </td>
                         </tr>
-                        <!--<tr>-->
-                            <!--<td class="title"></td>-->
-                            <!--<td class="title right" colspan="2">-->
-                                <!--<p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>-->
-                            <!--</td>-->
-                            <!--<td>-->
-                                <!--<p:inputText id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"-->
-                                             <!--readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"-->
-                                             <!--required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">-->
-                                    <!--<p:ajax event="blur" update=":frmMain:bizDocPermission"/>-->
-                                <!--</p:inputText>-->
-                            <!--</td>-->
-                        <!--</tr>-->
                         <tr>
                             <td colspan="1"></td>
                             <td class="title right">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocExpiryDate')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('bizDocExpiryDate')}" styleClass="require-field" id="bizDocExpiryDateLabel"/>
+                                <h:outputText value=" :"/>
                             </td>
                             <td>
                                 <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
-                                                readonly="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
-                                                disabled="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
+                                                disabled="#{bizInfoDetail.isDisabled('bizDocExpiryDate') and bizInfoDetail.bizInfoDetailView.bizPermission == 'N'}"
                                                 required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
@@ -225,16 +275,30 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.expIndCountryName')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.expIndCountryName')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('expIndCountryName')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText styleClass="large" id="exportIndirectCountryName" value="#{bizInfoDetail.bizInfoDetailView.expIndCountryName}"/>
+                                <p:inputText styleClass="large" id="exportIndirectCountryName"
+                                             readonly="#{bizInfoDetail.isDisabled('expIndCountryName')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.expIndCountryName}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/></td>
+                            <td class="title">
+                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/>
+                                <h:outputText value="#{bizInfoDetail.mandate('percentExpIndCountryName')}" styleClass="require-field"/>
+                                <h:outputText value=" :"/>
+                            </td>
                             <td colspan="3">
-                                <p:inputText styleClass="large right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
-                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                                <p:inputText styleClass="large right" id="percentExpIndCountryName"
+                                             readonly="#{bizInfoDetail.isDisabled('percentExpIndCountryName')}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
+                                             onfocus="removeComma(this)">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
@@ -257,7 +321,8 @@
                                                  process="@this"
                                                  actionListener="#{bizInfoDetail.onAddBizProductDetailView()}"
                                                  update=":bizProductViewDlgForm"
-                                                 oncomplete="bizProductViewDlg.show()">
+                                                 oncomplete="bizProductViewDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('addProductButton')}">
                                     <p:resetInput target=":bizProductViewDlgForm" />
                                 </p:commandButton>
                             </td>
@@ -295,7 +360,8 @@
                                                          action="#{bizInfoDetail.onEditBizProductDetailView()}"
                                                          update=":bizProductViewDlgForm"
                                                          process=":frmMain:bizProductViewTable"
-                                                         oncomplete="bizProductViewDlg.show();">
+                                                         oncomplete="bizProductViewDlg.show();"
+                                                         disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                             <f:setPropertyActionListener value="#{bizProductDetailView}"
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
@@ -304,7 +370,8 @@
                                         </p:commandButton>
                                         <p:commandButton title="Remove" process="@this"
                                                          icon="ui-icon-trash"
-                                                         oncomplete="confirmDeleteBizProductDlg.show()" >
+                                                         oncomplete="confirmDeleteBizProductDlg.show()"
+                                                         disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                             <f:setPropertyActionListener value="#{bizProductDetailView}"
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
@@ -331,7 +398,8 @@
                                                  styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('addSupplierButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="1" target="#{bizInfoDetail.stakeType}"/>
 
@@ -405,7 +473,8 @@
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
                                                              update=":stakeholderViewDlgForm,:frmMain:supplierTable"
                                                              process=":frmMain:supplierTable"
-                                                             oncomplete="stakeholderViewDlg.show();">
+                                                             oncomplete="stakeholderViewDlg.show();"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="1"
                                                                              target="#{bizInfoDetail.stakeType}"/>
                                                 <f:setPropertyActionListener value="#{supplierItem}"
@@ -417,7 +486,8 @@
 
                                             <p:commandButton icon="ui-icon-trash"
                                                              title="Remove" process="@this"
-                                                             oncomplete="confirmDeleteStakeholderDlg.show()">
+                                                             oncomplete="confirmDeleteStakeholderDlg.show()"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="#{supplierItem}"
                                                                              target="#{bizInfoDetail.selectStakeHolder}"/>
                                                 <f:setPropertyActionListener value="1"
@@ -433,7 +503,9 @@
 
                                                 <p:column style="background-color:#f4f8b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierTotalPercentBuyVolume" styleClass="right" readonly="true" style="width: 100px"
+                                                        <p:inputText id="supplierTotalPercentBuyVolume" styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentBuyVolume}">
                                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                             <p:ajax event="blur" update=":frmMain:supplierTable:supplierTotalPercentBuyVolume"/>
@@ -443,7 +515,9 @@
 
                                                 <p:column colspan="2"  style="background-color:#f4f8b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierTotalPercentCredit" styleClass="right" readonly="true" style="width: 100px"
+                                                        <p:inputText id="supplierTotalPercentCredit" styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentCredit}">
                                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                             <p:ajax event="blur" update=":frmMain:supplierTable:supplierTotalPercentCredit"/>
@@ -453,7 +527,9 @@
 
                                                 <p:column  style="background-color:#f4f8b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierTotalCreditTerm" styleClass="right" readonly="true" style="width: 100px"
+                                                        <p:inputText id="supplierTotalCreditTerm" styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierTotalCreditTerm}">
                                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
                                                             <p:ajax event="blur" update=":frmMain:supplierTable:supplierTotalCreditTerm"/>
@@ -468,8 +544,13 @@
 
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
-                                                        <p:inputText id="supplierUWAdjustPercentCredit" styleClass="right" readonly="true" style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                        <p:inputText id="supplierUWAdjustPercentCredit"
+                                                                     styleClass="right"
+                                                                     readonly="true"
+                                                                     style="width: 100px"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustPercentCredit}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -481,7 +562,9 @@
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
                                                         <p:inputText id="supplierUWAdjustCreditTerm" styleClass="right" readonly="true"  style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustCreditTerm}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -513,11 +596,12 @@
                                                  process="@this"
                                                  styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                                 update=":stakeholderViewDlgForm"
+                                                 oncomplete="stakeholderViewDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('addBuyerButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="2"
                                                                  target="#{bizInfoDetail.stakeType}"/>
-
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -590,7 +674,8 @@
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
                                                              update=":stakeholderViewDlgForm,:frmMain:buyerTable"
                                                              process=":frmMain:buyerTable"
-                                                             oncomplete="stakeholderViewDlg.show();">
+                                                             oncomplete="stakeholderViewDlg.show();"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="2"
                                                                              target="#{bizInfoDetail.stakeType}"/>
                                                 <f:setPropertyActionListener value="#{buyerItem}"
@@ -601,8 +686,8 @@
                                             </p:commandButton>
                                             <p:commandButton icon="ui-icon-trash"
                                                              title="Remove" process="@this"
-                                                             oncomplete="confirmDeleteStakeholderDlg.show()">
-
+                                                             oncomplete="confirmDeleteStakeholderDlg.show()"
+                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
                                                 <f:setPropertyActionListener value="#{buyerItem}"
                                                                              target="#{bizInfoDetail.selectStakeHolder}"/>
                                                 <f:setPropertyActionListener value="2"
@@ -653,7 +738,9 @@
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
                                                         <p:inputText id="buyerUWAdjustPercentCredit" styleClass="right" readonly="true" style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustPercentCredit}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -665,7 +752,9 @@
                                                 <p:column style="background-color:#f8d0b6; text-align:right;">
                                                     <f:facet name="footer">
                                                         <p:inputText id="buyerUWAdjustCreditTerm" styleClass="right" readonly="true" style="width: 100px"
-                                                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     onfocus="removeComma(this)"
                                                                      value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustCreditTerm}">
                                                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                             <f:validateDoubleRange maximum="100"/>
@@ -706,65 +795,124 @@
                                         <th colspan="2" style="width:33%;">Stock</th>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>  </td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountReceivable')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="standardAccountReceivable" readonly="true"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardAccountReceivable"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardAccountReceivable')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountPayable')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountPayable')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountPayable')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="standardAccountPayable" readonly="true"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardAccountPayable"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardAccountPayable')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardStock')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardStock')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardStock')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="standardStock" readonly="true"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardStock }">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardStock"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardStock')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardStock }"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardStock"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #efefef">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePurchaseAmount')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePurchaseAmount')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('averagePurchaseAmount')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="averagePurchaseAmount" readonly="true"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="averagePurchaseAmount"
+                                                         readonly="#{bizInfoDetail.isDisabled('averagePurchaseAmount')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePurchaseAmount"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePayableAmount')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePayableAmount')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('averagePayableAmount')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="averagePayableAmount" readonly="true"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="averagePayableAmount"
+                                                         readonly="#{bizInfoDetail.isDisabled('averagePayableAmount')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePayableAmount"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockDurationBDM')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationBDM"
-                                                         onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="stockDurationBDM"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockDurationBDM')}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}"
                                                          required="#{not empty param[saveButton.clientId]}">
-                                                <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationBDM,:frmMain:stockValueBDM" />
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCash')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCash')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentCash')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCash" readonly="true"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="purchasePercentCash"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentCash')}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -772,10 +920,18 @@
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCash,:frmMain:purchasePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentCash')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentCash')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"  readonly="true"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="payablePercentCash"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentCash')}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -783,47 +939,90 @@
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCash,:frmMain:payablePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('payablePercentCash')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationUW')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationUW')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockDurationUW')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationUW" value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}" readonly="true">
-                                                <!--readonly="#{bizInfoDetail.readonlyIsUW}"-->
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="stockDurationUW"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockDurationUW')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="10">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" />
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #efefef">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentCredit')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentCredit')}"
+                                                         id="purchasePercentCredit"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentCredit')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="payablePercentCredit"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentCredit')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockValueBDM')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockValueBDM')}"
+                                                         id="stockValueBDM"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}"
                                                          required="#{not empty param[saveButton.clientId]}">
-                                                <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueBDM"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentlocal')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentLocal"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentlocal')}"
+                                                         id="purchasePercentLocal"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -831,10 +1030,18 @@
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentLocal,:frmMain:purchasePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentLocal')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentLocal')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentLocal')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentLocal')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentLocal"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentLocal')}"
+                                                         id="payablePercentLocal"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -842,28 +1049,54 @@
                                                 <p:ajax event="blur" update=":frmMain:payablePercentLocal,:frmMain:payablePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('payablePercentLocal')}"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueUW')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueUW')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('stockValueUW')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueUW" readonly="true"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('stockValueUW')}"
+                                                         id="stockValueUW"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}" >
-                                                <!--readonly="#{bizInfoDetail.readonlyIsUW}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueUW"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
                                     <tr style="background-color: #efefef">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchasePercentForeign')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchasePercentForeign')}"
+                                                         id="purchasePercentForeign"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payablePercentForeign')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}" readonly="true">
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('payablePercentForeign')}"
+                                                         id="payablePercentForeign"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="3">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
@@ -871,19 +1104,33 @@
                                         <td colspan="2" style="width: 25%;line-height: 15px"></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchaseTerm')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchaseTerm')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('purchaseTerm')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="purchaseTerm"
-                                                         onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         readonly="#{bizInfoDetail.isDisabled('purchaseTerm')}"
+                                                         id="purchaseTerm"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchaseTerm}">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:purchaseTerm"/>
                                             </p:inputText>
                                         </td>
-                                        <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payableTerm')}"/></td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payableTerm')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('payableTerm')}" styleClass="require-field"/>
+                                        </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payableTerm"
-                                                         onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="payableTerm"
+                                                         readonly="#{bizInfoDetail.isDisabled('payableTerm')}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payableTerm}">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:payableTerm"/>
@@ -905,9 +1152,12 @@
                                                  value="#{msg.get('app.button.save')}"
                                                  process="@form"
                                                  update=":msgBoxSystemMessagePanel,:frmMain"
-                                                 action="#{bizInfoDetail.onSaveBizInfoView()}"/>
-                                <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                                 oncomplete="confirmChangeScreenSumDlg.show()"/>
+                                                 action="#{bizInfoDetail.onSaveBizInfoView()}"
+                                                 disabled="#{bizInfoDetail.isDisabled('saveButton')}"/>
+                                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                                 styleClass="small"
+                                                 oncomplete="confirmChangeScreenSumDlg.show()"
+                                                 disabled="#{bizInfoDetail.isDisabled('cancelButton')}"/>
                             </td>
                         </tr>
                         </table>
@@ -925,13 +1175,13 @@
     </h:form>
     </p:panel>
 
-    <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"  resizable="false"
-              modal="true" width="350" height="300">
+    <p:dialog id="stakeholderViewDialog" header="Stake Holder Information" widgetVar="stakeholderViewDlg" resizable="false"
+              modal="true" width="280" height="300" closeOnEscape="false" closable="false">
         <ui:include src="dialog/bizStakeholderDialog.xhtml"/>
     </p:dialog>
 
-    <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg" resizable="false"
-              modal="true" width="380" height="180">
+    <p:dialog id="bizProductViewDialog" header="Product Information" widgetVar="bizProductViewDlg" resizable="false"
+              modal="true" width="380" height="180" closeOnEscape="false" closable="false">
         <ui:include src="dialog/bizProductDialog.xhtml"/>
     </p:dialog>
 
@@ -972,10 +1222,12 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
+
     <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
         LOADING<br />
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+
     </h:body>
 </f:view>
 </html>
