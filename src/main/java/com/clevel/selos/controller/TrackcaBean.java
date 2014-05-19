@@ -239,7 +239,7 @@ public class TrackcaBean implements Serializable
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, rosterViewSelectItem.getAppNumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, Util.parseLong(rosterViewSelectItem.getStatusCode(), 0), rosterViewSelectItem.getAppNumber());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
             String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(rosterViewSelectItem.getStatusCode(), 0));

@@ -149,7 +149,7 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
         WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
 
         if(workCaseOwner != null){
-            return workCaseOwner.getUserid();
+            return workCaseOwner.getUser() != null ? workCaseOwner.getUser().getId() : "";
         }
         return "";
     }

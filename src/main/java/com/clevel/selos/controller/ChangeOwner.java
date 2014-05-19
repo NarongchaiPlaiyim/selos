@@ -742,7 +742,7 @@ public class ChangeOwner implements Serializable {
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, rosterViewSelectItem.getAppNumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, rosterViewSelectItem.getAppNumber());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
             String landingPage = inboxControl.getLandingPage(stepId,0);
