@@ -173,6 +173,8 @@ public class CreditFacPropose extends BaseController {
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewAll;
     private List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewByGroup;
 
+    private boolean creditFlag;
+
     @Inject
     private WorkCaseDAO workCaseDAO;
     @Inject
@@ -399,6 +401,8 @@ public class CreditFacPropose extends BaseController {
 
         prdGroupToPrdProgramViewAll = productControl.getPrdGroupToPrdProgramFromAllPrdProgram();
         prdGroupToPrdProgramViewByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
+
+        creditFlag = false;
     }
 
     public void onCallRetrieveAppraisalReportInfo() {
@@ -461,6 +465,15 @@ public class CreditFacPropose extends BaseController {
 
     public void onRetrievePricingFee() {
         log.debug("onRetrievePricingFee ::workCaseId :::  {}", workCaseId);
+
+        if(creditFlag){
+            messageHeader = msg.get("app.messageHeader.info");
+            message = "Please save Propose Line before Retrieve Pricing/Fee.";
+            severity = MessageDialogSeverity.INFO.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
         if (!Util.isNull(workCaseId)) {
             try {
                 List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
@@ -672,14 +685,6 @@ public class CreditFacPropose extends BaseController {
                 }
             }
         }
-
-//        if(newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0){
-//            for(NewCreditTierDetailView nctdv : newCreditDetailView.getNewCreditTierDetailViewList()){
-//                newCreditDetailView.getDeleteTmpList().add(nctdv.getId());
-//                newCreditDetailView.getNewCreditTierDetailViewList().remove(nctdv);
-//            }
-//        }
-
     }
 
     public void onCalInstallment(NewCreditDetailView newCreditDetailView) {
@@ -823,24 +828,13 @@ public class CreditFacPropose extends BaseController {
                 log.debug("onSaveCreditInfo ::: Undefined modeForButton !!");
             }
             complete = true;
+            creditFlag = true;
             seq++;
             log.debug("seq++ of credit after add complete proposeCredit :: {}", seq);
         } else {
             log.debug("onSaveCreditInfo ::: validation failed.");
             complete = false;
         }
-
-        //todo : remove & check on ui repeat only
-//        if (newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
-//            for (NewCreditDetailView newCreditView : newCreditFacilityView.getNewCreditDetailViewList()) {
-//                log.debug("newCreditDetail : {} ", newCreditView);
-//                if (newCreditView.getNewCreditTierDetailViewList() != null && newCreditView.getNewCreditTierDetailViewList().size() == 0) {
-//                    log.debug("set null");
-//                    newCreditView.setNewCreditTierDetailViewList(null);
-//                }
-//                log.debug("after tier : {}", newCreditView.getNewCreditTierDetailViewList());
-//            }
-//        }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
@@ -852,12 +846,13 @@ public class CreditFacPropose extends BaseController {
                 deleteCreditIdList.add(newCreditDetailSelected.getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
             } else {
-                messageHeader = msg.get("app.propose.exception");
+                messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.propose.error.delete.credit");
                 severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         }
+        creditFlag = true;
     }
 
     //   **************************************** END Propose Credit Information  **************************************** //
