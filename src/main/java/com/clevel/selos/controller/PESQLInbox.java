@@ -70,12 +70,70 @@ public class PESQLInbox implements Serializable
     private String message;
     private String messageHeader;
 
+    public String getInboxName() {
+        return inboxName;
+    }
+
+    public void setInboxName(String inboxName) {
+        this.inboxName = inboxName;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public List<PEInbox> getInboxViewList() {
+        return inboxViewList;
+    }
+
+    public void setInboxViewList(List<PEInbox> inboxViewList) {
+        this.inboxViewList = inboxViewList;
+    }
+
+    public PEInbox getInboxViewSelectItem() {
+        return inboxViewSelectItem;
+    }
+
+    public void setInboxViewSelectItem(PEInbox inboxViewSelectItem) {
+        this.inboxViewSelectItem = inboxViewSelectItem;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
     @PostConstruct
     public void onCreation()
     {
         log.info("Controller in onCreation method of PESQLInbox.java ");
 
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("#{peInbox}");
 
         log.info("onCreation userDetail PESQLInbox.java : {}", userDetail);
 
@@ -271,59 +329,4 @@ public class PESQLInbox implements Serializable
 
     }
 
-    public String getInboxName() {
-        return inboxName;
-    }
-
-    public void setInboxName(String inboxName) {
-        this.inboxName = inboxName;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-
-    public String getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
-
-    public List<PEInbox> getInboxViewList() {
-        return inboxViewList;
-    }
-
-    public void setInboxViewList(List<PEInbox> inboxViewList) {
-        this.inboxViewList = inboxViewList;
-    }
-
-    public PEInbox getInboxViewSelectItem() {
-        return inboxViewSelectItem;
-    }
-
-    public void setInboxViewSelectItem(PEInbox inboxViewSelectItem) {
-        this.inboxViewSelectItem = inboxViewSelectItem;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getMessageHeader() {
-        return messageHeader;
-    }
-
-    public void setMessageHeader(String messageHeader) {
-        this.messageHeader = messageHeader;
-    }
 }

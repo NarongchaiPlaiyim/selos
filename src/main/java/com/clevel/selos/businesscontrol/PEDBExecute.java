@@ -84,34 +84,6 @@ public class PEDBExecute extends BusinessControl
     @Config(name = "interface.pe.sql.searchrosterquery")
     String searchrosterquery;
 
-    /*@Inject
-    @Config(name = "interface.pe.sql.CACancelled")
-    String CACancelledStatusid;
-
-    @Inject
-    @Config(name = "interface.pe.sql.CARejectedbyUW1")
-    String CARejectedbyUW1Statusid;
-
-    @Inject
-    @Config(name = "interface.pe.sql.CAApprovedbyUW1")
-    String CAApprovedbyUW1Statusid;
-
-    @Inject
-    @Config(name = "interface.pe.sql.CARejected")
-    String CARejectedStatusid;
-
-    @Inject
-    @Config(name = "interface.pe.sql.CAApproved")
-    String CAApprovedStatusid;
-
-    @Inject
-    @Config(name = "interface.pe.sql.CAApprovedbyUW2")
-    String CAApprovedbyUW2Statusid;
-
-    @Inject
-    @Config(name = "interface.pe.sql.CARejectedbyUW2")
-    String CARejectedbyUW2Statusid;
-*/
     @Inject
     private UserDAO userDAO;
     @Inject
@@ -641,6 +613,15 @@ public class PEDBExecute extends BusinessControl
 
                 }
 
+                if(rs.getString("CurrentUser") != null)
+                {
+                    peRoster.setAtUser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+
+                    peRoster.setCurrentUser(peRoster.getAtUser());
+                }
+
+                peRoster.setStatusCode(rs.getString("StatusCode"));
+
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
@@ -661,11 +642,6 @@ public class PEDBExecute extends BusinessControl
                 }
 
                 peRoster.setStatus(rs.getString("Status"));
-
-                if(rs.getString("CurrentUser") != null)
-                {
-                    peRoster.setCurrentUser(userDAO.getUserNameById(rs.getString("CurrentUser")));
-                }
 
                 peRoster.setSlastatus(rs.getString("SLAStatus"));
 
@@ -1939,82 +1915,6 @@ public class PEDBExecute extends BusinessControl
 
     }
 
-
-/*    public List<PEInbox> getInboxResults(String selectedTeamId,String userName)
-    {
-        List<PEInbox> inboxViewList = new ArrayList<PEInbox>();
-
-        log.info("selectedTeamId---------- ",selectedTeamId);
-        log.info("userName---------- ",userName);
-        log.info("inboxQueryDB---------- ",inboxQueryDB);
-
-        String  inboxQuery = "select " + peInboxQuery + " from ";
-        String inboxQuery1 = inboxQuery + inboxQueryDB +" where"+ " CurrentUser = '" +userName+ "' and TeamName = '"+selectedTeamId+"'";
-
-        sqlpequery = inboxQuery1;
-
-        log.info("sql query for reassign search ::::::::::::::::::::::::::: {}", sqlpequery);
-
-        //   List<PEInbox> resultQueryList = new ArrayList<PEInbox>();
-
-        try
-        {
-            log.info("controller entered in to getResultSetExecution method of pedbexcecute class");
-            log.info("connection url from properties file :{}",connPE);
-
-            conn = dbContext.getConnection(connPE, peUser, pePassword);
-
-            log.info("connection is : {}", conn.toString());
-
-            PreparedStatement statement = conn.prepareStatement(sqlpequery);
-
-            log.info("statement is : {}",statement);
-
-            rs = statement.executeQuery();
-
-            log.info("resultset is : {}", rs);
-
-            while (rs.next())
-            {
-                PEInbox peInbox = new PEInbox();
-
-                peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
-                peInbox.setAtuserteam(rs.getString("TeamName"));
-                peInbox.setApplicationno(rs.getString("AppNumber"));
-                peInbox.setName(rs.getString("BorrowerName"));
-                peInbox.setProductgroup(rs.getString("ProductGroup"));
-                peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
-                peInbox.setStep(rs.getString("Step_Code"));
-                peInbox.setStatus(rs.getString("Status"));
-                if(rs.getString("CurrentUser") != null)
-                {
-                    peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
-                }
-                peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
-                peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
-                peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
-                peInbox.setFwobnumber(rs.getString("F_WobNum"));
-
-                inboxViewList.add(peInbox);
-
-                log.info("resultQueryList for search pedbexecute class is : {}",inboxViewList);
-
-                peInbox = null;
-
-            }
-            rs.close();
-            conn.close();
-            conn = null;
-
-        }
-        catch(Exception e)
-        {
-           log.error("Error :",e);
-        }
-
-        return inboxViewList;
-    }*/
-
     public List<PEInbox> getReassignSearch(String teamname,String username)
     {
         log.info("controller comes to getReassignSearch method of PEDBExecute.java {}",teamname);
@@ -2025,6 +1925,12 @@ public class PEDBExecute extends BusinessControl
         inboxViewList = new ArrayList<PEInbox>();
 
         String  peSqlQuery[] = new String[2];
+
+        String[] inboxNames = new String[2];
+
+        inboxNames[0] = inboxQueryDB;
+
+        inboxNames[1] = bdmsearchtablename;
 
         String sqlquery1 = "select "+peInboxQuery+" from "+inboxQueryDB;
 
@@ -2063,17 +1969,39 @@ public class PEDBExecute extends BusinessControl
 
                     log.info("resultset is ::::::::::::(1) {}", rs.getRow());
 
+                    String inboxName = inboxNames[i];
+
+                    if(inboxName.contains("_Inbox"))
+                    {
+                        inboxName = "Inbox(0)";
+                    }
+
+                    else
+                    {
+                        inboxName = inboxName.substring(inboxName.indexOf("_")+1,inboxName.length());
+                    }
+
                     while (rs.next())
                     {
                         PEInbox peInbox = new PEInbox();
 
-                        peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
+                        if(rs.getObject("ReceivedDate1")!=null)
+                        {
+                            peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
+                        }
+
+                        peInbox.setFetchType(BPMConstants.FETCH_TYPE_QUEUE);
+
                         peInbox.setAtuserteam(rs.getString("TeamName"));
                         peInbox.setApplicationno(rs.getString("AppNumber"));
                         peInbox.setName(rs.getString("BorrowerName"));
                         peInbox.setProductgroup(rs.getString("ProductGroup"));
                         peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
-                        peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
+                        if(rs.getString("Step_Code")!=null)
+                        {
+                            peInbox.setStepId(Long.parseLong(rs.getString("Step_Code")));
+                        }
+
                         peInbox.setStatus(rs.getString("Status"));
                         if(rs.getString("PreviousUser") != null)
                         {
@@ -2084,17 +2012,26 @@ public class PEDBExecute extends BusinessControl
                         {
                             peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
                         }
-                        peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+
+                        if(rs.getObject("AppointmentDate1")!=null)
+                        {
+                            peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+                        }
+
                         peInbox.setDoalevel(rs.getString("DOALevel"));
                         peInbox.setAction(rs.getString("PreviousAction"));
                         peInbox.setSlastatus(rs.getString("SLAStatus"));
-                        peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
+                        if(rs.getObject("SLAEndTime1")!=null)
+                        {
+                            peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
+                        }
                         peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                         peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
                         peInbox.setStatuscode(rs.getString("StatusCode"));
                         peInbox.setFwobnumber(rs.getString("F_WobNum"));
                         peInbox.setLocked(rs.getInt("F_Locked"));
                         peInbox.setStep(rs.getString("F_StepName"));
+                        peInbox.setQueuename(inboxName);
                         inboxViewList.add(peInbox);
 
                         log.info("resultQueryList pedbexecute class is(1) : {}",inboxViewList.size());
@@ -2145,6 +2082,12 @@ public class PEDBExecute extends BusinessControl
             while (rs.next()) {
                 peRoster = new PERoster();
 
+                peRoster.setFetchType(BPMConstants.FETCH_TYPE_ROSTER);
+
+                String inboxName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
+
+                peRoster.setQueuename(inboxName);
+
                 peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
@@ -2153,10 +2096,12 @@ public class PEDBExecute extends BusinessControl
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
                 peRoster.setStepId(Integer.parseInt(rs.getString("Step_Code")));
                 peRoster.setStatus(rs.getString("Status"));
-
+                peRoster.setStatusCode(rs.getString("StatusCode"));
                 if(rs.getString("CurrentUser") != null)
                 {
                     peRoster.setCurrentUser(userDAO.getUserNameById(rs.getString("CurrentUser")));
+
+                    peRoster.setAtUser(peRoster.getCurrentUser());
                 }
 
                 peRoster.setSlastatus(rs.getString("SLAStatus"));

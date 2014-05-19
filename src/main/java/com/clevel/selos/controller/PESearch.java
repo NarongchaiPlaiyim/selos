@@ -379,7 +379,7 @@ public class PESearch implements Serializable
                 {
                     usersList.add(userDetail.getUserName());
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCasePrescreen.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(workCasePrescreen.getId());
 
                     log.info("Users List work case : "+usersList.toString());
 
@@ -451,7 +451,7 @@ public class PESearch implements Serializable
                         usersList.add(userDetail.getUserName());
                     }
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(new Long(workCasePrescreen.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(workCasePrescreen.getId());
 
                     log.info("Users List : "+usersList.toString());
 
@@ -479,7 +479,7 @@ public class PESearch implements Serializable
                 else
                 {
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(new Long(workCasePrescreen.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCasePrescreenId(workCasePrescreen.getId());
 
                     if(workCaseOwnerUsersList.contains(userDetail.getUserName())){}
 
@@ -514,7 +514,7 @@ public class PESearch implements Serializable
 
                     usersList.add(userDetail.getUserName());
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(workCase.getId());
 
                     log.info("Users List work case : "+usersList.toString());
 
@@ -583,7 +583,7 @@ public class PESearch implements Serializable
                         usersList.add(userDetail.getUserName());
                     }
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(workCase.getId());
 
                     log.info("Users List work case : "+usersList.toString());
 
@@ -611,7 +611,7 @@ public class PESearch implements Serializable
                 else
                 {
 
-                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(new Long(workCase.getId()).intValue());
+                    List workCaseOwnerUsersList = workCaseOwnerDAO.getWorkCaseByWorkCaseId(workCase.getId());
 
                     if(workCaseOwnerUsersList.contains(userDetail.getUserName())){}
 

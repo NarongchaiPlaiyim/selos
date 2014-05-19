@@ -8,7 +8,7 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.db.master.WorkCaseOwner;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.slf4j.Logger;
 
@@ -43,6 +43,9 @@ public class ChangeOwnerControl extends BusinessControl {
     UserDAO userDAO;
 
     @Inject
+    RoleDAO roleDAO;
+
+    @Inject
     public ChangeOwnerControl(){
 
     }
@@ -72,7 +75,7 @@ public class ChangeOwnerControl extends BusinessControl {
                 if(workCase !=  null)
                 {
 
-                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCaseId(Integer.parseInt(Long.toString(workCase.getId())), currentUser, currentRoleId);
+                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCaseId(workCase.getId(), currentUser, currentRoleId);
 
                     log.info("WorkCase List obtained : {}, WobNumber : {}",workCaseOwnerList.size(), wobNumbers[i]);
 
@@ -83,9 +86,9 @@ public class ChangeOwnerControl extends BusinessControl {
 
                         WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                        workCaseOwner.setUserid(changeUser);
+                        workCaseOwner.setUser(userDAO.findById(changeUser));
 
-                        workCaseOwner.setRoleid(newRoleId);
+                        workCaseOwner.setRole(roleDAO.findById(newRoleId));
 
                         workCaseOwnerDAO.persist(workCaseOwner);
 
@@ -98,7 +101,7 @@ public class ChangeOwnerControl extends BusinessControl {
                 if(workCasePrescreen!=null)
                 {
 
-                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(Integer.parseInt(Long.toString(workCasePrescreen.getId())), currentUser, currentRoleId);
+                    List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(workCasePrescreen.getId(), currentUser, currentRoleId);
 
                     log.info("WorkCasePreScreen List obtained : {}, WobNumber : {}",workCaseOwnerList.size(), wobNumbers[i]);
 
@@ -109,11 +112,11 @@ public class ChangeOwnerControl extends BusinessControl {
 
                         WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                        log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreenId());
+                        log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreen().getId());
 
-                        workCaseOwner.setUserid(changeUser);
+                        workCaseOwner.setUser(userDAO.findById(changeUser));
 
-                        workCaseOwner.setRoleid(newRoleId);
+                        workCaseOwner.setRole(roleDAO.findById(newRoleId));
 
                         log.info("Work Case updated , New User : {}, Role:{}",changeUser, newRoleId);
                         log.info("WorkCaseOwner : {}",workCaseOwner);
@@ -132,7 +135,7 @@ public class ChangeOwnerControl extends BusinessControl {
 
                     if(workCasePrescreen !=null)
                     {
-                        List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(Integer.parseInt(Long.toString(workCasePrescreen.getId())), currentUser, currentRoleId);
+                        List<WorkCaseOwner> workCaseOwnerList = workCaseOwnerDAO.findByWorkCasePreScreenId(workCasePrescreen.getId(), currentUser, currentRoleId);
 
                         log.info("WorkCasePreScreen List obtained : {}, WobNumber : {}",workCaseOwnerList.size(), wobNumbers[i]);
 
@@ -143,11 +146,11 @@ public class ChangeOwnerControl extends BusinessControl {
 
                             WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                            log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreenId());
+                            log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreen().getId());
 
-                            workCaseOwner.setUserid(changeUser);
+                            workCaseOwner.setUser(userDAO.findById(changeUser));
 
-                            workCaseOwner.setRoleid(newRoleId);
+                            workCaseOwner.setRole(roleDAO.findById(newRoleId));
 
                             workCaseOwnerDAO.persist(workCaseOwner);
 
