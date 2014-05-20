@@ -101,6 +101,16 @@ public class ReassignTeamNames implements Serializable
 
     Map.Entry entry;
 
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Inject
     PEDBExecute pedbExecute;
     @Inject
@@ -568,15 +578,18 @@ public class ReassignTeamNames implements Serializable
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
 
-        long stepId = searchViewSelectItem.getStepId();
-        String appNumber = searchViewSelectItem.getApplicationno();
+        long stepId = Util.parseLong(searchViewSelectItem.getStepId(), 0);
+        long statusId = Util.parseLong(searchViewSelectItem.getStatuscode(), 0);
         long wrkCasePreScreenId = 0L;
         long wrkCaseId = 0L;
         long wrkCaseAppraisalId = 0L;
-        long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
-        String queueName = searchViewSelectItem.getQueuename();
+        int fetchType = Util.parseInt(searchViewSelectItem.getFetchType(), 0);
+        String appNumber = Util.parseString(searchViewSelectItem.getApplicationno(), "");
+        String queueName = Util.parseString(searchViewSelectItem.getQueuename(), "0");
+        String wobNumber = Util.parseString(searchViewSelectItem.getFwobnumber(), "");
+        String caseOwner = Util.parseString(searchViewSelectItem.getAtuser(), "");
 
         try {
 
@@ -593,7 +606,55 @@ public class ReassignTeamNames implements Serializable
                 //log.error("Error while opening case",e);
             }
 
-            if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            if(stepId != 0){
+                Step step = stepDAO.findById(stepId);
+                stageId = step != null ? step.getStage().getId() : 0;
+            }
+
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            if(!Util.isNull(workCase)){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
+
+            if(Util.isTrue(requestAppraisalFlag)){
+                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+            }
+
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+            session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("wobNumber", wobNumber);
+            session.setAttribute("statusId", statusId);
+            session.setAttribute("fetchType", fetchType);
+            session.setAttribute("stepId", stepId);
+            session.setAttribute("stageId", stageId);
+            session.setAttribute("caseOwner", caseOwner);
+            session.setAttribute("queueName", queueName);
+
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, searchViewSelectItem.getApplicationno());
+            session.setAttribute("appHeaderInfo", appHeaderView);
+
+            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
+
+            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
+
+            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
+                FacesUtil.redirect(landingPage);
+                return;
+            } else {
+                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
+                message = "Can not find landing page for step [" + stepId + "]";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg3.show()");
+            }
+
+            /*if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 if(workCasePrescreen != null){
                     wrkCasePreScreenId = workCasePrescreen.getId();
@@ -671,7 +732,7 @@ public class ReassignTeamNames implements Serializable
                 return;
             } else {
                 //TODO Show dialog
-            }
+            }*/
 
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
