@@ -17,45 +17,43 @@ public class DBRTransform extends Transform {
     DBRDAO dbrdao;
 
 
-    public DBRView getDBRView(DBR dbr) {
+    public DBRView transformToView(DBR dbr) {
         DBRView dbrView = new DBRView();
-        if (dbr == null) {
-            return dbrView;
+
+        if(dbr != null && dbr.getId() != 0){
+            dbrView.setId(dbr.getId());
+            dbrView.setDbrInterest(dbr.getDbrInterest());
+            dbrView.setCurrentDBR(dbr.getCurrentDBR());
+            dbrView.setDbrBeforeRequest(dbr.getDbrBeforeRequest());
+            dbrView.setIncomeFactor(dbr.getIncomeFactor());
+            dbrView.setMonthlyIncome(dbr.getMonthlyIncome());
+            dbrView.setMonthlyIncomePerMonth(dbr.getMonthlyIncomePerMonth());
+            dbrView.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
+            dbrView.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
+            dbrView.setTotalMonthDebtBorrowerFinal(dbr.getTotalMonthDebtBorrowerFinal());
+            dbrView.setTotalMonthDebtBorrowerStart(dbr.getTotalMonthDebtBorrowerStart());
+            dbrView.setTotalMonthDebtRelatedWc(dbr.getTotalMonthDebtRelatedWc());
+            dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
+            dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
+            dbrView.setModifyDate(dbr.getModifyDate());
         }
-        dbrView.setId(dbr.getId());
-        dbrView.setDbrInterest(dbr.getDbrInterest());
-        dbrView.setCurrentDBR(dbr.getCurrentDBR());
-        dbrView.setDbrBeforeRequest(dbr.getDbrBeforeRequest());
-        dbrView.setIncomeFactor(dbr.getIncomeFactor());
-        dbrView.setMonthlyIncome(dbr.getMonthlyIncome());
-        dbrView.setMonthlyIncomePerMonth(dbr.getMonthlyIncomePerMonth());
-        dbrView.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
-        dbrView.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
-        dbrView.setTotalMonthDebtBorrowerFinal(dbr.getTotalMonthDebtBorrowerFinal());
-        dbrView.setTotalMonthDebtBorrowerStart(dbr.getTotalMonthDebtBorrowerStart());
-        dbrView.setTotalMonthDebtRelatedWc(dbr.getTotalMonthDebtRelatedWc());
-        dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
-        dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
-        dbrView.setModifyDate(dbr.getModifyDate());
+
         return dbrView;
     }
 
-    public DBR getDBRInfoModel(DBRView dbrView, WorkCase workCase, User user) {
+    public DBR transformToModel(DBRView dbrView, WorkCase workCase, User user) {
         DBR dbr = new DBR();
-        if (dbrView == null) {
-            return dbr;
-        }
-        Date now = new Date();
-        if (dbrView.getId() == 0) {
-            dbr.setCreateBy(user);
-            dbr.setCreateDate(now);
-        } else {
+
+        if(dbrView.getId() != 0){
             dbr = dbrdao.findById(dbrView.getId());
-            if (dbr == null) {
-                dbr.setCreateBy(user);
-                dbr.setCreateDate(now);
-            }
+        } else {
+            dbr.setCreateDate(new Date());
+            dbr.setCreateBy(user);
         }
+
+        dbr.setModifyBy(user);
+        dbr.setModifyDate(new Date());
+        dbr.setWorkCase(workCase);
         dbr.setMonthlyIncomeAdjust(dbrView.getMonthlyIncomeAdjust());
         dbr.setMonthlyIncome(dbrView.getMonthlyIncome());
         dbr.setCurrentDBR(dbrView.getCurrentDBR());
@@ -63,10 +61,6 @@ public class DBRTransform extends Transform {
         dbr.setMonthlyIncomePerMonth(dbrView.getMonthlyIncomePerMonth());
         dbr.setDbrInterest(dbrView.getDbrInterest());
         dbr.setNetMonthlyIncome(dbrView.getNetMonthlyIncome());
-        dbr.setWorkCase(dbr.getWorkCase());
-        dbr.setModifyBy(user);
-        dbr.setModifyDate(now);
-        dbr.setWorkCase(workCase);
         dbr.setIncomeFactor(dbrView.getIncomeFactor());
         dbr.setTotalMonthDebtBorrowerStart(dbrView.getTotalMonthDebtBorrowerStart());
         dbr.setTotalMonthDebtBorrowerFinal(dbrView.getTotalMonthDebtBorrowerFinal());

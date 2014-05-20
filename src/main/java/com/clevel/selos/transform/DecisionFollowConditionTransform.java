@@ -48,12 +48,10 @@ public class DecisionFollowConditionTransform extends Transform {
 
     public List<DecisionFollowCondition> transformToModel(List<DecisionFollowConditionView> decisionFollowConditionViewList, WorkCase workCase) {
         List<DecisionFollowCondition> decisionFollowConditionList = new ArrayList<DecisionFollowCondition>();
-        if (decisionFollowConditionViewList == null) {
-            return decisionFollowConditionList;
-        }
-
-        for (DecisionFollowConditionView decisionFollowConditionView : decisionFollowConditionViewList) {
-            decisionFollowConditionList.add(transformToModel(decisionFollowConditionView, workCase));
+        if(decisionFollowConditionViewList != null && decisionFollowConditionViewList.size() > 0){
+            for (DecisionFollowConditionView decisionFollowConditionView : decisionFollowConditionViewList) {
+                decisionFollowConditionList.add(transformToModel(decisionFollowConditionView, workCase));
+            }
         }
         return decisionFollowConditionList;
     }
