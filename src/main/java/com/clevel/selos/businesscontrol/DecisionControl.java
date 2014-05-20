@@ -98,7 +98,7 @@ public class DecisionControl extends BusinessControl {
     public DecisionControl() {
     }
 
-    public void saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
+    public DecisionView saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
         log.debug("saveApproveAndConditionData() workCase: {}", workCase);
         if (workCase != null) {
             User currentUser = getCurrentUser();
@@ -107,6 +107,9 @@ public class DecisionControl extends BusinessControl {
             if (decisionView.getDecisionFollowConditionViewList() != null && decisionView.getDecisionFollowConditionViewList().size() > 0) {
                 List<DecisionFollowCondition> decFollowConList = decisionFollowConditionTransform.transformToModel(decisionView.getDecisionFollowConditionViewList(), workCase);
                 decisionFollowConditionDAO.persist(decFollowConList);
+                if(decFollowConList != null && decFollowConList.size() > 0){
+                    decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
+                }
             }
 
             NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
@@ -116,6 +119,9 @@ public class DecisionControl extends BusinessControl {
             if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
                 List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, currentUser, workCase, ProposeType.A);
                 newCreditDetailDAO.persist(newCreditDetailList);
+                if(newCreditDetailList != null && newCreditDetailList.size() > 0){
+                    decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(newCreditDetailList));
+                }
             }
 
             // Approve Guarantor Detail
@@ -127,6 +133,9 @@ public class DecisionControl extends BusinessControl {
                 }
                 List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, currentUser, ProposeType.A);
                 newGuarantorDetailDAO.persist(newGuarantorDetailList);
+                if(newGuarantorDetailList != null && newGuarantorDetailList.size() > 0){
+                    decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
+                }
             }
 
             // Approve Collateral
@@ -139,6 +148,7 @@ public class DecisionControl extends BusinessControl {
                             newCollateralRelationDAO.delete(newCollateral.getNewCollateralCreditList());
                             newCollateral.setNewCollateralCreditList(Collections.<NewCollateralCredit>emptyList());
                         }
+
                         List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
                         for (NewCollateralHead newCollateralHead : newCollateralHeadList) {
                             List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
@@ -154,8 +164,12 @@ public class DecisionControl extends BusinessControl {
                 }
                 List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, currentUser, workCase, ProposeType.A);
                 newCollateralDAO.persist(newCollateralList);
+                if(newCollateralList != null && newCollateralList.size() > 0){
+                    decisionView.setApproveCollateralList(newCollateralTransform.transformToView(newCollateralList));
+                }
             }
         }
+        return decisionView;
     }
 
     public void saveRelatedSubColl(WorkCase workCase, List<NewCollateralView> approveCollateralList) {

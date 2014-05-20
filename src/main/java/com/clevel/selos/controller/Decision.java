@@ -1433,7 +1433,7 @@ public class Decision extends BaseController {
                 // Delete List
                 //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                decisionControl.saveApproveAndConditionData(decisionView, workCase);
+                decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve
                 decisionControl.calculateTotalApprove(decisionView);
                 // Save Total Approve to Decision
