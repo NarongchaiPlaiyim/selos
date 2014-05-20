@@ -97,10 +97,11 @@ public class DecisionControl extends BusinessControl {
 
     @Inject
     public DecisionControl() {
+
     }
 
     public DecisionView saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
-        log.debug("saveApproveAndConditionData() workCase: {}", workCase);
+        log.debug("saveApproveAndConditionData ::: decisionView :: {}, workCase: {}", decisionView, workCase != null ? workCase.getId() : "0");
 
         Cloner cloner = new Cloner();
         DecisionView decisionViewReturn = cloner.deepClone(decisionView);
@@ -112,9 +113,8 @@ public class DecisionControl extends BusinessControl {
             if (decisionView.getDecisionFollowConditionViewList() != null && decisionView.getDecisionFollowConditionViewList().size() > 0) {
                 List<DecisionFollowCondition> decFollowConList = decisionFollowConditionTransform.transformToModel(decisionView.getDecisionFollowConditionViewList(), workCase);
                 decisionFollowConditionDAO.persist(decFollowConList);
-                if(decFollowConList != null && decFollowConList.size() > 0){
-                    decisionViewReturn.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
-                }
+                log.debug("decFollowConList :: {}",decFollowConList);
+                decisionViewReturn.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
             }
 
             NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
@@ -124,9 +124,8 @@ public class DecisionControl extends BusinessControl {
             if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
                 List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, currentUser, workCase, ProposeType.A);
                 newCreditDetailDAO.persist(newCreditDetailList);
-                if(newCreditDetailList != null && newCreditDetailList.size() > 0){
-                    decisionViewReturn.setApproveCreditList(newCreditDetailTransform.transformToView(newCreditDetailList));
-                }
+                log.debug("decFollowConList :: {}",newCreditDetailList);
+                decisionViewReturn.setApproveCreditList(newCreditDetailTransform.transformToViewList(newCreditDetailList));
             }
 
             // Approve Guarantor Detail
@@ -138,9 +137,8 @@ public class DecisionControl extends BusinessControl {
                 }
                 List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, currentUser, ProposeType.A);
                 newGuarantorDetailDAO.persist(newGuarantorDetailList);
-                if(newGuarantorDetailList != null && newGuarantorDetailList.size() > 0){
-                    decisionViewReturn.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
-                }
+                log.debug("decFollowConList :: {}",newGuarantorDetailList);
+                decisionViewReturn.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
             }
 
             // Approve Collateral
@@ -169,12 +167,12 @@ public class DecisionControl extends BusinessControl {
                 }
                 List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, currentUser, workCase, ProposeType.A);
                 newCollateralDAO.persist(newCollateralList);
-                if(newCollateralList != null && newCollateralList.size() > 0){
-                    decisionViewReturn.setApproveCollateralList(newCollateralTransform.transformToView(newCollateralList));
-                }
+                log.debug("decFollowConList :: {}",newCollateralList);
+                decisionViewReturn.setApproveCollateralList(newCollateralTransform.transformToView(newCollateralList));
             }
         }
-        return decisionView;
+        log.debug("decisionViewReturn :: {}", decisionViewReturn);
+        return decisionViewReturn;
     }
 
     public void saveRelatedSubColl(WorkCase workCase, List<NewCollateralView> approveCollateralList) {
@@ -343,7 +341,7 @@ public class DecisionControl extends BusinessControl {
 
                 // Approve data already been recorded
                 List<NewCreditDetail> approveCreditList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
-                decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(approveCreditList));
+                decisionView.setApproveCreditList(newCreditDetailTransform.transformToViewList(approveCreditList));
 
                 List<NewCollateral> approveCollateralList = newCollateralDAO.findNewCollateral(workCaseId, ProposeType.A);
                 decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(approveCollateralList));
@@ -375,7 +373,7 @@ public class DecisionControl extends BusinessControl {
             } else {
                 // Approve data is not recorded
                 // Duplicate from propose, set all id = 0 and all type is "Approve"
-                decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViews(approveCreditDetailViews, ProposeType.A, true));
+                decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViewList(approveCreditDetailViews, ProposeType.A, true));
                 decisionView.setApproveCollateralList(newCollateralTransform.copyToNewViews(approveCollViews, ProposeType.A, true));
                 decisionView.setApproveGuarantorList(newGuarantorDetailTransform.copyToNewViews(approveGuarantorViews, ProposeType.A, true));
 

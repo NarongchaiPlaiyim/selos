@@ -177,7 +177,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newCreditList.size() > 0) {
                     log.debug("newCreditFacility.getNewCreditDetailList() :: {}", newCreditFacility.getNewCreditDetailList().size());
-                    List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditList);
+                    List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToViewList(newCreditList);
                     log.debug("newCreditDetailViewList : {}", newCreditDetailViewList);
                     newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
                 }
