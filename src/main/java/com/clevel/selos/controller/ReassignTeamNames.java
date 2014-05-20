@@ -26,8 +26,6 @@ import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.bouncycastle.ocsp.Req;
-import org.hibernate.Criteria;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
