@@ -667,56 +667,64 @@ public class Customer implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("workCase", workCase != null ? workCase.getId() : "workCase null").
-                append("workCasePrescreen", workCasePrescreen != null ? workCasePrescreen.getId() : "workCasePrescreen null").
-                append("customerEntity", customerEntity != null ? customerEntity.getId() : "customerEntity null").
-//                append("documentType", documentType).
-//                append("documentAuthorizeBy", documentAuthorizeBy).
-//                append("serviceSegment", serviceSegment).
-//                append("collateralOwner", collateralOwner).
-//                append("percentShare", percentShare).
-//                append("approxIncome", approxIncome).
-//                append("tmbCustomerId", tmbCustomerId).
-//                append("documentExpiredDate", documentExpiredDate).
-                append("title", title != null ? title.getTitleTh() : "title null").
-//                append("nameEn", nameEn).
-                append("nameTh", nameTh).
-                append("lastNameTh", lastNameTh).
-//                append("lastNameEn", lastNameEn).
-//                append("age", age).
-//                append("ncbFlag", ncbFlag).
-//                append("csiFlag", csiFlag).
-                append("individual", individual).
-                append("juristic", juristic).
-//                append("addressesList", addressesList).
-//                append("businessType", businessType).
-//                append("relation", relation).
-//                append("reference", reference).
-//                append("ncb", ncb).
-//                append("customerCSIList", customerCSIList).
+                append("workCase", workCase != null ? workCase.getId() : "null").
+                append("workCasePrescreen", workCasePrescreen != null ? workCasePrescreen.getId() : "null").
+                append("customerEntity", customerEntity != null ? customerEntity.getId() : "null").
+                append("documentType", documentType != null ? documentType.getId() : "null").
+                append("documentAuthorizeBy", documentAuthorizeBy != null ? documentAuthorizeBy : "null").
+                append("collateralOwner", collateralOwner).
+                append("percentShare", percentShare != null ? percentShare : "null").
+                append("approxIncome", approxIncome != null ? approxIncome : "null").
+                append("tmbCustomerId", tmbCustomerId != null ? tmbCustomerId : "null").
+                append("documentExpiredDate", documentExpiredDate != null ? documentExpiredDate : "null").
+                append("title", title != null ? title.getId() : "null").
+                append("nameEn", nameEn != null ? nameEn : "null").
+                append("nameTh", nameTh != null ? nameTh : "null").
+                append("lastNameTh", lastNameTh != null ? lastNameTh : "null").
+                append("lastNameEn", lastNameEn != null ? lastNameEn : "null").
+                append("age", age).
+                append("ncbFlag", ncbFlag).
+                append("csiFlag", csiFlag).
+                append("individual", individual != null ? individual.getId() : "null").
+                append("juristic", juristic != null ? juristic.getId() : "null").
+                append("addressesList size", addressesList != null ? addressesList.size() : "null").
+                append("businessType", businessType != null ? businessType.getId() : "null").
+                append("businessSubType", businessSubType != null ? businessSubType.getId() : "null").
+                append("relation", relation != null ? relation.getId() : "null").
+                append("reference", reference != null ? reference.getId() : "null").
+                append("ncb", ncb != null ? ncb.getId() : "null").
+                append("customerCSIList size", customerCSIList != null ? customerCSIList.size() : "null").
                 append("isSpouse", isSpouse).
                 append("spouseId", spouseId).
-//                append("searchFromRM", searchFromRM).
-//                append("documentAuthorizeDate", documentAuthorizeDate).
-//                append("kycReason", kycReason).
-//                append("worthiness", worthiness).
-//                append("mobileNumber", mobileNumber).
-//                append("faxNumber", faxNumber).
-//                append("email", email).
-//                append("convenantFlag", convenantFlag).
-//                append("reviewFlag", reviewFlag).
-//                append("reason", reason).
-//                append("kycLevel", kycLevel).
-//                append("mailingAddressType", mailingAddressType).
+                append("searchFromRM", searchFromRM).
+                append("documentAuthorizeDate", documentAuthorizeDate != null ? documentAuthorizeDate : "null").
+                append("kycReason", kycReason != null ? kycReason : "null").
+                append("worthiness", worthiness).
+                append("mobileNumber", mobileNumber != null ? mobileNumber : "null").
+                append("faxNumber", faxNumber != null ? faxNumber : "null").
+                append("email", email != null ? email : "null").
+                append("covenantFlag", covenantFlag).
+                append("reviewFlag", reviewFlag).
+                append("reason", reason != null ? reason : "null").
+                append("kycLevel", kycLevel != null ? kycLevel.getId() : "null").
+                append("mailingAddressType", mailingAddressType != null ? mailingAddressType.getId() : "null").
                 append("searchBy", searchBy).
-                append("searchId", searchId).
-//                append("sourceIncome", sourceIncome).
-//                append("countryIncome", countryIncome).
+                append("searchId", searchId != null ? searchId : "null").
+                append("sourceIncome", sourceIncome != null ? sourceIncome.getId() : "null").
+                append("countryIncome", countryIncome != null ? countryIncome.getId() : "null").
                 append("isCommittee", isCommittee).
                 append("juristicId", juristicId).
+                append("customerOblInfo", customerOblInfo != null ? customerOblInfo.getId() : "null").
+                append("shares", shares != null ? shares : "null").
+                append("createDate", createDate != null ? createDate : "null").
+                append("modifyDate", modifyDate != null ? modifyDate : "null").
+                append("createBy", createBy != null ? createBy.getId() : "null").
+                append("modifyBy", modifyBy != null ? modifyBy.getId() : "null").
+                append("customerAccountList size", customerAccountList != null ? customerAccountList.size() : "null").
+                append("customerAccountNameList size", customerAccountNameList != null ? customerAccountNameList.size() : "null").
                 toString();
     }
-    
+
     public String getDisplayName() {
     	StringBuilder builder = new StringBuilder();
     	if (getTitle() != null)

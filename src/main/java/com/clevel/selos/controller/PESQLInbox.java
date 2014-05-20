@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
+import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
@@ -17,8 +18,10 @@ import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,12 +29,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "peInbox")
@@ -47,9 +52,6 @@ public class PESQLInbox implements Serializable
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    BPMInterfaceImpl bpmInterfaceImpl;
-
     @Inject
     StepDAO stepDAO;
 
@@ -68,6 +70,33 @@ public class PESQLInbox implements Serializable
     private String inboxName;
     private String message;
     private String messageHeader;
+
+    private Map<String, Boolean> checked =  new HashMap<String, Boolean>();
+
+    @Inject
+    @Config(name = "interface.pe.rosterName")
+    String peRosterName;
+
+    @Inject
+    BPMInterfaceImpl bpmInterfaceImpl;
+
+    private boolean disableAssign = true;
+
+    public boolean isDisableAssign() {
+        return disableAssign;
+    }
+
+    public void setDisableAssign(boolean disableAssign) {
+        this.disableAssign = disableAssign;
+    }
+
+    public Map<String, Boolean> getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Map<String, Boolean> checked) {
+        this.checked = checked;
+    }
 
     public String getInboxName() {
         return inboxName;
@@ -162,7 +191,7 @@ public class PESQLInbox implements Serializable
         } catch (Exception e) {
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
             message = "Error while unlocking case.";
-            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            //RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
         }
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -339,6 +368,141 @@ public class PESQLInbox implements Serializable
             log.error("Exception while select case from PoolBox : ", ex);
             message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+        }
+
+    }
+
+    public void checkAssign(AjaxBehaviorEvent ajaxBehaviorEvent)
+    {
+        UIComponent source = (UIComponent)ajaxBehaviorEvent.getSource();
+
+        log.info("UIComponent source : {}",source);
+
+        if(source!= null)
+        {
+            log.info("Value:" + ((SelectBooleanCheckbox) source).getValue());
+
+            String selectedCase= ((SelectBooleanCheckbox)source).getValue().toString();
+
+            log.info("Selected Case WobNum : {}",selectedCase);
+
+            int noOfCases = 0;
+
+            for ( Map.Entry<String, Boolean> entry : checked.entrySet())
+            {
+
+                if (entry.getValue()==true)
+                {
+                    String wobNo = entry.getKey().toString();
+
+                    log.info("WobNum : {}",wobNo);
+
+                    noOfCases++;
+
+                }
+            }
+
+            log.info("No. Of Cases Selected : {}", noOfCases);
+
+            if(selectedCase.equalsIgnoreCase("true") || noOfCases > 0)
+            {
+
+                disableAssign = false;
+
+                log.info("Reassign Button enabled : {}",disableAssign);
+            }
+
+            else
+            {
+                disableAssign =true;
+
+                log.info("Reassign Button disabled : {}",disableAssign);
+            }
+
+            if(noOfCases >5 )
+            {
+                disableAssign =true;
+
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg5.show()");
+
+                log.info("Reassign Button disabled : {}",disableAssign);
+            }
+
+        }
+
+        else
+        {
+            disableAssign = true;
+
+            log.info("Reassign Button disabled : {}",disableAssign);
+        }
+    }
+
+    public void onAssignBulk()
+    {
+
+        HashMap<String,String> fieldsMap = new HashMap<String, String>();
+        List<String>wobNumbersList = new ArrayList<String>();
+        Object[] arryOfObjectWobNOs = null;
+        String[] stringArrayOfWobNos = null;
+
+        try {
+
+            fieldsMap.put(BPMConstants.BPM_FIELD_ACTION_NAME, "Select Case");
+
+            for ( Map.Entry<String, Boolean> entry : checked.entrySet()) {
+
+                if (entry.getValue()==true)
+                {
+                    String wobNo =entry.getKey().toString();
+                    wobNumbersList.add(wobNo);
+
+                }
+
+            }
+
+            if(wobNumbersList!=null && wobNumbersList.size()>5)
+            {
+                log.info("in if for more than 5 cases");
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                log.info("after execute.. ");
+                return;
+            }
+            arryOfObjectWobNOs =wobNumbersList.toArray();
+            stringArrayOfWobNos = Arrays.copyOf(arryOfObjectWobNOs, arryOfObjectWobNOs.length, String[].class);
+            log.info("stringArray length : "+stringArrayOfWobNos.length);
+
+            if(peRosterName != null && stringArrayOfWobNos.length !=0 && fieldsMap.size() !=0)
+            {
+
+                bpmInterfaceImpl.batchDispatchCaseFromRoster(peRosterName,stringArrayOfWobNos,fieldsMap);
+
+                log.info("batchDispatch successful.... ");
+
+                onCreation();
+            }
+
+            checked.clear();
+
+            setChecked(checked);
+
+            RequestContext.getCurrentInstance().execute("successDlg.show()");
+
+            return;
+
+        }
+
+        catch (Exception e)
+        {
+
+            wobNumbersList = null;
+            arryOfObjectWobNOs = null;
+            stringArrayOfWobNos = null;
+            fieldsMap = null;
+            log.error("Error in assign bulk : {}",e);
+            message = e.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            return;
         }
 
     }

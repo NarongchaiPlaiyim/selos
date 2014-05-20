@@ -118,8 +118,6 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         Criteria criteria = createCriteria();
 
-        long id = Long.parseLong(String.valueOf(workCaseId));
-
         List<Long> restrictionsStepList = new ArrayList<Long>();
 
         restrictionsStepList.add(Long.parseLong(String.valueOf(StepValue.CREDIT_DECISION_UW1.value())));

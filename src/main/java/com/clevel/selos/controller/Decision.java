@@ -1269,6 +1269,7 @@ public class Decision extends BaseController {
         log.debug("onAddAppProposeGuarantor()");
         selectedApproveGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
+        guarantorCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
 
         modeEditGuarantor = false;
     }
@@ -1427,43 +1428,16 @@ public class Decision extends BaseController {
     // ---------- Decision - Action ---------- //
     public void onSaveDecision() {
         log.debug("onSaveDecision()");
-
         try {
-
             if (roleUW) {
                 // Delete List
                 //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
-
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                Map<String, Object> resultMapVal = decisionControl.saveApproveAndConditionData(decisionView, workCase);
-                if (resultMapVal != null) {
-                    if (resultMapVal.get("decFollowConList") != null) {
-                        List<DecisionFollowCondition> decFollowConList = (List<DecisionFollowCondition>) resultMapVal.get("decFollowConList");
-                        decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
-                    }
-
-                    if (resultMapVal.get("newCreditDetailList") != null) {
-                        List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) resultMapVal.get("newCreditDetailList");
-                        decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(newCreditDetailList));
-                    }
-
-                    if (resultMapVal.get("newGuarantorDetailList") != null) {
-                        List<NewGuarantorDetail> newGuarantorDetailList = (List<NewGuarantorDetail>) resultMapVal.get("newGuarantorDetailList");
-                        decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
-                    }
-
-                    if (resultMapVal.get("newCollateralList") != null) {
-                        List<NewCollateral> newCollateralList = (List<NewCollateral>) resultMapVal.get("newCollateralList");
-                        decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(newCollateralList));
-                    }
-                }
-
+                decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve
                 decisionControl.calculateTotalApprove(decisionView);
-
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
-
                 exSummaryControl.calForDecision(workCaseId);
                 fullApplicationControl.calculateApprovedPricingDOA(workCase.getId());
             }
@@ -1494,7 +1468,7 @@ public class Decision extends BaseController {
                 }
             }
 
-            //onCreation();
+            onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";

@@ -167,92 +167,95 @@ public class PESearch implements Serializable
     }
 
     public void onSelectInbox() {
-        log.debug("onSelectInbox ::: setSession ");
-        log.debug("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
-        HttpSession session = FacesUtil.getSession(false);
 
-        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.debug("userDetails  : {}", userDetail);
-        User user = userDAO.findByUserName(userDetail.getUserName());
+        try
+        {
 
-        long stepId = Util.parseLong(searchViewSelectItem.getStepId(), 0);
-        long statusId = Util.parseLong(searchViewSelectItem.getStatuscode(), 0);
-        long wrkCasePreScreenId = 0L;
-        long wrkCaseId = 0L;
-        long wrkCaseAppraisalId = 0L;
-        int stageId = 0;
-        int requestAppraisalFlag = 0;
-        int fetchType = Util.parseInt(searchViewSelectItem.getFetchType(), 0);
-        String appNumber = Util.parseString(searchViewSelectItem.getApplicationno(), "");
-        String queueName = Util.parseString(searchViewSelectItem.getQueuename(), "0");
-        String wobNumber = Util.parseString(searchViewSelectItem.getFwobnumber(), "");
-        String caseOwner = Util.parseString(searchViewSelectItem.getAtuser(), "");
-        String createBy = "";
 
-        boolean accessAuthorize = false;
+            log.debug("onSelectInbox ::: setSession ");
+            log.debug("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
+            HttpSession session = FacesUtil.getSession(false);
 
-        WorkCase workCase = workCaseDAO.findByAppNumber(searchViewSelectItem.getApplicationno());
-        if(workCase == null){
-            log.debug("onSelectSearch ::: select by workCase ...");
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(searchViewSelectItem.getApplicationno());
-            wrkCaseId = 0;
-            if(workCasePrescreen != null) {
-                log.debug("onSelectSearch ::: select by workCasePreScreen ...");
-                wrkCasePreScreenId = workCasePrescreen.getId();
-                createBy = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
+            userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            log.debug("userDetails  : {}", userDetail);
+            User user = userDAO.findByUserName(userDetail.getUserName());
+
+            long stepId = Util.parseLong(searchViewSelectItem.getStepId(), 0);
+            long statusId = Util.parseLong(searchViewSelectItem.getStatuscode(), 0);
+            long wrkCasePreScreenId = 0L;
+            long wrkCaseId = 0L;
+            long wrkCaseAppraisalId = 0L;
+            int stageId = 0;
+            int requestAppraisalFlag = 0;
+            int fetchType = Util.parseInt(searchViewSelectItem.getFetchType(), 0);
+            String appNumber = Util.parseString(searchViewSelectItem.getApplicationno(), "");
+            String queueName = Util.parseString(searchViewSelectItem.getQueuename(), "0");
+            String wobNumber = Util.parseString(searchViewSelectItem.getFwobnumber(), "");
+            String caseOwner = Util.parseString(searchViewSelectItem.getAtuser(), "");
+            String createBy = "";
+
+            boolean accessAuthorize = false;
+
+            WorkCase workCase = workCaseDAO.findByAppNumber(searchViewSelectItem.getApplicationno());
+            if(workCase == null){
+                log.debug("onSelectSearch ::: select by workCase ...");
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(searchViewSelectItem.getApplicationno());
+                wrkCaseId = 0;
+                if(workCasePrescreen != null) {
+                    log.debug("onSelectSearch ::: select by workCasePreScreen ...");
+                    wrkCasePreScreenId = workCasePrescreen.getId();
+                    createBy = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
+                }
+            }else{
+                wrkCaseId = workCase.getId();
+                wrkCasePreScreenId = 0;
+                createBy = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
             }
-        }else{
-            wrkCaseId = workCase.getId();
-            wrkCasePreScreenId = 0;
-            createBy = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
-        }
 
-        log.debug("onSelectSearch ::: wrkCaseId : {}, wrkCasePreScreenId : {}, createBy : {}", wrkCaseId, wrkCasePreScreenId, createBy);
+            log.debug("onSelectSearch ::: wrkCaseId : {}, wrkCasePreScreenId : {}, createBy : {}", wrkCaseId, wrkCasePreScreenId, createBy);
 
-        if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id())) {
-            accessAuthorize = true;
-            log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
-            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
-        }
-
-        if(!accessAuthorize && (!Util.isNull(user.getTeam()) &&
-                (user.getTeam().getTeam_type() == TeamTypeValue.GROUP_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.CSSO.value()))) {
-            accessAuthorize = true;
-            log.debug("onSelectSearch ::: after check by TEAM_GROUP_HEAD, TEAM_CSSO ,, user team = : {}", user.getTeam() != null ? user.getTeam().getTeam_type() : "NULL");
-            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
-        }
-
-        if(!accessAuthorize && createBy.equalsIgnoreCase(user.getId())) {
-            accessAuthorize = true;
-            log.debug("onSelectSearch ::: after check by USER_ID ,, user id = : {}", user.getId());
-            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
-        }
-
-        if(!accessAuthorize && checkAuthorizeWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, user.getId())) {
-            accessAuthorize = true;
-            log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
-            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
-        }
-
-        if(!accessAuthorize && !Util.isNull(user.getTeam()) &&
-                (user.getTeam().getTeam_type() == TeamTypeValue.TEAM_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.TEAM_LEAD.value())) {
-            if (checkAuthorizeTeam(wrkCasePreScreenId, wrkCaseId, user))
+            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id())) {
                 accessAuthorize = true;
-            log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
-            log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
-        }
+                log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
 
-        if(!accessAuthorize){
-            log.debug("You are not authorised to view this case. else after 3 2 ");
-            message = "You are not Authorised to view this case!";
-            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
-            return;
-        }
+            if(!accessAuthorize && (!Util.isNull(user.getTeam()) &&
+                    (user.getTeam().getTeam_type() == TeamTypeValue.GROUP_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.CSSO.value()))) {
+                accessAuthorize = true;
+                log.debug("onSelectSearch ::: after check by TEAM_GROUP_HEAD, TEAM_CSSO ,, user team = : {}", user.getTeam() != null ? user.getTeam().getTeam_type() : "NULL");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
 
-        log.info("onSelectInbox ::: setSession ");
-        log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
+            if(!accessAuthorize && createBy.equalsIgnoreCase(user.getId())) {
+                accessAuthorize = true;
+                log.debug("onSelectSearch ::: after check by USER_ID ,, user id = : {}", user.getId());
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
 
-        try {
+            if(!accessAuthorize && checkAuthorizeWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, user.getId())) {
+                accessAuthorize = true;
+                log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
+
+            if(!accessAuthorize && !Util.isNull(user.getTeam()) &&
+                    (user.getTeam().getTeam_type() == TeamTypeValue.TEAM_HEAD.value() || user.getTeam().getTeam_type() == TeamTypeValue.TEAM_LEAD.value())) {
+                if (checkAuthorizeTeam(wrkCasePreScreenId, wrkCaseId, user))
+                    accessAuthorize = true;
+                log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
+
+            if(!accessAuthorize){
+                log.debug("You are not authorised to view this case. else after 3 2 ");
+                message = "You are not Authorised to view this case!";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+                return;
+            }
+
+            log.info("onSelectInbox ::: setSession ");
+            log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
 
             try{
                 //Try to Lock case

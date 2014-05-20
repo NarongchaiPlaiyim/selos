@@ -65,6 +65,7 @@ public class NewGuarantorDetailTransform extends Transform {
             }
             newGuarantorDetail.setProposeType(proposeType);
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
+            log.debug("########### NewGuarantorDetailTransform ########### transformToModel :::: guarantor :::: {}",guarantor);
             newGuarantorDetail.setGuarantorName(guarantor);
             newGuarantorDetail.setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
