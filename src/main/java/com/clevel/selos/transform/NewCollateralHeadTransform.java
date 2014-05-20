@@ -165,9 +165,9 @@ public class NewCollateralHeadTransform extends Transform {
             newCollateralHeadView.setAppraisalValue(originalNewCollateralHeadView.getAppraisalValue());
             newCollateralHeadView.setHeadCollType(originalNewCollateralHeadView.getHeadCollType());
             newCollateralHeadView.setSubCollType(originalNewCollateralHeadView.getSubCollType());
-//            newCollateralHeadView.setCollTypePercentLTV(originalNewCollateralHeadView.getCollTypePercentLTV());
-            newCollateralHeadView.setTcgCollateralType(originalNewCollateralHeadView.getTcgCollateralType());
+            newCollateralHeadView.setCollTypePercentLTV(originalNewCollateralHeadView.getCollTypePercentLTV());
             newCollateralHeadView.setPotentialCollateral(originalNewCollateralHeadView.getPotentialCollateral());
+            newCollateralHeadView.setTcgCollateralType(originalNewCollateralHeadView.getTcgCollateralType());
             newCollateralHeadView.setCollID(originalNewCollateralHeadView.getCollID());
             newCollateralHeadView.setExistingCredit(originalNewCollateralHeadView.getExistingCredit());
             newCollateralHeadView.setInsuranceCompany(originalNewCollateralHeadView.getInsuranceCompany());

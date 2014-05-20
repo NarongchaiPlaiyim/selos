@@ -1927,12 +1927,12 @@
                     <tr>
                         <td class="left" style="background-color: #ffffff">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.relatedTMBLending')}"/>
-                            <h:outputText value="#{basicInfo.mandate('relatedTMBLending')}" styleClass="require-field"/>
+                            <h:outputText value="#{creditFacPropose.mandate('relatedTMBLending')}" styleClass="require-field"/>
                             <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
                             <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.relatedTMBLending}"
-                                              disabled="#{basicInfo.isDisabled('relatedTMBLending')}">
+                                              disabled="#{creditFacPropose.isDisabled('relatedTMBLending')}">
                                 <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
                                 <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
                             </p:selectOneRadio>
@@ -1942,12 +1942,12 @@
                     <tr>
                         <td class="left">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.25percentShareRelatedTMBLending')}"/>
-                            <h:outputText value="#{basicInfo.mandate('25percentShareRelatedTMBLending')}" styleClass="require-field"/>
+                            <h:outputText value="#{creditFacPropose.mandate('25percentShareRelatedTMBLending')}" styleClass="require-field"/>
                             <h:outputText value=" :"/>
                         </td>
                         <td class="left">
                             <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.twentyFivePercentShareRelatedTMBLending}"
-                                              disabled="#{basicInfo.isDisabled('25percentShareRelatedTMBLending')}">
+                                              disabled="#{creditFacPropose.isDisabled('25percentShareRelatedTMBLending')}">
                                 <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
                                 <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
                             </p:selectOneRadio>
@@ -1957,12 +1957,12 @@
                     <tr>
                         <td class="left" style="background-color: #ffffff">
                             <h:outputText value="#{msg.get('app.credit.facility.propose.label.singleLendingLimit')}"/>
-                            <h:outputText value="#{basicInfo.mandate('singleLendingLimit')}" styleClass="require-field"/>
+                            <h:outputText value="#{creditFacPropose.mandate('singleLendingLimit')}" styleClass="require-field"/>
                             <h:outputText value=" :"/>
                         </td>
                         <td class="left" style="background-color: #ffffff">
                             <p:selectOneRadio value="#{creditFacPropose.newCreditFacilityView.singleLendingLimit}"
-                                              disabled="#{basicInfo.isDisabled('singleLendingLimit')}">
+                                              disabled="#{creditFacPropose.isDisabled('singleLendingLimit')}">
                                 <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
                                 <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
                             </p:selectOneRadio>

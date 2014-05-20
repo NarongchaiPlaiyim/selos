@@ -139,37 +139,39 @@ public class ActionValidationControl extends BusinessControl{
 
     public void validate(Object object){
         logger.info("-- begin validate object: {}", object);
-        validationResultMap = new HashMap<Long, ValidationResult>();
-        dependedValidationMap = new HashMap<Long, ValidationResult>();
-        Class objectClass = object.getClass();
-        Type type = objectClass.getGenericSuperclass();
-        logger.info("Type of {}, object Class Name {}", type, objectClass.getName());
-        String _compareClassName = type.toString();
-        if(_compareClassName.endsWith(Object.class.getName())){
-            _compareClassName = objectClass.getName();
-        }
-        logger.info("compare class name {}", _compareClassName);
-
-        String className = null;
-        for(String key : mandateFieldViewMap.keySet()){
-            if(_compareClassName.endsWith(key)){
-                logger.info("find class Name {}", key);
-                className = key;
+        if(object != null){
+            validationResultMap = new HashMap<Long, ValidationResult>();
+            dependedValidationMap = new HashMap<Long, ValidationResult>();
+            Class objectClass = object.getClass();
+            Type type = objectClass.getGenericSuperclass();
+            logger.info("Type of {}, object Class Name {}", type, objectClass.getName());
+            String _compareClassName = type.toString();
+            if(_compareClassName.endsWith(Object.class.getName())){
+                _compareClassName = objectClass.getName();
             }
-        }
+            logger.info("compare class name {}", _compareClassName);
 
-        List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(className);
-        if(mandateFieldViewList != null){
-            for(MandateFieldView mandateFieldView : mandateFieldViewList){
-                ValidationResult validationResult = validateField(object, objectClass, mandateFieldView);
-                if(validationResult != null){
-                    validationResultMap.put(mandateFieldView.getId(), validationResult);
+            String className = null;
+            for(String key : mandateFieldViewMap.keySet()){
+                if(_compareClassName.endsWith(key)){
+                    logger.info("find class Name {}", key);
+                    className = key;
                 }
             }
-            //Consolidate Condition Validation;
-            checkCondition(object);
-        } else {
-            logger.info("No validation configure for class {}", _compareClassName);
+
+            List<MandateFieldView> mandateFieldViewList = mandateFieldViewMap.get(className);
+            if(mandateFieldViewList != null){
+                for(MandateFieldView mandateFieldView : mandateFieldViewList){
+                    ValidationResult validationResult = validateField(object, objectClass, mandateFieldView);
+                    if(validationResult != null){
+                        validationResultMap.put(mandateFieldView.getId(), validationResult);
+                    }
+                }
+                //Consolidate Condition Validation;
+                checkCondition(object);
+            } else {
+                logger.info("No validation configure for class {}", _compareClassName);
+            }
         }
         logger.debug("-- end validate");
     }
