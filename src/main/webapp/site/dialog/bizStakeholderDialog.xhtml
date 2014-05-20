@@ -16,7 +16,7 @@
                 <td>
                     <p:inputText id="name" value="#{bizInfoDetail.bizStakeHolderDetailView.name}"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.name')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.name')}">
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:name"/>
                     </p:inputText>
                 </td>
@@ -29,7 +29,7 @@
                 </td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.contactName')}"/>
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.contactName')}"/>
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                     <p:inputText id="phoneNo" value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
                                  onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.phoneNo')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.phoneNo')}">
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:phoneNo"/>
                     </p:inputText>
 
@@ -58,7 +58,7 @@
                     <p:inputText id="contactYear" value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}" styleClass="right"
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.contactYear')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.contactYear')}">
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:contactYear"/>
                     </p:inputText>
                 </td>
@@ -74,7 +74,7 @@
                                  onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                  value="#{bizInfoDetail.bizStakeHolderDetailView.percentSalesVolume}"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.percentBuyVolumn')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.percentBuyVolumn')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentSalesVolume"/>
@@ -89,10 +89,11 @@
                 </td>
                 <td>
                     <p:inputText id="percentCash" styleClass="right"
-                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  value="#{bizInfoDetail.bizStakeHolderDetailView.percentCash}"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.percentCash')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.percentCash')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash,:stakeholderViewDlgForm:percentCredit" listener="#{bizInfoDetail.onCalCashCredit('stakeHolderDlg')}"/>
@@ -106,10 +107,10 @@
                     <h:outputText value=" :"/>
                 </td>
                 <td>
-                    <p:inputText id="percentCredit" styleClass="right" readonly="true"
+                    <p:inputText id="percentCredit" styleClass="right"
                                  value="#{bizInfoDetail.bizStakeHolderDetailView.percentCredit}"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.percentCredit')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.percentCredit')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCredit"/>
@@ -127,7 +128,7 @@
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  value="#{bizInfoDetail.bizStakeHolderDetailView.creditTerm}"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizSupplier.creditTerm')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizSupplier.creditTerm')}">
                         <f:convertNumber pattern="#,##0" integerOnly="true"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:creditTerm"/>
                     </p:inputText>
@@ -148,7 +149,8 @@
                                      update=":frmMain:supplierTable,:frmMain:buyerTable,:msgBoxSystemMessagePanel,:stakeholderViewDlgForm"
                                      oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"/>
 
-                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" update=":stakeholderViewDlgForm"
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}"
+                                     update=":stakeholderViewDlgForm"
                                      onclick="stakeholderViewDlg.hide()"/>
 
                 </td>
