@@ -651,15 +651,18 @@ public class ChangeOwner implements Serializable {
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: rosterViewSelectItem : {}", rosterViewSelectItem);
 
-        long stepId = rosterViewSelectItem.getStepId();
-        String appNumber = rosterViewSelectItem.getAppNumber();
+        long stepId = Util.parseLong(rosterViewSelectItem.getStepId(), 0);
+        long statusId = Util.parseLong(rosterViewSelectItem.getStatusCode(), 0);
         long wrkCasePreScreenId = 0L;
         long wrkCaseId = 0L;
         long wrkCaseAppraisalId = 0L;
-        long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
-        String queueName = rosterViewSelectItem.getQueuename();
+        int fetchType = Util.parseInt(rosterViewSelectItem.getFetchType(), 0);
+        String appNumber = Util.parseString(rosterViewSelectItem.getAppNumber(), "");
+        String queueName = Util.parseString(rosterViewSelectItem.getQueuename(), "0");
+        String wobNumber = Util.parseString(rosterViewSelectItem.getF_WobNum(), "");
+        String caseOwner = Util.parseString(rosterViewSelectItem.getAtUser(), "");
 
         try {
 
@@ -676,7 +679,55 @@ public class ChangeOwner implements Serializable {
                 //log.error("Error while opening case",e);
             }
 
-            if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            if(stepId != 0){
+                Step step = stepDAO.findById(stepId);
+                stageId = step != null ? step.getStage().getId() : 0;
+            }
+
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            if(!Util.isNull(workCase)){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
+
+            if(Util.isTrue(requestAppraisalFlag)){
+                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+            }
+
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+            session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("wobNumber", wobNumber);
+            session.setAttribute("statusId", statusId);
+            session.setAttribute("fetchType", fetchType);
+            session.setAttribute("stepId", stepId);
+            session.setAttribute("stageId", stageId);
+            session.setAttribute("caseOwner", caseOwner);
+            session.setAttribute("queueName", queueName);
+
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, rosterViewSelectItem.getAppNumber());
+            session.setAttribute("appHeaderInfo", appHeaderView);
+
+            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(rosterViewSelectItem.getStatusCode(), 0));
+
+            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
+
+            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
+                FacesUtil.redirect(landingPage);
+                return;
+            } else {
+                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
+                message = "Can not find landing page for step [" + stepId + "]";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg3.show()");
+            }
+
+           /* if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 if(workCasePrescreen != null){
                     wrkCasePreScreenId = workCasePrescreen.getId();
@@ -754,7 +805,7 @@ public class ChangeOwner implements Serializable {
                 return;
             } else {
                 //TODO Show dialog
-            }
+            }*/
 
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, rosterViewSelectItem.getFwobnumber(), e);
