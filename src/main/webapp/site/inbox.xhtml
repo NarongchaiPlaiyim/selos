@@ -128,10 +128,8 @@
                                                 <h:outputText value="#{item.totaltimespentatprocess}"/>
                                             </p:column>
                                             <p:column headerText="">
-                                                <p:commandButton icon="ui-icon-pencil" title="View" action="#{peInbox.onSelectInbox}" onclick="blockInbox.show" >
-                                                </p:commandButton>
-                                                <p:commandButton icon="ui-icon-search" title="View" action="#{change.onSelectInbox}" onclick="blockInbox.show()">
-                                                    <f:setPropertyActionListener value="#{item}" target="#{change.rosterViewSelectItem}"/>
+                                                <p:commandButton icon="ui-icon-pencil" title="View" action="#{peInbox.onSelectInbox}" onclick="blockInbox.show()" >
+                                                    <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
                                                 </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
@@ -140,8 +138,8 @@
 
                                         <tr>
                                             <td colspan="100%" style="color: red;">
-                                                <p:commandButton value="Assign to Me"  rendered="#{peInbox.inboxName == 'Pool Box'}"
-                                                                 id="reassignButtonId" styleClass="medium" >
+                                                <p:commandButton value="Assign to Me" disabled="#{peInbox.disableAssign}" rendered="#{peInbox.inboxName == 'Pool Box'}"
+                                                                 id="reassignButtonId" action="#{peInbox.onAssignBulk()}" styleClass="medium" >
                                                 </p:commandButton>
                                                 <p:spacer width="20px;"/> </td>
                                         </tr>
@@ -161,9 +159,8 @@
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
                                             <p:column headerText="" styleClass="center" style="width:22px;" >
-                                                <p:selectBooleanCheckbox id="checkBoxId"  >
-                                                    <!--<p:ajax update=":frmMain:reassignButtonId" process="@this" listener="{reassignteamnames.checkReassign}"/>-->
-                                                    <!--<f:ajax event="change" execute="@this" render=":frmMain:reassignButtonId" listener="{reassignteamnames.checkReassign}"/>-->
+                                                <p:selectBooleanCheckbox id="checkBoxId" value="#{peInbox.checked[item.fwobnumber]}">
+                                                    <p:ajax update=":frmMain:reassignButtonId" process="@this" listener="#{peInbox.checkAssign}"/>
                                                 </p:selectBooleanCheckbox>
                                             </p:column>
                                             <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="receiveddate" >
@@ -211,7 +208,8 @@
                                             </p:column>
 
                                             <p:column headerText="">
-                                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="View" >
+                                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="View" action="#{peInbox.onClickPickUpCase()}" >
+                                                    <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
                                                 </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
@@ -252,7 +250,26 @@
                                          update="frmMain"
                                          oncomplete="msgBoxErrorDlg.hide()"/>
                     </p:confirmDialog>
+
+
+                    <p:confirmDialog id="msgBoxErrorDialog1" widgetVar="msgBoxErrorDlg5" styleClass="messageDialog"
+                                     closable="false"
+                                     header="Exception.">
+                        <f:facet name="message">
+                            <h:outputText value="Please Select 5 or less cases" escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg5.close();"/>
+                    </p:confirmDialog>
                 </p:panel>
+
+                <p:confirmDialog id="successDialog" widgetVar="successDlg" styleClass="messageDialog"
+                                 closable="false"
+                                 header="Success.">
+                    <f:facet name="message">
+                        <h:outputText value="Assign Successfull!!" escape="false"/>
+                    </f:facet>
+                    <p:commandButton value="Ok" styleClass="small" onclick="successDlg.close();"/>
+                </p:confirmDialog>
             </h:form>
         </p:panel>
         <p:blockUI widgetVar="blockInbox" block=":frmMain">

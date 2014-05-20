@@ -73,12 +73,12 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
     public int findWorkCaseOwner(long workCasePreScreenId, long workCaseId, String userId){
         Criteria criteria = createCriteria();
         if(workCasePreScreenId != 0) {
-            criteria.add(Restrictions.eq("workCasePrescreenId", workCasePreScreenId));
+            criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         }
         if(workCaseId != 0){
-            criteria.add(Restrictions.eq("workCaseId", workCaseId));
+            criteria.add(Restrictions.eq("workCase.id", workCaseId));
         }
-        criteria.add(Restrictions.eq("userid", userId));
+        criteria.add(Restrictions.eq("user.id", userId));
 
         List<WorkCaseOwner> workCaseOwnerList = criteria.list();
 
@@ -118,8 +118,6 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         Criteria criteria = createCriteria();
 
-        long id = Long.parseLong(String.valueOf(workCaseId));
-
         List<Long> restrictionsStepList = new ArrayList<Long>();
 
         restrictionsStepList.add(Long.parseLong(String.valueOf(StepValue.CREDIT_DECISION_UW1.value())));
@@ -144,8 +142,8 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
     public String getUW1(long stepId, long workCaseId){
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("stepId", stepId));
-        criteria.add(Restrictions.eq("workCaseId", workCaseId));
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
         WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
 
         if(workCaseOwner != null){

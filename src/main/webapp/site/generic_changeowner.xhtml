@@ -263,6 +263,20 @@
                          oncomplete="msgBoxErrorDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
+
+<p:panel id="msgBoxErrorPanel1" styleClass="panel">
+    <p:confirmDialog id="msgBoxErrorDialog3" widgetVar="msgBoxErrorDlg3" styleClass="messageDialog"
+                     closable="false"
+                     header="Exception.">
+        <f:facet name="message">
+            <h:outputText value="#{peInbox.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="#{msg.get('app.button.ok')}"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxErrorDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
 <!-- Start Footer -->
 <p:dialog id="changeOwnerDialog" header="Change Owner Information" widgetVar="changeOwnerDlg" modal="true">
 
