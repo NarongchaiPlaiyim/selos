@@ -191,7 +191,7 @@ public class PESQLInbox implements Serializable
         } catch (Exception e) {
             log.error("Error while unlocking case in queue : {}, WobNum : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
             message = "Error while unlocking case.";
-            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            //RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
         }
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -478,6 +478,8 @@ public class PESQLInbox implements Serializable
                 bpmInterfaceImpl.batchDispatchCaseFromRoster(peRosterName,stringArrayOfWobNos,fieldsMap);
 
                 log.info("batchDispatch successful.... ");
+
+                onCreation();
             }
 
             checked.clear();
@@ -497,8 +499,9 @@ public class PESQLInbox implements Serializable
             arryOfObjectWobNOs = null;
             stringArrayOfWobNos = null;
             fieldsMap = null;
-            log.error("Error in change owner : {}",e);
-            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg2.show()");
+            log.error("Error in assign bulk : {}",e);
+            message = e.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             return;
         }
 

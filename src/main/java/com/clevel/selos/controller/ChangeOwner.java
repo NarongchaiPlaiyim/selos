@@ -607,6 +607,7 @@ public class ChangeOwner implements Serializable {
                 changeOwnerControl.updateUserName(stringArrayOfWobNos, selectUserChangeOwner, selectuser);
 
                 log.info("batchDispatch successful.... ");
+
                 changOwnerSearchQuery();
             }
 
