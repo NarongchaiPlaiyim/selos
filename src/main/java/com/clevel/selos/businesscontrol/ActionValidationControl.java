@@ -369,9 +369,11 @@ public class ActionValidationControl extends BusinessControl{
 
                     if(conditionDetail.getBaseValue() == null){
                         ValidationResult validationResult = validationResultMap.get(mandateField.getId());
-                        isPassCondition = validationResult.isPass;
-                        stringBuilder.append(validationResult.message);
-                        dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
+                        if(validationResult != null) {
+                            isPassCondition = validationResult.isPass;
+                            stringBuilder.append(validationResult.message);
+                            dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
+                        }
                     } else {
                         if(object != null) {
                             try{

@@ -89,8 +89,8 @@ public class MandateFieldSubmit implements Serializable {
         URL scanURL = null;
         try{
             URL url = ClasspathHelper.forWebInfClasses((ServletContext) ec.getContext());
-            scanURL = url;
-            //scanURL = new URL(url.toString()+"../../../lib/selos-lib.jar");
+            //scanURL = url;
+            scanURL = new URL(url.toString()+"../../../lib/selos-lib.jar");
             log.info("-- URL {}", scanURL.toString());
 
         }catch (Exception ex){

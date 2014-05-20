@@ -738,8 +738,8 @@ public class NewCollateralTransform extends Transform {
             newCollateralView = new NewCollateralView();
             newCollateralView.setId(isNewId ? 0 : originalCollateralView.getId());
             newCollateralView.setJobID(originalCollateralView.getJobID());
-            newCollateralView.setProposeType(proposeType);
             newCollateralView.setAppraisalDate(originalCollateralView.getAppraisalDate());
+            newCollateralView.setNumberMonthsFromApprDate(originalCollateralView.getNumberMonthsFromApprDate());
             newCollateralView.setAadDecision(originalCollateralView.getAadDecision());
             newCollateralView.setAadDecisionReason(originalCollateralView.getAadDecisionReason());
             newCollateralView.setAadDecisionReasonDetail(originalCollateralView.getAadDecisionReasonDetail());
@@ -755,9 +755,13 @@ public class NewCollateralTransform extends Transform {
             newCollateralView.setModifyDate(originalCollateralView.getModifyDate());
             newCollateralView.setModifyBy(originalCollateralView.getModifyBy());
             newCollateralView.setPremiumAmount(originalCollateralView.getPremiumAmount());
+            newCollateralView.setProposeType(proposeType);
             newCollateralView.setComs(originalCollateralView.isComs());
+
             newCollateralView.setNewCollateralHeadViewList(newCollateralHeadTransform.copyToNewViews(originalCollateralView.getNewCollateralHeadViewList(), isNewId));
             newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailTransform.copyToNewViews(originalCollateralView.getProposeCreditDetailViewList(), isNewId));
+
+            newCollateralView.setJobIDSearch(originalCollateralView.getJobIDSearch());
         }
         return newCollateralView;
     }
