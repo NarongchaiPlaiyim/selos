@@ -123,7 +123,13 @@ public class MandateFieldControl extends BusinessControl {
 
         try{
             Class clazz = Class.forName(mandateFieldClassView.getClassName());
+
             Field[] fields = clazz.getDeclaredFields();
+
+            if(clazz.getSuperclass().getName().contains("AbstractWorkCase")){
+                fields = combinedFields(fields, clazz.getSuperclass().getDeclaredFields());
+            }
+
             logger.info("fields {}", fields.length);
             List<MandateField> mandateFieldList = new ArrayList<MandateField>();
             if(mandateFieldClassView.getId() != 0)
@@ -156,6 +162,21 @@ public class MandateFieldControl extends BusinessControl {
         }
         logger.info("-- end getMandateField return size: {}", mandateFieldViewList);
         return mandateFieldViewList;
+    }
+
+    private Field[] combinedFields(Field[] fields1, Field[] fields2){
+        logger.info("begin combinedFields {}, {}", fields1, fields2);
+        List<Field> _combinedList = new ArrayList<Field>();
+        for(Field field : fields1){
+            _combinedList.add(field);
+        }
+        if(fields2 != null){
+            for (Field field : fields2){
+                _combinedList.add(field);
+            }
+        }
+
+        return _combinedList.toArray(new Field[_combinedList.size()]);
     }
 
     public List<MandateFieldConditionView> getMandateConditionList(MandateFieldClassView mandateFieldClassView){

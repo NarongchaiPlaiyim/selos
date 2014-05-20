@@ -278,6 +278,35 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
+    //---------- Function for Cancel Appraisal Request -----------//
+    public void onOpenCancelAppraisalRequest(){
+        log.debug("onOpenCancelAppraisalRequest ::: starting...");
+        cancelRemark = "";
+        reasonId = 0;
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
+    }
+
+    public void onCancelAppraisalRequest(){
+        log.debug("onCancelAppraisalRequest ::: starting...");
+        _loadSessionVariable();
+        boolean complete = false;
+        try{
+            fullApplicationControl.cancelRequestAppraisal(queueName, wobNumber, reasonId, cancelRemark);
+            messageHeader =  msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.cancel.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onCancelAppraisalRequest ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onCancelAppraisalRequest ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
     //---------- Function for Cancel CA -----------//
     public void onOpenCancelCA(){
         log.debug("onOpenCancelCA ::: starting...");
@@ -714,12 +743,12 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onOpenReturnBDMByZM(){
-        log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
+    public void onOpenReturnBDMByBU(){
+        log.debug("onOpenReturnBDMByZM ( return to BDM by BU [ Open dialog ] )");
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
         returnRemark = "";
 
-        RequestContext.getCurrentInstance().execute("returnBDM_ZMDlg.show()");
+        RequestContext.getCurrentInstance().execute("returnBDM_BUDlg.show()");
     }
 
     public void onReturnBDMByBU(){
@@ -729,9 +758,15 @@ public class HeaderController extends BaseController {
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try{
-
+            fullApplicationControl.returnBDMByBU(queueName, wobNumber, returnRemark, reasonId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.return.success");
+            showMessageRedirect();
         }catch (Exception ex){
-
+            log.error("Exception while return to BDM : ", ex);
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
         }
     }
 
@@ -1689,7 +1724,7 @@ public class HeaderController extends BaseController {
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             try{
-                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId);
+                UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId, 1009);
                 log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
                     if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){

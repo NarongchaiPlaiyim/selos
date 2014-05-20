@@ -48,7 +48,7 @@ public class CheckCriteria {
             WorkCase workCase = workCaseDAO.findByAppNumber(appId);
             if(workCase!=null){
                 try{
-                    UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCase.getId());
+                    UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCase.getId(), 1009);
                     log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                     if(uwRuleResponseView != null){
                         if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){

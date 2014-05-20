@@ -1033,6 +1033,10 @@ public class FullApplicationControl extends BusinessControl {
         return authorizationDOAList;
     }
 
+    public void cancelRequestAppraisal(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
+        bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_APPRAISAL.getVal(), getReasonDescription(reasonId), remark);
+    }
+
     public void cancelCAFullApp(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), getReasonDescription(reasonId), remark);
     }
