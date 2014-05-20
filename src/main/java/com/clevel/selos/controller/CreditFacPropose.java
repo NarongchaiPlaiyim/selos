@@ -879,7 +879,7 @@ public class CreditFacPropose extends BaseController {
                 if (ValidationUtil.isValueCompareToZero(suggestInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
                     suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg.doubleValue();
                 } else {
-                    suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg.doubleValue();
+                    suggestPriceLabel = suggestBase.getName() + " +" + suggestInterestDlg.doubleValue();
                 }
             }
         }
@@ -891,7 +891,7 @@ public class CreditFacPropose extends BaseController {
                 if (ValidationUtil.isValueCompareToZero(standardInterestDlg, ValidationUtil.CompareMode.LESS_THAN)) {
                     standardPriceLabel = standardBase.getName() + " " + standardInterestDlg.doubleValue();
                 } else {
-                    standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg.doubleValue();
+                    standardPriceLabel = standardBase.getName() + " +" + standardInterestDlg.doubleValue();
                 }
             }
         }

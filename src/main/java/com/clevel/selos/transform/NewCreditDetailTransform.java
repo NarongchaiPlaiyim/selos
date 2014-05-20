@@ -46,9 +46,7 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     BaseRateDAO baseRateDAO;
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews,
-                                                  NewCreditFacility newCreditFacility ,User user ,
-                                                  WorkCase workCase, ProposeType proposeType) {
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility, User user, WorkCase workCase, ProposeType proposeType) {
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
 
