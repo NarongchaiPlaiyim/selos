@@ -575,6 +575,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WcLimit());
         applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWcTmb());
         applicationInfo.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+        applicationInfo.setCreditCusType(newCreditFacility.getCreditCustomerType()==2? "P" : "N");
 
         if(bizInfoSummary.getProvince() != null)
             applicationInfo.setBizLocation(String.valueOf(bizInfoSummary.getProvince().getCode()));
