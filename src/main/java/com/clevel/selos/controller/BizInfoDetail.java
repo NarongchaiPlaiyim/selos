@@ -704,7 +704,7 @@ public class BizInfoDetail extends BaseController {
         FacesUtil.redirect("/site/bizInfoSummary.jsf");
     }
 
-    public void onCalCashCredit(String point ){
+    public void onCalCashCredit(String point){
         if(point.equals("stakeHolderDlg")){
             bizStakeHolderDetailView.setPercentCredit(Util.subtract(BigDecimal.valueOf(100),bizStakeHolderDetailView.getPercentCash()));
         }else if(point.equals("purchasePercentCash")){

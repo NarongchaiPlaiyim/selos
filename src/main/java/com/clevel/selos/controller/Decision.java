@@ -1431,7 +1431,7 @@ public class Decision extends BaseController {
         try {
             if (roleUW) {
                 // Delete List
-                //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
+                decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionView = decisionControl.saveApproveAndConditionData(decisionView, workCase);
                 // Calculate Total Approve

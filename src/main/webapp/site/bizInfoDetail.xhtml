@@ -398,7 +398,8 @@
                                                  styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()"
+                                                 update=":stakeholderViewDlgForm,:stakeholderViewDialog"
+                                                 oncomplete="stakeholderViewDlg.show()"
                                                  disabled="#{bizInfoDetail.isDisabled('addSupplierButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="1" target="#{bizInfoDetail.stakeType}"/>
@@ -471,7 +472,7 @@
                                             <p:commandButton icon="ui-icon-pencil"
                                                              title="Edit"
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
-                                                             update=":stakeholderViewDlgForm,:frmMain:supplierTable"
+                                                             update=":stakeholderViewDlgForm,:frmMain:supplierTable,:stakeholderViewDialog"
                                                              process=":frmMain:supplierTable"
                                                              oncomplete="stakeholderViewDlg.show();"
                                                              disabled="#{bizInfoDetail.isDisabled('saveButton')}">
@@ -596,7 +597,7 @@
                                                  process="@this"
                                                  styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm"
+                                                 update=":stakeholderViewDlgForm,:stakeholderViewDialog"
                                                  oncomplete="stakeholderViewDlg.show()"
                                                  disabled="#{bizInfoDetail.isDisabled('addBuyerButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
@@ -672,7 +673,7 @@
                                             <p:commandButton icon="ui-icon-pencil"
                                                              title="Edit"
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
-                                                             update=":stakeholderViewDlgForm,:frmMain:buyerTable"
+                                                             update=":stakeholderViewDlgForm,:frmMain:buyerTable,:stakeholderViewDialog"
                                                              process=":frmMain:buyerTable"
                                                              oncomplete="stakeholderViewDlg.show();"
                                                              disabled="#{bizInfoDetail.isDisabled('saveButton')}">
@@ -1172,6 +1173,11 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </div>
+
+        <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </h:form>
     </p:panel>
 
@@ -1222,12 +1228,6 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
-
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
-
     </h:body>
 </f:view>
 </html>
