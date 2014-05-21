@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewCollateralCreditTransform extends Transform {
@@ -27,6 +28,50 @@ public class NewCollateralCreditTransform extends Transform {
     @Inject
     NewCollateralCreditDAO newCollateralRelationDAO;
 
+    public NewCollateralCredit transformsToModel(ProposeCreditDetailView proposeCreditDetailView, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user){
+        if(proposeCreditDetailView != null){
+            NewCollateralCredit newCollateralCredit = new NewCollateralCredit();
+            if(proposeCreditDetailView.getId() != 0){
+                newCollateralCredit.setCreateDate(new Date());
+                newCollateralCredit.setCreateBy(user);
+            }
+            newCollateralCredit.setModifyDate(new Date());
+            newCollateralCredit.setModifyBy(user);
+
+            if ("N".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                NewCreditDetail newCreditDetailAdd = findNewCreditDetail(newCreditDetailList, proposeCreditDetailView);
+                if (newCreditDetailAdd != null) {
+                    newCollateralCredit.setNewCreditDetail(newCreditDetailAdd);
+                }
+            } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
+                if(existingCreditDetail != null){
+                    if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
+                        newCollateralCredit.setExistingCreditDetail(existingCreditDetail);
+                    }
+                }
+            }
+            newCollateralCredit.setNewCreditFacility(newCreditFacility);
+            newCollateralCredit.setNewCollateral(newCollateralDetail);
+            newCollateralCredit.setProposeType(proposeType);
+
+            return newCollateralCredit;
+        } else {
+            return null;
+        }
+    }
+
+    public List<NewCollateralCredit> transformsToModelList(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user){
+        List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
+        if (proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0) {
+            for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
+                NewCollateralCredit newCollateralCredit = transformsToModel(proposeCreditDetailView, newCreditDetailList, newCollateralDetail, newCreditFacility, proposeType, user);
+                newCollateralCreditList.add(newCollateralCredit);
+            }
+        }
+        return newCollateralCreditList;
+    }
+
     public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user) {
        log.info("proposeCreditDetailViewList size :: {}",proposeCreditDetailViewList.size());
         List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
@@ -35,51 +80,41 @@ public class NewCollateralCreditTransform extends Transform {
 
         for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
             log.debug("Start... transformToModelForCollateral : proposeCreditDetailView : {}", proposeCreditDetailView);
-
                 newCollateralRelCredit = new NewCollateralCredit();
-                newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
+                newCollateralRelCredit.setModifyDate(new Date());
                 newCollateralRelCredit.setModifyBy(user);
-                newCollateralRelCredit.setCreateDate(DateTime.now().toDate());
+                newCollateralRelCredit.setCreateDate(new Date());
                 newCollateralRelCredit.setCreateBy(user);
 
-                log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
-
                 if ("N".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                    log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
                     newCreditDetailAdd = findNewCreditDetail(newCreditDetailList, proposeCreditDetailView);
                     if (newCreditDetailAdd != null) {
                         newCollateralRelCredit.setNewCreditDetail(newCreditDetailAdd);
-                        log.info("newCollateralRelCredit newCreditDetailAdd id toSet is " + newCollateralRelCredit.getNewCreditDetail().getId());
                     }
                 } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
                     ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
                     if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
-                        log.debug("guarantor choose id  is :: {}", proposeCreditDetailView.getId());
-                        log.debug("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
                         newCollateralRelCredit.setExistingCreditDetail(existingCreditDetail);
-                        log.info("newCollateralRelCredit existingCreditDetail id toSet is " + newCollateralRelCredit.getExistingCreditDetail().getId());
                     }
                 }
-
                 newCollateralRelCredit.setNewCreditFacility(newCreditFacility);
                 newCollateralRelCredit.setNewCollateral(newCollateralDetail);
                 newCollateralRelCredit.setProposeType(proposeType);
                 newCollateralCreditList.add(newCollateralRelCredit);
-
         }
-
         return newCollateralCreditList;
     }
 
     public NewCreditDetail findNewCreditDetail(List<NewCreditDetail> newCreditDetailList, ProposeCreditDetailView proposeCreditDetailView) {
         NewCreditDetail newCreditDetailReturn = null;
-
-        for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
-            log.info("newCreditDetailAdd seq is :: {}", newCreditDetailAdd.getSeq());
-            log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
-            if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
-                newCreditDetailReturn = newCreditDetailAdd;
-                return newCreditDetailReturn;
+        if(newCreditDetailList != null && newCreditDetailList.size() > 0){
+            for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
+                if(proposeCreditDetailView != null){
+                    if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
+                        newCreditDetailReturn = newCreditDetailAdd;
+                        return newCreditDetailReturn;
+                    }
+                }
             }
         }
         return newCreditDetailReturn;
