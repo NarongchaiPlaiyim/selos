@@ -1131,6 +1131,7 @@ public class BRMSControl extends BusinessControl {
             }
         }
         customerInfo.setTmbAccountInfoList(tmbAccountInfoList);
+        customerInfo.setCreditWorthiness(customer.getWorthiness()==3? "Y":"N");
         return customerInfo;
     }
 
