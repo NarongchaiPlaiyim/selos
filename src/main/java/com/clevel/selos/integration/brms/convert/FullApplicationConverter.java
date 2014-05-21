@@ -36,6 +36,7 @@ public class FullApplicationConverter extends Converter{
             logger.error("Could not transform Date");
         }
         applicationType.setTotalMonthlyIncome(getValueForInterface(applicationInfo.getNetMonthlyIncome()));
+        applicationType.setAggregatedCreditExposureLimit(applicationInfo.getFinalGroupExposure());
 
         //1. Convert Value for Application Level//
         List<AttributeType> attributeTypeList = applicationType.getAttribute();
