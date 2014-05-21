@@ -36,7 +36,6 @@ public class NewGuarantorDetail implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer guarantorName;
 
-
     @Column(name = "guarantor_category", columnDefinition = "int default 0", length = 1)
     @Enumerated(EnumType.ORDINAL)
     private GuarantorCategory GuarantorCategory;

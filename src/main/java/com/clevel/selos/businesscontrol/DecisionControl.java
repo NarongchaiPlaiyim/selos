@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
+import com.rits.cloning.Cloner;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -96,25 +97,24 @@ public class DecisionControl extends BusinessControl {
 
     @Inject
     public DecisionControl() {
+
     }
 
-    public Map<String, Object> saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
-        log.debug("saveApproveAndConditionData() workCase: {}", workCase);
-        Map<String, Object> returnMapVal = null;
+    public DecisionView saveApproveAndConditionData(DecisionView decisionView, WorkCase workCase) {
+        log.debug("saveApproveAndConditionData ::: decisionView :: {}, workCase: {}", decisionView, workCase != null ? workCase.getId() : "0");
+
+        Cloner cloner = new Cloner();
+        DecisionView decisionViewReturn = cloner.deepClone(decisionView);
 
         if (workCase != null) {
             User currentUser = getCurrentUser();
 
-            returnMapVal = new HashMap<String, Object>();
-
             // Decision Follow up Condition
             if (decisionView.getDecisionFollowConditionViewList() != null && decisionView.getDecisionFollowConditionViewList().size() > 0) {
-                log.debug("Pre-persist -> DecisionFollowConditionViews: {}", decisionView.getDecisionFollowConditionViewList());
                 List<DecisionFollowCondition> decFollowConList = decisionFollowConditionTransform.transformToModel(decisionView.getDecisionFollowConditionViewList(), workCase);
                 decisionFollowConditionDAO.persist(decFollowConList);
-//                decisionView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
-                log.debug("Post-persist -> decFollowConList: {}", decFollowConList);
-                returnMapVal.put("decFollowConList", decFollowConList);
+                log.debug("decFollowConList :: {}",decFollowConList);
+                decisionViewReturn.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decFollowConList));
             }
 
             NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
@@ -122,12 +122,10 @@ public class DecisionControl extends BusinessControl {
 
             // Approve Credit Detail
             if (decisionView.getApproveCreditList() != null && decisionView.getApproveCreditList().size() > 0) {
-                log.debug("Pre-persist -> ApproveCreditViews: {}", decisionView.getApproveCreditList());
                 List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(decisionView.getApproveCreditList(), newCreditFacility, currentUser, workCase, ProposeType.A);
                 newCreditDetailDAO.persist(newCreditDetailList);
-//                decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(newCreditDetailList));
-                log.debug("Post-persist -> newCreditDetailList: {}", newCreditDetailList);
-                returnMapVal.put("newCreditDetailList", newCreditDetailList);
+                log.debug("decFollowConList :: {}",newCreditDetailList);
+                decisionViewReturn.setApproveCreditList(newCreditDetailTransform.transformToViewList(newCreditDetailList));
             }
 
             // Approve Guarantor Detail
@@ -137,22 +135,16 @@ public class DecisionControl extends BusinessControl {
                     log.info("Guarantor Relation - deleteList size: {}",relationDeleteList.size());
                     newGuarantorRelationDAO.delete(relationDeleteList);
                 }
-
-                log.debug("Pre-persist -> ApproveGuarantorViews: {}", decisionView.getApproveGuarantorList());
                 List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(decisionView.getApproveGuarantorList(), newCreditFacility, currentUser, ProposeType.A);
                 newGuarantorDetailDAO.persist(newGuarantorDetailList);
-//                decisionView.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
-                log.debug("Post-persist -> newGuarantorDetailList: {}", newGuarantorDetailList);
-                returnMapVal.put("newGuarantorDetailList", newGuarantorDetailList);
+                log.debug("decFollowConList :: {}",newGuarantorDetailList);
+                decisionViewReturn.setApproveGuarantorList(newGuarantorDetailTransform.transformToView(newGuarantorDetailList));
             }
 
             // Approve Collateral
             if (decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0) {
-
                 List<NewCollateral> tmpNewCollateralList = newCollateralDAO.findNewCollateralByTypeA(newCreditFacility);
-
                 if (tmpNewCollateralList != null && tmpNewCollateralList.size() > 0) {
-
                     for (NewCollateral newCollateral : tmpNewCollateralList) {
                         // delete old collateral relation
                         if (newCollateral.getNewCollateralCreditList() != null) {
@@ -170,23 +162,17 @@ public class DecisionControl extends BusinessControl {
                                 newCollateralSub.setNewCollateralSubOwnerList(Collections.<NewCollateralSubOwner>emptyList());
                             }
                         }
-
                         newCollateralDAO.persist(newCollateral);
                     }
                 }
-
-                log.debug("Pre-persist -> ApproveCollateralViews: {}", decisionView.getApproveCollateralList());
                 List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(decisionView.getApproveCollateralList(), newCreditFacility, currentUser, workCase, ProposeType.A);
                 newCollateralDAO.persist(newCollateralList);
-//                decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(newCollateralList));
-                log.debug("Post-persist -> newCollateralList: {}", newCollateralList);
-                returnMapVal.put("newCollateralList", newCollateralList);
-
+                log.debug("decFollowConList :: {}",newCollateralList);
+                decisionViewReturn.setApproveCollateralList(newCollateralTransform.transformToView(newCollateralList));
             }
-
         }
-
-        return returnMapVal;
+        log.debug("decisionViewReturn :: {}", decisionViewReturn);
+        return decisionViewReturn;
     }
 
     public void saveRelatedSubColl(WorkCase workCase, List<NewCollateralView> approveCollateralList) {
@@ -341,8 +327,7 @@ public class DecisionControl extends BusinessControl {
             approveGuarantorViews = newCreditFacilityView.getNewGuarantorDetailViewList();
             approveTotalGuaranteeAmt = newCreditFacilityView.getTotalGuaranteeAmount();
 
-        }
-        else {
+        } else {
             //if credit facility propose is not found
             decisionView.setCreditCustomerType(CreditCustomerType.NOT_SELECTED);
             decisionView.setLoanRequestType(new CreditRequestTypeView());
@@ -356,12 +341,11 @@ public class DecisionControl extends BusinessControl {
 
                 // Approve data already been recorded
                 List<NewCreditDetail> approveCreditList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
-                decisionView.setApproveCreditList(newCreditDetailTransform.transformToView(approveCreditList));
+                decisionView.setApproveCreditList(newCreditDetailTransform.transformToViewList(approveCreditList));
 
                 List<NewCollateral> approveCollateralList = newCollateralDAO.findNewCollateral(workCaseId, ProposeType.A);
                 decisionView.setApproveCollateralList(newCollateralTransform.transformsCollateralToView(approveCollateralList));
 
-//                List<NewGuarantorDetail> approveGuarantorList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, ProposeType.A);
                 List<NewGuarantorDetail> approveGuarantorList;
                 if (newCreditFacilityView != null && newCreditFacilityView.getId() != 0) {
                     approveGuarantorList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacId(newCreditFacilityView.getId(), ProposeType.A);
@@ -386,11 +370,10 @@ public class DecisionControl extends BusinessControl {
                 decisionView.setApproveTotalTCGGuaranteeAmt(decision.getTotalApproveTCGGuaranteeAmt());
                 decisionView.setApproveTotalIndvGuaranteeAmt(decision.getTotalApproveIndiGuaranteeAmt());
                 decisionView.setApproveTotalJurisGuaranteeAmt(decision.getTotalApproveJuriGuaranteeAmt());
-            }
-            else {
+            } else {
                 // Approve data is not recorded
                 // Duplicate from propose, set all id = 0 and all type is "Approve"
-                decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViews(approveCreditDetailViews, ProposeType.A, true));
+                decisionView.setApproveCreditList(newCreditDetailTransform.copyToNewViewList(approveCreditDetailViews, ProposeType.A, true));
                 decisionView.setApproveCollateralList(newCollateralTransform.copyToNewViews(approveCollViews, ProposeType.A, true));
                 decisionView.setApproveGuarantorList(newGuarantorDetailTransform.copyToNewViews(approveGuarantorViews, ProposeType.A, true));
 
@@ -400,8 +383,7 @@ public class DecisionControl extends BusinessControl {
                 decisionView.setApproveTotalExposure(approveTotalExposure);
                 decisionView.setApproveTotalGuaranteeAmt(approveTotalGuaranteeAmt);
             }
-        }
-        else {
+        } else {
             // BDM, ABDM (Show duplicate data from propose only)
             decisionView.setApproveCreditList(approveCreditDetailViews);
             decisionView.setApproveCollateralList(approveCollViews);
@@ -549,6 +531,7 @@ public class DecisionControl extends BusinessControl {
         decision.setTotalApproveTCGGuaranteeAmt(decisionView.getApproveTotalTCGGuaranteeAmt());
         decision.setTotalApproveIndiGuaranteeAmt(decisionView.getApproveTotalIndvGuaranteeAmt());
         decision.setTotalApproveJuriGuaranteeAmt(decisionView.getApproveTotalJurisGuaranteeAmt());
+
         decisionDAO.persist(decision);
     }
 

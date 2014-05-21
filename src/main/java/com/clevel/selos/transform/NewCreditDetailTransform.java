@@ -46,27 +46,24 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     BaseRateDAO baseRateDAO;
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews,
-                                                  NewCreditFacility newCreditFacility ,User user ,
-                                                  WorkCase workCase, ProposeType proposeType) {
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility, User user, WorkCase workCase, ProposeType proposeType) {
+        log.debug("transformToModel :: newCreditDetailViews :: {}, newCreditFacility ID :: {}, user :: {}, workCase ID :: {}, proposeType :: {}"
+                ,newCreditDetailViews, newCreditFacility != null ? newCreditFacility.getId() : "0", user, workCase != null ? workCase.getId() : "0", proposeType);
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
 
         for (NewCreditDetailView newCreditDetailView : newCreditDetailViews) {
-            //---- Start Transform for NewCreditDetail ------//
-            log.debug("Start.. transformToModel for newCreditDetailView : {}", newCreditDetailView);
             newCreditDetail = new NewCreditDetail();
             if (newCreditDetailView.getId() != 0) {
-                //newCreditDetail.setId(newCreditDetailView.getId());
                 newCreditDetail = newCreditDetailDAO.findById(newCreditDetailView.getId());
                 newCreditDetail.setProposeCreditTierDetailList(new ArrayList<NewCreditTierDetail>());
-                newCreditDetail.setModifyDate(DateTime.now().toDate());
-                newCreditDetail.setModifyBy(user);
-            } else { // id = 0 create new
+            } else {
                 newCreditDetail.setCreateDate(new Date());
                 newCreditDetail.setCreateBy(user);
             }
 
+            newCreditDetail.setModifyDate(new Date());
+            newCreditDetail.setModifyBy(user);
             newCreditDetail.setProposeType(proposeType);
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
@@ -112,7 +109,7 @@ public class NewCreditDetailTransform extends Transform {
         return newCreditDetailList;
     }
 
-    public List<NewCreditDetailView> transformToView(List<NewCreditDetail> newCreditDetailList) {
+    public List<NewCreditDetailView> transformToViewList(List<NewCreditDetail> newCreditDetailList) {
         List<NewCreditDetailView> newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
             newCreditDetailViewList.add(transformToView(newCreditDetail));
@@ -211,7 +208,7 @@ public class NewCreditDetailTransform extends Transform {
         return newCreditDetailView;
     }
 
-    public List<NewCreditDetailView> copyToNewViews(List<NewCreditDetailView> originalNewCreditDetailViews, ProposeType proposeType, boolean isNewId) {
+    public List<NewCreditDetailView> copyToNewViewList(List<NewCreditDetailView> originalNewCreditDetailViews, ProposeType proposeType, boolean isNewId) {
         List<NewCreditDetailView> newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         if (originalNewCreditDetailViews != null && originalNewCreditDetailViews.size() > 0) {
             for (NewCreditDetailView originalCreditDetailView : originalNewCreditDetailViews) {
@@ -220,18 +217,4 @@ public class NewCreditDetailTransform extends Transform {
         }
         return newCreditDetailViewList;
     }
-
-   public String toGetPricing(BaseRate baseRate ,BigDecimal price){
-      String priceToShow = "";
-
-       if (price.doubleValue() < 0)
-       {
-           priceToShow = baseRate.getName() + " " + price;
-       }else{
-           priceToShow = baseRate.getName() + " + " + price;
-       }
-        log.info("priceToShow :: {}",priceToShow);
-       return priceToShow;
-   }
-
 }

@@ -65,6 +65,7 @@ public class NewGuarantorDetailTransform extends Transform {
             }
             newGuarantorDetail.setProposeType(proposeType);
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
+            log.debug("########### NewGuarantorDetailTransform ########### transformToModel :::: guarantor :::: {}",guarantor);
             newGuarantorDetail.setGuarantorName(guarantor);
             newGuarantorDetail.setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
@@ -164,7 +165,7 @@ public class NewGuarantorDetailTransform extends Transform {
         log.info("proposeCreditDetailTransform :: newCreditDetailList size :: {}", newCreditDetailList.size());
         log.info("proposeCreditDetailTransform :: existingCreditDetailList size :: {}", existingCreditDetailList.size());
 
-        List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
+        List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToViewList(newCreditDetailList);
         // todo: find credit existing and propose in this workCase
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         ProposeCreditDetailView proposeCreditDetailView;

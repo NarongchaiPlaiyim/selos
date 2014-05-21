@@ -398,7 +398,8 @@
                                                  styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()"
+                                                 update=":stakeholderViewDlgForm,:stakeholderViewDialog"
+                                                 oncomplete="stakeholderViewDlg.show()"
                                                  disabled="#{bizInfoDetail.isDisabled('addSupplierButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="1" target="#{bizInfoDetail.stakeType}"/>
@@ -471,7 +472,7 @@
                                             <p:commandButton icon="ui-icon-pencil"
                                                              title="Edit"
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
-                                                             update=":stakeholderViewDlgForm,:frmMain:supplierTable"
+                                                             update=":stakeholderViewDlgForm,:frmMain:supplierTable,:stakeholderViewDialog"
                                                              process=":frmMain:supplierTable"
                                                              oncomplete="stakeholderViewDlg.show();"
                                                              disabled="#{bizInfoDetail.isDisabled('saveButton')}">
@@ -596,7 +597,7 @@
                                                  process="@this"
                                                  styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
-                                                 update=":stakeholderViewDlgForm"
+                                                 update=":stakeholderViewDlgForm,:stakeholderViewDialog"
                                                  oncomplete="stakeholderViewDlg.show()"
                                                  disabled="#{bizInfoDetail.isDisabled('addBuyerButton')}">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
@@ -672,7 +673,7 @@
                                             <p:commandButton icon="ui-icon-pencil"
                                                              title="Edit"
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
-                                                             update=":stakeholderViewDlgForm,:frmMain:buyerTable"
+                                                             update=":stakeholderViewDlgForm,:frmMain:buyerTable,:stakeholderViewDialog"
                                                              process=":frmMain:buyerTable"
                                                              oncomplete="stakeholderViewDlg.show();"
                                                              disabled="#{bizInfoDetail.isDisabled('saveButton')}">
@@ -807,7 +808,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
@@ -824,7 +825,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
                                             </p:inputText>
@@ -841,7 +842,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardStock"/>
                                             </p:inputText>
@@ -860,7 +861,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePurchaseAmount"/>
                                             </p:inputText>
@@ -877,7 +878,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePayableAmount"/>
                                             </p:inputText>
@@ -912,7 +913,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -931,7 +932,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -951,7 +952,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" />
                                             </p:inputText>
@@ -970,7 +971,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
@@ -987,7 +988,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
@@ -1022,7 +1023,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -1041,7 +1042,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -1079,7 +1080,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
@@ -1096,7 +1097,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
@@ -1172,6 +1173,11 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </div>
+
+        <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </h:form>
     </p:panel>
 
@@ -1222,12 +1228,6 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
-
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
-
     </h:body>
 </f:view>
 </html>

@@ -36,6 +36,7 @@ public class FullApplicationConverter extends Converter{
             logger.error("Could not transform Date");
         }
         applicationType.setTotalMonthlyIncome(getValueForInterface(applicationInfo.getNetMonthlyIncome()));
+        applicationType.setAggregatedCreditExposureLimit(applicationInfo.getFinalGroupExposure());
 
         //1. Convert Value for Application Level//
         List<AttributeType> attributeTypeList = applicationType.getAttribute();
@@ -80,6 +81,7 @@ public class FullApplicationConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.COUNTRY_OF_BUSINESS, applicationInfo.getCountryOfRegistration()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TRADE_CHEQUE_RETURN_PERCENT, applicationInfo.getTradeChequeReturnPercent()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXISTING_GROUP_EXPOSURE, applicationInfo.getExistingGroupExposure()));
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
