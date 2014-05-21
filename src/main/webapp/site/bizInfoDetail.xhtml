@@ -808,7 +808,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
@@ -825,7 +825,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
                                             </p:inputText>
@@ -842,7 +842,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardStock"/>
                                             </p:inputText>
@@ -861,7 +861,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePurchaseAmount"/>
                                             </p:inputText>
@@ -878,7 +878,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePayableAmount"/>
                                             </p:inputText>
@@ -913,7 +913,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -932,7 +932,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -952,7 +952,7 @@
                                                          onkeydown="return onKeyDownNumber(event);"
                                                          onkeypress="return onKeyPressNumber(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="10">
+                                                         maxlength="14">
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" />
                                             </p:inputText>
@@ -971,7 +971,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
@@ -988,7 +988,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
@@ -1023,7 +1023,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -1042,7 +1042,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3"
+                                                         maxLength="6"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}"
                                                          required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -1080,7 +1080,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
@@ -1097,7 +1097,7 @@
                                                          onkeydown="return onKeyDownMoney(event);"
                                                          onkeypress="return onKeyPressMoney(event);"
                                                          onfocus="removeComma(this)"
-                                                         maxlength="3">
+                                                         maxLength="6">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
