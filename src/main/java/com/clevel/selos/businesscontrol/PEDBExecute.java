@@ -35,13 +35,13 @@ public class PEDBExecute extends BusinessControl
     @SELOS
     Logger log;
 
-    @Inject
+/*    @Inject
     @Config(name = "interface.pe.mysql.inbox.tablename")
     String inboxQueryDB;
 
     @Inject
     @Config(name = "interface.pe.mysql.inbox.bdmsearchtablename")
-    String bdmsearchtablename;
+    String bdmsearchtablename;*/
 
     @Inject
     @Config(name = "interface.pe.sql.conn")
@@ -107,6 +107,9 @@ public class PEDBExecute extends BusinessControl
 
     @Inject
     SQLDBConnection dbContext;
+
+    @Inject
+    FetchQueueNameDAO queueNameDAO;
 
     @Inject
     @ExceptionMessage
@@ -1927,13 +1930,15 @@ public class PEDBExecute extends BusinessControl
 
         String[] inboxNames = new String[2];
 
-        inboxNames[0] = inboxQueryDB;
+        inboxNames[0] = fetchQueueNameDAO.getQueueTableName(1); //Inbox
 
-        inboxNames[1] = bdmsearchtablename;
+        inboxNames[1] = fetchQueueNameDAO.getQueueTableName(2); //BDM_UW_Return_Q
 
-        String sqlquery1 = "select "+peInboxQuery+" from "+inboxQueryDB;
+        log.info("Inbox table  : {} , BDM_UW_Return_Q table : {}",inboxNames[0],inboxNames[1]);
 
-        String sqlquery2 = "select "+peBDMReturnQuery+" from "+bdmsearchtablename;
+        String sqlquery1 = "select "+peInboxQuery+" from "+inboxNames[0];
+
+        String sqlquery2 = "select "+peBDMReturnQuery+" from "+inboxNames[1];
 
         /*peSqlQuery[0] = sqlquery1 + " where TeamName = '"+teamname+"'  AND CurrentUser IN ( "+username+ " ) ";
 
