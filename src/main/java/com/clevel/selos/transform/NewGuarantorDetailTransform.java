@@ -9,6 +9,8 @@ import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -22,6 +24,9 @@ public class NewGuarantorDetailTransform extends Transform {
     @SELOS
     @Inject
     private Logger log;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     public NewGuarantorDetailTransform() {
@@ -64,9 +69,16 @@ public class NewGuarantorDetailTransform extends Transform {
                 newGuarantorDetail.setCreateBy(user);
             }
             newGuarantorDetail.setProposeType(proposeType);
-            Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
-            log.debug("########### NewGuarantorDetailTransform ########### transformToModel :::: guarantor :::: {}",guarantor);
-            newGuarantorDetail.setGuarantorName(guarantor);
+            if(newGuarantorDetailView.getGuarantorName() != null){
+                if(newGuarantorDetailView.getGuarantorName().getId() == -1){
+                    newGuarantorDetail.setGuarantorName(null);
+                } else {
+                    Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
+                    newGuarantorDetail.setGuarantorName(guarantor);
+                }
+            } else {
+                newGuarantorDetail.setGuarantorName(null);
+            }
             newGuarantorDetail.setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
             newGuarantorDetail.setNewCreditFacility(newCreditFacility);
@@ -94,12 +106,19 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView = new NewGuarantorDetailView();
             newGuarantorDetailView.setId(newGuarantorDetail.getId());
             newGuarantorDetailView.setProposeType(newGuarantorDetail.getProposeType());
-            CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
+            if(newGuarantorDetail.getGuarantorName() != null){
+                CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
+                newGuarantorDetailView.setGuarantorName(guarantorView);
+            } else {
+                CustomerInfoView customerInfoView = new CustomerInfoView();
+                customerInfoView.setId(-1);
+                customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                newGuarantorDetailView.setGuarantorName(customerInfoView);
+            }
             newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
             newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());
             newGuarantorDetailView.setModifyDate(newGuarantorDetail.getModifyDate());
             newGuarantorDetailView.setModifyBy(newGuarantorDetail.getModifyBy());
-            newGuarantorDetailView.setGuarantorName(guarantorView);
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetail.getTcgLgNo());
             newGuarantorDetailView.setGuarantorCategory(newGuarantorDetail.getGuarantorCategory());
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
@@ -111,21 +130,17 @@ public class NewGuarantorDetailTransform extends Transform {
 
             for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
                 if (newGuarantorCredit.getExistingCreditDetail() != null) {
-                    log.info("newGuarantorCredit.getExistingCreditDetail :: {}", newGuarantorCredit.getExistingCreditDetail().getId());
                     existingCreditDetailList.add(newGuarantorCredit.getExistingCreditDetail());
                 } else if (newGuarantorCredit.getNewCreditDetail() != null) {
-                    log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
                     newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
                 }
             }
 
             List<ProposeCreditDetailView> proposeCreditDetailViewList = proposeCreditDetailTransform(newCreditDetailList, existingCreditDetailList, newGuarantorCreditList);
             if (proposeCreditDetailViewList.size() > 0) {
-                log.info("proposeCreditDetailViewList size ::: {}",proposeCreditDetailViewList.size());
                 newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
             }
             newGuarantorDetailViews.add(newGuarantorDetailView);
-
         }
 
         return newGuarantorDetailViews;

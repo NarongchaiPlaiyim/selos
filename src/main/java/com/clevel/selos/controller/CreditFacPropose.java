@@ -361,6 +361,10 @@ public class CreditFacPropose extends BaseController {
             }
 
             guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+//            CustomerInfoView customerInfoView = new CustomerInfoView();
+//            customerInfoView.setId(-1);
+//            customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+//            guarantorList.add(customerInfoView);
             collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
         }
 
@@ -1675,9 +1679,7 @@ public class CreditFacPropose extends BaseController {
         newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
         if (newGuarantorDetailViewItem.getProposeCreditDetailViewList() != null && newGuarantorDetailViewItem.getProposeCreditDetailViewList().size() > 0) {
-            // set selected credit type items (check/uncheck)
             selectedGuarantorCrdTypeItems = newGuarantorDetailViewItem.getProposeCreditDetailViewList();
-            log.debug("newGuarantorDetailViewItem.getProposeCreditDetailViewList():: amount ::  {}", newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
 
             for (ProposeCreditDetailView proposeCreditDetailView : newGuarantorDetailView.getProposeCreditDetailViewList()) {
                 for (ProposeCreditDetailView proposeCreditDetailSelect : selectedGuarantorCrdTypeItems) {
@@ -1696,103 +1698,130 @@ public class CreditFacPropose extends BaseController {
         int seqTemp;
         boolean checkPlus;
 
-        if (newGuarantorDetailView.getGuarantorName() != null) {
-            if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                log.debug("modeForButton ::: {}", modeForButton);
-                CustomerInfoView customerInfoView = customerInfoControl.getCustomerById(newGuarantorDetailView.getGuarantorName());
-                NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
-
-                guarantorDetailAdd.setGuarantorName(customerInfoView);
-                if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
-                } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
-//                todo: What is TCG ?
-//                }else if (customerInfoView.getCustomerEntity().getId()==GuarantorCategory.TCG.value()){
-//                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
+        if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            log.debug("modeForButton ::: {}", modeForButton);
+            NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
+            if(newGuarantorDetailView.getGuarantorName() != null){
+                if(newGuarantorDetailView.getGuarantorName().getId() == -1){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+                    customerInfoView.setId(-1);
+                    customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                    guarantorDetailAdd.setGuarantorName(customerInfoView);
                 } else {
-                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
-                }
-
-                guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
-                if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-
-                    List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
-                    for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                        creditTypeItem.setNoFlag(true);
-                        newCreditTypeItems.add(creditTypeItem);
-                        log.debug("creditTypeItem.getGuaranteeAmount() :: {}", creditTypeItem.getGuaranteeAmount());
-                        summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
+                    CustomerInfoView customerInfoView = customerInfoControl.getCustomerInfoViewById(newGuarantorDetailView.getGuarantorName().getId(), guarantorList);
+                    guarantorDetailAdd.setGuarantorName(customerInfoView);
+                    if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
+                        guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                    } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
+                        guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
+                    } else {
+                        guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
                     }
-
-                    guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
-                    guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
-                    newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
-                    complete = true;
-
-                    for (int j = 0; j < guarantorDetailAdd.getProposeCreditDetailViewList().size(); j++) {
-                        seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(j).getSeq();
-                        log.info("seqTemp :: {}",seqTemp);
-                        if(hashSeqCredit.containsKey(j)){
-                            if (guarantorDetailAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
-                                hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
-                            } else {
-                                hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
-                            }
-                        }
-                    }
-
-                } else {
-                    messageHeader = msg.get("app.propose.exception");
-                    message = msg.get("app.propose.desc.add.data");
-                    severity = MessageDialogSeverity.ALERT.severity();
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                }
-            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-                log.debug("modeForButton ::: {}", modeForButton);
-                CustomerInfoView customerInfoEdit = customerInfoControl.getCustomerById(newGuarantorDetailView.getGuarantorName());
-                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoEdit);
-                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
-                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
-                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(newGuarantorDetailView.getGuarantorCategory());
-                if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-
-                    for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
-                        creditTypeItem.setNoFlag(true);
-                        newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().add(creditTypeItem);
-                        log.debug(" newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount(); :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
-                        summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
-
-                        seqTemp = creditTypeItem.getSeq();
-                        checkPlus = true;
-
-                        for (int j = 0; j < newGuarantorDetailViewItem.getProposeCreditDetailViewList().size(); j++) {
-                            if (newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(j).getSeq() == seqTemp) {
-                                checkPlus = false;
-                            }
-                        }
-
-                        if(hashSeqCredit.containsKey(seqTemp)){
-                            if (checkPlus) {
-                                hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-                            }else{
-                                hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) - 1);
-                            }
-                        }
-                    }
-                    newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
-                    complete = true;
-
-                } else {
-                    messageHeader = msg.get("app.propose.exception");
-                    message = msg.get("app.propose.desc.add.data");
-                    severity = MessageDialogSeverity.ALERT.severity();
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
-                log.debug("onSaveGuarantorInfoDlg ::: Undefined modeForButton !!");
-                complete = false;
+                guarantorDetailAdd.setGuarantorName(null);
+                guarantorDetailAdd.setGuarantorCategory(null);
             }
+
+            guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
+
+            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
+
+                List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
+                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+                    creditTypeItem.setNoFlag(true);
+                    newCreditTypeItems.add(creditTypeItem);
+                    log.debug("creditTypeItem.getGuaranteeAmount() :: {}", creditTypeItem.getGuaranteeAmount());
+                    summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
+                }
+
+                guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
+                guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
+                newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
+                complete = true;
+
+                for (int j = 0; j < guarantorDetailAdd.getProposeCreditDetailViewList().size(); j++) {
+                    seqTemp = guarantorDetailAdd.getProposeCreditDetailViewList().get(j).getSeq();
+                    log.info("seqTemp :: {}",seqTemp);
+                    if(hashSeqCredit.containsKey(j)){
+                        if (guarantorDetailAdd.getProposeCreditDetailViewList().get(j).isNoFlag()) {
+                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) + 1);
+                        } else {
+                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(j).toString()) - 1);
+                        }
+                    }
+                }
+
+            } else {
+                messageHeader = msg.get("app.propose.exception");
+                message = msg.get("app.propose.desc.add.data");
+                severity = MessageDialogSeverity.ALERT.severity();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            log.debug("modeForButton ::: {}", modeForButton);
+            if(newGuarantorDetailView.getGuarantorName() != null){
+                if(newGuarantorDetailView.getGuarantorName().getId() == -1){
+                    newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(GuarantorCategory.TCG);
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+                    customerInfoView.setId(-1);
+                    customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                    newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoView);
+                } else {
+                    CustomerInfoView customerInfoView = customerInfoControl.getCustomerInfoViewById(newGuarantorDetailView.getGuarantorName().getId(), guarantorList);
+                    newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoView);
+                    if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
+                        newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                    } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
+                        newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(GuarantorCategory.JURISTIC);
+                    } else {
+                        newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(GuarantorCategory.NA);
+                    }
+                }
+            } else {
+                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(null);
+                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorCategory(null);
+            }
+
+            newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
+            newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
+            if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
+
+                for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+                    creditTypeItem.setNoFlag(true);
+                    newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().add(creditTypeItem);
+                    log.debug(" newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount(); :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).getProposeCreditDetailViewList().get(0).getGuaranteeAmount());
+                    summary = Util.add(summary, creditTypeItem.getGuaranteeAmount());
+
+                    seqTemp = creditTypeItem.getSeq();
+                    checkPlus = true;
+
+                    for (int j = 0; j < newGuarantorDetailViewItem.getProposeCreditDetailViewList().size(); j++) {
+                        if (newGuarantorDetailViewItem.getProposeCreditDetailViewList().get(j).getSeq() == seqTemp) {
+                            checkPlus = false;
+                        }
+                    }
+
+                    if(hashSeqCredit.containsKey(seqTemp)){
+                        if (checkPlus) {
+                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
+                        }else{
+                            hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) - 1);
+                        }
+                    }
+                }
+                newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
+                complete = true;
+            } else {
+                messageHeader = msg.get("app.propose.exception");
+                message = msg.get("app.propose.desc.add.data");
+                severity = MessageDialogSeverity.ALERT.severity();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        } else {
+            log.debug("onSaveGuarantorInfoDlg ::: Undefined modeForButton !!");
+            complete = false;
         }
 
         newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));

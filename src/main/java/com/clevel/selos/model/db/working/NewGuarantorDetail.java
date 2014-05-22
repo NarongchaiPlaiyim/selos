@@ -38,7 +38,7 @@ public class NewGuarantorDetail implements Serializable {
 
     @Column(name = "guarantor_category", columnDefinition = "int default 0", length = 1)
     @Enumerated(EnumType.ORDINAL)
-    private GuarantorCategory GuarantorCategory;
+    private GuarantorCategory guarantorCategory;
 
     @Column(name = "tcg_lg_no")
     private String tcgLgNo;
@@ -95,11 +95,11 @@ public class NewGuarantorDetail implements Serializable {
     }
 
     public GuarantorCategory getGuarantorCategory() {
-        return GuarantorCategory;
+        return guarantorCategory;
     }
 
     public void setGuarantorCategory(GuarantorCategory guarantorCategory) {
-        GuarantorCategory = guarantorCategory;
+        this.guarantorCategory = guarantorCategory;
     }
 
     public String getTcgLgNo() {
