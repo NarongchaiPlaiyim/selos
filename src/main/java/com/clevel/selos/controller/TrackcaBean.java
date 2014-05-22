@@ -111,6 +111,21 @@ public class TrackcaBean implements Serializable
 
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("#{trackBean}");
 
+        HttpSession session = FacesUtil.getSession(false);
+        try
+        {
+
+            if((Long)session.getAttribute("stepId") !=1 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+            {
+                String wobNumber = (String)session.getAttribute("wobNumber");
+                bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"), e);
+        }
+
         log.info("in controller");
 
     }

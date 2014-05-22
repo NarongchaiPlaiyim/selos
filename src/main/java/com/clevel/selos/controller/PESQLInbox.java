@@ -11,6 +11,7 @@ import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
@@ -175,7 +176,7 @@ public class PESQLInbox implements Serializable
 
                 //String isLocked = (String) session.getAttribute("isLocked");
 
-                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                if((Long)session.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                 {
                     String wobNumber = (String)session.getAttribute("wobNumber");
                     log.info("unlocking case queue: {}, wobNumber : {}, fetchType: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
@@ -500,7 +501,7 @@ public class PESQLInbox implements Serializable
             stringArrayOfWobNos = null;
             fieldsMap = null;
             log.error("Error in assign bulk : {}",e);
-            message = e.getMessage();
+            message = Util.getMessageException(e);
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             return;
         }

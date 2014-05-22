@@ -379,7 +379,7 @@ public class ChangeOwner implements Serializable {
         try
         {
 
-            if(session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+            if((Long)session.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)session.getAttribute("wobNumber");
                 bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
@@ -489,7 +489,7 @@ public class ChangeOwner implements Serializable {
         }
         if(changeOwnerQueryList != null && changeOwnerQueryList.length() > 0)
         {
-            changeOwerViewList = pedbExecute.queryForChangeOwner(changeOwnerQueryList);
+            changeOwerViewList = pedbExecute.queryForChangeOwner(changeOwnerQueryList,selectuser);
 
             log.info("in Change Owner if 2 ");
 
