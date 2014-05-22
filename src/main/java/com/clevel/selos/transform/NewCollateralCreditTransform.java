@@ -32,6 +32,8 @@ public class NewCollateralCreditTransform extends Transform {
         if(proposeCreditDetailView != null){
             NewCollateralCredit newCollateralCredit = new NewCollateralCredit();
             if(proposeCreditDetailView.getId() != 0){
+                newCollateralCredit = newCollateralRelationDAO.findById(proposeCreditDetailView.getId());
+            } else {
                 newCollateralCredit.setCreateDate(new Date());
                 newCollateralCredit.setCreateBy(user);
             }
@@ -44,10 +46,12 @@ public class NewCollateralCreditTransform extends Transform {
                     newCollateralCredit.setNewCreditDetail(newCreditDetailAdd);
                 }
             } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
-                ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
-                if(existingCreditDetail != null){
-                    if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
-                        newCollateralCredit.setExistingCreditDetail(existingCreditDetail);
+                if(proposeCreditDetailView.getId() != 0){
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditDetailView.getId());
+                    if(existingCreditDetail != null){
+                        if (existingCreditDetail.getId() ==  proposeCreditDetailView.getId()) {
+                            newCollateralCredit.setExistingCreditDetail(existingCreditDetail);
+                        }
                     }
                 }
             }
