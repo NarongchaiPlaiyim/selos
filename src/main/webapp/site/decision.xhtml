@@ -3400,6 +3400,8 @@
                                                           rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                             <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                           rendered="#{not empty guarantor.guarantorName}"/>
+                                            <h:outputText value="#{msg.get('app.select.item1')}"
+                                                          rendered="#{empty guarantor.guarantorName}"/>
                                         </p:column>
 
                                         <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
