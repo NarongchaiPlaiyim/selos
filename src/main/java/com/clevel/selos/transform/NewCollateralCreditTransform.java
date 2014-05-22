@@ -31,12 +31,14 @@ public class NewCollateralCreditTransform extends Transform {
     public NewCollateralCredit transformsToModel(ProposeCreditDetailView proposeCreditDetailView, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail,NewCreditFacility newCreditFacility,ProposeType proposeType, User user){
         if(proposeCreditDetailView != null){
             NewCollateralCredit newCollateralCredit = new NewCollateralCredit();
-            if(proposeCreditDetailView.getId() != 0){
+            /*if(proposeCreditDetailView.getId() != 0){
                 newCollateralCredit = newCollateralRelationDAO.findById(proposeCreditDetailView.getId());
             } else {
                 newCollateralCredit.setCreateDate(new Date());
                 newCollateralCredit.setCreateBy(user);
-            }
+            }*/
+            newCollateralCredit.setCreateDate(new Date());
+            newCollateralCredit.setCreateBy(user);
             newCollateralCredit.setModifyDate(new Date());
             newCollateralCredit.setModifyBy(user);
 

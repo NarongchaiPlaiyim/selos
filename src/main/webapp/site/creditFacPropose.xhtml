@@ -1721,9 +1721,10 @@
                     <p:column styleClass="top center">#{rowIndex + 1}</p:column>
 
                     <p:column styleClass="top left">
-                        <h:outputText
-                                value="#{newGuarantorDetailView.guarantorName.titleTh.titleTh} #{newGuarantorDetailView.guarantorName.firstNameTh} #{newGuarantorDetailView.guarantorName.lastNameTh}"
-                                rendered="#{not empty newGuarantorDetailView.guarantorName}"/>
+                        <h:outputText value="#{newGuarantorDetailView.guarantorName.titleTh.titleTh}"
+                                      rendered="#{not empty newGuarantorDetailView.guarantorName and not empty newGuarantorDetailView.guarantorName.titleTh}"/>
+                        <h:outputText value="#{newGuarantorDetailView.guarantorName.firstNameTh} #{newGuarantorDetailView.guarantorName.lastNameTh}"
+                                      rendered="#{not empty newGuarantorDetailView.guarantorName}"/>
                     </p:column>
 
                     <p:column styleClass="top left">
