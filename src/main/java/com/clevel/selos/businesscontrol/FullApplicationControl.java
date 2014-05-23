@@ -1071,7 +1071,7 @@ public class FullApplicationControl extends BusinessControl {
     public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
         ReasonType reasonType = reasonTypeDAO.findById(reasonTypeValue.value());
         List<Reason> reasonList = reasonDAO.getList(reasonType);
-        if(Util.isNull(reasonList)){
+        if(reasonList == null){
             reasonList = new ArrayList<Reason>();
         }
 

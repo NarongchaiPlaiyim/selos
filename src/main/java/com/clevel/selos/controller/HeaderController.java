@@ -958,7 +958,7 @@ public class HeaderController extends BaseController {
 
     public void onOpenCancelRequestPriceReduction(){
         log.debug("onOpenCancelRequestPriceReduction");
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        cancelReason = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
         reasonId = 0;
         cancelRemark = "";
         RequestContext.getCurrentInstance().execute("cancelRequestPriceReduceDlg.show()");
