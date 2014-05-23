@@ -56,12 +56,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title">
+                                <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
                                 </td>
-                                <td style="min-width: 350px; max-width: 350px; width: 350px;">
-                                    <p:selectOneMenu style="min-width: 350px; max-width: 350px; width: 350px;"
-                                                     styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"
+                                <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                                    <p:selectOneMenu size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
+                                                     value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"
                                                      required="#{not empty param[saveButton.clientId]}"
                                             >
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -71,13 +71,13 @@
                                                        itemValue="#{appraisalCompany.id}"/>
                                     </p:selectOneMenu>
                                 </td>
-                                <td class="title">
+                                <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
                                 </td>
-                                <td style="min-width: 350px; max-width: 350px; width: 350px;">
-                                    <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalDivision.id}"
+                                <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                                    <p:selectOneMenu size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
+                                                     value="#{appraisalAppointment.appraisalView.appraisalDivision.id}"
                                                      required="#{not empty param[saveButton.clientId]}"
-                                                     style="min-width: 350px; max-width: 350px; width: 350px;"
                                                      >
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.appraisalDivisionList}"
@@ -88,7 +88,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title">
+                                <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                                 </td>
                                 <td>
@@ -96,7 +96,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title">
+                                <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
                                 </td>
                                 <td>
@@ -112,11 +112,14 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title">
+                                <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
                                 </td>
-                                <td>
-                                    <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalAppointment.appraisalView.locationOfProperty.id}"  required="#{not empty param[saveButton.clientId]}">
+                                <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                                    <p:selectOneMenu id="locationOfPropertyId"
+                                                     size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
+                                                     value="#{appraisalAppointment.appraisalView.locationOfProperty.id}"  required="#{not empty param[saveButton.clientId]}"
+                                            >
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.locationPropertyList}"
                                                        var="locationProperty"
@@ -127,8 +130,10 @@
                                 <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
                                 </td>
-                                <td>
-                                    <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalAppointment.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}">
+                                <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                                    <p:selectOneMenu id="provinceOfPropertyId"
+                                                     size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
+                                                     value="#{appraisalAppointment.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.provinceList}"
                                                        var="province"
