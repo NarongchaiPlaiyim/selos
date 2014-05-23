@@ -160,7 +160,8 @@
             <!--Cancel Request Price Reduction-->
             <p:commandButton id="btnCancelRequestPriceReduce" value="#{msg.get('app.header.button.cancelRequestPriceReduction')}" title="#{msg.get('app.header.button.cancelRequestPriceReduction')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel Request') and headerController.stepId == 2018}"
-                             actionListener="#{headerController.onOpenCancelRequestPriceReduction()}">
+                             actionListener="#{headerController.onOpenCancelRequestPriceReduction()}"
+                             update=":frmMain:cancelRequestPriceReducePanel, :frmMain:msgBoxBaseMessagePanel">
             </p:commandButton>
             <!--Return to AAD Admin ( UW2 )-->
             <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
