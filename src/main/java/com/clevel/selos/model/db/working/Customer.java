@@ -107,7 +107,7 @@ public class Customer implements Serializable {
     @OneToOne(mappedBy="customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private NCB ncb;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     private List<CustomerCSI> customerCSIList;
 
     @Column(name="is_spouse", nullable=false, columnDefinition="int default 0")

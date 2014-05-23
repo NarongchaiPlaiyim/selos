@@ -1053,6 +1053,8 @@ public class BRMSControl extends BusinessControl {
                 customerInfo.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance().compareTo(BigDecimal.ZERO) != 0);
             if(customerOblInfo.getPendingClaimLG() != null)
                 customerInfo.setPendingClaimLG(customerOblInfo.getPendingClaimLG().compareTo(BigDecimal.ZERO) != 0);
+            if(customerOblInfo.getAdjustClass() != null)
+                customerInfo.setAdjustClass(customerOblInfo.getAdjustClass());
         }
 
         if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
