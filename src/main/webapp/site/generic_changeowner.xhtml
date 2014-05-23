@@ -64,6 +64,9 @@
 <!-- End Menu -->
 <div id="content_container">
     <div id="content_name">Change Owner</div>
+    <div style="color: red;">Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
+        Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ
+    </div>
     <div id="content">
         <table id="content_form">
             <!--<tr>
@@ -269,7 +272,7 @@
                      closable="false"
                      header="Exception.">
         <f:facet name="message">
-            <h:outputText value="#{peInbox.message}" escape="false"/>
+            <h:outputText value="#{change.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="#{msg.get('app.button.ok')}"
                          process="@this"

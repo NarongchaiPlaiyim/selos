@@ -2066,13 +2066,13 @@ public class PEDBExecute extends BusinessControl
 
 
 
-    public List<PERoster> queryForChangeOwner(String applicationNos)
+    public List<PERoster> queryForChangeOwner(String applicationNos, String selectedUser)
     {
         List<PERoster> changeOwerViewList = new ArrayList<PERoster>();
         tableName = actionDAO.getRosterTableName();
         query = " select "+queryForRosterColumns+" from ";
 
-        queryChangeOwner = query +prefix+"."+tableName+ " where AppNumber in(" + applicationNos + ")";
+        queryChangeOwner = query +prefix+"."+tableName+ " where AppNumber in(" + applicationNos + ") or lower(CurrentUser) = lower('"+selectedUser+"')";
 
         sqlpequery = queryChangeOwner;
         log.info("sql query for Changeowner search ::::::::::::::::::::::::::: {}", sqlpequery);
