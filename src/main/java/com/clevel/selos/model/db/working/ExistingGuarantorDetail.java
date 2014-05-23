@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -53,6 +54,10 @@ public class ExistingGuarantorDetail implements Serializable {
 
     @OneToMany(mappedBy = "existingGuarantorDetail", cascade = CascadeType.ALL)
     private List<ExistingGuarantorCredit> existingGuarantorCreditList;
+
+    @Column(name = "guarantor_category", columnDefinition = "int default 0", length = 1)
+    @Enumerated(EnumType.ORDINAL)
+    private GuarantorCategory guarantorCategory;
 
     public long getId() {
         return id;
@@ -142,20 +147,29 @@ public class ExistingGuarantorDetail implements Serializable {
         this.existingGuarantorCreditList = existingGuarantorCreditList;
     }
 
+    public GuarantorCategory getGuarantorCategory() {
+        return guarantorCategory;
+    }
+
+    public void setGuarantorCategory(GuarantorCategory guarantorCategory) {
+        this.guarantorCategory = guarantorCategory;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("no", no)
-                .append("guarantorName", guarantorName)
-                .append("tcglgNo", tcglgNo)
-                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("existingCreditFacility", existingCreditFacility)
-                .append("existingGuarantorCreditList", existingGuarantorCreditList)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("no", no).
+                append("guarantorName", guarantorName).
+                append("tcglgNo", tcglgNo).
+                append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("existingCreditFacility", existingCreditFacility).
+                append("existingGuarantorCreditList", existingGuarantorCreditList).
+                append("guarantorCategory", guarantorCategory).
+                toString();
     }
 }

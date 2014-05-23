@@ -446,6 +446,10 @@ public class Decision extends BaseController {
         // ========== Approve Guarantor Dialog ========== //
         selectedApproveGuarantor = new NewGuarantorDetailView();
         guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+//        CustomerInfoView customerInfoView = new CustomerInfoView();
+//        customerInfoView.setId(-1);
+//        customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+//        guarantorList.add(customerInfoView);
         // ================================================== //
 
         // ========== Follow Up Condition ========== //
@@ -1187,8 +1191,7 @@ public class Decision extends BaseController {
                 }
             }
             // Add Customer UW to list
-            selectedApproveSubColl.getCollateralOwnerUWList().add(
-                    getCustomerInfoViewById(selectedApproveSubColl.getCollateralOwnerUW().getId(), collateralOwnerUwAllList));
+            selectedApproveSubColl.getCollateralOwnerUWList().add(customerInfoControl.getCustomerInfoViewById(selectedApproveSubColl.getCollateralOwnerUW().getId(), collateralOwnerUwAllList));
         }
     }
 
@@ -1275,13 +1278,9 @@ public class Decision extends BaseController {
     }
 
     public void onEditApproveGuarantor() {
-        log.debug("onEditAppProposeGuarantor() selectedApproveGuarantor: {}", selectedApproveGuarantor);
         guarantorCreditTypeList = proposeCreditDetailTransform.copyToNewViews(commonProposeCreditList, false);
-
         if (selectedApproveGuarantor.getProposeCreditDetailViewList() != null && selectedApproveGuarantor.getProposeCreditDetailViewList().size() > 0) {
-            // set selected credit type items (check/uncheck)
             selectedGuarantorCrdTypeItems = selectedApproveGuarantor.getProposeCreditDetailViewList();
-            // update Guarantee Amount before render dialog
             for (ProposeCreditDetailView creditTypeFromAll : guarantorCreditTypeList) {
                 for (ProposeCreditDetailView creditTypeFromSelected : selectedApproveGuarantor.getProposeCreditDetailViewList()) {
                     if (creditTypeFromAll.getSeq() == creditTypeFromSelected.getSeq()) {
@@ -1290,34 +1289,46 @@ public class Decision extends BaseController {
                 }
             }
         }
-
         modeEditGuarantor = true;
     }
 
     public void onSaveApproveGuarantor() {
-        log.debug("onSaveApproveGuarantor()");
-        log.debug("selectedGuarantorCrdTypeItems.size() = {}", selectedGuarantorCrdTypeItems.size());
-        log.debug("selectedGuarantorCrdTypeItems: {}", selectedGuarantorCrdTypeItems);
-
         boolean success = false;
         BigDecimal sumGuaranteeAmtPerCrdType = BigDecimal.ZERO;
 
         if (modeEditGuarantor) {
-            log.debug("===> Edit - Guarantor: {}", selectedApproveGuarantor);
             NewGuarantorDetailView guarantorDetailEdit = decisionView.getApproveGuarantorList().get(rowIndexGuarantor);
             guarantorDetailEdit.setUwDecision(selectedApproveGuarantor.getUwDecision());
-            guarantorDetailEdit.setGuarantorName(getCustomerInfoViewById(selectedApproveGuarantor.getGuarantorName().getId(), guarantorList));
+            if(selectedApproveGuarantor.getGuarantorName() != null){
+                if(selectedApproveGuarantor.getGuarantorName().getId() == -1){
+                    guarantorDetailEdit.setGuarantorCategory(GuarantorCategory.TCG);
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+                    customerInfoView.setId(-1);
+                    customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                    guarantorDetailEdit.setGuarantorName(customerInfoView);
+                } else {
+                    CustomerInfoView customerInfoView = customerInfoControl.getCustomerInfoViewById(selectedApproveGuarantor.getGuarantorName().getId(), guarantorList);
+                    guarantorDetailEdit.setGuarantorName(customerInfoView);
+                    if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
+                        guarantorDetailEdit.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                    } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
+                        guarantorDetailEdit.setGuarantorCategory(GuarantorCategory.JURISTIC);
+                    } else {
+                        guarantorDetailEdit.setGuarantorCategory(GuarantorCategory.NA);
+                    }
+                }
+            } else {
+                guarantorDetailEdit.setGuarantorName(null);
+                guarantorDetailEdit.setGuarantorCategory(null);
+            }
+
             guarantorDetailEdit.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
 
             if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
-
                 List<ProposeCreditDetailView> newCreditTypeItems = new ArrayList<ProposeCreditDetailView>();
                 for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
                     newCreditTypeItems.add(creditTypeItem);
                     sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
-
-                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                 }
                 guarantorDetailEdit.setProposeCreditDetailViewList(newCreditTypeItems);
                 guarantorDetailEdit.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
@@ -1330,15 +1341,34 @@ public class Decision extends BaseController {
                 severity = MessageDialogSeverity.ALERT.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-
         } else {
             // Add New
-            log.debug("===> Add New - Guarantor: {}", selectedApproveGuarantor);
             NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
             guarantorDetailAdd.setUwDecision(selectedApproveGuarantor.getUwDecision());
-            guarantorDetailAdd.setGuarantorName(getCustomerInfoViewById(selectedApproveGuarantor.getGuarantorName().getId(), guarantorList));
-            guarantorDetailAdd.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
+            if(selectedApproveGuarantor.getGuarantorName() != null){
+                if(selectedApproveGuarantor.getGuarantorName().getId() == -1){
+                    guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.TCG);
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+                    customerInfoView.setId(-1);
+                    customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                    guarantorDetailAdd.setGuarantorName(customerInfoView);
+                } else {
+                    CustomerInfoView customerInfoView = customerInfoControl.getCustomerInfoViewById(selectedApproveGuarantor.getGuarantorName().getId(), guarantorList);
+                    guarantorDetailAdd.setGuarantorName(customerInfoView);
+                    if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
+                        guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                    } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
+                        guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
+                    } else {
+                        guarantorDetailAdd.setGuarantorCategory(GuarantorCategory.NA);
+                    }
+                }
+            } else {
+                guarantorDetailAdd.setGuarantorName(null);
+                guarantorDetailAdd.setGuarantorCategory(null);
+            }
 
+            guarantorDetailAdd.setTcgLgNo(selectedApproveGuarantor.getTcgLgNo());
             if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
 
                 if (guarantorDetailAdd.getProposeCreditDetailViewList() == null) {
@@ -1349,9 +1379,6 @@ public class Decision extends BaseController {
                 for (ProposeCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
                     newCreditTypeItems.add(creditTypeItem);
                     sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
-
-                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
-                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                 }
                 guarantorDetailAdd.setProposeCreditDetailViewList(newCreditTypeItems);
                 guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
@@ -1671,26 +1698,6 @@ public class Decision extends BaseController {
             }
         }
         return returnMortgageType;
-    }
-
-    private CustomerInfoView getCustomerInfoViewById(long id, List<CustomerInfoView> customerInfoViewList) {
-        CustomerInfoView returnCusInfoView = new CustomerInfoView();
-        if (customerInfoViewList != null && !customerInfoViewList.isEmpty() && id != 0) {
-            for (CustomerInfoView customerInfoView : customerInfoViewList) {
-                if (customerInfoView.getId() == id) {
-                    returnCusInfoView.setId(customerInfoView.getId());
-                    returnCusInfoView.setFirstNameTh(customerInfoView.getFirstNameTh());
-                    returnCusInfoView.setFirstNameEn(customerInfoView.getFirstNameEn());
-                    returnCusInfoView.setLastNameTh(customerInfoView.getLastNameTh());
-                    returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
-                    returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
-                    returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
-                    returnCusInfoView.setCustomerEntity(customerInfoView.getCustomerEntity());
-                    break;
-                }
-            }
-        }
-        return returnCusInfoView;
     }
 
     private FollowConditionView getFollowConditionById(long id) {

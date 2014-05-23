@@ -13,6 +13,7 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.TeamTypeValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
@@ -116,7 +117,7 @@ public class PESearch implements Serializable
 
                 //String isLocked = (String) session.getAttribute("isLocked");
 
-                if((Long)session.getAttribute("stepId") !=0 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+                if((Long)session.getAttribute("stepId") !=StepValue.COMPLETED_STEP.value() && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                 {
                     String wobNumber = (String)session.getAttribute("wobNumber");
                     log.debug("unlocking case queue: {}, wobNumber : {}, fetchtype: {}", session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
@@ -260,7 +261,7 @@ public class PESearch implements Serializable
             try{
                 //Try to Lock case
                 log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, searchViewSelectItem.getFwobnumber(), searchViewSelectItem.getFetchType());
-                if(searchViewSelectItem.getStepId() != 0) {
+                if(searchViewSelectItem.getStepId() != StepValue.COMPLETED_STEP.value()) {
                     bpmInterfaceImpl.lockCase(queueName, wobNumber, searchViewSelectItem.getFetchType());
                 }
                 /*session.setAttribute("isLocked","true");*/

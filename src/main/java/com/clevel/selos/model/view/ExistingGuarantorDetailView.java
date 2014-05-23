@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,6 +17,7 @@ public class ExistingGuarantorDetailView implements Serializable {
     private CustomerInfoView guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
+    private GuarantorCategory guarantorCategory;
 
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
 
@@ -115,17 +117,28 @@ public class ExistingGuarantorDetailView implements Serializable {
         this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
     }
 
+    public GuarantorCategory getGuarantorCategory() {
+        return guarantorCategory;
+    }
+
+    public void setGuarantorCategory(GuarantorCategory guarantorCategory) {
+        this.guarantorCategory = guarantorCategory;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("guarantorName", guarantorName)
-                .append("tcgLgNo", tcgLgNo)
-                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
-                .append("existingCreditTypeDetailViewList", existingCreditTypeDetailViewList)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("no", no).
+                append("guarantorName", guarantorName).
+                append("tcgLgNo", tcgLgNo).
+                append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount).
+                append("guarantorCategory", guarantorCategory).
+                append("existingCreditTypeDetailViewList", existingCreditTypeDetailViewList).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
     }
 }
