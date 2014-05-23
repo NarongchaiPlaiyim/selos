@@ -1772,7 +1772,7 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("FULLAPP".equalsIgnoreCase(stageString)){
-            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207){
+            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207 || stageId == 208){
                 accessible = true;
             }
         } else if ("APPRAISAL".equalsIgnoreCase(stageString)){

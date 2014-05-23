@@ -403,7 +403,7 @@ public class ReassignTeamNames implements Serializable
         try
         {
 
-            if(session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
+            if((Long)session.getAttribute("stepId")!= StepValue.COMPLETED_STEP.value() &&session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)session.getAttribute("wobNumber");
                 bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));

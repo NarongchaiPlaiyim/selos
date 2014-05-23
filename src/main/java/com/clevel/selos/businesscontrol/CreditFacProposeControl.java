@@ -174,16 +174,14 @@ public class CreditFacProposeControl extends BusinessControl {
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                 }
 
-//                List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newCreditList.size() > 0) {
                     log.debug("newCreditFacility.getNewCreditDetailList() :: {}", newCreditFacility.getNewCreditDetailList().size());
-                    List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditList);
+                    List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToViewList(newCreditList);
                     log.debug("newCreditDetailViewList : {}", newCreditDetailViewList);
                     newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
                 }
 
-//                List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
                 List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newCollateralDetailList.size() > 0) {
                     log.debug("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
@@ -192,7 +190,6 @@ public class CreditFacProposeControl extends BusinessControl {
                     newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                 }
 
-//                List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
                 List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility, ProposeType.P);
                 if (newGuarantorDetails.size() > 0) {
                     log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
@@ -992,11 +989,15 @@ public class CreditFacProposeControl extends BusinessControl {
         List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
         if(newGuarantorCredits != null && newGuarantorCredits.size() > 0){
             for(NewGuarantorCredit newGuarantorCredit : newGuarantorCredits){
-                if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
-                    if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
-                        for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
-                            if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
-                                proposeCreditDetailView.setNoFlag(true);
+                if(newGuarantorCredit != null && newGuarantorCredit.getNewGuarantorDetail() != null && newGuarantorDetailView != null){
+                    if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
+                        if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                            for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                                if(proposeCreditDetailView != null && newGuarantorCredit.getNewCreditDetail() != null){
+                                    if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
+                                        proposeCreditDetailView.setNoFlag(true);
+                                    }
+                                }
                             }
                         }
                     }
@@ -1293,7 +1294,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewGuarantor
         if (Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0) {
-
             List<NewGuarantorDetail> tmpNewGuarantorList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
             for (NewGuarantorDetail newGuarantorDetail : tmpNewGuarantorList) {
                 if (newGuarantorDetail.getNewGuarantorCreditList() != null) {

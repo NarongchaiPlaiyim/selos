@@ -245,7 +245,7 @@
                  closable="false"
                  header="Exception.">
     <f:facet name="message">
-        <h:outputText value="Some of the selected cases are Locked." escape="false"/>
+        <h:outputText value="Selected case(s) are Locked." escape="false"/>
     </f:facet>
     <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg2.close();"/>
 </p:confirmDialog>
@@ -269,7 +269,7 @@
                      closable="false"
                      header="Exception.">
         <f:facet name="message">
-            <h:outputText value="#{peInbox.message}" escape="false"/>
+            <h:outputText value="#{change.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="#{msg.get('app.button.ok')}"
                          process="@this"

@@ -768,4 +768,24 @@ public class CustomerInfoControl extends BusinessControl {
             return isExist;
         }
     }
+
+    public CustomerInfoView getCustomerInfoViewById(long id, List<CustomerInfoView> customerInfoViewList) {
+        CustomerInfoView returnCusInfoView = new CustomerInfoView();
+        if (customerInfoViewList != null && !customerInfoViewList.isEmpty() && id != 0) {
+            for (CustomerInfoView customerInfoView : customerInfoViewList) {
+                if (customerInfoView.getId() == id) {
+                    returnCusInfoView.setId(customerInfoView.getId());
+                    returnCusInfoView.setFirstNameTh(customerInfoView.getFirstNameTh());
+                    returnCusInfoView.setFirstNameEn(customerInfoView.getFirstNameEn());
+                    returnCusInfoView.setLastNameTh(customerInfoView.getLastNameTh());
+                    returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
+                    returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
+                    returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
+                    returnCusInfoView.setCustomerEntity(customerInfoView.getCustomerEntity());
+                    break;
+                }
+            }
+        }
+        return returnCusInfoView;
+    }
 }
