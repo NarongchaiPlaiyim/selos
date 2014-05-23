@@ -68,8 +68,11 @@
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Reassign</div>
+                <div style="color: red;">Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
+                    Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ</div>
                 <div id="content">
                     <table id="content_form">
+
                         <!--<tr>
                             <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Reassign:</label></td>
                         </tr>
@@ -136,7 +139,7 @@
                                                  id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()"
                                                  disabled="#{reassignteamnames.disableReassign}">
                                         <p:resetInput target=":reassignDialog"></p:resetInput>
-                                </p:commandButton>
+                                </p:commandButton> เลือก Reassign ได้ไม่เกินครั้งละ 5 cases.
                                 <p:spacer width="20px;"/> </td>
                         </tr>
 
