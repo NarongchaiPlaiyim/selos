@@ -1164,6 +1164,8 @@ public class FullApplicationControl extends BusinessControl {
                     csiResultList.add(csiResult);
 
                     List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+                    List<CustomerCSI> customerCSIListDel = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
+                    customerCSIDAO.delete(customerCSIListDel);
 
                     if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
