@@ -114,6 +114,7 @@
             </p:commandButton>
             <!--Check Criteria (BRMS)-->
             <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
+                             onclick="PF('blockUI').show()"
                              rendered="#{headerController.checkButton('Check Criteria')}"
                              actionListener="#{headerController.onCheckCriteria}"
                              update=":frmMain:msgBoxBaseMessagePanel">
@@ -561,6 +562,7 @@
         </f:facet>
         <p:commandButton value="OK"
                          process="@this"
+                         update=":frmMain"
                          oncomplete="msgBoxBaseMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
@@ -598,7 +600,17 @@
                      process="@this"
                      action="#{headerController.onGoToInbox}"/>
 </p:confirmDialog>
-
+<p:panel id="msgBoxBaseRefreshPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxBaseRefreshDialog" widgetVar="msgBoxBaseRefreshDlg" styleClass="messageDialog"
+                     header="#{headerController.messageHeader}">
+        <f:facet name="message">
+            <h:outputText value="#{headerController.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         onclick="reload();"/>
+    </p:confirmDialog>
+</p:panel>
 <!--End of Message Box -->
 <p:panel id="printReportPanel" styleClass="panel">
     <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"

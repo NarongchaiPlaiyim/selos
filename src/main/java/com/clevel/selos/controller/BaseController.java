@@ -156,6 +156,10 @@ public class BaseController implements Serializable {
         RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
     }
 
+    public void showMessageRefresh() {
+        RequestContext.getCurrentInstance().execute("msgBoxBaseRefreshDlg.show()");
+    }
+
     public void showMessageNoPermissionBox(){
         RequestContext.getCurrentInstance().execute("msgBoxNoPermissionDlg.show()");
     }

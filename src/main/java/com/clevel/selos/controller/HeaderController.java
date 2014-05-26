@@ -1719,6 +1719,7 @@ public class HeaderController extends BaseController {
     //-------------- End of Function for Appraisal Request ( BDM ) ------------------//
 
     public void onCheckCriteria(){
+        //RequestContext.getCurrentInstance().execute("blockUI.show()");
         long workCaseId = 0;
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCaseId"))){
@@ -1738,30 +1739,31 @@ public class HeaderController extends BaseController {
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
                             message = Util.getMessageException(ex);
-                            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                            showMessageBox();
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Criteria Success.";
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        showMessageRefresh();
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        showMessageBox();
                     }
                 } else {
                     uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                     messageHeader = "Exception.";
                     message = "Request for Check Criteria Fail.";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                    showMessageRefresh();
                 }
             } catch (Exception ex){
                 log.error("Exception while onCheckCriteria : ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                showMessageBox();
             }
 
         }
+        //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
     public boolean checkAccessStage(String stageString){

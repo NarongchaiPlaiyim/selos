@@ -30,6 +30,10 @@ function showCheckedValue(){
     alert(document.getElementById('frmMain:checkBoxId').checked);
 }
 
+function reload(){
+    window.location.reload();
+}
+
 function gotoInbox(contextUrl) {
     window.location = contextUrl;
 }
