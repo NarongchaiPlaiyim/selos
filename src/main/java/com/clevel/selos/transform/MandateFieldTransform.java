@@ -116,7 +116,7 @@ public class MandateFieldTransform extends Transform{
 
         mandateFieldConditionView.setConditionDetailViewList(conditionDetailViewList);
 
-        logger.debug("-- end transformToView()");
+        logger.info("-- end transformToView(): {}", mandateFieldConditionView);
         return mandateFieldConditionView;
     }
 

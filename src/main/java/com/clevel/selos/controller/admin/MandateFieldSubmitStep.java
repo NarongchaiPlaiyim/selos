@@ -3,6 +3,7 @@ package com.clevel.selos.controller.admin;
 import com.clevel.selos.businesscontrol.StepStatusControl;
 import com.clevel.selos.businesscontrol.admin.MandateFieldControl;
 import com.clevel.selos.integration.ADMIN;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
@@ -49,6 +50,7 @@ public class MandateFieldSubmitStep implements Serializable {
     private long selectedClassViewId = -1;
     private long selectedConditionId = -1;
     private long selectedMandateFieldSAAdminId = -1;
+    private int classRequired = -1;
 
     private long selectedStepId = -1;
     private long selectedActionId = -1;
@@ -126,8 +128,8 @@ public class MandateFieldSubmitStep implements Serializable {
                 selectedClassViewId = wrkMandateFieldClassSAAdminView.getId();
                 updatedMode = true;
             }
+            _initFieldConditionDropdown();
         }
-
     }
 
     public void onDeleteStepActionField(){
@@ -160,27 +162,35 @@ public class MandateFieldSubmitStep implements Serializable {
 
     private void _initFieldConditionDropdown(){
         //Query Field list from MST and then filter the selected one out.
-        mandateFieldViewList = mandateFieldControl.getMandateFieldDB(wrkMandateFieldClassSAAdminView);
-        if(wrkMandateFieldClassSAAdminView.getMandateFieldViewList() != null){
+        List<MandateFieldView> _tempDBFieldViewList = mandateFieldControl.getMandateFieldDB(wrkMandateFieldClassSAAdminView);
+        mandateFieldViewList = new ArrayList<MandateFieldView>();
+        for(MandateFieldView mstMandateFieldView : _tempDBFieldViewList){
+            boolean isMatched = false;
             for(MandateFieldView selectedMandateFieldView : wrkMandateFieldClassSAAdminView.getMandateFieldViewList()){
-                for(MandateFieldView mstMandateFieldView : mandateFieldViewList){
-                    if(selectedMandateFieldView.getId() == mstMandateFieldView.getId()){
-                        mandateFieldViewList.remove(mstMandateFieldView);
-                        break;
-                    }
+                if(selectedMandateFieldView.getFieldName().equals(mstMandateFieldView.getFieldName())){
+                    isMatched = true;
+                    break;
                 }
+            }
+            if(!isMatched){
+                mandateFieldViewList.add(mstMandateFieldView);
             }
         }
 
         //Query Condition list from MST and then filter the selected one out.
-        mandateFieldConditionViewList = mandateFieldControl.getMandateConditionList(wrkMandateFieldClassSAAdminView);
-        if(wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList() != null){
+        List<MandateFieldConditionView> _tempMandateConditionViewDBList = mandateFieldControl.getMandateConditionList(wrkMandateFieldClassSAAdminView);
+        mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
+        for(MandateFieldConditionView mstConditionView : _tempMandateConditionViewDBList){
+            boolean isMatched = false;
             for(MandateFieldConditionView selectedConditionView : wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList()){
-                for(MandateFieldConditionView mstConditionView : mandateFieldConditionViewList){
-                    if(selectedConditionView.getId() == mstConditionView.getId()){
-                        mandateFieldConditionViewList.remove(mstConditionView);
-                    }
+
+                if(selectedConditionView.getId() == mstConditionView.getId()){
+                    isMatched = true;
+                    break;
                 }
+            }
+            if(!isMatched){
+                mandateFieldConditionViewList.add(mstConditionView);
             }
         }
     }
@@ -194,9 +204,11 @@ public class MandateFieldSubmitStep implements Serializable {
     }
 
     public void onAddStepActionField(){
-        log.info("-- begin onAddStepActionField");
+        log.info("-- begin onAddStepActionField {}:", classRequired);
         MandateFieldClassSAAdminView _toUpd = new MandateFieldClassSAAdminView();
         _toUpd.updateValues(wrkMandateFieldClassSAAdminView);
+        _toUpd.setClassRequired(classRequired == RadioValue.YES.value());
+
         List<MandateFieldClassSAAdminView> classStepActionViewList = mandateFieldStepActionView.getClassSAAdminViewList();
         for(MandateFieldClassSAAdminView classSAAdminView : classStepActionViewList){
             if(classSAAdminView.getId() == _toUpd.getId()){
@@ -208,7 +220,7 @@ public class MandateFieldSubmitStep implements Serializable {
 
         mandateFieldControl.deleteMandateFieldStepAction(mandateFieldViewList, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
         mandateFieldControl.deleteMandateFieldConStepAction(mandateFieldConditionViewList, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
-        mandateFieldControl.saveMandateFieldClassSAAdmin(wrkMandateFieldClassSAAdminView, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
+        mandateFieldControl.saveMandateFieldClassSAAdmin(_toUpd, mandateFieldStepActionView.getStepView(), mandateFieldStepActionView.getActionView());
         classStepActionViewList.add(_toUpd);
         mandateFieldStepActionView.setClassSAAdminViewList(classStepActionViewList);
 
@@ -457,8 +469,15 @@ public class MandateFieldSubmitStep implements Serializable {
         this.mandateFieldConditionViewList = mandateFieldConditionViewList;
     }
 
-
     public long getSelectedConditionId() {
         return selectedConditionId;
+    }
+
+    public int getClassRequired() {
+        return classRequired;
+    }
+
+    public void setClassRequired(int classRequired) {
+        this.classRequired = classRequired;
     }
 }

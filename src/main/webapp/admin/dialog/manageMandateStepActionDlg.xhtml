@@ -41,6 +41,17 @@
                 </tr>
                 <tr>
                     <td class="title">
+                        <p:outputLabel for="classRequired" value="#{msg.get('app.mandate.step.action.class.not.null')}" />
+                    </td>
+                    <td>
+                        <p:selectOneRadio id="classRequired" value="#{mandateFieldSubmitStep.classRequired}">
+                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
+                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                        </p:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
                         <p:outputLabel value="#{msg.get('app.mandate.step.action.select.condition')}" />
                     </td>
                     <td>
