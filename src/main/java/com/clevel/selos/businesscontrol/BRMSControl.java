@@ -238,8 +238,8 @@ public class BRMSControl extends BusinessControl {
 
         actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), actionId);
         logger.info("-- load Action Validation");
-        actionValidationControl.validate(workCasePrescreen);
-        actionValidationControl.validate(prescreen);
+        actionValidationControl.validate(workCasePrescreen, WorkCasePrescreen.class);
+        actionValidationControl.validate(prescreen, Prescreen.class);
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
@@ -282,8 +282,8 @@ public class BRMSControl extends BusinessControl {
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkcasePrescreenId(workcasePrescreenId);
         //validate bankStatementSummary
+        actionValidationControl.validate(bankStatementSummary, BankStatement.class);
         if(bankStatementSummary != null){
-            actionValidationControl.validate(bankStatementSummary);
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
             for(BankStatement bankStatement : bankStatementList){
                 accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
@@ -342,6 +342,7 @@ public class BRMSControl extends BusinessControl {
 
         UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
+        logger.info("actionValidationResult: {}", actionValidationResult);
         if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
             /** To Change to use test Data using second line**/
@@ -370,7 +371,7 @@ public class BRMSControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         actionValidationControl.loadActionValidation(workCase.getStep().getId(), actionId);
-        actionValidationControl.validate(workCase);
+        actionValidationControl.validate(workCase, WorkCase.class);
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         //1. Set Customer Information, NCB Account, TMB Account Info, Customer CSI (Warning List)
@@ -379,7 +380,7 @@ public class BRMSControl extends BusinessControl {
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
 
-        actionValidationControl.validate(customerInfoList);
+        actionValidationControl.validate(customerInfoList, Customer.class);
 
         for(Customer customer : customerList){
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
@@ -401,7 +402,7 @@ public class BRMSControl extends BusinessControl {
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
 
         List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
-        actionValidationControl.validate(bankStatementSummary);
+        actionValidationControl.validate(bankStatementSummary, BankStatement.class);
         for(BankStatement bankStatement : bankStatementList){
             accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
         }
@@ -410,7 +411,7 @@ public class BRMSControl extends BusinessControl {
         //3. Set Biz Info
         List<BRMSBizInfo> brmsBizInfoList = new ArrayList<BRMSBizInfo>();
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(bizInfoSummary);
+        actionValidationControl.validate(bizInfoSummary, BizInfoSummary.class);
         List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
         for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
             brmsBizInfoList.add(getBRMSBizInfo(bizInfoDetail));
@@ -419,11 +420,11 @@ public class BRMSControl extends BusinessControl {
 
         //4. Set TMB Account Request
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(newCreditFacility);
+        actionValidationControl.validate(newCreditFacility, NewCreditFacility.class);
 
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(decision);
+        actionValidationControl.validate(decision, Decision.class);
 
         ProposeType _proposeType = ProposeType.P;
         if(workCase.getStep() != null)
@@ -502,12 +503,12 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCollateralInfoList(collateralInfoList);
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(basicInfo);
+        actionValidationControl.validate(basicInfo, BasicInfo.class);
 
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(tcg);
-        actionValidationControl.validate(dbr);
+        actionValidationControl.validate(tcg, TCG.class);
+        actionValidationControl.validate(dbr, DBR.class);
 
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
@@ -521,7 +522,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
 
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
-        actionValidationControl.validate(workCaseAppraisal);
+        actionValidationControl.validate(workCaseAppraisal, WorkCaseAppraisal.class);
 
         if(workCaseAppraisal != null){
             AppraisalStatus appraisalStatus = AppraisalStatus.lookup(workCaseAppraisal.getAppraisalResult());
@@ -538,7 +539,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(exSummary);
+        actionValidationControl.validate(exSummary, ExSummary.class);
 
         if(ProposeType.P.equals(_proposeType)){
             applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalIncomeNetBDM());
@@ -553,7 +554,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(existingCreditFacility);
+        actionValidationControl.validate(existingCreditFacility, ExistingCreditFacility.class);
 
         applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
         applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
