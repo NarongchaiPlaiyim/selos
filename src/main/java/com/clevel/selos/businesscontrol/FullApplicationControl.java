@@ -105,12 +105,17 @@ public class FullApplicationControl extends BusinessControl {
     RLOSInterface rlosInterface;
     @Inject
     WarningCodeDAO warningCodeDAO;
+    @Inject
+    UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
 
     @Inject
     AppraisalRequestControl appraisalRequestControl;
 
     @Inject
     BPMExecutor bpmExecutor;
+
+    @Inject
+    ActionValidationControl actionValidationControl;
 
     public List<User> getABDMUserList(){
         User currentUser = getCurrentUser();
@@ -156,7 +161,7 @@ public class FullApplicationControl extends BusinessControl {
         WorkCase workCase = null;
         String productGroup = "";
         String deviationCode = "";
-        String resultCode = "G"; //TODO: get result code
+        String resultCode = "G";
         int requestType = 0;
         int appraisalRequestRequire = 0;
         BigDecimal totalCommercial = BigDecimal.ZERO;
@@ -171,8 +176,18 @@ public class FullApplicationControl extends BusinessControl {
 
                 //TODO: get total com and retail
 
-                if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
-                    deviationCode = "AD"; //TODO:
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                    if(uwRuleResultSummary.getUwResultColor()!=null){
+                        resultCode = uwRuleResultSummary.getUwResultColor().code();
+                    }
+
+                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
+                        deviationCode = "AD";
+                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
+                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
+                        }
+                    }
                 }
 
                 bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
@@ -199,8 +214,8 @@ public class FullApplicationControl extends BusinessControl {
         String zmPricingRequestFlag = "";
         BigDecimal totalCommercial = BigDecimal.ZERO; //TODO
         BigDecimal totalRetail = BigDecimal.ZERO; //TODO
-        String resultCode = "G"; //TODO
-        String deviationCode = ""; //TODO
+        String resultCode = "G";
+        String deviationCode = "";
         int requestType = 0;
         int priceDOALevel = 0;
         ApprovalHistory approvalHistoryEndorseCA = null;
@@ -263,8 +278,19 @@ public class FullApplicationControl extends BusinessControl {
                         approvalHistoryEndorseCA.setSubmitDate(new Date());
                     }
                 }
-                if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
-                    deviationCode = "AD"; //TODO:
+
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                    if(uwRuleResultSummary.getUwResultColor()!=null){
+                        resultCode = uwRuleResultSummary.getUwResultColor().code();
+                    }
+
+                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
+                        deviationCode = "AD";
+                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
+                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
+                        }
+                    }
                 }
 
                 bpmExecutor.submitRM(queueName, wobNumber, zmDecisionFlag, zmPricingRequestFlag, totalCommercial, totalRetail, resultCode, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
