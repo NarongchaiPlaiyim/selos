@@ -82,7 +82,7 @@
             <!--Close Sale-->
             <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                              title="#{msg.get('app.header.button.closeSale')}"
-                             rendered="#{headerController.checkButton('Close Sales')}"
+                             rendered="#{headerController.checkButton('Close Sales') and headerController.canCloseSale}"
                              type="button"
                              onclick="confrmCloseSaleCA.show()"/>
             <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"

@@ -4,12 +4,14 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
+import com.clevel.selos.model.db.working.UWRuleResultSummary;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -49,6 +51,8 @@ public class HeaderController extends BaseController {
     BasicInfoDAO basicInfoDAO;
     @Inject
     ReasonDAO reasonDAO;
+    @Inject
+    UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
 
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -179,6 +183,11 @@ public class HeaderController extends BaseController {
     private int returnReasonId;
     private String returnAADRemark;
 
+    //Check Pre-Screen Result
+    private boolean canCloseSale;
+    private UWResultColor uwResultColor;
+    private String deviationFlag = "";
+
     public HeaderController() {
     }
 
@@ -220,6 +229,17 @@ public class HeaderController extends BaseController {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
+        }
+
+        //check pre-screen result
+        canCloseSale = false;
+        if(workCasePreScreenId!=0){
+            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                    canCloseSale = true;
+                }
+            }
         }
     }
 
@@ -2312,5 +2332,13 @@ public class HeaderController extends BaseController {
 
     public void setReturnAADRemark(String returnAADRemark) {
         this.returnAADRemark = returnAADRemark;
+    }
+
+    public boolean isCanCloseSale() {
+        return canCloseSale;
+    }
+
+    public void setCanCloseSale(boolean canCloseSale) {
+        this.canCloseSale = canCloseSale;
     }
 }
