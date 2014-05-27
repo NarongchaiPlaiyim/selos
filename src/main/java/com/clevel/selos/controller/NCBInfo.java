@@ -281,6 +281,17 @@ public class NCBInfo extends BaseController {
         if (selectNcbRecordItem != null) {
             ncbDetailView = new NCBDetailView();
             ncbDetailView = cloner.deepClone(selectNcbRecordItem);
+            if(ncbDetailView.getRefinanceCheck()){
+                ncbDetailView.setRefinanceFlag(RadioValue.YES.value());
+            } else {
+                ncbDetailView.setRefinanceFlag(RadioValue.NO.value());
+            }
+
+            if(ncbDetailView.getWcCheck()){
+                ncbDetailView.setWcFlag(RadioValue.YES.value());
+            } else {
+                ncbDetailView.setWcFlag(RadioValue.NO.value());
+            }
         }
     }
 

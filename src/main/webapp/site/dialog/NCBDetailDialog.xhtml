@@ -178,7 +178,7 @@
             <tr>
                 <td class="title" style="width: 280px;">
                     <h:outputText value="#{msg.get('app.ncbDetail.dlg.typeOfCurrentPayment')}"/>
-                    <h:outputText value="#{ncbInfo.mandate('typeOfCurrentPayment')}" styleClass="require-field"/>
+                    <h:outputText value="#{ncbInfo.mandate('typeOfCurrentPaymentDlg')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
                 <td>
@@ -187,7 +187,7 @@
                                      style="width: 200px;"
                                      size="1"
                                      required="#{not empty param[addRowData.clientId]}"
-                                     disabled="#{ncbInfo.isDisabled('typeOfCurrentPayment')}">
+                                     disabled="#{ncbInfo.isDisabled('typeOfCurrentPaymentDlg')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{ncbInfo.settlementStatusList}"
                                        var="dlgtdrCurrentList"
@@ -200,7 +200,7 @@
             <tr>
                 <td class="title" style="width: 280px;">
                     <h:outputText value="#{msg.get('app.ncbDetail.dlg.typeOfHistoryPayment')}"/>
-                    <h:outputText value="#{ncbInfo.mandate('typeOfHistoryPayment')}" styleClass="require-field"/>
+                    <h:outputText value="#{ncbInfo.mandate('typeOfHistoryPaymentDlg')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
                 <td>
@@ -209,7 +209,7 @@
                                      style="width: 200px;"
                                      size="1"
                                      required="#{not empty param[addRowData.clientId]}"
-                                     disabled="#{ncbInfo.isDisabled('typeOfHistoryPayment')}">
+                                     disabled="#{ncbInfo.isDisabled('typeOfHistoryPaymentDlg')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{ncbInfo.settlementStatusList}"
                                        var="dlgHistoryList"

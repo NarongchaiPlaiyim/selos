@@ -233,14 +233,10 @@ public class CreditFacExisting extends BaseController {
                 isUsePCE = false;
 
                 guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
-                log.info("guarantorList size :: {}", guarantorList.size());
-                /*if (guarantorList == null) {
-                    guarantorList = new ArrayList<CustomerInfoView>();
-                    CustomerInfoView customer = new CustomerInfoView();
-                    customer.setId(63);
-                    customer.setFirstNameTh("พี่เทพ มวลมหาประชา");
-                    guarantorList.add(customer);
-                }*/
+//                CustomerInfoView customerInfoView = new CustomerInfoView();
+//                customerInfoView.setId(-1);
+//                customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+//                guarantorList.add(customerInfoView);
 
                 existAccountStatusView = new BankAccountStatusView();
                 existProductProgramView = new ProductProgramView();
@@ -1744,36 +1740,45 @@ public class CreditFacExisting extends BaseController {
 
 
     public void onSaveExistingGuarantor() {
-        log.info("onSaveExistingGuarantor ::: mode : {}", modeForButton);
-        log.info("onSaveExistingGuarantor rowIndex is " + rowIndex);
-        log.info("onSaveExistingGuarantor selectGuarantorDetail null is " + (selectGuarantorDetail==null));
-        List<ExistingCreditTypeDetailView> typeCheckLastTime;
-        //typeCheckLastTime = selectGuarantorDetail.getExistingCreditTypeDetailViewList();
-        if(selectGuarantorDetail != null){
-            log.info("selectGuarantorDetail is " + selectGuarantorDetail.toString());
-           //typeCheckLastTime = selectGuarantorDetail.getExistingCreditTypeDetailViewList();
-            //log.info("onSaveExistingGuarantor typeCheckLastTime size is " + typeCheckLastTime.size());
-        }
-
-        boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
+
+        boolean complete;
+        boolean checkPlus;
+
         int seqBorrowerTemp;
-        boolean checkPlus = true;
+
         BigDecimal summaryGuaranteeAmount = BigDecimal.ZERO;
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
-            for (int l=0;l<hashBorrower.size();l++){
-                log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
-            }
             ExistingGuarantorDetailView existingGuarantorDetailViewAdd = new ExistingGuarantorDetailView();
-
             existingGuarantorDetailViewAdd.setNo(borrowerExistingGuarantorDetailViewList.size()+1);
-            existingGuarantorDetailViewAdd.setGuarantorName(customerInfoControl.getCustomerById(existingGuarantorDetailView.getGuarantorName()));
-            existingGuarantorDetailViewAdd.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
 
+            if(existingGuarantorDetailView.getGuarantorName() != null){
+                if(existingGuarantorDetailView.getGuarantorName().getId() == -1){
+                    existingGuarantorDetailViewAdd.setGuarantorCategory(GuarantorCategory.TCG);
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+                    customerInfoView.setId(-1);
+                    customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                    existingGuarantorDetailViewAdd.setGuarantorName(customerInfoView);
+                } else {
+                    CustomerInfoView customerInfoView = customerInfoControl.getCustomerInfoViewById(existingGuarantorDetailView.getGuarantorName().getId(), guarantorList);
+                    existingGuarantorDetailViewAdd.setGuarantorName(customerInfoView);
+                    if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
+                        existingGuarantorDetailViewAdd.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                    } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
+                        existingGuarantorDetailViewAdd.setGuarantorCategory(GuarantorCategory.JURISTIC);
+                    } else {
+                        existingGuarantorDetailViewAdd.setGuarantorCategory(GuarantorCategory.NA);
+                    }
+                }
+            } else {
+                existingGuarantorDetailViewAdd.setGuarantorName(null);
+                existingGuarantorDetailViewAdd.setGuarantorCategory(null);
+            }
+
+            existingGuarantorDetailViewAdd.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
             existingGuarantorDetailViewAdd.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
             for (ExistingCreditTypeDetailView existingCreditTypeDetail : existingGuarantorDetailView.getExistingCreditTypeDetailViewList()) {
-                log.info("existingCreditTypeDetail.isNoFlag()  :: {}", existingCreditTypeDetail.isNoFlag());
                 if (existingCreditTypeDetail.isNoFlag()) {
                     existingGuarantorDetailViewAdd.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetail);
                     summaryGuaranteeAmount = summaryGuaranteeAmount.add(existingCreditTypeDetail.getGuaranteeAmount());
@@ -1782,25 +1787,38 @@ public class CreditFacExisting extends BaseController {
                 }
             }
             existingGuarantorDetailViewAdd.setTotalLimitGuaranteeAmount(summaryGuaranteeAmount);
-            for (int l=0;l<hashBorrower.size();l++){
-                log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
-            }
             borrowerExistingGuarantorDetailViewList.add(existingGuarantorDetailViewAdd);
             existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
-            //onSetRowNoCreditTypeDetail(existingGuarantorDetailViewAdd.getExistingCreditTypeDetailViewList());
         }else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
             ExistingGuarantorDetailView existingGuarantorDetailViewOnRow = borrowerExistingGuarantorDetailViewList.get(rowIndex);
             existingGuarantorDetailViewOnRow.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
             existingGuarantorDetailViewOnRow.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
-            existingGuarantorDetailViewOnRow.setGuarantorName(customerInfoControl.getCustomerById(existingGuarantorDetailView.getGuarantorName()));
+
+            if(existingGuarantorDetailView.getGuarantorName() != null){
+                if(existingGuarantorDetailView.getGuarantorName().getId() == -1){
+                    existingGuarantorDetailViewOnRow.setGuarantorCategory(GuarantorCategory.TCG);
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+                    customerInfoView.setId(-1);
+                    customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                    existingGuarantorDetailViewOnRow.setGuarantorName(customerInfoView);
+                } else {
+                    CustomerInfoView customerInfoView = customerInfoControl.getCustomerInfoViewById(existingGuarantorDetailView.getGuarantorName().getId(), guarantorList);
+                    existingGuarantorDetailViewOnRow.setGuarantorName(customerInfoView);
+                    if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.INDIVIDUAL.value()) {
+                        existingGuarantorDetailViewOnRow.setGuarantorCategory(GuarantorCategory.INDIVIDUAL);
+                    } else if (customerInfoView.getCustomerEntity().getId() == GuarantorCategory.JURISTIC.value()) {
+                        existingGuarantorDetailViewOnRow.setGuarantorCategory(GuarantorCategory.JURISTIC);
+                    } else {
+                        existingGuarantorDetailViewOnRow.setGuarantorCategory(GuarantorCategory.NA);
+                    }
+                }
+            } else {
+                existingGuarantorDetailViewOnRow.setGuarantorName(null);
+                existingGuarantorDetailViewOnRow.setGuarantorCategory(null);
+            }
 
             List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
             existingCreditTypeDetailViewList = existingGuarantorDetailView.getExistingCreditTypeDetailViewList();
-            for (int l=0;l<hashBorrower.size();l++){
-                log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
-            }
-            log.info("selectGuarantorDetail begin old check last size " +selectGuarantorDetail.getExistingCreditTypeDetailViewList().size());
-
             if(existingCreditTypeDetailViewList!=null && existingCreditTypeDetailViewList.size()>0){
                 for (int i = 0; i < existingCreditTypeDetailViewList.size(); i++) {
                     seqBorrowerTemp = existingCreditTypeDetailViewList.get(i).getNo();
@@ -1809,24 +1827,12 @@ public class CreditFacExisting extends BaseController {
                         summaryGuaranteeAmount = summaryGuaranteeAmount.add(existingCreditTypeDetailViewList.get(i).getGuaranteeAmount());
                         checkPlus = true;
 
-                        log.info("selectGuarantorDetail in process old check last size " +selectGuarantorDetail.getExistingCreditTypeDetailViewList().size());
-
-                        //for (int j = 0; j < selectGuarantorDetail.getExistingCreditTypeDetailViewList().size(); j++) {
                         for (int j = 0; j <selectGuarantorDetail.getExistingCreditTypeDetailViewList().size(); j++) {
-                            log.info("selectGuarantorDetail old check last getSeq  " + j + "  is " + selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(j).getNo());
                             if (selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(j).getNo() == seqBorrowerTemp) {
                                 checkPlus = false;
                             }
-
-                            log.info("checkPlus is  " + checkPlus);
-
                             if (checkPlus) {
-                                log.info("put hash ");
                                 hashBorrower.put(seqBorrowerTemp, 1);
-
-                                for (int l=0;l<hashBorrower.size();l++){
-                                    log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
-                                }
                             }
                         }
                         existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
@@ -1838,24 +1844,13 @@ public class CreditFacExisting extends BaseController {
                     existingGuarantorDetailViewOnRow.setTotalLimitGuaranteeAmount(summaryGuaranteeAmount);
                 }
             }
-
-            for (int l=0;l<hashBorrower.size();l++){
-                log.info("hashBorrower.get(l) in use   :  "+ l + " is   " +hashBorrower.get(l+1).toString());
-            }
-            //existingCreditFacilityView.getBorrowerGuarantorList().get(rowIndex).setExistingCreditTypeDetailViewList(existingCollateralDetailView.getExistingCreditTypeDetailViewList());
             existingCreditFacilityView.setBorrowerGuarantorList(borrowerExistingGuarantorDetailViewList);
-            //onSetRowNoCreditTypeDetail(existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList());
-
-
-        }else {
+        } else {
             log.info("onSaveCreditDetail ::: Undefined modeForButton !!");
         }
         calTotalGuarantor();
         complete = true;
-
-        log.info(" onSaveExistingGuarantor complete >>>>  :  {}", complete);
         context.addCallbackParam("functionComplete", complete);
-
     }
 
     private void calTotalGuarantor(){
@@ -1867,25 +1862,10 @@ public class CreditFacExisting extends BaseController {
     }
 
     public void onDeleteExistingGuarantor(){
-        log.info("onDeleteExistingGuarantor begin " );
-        log.info("onDeleteExistingGuarantor rowIndex is " + rowIndex);
-        log.info("onDeleteExistingGuarantor selectGuarantorDetail null is " + (selectGuarantorDetail==null));
-        if(selectGuarantorDetail != null){
-            log.info("selectGuarantorDetail is " + selectGuarantorDetail.toString());
-        }
-
         ExistingGuarantorDetailView guarantorDetailViewDel = selectGuarantorDetail;
-
-        for (int l=0;l<hashBorrower.size();l++){
-            log.info("before hashBorrower seq :  "+ l + " use is   " +hashBorrower.get(l+1).toString());
-        }
-        log.info("getCreditFacilityList().size() " + guarantorDetailViewDel.getExistingCreditTypeDetailViewList().size());
 
         for(int j=0;j<guarantorDetailViewDel.getExistingCreditTypeDetailViewList().size();j++){
             int seqBowForDel = guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo();
-
-            log.info("seq in seqBowForDel :  "+ seqBowForDel +" use feq is " + hashBorrower.get(seqBowForDel).toString());
-
             if(hashBorrower.containsKey(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()) &&
                     Integer.parseInt(hashBorrower.get(guarantorDetailViewDel.getExistingCreditTypeDetailViewList().get(j).getNo()).toString())>0){
                 hashBorrower.put(seqBowForDel, 0);
@@ -1894,16 +1874,12 @@ public class CreditFacExisting extends BaseController {
 
         borrowerExistingGuarantorDetailViewList.remove(guarantorDetailViewDel);
         onSetRowNoGuarantorDetail(borrowerExistingGuarantorDetailViewList);
-
-        for (int l=0;l<hashBorrower.size();l++){
-            log.info("after hashBorrower seq :  "+ l + " use is   " +hashBorrower.get(l+1).toString());
-        }
         calTotalGuarantor();
     }
 
     private void onSetInUsed(){
         int inUsed;
-        int  seq;
+        int seq;
         if(existingCreditFacilityView.getBorrowerComExistingCredit()!=null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
             for(int i = 0; i < existingCreditFacilityView.getBorrowerComExistingCredit().size(); i++) {
                 seq = existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getNo();
@@ -1929,30 +1905,12 @@ public class CreditFacExisting extends BaseController {
     }
 
     public void onSaveCreditFacExisting() {
-
-        log.info("onSaveCreditFacExisting ::: ModeForDB  {}");
         onSetInUsed();
-        log.info("check seq  ::: inused ");
-        if(existingCreditFacilityView.getBorrowerComExistingCredit()!=null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
-            for(int i = 0; i < existingCreditFacilityView.getBorrowerComExistingCredit().size(); i++) {
-                log.info("borrower  seq is >>> " + existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getNo()  + " inuse is >> " + existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getInUsed());
-            }
-        }
-
-        if(existingCreditFacilityView.getRelatedComExistingCredit()!=null && existingCreditFacilityView.getRelatedComExistingCredit().size()>0){
-            for (int i = 0; i < existingCreditFacilityView.getRelatedComExistingCredit().size(); i++) {
-                log.info("related   seq is >>> " + existingCreditFacilityView.getRelatedComExistingCredit().get(i).getNo()  + " inuse is >> " + existingCreditFacilityView.getRelatedComExistingCredit().get(i).getInUsed());
-            }
-        }
-
-
         try {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
-            //onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.credit.facility.message.save.failed");
@@ -1962,8 +1920,6 @@ public class CreditFacExisting extends BaseController {
             } else {
                 message = msg.get("app.credit.facility.message.save.failed") + ex.getMessage();
             }
-
-            //messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }

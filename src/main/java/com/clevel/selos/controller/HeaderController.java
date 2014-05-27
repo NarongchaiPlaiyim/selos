@@ -958,7 +958,7 @@ public class HeaderController extends BaseController {
 
     public void onOpenCancelRequestPriceReduction(){
         log.debug("onOpenCancelRequestPriceReduction");
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        cancelReason = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
         reasonId = 0;
         cancelRemark = "";
         RequestContext.getCurrentInstance().execute("cancelRequestPriceReduceDlg.show()");
@@ -1724,6 +1724,7 @@ public class HeaderController extends BaseController {
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             try{
+                fullApplicationControl.updateCSIDataFullApp(workCaseId);
                 UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId, 1009);
                 log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
@@ -1772,7 +1773,7 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("FULLAPP".equalsIgnoreCase(stageString)){
-            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207){
+            if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207 || stageId == 208){
                 accessible = true;
             }
         } else if ("APPRAISAL".equalsIgnoreCase(stageString)){

@@ -8,6 +8,7 @@ import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.Language;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
@@ -280,7 +281,7 @@ public class LoginBean {
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {*/
-            if((Long)httpSession.getAttribute("stepId") !=0 && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
+            if((Long)httpSession.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)httpSession.getAttribute("wobNumber");
                 bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));

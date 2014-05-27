@@ -79,7 +79,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
         UWRulesResponse uwRulesResponse = null;
 
         try {
-            DecisionServiceResponse decisionServiceResponse = endpoint.callPrescreenUnderwritingRulesService(fullApplicationConverter.getDecisionServiceRequest(applicationInfo));
+            DecisionServiceResponse decisionServiceResponse = endpoint.callFullApplicationUnderwritingRulesService(fullApplicationConverter.getDecisionServiceRequest(applicationInfo));
             uwRulesResponse = fullApplicationConverter.getUWRulesResponse(decisionServiceResponse);
             uwRulesResponse.setActionResult(ActionResult.SUCCESS);
         }catch (Exception ex) {

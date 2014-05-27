@@ -8,6 +8,8 @@ import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.db.working.ExistingGuarantorDetail;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingGuarantorDetailView;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -19,6 +21,9 @@ public class ExistingGuarantorDetailTransform extends Transform {
     @SELOS
     @Inject
     private Logger log;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     CustomerDAO customerDAO;
@@ -39,7 +44,6 @@ public class ExistingGuarantorDetailTransform extends Transform {
         for (ExistingGuarantorDetailView existingGuarantorDetailView : existingGuarantorDetailViewList) {
             existingGuarantorDetail = new ExistingGuarantorDetail();
             if (existingGuarantorDetailView.getId() != 0) {
-                //existingGuarantorDetail.setId(existingGuarantorDetailView.getId());
                 existingGuarantorDetail.setCreateDate(existingGuarantorDetailView.getCreateDate());
                 existingGuarantorDetail.setCreateBy(existingGuarantorDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -48,17 +52,20 @@ public class ExistingGuarantorDetailTransform extends Transform {
             }
             existingGuarantorDetail.setModifyDate(new Date());
             existingGuarantorDetail.setModifyBy(user);
-            existingGuarantorDetail.setNo(existingGuarantorDetailView.getNo());
-            log.debug("existingGuarantorDetailView.getGuarantorName().getId() is {}",existingGuarantorDetailView.getGuarantorName().getId());
-            Customer guarantor = null;
-            if(existingGuarantorDetailView.getGuarantorName()!=null && existingGuarantorDetailView.getGuarantorName().getId()!=0) {
-                guarantor = new Customer();
-                guarantor.setId(existingGuarantorDetailView.getGuarantorName().getId());
+            if(existingGuarantorDetailView.getGuarantorName() != null){
+                if(existingGuarantorDetailView.getGuarantorName().getId() == -1){
+                    existingGuarantorDetail.setGuarantorName(null);
+                } else {
+                    Customer guarantor = customerDAO.findById(existingGuarantorDetailView.getGuarantorName().getId());
+                    existingGuarantorDetail.setGuarantorName(guarantor);
+                }
+            } else {
+                existingGuarantorDetail.setGuarantorName(null);
             }
-            existingGuarantorDetail.setGuarantorName(guarantor);
             existingGuarantorDetail.setTcglgNo(existingGuarantorDetailView.getTcgLgNo());
             existingGuarantorDetail.setExistingCreditFacility(existingCreditFacility);
             existingGuarantorDetail.setTotalLimitGuaranteeAmount(existingGuarantorDetailView.getTotalLimitGuaranteeAmount());
+            existingGuarantorDetail.setGuarantorCategory(existingGuarantorDetailView.getGuarantorCategory());
             existingGuarantorDetailList.add(existingGuarantorDetail);
         }
 
@@ -77,11 +84,16 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetailView.setCreateBy(existingGuarantorDetail.getCreateBy());
             existingGuarantorDetailView.setModifyDate(existingGuarantorDetail.getModifyDate());
             existingGuarantorDetailView.setModifyBy(existingGuarantorDetail.getModifyBy());
-            CustomerInfoView guarantorView = new CustomerInfoView();
-            if(existingGuarantorDetail.getGuarantorName() != null && existingGuarantorDetail.getGuarantorName().getId() != 0){
-                guarantorView = customerTransform.transformToView(customerDAO.findById(existingGuarantorDetail.getGuarantorName().getId()));
+            if(existingGuarantorDetail.getGuarantorName() != null){
+                CustomerInfoView guarantorView = customerTransform.transformToView(existingGuarantorDetail.getGuarantorName());
+                existingGuarantorDetailView.setGuarantorName(guarantorView);
+            } else {
+                CustomerInfoView customerInfoView = new CustomerInfoView();
+                customerInfoView.setId(-1);
+                customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                existingGuarantorDetailView.setGuarantorName(customerInfoView);
             }
-            existingGuarantorDetailView.setGuarantorName(guarantorView);
+            existingGuarantorDetailView.setGuarantorCategory(existingGuarantorDetail.getGuarantorCategory());
             existingGuarantorDetailView.setTcgLgNo(existingGuarantorDetail.getTcglgNo());
             existingGuarantorDetailView.setTotalLimitGuaranteeAmount(existingGuarantorDetail.getTotalLimitGuaranteeAmount());
             existingGuarantorDetailViews.add(existingGuarantorDetailView);

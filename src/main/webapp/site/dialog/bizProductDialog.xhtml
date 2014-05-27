@@ -16,7 +16,7 @@
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}"
                                  required="#{not empty param[saveBizProductBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.productType')}"/>
+                                 readonly="#{bizInfoDetail.isDisabled('bizProduct.productType')}"/>
                 </td>
             </tr>
             <tr>
@@ -29,7 +29,7 @@
                     <p:inputText id="percentSalesVolume" styleClass="right"
                                  onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                  value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="#{not empty param[saveBizProductBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.percentSalesVolumn')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizProduct.percentSalesVolumn')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentSalesVolume"/>
@@ -46,7 +46,7 @@
                     <p:inputText id="percentEBIT" styleClass="right"
                                  onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                  value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="#{not empty param[saveBizProductBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.percentEBIT')}">
+                                 readonly="#{bizInfoDetail.isDisabled('bizProduct.percentEBIT')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentEBIT"/>
@@ -62,7 +62,7 @@
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}"
                                  required="#{not empty param[saveBizProductBtn.clientId]}"
-                                 disabled="#{bizInfoDetail.isDisabled('bizProduct.productDetail')}"/>
+                                 readonly="#{bizInfoDetail.isDisabled('bizProduct.productDetail')}"/>
                 </td>
             </tr>
             <tr>
@@ -79,8 +79,7 @@
                             action="#{bizInfoDetail.onSaveBizProductDetailView()}"
                             process=":bizProductViewDlgForm"
                             update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
-                            oncomplete="handleFullappBizProductRequest(xhr, status, args)"
-                            />
+                            oncomplete="handleFullappBizProductRequest(xhr, status, args)"/>
                     <p:commandButton type="button" value="#{msg.get('app.button.cancel')}"
                                      update=":bizProductViewDlgForm" onclick="bizProductViewDlg.hide()"/>
                 </td>

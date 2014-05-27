@@ -1728,7 +1728,10 @@
                                                     <p:outputLabel value="#{existingGuarantor.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="" styleClass="left top">
-                                                    <p:outputLabel value="#{existingGuarantor.guarantorName.firstNameTh}"></p:outputLabel>
+                                                    <h:outputText value="#{existingGuarantor.guarantorName.titleTh.titleTh}"
+                                                                  rendered="#{not empty existingGuarantor.guarantorName and not empty existingGuarantor.guarantorName.titleTh}"/>
+                                                    <h:outputText value="#{existingGuarantor.guarantorName.firstNameTh} #{existingGuarantor.guarantorName.lastNameTh}"
+                                                                  rendered="#{not empty existingGuarantor.guarantorName}"/>
                                                 </p:column>
                                                 <p:column headerText="" styleClass="left top">
                                                     <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>

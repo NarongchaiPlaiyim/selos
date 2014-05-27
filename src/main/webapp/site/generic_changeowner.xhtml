@@ -64,6 +64,9 @@
 <!-- End Menu -->
 <div id="content_container">
     <div id="content_name">Change Owner</div>
+    <div style="color: red;">Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
+        Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ
+    </div>
     <div id="content">
         <table id="content_form">
             <!--<tr>
@@ -245,7 +248,7 @@
                  closable="false"
                  header="Exception.">
     <f:facet name="message">
-        <h:outputText value="Some of the selected cases are Locked." escape="false"/>
+        <h:outputText value="Selected case(s) are Locked." escape="false"/>
     </f:facet>
     <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg2.close();"/>
 </p:confirmDialog>
@@ -256,6 +259,20 @@
                      header="Exception.">
         <f:facet name="message">
             <h:outputText value="Another User is Working on this case!! Please Retry Later." escape="false"/>
+        </f:facet>
+        <p:commandButton value="#{msg.get('app.button.ok')}"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxErrorDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+
+<p:panel id="msgBoxErrorPanel1" styleClass="panel">
+    <p:confirmDialog id="msgBoxErrorDialog3" widgetVar="msgBoxErrorDlg3" styleClass="messageDialog"
+                     closable="false"
+                     header="Exception.">
+        <f:facet name="message">
+            <h:outputText value="#{change.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="#{msg.get('app.button.ok')}"
                          process="@this"

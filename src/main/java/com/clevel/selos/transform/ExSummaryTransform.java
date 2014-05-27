@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.working.ExSummaryDAO;
 import com.clevel.selos.dao.working.UWRuleResultDetailDAO;
 import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.integration.SELOS;
@@ -35,6 +36,8 @@ public class ExSummaryTransform extends Transform {
     private UWRuleResultDetailDAO uwRuleResultDetailDAO;
     @Inject
     private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    @Inject
+    private ExSummaryDAO exSummaryDAO;
 
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
@@ -49,9 +52,7 @@ public class ExSummaryTransform extends Transform {
         exSummary.setWorkCase(workCase);
 
         if (exSummaryView.getId() != 0) {
-            exSummary.setId(exSummaryView.getId());
-            exSummary.setCreateDate(exSummaryView.getCreateDate());
-            exSummary.setCreateBy(exSummaryView.getCreateBy());
+            exSummary = exSummaryDAO.findById(exSummaryView.getId());
         } else { // id = 0 create new
             exSummary.setCreateDate(new Date());
             exSummary.setCreateBy(user);

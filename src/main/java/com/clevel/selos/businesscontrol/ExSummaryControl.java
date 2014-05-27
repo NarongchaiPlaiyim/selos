@@ -344,12 +344,14 @@ public class ExSummaryControl extends BusinessControl {
                 for(NewCollateralView acl : decisionView.getApproveCollateralList()){
                     if(acl.getNewCollateralHeadViewList() != null && acl.getNewCollateralHeadViewList().size() > 0){
                         for(NewCollateralHeadView nch : acl.getNewCollateralHeadViewList()){
-                            if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
-                                tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
-                            } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
-                            } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                            if(nch != null && nch.getPotentialCollateral() != null){
+                                if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                    tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                    tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                    tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                }
                             }
                         }
                     }

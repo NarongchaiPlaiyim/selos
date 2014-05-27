@@ -433,12 +433,17 @@ public class BRMSControl extends BusinessControl {
         if( _proposeType.equals(ProposeType.P)){
             if(newCreditFacility.getLoanRequestType() != null)
                 applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
+            applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalExposure());
         }
         else if(_proposeType.equals(ProposeType.A)){
             if(newCreditFacility.getLoanRequestType() != null)
                 applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            if(decision != null)
+            if(decision != null){
                 applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
+            } else {
+                applicationInfo.setFinalGroupExposure(BigDecimal.ZERO);
+            }
+
         }
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
@@ -576,6 +581,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WcLimit());
         applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWcTmb());
         applicationInfo.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+        applicationInfo.setCreditCusType(newCreditFacility.getCreditCustomerType()==2? "P" : "N");
 
         if(bizInfoSummary.getProvince() != null)
             applicationInfo.setBizLocation(String.valueOf(bizInfoSummary.getProvince().getCode()));
@@ -1048,6 +1054,8 @@ public class BRMSControl extends BusinessControl {
                 customerInfo.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance().compareTo(BigDecimal.ZERO) != 0);
             if(customerOblInfo.getPendingClaimLG() != null)
                 customerInfo.setPendingClaimLG(customerOblInfo.getPendingClaimLG().compareTo(BigDecimal.ZERO) != 0);
+            if(customerOblInfo.getAdjustClass() != null)
+                customerInfo.setAdjustClass(customerOblInfo.getAdjustClass());
         }
 
         if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
@@ -1131,6 +1139,7 @@ public class BRMSControl extends BusinessControl {
             }
         }
         customerInfo.setTmbAccountInfoList(tmbAccountInfoList);
+        customerInfo.setCreditWorthiness(customer.getWorthiness()==3? "Y":"N");
         return customerInfo;
     }
 

@@ -3400,6 +3400,8 @@
                                                           rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                             <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                           rendered="#{not empty guarantor.guarantorName}"/>
+                                            <h:outputText value="#{msg.get('app.select.item1')}"
+                                                          rendered="#{empty guarantor.guarantorName}"/>
                                         </p:column>
 
                                         <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
@@ -3952,23 +3954,6 @@
                                 </tr>
                             </h:panelGroup>
                         </h:panelGroup>
-                        <tr>
-                            <td colspan="2">
-                                <div class="separate"><!-- --></div>
-
-                                <!-- Hidden Field -->
-                                <h:inputHidden value="#{decision.decisionView.approveTotalNumOfNewOD}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalNumProposeCreditFac}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalNumContingentPropose}"/>
-
-                                <h:inputHidden value="#{decision.decisionView.grandTotalNumOfCoreAsset}"/>
-                                <h:inputHidden value="#{decision.decisionView.grandTotalNumOfNonCoreAsset}"/>
-
-                                <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
-                            </td>
-                        </tr>
 
                         <!-- Save & Cancel Decision Buttons -->
                         <tr>

@@ -58,6 +58,7 @@ public class BizInfoDetail extends BaseController {
 
     private int rowIndex;
     private String modeForButton;
+    private String dlgStakeHeader;
     private String dlgStakeName;
     private String dlgStakeSaleType;
     private long bizInfoSummaryId;
@@ -446,9 +447,11 @@ public class BizInfoDetail extends BaseController {
 
     private void onSetLabelStakeHolder(){
         if(stakeType.equalsIgnoreCase("1")){
+            dlgStakeHeader = msg.get("app.bizInfoDetail.label.supplierDetail");
             dlgStakeName = msg.get("app.bizInfoDetail.bizStakeHolder.label.supplierName");
             dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentBuysVolume");
         }else if(stakeType.equalsIgnoreCase("2")){
+            dlgStakeHeader = msg.get("app.bizInfoDetail.label.buyerDetail");
             dlgStakeName =msg.get("app.bizInfoDetail.bizStakeHolder.label.buyerName");
             dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentSalesVolume");
         }
@@ -701,7 +704,7 @@ public class BizInfoDetail extends BaseController {
         FacesUtil.redirect("/site/bizInfoSummary.jsf");
     }
 
-    public void onCalCashCredit(String point ){
+    public void onCalCashCredit(String point){
         if(point.equals("stakeHolderDlg")){
             bizStakeHolderDetailView.setPercentCredit(Util.subtract(BigDecimal.valueOf(100),bizStakeHolderDetailView.getPercentCash()));
         }else if(point.equals("purchasePercentCash")){
@@ -931,5 +934,13 @@ public class BizInfoDetail extends BaseController {
 
     public void setReadonlyIsBDM(boolean readonlyIsBDM) {
         this.readonlyIsBDM = readonlyIsBDM;
+    }
+
+    public String getDlgStakeHeader() {
+        return dlgStakeHeader;
+    }
+
+    public void setDlgStakeHeader(String dlgStakeHeader) {
+        this.dlgStakeHeader = dlgStakeHeader;
     }
 }
