@@ -1025,6 +1025,7 @@ public class HeaderController extends BaseController {
 
     public void onCheckPreScreen(){
         long workCasePreScreenId = 0;
+        boolean success = false;
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -1042,10 +1043,10 @@ public class HeaderController extends BaseController {
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
                             message = Util.getMessageException(ex);
-
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Pre-Screen success";
+                        success = true;
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
@@ -1063,12 +1064,12 @@ public class HeaderController extends BaseController {
             }
 
             if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                if(success)
+                    showMessageBox();
+                else
+                    showMessageRefresh();
             else
                 RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
-
-
-
         }
     }
 
