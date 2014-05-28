@@ -370,7 +370,8 @@
             <p:commandButton id="btnCancelReqAppr_BDM" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel Appraisal Request') and headerController.stepId == 2007}"
                              actionListener="#{headerController.onOpenCancelAppraisalRequest()}"
-                             oncomplete="cancelReqApprDlg.show()">
+                             oncomplete="cancelReqApprDlg.show()"
+                             update=":frmMain:cancelReqApprPanel, :frmMain:msgBoxBaseMessagePanel">
             </p:commandButton>
             <!-- Submit to AAD Admin [ From BDM ] -->
             <p:commandButton id="btnReturnAADM_BDM" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
