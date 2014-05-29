@@ -118,6 +118,9 @@ public class MandateFieldSubmitStep implements Serializable {
         wrkMandateFieldClassSAAdminView = new MandateFieldClassSAAdminView();
         updatedMode = false;
         selectedMandateFieldSAAdminId = -1;
+        selectedClassViewId = -1;
+        selectedFieldViewId = -1;
+        _initFieldConditionDropdown();
     }
 
     public void onOpenUpdateStepActionField(){
@@ -145,7 +148,7 @@ public class MandateFieldSubmitStep implements Serializable {
 
     public void onChangeClassView(){
         log.info("-- begin onChangeClassView {}", selectedClassViewId);
-        if(selectedClassViewId > 0){
+        if(selectedClassViewId >= 0){
             for(MandateFieldClassView mandateFieldClassView : mandateFieldClassViewList){
                 if(mandateFieldClassView.getId() == selectedClassViewId){
                     wrkMandateFieldClassSAAdminView = new MandateFieldClassSAAdminView();
@@ -153,6 +156,7 @@ public class MandateFieldSubmitStep implements Serializable {
                     wrkMandateFieldClassSAAdminView.setActive(mandateFieldClassView.isActive());
                     wrkMandateFieldClassSAAdminView.setClassName(mandateFieldClassView.getClassName());
                     wrkMandateFieldClassSAAdminView.setPageName(mandateFieldClassView.getPageName());
+                    wrkMandateFieldClassSAAdminView.setMandateFieldViewList(new ArrayList<MandateFieldView>());
                     break;
                 }
             }
