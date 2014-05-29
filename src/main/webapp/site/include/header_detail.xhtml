@@ -71,12 +71,13 @@
                              widgetVar="confrmCancelCA" global="false" showEffect="fade"
                              rendered="#{headerController.checkButton('Cancel CA')}">
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                 process="@this"
+                                 process="@this" widgetVar="cancelCASaveBtn"
                                  update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                  actionListener="#{prescreenMaker.onCancelCA}"
-                                 oncomplete="confrmCancelCA.hide()"/>
+                                 oncomplete="confrmCancelCA.hide();cancelCASaveBtn.enable();cancelCACancelBtn.enable()"
+                                 onclick="cancelCASaveBtn.disable();cancelCACancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
-                                 process="@this"
+                                 process="@this" widgetVar="cancelCACancelBtn"
                                  onclick="confrmCancelCA.hide()"/>
             </p:confirmDialog>
             <!--Close Sale-->
@@ -198,9 +199,12 @@
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onSubmitRM()}" process="@this"
-                                     oncomplete="confirmSubmitSubmitRGM.hide()"/>
+                                     widgetVar="subRegSaveBtn"
+                                     oncomplete="confirmSubmitSubmitRGM.hide();subRegSaveBtn.enable();subRegCancelBtn.enable()"
+                                     onclick="subRegSaveBtn.disable();subRegCancelBtn.disable()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no" type="button"
-                                     onclick="confirmSubmitSubmitRGM.hide()"/>
+                                     onclick="confirmSubmitSubmitRGM.hide()"
+                                     widgetVar="subRegCancelBtn"/>
                 </p:confirmDialog>
             <!--Submit to Region Manager [ Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToRGM_FCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -213,9 +217,12 @@
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onSubmitPriceReduceRGM()}" process="@this"
-                                     oncomplete="confirmSubmitSubmitRGM_FCash.hide()"/>
+                                     widgetVar="subRegFCSaveBtn"
+                                     oncomplete="confirmSubmitSubmitRGM_FCash.hide();subRegFCSaveBtn.enable();subRegFCCancelBtn.enable()"
+                                     onclick="subRegFCSaveBtn.disable();subRegFCCancelBtn.disable()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no" type="button"
-                                     onclick="PF('confirmSubmitSubmitRGM_FCash').hide()"/>
+                                     onclick="PF('confirmSubmitSubmitRGM_FCash').hide()"
+                                     widgetVar="subRegFCCancelBtn"/>
                 </p:confirmDialog>
             <!--Submit To Group Head [ From Region Manager - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -228,9 +235,12 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitGH()}"
-                                 process="@this" oncomplete="confirmSubmitSubmitGH.hide()"/>
+                                 process="@this" widgetVar="subGHSaveBtn"
+                                 oncomplete="confirmSubmitSubmitGH.hide();subGHSaveBtn.enable();subGHCancelBtn.enable()"
+                                 onclick="subGHSaveBtn.disable();subGHCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitGH.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="subGHCancelBtn"/>
             </p:confirmDialog>
             <!--Submit To CSSO [ From Group Head - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -243,13 +253,15 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitCSSO()}"
-                                 process="@this" oncomplete="confirmSubmitSubmitCSSO.hide()"/>
+                                 process="@this" widgetVar="subCSSO"
+                                 oncomplete="confirmSubmitSubmitCSSO.hide();subCSSOSaveBtn.enable();subCSSOCancelBtn.enable()"
+                                 onclick="subCSSOSaveBtn.disable();subCSSOCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCSSO.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="subCSSOCancelBtn"/>
             </p:confirmDialog>
             <!--Submit To UW1 [ From CSSO - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}"
                              onclick="confirmSubmitSubmitUW.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
@@ -259,9 +271,12 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitUWFromCSSO()}"
-                                 process="@this" oncomplete="confirmSubmitSubmitUW.hide()"/>
+                                 process="@this" widgetVar="subUWSaveBtn"
+                                 oncomplete="confirmSubmitSubmitUW.hide();subUWSaveBtn.enable();subUWCancelBtn.enable()"
+                                 onclick="subUWSaveBtn.disable();subUWCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="subUWCancelBtn"/>
             </p:confirmDialog>
             <!--Submit UW2 [ From UW1 ]-->
             <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -279,9 +294,12 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitReturnUW1()}"
-                                 process="@this" oncomplete="confirmSubmitSubmitUW1.hide()"/>
+                                 process="@this" widgetVar="subUW1SaveBtn"
+                                 oncomplete="confirmSubmitSubmitUW1.hide();subUW1SaveBtn.enable();subUW1CancelBtn.enable()"
+                                 onclick="subUW1SaveBtn.disable();subUW1CancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitUW1.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="subUW1CancelBtn"/>
             </p:confirmDialog>
             <!--Submit CA [ END OF CA ]-->
             <p:commandButton id="btnSubmitCaseUW2" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -294,9 +312,12 @@
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onSubmitCA()}"
-                                     process="@this" oncomplete="confirmSubmitSubmitCAUW2.hide()"/>
+                                     process="@this" widgetVar="subUW2SaveBtn"
+                                     oncomplete="confirmSubmitSubmitCAUW2.hide();subUW2SaveBtn.enable();subUW2CancelBtn.enable()"
+                                     onclick="subUW2SaveBtn.disable();subUW2CancelBtn.disable()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCAUW2.hide()"
-                                     styleClass="ui-confirmdialog-no"/>
+                                     styleClass="ui-confirmdialog-no"
+                                     widgetVar="subUW2CancelBtn"/>
                 </p:confirmDialog>
             <!--Submit CA [ Zone Manager F-Cash ]-->
             <p:commandButton id="btnSubmitCase_ZMFCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -309,9 +330,12 @@
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onSubmitFCashZM()}"
-                                     process="@this" oncomplete="confirmSubmitZM_FCash.hide()"/>
+                                     process="@this" widgetVar="subZMFCSaveBtn"
+                                     oncomplete="confirmSubmitZM_FCash.hide();subZMFCSaveBtn.enable();subZMFCCancelBtn.enable()"
+                                     onclick="subZMFCSaveBtn.disable();subZMFCCancelBtn.disable()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmSubmitZM_FCash').hide()"
-                                     styleClass="ui-confirmdialog-no"/>
+                                     styleClass="ui-confirmdialog-no"
+                                     widgetVar="subZMFCCancelBtn"/>
                 </p:confirmDialog>
             <!--Submit to BDM [ From ABDM return case to BDM ]-->
             <p:commandButton id="btnSubmitCaseToBDM_ABDM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -324,9 +348,12 @@
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onSubmitToBDM()}"
-                                     process="@this" oncomplete="confirmSubmitBDM_ABDM.hide()"/>
+                                     process="@this" widgetVar="subBDMABDMSaveBtn"
+                                     oncomplete="confirmSubmitBDM_ABDM.hide();subBDMABDMSaveBtn.enable();subBDMABDMCancelBtn.enable()"
+                                     onclick="subBDMABDMSaveBtn.disable();subBDMABDMCancelBtn.disable()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitBDM_ABDM.hide()"
-                                     styleClass="ui-confirmdialog-no"/>
+                                     styleClass="ui-confirmdialog-no"
+                                     widgetVar="subBDMABDMCancelBtn"/>
                 </p:confirmDialog>
             <!--Restart case (UW)-->
             <p:commandButton id="btnRestartCase" value="#{msg.get('app.header.button.restart')}" title="#{msg.get('app.header.button.restart')}" styleClass="blueButton"
@@ -339,9 +366,12 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onRestartCase()}"
-                                 process="@this" oncomplete="confirmRestart.hide()"/>
+                                 process="@this" widgetVar="resUWSaveBtn"
+                                 oncomplete="confirmRestart.hide();resUWSaveBtn.enable();resUWCancelBtn.enable()"
+                                 onclick="resUWSaveBtn.disable();resUWCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmRestart.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="resUWCancelBtn"/>
             </p:confirmDialog>
             <!--Complete Return Parallel case (UW)-->
             <p:commandButton id="btnCompleteCase" value="#{msg.get('app.header.button.complete')}" title="#{msg.get('app.header.button.complete')}" styleClass="blueButton"
@@ -354,9 +384,12 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onCompleteCase()}"
-                                 process="@this" oncomplete="confirmComplete.hide()"/>
+                                 process="@this" widgetVar="conComSaveBtn"
+                                 oncomplete="confirmComplete.hide();conComSaveBtn.enable();conComCancelBtn.enable()"
+                                 onclick="conComSaveBtn.disable();conComCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmComplete.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="conComCancelBtn"/>
             </p:confirmDialog>
         </p:panel>
         <!--############ Stage for Appraisal ############-->
@@ -385,9 +418,12 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onReturnToAADAdminByBDM()}"
-                                 process="@this" oncomplete="confirmReturnAADM_BDM.hide()"/>
+                                 process="@this" widgetVar="conRetAADMSaveBtn"
+                                 oncomplete="confirmReturnAADM_BDM.hide();conRetAADMSaveBtn.enable();conRetAADMCancelBtn.enable()"
+                                 onclick="conRetAADMSaveBtn.disable();conRetAADMCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmReturnAADM_BDM.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="conRetAADMCancelBtn"/>
             </p:confirmDialog>
             <!-- Return to BDM [ From AAD Admin ]-->
             <p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
@@ -434,10 +470,13 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitAppraisalToUW()}"
-                                 process="@this" oncomplete="confirmSubmitApprToUw.hide()"/>
+                                 process="@this" widgetVar="conSubAppUWSaveBtn"
+                                 oncomplete="confirmSubmitApprToUw.hide();conSubAppUWSaveBtn.enable();conSubAppUWCancelBtn.enable()"
+                                 onclick="conSubAppUWSaveBtn.disable();conSubAppUWCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
                                  onclick="PF('confirmSubmitApprToUw').hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="conSubAppUWCancelBtn"/>
             </p:confirmDialog>
         </p:panel>
         <!--############ Customer Acceptance Stage ############-->
@@ -461,10 +500,13 @@
                     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                      actionListener="#{headerController.onRequestPriceReduction()}"
-                                     process="@this" oncomplete="PF('confirmRequestPriceReduction').hide()"/>
+                                     process="@this" widgetVar="reqPriRedSaveBtn"
+                                     oncomplete="PF('confirmRequestPriceReduction').hide();reqPriRedSaveBtn.enable();reqPriRedCancelBtn.enable()"
+                                     onclick="reqPriRedSaveBtn.disable();reqPriRedCancelBtn.disable()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
                                      onclick="PF('confirmRequestPriceReduction').hide()"
-                                     styleClass="ui-confirmdialog-no"/>
+                                     styleClass="ui-confirmdialog-no"
+                                     widgetVar="reqPriRedCancelBtn"/>
                 </p:confirmDialog>
             <!-- Pending for Decision -->
             <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
@@ -484,10 +526,13 @@
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                                  update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                                  actionListener="#{headerController.onSubmitCustomerAcceptance()}"
-                                 process="@this" oncomplete="confirmSubmitCustomerAccept.hide()"/>
+                                 process="@this" widgetVar="cusAppSaveBtn"
+                                 oncomplete="confirmSubmitCustomerAccept.hide();cusAppSaveBtn.enable();cusAppCancelBtn.enable()"
+                                 onclick="cusAppSaveBtn.disable();cusAppCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
                                  onclick="confirmSubmitCustomerAccept.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="cusAppCancelBtn"/>
             </p:confirmDialog>
         </p:panel>
         <!-- Stage 301 - Customer acceptance -->

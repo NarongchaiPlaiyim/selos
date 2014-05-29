@@ -32,9 +32,9 @@
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantor.TCGLGNo')}"/>
                     </td>
                     <td>
-                        <p:inputText id="totalGuarantee" value="#{creditFacExisting.existingGuarantorDetailView.tcgLgNo}"
-                                      style="text-align:right">
-                        </p:inputText>
+                        <p:inputMask id="totalGuarantee" value="#{creditFacExisting.existingGuarantorDetailView.tcgLgNo}"
+                                     required="true"
+                                     mask="99-99999"/>
                     </td>
                 </tr>
                 <tr>
