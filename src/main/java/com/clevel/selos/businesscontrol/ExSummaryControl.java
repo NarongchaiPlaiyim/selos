@@ -915,6 +915,8 @@ public class ExSummaryControl extends BusinessControl {
             groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
             if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
                 groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+            } else {
+                groupExposureUW = newCreditFacility.getTotalExposure();
             }
         }
 
