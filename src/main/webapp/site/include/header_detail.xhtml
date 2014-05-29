@@ -90,12 +90,13 @@
                              widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
                              rendered="#{headerController.checkButton('Close Sales')}">
                 <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                                 process="@this"
+                                 process="@this" widgetVar="closeSaleSaveBtn"
                                  actionListener="#{prescreenMaker.onCloseSale()}"
-                                 oncomplete="confrmCloseSaleCA.hide()"
-                                 update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"/>
+                                 update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
+                                 oncomplete="confrmCloseSaleCA.hide();closeSaleSaveBtn.enable();closeSaleCancelBtn.enable()"
+                                 onclick="closeSaleSaveBtn.disable();closeSaleCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
-                                 process="@this"
+                                 process="@this" widgetVar="closeSaleCancelBtn"
                                  onclick="confrmCloseSaleCA.hide()"/>
             </p:confirmDialog>
         </p:panel>
