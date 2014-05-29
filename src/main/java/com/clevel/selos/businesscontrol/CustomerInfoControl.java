@@ -136,7 +136,7 @@ public class CustomerInfoControl extends BusinessControl {
 
         if(customer.getIsCommittee() == 1){
             Customer cusJuristic = customerDAO.findById(customer.getJuristicId());
-            BigDecimal totalShare = cusJuristic.getShares();
+            BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
             BigDecimal share = customer.getShares();
             BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
             customer.setPercentShare(percentShare);
@@ -169,7 +169,7 @@ public class CustomerInfoControl extends BusinessControl {
 
             if(spouse.getIsCommittee() == 1){
                 Customer cusJuristic = customerDAO.findById(spouse.getJuristicId());
-                BigDecimal totalShare = cusJuristic.getShares();
+                BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
                 BigDecimal share = spouse.getShares();
                 BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
                 spouse.setPercentShare(percentShare);
