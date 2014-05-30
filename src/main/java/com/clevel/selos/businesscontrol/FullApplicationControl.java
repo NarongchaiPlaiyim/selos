@@ -307,7 +307,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToGH(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String rgmDecisionFlag = "E"; //TODO
+        String rgmDecisionFlag = "E";
         int priceDOALevel = 0;
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
@@ -347,7 +347,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToCSSO(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String ghDecisionFlag = "E"; //TODO
+        String ghDecisionFlag = "E";
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
         int priceDOALevel = 0;
@@ -448,7 +448,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
-        String cssoDecisionFlag = "A"; //TODO
+        String cssoDecisionFlag = "A";
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
@@ -479,7 +479,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToUWFromZM(String queueName, long workCaseId) throws Exception {
-        String zmDecisionFlag = "A"; //TODO
+        String zmDecisionFlag = "A";
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
@@ -692,7 +692,6 @@ public class FullApplicationControl extends BusinessControl {
             throw new Exception("exception while request appraisal, cause session variable expired.");
         }
 
-        //TODO Insert data into WRK_APPRAISAL
         WorkCaseAppraisal workCaseAppraisal = new WorkCaseAppraisal();
         workCaseAppraisal.setAppNumber(appNumber);
         workCaseAppraisal.setCreateDate(DateTime.now().toDate());

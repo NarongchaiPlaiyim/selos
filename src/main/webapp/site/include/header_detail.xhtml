@@ -84,7 +84,8 @@
             <!--Close Sale-->
             <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                              title="#{msg.get('app.header.button.closeSale')}"
-                             rendered="#{headerController.checkButton('Close Sales') and headerController.canCloseSale}"
+                             rendered="#{headerController.checkButton('Close Sales')}"
+                             disabled="#{not headerController.canCloseSale}"
                              type="button"
                              onclick="confrmCloseSaleCA.show()"/>
             <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
@@ -186,12 +187,14 @@
             <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
             <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2001 || headerController.stepId == 2018 )}"
+                             disabled="#{not headerController.canSubmitCA}"
                              action="#{headerController.onOpenSubmitZM}"
                              update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
             <!--Submit To Region Manager [ From Zone Manager ]-->
             <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="confirmSubmitSubmitRGM.show()"/>
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"
@@ -210,6 +213,7 @@
             <!--Submit to Region Manager [ Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToRGM_FCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2019}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="PF('confirmSubmitSubmitRGM_FCash').show()"/>
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"
@@ -228,6 +232,7 @@
             <!--Submit To Group Head [ From Region Manager - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="confirmSubmitSubmitGH.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                              icon="ui-icon-alert"
@@ -246,6 +251,7 @@
             <!--Submit To CSSO [ From Group Head - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="confirmSubmitSubmitCSSO.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                              icon="ui-icon-alert"
@@ -264,6 +270,7 @@
             <!--Submit To UW1 [ From CSSO - Pricing Flow ]-->
             <p:commandButton id="btnSubmitCaseToUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="confirmSubmitSubmitUW.show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                              icon="ui-icon-alert"
@@ -283,6 +290,7 @@
             <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2003}"
                              action="#{headerController.onOpenSubmitUW2()}"
+                             disabled="#{not headerController.canSubmitCA}"
                              update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
             <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
             <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
@@ -305,6 +313,7 @@
             <!--Submit CA [ END OF CA ]-->
             <p:commandButton id="btnSubmitCaseUW2" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="confirmSubmitSubmitCAUW2.show()"/>
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"
@@ -323,6 +332,7 @@
             <!--Submit CA [ Zone Manager F-Cash ]-->
             <p:commandButton id="btnSubmitCase_ZMFCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2009}"
+                             disabled="#{not headerController.canSubmitCA}"
                              onclick="PF('confirmSubmitZM_FCash').show()"/>
                 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                                  icon="ui-icon-alert"

@@ -188,6 +188,9 @@ public class HeaderController extends BaseController {
     private UWResultColor uwResultColor;
     private String deviationFlag = "";
 
+    //Check Criteria Result
+    private boolean canSubmitCA;
+
     public HeaderController() {
     }
 
@@ -238,6 +241,23 @@ public class HeaderController extends BaseController {
             if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canCloseSale = true;
+                }
+            }
+        }
+
+        //check criteria result
+        canSubmitCA = false;
+        if(workCaseId!=0){
+            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                    canCloseSale = true;
+                } else {
+                    if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
+                        if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                            canCloseSale = true;
+                        }
+                    }
                 }
             }
         }
@@ -2340,5 +2360,13 @@ public class HeaderController extends BaseController {
 
     public void setCanCloseSale(boolean canCloseSale) {
         this.canCloseSale = canCloseSale;
+    }
+
+    public boolean isCanSubmitCA() {
+        return canSubmitCA;
+    }
+
+    public void setCanSubmitCA(boolean canSubmitCA) {
+        this.canSubmitCA = canSubmitCA;
     }
 }
