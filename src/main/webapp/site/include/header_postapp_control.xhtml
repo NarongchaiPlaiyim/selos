@@ -1,0 +1,168 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	>
+
+	<!--Print Op Sheet -->
+	<p:commandButton id="btnPrintOpSheet_POSTAPP"
+		value="#{msg.get('app.header.button.printReport')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.printReport')}"
+		oncomplete="printReportDlg.show()"
+		actionListener="#{report.setNameReport()}"
+		update=":frmMain:printReportPanel"
+		rendered="#{headerController.checkButton('Print PDF')}">
+	</p:commandButton>
+	
+	<!--Check Mandate Doc -->
+	<p:commandButton id="btnChkMandate_POSTAPP"
+		value="#{msg.get('app.header.button.mandateDoc')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.mandateDoc')}"
+		rendered="#{headerController.checkButton('Check Mandate Doc')}"
+		actionListener="#{headerController.onCheckMandateForChecker()}"
+        oncomplete="checkMandateDlg.show()"
+        update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+		<p:resetInput target=":frmMain:checkMandatePanel"/>
+ 	</p:commandButton>
+ 
+
+	<!--Request for Price Reduction -->
+	<p:commandButton id="btnPriceReduction_POSTAPP"
+		value="#{msg.get('app.header.button.requestPriceReduction')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.requestPriceReduction')}"
+		rendered="#{headerController.checkButton('Request for Price Reduction')}"
+		>
+	</p:commandButton>
+	
+	<!-- Generate Agreement -->
+	<p:commandButton id="btnGenerateAgreement_POSTAPP"
+		value="#{msg.get('app.header.button.generateAgreement')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.generateAgreement')}"
+		rendered="#{headerController.checkButton('Generate Agreement')}"
+		>
+	</p:commandButton>
+	
+	<!-- Regenerate Agreement -->
+	<p:commandButton id="btnRegenerateAgreement_POSTAPP"
+		value="#{msg.get('app.header.button.regenerateAgreement')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.regenerateAgreement')}"
+		rendered="#{headerController.checkButton('Regenerate Agreement')}"
+		>
+	</p:commandButton>
+	
+	<!-- Cancel Disbursement -->
+	<p:commandButton id="btnCancelDisbursement_POSTAPP"
+		value="#{msg.get('app.header.button.cancelDisbursement')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.cancelDisbursement')}"
+		rendered="#{headerController.checkButton('Cancel Disbursement')}"
+		>
+	</p:commandButton>
+
+	<!--Return to BDM -->
+	<p:commandButton id="btnReturnBDM_POSTAPP"
+		value="#{msg.get('app.header.button.returnToBDM')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.returnToBDM')}"
+		rendered="#{headerController.checkButton('Return to BDM')}"
+		oncomplete="p_postApp_returnBDM_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update="postApp_returnBDM_Dlg"
+		>
+		<p:resetInput target="postApp_returnBDM_Dlg" />
+	</p:commandButton>
+
+	<!--Return to UW2 -->
+	<p:commandButton id="btnReturnUW2_POSTAPP"
+		value="#{msg.get('app.header.button.returnToUW2')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.returnToUW2')}"
+		rendered="#{headerController.checkButton('Return to UW2')}"
+		oncomplete="p_postApp_returnUW2_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update="postApp_returnUW2_Dlg"
+		>
+		<p:resetInput target="postApp_returnUW2_Dlg" />
+	</p:commandButton>
+	
+	<!--Return to DataEntry -->
+	<p:commandButton id="btnReturnDataMaker_POSTAPP"
+		value="#{msg.get('app.header.button.returnToDataMaker')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.returnToDataMaker')}"
+		rendered="#{headerController.checkButton('Return to Data Entry Maker')}"
+		oncomplete="p_postApp_returnDataEntry_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update="postApp_returnDataEntry_Dlg"
+		>
+		<p:resetInput target="postApp_returnDataEntry_Dlg" />
+	</p:commandButton>
+	
+	<!--Return to Contact Center#2-->
+	<p:commandButton id="btnReturnCC2_POSTAPP"
+		value="#{msg.get('app.header.button.returnToContactCenter2')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.returnToContactCenter2')}"
+		rendered="#{headerController.checkButton('Return to Contact Center')}"
+		oncomplete="p_postApp_returnCC2_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update="postApp_returnCC2_Dlg"
+		>
+		<p:resetInput target="postApp_returnCC2_Dlg" />
+	</p:commandButton>
+	
+	<!--Return to LAR/BC -->
+	<p:commandButton id="btnReturnLarBc_POSTAPP"
+		value="#{msg.get('app.header.button.returnToLarBc')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.returnToLarBc')}"
+		rendered="#{headerController.checkButton('Return to LAR/BC')}"
+		oncomplete="p_postApp_returnLARBC_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update="postApp_returnLARBC_Dlg"
+		>
+		<p:resetInput target="postApp_returnLARBC_Dlg" />
+	</p:commandButton>
+
+	<!--Cancel CA -->
+	<p:commandButton id="btnCancelCA_POSTAPP"
+		value="#{msg.get('app.header.button.cancelCA')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.cancelCA')}"
+		rendered="#{headerController.checkButton('Cancel CA')}"
+		oncomplete="p_postApp_cancelCA_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update="postApp_cancelCA_Dlg"
+		>
+		<p:resetInput target="postApp_cancelCA_Dlg" />
+	</p:commandButton>
+	
+	<!-- Data Entry Completed -->
+	<p:commandButton id="btnDataEntryComplete_POSTAPP"
+		value="#{msg.get('app.header.button.dataEntryComplete')}"
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.dataEntryComplete')}"
+		rendered="#{headerController.checkButton('Data Entry Completed')}"
+		>
+	</p:commandButton>
+	
+	<!--Submit -->
+	<p:commandButton id="btnSubmitCase_POSTAPP"
+		value="#{msg.get('app.header.button.submit')}" 
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.submit')}"
+		rendered="#{headerController.checkButton('Submit CA')}">
+	</p:commandButton>
+</ui:composition>

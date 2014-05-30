@@ -1,0 +1,55 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+	<p:dialog id="#{id}" widgetVar="#{name}"
+		header="#{msg.get('app.postApp.dlg.submit02.title')}"
+		modal='true' resizable='false' draggable="false" closeOnEscape="true"
+		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
+		appendTo="@(body)"
+		>
+		<h:form id="#{formId}">
+			<p:panel styleClass="panel-dialog">
+				<p:messages id="errMsg"/>
+				<table class="content_form">
+					<tr>
+						<td class="title" style="width:100px;vertical-align:top">
+							<p:outputLabel for="remark"
+								value="#{msg.get('app.postApp.dlg.submit02.remarkLbl')}" />
+						</td>
+						<td>
+							<p:inputTextarea
+									id="remark"
+								 	value="#{postAppGeneral.submit02_Remark}"
+                                    autoResize="false"
+                                    cols="35"
+                                    rows="5"
+                                    required="true" requiredMessage="#{msg.get('app.postApp.dlg.submit02.msg.remark')}"
+								/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="center" style='padding-top:10px;'>
+							<p:commandButton
+							 		process="@form"
+			                        value="#{msg.get('app.button.submit')}"
+			                        actionListener="#{controller[action]}"
+			                        update="#{formId}:errMsg,:frmMain:postapp_result_dialog"
+			                        onstart="handlePostAppOnSending();"
+			                        partialSubmit="false"
+			                        immediate="false"
+			                        oncomplete="handlePostAppOnCompleteSending(args,#{name})"
+			                        styleClass="small"
+		                         />
+							<p:commandButton
+								type="button"
+								value="#{msg.get('app.button.cancel')}"
+		                    	styleClass="small"
+		                    	onclick="#{name}.hide()"/>
+						</td>
+					</tr>
+				</table>
+			</p:panel>
+		</h:form> 
+	</p:dialog>
+</f:view>
