@@ -6,7 +6,7 @@
 		header="#{msg.get('app.postApp.dlg.cancel01.title')}"
 		modal='true' resizable='false' draggable="false" closeOnEscape="true"
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
-		appendTo="@(body)"
+		appendTo="@(body)" appendToBody="true"
 		>
 		<h:form id="#{formId}">
 			<p:panel styleClass="panel-dialog">
@@ -50,7 +50,7 @@
 								 	 process="@form"
 			                         value="#{msg.get('app.button.submit')}"
 			                         actionListener="#{controller[action]}"
-			                         update="#{formId}:errMsg,:frmMain:postapp_result_dialog"
+			                         update="#{formId}:errMsg,:postapp_result_dialog"
 			                         onstart="handlePostAppOnSending();"
 				                     partialSubmit="false"
 				                     immediate="false"

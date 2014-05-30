@@ -7,7 +7,7 @@
     	message="#{msg.get('app.postApp.dlg.submit01.message')}"
         showEffect="fade" hideEffect="fade" width="250"
         severity="alert" widgetVar="#{name}"
-        appendTo="@(body)"
+       	appendTo="@(body)" appendToBody="true"
         >
         <h:form id="#{formId}">
             <div class="onRight">
@@ -15,7 +15,7 @@
 				 		process="@form"
                         value="#{msg.get('app.button.submit')}"
                         actionListener="#{controller[action]}"
-                        update=":frmMain:postapp_result_dialog"
+                        update=":postapp_result_dialog"
                         onstart="handlePostAppOnSending();"
                         partialSubmit="false"
                         immediate="false"
