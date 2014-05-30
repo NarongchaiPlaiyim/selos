@@ -403,8 +403,8 @@
                                                                      rendered="#{item.canToEdit}"
                                                                      action="#{ncbInfo.onEditNcbDetail()}"
                                                                      process="@form" update=":ncbDlgForm"
-                                                                     onclick="PF('blockNCB').show()"
-                                                                     oncomplete="ncbDlg.show(); blockNCB.hide();">
+                                                                     onclick="PF('blockUI').show()"
+                                                                     oncomplete="ncbDlg.show(); blockUI.hide();">
                                                         <f:setPropertyActionListener value="#{item}" target="#{ncbInfo.selectNcbRecordItem}"/>
                                                         <f:setPropertyActionListener value="#{rowIndex}" target="#{ncbInfo.rowIndex}"/>
                                                         <p:resetInput target=":ncbDlgForm" />
@@ -452,7 +452,7 @@
             <ui:include src="include/footer.xhtml"/>
             <!-- End Footer -->
         </div>
-        <p:blockUI widgetVar="blockNCB" block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
             LOADING<br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

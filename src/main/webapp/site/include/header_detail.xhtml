@@ -50,6 +50,7 @@
             </p:commandButton>
             <!-- Check PreScreen (BRMS)-->
             <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
+                             onclick="PF('blockUI').show()"
                              rendered="#{headerController.checkButton('Check Prescreen')}"
                              actionListener="#{headerController.onCheckPreScreen}"
                              update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel">

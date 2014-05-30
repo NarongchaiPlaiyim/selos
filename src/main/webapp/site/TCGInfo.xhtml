@@ -385,7 +385,7 @@
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
         </div>
-        <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
             LOADING<br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

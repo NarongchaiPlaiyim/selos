@@ -224,7 +224,7 @@ public class TCGInfo extends BaseController {
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: modeForDB  {}", modeForDB);
         try {
-            if (TCGDetailViewList.size() > 0) {
+            /*if (TCGDetailViewList.size() > 0) {*/
                 if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                     tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
                 } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
@@ -234,11 +234,11 @@ public class TCGInfo extends BaseController {
                 message = msg.get("app.tcg.response.save.success");
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
+            /*} else {
                 messageHeader = msg.get("app.tcg.response.cannot.save");
                 message = msg.get("app.tcg.response.desc.cannot.save");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
+            }*/
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.header.save.failed");
