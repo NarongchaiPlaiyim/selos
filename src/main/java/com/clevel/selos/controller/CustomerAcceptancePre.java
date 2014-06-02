@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
@@ -47,7 +48,7 @@ public class CustomerAcceptancePre extends BaseController {
     private boolean preRenderCheck = false;
     private long workCaseId = -1;
     private long stepId = -1;
-    private long stageId = -1;
+    //private long stageId = -1;
     private User user;
     private Status workCaseStatus;
     private List<ContactRecordDetailView> deleteList;
@@ -70,24 +71,24 @@ public class CustomerAcceptancePre extends BaseController {
      */
     @PostConstruct
     private void init() {
-        log.info("Construct");
+        log.debug("Construct");
         HttpSession session = FacesUtil.getSession(false);
         if (session != null) {
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
-            stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-            stageId = Util.parseLong(session.getAttribute("stageId"), -1);
+            workCaseId = getCurrentWorkCaseId(session);
+            stepId = getCurrentStep(session);
+            //stageId = getCurrent
             user = (User) session.getAttribute("user");
         }
         _loadInitData();
     }
 
     public void preRender() {
-        log.info("preRender workCase Id = " + workCaseId);
+        log.debug("preRender workCase Id = {}", workCaseId);
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
             //Check valid step
             stepId = getCurrentStep(session);
-            if(stepId != 2011 && stepId != 2012){
+            if(stepId != StepValue.CUSTOMER_ACCEPTANCE_PRE.value() && stepId != StepValue.CUSTOMER_ACCEPTANCE_PRE_PENDING.value()){
                 FacesUtil.redirect("/selos/inbox.jsf");
             }
         }
@@ -118,7 +119,7 @@ public class CustomerAcceptancePre extends BaseController {
         contactRecordDetailViews.add(contactRecord);
         contactRecord = null;
 
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        sendCallBackParam(true);
     }
 
     public void onUpdateContactRecord() {
@@ -127,7 +128,7 @@ public class CustomerAcceptancePre extends BaseController {
         contactRecord.setNeedUpdate(true);
         contactRecord = null;
 
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        sendCallBackParam(true);
     }
 
     public void onDeleteContactRecord() {
@@ -139,7 +140,7 @@ public class CustomerAcceptancePre extends BaseController {
         }
         deletedRowId = -1;
 
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        sendCallBackParam(true);
     }
 
     public boolean isContactUpdatable(ContactRecordDetailView detail) {
@@ -151,12 +152,12 @@ public class CustomerAcceptancePre extends BaseController {
     public void onSaveCustomerAcceptance() {
         customerAcceptanceControl.saveCustomerContactRecords(workCaseId, customerAcceptanceView, tcgInfoView, contactRecordDetailViews, deleteList);
         _loadInitData();
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        sendCallBackParam(true);
     }
 
     public void onCancelCustomerAcceptance() {
         _loadInitData();
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        sendCallBackParam(true);
     }
 
     /*

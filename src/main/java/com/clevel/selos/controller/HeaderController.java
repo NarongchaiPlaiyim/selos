@@ -1109,7 +1109,7 @@ public class HeaderController extends BaseController {
                 else
                     showMessageBox();
             else
-                RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
+                showMessageMandate();
         }
     }
 
@@ -1762,6 +1762,7 @@ public class HeaderController extends BaseController {
     public void onCheckCriteria(){
         //RequestContext.getCurrentInstance().execute("blockUI.show()");
         long workCaseId = 0;
+        boolean success = false;
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -1784,24 +1785,30 @@ public class HeaderController extends BaseController {
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Criteria Success.";
-                        showMessageRefresh();
+                        success = true;
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
-                        showMessageBox();
+                        mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
                     }
                 } else {
                     uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                     messageHeader = "Exception.";
                     message = "Request for Check Criteria Fail.";
-                    showMessageRefresh();
                 }
             } catch (Exception ex){
                 log.error("Exception while onCheckCriteria : ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                showMessageBox();
             }
+
+            if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
+                if(success)
+                    showMessageRefresh();
+                else
+                    showMessageBox();
+            else
+                showMessageMandate();
 
         }
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
