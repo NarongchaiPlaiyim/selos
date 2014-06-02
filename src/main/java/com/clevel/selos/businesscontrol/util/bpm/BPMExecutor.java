@@ -673,7 +673,7 @@ public class BPMExecutor implements Serializable {
         execute(queueName, wobNumber, fields);
     }
 
-    private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
+    public void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);
     }

@@ -35,7 +35,12 @@
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.requestPriceReduction')}"
 		rendered="#{headerController.checkButton('Request for Price Reduction')}"
+		oncomplete="p_postApp_reqPriceReduct_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_reqPriceReduct_Dlg"
 		>
+		<p:resetInput target=":postApp_reqPriceReduct_Dlg" />
 	</p:commandButton>
 	
 	<!-- Generate Agreement -->
@@ -44,7 +49,12 @@
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.generateAgreement')}"
 		rendered="#{headerController.checkButton('Generate Agreement')}"
+		oncomplete="p_postApp_genAgreement_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_genAgreement_Dlg"
 		>
+		<p:resetInput target=":postApp_genAgreement_Dlg" />
 	</p:commandButton>
 	
 	<!-- Regenerate Agreement -->
@@ -53,8 +63,14 @@
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.regenerateAgreement')}"
 		rendered="#{headerController.checkButton('Regenerate Agreement')}"
+		oncomplete="p_postApp_regenAgreement_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_regenAgreement_Dlg"
 		>
+		<p:resetInput target=":postApp_regenAgreement_Dlg" />
 	</p:commandButton>
+
 	
 	<!-- Cancel Disbursement -->
 	<p:commandButton id="btnCancelDisbursement_POSTAPP"
@@ -62,7 +78,12 @@
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.cancelDisbursement')}"
 		rendered="#{headerController.checkButton('Cancel Disbursement')}"
+		oncomplete="p_postApp_cancelDisbursement_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_cancelDisbursement_Dlg"
 		>
+		<p:resetInput target=":postApp_cancelDisbursement_Dlg" />
 	</p:commandButton>
 
 	<!--Return to BDM -->
@@ -74,9 +95,9 @@
 		oncomplete="p_postApp_returnBDM_Dlg.show()"
 		partialSubmit="true"
 		process="@this"
-		update="postApp_returnBDM_Dlg"
+		update=":postApp_returnBDM_Dlg"
 		>
-		<p:resetInput target="postApp_returnBDM_Dlg" />
+		<p:resetInput target=":postApp_returnBDM_Dlg" />
 	</p:commandButton>
 
 	<!--Return to UW2 -->
@@ -88,9 +109,9 @@
 		oncomplete="p_postApp_returnUW2_Dlg.show()"
 		partialSubmit="true"
 		process="@this"
-		update="postApp_returnUW2_Dlg"
+		update=":postApp_returnUW2_Dlg"
 		>
-		<p:resetInput target="postApp_returnUW2_Dlg" />
+		<p:resetInput target=":postApp_returnUW2_Dlg" />
 	</p:commandButton>
 	
 	<!--Return to DataEntry -->
@@ -102,9 +123,9 @@
 		oncomplete="p_postApp_returnDataEntry_Dlg.show()"
 		partialSubmit="true"
 		process="@this"
-		update="postApp_returnDataEntry_Dlg"
+		update=":postApp_returnDataEntry_Dlg"
 		>
-		<p:resetInput target="postApp_returnDataEntry_Dlg" />
+		<p:resetInput target=":postApp_returnDataEntry_Dlg" />
 	</p:commandButton>
 	
 	<!--Return to Contact Center#2-->
@@ -116,9 +137,9 @@
 		oncomplete="p_postApp_returnCC2_Dlg.show()"
 		partialSubmit="true"
 		process="@this"
-		update="postApp_returnCC2_Dlg"
+		update=":postApp_returnCC2_Dlg"
 		>
-		<p:resetInput target="postApp_returnCC2_Dlg" />
+		<p:resetInput target=":postApp_returnCC2_Dlg" />
 	</p:commandButton>
 	
 	<!--Return to LAR/BC -->
@@ -130,9 +151,9 @@
 		oncomplete="p_postApp_returnLARBC_Dlg.show()"
 		partialSubmit="true"
 		process="@this"
-		update="postApp_returnLARBC_Dlg"
+		update=":postApp_returnLARBC_Dlg"
 		>
-		<p:resetInput target="postApp_returnLARBC_Dlg" />
+		<p:resetInput target=":postApp_returnLARBC_Dlg" />
 	</p:commandButton>
 
 	<!--Cancel CA -->
@@ -144,9 +165,9 @@
 		oncomplete="p_postApp_cancelCA_Dlg.show()"
 		partialSubmit="true"
 		process="@this"
-		update="postApp_cancelCA_Dlg"
+		update=":postApp_cancelCA_Dlg"
 		>
-		<p:resetInput target="postApp_cancelCA_Dlg" />
+		<p:resetInput target=":postApp_cancelCA_Dlg" />
 	</p:commandButton>
 	
 	<!-- Data Entry Completed -->
@@ -155,14 +176,39 @@
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.dataEntryComplete')}"
 		rendered="#{headerController.checkButton('Data Entry Completed')}"
+		oncomplete="p_postApp_dataEntryComplete_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_dataEntryComplete_Dlg"
 		>
+		<p:resetInput target=":postApp_dataEntryComplete_Dlg" />
 	</p:commandButton>
 	
-	<!--Submit -->
+	<!--Submit without remark -->
+	<p:commandButton id="btnSubmitCaseWithoutCase_POSTAPP"
+		value="#{msg.get('app.header.button.submit')}" 
+		styleClass="blueButton"
+		title="#{msg.get('app.header.button.submit')}"
+		rendered="#{postAppGeneral.showSubmitCAWithoutRemark()}"
+		oncomplete="p_postApp_submit01_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_submit01_Dlg"
+		>
+		<p:resetInput target=":postApp_submit01_Dlg" />
+	</p:commandButton>
+	
+	<!--Submit with remark -->
 	<p:commandButton id="btnSubmitCase_POSTAPP"
 		value="#{msg.get('app.header.button.submit')}" 
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.submit')}"
-		rendered="#{headerController.checkButton('Submit CA')}">
+		rendered="#{postAppGeneral.showSubmitCAWithRemark()}"
+		oncomplete="p_postApp_submit02_Dlg.show()"
+		partialSubmit="true"
+		process="@this"
+		update=":postApp_submit02_Dlg"
+		>
+		<p:resetInput target=":postApp_submit02_Dlg" />
 	</p:commandButton>
 </ui:composition>

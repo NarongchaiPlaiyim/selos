@@ -8,14 +8,14 @@
 		<ui:param name="name" value="p_postApp_submit01_Dlg"/>
 		<ui:param name="formId" value="postApp_submit01_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onSubmitCA"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
 		<ui:param name="id" value="postApp_submit02_Dlg"/>
 		<ui:param name="name" value="p_postApp_submit02_Dlg"/>
 		<ui:param name="formId" value="postApp_submit02_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onSubmitCAWithRemark"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppReturn01Dialog.xhtml">
 		<ui:param name="id" value="postApp_returnBDM_Dlg"/>
@@ -23,7 +23,7 @@
 		<ui:param name="name" value="p_postApp_returnBDM_Dlg"/>
 		<ui:param name="formId" value="postApp_returnBDM_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCaseFail"/>
+		<ui:param name="action" value="onReturnToBDM"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppReturn01Dialog.xhtml">
 		<ui:param name="id" value="postApp_returnUW2_Dlg"/>
@@ -31,7 +31,7 @@
 		<ui:param name="name" value="p_postApp_returnUW2_Dlg"/>
 		<ui:param name="formId" value="postApp_returnUW2_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onReturnUW2"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppReturn01Dialog.xhtml">
 		<ui:param name="id" value="postApp_returnDataEntry_Dlg"/>
@@ -39,7 +39,7 @@
 		<ui:param name="name" value="p_postApp_returnDataEntry_Dlg"/>
 		<ui:param name="formId" value="postApp_returnDataEntry_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onReturnDataEntry"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppReturn01Dialog.xhtml">
 		<ui:param name="id" value="postApp_returnCC2_Dlg"/>
@@ -47,7 +47,7 @@
 		<ui:param name="name" value="p_postApp_returnCC2_Dlg"/>
 		<ui:param name="formId" value="postApp_returnCC2_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onReturnToContactCenter"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppReturn01Dialog.xhtml">
 		<ui:param name="id" value="postApp_returnLARBC_Dlg"/>
@@ -55,16 +55,50 @@
 		<ui:param name="name" value="p_postApp_returnLARBC_Dlg"/>
 		<ui:param name="formId" value="postApp_returnLARBC_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onReturnToLARBC"/>
 	</ui:include>
 	<ui:include src="/site/dialog/postAppCancel01Dialog.xhtml">
 		<ui:param name="id" value="postApp_cancelCA_Dlg"/>
 		<ui:param name="name" value="p_postApp_cancelCA_Dlg"/>
 		<ui:param name="formId" value="postApp_cancelCA_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onSubmitCase"/>
+		<ui:param name="action" value="onCancelCA"/>
 	</ui:include>
-	
+	<ui:include src="/site/dialog/postAppCancel01Dialog.xhtml">
+		<ui:param name="id" value="postApp_cancelDisbursement_Dlg"/>
+		<ui:param name="name" value="p_postApp_cancelDisbursement_Dlg"/>
+		<ui:param name="formId" value="postApp_cancelDisbursement_DlgFrm"/>
+		<ui:param name="controller" value="#{postAppGeneral}"/>
+		<ui:param name="action" value="onCancelDisbursement"/>
+	</ui:include>
+	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
+		<ui:param name="id" value="postApp_reqPriceReduct_Dlg"/>
+		<ui:param name="name" value="p_postApp_reqPriceReduct_Dlg"/>
+		<ui:param name="formId" value="postApp_reqPriceReduct_DlgFrm"/>
+		<ui:param name="controller" value="#{postAppGeneral}"/>
+		<ui:param name="action" value="onRequestPriceReduction"/>
+	</ui:include>
+	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
+		<ui:param name="id" value="postApp_genAgreement_Dlg"/>
+		<ui:param name="name" value="p_postApp_genAgreement_Dlg"/>
+		<ui:param name="formId" value="postApp_genAgreement_DlgFrm"/>
+		<ui:param name="controller" value="#{postAppGeneral}"/>
+		<ui:param name="action" value="onGenerateAgreement"/>
+	</ui:include>
+	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
+		<ui:param name="id" value="postApp_regenAgreement_Dlg"/>
+		<ui:param name="name" value="p_postApp_regenAgreement_Dlg"/>
+		<ui:param name="formId" value="postApp_regenAgreement_DlgFrm"/>
+		<ui:param name="controller" value="#{postAppGeneral}"/>
+		<ui:param name="action" value="onRegenerateAgreement"/>
+	</ui:include>
+	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
+		<ui:param name="id" value="postApp_dataEntryComplete_Dlg"/>
+		<ui:param name="name" value="p_postApp_dataEntryComplete_Dlg"/>
+		<ui:param name="formId" value="postApp_dataEntryComplete_DlgFrm"/>
+		<ui:param name="controller" value="#{postAppGeneral}"/>
+		<ui:param name="action" value="onDataEntryComplete"/>
+	</ui:include>
 	
 	<p:dialog widgetVar='p_postapp_loading_dialog' id='postapp_loading_dialog' modal='true' 
 		closable='false' resizable='false' draggable="false"

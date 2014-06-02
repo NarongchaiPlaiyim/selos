@@ -16,6 +16,7 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
+import com.clevel.selos.businesscontrol.PostAppBusinessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -32,9 +33,15 @@ public class PostAppGeneral implements Serializable  {
 	private Message message;
 	@Inject @SELOS
 	private Logger log;
+	@Inject
+	private HeaderController headerController;
+	@Inject
+	private PostAppBusinessControl postAppBusinessControl;
+	
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
+	private long statusId = -1;
+	private String queueName = "";
 	
 	//Submit02 Dialog value
 	private String submit02_Remark;
@@ -49,6 +56,8 @@ public class PostAppGeneral implements Serializable  {
 	
 	private List<SelectItem> returnReasonList;
 	private List<SelectItem> cancelReasonList;
+	
+	
 	
 	public String getCancel01_Remark() {
 		return cancel01_Remark;
@@ -96,7 +105,8 @@ public class PostAppGeneral implements Serializable  {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
+			queueName = Util.parseString(session.getAttribute("queueName"), "");
+			statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 		}
 		returnReasonList = generalPeopleInfoControl.listReturnReasons();
 		cancelReasonList = generalPeopleInfoControl.listCancelReasons();
@@ -109,7 +119,6 @@ public class PostAppGeneral implements Serializable  {
 	}
 	
 	public void onSubmitCase() {
-		
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 		FacesUtil.redirect("/site/inbox_dev.jsf");
 	}
@@ -119,5 +128,186 @@ public class PostAppGeneral implements Serializable  {
 	}
 	
 	
+	public void onSubmitCA() {
+		try {
+			postAppBusinessControl.submitCA(workCaseId, queueName, null);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onSubmitCAWithRemark() {
+		try {
+			postAppBusinessControl.submitCA(workCaseId, queueName, submit02_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
 	
+	public void onReturnToBDM() {
+		try {
+			postAppBusinessControl.returnToBDM(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	
+	public void onReturnUW2() {
+		try {
+			postAppBusinessControl.returnToUW2(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onReturnDataEntry() {
+		try {
+			postAppBusinessControl.returnToDataEntry(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onReturnToContactCenter() {
+		try {
+			postAppBusinessControl.returnToContactCenter(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onReturnToLARBC() {
+		try {
+			postAppBusinessControl.returnToLARBC(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onCancelCA() {
+		try {
+			postAppBusinessControl.cancelCA(workCaseId, queueName, cancel01_SelectedReasonId, cancel01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onCancelDisbursement() {
+		try {
+			postAppBusinessControl.cancelDisbursement(workCaseId, queueName, cancel01_SelectedReasonId, cancel01_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onRequestPriceReduction() {
+		try {
+			postAppBusinessControl.requestPriceReduction(workCaseId, queueName, submit02_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onGenerateAgreement() {
+		try {
+			postAppBusinessControl.generateAgreement(workCaseId, queueName, submit02_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onRegenerateAgreement() {
+		try {
+			postAppBusinessControl.regenerateAgreement(workCaseId, queueName, submit02_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	public void onDataEntryComplete() {
+		try {
+			postAppBusinessControl.dataEntryComplete(workCaseId, queueName, submit02_Remark);
+			
+			_manageComplete();
+		} catch (Exception e) {
+			_manageError(e);
+		}
+	}
+	
+	public boolean showSubmitCAWithRemark() {
+		if (!headerController.checkButton("Submit CA"))
+			return false;
+		return !_notShowRemark();
+	}
+	public boolean showSubmitCAWithoutRemark() {
+		if (!headerController.checkButton("Submit CA"))
+			return false;
+		return _notShowRemark();
+	}
+	
+	private boolean _notShowRemark() {
+		int stepIdI = (int) stepId;
+		switch (stepIdI) {
+		case 3006: //Inform Customer
+			return true;
+		case 3004 : //Request to get Customer Acceptance
+			return (statusId == 90006 || //CA Approved by UW2
+					statusId == 30001 || //Request to get  Customer acceptance  - Contact Center(#1)
+					statusId == 20031 || //Price/Fee Reduction Approved
+					statusId == 20030);	//Price/Fee Reduction Rejected
+		case 3008 : //Check Doc
+			return true;
+		case 3011 : //Key in Data
+			return statusId == 30008; //Key in Data
+		case 3015 : //Request to Confirm Customer acceptance
+			return true;
+		case 3045 : //Review Perfection
+			return statusId == 30043 || //Review Perfection of Agreement
+				statusId == 20007; //Reply From BDM
+		case 3023 : //Create/Update Customer Profile
+			boolean openAcc = false;
+			if (statusId == 30020) //Customer accepted the final Approval
+				return openAcc;
+			if (statusId == 20007) //Reply From BDM
+				return openAcc;
+		case 3037 : //Reviewed Signed Agreemen
+			boolean pledgeReq = false;
+			if (statusId == 30037) //Agreement Sign Completed
+				return pledgeReq;
+		}
+		return false;
+	}
+
+	private void _manageComplete() {
+		_clearAllInput();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+		FacesUtil.redirect("/site/inbox.jsf");
+	}
+	private void _manageError(Exception e) {
+		String message = Util.getMessageException(e);
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,message,message);
+		FacesContext.getCurrentInstance().addMessage(null,msg);
+		_clearAllInput();
+	}
+	private void _clearAllInput() {
+		submit02_Remark = null;
+		return01_Remark = null;
+		return01_SelectedReasonId = -1;
+		cancel01_Remark = null;
+		cancel01_SelectedReasonId = -1;
+	}
 }
