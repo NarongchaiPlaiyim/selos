@@ -368,6 +368,9 @@ public class BRMSControl extends BusinessControl {
         logger.debug("getFullApplicationResult from workcaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
+
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         actionValidationControl.loadActionValidation(workCase.getStep().getId(), actionId);
@@ -400,6 +403,11 @@ public class BRMSControl extends BusinessControl {
         //2. Set BankStatement Info
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+        if(bankStatementSummary==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Bank Statement is missing!!");
+            return uwRuleResponseView;
+        }
 
         List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
         actionValidationControl.validate(bankStatementSummary, BankStatement.class);
@@ -411,6 +419,11 @@ public class BRMSControl extends BusinessControl {
         //3. Set Biz Info
         List<BRMSBizInfo> brmsBizInfoList = new ArrayList<BRMSBizInfo>();
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
+        if(bizInfoSummary==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Business Information is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(bizInfoSummary, BizInfoSummary.class);
         List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
         for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
@@ -420,10 +433,20 @@ public class BRMSControl extends BusinessControl {
 
         //4. Set TMB Account Request
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
+        if(newCreditFacility==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Credit Propose Line is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(newCreditFacility, NewCreditFacility.class);
 
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+        if(decision==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Decision is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(decision, Decision.class);
 
         ProposeType _proposeType = ProposeType.P;
@@ -503,10 +526,25 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setCollateralInfoList(collateralInfoList);
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        if(basicInfo==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Basic Information is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(basicInfo, BasicInfo.class);
 
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+        if(tcg==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("TCG is missing!!");
+            return uwRuleResponseView;
+        }
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
+        if(dbr==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("DBR is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(tcg, TCG.class);
         actionValidationControl.validate(dbr, DBR.class);
 
@@ -522,6 +560,11 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
 
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
+        if(workCaseAppraisal==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Appraisal is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(workCaseAppraisal, WorkCaseAppraisal.class);
 
         if(workCaseAppraisal != null){
@@ -539,6 +582,11 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Ex Summary is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(exSummary, ExSummary.class);
 
         if(ProposeType.P.equals(_proposeType)){
@@ -554,6 +602,11 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        if(existingCreditFacility==null){
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Credit Existing Line is missing!!");
+            return uwRuleResponseView;
+        }
         actionValidationControl.validate(existingCreditFacility, ExistingCreditFacility.class);
 
         applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
@@ -601,7 +654,6 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
-        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
         if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
