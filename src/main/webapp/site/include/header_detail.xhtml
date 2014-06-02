@@ -122,7 +122,7 @@
                              onclick="PF('blockUI').show()"
                              rendered="#{headerController.checkButton('Check Criteria')}"
                              actionListener="#{headerController.onCheckCriteria}"
-                             update=":frmMain:msgBoxBaseMessagePanel">
+                             update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:msgBoxMandateMessagePanel">
             </p:commandButton>
             <!--Assign to ABDM-->
             <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" title="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton"
