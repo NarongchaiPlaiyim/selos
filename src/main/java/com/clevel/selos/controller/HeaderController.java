@@ -1105,9 +1105,9 @@ public class HeaderController extends BaseController {
 
             if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
                 if(success)
-                    showMessageBox();
-                else
                     showMessageRefresh();
+                else
+                    showMessageBox();
             else
                 RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
         }

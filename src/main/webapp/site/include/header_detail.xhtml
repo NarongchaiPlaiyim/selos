@@ -644,6 +644,7 @@
         </f:facet>
         <p:commandButton value="OK"
                          process="@this"
+                         onclick="PF('blockUI').show()"
                          action="#{headerController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
