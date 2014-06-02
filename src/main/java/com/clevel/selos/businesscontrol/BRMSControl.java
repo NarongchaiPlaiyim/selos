@@ -405,7 +405,7 @@ public class BRMSControl extends BusinessControl {
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         if(bankStatementSummary==null){
             uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("Bank Statement is missing!!");
+            uwRuleResponseView.setReason("Bank Statement Information is missing!!");
             return uwRuleResponseView;
         }
 
@@ -435,18 +435,13 @@ public class BRMSControl extends BusinessControl {
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
         if(newCreditFacility==null){
             uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("Credit Propose Line is missing!!");
+            uwRuleResponseView.setReason("Credit Propose Line Information is missing!!");
             return uwRuleResponseView;
         }
         actionValidationControl.validate(newCreditFacility, NewCreditFacility.class);
 
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-        if(decision==null){
-            uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("Decision is missing!!");
-            return uwRuleResponseView;
-        }
         actionValidationControl.validate(decision, Decision.class);
 
         ProposeType _proposeType = ProposeType.P;
@@ -459,12 +454,14 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalExposure());
         }
         else if(_proposeType.equals(ProposeType.A)){
-            if(newCreditFacility.getLoanRequestType() != null)
+            if(decision==null){
+                uwRuleResponseView.setActionResult(ActionResult.FAILED);
+                uwRuleResponseView.setReason("Decision Information is missing!!");
+                return uwRuleResponseView;
+            }
+            if(newCreditFacility.getLoanRequestType() != null){
                 applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            if(decision != null){
                 applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
-            } else {
-                applicationInfo.setFinalGroupExposure(BigDecimal.ZERO);
             }
 
         }
@@ -536,13 +533,13 @@ public class BRMSControl extends BusinessControl {
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         if(tcg==null){
             uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("TCG is missing!!");
+            uwRuleResponseView.setReason("TCG Information is missing!!");
             return uwRuleResponseView;
         }
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
         if(dbr==null){
             uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("DBR is missing!!");
+            uwRuleResponseView.setReason("DBR Information is missing!!");
             return uwRuleResponseView;
         }
         actionValidationControl.validate(tcg, TCG.class);
@@ -562,7 +559,7 @@ public class BRMSControl extends BusinessControl {
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
         if(workCaseAppraisal==null){
             uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("Appraisal is missing!!");
+            uwRuleResponseView.setReason("Appraisal Information is missing!!");
             return uwRuleResponseView;
         }
         actionValidationControl.validate(workCaseAppraisal, WorkCaseAppraisal.class);
