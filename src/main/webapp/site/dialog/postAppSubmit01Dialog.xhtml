@@ -1,0 +1,33 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+    <p:confirmDialog id="#{id}" 
+    	header="#{msg.get('app.postApp.dlg.submit01.title')}" 
+    	message="#{msg.get('app.postApp.dlg.submit01.message')}"
+        showEffect="fade" hideEffect="fade" width="250"
+        severity="alert" widgetVar="#{name}"
+       	appendTo="@(body)"
+        >
+        <h:form id="#{formId}">
+            <div class="onRight">
+                <p:commandButton
+				 		process="@form"
+                        value="#{msg.get('app.button.submit')}"
+                        actionListener="#{controller[action]}"
+                        update=":postapp_result_dialog"
+                        onstart="handlePostAppOnSending();"
+                        partialSubmit="false"
+                        immediate="false"
+                        oncomplete="handlePostAppOnCompleteSending(args,#{name})"
+                        styleClass="small"
+                        />
+				<p:commandButton
+					type="button"
+					value="#{msg.get('app.button.cancel')}"
+                   	styleClass="small"
+                   	onclick="#{name}.hide()"/>
+            </div>
+        </h:form>
+    </p:confirmDialog>
+</f:view>

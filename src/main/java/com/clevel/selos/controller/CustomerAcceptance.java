@@ -86,6 +86,9 @@ public class CustomerAcceptance implements Serializable {
 		else
 			return basicInfoView.getApproveResult();
 	}
+	public void setApproveResult(ApproveResult result) {
+		//DO NOTHING
+	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
 			return ApproveType.NA;

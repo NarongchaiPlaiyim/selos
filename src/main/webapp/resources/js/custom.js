@@ -984,6 +984,23 @@ function onKeyDownName(evt){
 function is_defined(varname) {
 	return eval('typeof('+varname+')') != 'undefined';
 }
+function handlePostAppOnSending() {
+	if (is_defined('p_postapp_loading_dialog'))
+		p_postapp_loading_dialog.show();
+}
+function handlePostAppOnCompleteSending(args,dialog) {
+	if (is_defined('p_postapp_loading_dialog'))
+		p_postapp_loading_dialog.hide();
+	if (!isValidateComplete(args))
+		return;
+	if (dialog)
+		dialog.hide();
+	if (args && !args.functionComplete) {
+		if (is_defined('p_postapp_result_dialog'))
+			p_postapp_result_dialog.show();
+	}
+}
+
 function handleOnStartOpenCfmDlg() {
 	if (is_defined('p_loading_dialog'))
 		p_loading_dialog.show();

@@ -3,7 +3,8 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
 <div id="header_detail">
 <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
     <div id="header_button_bar">
@@ -546,63 +547,11 @@
                                  widgetVar="cusAppCancelBtn"/>
             </p:confirmDialog>
         </p:panel>
-        <!-- Stage 301 - Customer acceptance -->
-        <p:panel id="header_panel_301" rendered="#{headerController.stageId == 301}" styleClass="panel">
-            <!--Print Op Sheet -->
-            <p:commandButton id="btnPrintReport301" value="#{msg.get('app.header.button.printReport')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.printReport')}"
-                             oncomplete="printReportDlg.show()"
-                             actionListener="#{report.setNameReport()}"
-                             update=":frmMain:printReportPanel"
-                             rendered="#{headerController.checkButton('Print PDF')}">
-            </p:commandButton>
-            <!--Check Mandate Doc -->
-            <p:commandButton id="btnChkMandate301" value="#{msg.get('app.header.button.mandateDoc')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
-                             rendered="#{headerController.checkButton('Check Mandate Doc')}"
-                             update=":frmMain:msgBoxBaseMessagePanel">
-            </p:commandButton>
-
-            <!--Request for Price Reduction -->
-            <p:commandButton id="btnPriceReduction301" value="#{msg.get('app.header.button.requestPriceReduction')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.requestPriceReduction')}"
-                             rendered="#{headerController.checkButton('Request for Price Reduction')}">
-            </p:commandButton>
-
-
-            <!--Return to BDM -->
-            <p:commandButton id="btnReturnBDM301" value="#{msg.get('app.header.button.returnToBDM')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
-                             rendered="#{headerController.checkButton('Return to BDM')}"
-                             actionListener="#{headerController.onOpenReturnBDMDialog()}"
-                             oncomplete="returnBDMDlg.show()"
-                             update=":frmMain:returnBDMPanel">
-                <p:resetInput target=":frmMain:returnBDMPanel"/>
-            </p:commandButton>
-
-            <!--Return to UW2 -->
-            <p:commandButton id="btnReturnUW2_301" value="#{msg.get('app.header.button.returnToUW2')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.returnToBDM')}"
-                             rendered="#{headerController.checkButton('Return to UW 2')}"
-                    >
-            </p:commandButton>
-
-            <!--Cancel CA -->
-            <p:commandButton id="btnCancelCA301" value="#{msg.get('app.header.button.cancelCA')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
-                             rendered="#{headerController.checkButton('Cancel CA')}"
-                             actionListener="#{headerController.onOpenCancelCA()}"
-                             oncomplete="cancelCADlg.show()"
-                             update=":frmMain:cancelCAPanel">
-                <p:resetInput target=":frmMain:cancelCAPanel"/>
-            </p:commandButton>
-            <!--Submit to BDM -->
-            <p:commandButton id="btnSubmitCase301" value="#{msg.get('app.header.button.submit')}"
-                             styleClass="blueButton" title="#{msg.get('app.header.button.submit')}"
-                             rendered="#{headerController.checkButton('Submit CA')}"
-                    >
-            </p:commandButton>
-
+        <!-- Post App -->
+        <p:panel id="header_panel_postapp" rendered="#{postAppGeneral.postAppStage}" styleClass="panel">
+        	<c:if test="#{postAppGeneral.postAppStage}">
+            	<ui:include src="header_postapp_control.xhtml"/>
+            </c:if>
         </p:panel>
     </div>
 <div class="clear"></div>
@@ -829,5 +778,4 @@
         <ui:include src="/site/dialog/cancelRequestPriceReduceDialog.xhtml"/>
     </p:dialog>
 </p:panel>
-
 </ui:composition>
