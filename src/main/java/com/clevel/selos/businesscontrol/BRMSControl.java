@@ -422,6 +422,9 @@ public class BRMSControl extends BusinessControl {
             }
             customerInfoList.add(brmsCustomerInfo);
 
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
+                numberOfGuarantor = numberOfGuarantor + 1;
+
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 

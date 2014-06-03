@@ -55,7 +55,7 @@
                              rendered="#{headerController.checkButton('Check Prescreen')}"
                              actionListener="#{headerController.onCheckPreScreen}"
                              oncomplete="blockUI.hide()"
-                             update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel">
+                             update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel">
             </p:commandButton>
             <!-- Request Appraisal Prescreen -->
             <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
