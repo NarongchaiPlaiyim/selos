@@ -54,6 +54,7 @@
                              onclick="PF('blockUI').show()"
                              rendered="#{headerController.checkButton('Check Prescreen')}"
                              actionListener="#{headerController.onCheckPreScreen}"
+                             oncomplete="blockUI.hide()"
                              update=":frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxMandateMessagePanel">
             </p:commandButton>
             <!-- Request Appraisal Prescreen -->
@@ -122,6 +123,7 @@
                              onclick="PF('blockUI').show()"
                              rendered="#{headerController.checkButton('Check Criteria')}"
                              actionListener="#{headerController.onCheckCriteria}"
+                             oncomplete="blockUI.hide()"
                              update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:msgBoxMandateMessagePanel">
             </p:commandButton>
             <!--Assign to ABDM-->
