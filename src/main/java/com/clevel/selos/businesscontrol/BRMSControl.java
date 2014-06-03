@@ -276,17 +276,21 @@ public class BRMSControl extends BusinessControl {
                 borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
             }
 
-            customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
-            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
+                logger.debug("found guarantor!");
                 numberOfGuarantor = numberOfGuarantor + 1;
+            }
+
+            customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
+        logger.debug("number of guarantor ({})",numberOfGuarantor);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");
             mandateFieldMessageView.setFieldDesc("Guarantor Info.");
-            mandateFieldMessageView.setMessage("Juristic should have guarantor at least one.");
+            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor.");
             mandateFieldMessageView.setPageName("Customer Info.");
             List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
             mandateFieldMessageViewList.add(mandateFieldMessageView);
@@ -411,6 +415,11 @@ public class BRMSControl extends BusinessControl {
         CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
         int numberOfGuarantor = 0;
         for(Customer customer : customerList){
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
+                logger.debug("found guarantor!");
+                numberOfGuarantor = numberOfGuarantor + 1;
+            }
+
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value() &&
                     customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -420,16 +429,18 @@ public class BRMSControl extends BusinessControl {
                 }
                 shareHolderRatio = shareHolderRatio.add(juristic.getShareHolderRatio());
             }
+
             customerInfoList.add(brmsCustomerInfo);
 
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
+        logger.debug("number of guarantor ({})",numberOfGuarantor);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");
             mandateFieldMessageView.setFieldDesc("Guarantor Info.");
-            mandateFieldMessageView.setMessage("Juristic should have guarantor at least one.");
+            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor.");
             mandateFieldMessageView.setPageName("Customer Info.");
             List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
             mandateFieldMessageViewList.add(mandateFieldMessageView);
