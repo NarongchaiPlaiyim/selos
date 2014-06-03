@@ -367,6 +367,8 @@ public class MandateFieldSubmit implements Serializable {
             log.info("mandateFiledClass: {}", selectedMandateClassView);
             mandateFieldControl.deleteAllMandateField(deletedMandateFieldConViewList, deletedMandateFieldConDetailViewList);
             mandateFieldControl.saveAllMandateField(selectedMandateClassView, mandateFieldViewList, mandateFieldConViewList);
+            //Reload New Field Information to get new detail.
+            _loadFieldDetail();
             RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
         }catch (Exception ex){
             RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
