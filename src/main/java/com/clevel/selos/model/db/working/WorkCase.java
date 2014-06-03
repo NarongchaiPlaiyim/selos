@@ -44,7 +44,7 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "uw_doa2")
     private AuthorizationDOA uwDOA2;
 
-    @Column(name = "ref_app_number")
+    @Column(name = "ref_app_number", length = 50)
     private String refAppNumber;
 
     public String getRefAppNumber() {

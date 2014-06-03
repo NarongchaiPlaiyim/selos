@@ -15,7 +15,7 @@ public class RMActivity implements Serializable {
     @SequenceGenerator(name = "SEQ_ADT_RM_ID", sequenceName = "SEQ_ADT_RM_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADT_RM_ID")
     private long id;
-    @Column(name = "user_id", nullable = false)   //user id
+    @Column(name = "user_id", nullable = false, length = 10)   //user id
     private String userId;
     @Column(name = "action", nullable = false)
     private String action;

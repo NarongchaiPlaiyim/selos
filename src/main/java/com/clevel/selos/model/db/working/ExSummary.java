@@ -256,7 +256,7 @@ public class ExSummary implements Serializable {
     ///////////////////////////////////////////////////////////////
 
     //To Send to BRMS - calculate months from yearInBusiness fields.
-    @Column(name ="year_business_month")
+    @Column(name ="year_business_month", columnDefinition = "int default 0")
     private int yearInBusinessMonth;
     ///////////////////////////////////////////////////////////////
 

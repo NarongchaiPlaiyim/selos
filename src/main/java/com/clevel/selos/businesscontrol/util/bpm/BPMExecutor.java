@@ -68,21 +68,16 @@ public class BPMExecutor implements Serializable {
                 }
                 fields.put("BorrowerName", borrowerName);
             }
-            /*for(Customer item : customerList){
-                fields.put("BorrowerName", item.getNameTh());
-            }*/
-            if(!Util.isEmpty(remark)){
+            if(!Util.isEmpty(remark))
                 fields.put("Remark", remark);
-            }
 
             log.debug("dispatch case for [Assign to Checker]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), checkerId);
 
-            if (workCasePrescreen != null) {
+            if (workCasePrescreen != null)
                 execute(queueName, workCasePrescreen.getWobNumber(), fields);
-            } else {
+            else
                 throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
-            }
-        } else {
+        }else{
             throw new Exception("An exception occurred, Can not find Action.");
         }
     }
@@ -673,7 +668,7 @@ public class BPMExecutor implements Serializable {
         execute(queueName, wobNumber, fields);
     }
 
-    private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
+    public void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);
     }

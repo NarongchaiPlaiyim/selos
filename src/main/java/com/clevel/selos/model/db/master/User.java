@@ -13,7 +13,7 @@ import java.util.Date;
 public class User implements Serializable {
     @Id
     @Column(name = "id", nullable = false, unique = true, length = 10)
-    protected String id;
+    private String id;
     @Column(name = "username", length = 50)
     private String userName;
     @OneToOne

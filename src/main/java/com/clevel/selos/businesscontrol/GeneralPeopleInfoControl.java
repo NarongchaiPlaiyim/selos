@@ -39,8 +39,36 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 	 @Inject private BusinessTypeDAO businessTypeDAO;
 	 @Inject private WorkCaseDAO workCaseDAO;
 	 
+	 @Inject private ReasonDAO reasonDAO;
+	 
 	 public GeneralPeopleInfoControl() {
 	 }
+	 
+	 public List<SelectItem> listCancelReasons() {
+		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
+		 List<Reason> reasons = reasonDAO.getCancelList();
+		 for (Reason reason : reasons) {
+			 SelectItem item = new SelectItem();
+			 item.setValue(reason.getId());
+			 item.setLabel(reason.getDescription());
+			 item.setDescription(reason.getDescription());
+			 rtnDatas.add(item);
+		 }
+		 return rtnDatas;
+	 }
+	 public List<SelectItem> listReturnReasons() {
+		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
+		 List<Reason> reasons = reasonDAO.getReasonList();
+		 for (Reason reason : reasons) {
+			 SelectItem item = new SelectItem();
+			 item.setValue(reason.getId());
+			 item.setLabel(reason.getDescription());
+			 item.setDescription(reason.getDescription());
+			 rtnDatas.add(item);
+		 }
+		 return rtnDatas;
+	 }
+	 
 	 public List<SelectItem> listRelationTypes() {
 		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
 		 List<Relation> list = relationDAO.findActiveAll();

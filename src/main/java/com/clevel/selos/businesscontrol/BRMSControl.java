@@ -7,9 +7,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.MandateDocument;
-import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
@@ -236,6 +234,10 @@ public class BRMSControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workcasePrescreenId);
 
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+
+        CustomerEntity mainBorrower = workCasePrescreen.getBorrowerType();
+
         actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), actionId);
         logger.info("-- load Action Validation");
         actionValidationControl.validate(workCasePrescreen, WorkCasePrescreen.class);
@@ -267,15 +269,38 @@ public class BRMSControl extends BusinessControl {
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workcasePrescreenId);
         //Validate Customer List
         actionValidationControl.validate(customerList, Customer.class);
+        int numberOfGuarantor = 0;
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList) {
             if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
                 borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
             }
 
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
+                logger.debug("found guarantor!");
+                numberOfGuarantor = numberOfGuarantor + 1;
+            }
+
             customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
+
+        logger.debug("number of guarantor ({})",numberOfGuarantor);
+        if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
+            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
+            mandateFieldMessageView.setFieldName("Guarantor.");
+            mandateFieldMessageView.setFieldDesc("Guarantor Info.");
+            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor.");
+            mandateFieldMessageView.setPageName("Customer Info.");
+            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+            mandateFieldMessageViewList.add(mandateFieldMessageView);
+
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+
+            return uwRuleResponseView;
+        }
 
         /** Setup Bank Statement Account **/
         //2. Set BankStatement Info
@@ -340,7 +365,6 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
-        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
         logger.info("actionValidationResult: {}", actionValidationResult);
         if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
@@ -368,6 +392,9 @@ public class BRMSControl extends BusinessControl {
         logger.debug("getFullApplicationResult from workcaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
+
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         actionValidationControl.loadActionValidation(workCase.getStep().getId(), actionId);
@@ -382,7 +409,17 @@ public class BRMSControl extends BusinessControl {
 
         actionValidationControl.validate(customerInfoList, Customer.class);
 
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(basicInfo, BasicInfo.class);
+
+        CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
+        int numberOfGuarantor = 0;
         for(Customer customer : customerList){
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
+                logger.debug("found guarantor!");
+                numberOfGuarantor = numberOfGuarantor + 1;
+            }
+
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value() &&
                     customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -392,37 +429,65 @@ public class BRMSControl extends BusinessControl {
                 }
                 shareHolderRatio = shareHolderRatio.add(juristic.getShareHolderRatio());
             }
+
             customerInfoList.add(brmsCustomerInfo);
+
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
+                numberOfGuarantor = numberOfGuarantor + 1;
 
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
+        logger.debug("number of guarantor ({})",numberOfGuarantor);
+        if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
+            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
+            mandateFieldMessageView.setFieldName("Guarantor.");
+            mandateFieldMessageView.setFieldDesc("Guarantor Info.");
+            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor.");
+            mandateFieldMessageView.setPageName("Customer Info.");
+            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+            mandateFieldMessageViewList.add(mandateFieldMessageView);
+
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+
+            return uwRuleResponseView;
+        }
+
         //2. Set BankStatement Info
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
-
-        List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
         actionValidationControl.validate(bankStatementSummary, BankStatement.class);
-        for(BankStatement bankStatement : bankStatementList){
-            accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
+        if(bankStatementSummary!=null){
+            List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
+            for(BankStatement bankStatement : bankStatementList){
+                accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
+            }
+            applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
         }
-        applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
 
         //3. Set Biz Info
         List<BRMSBizInfo> brmsBizInfoList = new ArrayList<BRMSBizInfo>();
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(bizInfoSummary, BizInfoSummary.class);
-        List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
-        for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
-            brmsBizInfoList.add(getBRMSBizInfo(bizInfoDetail));
+        if(bizInfoSummary!=null){
+            List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
+            for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
+                brmsBizInfoList.add(getBRMSBizInfo(bizInfoDetail));
+            }
+            applicationInfo.setBizInfoList(brmsBizInfoList);
         }
-        applicationInfo.setBizInfoList(brmsBizInfoList);
 
         //4. Set TMB Account Request
         NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(newCreditFacility, NewCreditFacility.class);
+        BigDecimal discountFrontEndFeeRate = BigDecimal.ZERO;
 
-        BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
+        if(newCreditFacility!=null)
+            discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
+
+
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(decision, Decision.class);
 
@@ -431,18 +496,19 @@ public class BRMSControl extends BusinessControl {
             _proposeType = workCase.getStep().getProposeType();
 
         if( _proposeType.equals(ProposeType.P)){
-            if(newCreditFacility.getLoanRequestType() != null)
-                applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalExposure());
+            if(newCreditFacility!=null){
+                if(newCreditFacility.getLoanRequestType() != null)
+                    applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
+                applicationInfo.setFinalGroupExposure(newCreditFacility.getTotalExposure());
+            }
         }
         else if(_proposeType.equals(ProposeType.A)){
-            if(newCreditFacility.getLoanRequestType() != null)
-                applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
-            if(decision != null){
-                applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
-            } else {
-                applicationInfo.setFinalGroupExposure(BigDecimal.ZERO);
-            }
+            if(newCreditFacility!=null)
+                if(newCreditFacility.getLoanRequestType() != null){
+                    applicationInfo.setLoanRequestType(newCreditFacility.getLoanRequestType().getBrmsCode());
+                    if(decision!=null)
+                        applicationInfo.setFinalGroupExposure(decision.getTotalApproveExposure());
+                }
 
         }
 
@@ -502,24 +568,30 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setCollateralInfoList(collateralInfoList);
 
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(basicInfo, BasicInfo.class);
-
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
+
         actionValidationControl.validate(tcg, TCG.class);
         actionValidationControl.validate(dbr, DBR.class);
 
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
-        applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
-        applicationInfo.setExpectedSubmitDate(bankStatementSummary.getExpectedSubmitDate());
-        if(basicInfo.getBorrowerType() != null)
-            applicationInfo.setBorrowerType(basicInfo.getBorrowerType().getBrmsCode());
-        applicationInfo.setRequestLoanWithSameName(getRadioBoolean(basicInfo.getRequestLoanWithSameName()));
-        applicationInfo.setRefinanceIN(getRadioBoolean(basicInfo.getRefinanceIN()));
-        applicationInfo.setRefinanceOUT(getRadioBoolean(basicInfo.getRefinanceOUT()));
-        applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
+        if(basicInfo!=null){
+            applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
+            if(basicInfo.getBorrowerType() != null)
+                applicationInfo.setBorrowerType(basicInfo.getBorrowerType().getBrmsCode());
+        }
+        if(bankStatementSummary!=null)
+            applicationInfo.setExpectedSubmitDate(bankStatementSummary.getExpectedSubmitDate());
+
+        if(basicInfo!=null){
+            applicationInfo.setRequestLoanWithSameName(getRadioBoolean(basicInfo.getRequestLoanWithSameName()));
+            applicationInfo.setRefinanceIN(getRadioBoolean(basicInfo.getRefinanceIN()));
+            applicationInfo.setRefinanceOUT(getRadioBoolean(basicInfo.getRefinanceOUT()));
+        }
+
+        if(tcg!=null)
+            applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
 
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
         actionValidationControl.validate(workCaseAppraisal, WorkCaseAppraisal.class);
@@ -535,73 +607,99 @@ public class BRMSControl extends BusinessControl {
 
         applicationInfo.setNumberOfYearFinancialStmt(new BigDecimal(DateTimeUtil.getYearOfDate(checkDate) - latestFinancialStmtYear));
         applicationInfo.setShareHolderRatio(shareHolderRatio);
-        applicationInfo.setFinalDBR(dbr.getFinalDBR());
-        applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
+        if(dbr!=null){
+            applicationInfo.setFinalDBR(dbr.getFinalDBR());
+            applicationInfo.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
+        }
+
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(exSummary, ExSummary.class);
 
         if(ProposeType.P.equals(_proposeType)){
-            applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalIncomeNetBDM());
-            applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleBDM());
+            if(bankStatementSummary!=null)
+                applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalIncomeNetBDM());
+            if(exSummary!=null)
+                applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleBDM());
         } else if(ProposeType.A.equals(_proposeType)){
-            applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalBorrowerIncomeNetUW());
-            applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleUW());
+            if(bankStatementSummary!=null)
+                applicationInfo.setBorrowerGroupIncome(bankStatementSummary.getGrdTotalBorrowerIncomeNetUW());
+            if(exSummary!=null)
+                applicationInfo.setTotalGroupIncome(exSummary.getGroupSaleUW());
         } else {
             applicationInfo.setBorrowerGroupIncome(BigDecimal.ZERO);
             applicationInfo.setTotalGroupIncome(BigDecimal.ZERO);
         }
-        applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
+        if(exSummary!=null)
+            applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(existingCreditFacility, ExistingCreditFacility.class);
 
-        applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
-        applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
-        applicationInfo.setTotalNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
+        if(existingCreditFacility!=null){
+            applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
+            applicationInfo.setTotalExistingODLimit(existingCreditFacility.getTotalBorrowerODLimit());
+            applicationInfo.setTotalNumberOfExistingOD(existingCreditFacility.getTotalBorrowerNumberOfExistingOD());
+        }
+
 
         applicationInfo.setTotalApprovedCredit(totalApprovedCredit);
-        applicationInfo.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
-        applicationInfo.setTotalNumberProposeCredit(newCreditFacility.getTotalNumberProposeCreditFac());
-        applicationInfo.setTotalNumberOfRequestedOD(newCreditFacility.getTotalNumberOfNewOD());
+        if(newCreditFacility!=null){
+            applicationInfo.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
+            applicationInfo.setTotalNumberProposeCredit(newCreditFacility.getTotalNumberProposeCreditFac());
+            applicationInfo.setTotalNumberOfRequestedOD(newCreditFacility.getTotalNumberOfNewOD());
 
-        applicationInfo.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
-        applicationInfo.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
+            applicationInfo.setTotalNumberOfCoreAsset(newCreditFacility.getTotalNumberOfCoreAsset());
+            applicationInfo.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
+        }
 
-        applicationInfo.setAbleToGettingGuarantorJob(getRadioBoolean(basicInfo.getAbleToGettingGuarantorJob()));
-        applicationInfo.setNoClaimLGHistory(getRadioBoolean(basicInfo.getNoClaimLGHistory()));
-        applicationInfo.setNoRevokedLicense(getRadioBoolean(basicInfo.getNoRevokedLicense()));
-        applicationInfo.setNoLateWorkDelivery(getRadioBoolean(basicInfo.getNoLateWorkDelivery()));
-        applicationInfo.setAdequateOfCapital(getRadioBoolean(basicInfo.getAdequateOfCapitalResource()));
 
-        applicationInfo.setCollateralPercent(tcg.getCollateralRuleResult());
-        applicationInfo.setWcNeed(newCreditFacility.getWcNeed());
-        applicationInfo.setCase1WCminLimit(newCreditFacility.getCase1WcMinLimit());
-        applicationInfo.setCase2WCminLimit(newCreditFacility.getCase2WcMinLimit());
-        applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WcLimit());
-        applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWcTmb());
-        applicationInfo.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
-        applicationInfo.setCreditCusType(newCreditFacility.getCreditCustomerType()==2? "P" : "N");
+        if(basicInfo!=null){
+            applicationInfo.setAbleToGettingGuarantorJob(getRadioBoolean(basicInfo.getAbleToGettingGuarantorJob()));
+            applicationInfo.setNoClaimLGHistory(getRadioBoolean(basicInfo.getNoClaimLGHistory()));
+            applicationInfo.setNoRevokedLicense(getRadioBoolean(basicInfo.getNoRevokedLicense()));
+            applicationInfo.setNoLateWorkDelivery(getRadioBoolean(basicInfo.getNoLateWorkDelivery()));
+            applicationInfo.setAdequateOfCapital(getRadioBoolean(basicInfo.getAdequateOfCapitalResource()));
+        }
 
-        if(bizInfoSummary.getProvince() != null)
-            applicationInfo.setBizLocation(String.valueOf(bizInfoSummary.getProvince().getCode()));
 
-        if(bizInfoSummary.getCountry() != null)
-            applicationInfo.setCountryOfRegistration(bizInfoSummary.getCountry().getCode2());
+        if(tcg!=null)
+            applicationInfo.setCollateralPercent(tcg.getCollateralRuleResult());
+        if(newCreditFacility!=null){
+            applicationInfo.setWcNeed(newCreditFacility.getWcNeed());
+            applicationInfo.setCase1WCminLimit(newCreditFacility.getCase1WcMinLimit());
+            applicationInfo.setCase2WCminLimit(newCreditFacility.getCase2WcMinLimit());
+            applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WcLimit());
+            applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWcTmb());
+            applicationInfo.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
+            applicationInfo.setCreditCusType(newCreditFacility.getCreditCustomerType()==2? "P" : "N");
+        }
 
-        applicationInfo.setTradeChequeReturnPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
+
+        if(bizInfoSummary!=null)
+            if(bizInfoSummary.getProvince() != null)
+                applicationInfo.setBizLocation(String.valueOf(bizInfoSummary.getProvince().getCode()));
+
+        if(bizInfoSummary!=null)
+            if(bizInfoSummary.getCountry() != null)
+                applicationInfo.setCountryOfRegistration(bizInfoSummary.getCountry().getCode2());
+
+        if(bankStatementSummary!=null)
+            applicationInfo.setTradeChequeReturnPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
 
         if(workCase.getProductGroup() != null)
             applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
-        applicationInfo.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
+        if(newCreditFacility!=null)
+            applicationInfo.setMaximumSMELimit(newCreditFacility.getMaximumSMELimit());
 
-        if(bizInfoSummary.getReferredExperience() != null)
-            applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
+        if(bizInfoSummary!=null)
+            if(bizInfoSummary.getReferredExperience() != null)
+                applicationInfo.setReferredDocType(bizInfoSummary.getReferredExperience().getBrmsCode());
 
-        applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
+        if(bizInfoSummary!=null)
+            applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
-        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
         if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
