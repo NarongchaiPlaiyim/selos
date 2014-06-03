@@ -44,6 +44,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     @SELOS
     private Logger log;
+
     @Inject
     PrescreenTransform prescreenTransform;
     @Inject
@@ -120,31 +121,24 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     ProductGroupDAO productGroupDAO;
 
-
     @Inject
     RMInterface rmInterface;
     @Inject
     BPMInterface bpmInterface;
     @Inject
     RLOSInterface rlosInterface;
+    @Inject
+    private NCBInterfaceImpl ncbInterface;
 
     @Inject
     STPExecutor stpExecutor;
     @Inject
     BPMExecutor bpmExecutor;
 
-    /*@Inject
-    NCBInterface ncbInterface;  */
-
-    @Inject
-    private NCBInterfaceImpl ncbInterface;
-
     @Inject
     private ExistingCreditControl existingCreditControl;
-
     @Inject
     private BankStmtControl bankStmtControl;
-
     @Inject
     private UWRuleResultControl uwRuleResultControl;
 
@@ -161,13 +155,13 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: SearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: SearchId : {}", customerInfoView.getSearchId());
 
-        DocumentType masterDocumentType = new DocumentType();
+        DocumentType masterDocumentType;
 
-        RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+        RMInterface.SearchBy searchBy = RMInterface.SearchBy.CUSTOMER_ID;
         if(customerInfoView.getSearchBy() == 1){
-            searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+            searchBy = RMInterface.SearchBy.CUSTOMER_ID;
         }else if(customerInfoView.getSearchBy() == 2){
-            searcyBy = RMInterface.SearchBy.TMBCUS_ID;
+            searchBy = RMInterface.SearchBy.TMBCUS_ID;
         }
 
         masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
@@ -198,11 +192,11 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
 
         if(customerInfoView.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
-            IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searchBy);
             log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
             customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
         } else if(customerInfoView.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-            CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searchBy);
             log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
             customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
         }

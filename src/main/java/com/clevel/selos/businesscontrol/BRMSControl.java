@@ -7,9 +7,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.MandateDocument;
-import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
@@ -236,6 +234,10 @@ public class BRMSControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workcasePrescreenId);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workcasePrescreenId);
 
+        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
+
+        CustomerEntity mainBorrower = workCasePrescreen.getBorrowerType();
+
         actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), actionId);
         logger.info("-- load Action Validation");
         actionValidationControl.validate(workCasePrescreen, WorkCasePrescreen.class);
@@ -267,6 +269,7 @@ public class BRMSControl extends BusinessControl {
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workcasePrescreenId);
         //Validate Customer List
         actionValidationControl.validate(customerList, Customer.class);
+        int numberOfGuarantor = 0;
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList) {
             if(customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -274,8 +277,26 @@ public class BRMSControl extends BusinessControl {
             }
 
             customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
+                numberOfGuarantor = numberOfGuarantor + 1;
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
+
+        if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
+            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
+            mandateFieldMessageView.setFieldName("Guarantor.");
+            mandateFieldMessageView.setFieldDesc("Guarantor Info.");
+            mandateFieldMessageView.setMessage("Juristic should have guarantor at least one.");
+            mandateFieldMessageView.setPageName("Customer Info.");
+            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+            mandateFieldMessageViewList.add(mandateFieldMessageView);
+
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+
+            return uwRuleResponseView;
+        }
 
         /** Setup Bank Statement Account **/
         //2. Set BankStatement Info
@@ -340,7 +361,6 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
-        UWRuleResponseView uwRuleResponseView = new UWRuleResponseView();
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
         logger.info("actionValidationResult: {}", actionValidationResult);
         if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
@@ -385,6 +405,11 @@ public class BRMSControl extends BusinessControl {
 
         actionValidationControl.validate(customerInfoList, Customer.class);
 
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(basicInfo, BasicInfo.class);
+
+        CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
+        int numberOfGuarantor = 0;
         for(Customer customer : customerList){
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value() &&
@@ -399,6 +424,22 @@ public class BRMSControl extends BusinessControl {
 
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
+
+        if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
+            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
+            mandateFieldMessageView.setFieldName("Guarantor.");
+            mandateFieldMessageView.setFieldDesc("Guarantor Info.");
+            mandateFieldMessageView.setMessage("Juristic should have guarantor at least one.");
+            mandateFieldMessageView.setPageName("Customer Info.");
+            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+            mandateFieldMessageViewList.add(mandateFieldMessageView);
+
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+
+            return uwRuleResponseView;
+        }
 
         //2. Set BankStatement Info
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
@@ -512,9 +553,6 @@ public class BRMSControl extends BusinessControl {
         }
 
         applicationInfo.setCollateralInfoList(collateralInfoList);
-
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(basicInfo, BasicInfo.class);
 
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
