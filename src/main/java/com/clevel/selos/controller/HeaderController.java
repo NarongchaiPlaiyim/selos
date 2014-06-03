@@ -251,11 +251,11 @@ public class HeaderController extends BaseController {
             UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
             if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
-                    canCloseSale = true;
+                    canSubmitCA = true;
                 } else {
                     if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
                         if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
-                            canCloseSale = true;
+                            canSubmitCA = true;
                         }
                     }
                 }
