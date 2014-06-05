@@ -160,7 +160,7 @@
                     </tr>
 
                     <tr>
-                        <td class="title" >
+                        <td class="title">
                             <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountNumber')}"/>
                             <h:outputText value="#{bankStatementDetail.mandate('accountNumber')}" styleClass="require-field"/>
                             <h:outputText value=" :"/>
@@ -238,8 +238,11 @@
                                             <table style="width: 100%">
                                                 <thead>
                                                     <tr>
-                                                        <th class="ui-state-default"></th>
-                                                        <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item">
+                                                        <th class="ui-state-default" style="background:none !important; border:none !important; border-spacing:0 !important; border-width:0 !important;"></th>
+                                                        <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <th class="ui-state-default" style="background:none !important; border:none !important; border-spacing:0 !important; border-width:0 !important;"></th>
+                                                            </h:panelGroup>
                                                             <th class="ui-state-default">
                                                                 <h:outputText value="#{item.asOfDate}">
                                                                     <f:convertDateTime pattern="MMM yyyy" locale="th_TH"/>
@@ -256,6 +259,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('overLimitAmount')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left" style="background:none;">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitAmount')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.overLimitAmount}"
@@ -277,6 +286,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('grossCreditBalance')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left" style="background:none;">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.grossCreditBalance')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('grossCreditBalance')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.grossCreditBalance}"
@@ -299,6 +314,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('numberOfCreditTxn')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.numberOfCreditTxn')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('numberOfCreditTxn')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.numberOfCreditTxn}"
@@ -324,6 +345,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('excludeListBDM')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.excludeListBDM')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('excludeListBDM')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.excludeListBDM}"
@@ -346,6 +373,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('excludeListUW')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.excludeListUW')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('excludeListUW')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.excludeListUW}"
@@ -368,6 +401,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('creditAmountBDM')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.creditAmountBDM')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('creditAmountBDM')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.creditAmountBDM}"
@@ -389,6 +428,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('creditAmountUW')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.creditAmountUW')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('creditAmountUW')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.creditAmountUW}"
@@ -410,6 +455,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('timesOfAverageCreditBDM')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditBDM')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('timesOfAverageCreditBDM')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.timesOfAvgCreditBDM}"
@@ -431,6 +482,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('timesOfAverageCreditUW')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditUW')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('timesOfAverageCreditUW')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.timesOfAvgCreditUW}"
@@ -455,6 +512,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('debitAmount')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.debitAmount')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('debitAmount')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.debitAmount}"
@@ -477,6 +540,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('numberOfDebitTxn')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.numberOfDebitTxn')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('numberOfDebitTxn')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.numberOfDebitTxn}"
@@ -502,6 +571,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('dateOfMaxBalance')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.dateOfMaxBalance')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('dateOfMaxBalance')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <clv:BECalendar showOn="focus" showButtonPanel="true" navigator="true"
@@ -522,6 +597,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('maxBalance')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.maxBalance')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('maxBalance')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.maxBalance}"
@@ -544,6 +625,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('dateOfMinBalance')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.dateOfMinBalance')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('dateOfMinBalance')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <clv:BECalendar showOn="focus" showButtonPanel="true" navigator="true"
@@ -564,6 +651,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('minBalance')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.minBalance')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('minBalance')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.minBalance}"
@@ -586,6 +679,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('monthBalance')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.monthBalance')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('monthBalance')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.monthBalance}"
@@ -611,6 +710,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('numberOfChequeReturn')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.numberOfChequeReturn')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('numberOfChequeReturn')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.numberOfChequeReturn}"
@@ -633,6 +738,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('chequeReturnAmount')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.chequeReturnAmount')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('chequeReturnAmount')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.chequeReturnAmount}"
@@ -655,6 +766,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('overLimitTimes')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitTimes')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitTimes')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.overLimitTimes}"
@@ -677,6 +794,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('overLimitDays')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitDays')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitDays')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.overLimitDays}"
@@ -699,6 +822,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('swingPercent')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.swingPercent')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('swingPercent')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.swingPercent}"
@@ -722,6 +851,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('utilizationPercent')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.utilizationPercent')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('utilizationPercent')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.utilizationPercent}"
@@ -748,6 +883,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('grossInflowPerLimit')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.grossInflowPerLimit')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('grossInflowPerLimit')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.grossInflowPerLimit}"
@@ -771,6 +912,12 @@
                                                             <h:outputText value="#{bankStatementDetail.mandate('totalTransaction')}" styleClass="require-field"/>
                                                         </td>
                                                         <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                            <h:panelGroup rendered="#{(i.index) eq 6}">
+                                                                <td class="left">
+                                                                    <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.totalTransaction')}"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('totalTransaction')}" styleClass="require-field"/>
+                                                                </td>
+                                                            </h:panelGroup>
                                                             <td class="center"
                                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                                 <p:inputText value="#{item.totalTransaction}"
@@ -1090,12 +1237,13 @@
 
             <div id="bottom_line"></div>
             <!-- Start Footer -->
+            <h:inputHidden id="pagename" value="mnufinancialinfo"/>
+            <h:inputHidden id="subpagename" value="submnubankstatement"/>
             <ui:include src="include/footer.xhtml"/>
             <!-- End Footer -->
             </div>
 
-            <p:blockUI widgetVar="blockUI" block=":frmMain"
-                       trigger=":frmMain:btnSave,:frmMain:btnCancel">
+            <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
                 LOADING<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

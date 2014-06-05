@@ -112,7 +112,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <p:dataTable id='stepAction_tbl' styleClass="full_table" value="#{mandateFieldSubmitStep.mandateFieldStepActionView.classStepActionViewList}"
+                                                            <p:dataTable id='stepAction_tbl' styleClass="full_table" value="#{mandateFieldSubmitStep.mandateFieldStepActionView.classSAAdminViewList}"
                                                                          var="fieldStepAction" rowIndexVar="rowIndex">
                                                                 <p:column styleClass="center">
                                                                     <h:outputText value="#{rowIndex+1}"
@@ -136,7 +136,7 @@
                                                                                      action="#{mandateFieldSubmitStep.onOpenUpdateStepActionField}"
                                                                                      update=":manageStepActionDlg"
                                                                                      style="margin-right:0px !important">
-                                                                        <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedMandateFieldClassStepActionId}" value="#{rowIndex}" />
+                                                                        <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedMandateFieldSAAdminId}" value="#{rowIndex}" />
                                                                         <p:resetInput target=":manageStepActionDlg" />
                                                                     </p:commandButton>
                                                                     <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
@@ -144,7 +144,7 @@
                                                                                      oncomplete="handleOnCompleteOpenCfmDlg(args,p_deleteMandateFieldDlg);"
                                                                                      process="@form"
                                                                                      update=":frmMain:stepAction_tbl">
-                                                                        <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedMandateFieldClassStepActionId}" value="#{rowIndex}" />
+                                                                        <f:setPropertyActionListener target="#{mandateFieldSubmitStep.selectedMandateFieldSAAdminId}" value="#{rowIndex}" />
                                                                     </p:commandButton>
                                                                 </p:column>
 

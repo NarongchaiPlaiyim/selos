@@ -107,7 +107,7 @@ public class LoginBean {
     {
         log.info("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
 
-        log.info("controler in login method of loginbean class");
+        log.info("controller in login method of loginbean class");
 
         loginExceptionMessage = "";
 

@@ -1,15 +1,11 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.MandateFieldClassDAO;
-import com.clevel.selos.dao.master.MandateFieldConditionDAO;
-import com.clevel.selos.dao.master.MandateFieldDAO;
-import com.clevel.selos.dao.master.MandateFieldStepActionDAO;
+import com.clevel.selos.businesscontrol.admin.MandateFieldControl;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.ActionValidationResult;
-import com.clevel.selos.model.view.MandateFieldMessageView;
-import com.clevel.selos.model.view.MandateFieldView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.MandateFieldTransform;
@@ -50,6 +46,12 @@ public class ActionValidationControl extends BusinessControl{
     MandateFieldConditionDAO mandateFieldConditionDAO;
 
     @Inject
+    MandateFieldClassStepActionDAO mandateFieldClassStepActionDAO;
+
+    @Inject
+    MandateFieldControl mandateFieldControl;
+
+    @Inject
     @ValidationMessage
     Message validationMsg;
 
@@ -67,10 +69,12 @@ public class ActionValidationControl extends BusinessControl{
 
     private Map<String, List<MandateFieldView>> mandateFieldViewMap;
     private Map<String, MandateFieldView> listMandateFieldViewMap;
+    private Map<String, MandateFieldClassView> listMandateClassViewMap;
     private ActionValidationResult actionValidationResult;
 
     private Map<Long, ConditionResult> conditionResultMap;
-    private Map<Long, MandateFieldCondition> dependedConditionMap;
+    private Map<Long, ConditionResult> dependedConditionMap;
+
     private Map<Long, ValidationResult> validationResultMap;
     private Map<Long, ValidationResult> dependedValidationMap;
 
@@ -78,6 +82,7 @@ public class ActionValidationControl extends BusinessControl{
         logger.info("-- begin loadActionValidation stepId {}: actionId {}", stepId, actionId);
         mandateFieldViewMap = new HashMap<String, List<MandateFieldView>>();
         listMandateFieldViewMap = new HashMap<String, MandateFieldView>();
+        listMandateClassViewMap = new HashMap<String, MandateFieldClassView>();
         List<MandateFieldStepAction> mandateFieldStepActionList = mandateFieldStepActionDAO.findByAction(stepId, actionId);
         logger.info("-- update Mandate Field {}", mandateFieldStepActionList);
 
@@ -98,6 +103,11 @@ public class ActionValidationControl extends BusinessControl{
                 }
             }
         }
+
+        List<MandateFieldClassStepAction> classStepActionList = mandateFieldClassStepActionDAO.findByActionAndCon(stepId, actionId);
+        for(MandateFieldClassStepAction classStepAction : classStepActionList){
+            listMandateClassViewMap.put(classStepAction.getMandateFieldClass().getClassName(), mandateFieldTransform.transformToView(classStepAction.getMandateFieldClass()));
+        }
         actionValidationResult = new ActionValidationResult();
         List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
         actionValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
@@ -108,26 +118,35 @@ public class ActionValidationControl extends BusinessControl{
         logger.debug("-- begin valide(object:{}, paramenterizedName:{}", object, parameterizedClass.getName());
         String parameterizedName = parameterizedClass.getName();
 
-        if(object != null){
-            Class objectClass = object.getClass();
-
-            logger.info("Object Class Name {}", objectClass.getName());
-            if(objectClass.getName().equals(ArrayList.class.getName())){
-                if(parameterizedName != null){
-                    MandateFieldView mandateFieldView = listMandateFieldViewMap.get(parameterizedName);
-                    if(mandateFieldView != null) {
-                        if(mandateFieldView.getMandateFieldType() == MandateFieldType.FIELD_TYPE){
-                            addMandateFieldMessageView(validateField(object, objectClass, mandateFieldView));
-                        } else if(mandateFieldView.getMandateFieldType() == MandateFieldType.METHOD_TYPE) {
-                            addMandateFieldMessageView(validateMethod(object, objectClass, mandateFieldView));
+        if(parameterizedName != null){
+            MandateFieldView mandateFieldView = listMandateFieldViewMap.get(parameterizedName);
+            MandateFieldClassView mandateFieldClassView = listMandateClassViewMap.get(parameterizedName);
+            if(mandateFieldClassView != null){
+                if(object == null){
+                    addMandateFieldMessageView(mandateFieldClassView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassDescription()));
+                    return;
+                } else {
+                    Class objectClass = object.getClass();
+                    if(objectClass.getName().equals(ArrayList.class.getName())){
+                        ArrayList arrayList = (ArrayList<?>)object;
+                        if(arrayList.size() == 0){
+                            addMandateFieldMessageView(mandateFieldClassView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassDescription()));
                         }
                     }
-                    ArrayList arrayList = (ArrayList<?>)object;
-                    if(arrayList != null && arrayList.size() > 0){
-                        for(Object objectInArray : arrayList){
-                            logger.info("objectInArray is a class of {}", objectInArray.getClass().getName());
-                            validate(objectInArray);
-                        }
+
+                }
+            }
+        }
+
+        if(object != null){
+            Class objectClass = object.getClass();
+            logger.info("Object Class Name {}", objectClass.getName());
+            if(objectClass.getName().equals(ArrayList.class.getName())){
+                ArrayList arrayList = (ArrayList<?>)object;
+                if(arrayList != null && arrayList.size() > 0){
+                    for(Object objectInArray : arrayList){
+                        logger.info("objectInArray is a class of {}", objectInArray.getClass().getName());
+                        validate(objectInArray);
                     }
                 }
             } else {
@@ -137,7 +156,7 @@ public class ActionValidationControl extends BusinessControl{
         logger.debug("-- end validate()");
     }
 
-    public void validate(Object object){
+    private void validate(Object object){
         logger.info("-- begin validate object: {}", object);
         if(object != null){
             validationResultMap = new HashMap<Long, ValidationResult>();
@@ -204,7 +223,7 @@ public class ActionValidationControl extends BusinessControl{
                     } else {
                         Class _fieldObjClass = _fieldObj.getClass();
                         if(_fieldObjClass.isEnum()){
-
+                            logger.info("----- object is enum -------", _fieldObj.getClass());
                         } else if(_fieldObjClass.equals(Integer.class.getName())){
                             return validate(mandateFieldView, (Integer)_fieldObj);
                         } else if(_fieldObjClass.equals(Long.class.getName())){
@@ -213,12 +232,19 @@ public class ActionValidationControl extends BusinessControl{
                             return validate(mandateFieldView, (BigDecimal)_fieldObj);
                         } else if(_fieldObjClass.equals(Boolean.class.getName())){
                             return validate(mandateFieldView, (Boolean)_fieldObj);
+                        } else if(_fieldObjClass.equals(String.class.getName())){
+                            return validate(mandateFieldView, (String)_fieldObj);
                         } else if(!_fieldObjClass.isPrimitive()){
                             if(_fieldObjClass.getName().equals(ArrayList.class.getName())){
                                 return validate(mandateFieldView, (ArrayList<?>)_fieldObj);
                             } else {
-                                logger.debug("check for field is not an primitive and expected value");
-                                validate(_fieldObj);
+                                if(_fieldObjClass.getName().contains(".master.")){
+                                    logger.debug("check for field which is a master table");
+                                    validateMaster(mandateFieldView, _fieldObj);
+                                } else {
+                                    logger.debug("check for field is not an primitive and expected value");
+                                    validate(_fieldObj);
+                                }
                             }
                         }
                     }
@@ -283,27 +309,33 @@ public class ActionValidationControl extends BusinessControl{
     }
 
     private void checkCondition(Object object){
-        logger.debug("-- begin checkCondition object{}, ");
-        conditionResultMap = new HashMap<Long, ConditionResult>();
-        dependedConditionMap = new HashMap<Long, MandateFieldCondition>();
+        logger.debug("-- begin checkCondition object: {}, ", object);
 
+
+        conditionResultMap = new HashMap<Long, ConditionResult>();
+        dependedConditionMap = new HashMap<Long, ConditionResult>();
         String className = object.getClass().getName();
 
-        MandateFieldClass mandateFieldClass = mandateFieldClassDAO.findByClassName(className);
-        List<MandateFieldCondition> mandateFieldConditionList = mandateFieldConditionDAO.findByClass(mandateFieldClass);
-        if(mandateFieldConditionList != null && mandateFieldConditionList.size() > 0){
-            for(MandateFieldCondition condition : mandateFieldConditionList){
-                logger.info("There is condition setting");
-                if(conditionResultMap.get(condition.getId()) != null){
-                    continue;
-                } else {
-                    checkCondition(object, condition);
+        MandateFieldClassView mandateFieldClass = mandateFieldTransform.transformToView(mandateFieldClassDAO.findByClassName(className));
+        List<MandateFieldConditionView> mandateFieldConditionViewList = mandateFieldControl.getMandateConditionList(mandateFieldClass);
+
+
+
+        if(mandateFieldConditionViewList != null && mandateFieldConditionViewList.size() > 0){
+            for(MandateFieldConditionView conditionView : mandateFieldConditionViewList){
+                checkCondition(object, conditionView);
+            }
+
+            ArrayList<ConditionResult> _failedConResultList = new ArrayList<ConditionResult>();
+            for(ConditionResult conditionResult : conditionResultMap.values()){
+                if(combineConditionResult(conditionResult)){
+                    _failedConResultList.add(conditionResult);
                 }
             }
 
-            for(ConditionResult conditionResult : conditionResultMap.values()){
-                if(dependedConditionMap.get(conditionResult.id) != null)
-                    addMandateFieldMessageView(conditionResult.mandateFieldCondition, conditionResult.message);
+            for(ConditionResult _failedConditionResult : _failedConResultList) {
+                if(dependedConditionMap.get(_failedConditionResult.id) == null)
+                    addMandateFieldMessageView(_failedConditionResult.conditionView, _failedConditionResult.message);
             }
         }
         for(ValidationResult validationResult : validationResultMap.values()){
@@ -314,93 +346,107 @@ public class ActionValidationControl extends BusinessControl{
         }
     }
 
-    private boolean checkCondition(Object object, long conditionId){
-        MandateFieldCondition condition = mandateFieldConditionDAO.findById(conditionId);
-        return checkCondition(object, condition);
+    private boolean combineConditionResult(ConditionResult conditionResult){
+        logger.info("-- begin combineConditionResult :: {}", conditionResult);
+
+        MandateFieldConditionView conditionView = conditionResult.conditionView;
+
+        if(conditionView.getDependType().equals(MandateDependType.DEPEND_TRUE)){
+            ConditionResult dependResult = conditionResultMap.get(conditionView.getDependCondition().getId());
+            dependedConditionMap.put(dependResult.id, dependResult);
+            if(combineConditionResult(dependResult)){
+                return conditionResult.isPass;
+            } else {
+                //When DEPEND_TRUE the condition will not be checked.
+                return true;
+            }
+        } else if(conditionView.getDependType().equals(MandateDependType.DEPEND_FALSE)){
+            ConditionResult dependResult = conditionResultMap.get(conditionView.getDependCondition().getId());
+            dependedConditionMap.put(dependResult.id, dependResult);
+            if(!combineConditionResult(dependResult)){
+                return conditionResult.isPass;
+            } else {
+                return true;
+            }
+        } else {
+            return conditionResult.isPass;
+        }
     }
 
-    private boolean checkCondition(Object object, MandateFieldCondition condition){
-        logger.debug("-- begin checkCondition object:{}, mandateFieldCondition: {}, validationResultMap: {}", object, condition, validationResultMap);
+    private boolean checkCondition(Object object, MandateFieldConditionView conditionView){
+        logger.info("-- begin checkCondition object:{}, mandateFieldCondition: {}", object, conditionView);
+        logger.info("with mandateFieldCondition: {}", conditionView);
+        logger.info("current validation result {}", validationResultMap);
+        logger.info("current condition result {}", conditionResultMap);
 
-        List<MandateFieldConditionDetail> conditionDetailList = condition.getMandateFieldConditionDetailList();
+        List<MandateFieldConditionDetailView> conditionDetailViewList = conditionView.getConditionDetailViewList();
         boolean isPassCondition = Boolean.TRUE;
         StringBuilder stringBuilder = new StringBuilder();
 
-        boolean dependResult = true;
-
-        if(!condition.getDependType().equals(MandateDependType.NO_DEPENDENCY)){
-            ConditionResult conditionResult = conditionResultMap.get(condition.getId());
-            if(conditionResult != null){
-                if(condition.getDependType() == MandateDependType.DEPEND_TRUE){
-                    if(conditionResult.isPass)
-                        dependResult = true;
-                } else if(condition.getDependType() == MandateDependType.DEPEND_FALSE){
-                    if(!conditionResult.isPass)
-                        dependResult = true;
+        if(conditionView.getMandateConditionType().equals(MandateConditionType.AND)){
+            for(MandateFieldConditionDetailView conditionDetailView : conditionDetailViewList){
+                ValidationResult validationResult = validationResultMap.get(conditionDetailView.getMandateFieldView().getId());
+                if(!validationResult.isPass)
+                    isPassCondition = Boolean.FALSE;
+                if(stringBuilder.length() > 0){
+                    stringBuilder.append(" ").append(MandateConditionType.AND).append(" ").append(validationResult.message);
+                } else {
+                    stringBuilder.append(validationResult.message);
                 }
-            } else {
-                checkCondition(object, condition.getDependCondition());
+                dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
             }
-        }
-
-        if(dependResult) {
-            if(condition.getMandateConditionType().equals(MandateConditionType.AND)){
-                for(MandateFieldConditionDetail conditionDetail : conditionDetailList){
-                    ValidationResult validationResult = validationResultMap.get(conditionDetail.getMandateField().getId());
-                    if(!validationResult.isPass)
-                        isPassCondition = Boolean.FALSE;
-                    if(stringBuilder.length() > 0){
-                        stringBuilder.append(" ").append(MandateConditionType.AND).append(" ").append(validationResult.message);
-                    }
-                    dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
+        } else if(conditionView.getMandateConditionType().equals(MandateConditionType.OR)){
+            isPassCondition = Boolean.FALSE;
+            for(MandateFieldConditionDetailView conditionDetailView : conditionDetailViewList){
+                ValidationResult validationResult = validationResultMap.get(conditionDetailView.getMandateFieldView().getId());
+                if(validationResult.isPass)
+                    isPassCondition = Boolean.TRUE;
+                if(stringBuilder.length() > 0){
+                    stringBuilder.append(" ").append(MandateConditionType.OR).append(" ").append(validationResult.message);
+                } else {
+                    stringBuilder.append(validationResult.message);
                 }
-            } else if(condition.getMandateConditionType().equals(MandateConditionType.OR)){
-                isPassCondition = Boolean.FALSE;
-                for(MandateFieldConditionDetail conditionDetail : conditionDetailList){
-                    ValidationResult validationResult = validationResultMap.get(conditionDetail.getMandateField().getId());
-                    if(validationResult.isPass)
-                        isPassCondition = Boolean.TRUE;
-                    if(stringBuilder.length() > 0){
-                        stringBuilder.append(" ").append(MandateConditionType.AND).append(" ").append(validationResult.message);
+                dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
+            }
+        } else if(conditionView.getMandateConditionType().equals(MandateConditionType.BASE)){
+            for(MandateFieldConditionDetailView conditionDetailView : conditionDetailViewList){
+                MandateFieldView mandateFieldView = conditionDetailView.getMandateFieldView();
+                if(conditionDetailView.getBaseValue() == null){
+                    ValidationResult validationResult = validationResultMap.get(mandateFieldView.getId());
+                    if(validationResult != null) {
+                        isPassCondition = validationResult.isPass;
+                        stringBuilder.append(validationResult.message);
+                        dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
                     }
-                    dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
-                }
-            } else if(condition.getMandateConditionType().equals(MandateConditionType.BASE)){
-                for(MandateFieldConditionDetail conditionDetail : conditionDetailList){
-                    MandateField mandateField = conditionDetail.getMandateField();
+                } else {
+                    if(object != null) {
 
-                    if(conditionDetail.getBaseValue() == null){
-                        ValidationResult validationResult = validationResultMap.get(mandateField.getId());
-                        if(validationResult != null) {
-                            isPassCondition = validationResult.isPass;
-                            stringBuilder.append(validationResult.message);
-                            dependedValidationMap.put(validationResult.mandateFieldView.getId(), validationResult);
-                        }
-                    } else {
-                        if(object != null) {
-                            try{
-                                Field field = object.getClass().getField(mandateField.getFieldName());
-                                field.setAccessible(true);
-                                Object _fieldObj = field.get(object);
-                                if(_fieldObj == null){
-                                    isPassCondition = Boolean.FALSE;
-                                    stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateField.getFieldName()));
+                        try{
+                            Field field = object.getClass().getField(mandateFieldView.getFieldName());
+                            field.setAccessible(true);
+                            Object _fieldObj = field.get(object);
+                            if(_fieldObj == null){
+                                isPassCondition = Boolean.FALSE;
+                                stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldName()));
+                            } else {
+                                logger.info("check condition value: {}", _fieldObj);
+                                if(conditionDetailView.getBaseValue() != null && conditionDetailView.getBaseValue().contains(":")){
+                                    isPassCondition = isContainValue(conditionDetailView.getBaseValue(), _fieldObj);
                                 } else {
-
                                     if(Integer.class.getName().equals(_fieldObj.getClass().getName())){
-                                        if((Integer)_fieldObj != Integer.parseInt(conditionDetail.getBaseValue())){
+                                        if((Integer)_fieldObj != Integer.parseInt(conditionDetailView.getBaseValue())){
                                             isPassCondition = Boolean.TRUE;
                                         } else {
                                             isPassCondition = Boolean.FALSE;
                                         }
                                     } else if(Long.class.getName().equals(_fieldObj.getClass().getName())){
-                                        if((Long)_fieldObj != Long.parseLong(conditionDetail.getBaseValue())){
+                                        if((Long)_fieldObj != Long.parseLong(conditionDetailView.getBaseValue())){
                                             isPassCondition = Boolean.TRUE;
                                         } else {
                                             isPassCondition = Boolean.FALSE;
                                         }
                                     } else if(BigDecimal.class.getName().equals(_fieldObj.getClass().getName())){
-                                        BigDecimal baseValue = new BigDecimal(conditionDetail.getBaseValue());
+                                        BigDecimal baseValue = new BigDecimal(conditionDetailView.getBaseValue());
                                         if(baseValue.compareTo((BigDecimal)_fieldObj) == 0){
                                             isPassCondition = Boolean.TRUE;
                                         } else {
@@ -408,38 +454,26 @@ public class ActionValidationControl extends BusinessControl{
                                         }
 
                                     } else if(Boolean.class.getName().equals(_fieldObj.getClass().getName())){
-                                        Boolean baseValue = Boolean.valueOf(conditionDetail.getBaseValue());
+                                        Boolean baseValue = Boolean.valueOf(conditionDetailView.getBaseValue());
                                         if(_fieldObj.equals(baseValue)){
                                             isPassCondition = Boolean.TRUE;
                                         } else {
                                             isPassCondition = Boolean.FALSE;
                                         }
-                                    } else {
-                                        if(!_fieldObj.getClass().isPrimitive()){
-                                            Field idField = _fieldObj.getClass().getField("id");
-                                            idField.setAccessible(true);
-                                            Object idObject = idField.get(_fieldObj);
-                                            if((Long)idObject == Long.parseLong(conditionDetail.getBaseValue())){
-                                                isPassCondition = true;
-                                            } else {
-                                                isPassCondition = Boolean.FALSE;
-                                            }
-                                        }
-                                    }
-                                    if(!isPassCondition){
-                                        stringBuilder.append(validationMsg.get(CONDITION_BASE, condition.getConditionDesc()));
                                     }
                                 }
-                            } catch (NoSuchFieldException nse){
-                                stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateField.getFieldName()));
-                                logger.debug("cannot find field {}", mandateField.getFieldName());
-                            } catch (IllegalAccessException nse){
-                                isPassCondition = Boolean.FALSE;
-                                stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateField.getFieldName()));
-                                logger.debug("cannot access field {}", mandateField.getFieldName());
-                            }
-                        }
+                                //Set message for every condition check
+                                stringBuilder.append(validationMsg.get(CONDITION_BASE, conditionView.getConditionDesc()));
 
+                            }
+                        } catch (NoSuchFieldException nse){
+                            stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldName()));
+                            logger.debug("cannot find field {}", mandateFieldView.getFieldName());
+                        } catch (IllegalAccessException nse){
+                            isPassCondition = Boolean.FALSE;
+                            stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldName()));
+                            logger.debug("cannot access field {}", mandateFieldView.getFieldName());
+                        }
                     }
                 }
             }
@@ -447,10 +481,12 @@ public class ActionValidationControl extends BusinessControl{
 
         ConditionResult conditionResult = new ConditionResult();
         conditionResult.isPass = isPassCondition;
-        conditionResult.id = condition.getId();
+        conditionResult.id = conditionView.getId();
         conditionResult.message = stringBuilder.toString();
-        conditionResult.mandateFieldCondition = condition;
+        conditionResult.conditionView = conditionView;
+
         conditionResultMap.put(conditionResult.id, conditionResult);
+        logger.info("Condition Result Map: {}", conditionResultMap);
         return true;
     }
 
@@ -551,12 +587,39 @@ public class ActionValidationControl extends BusinessControl{
         }
         if(!Util.isEmpty(mandateFieldView.getNotMatchedValue())){
             if(mandateFieldView.getNotMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.key())){
-                isPassNotMatched = !(_fieldObj == null);
+                isPassNotMatched = (_fieldObj != null);
             } else {
-                isPassNotMatched = !(_fieldObj == Boolean.parseBoolean(mandateFieldView.getNotMatchedValue()));
+                isPassNotMatched = (_fieldObj != Boolean.parseBoolean(mandateFieldView.getNotMatchedValue()));
             }
         }
         logger.info("validate isPassMin:{}, isPassMax: {}, isPassMatched: {}, isPassNotMatched: {}", isPassMin, isPassMax, isPassMatched, isPassNotMatched);
+        return getValidationResult(mandateFieldView, isPassMin, isPassMax, isPassMatched, isPassNotMatched);
+    }
+
+    private ValidationResult validate(MandateFieldView mandateFieldView, String _fieldObj){
+        logger.info("validate mandateFieldView:{}, String: {}", mandateFieldView, _fieldObj);
+        Boolean isPassMin = null, isPassMax = null, isPassMatched = null, isPassNotMatched = null;
+        if(!Util.isEmpty(mandateFieldView.getMinValue())){
+            isPassMin = (_fieldObj.compareTo(mandateFieldView.getMinValue()) >= 0);
+        }
+        if(!Util.isEmpty(mandateFieldView.getMaxValue())){
+            isPassMax = (_fieldObj.compareTo(mandateFieldView.getMinValue()) <= 0);
+        }
+        if(!Util.isEmpty(mandateFieldView.getMatchedValue())){
+            if(mandateFieldView.getMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.key())){
+                isPassMatched = (_fieldObj == null || "".equals(_fieldObj));
+            } else {
+                isPassMatched = (_fieldObj.equals(mandateFieldView.getMatchedValue()));
+            }
+        }
+        if(!Util.isEmpty(mandateFieldView.getNotMatchedValue())){
+            if(mandateFieldView.getNotMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.key())){
+                isPassNotMatched = !(_fieldObj == null || "".equals(_fieldObj));
+            } else {
+                isPassNotMatched = (_fieldObj.equals(mandateFieldView.getMatchedValue()));
+            }
+        }
+        logger.info("validate result:{}, {}, {}, {}", isPassMin, isPassMax, isPassMatched, isPassNotMatched);
         return getValidationResult(mandateFieldView, isPassMin, isPassMax, isPassMatched, isPassNotMatched);
     }
 
@@ -606,6 +669,63 @@ public class ActionValidationControl extends BusinessControl{
         }
         logger.info("validateNullObject result:{}, {}, {}, {}", isPassMin, isPassMax, isPassMatched, isPassNotMatched);
         return getValidationResult(mandateFieldView, isPassMin, isPassMax, isPassMatched, isPassNotMatched);
+    }
+
+    private ValidationResult validateMaster(MandateFieldView mandateFieldView, Object _fieldObj){
+        logger.info("validateMaster mandateFieldView:{}, Integer: {}", mandateFieldView, _fieldObj);
+        Boolean isPassMin = null, isPassMax = null, isPassMatched = null, isPassNotMatched = null;
+
+        if(!Util.isEmpty(mandateFieldView.getMatchedValue())){
+            if(mandateFieldView.getMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.toString())){
+                isPassMatched = (_fieldObj == null);
+            } else {
+                isPassNotMatched = isContainValue(mandateFieldView.getNotMatchedValue(), _fieldObj);
+
+            }
+        }
+        if(!Util.isEmpty(mandateFieldView.getNotMatchedValue())){
+            if(mandateFieldView.getNotMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.key())){
+                isPassNotMatched = (_fieldObj != null);
+            } else {
+                isPassNotMatched = !isContainValue(mandateFieldView.getNotMatchedValue(), _fieldObj);
+            }
+        }
+
+        logger.info("validateMaster result:{}, {}, {}, {}", isPassMin, isPassMax, isPassMatched, isPassNotMatched);
+        return getValidationResult(mandateFieldView, isPassMin, isPassMax, isPassMatched, isPassNotMatched);
+    }
+
+    private boolean isContainValue(String _compValue, Object _fieldObj){
+        boolean isContain = false;
+        if(_compValue != null){
+            if(_compValue.contains(":")){
+                String[] splits = _compValue.split(":");
+                try{
+                    Field subField = _fieldObj.getClass().getField(splits[0]);
+                    subField.setAccessible(true);
+                    Object _subFieldObj = subField.get(_fieldObj);
+                    if(_subFieldObj == null){
+                        if(_subFieldObj == null || "".equals(_subFieldObj)){
+                            isContain = true;
+                        }
+                    } else {
+                        Class _subClass = _subFieldObj.getClass();
+                        if(Integer.class.getName().equals(_subClass.getName())){
+                            isContain = ((Integer)_subFieldObj == Integer.parseInt(splits[1]));
+                        } else if(Long.class.getName().equals(_subClass.getName())) {
+                            isContain = ((Long)_subFieldObj == Long.parseLong(splits[1]));
+                        } else if(Boolean.class.getName().equals(_subClass.getName())){
+                            isContain = ((Boolean)_subFieldObj == Boolean.parseBoolean(splits[1]));
+                        } else if(String.class.getName().equals(_subClass.getName())){
+                            isContain = (splits[1].equals(_subFieldObj));
+                        }
+                    }
+                }catch (Exception ex){
+                    logger.error("Cannot Compare Value", ex);
+                }
+            }
+        }
+        return isContain;
     }
 
     private ValidationResult getValidationResult(MandateFieldView mandateFieldView, Boolean isPassMin, Boolean isPassMax, Boolean isPassMatched, Boolean isPassNotMatched){
@@ -665,12 +785,20 @@ public class ActionValidationControl extends BusinessControl{
         actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
-    private void addMandateFieldMessageView(MandateFieldCondition condition, String message){
+    private void addMandateFieldMessageView(MandateFieldConditionView conditionView, String message){
         MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
-        mandateFieldMessageView.setFieldName("Condition " + condition.getMandateConditionType().name());
-        mandateFieldMessageView.setFieldDesc(condition.getConditionDesc());
+        mandateFieldMessageView.setFieldName("Condition " + conditionView.getMandateConditionType().name());
+        mandateFieldMessageView.setFieldDesc(conditionView.getConditionDesc());
         mandateFieldMessageView.setMessage(message);
+        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+    }
 
+    private void addMandateFieldMessageView(MandateFieldClassView mandateFieldClassView, String message){
+        MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
+        mandateFieldMessageView.setFieldName("Class " + mandateFieldClassView.getClassName());
+        mandateFieldMessageView.setPageName(mandateFieldClassView.getPageName());
+        mandateFieldMessageView.setFieldDesc(mandateFieldClassView.getClassDescription());
+        mandateFieldMessageView.setMessage(message);
         actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
@@ -703,13 +831,15 @@ public class ActionValidationControl extends BusinessControl{
         Long id = null;
         Boolean isPass = null;
         String message = null;
-        MandateFieldCondition mandateFieldCondition = null;
+        MandateFieldConditionView conditionView = null;
 
         @Override
         public String toString() {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                    .append("id", id)
                     .append("isPass", isPass)
                     .append("message", message)
+                    .append("conditionView", conditionView)
                     .toString();
         }
     }

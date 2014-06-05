@@ -176,19 +176,34 @@ public class PrescreenConverter extends Converter{
             ncbEnquiryTypeList.add(ncbEnquiryType);
             ncbReportTypeList.add(ncbReportType);
 
+            //Convert Warning Code into Customer.
             List<WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
             List<String> csiFullyMatchList = customerInfo.getCsiFullyMatchCode();
-            for(String csiFullyMatchCode : csiFullyMatchList){
+            int csiFullyMatchSize = 0;
+            if(csiFullyMatchList != null && csiFullyMatchList.size() > 0) {
+                csiFullyMatchSize = csiFullyMatchList.size();
+                for (String csiFullyMatchCode : csiFullyMatchList) {
+                    WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
+                    warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
+                    warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
+                }
+            } else {
                 WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
-                warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
+                warningCodeFullMatchedType.setCode("");
                 warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
             }
 
             List<WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
             List<String> csiSomeMatchList = customerInfo.getCsiSomeMatchCode();
-            for(String csiSomeMatchCode : csiSomeMatchList){
+            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0 && csiFullyMatchSize == 0) {
+                for (String csiSomeMatchCode : csiSomeMatchList) {
+                    WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
+                    warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
+                    warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
+                }
+            } else {
                 WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
-                warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
+                warningCodePartialMatchedType.setCode("");
                 warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
             }
 

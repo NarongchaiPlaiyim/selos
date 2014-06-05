@@ -7,8 +7,12 @@ import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.Serializable;
 import java.net.URL;
 
@@ -88,6 +92,13 @@ public class EndPoint implements Serializable {
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            String requestFile = "/home/slosdev/clevel/brms/prescreenUnderwritingRulesRequest.xml";
+            String responseFile = "/home/slosdev/clevel/brms/prescreenUnderwritingRulesResponse.xml";
+            JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
+            Marshaller mRequest = requestContext.createMarshaller();
+            mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mRequest.marshal(request, new FileWriter(requestFile, true));
+
             URL url = new URL(prescreenAddress + WSDL);
             QName qname = new QName(brmsServiceURL, prescreenServiceName);
 
@@ -105,6 +116,12 @@ public class EndPoint implements Serializable {
             logger.debug("callPrescreenUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
             logger.debug("callPrescreenUnderwritingRulesService() Done...{}", response);
+
+            JAXBContext responseContext = JAXBContext.newInstance(DecisionServiceResponse.class);
+            Marshaller mResponse = responseContext.createMarshaller();
+            mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mResponse.marshal(response, new FileWriter(responseFile, true));
+
             return response;
         } catch (Exception e) {
             logger.error("callPrescreenUnderwritingRulesService() Error :", e);
@@ -121,6 +138,13 @@ public class EndPoint implements Serializable {
         DecisionServiceSEFullApplicationUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            String requestFile = "/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesRequest.xml";
+            String responseFile = "/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesResponse.xml";
+            JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
+            Marshaller mRequest = requestContext.createMarshaller();
+            mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mRequest.marshal(request, new FileWriter(requestFile, true));
+
             URL url = new URL(fullAppAddress + WSDL);
             QName qname = new QName(brmsServiceURL, fullAppServiceName);
             service = new DecisionServiceSEFullApplicationUWSFlow_Service(url, qname);
@@ -137,6 +161,12 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, fullAppAddress);
             logger.debug("callFullApplicationUnderwritingRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
+
+            JAXBContext responseContext = JAXBContext.newInstance(DecisionServiceResponse.class);
+            Marshaller mResponse = responseContext.createMarshaller();
+            mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mResponse.marshal(response, new FileWriter(responseFile, true));
+
             logger.debug("callFullApplicationUnderwritingRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
@@ -153,6 +183,14 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingInterestFlow port = null;
         DecisionServiceResponse response = null;
         try {
+
+            String requestFile = "/home/slosdev/clevel/brms/standardPricingInterestRulesRequest.xml";
+            String responseFile = "/home/slosdev/clevel/brms/standardPricingInterestRulesResponse.xml";
+            JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
+            Marshaller mRequest = requestContext.createMarshaller();
+            mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mRequest.marshal(request, new FileWriter(requestFile, true));
+
             URL url = new URL(interestAddress + WSDL);
             QName qname = new QName(brmsServiceURL, interestServiceName);
 
@@ -169,6 +207,12 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, interestAddress);
             logger.debug("callStandardPricingInterestRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
+
+            JAXBContext responseContext = JAXBContext.newInstance(DecisionServiceResponse.class);
+            Marshaller mResponse = responseContext.createMarshaller();
+            mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mResponse.marshal(response, new FileWriter(responseFile, true));
+
             logger.debug("callStandardPricingFeeRulesService() Done...{}", response);
             return response;
         } catch (Exception e) {
@@ -186,6 +230,13 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingFeeFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            String requestFile = "/home/slosdev/clevel/brms/standardPricingFeeRulesRequest.xml";
+            String responseFile = "/home/slosdev/clevel/brms/standardPricingFeeRulesResponse.xml";
+            JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
+            Marshaller mRequest = requestContext.createMarshaller();
+            mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mRequest.marshal(request, new FileWriter(requestFile, true));
+
             URL wsdlUrl = new URL(feeAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, feeServiceName);
 
@@ -202,6 +253,12 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, feeAddress);
             logger.debug("callStandardPricingFeeRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
+
+            JAXBContext responseContext = JAXBContext.newInstance(DecisionServiceResponse.class);
+            Marshaller mResponse = responseContext.createMarshaller();
+            mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mResponse.marshal(response, new FileWriter(responseFile, true));
+
             logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
@@ -219,6 +276,13 @@ public class EndPoint implements Serializable {
         DecisionServiceSEDocumentCustomerFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            String requestFile = "/home/slosdev/clevel/brms/documentCustomerRulesRequest.xml";
+            String responseFile = "/home/slosdev/clevel/brms/documentCustomerRulesResponse.xml";
+            JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
+            Marshaller mRequest = requestContext.createMarshaller();
+            mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mRequest.marshal(request, new FileWriter(requestFile, true));
+
             URL wsdlUrl = new URL(customerAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, customerServiceName);
             service = new DecisionServiceSEDocumentCustomerFlow_Service(wsdlUrl, qname);
@@ -234,6 +298,12 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, customerAddress);
             logger.debug("callDocumentCustomerRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
+
+            JAXBContext responseContext = JAXBContext.newInstance(DecisionServiceResponse.class);
+            Marshaller mResponse = responseContext.createMarshaller();
+            mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mResponse.marshal(response, new FileWriter(responseFile, true));
+
             logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
@@ -251,6 +321,13 @@ public class EndPoint implements Serializable {
         DecisionServiceSEDocumentAppraisalFlow port = null;
         DecisionServiceResponse response = null;
         try {
+            String requestFile = "/home/slosdev/clevel/brms/documentAppraisalRulesRequest.xml";
+            String responseFile = "/home/slosdev/clevel/brms/documentAppraisalRulesResponse.xml";
+            JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
+            Marshaller mRequest = requestContext.createMarshaller();
+            mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mRequest.marshal(request, new FileWriter(requestFile, true));
+
             URL wsdlUrl = new URL(appraisalAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, appraisalServiceName);
             service = new DecisionServiceSEDocumentAppraisalFlow_Service(wsdlUrl, qname);
@@ -266,6 +343,12 @@ public class EndPoint implements Serializable {
             ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, appraisalAddress);
             logger.debug("callDocumentAppraisalRulesService() Calling...{}", request);
             response = port.executeDecisionService(request);
+
+            JAXBContext responseContext = JAXBContext.newInstance(DecisionServiceResponse.class);
+            Marshaller mResponse = responseContext.createMarshaller();
+            mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            mResponse.marshal(response, new FileWriter(responseFile, true));
+
             logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {

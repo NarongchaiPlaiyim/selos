@@ -4,12 +4,14 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
+import com.clevel.selos.model.db.working.UWRuleResultSummary;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -49,6 +51,8 @@ public class HeaderController extends BaseController {
     BasicInfoDAO basicInfoDAO;
     @Inject
     ReasonDAO reasonDAO;
+    @Inject
+    UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
 
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -179,6 +183,14 @@ public class HeaderController extends BaseController {
     private int returnReasonId;
     private String returnAADRemark;
 
+    //Check Pre-Screen Result
+    private boolean canCloseSale;
+    private UWResultColor uwResultColor;
+    private String deviationFlag = "";
+
+    //Check Criteria Result
+    private boolean canSubmitCA;
+
     public HeaderController() {
     }
 
@@ -220,6 +232,34 @@ public class HeaderController extends BaseController {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
+        }
+
+        //check pre-screen result
+        canCloseSale = false;
+        if(workCasePreScreenId!=0){
+            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                    canCloseSale = true;
+                }
+            }
+        }
+
+        //check criteria result
+        canSubmitCA = false;
+        if(workCaseId!=0){
+            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                    canSubmitCA = true;
+                } else {
+                    if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
+                        if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                            canSubmitCA = true;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -958,7 +998,7 @@ public class HeaderController extends BaseController {
 
     public void onOpenCancelRequestPriceReduction(){
         log.debug("onOpenCancelRequestPriceReduction");
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        cancelReason = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
         reasonId = 0;
         cancelRemark = "";
         RequestContext.getCurrentInstance().execute("cancelRequestPriceReduceDlg.show()");
@@ -1025,6 +1065,7 @@ public class HeaderController extends BaseController {
 
     public void onCheckPreScreen(){
         long workCasePreScreenId = 0;
+        boolean success = false;
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -1042,10 +1083,10 @@ public class HeaderController extends BaseController {
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
                             message = Util.getMessageException(ex);
-
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Pre-Screen success";
+                        success = true;
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
@@ -1063,12 +1104,12 @@ public class HeaderController extends BaseController {
             }
 
             if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                if(success)
+                    showMessageRefresh();
+                else
+                    showMessageBox();
             else
-                RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
-
-
-
+                showMessageMandate();
         }
     }
 
@@ -1719,11 +1760,14 @@ public class HeaderController extends BaseController {
     //-------------- End of Function for Appraisal Request ( BDM ) ------------------//
 
     public void onCheckCriteria(){
+        //RequestContext.getCurrentInstance().execute("blockUI.show()");
         long workCaseId = 0;
+        boolean success = false;
         HttpSession session = FacesUtil.getSession(true);
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             try{
+                fullApplicationControl.updateCSIDataFullApp(workCaseId);
                 UWRuleResponseView uwRuleResponseView = brmsControl.getFullApplicationResult(workCaseId, 1009);
                 log.info("onCheckCriteria uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
@@ -1737,30 +1781,37 @@ public class HeaderController extends BaseController {
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
                             message = Util.getMessageException(ex);
-                            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                            showMessageBox();
                         }
                         messageHeader = "Information.";
                         message = "Request for Check Criteria Success.";
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        success = true;
                     }else {
                         messageHeader = "Exception.";
                         message = uwRuleResponseView.getReason();
-                        RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                        mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
                     }
                 } else {
                     uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                     messageHeader = "Exception.";
                     message = "Request for Check Criteria Fail.";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 }
             } catch (Exception ex){
                 log.error("Exception while onCheckCriteria : ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             }
 
+            if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
+                if(success)
+                    showMessageRefresh();
+                else
+                    showMessageBox();
+            else
+                showMessageMandate();
+
         }
+        //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
     public boolean checkAccessStage(String stageString){
@@ -2308,5 +2359,21 @@ public class HeaderController extends BaseController {
 
     public void setReturnAADRemark(String returnAADRemark) {
         this.returnAADRemark = returnAADRemark;
+    }
+
+    public boolean isCanCloseSale() {
+        return canCloseSale;
+    }
+
+    public void setCanCloseSale(boolean canCloseSale) {
+        this.canCloseSale = canCloseSale;
+    }
+
+    public boolean isCanSubmitCA() {
+        return canSubmitCA;
+    }
+
+    public void setCanSubmitCA(boolean canSubmitCA) {
+        this.canSubmitCA = canSubmitCA;
     }
 }
