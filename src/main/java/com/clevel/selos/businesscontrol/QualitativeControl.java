@@ -41,6 +41,10 @@ public class QualitativeControl extends BusinessControl {
         QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase, getCurrentUser());
         qualitativeADAO.persist(qualitativeA);
 
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
     }
 
     public QualitativeView getQualitativeA(long workCaseId){
@@ -77,6 +81,9 @@ public class QualitativeControl extends BusinessControl {
         QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase, getCurrentUser());
         qualitativeBDAO.persist(qualitativeB);
 
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
     }
 
     public QualitativeView getQualitativeB(long workCaseId){

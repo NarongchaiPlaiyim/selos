@@ -109,6 +109,7 @@
         <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
             <!--Print Report-->
             <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Print PDF')}"
                              actionListener="#{report.setNameReport()}"
                              oncomplete="printReportDlg.show()"
                              update=":frmMain:printReportPanel">
@@ -119,9 +120,9 @@
 
             </p:commandButton>
             <!--Check Criteria (BRMS)-->
-            <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
+            <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')} [#{headerController.timesOfCriteriaCheck}]" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
                              onclick="PF('blockUI').show()"
-                             rendered="#{headerController.checkButton('Check Criteria')}"
+                             rendered="#{headerController.checkButton('Check Criteria')}" disabled="#{not headerController.canCheckCriteria}"
                              actionListener="#{headerController.onCheckCriteria}"
                              oncomplete="blockUI.hide()"
                              update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:msgBoxMandateMessagePanel">
@@ -174,7 +175,7 @@
             <!--Return to AAD Admin ( UW2 )-->
             <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                              title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisal == 1}"
+                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisalRequire == 1}"
                              actionListener="#{headerController.onOpenReturnAADMByUW2()}"
                              update=":frmMain:returnAADM_UW2Panel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
@@ -564,7 +565,7 @@
 <div class="clear"></div>
 <!-- Start for Message Box -->
 <p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog"
+    <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog" closable="false"
                      header="#{headerController.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{headerController.message}" escape="false"/>
@@ -576,19 +577,13 @@
     </p:confirmDialog>
 </p:panel>
 <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
-    <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="messageDialog"
-              header="#{headerController.messageHeader}" width="800" closable="false" modal="true">
-        <f:facet name="message">
-            <h:outputText value="#{headerController.message}" escape="false"/>
-        </f:facet>
+    <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="mandateFieldDialog" resizable="false"
+              header="#{headerController.messageHeader}" closable="false" modal="true">
         <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
-        <p:commandButton value="OK"
-                         process="@this"
-                         oncomplete="msgBoxMandateMessageDlg.hide()"/>
     </p:dialog>
 </p:panel>
 <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog"
+    <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog" closable="false"
                      header="#{headerController.messageHeader}">
         <f:facet name="message">
             <h:outputText value="#{headerController.message}" escape="false"/>
@@ -763,7 +758,7 @@
 </p:panel>
 
 <p:panel id="returnAADM_UW2Panel" styleClass="panel"
-         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisal == 1}">
+         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisalRequire == 1}">
     <p:dialog id="returnAADM_UW2Dialog" widgetVar="returnAADM_UW2Dlg" header="Return to AAD Admin"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="160" closable="false">

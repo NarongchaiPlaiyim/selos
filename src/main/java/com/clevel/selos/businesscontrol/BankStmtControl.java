@@ -1243,6 +1243,9 @@ public class BankStmtControl extends BusinessControl {
         if (workCaseId != 0) {
             workCase = workCaseDAO.findById(workCaseId);
             bankStatementSummaryWorkCase = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+            //--Update flag in WorkCase ( for check before submit )
+            workCase.setCaseUpdateFlag(1);
+            workCaseDAO.persist(workCase);
         }
         if (workCasePrescreenId != 0) {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
@@ -1264,6 +1267,7 @@ public class BankStmtControl extends BusinessControl {
         bankStatementSummary.setWorkCasePrescreen(workCasePrescreen);
         BankStatementSummary returnBankStmtSummary = bankStatementSummaryDAO.persist(bankStatementSummary);
         log.debug("persist BankStatementSummary: {}", bankStatementSummary);
+
         return bankStmtTransform.getBankStmtSummaryView(returnBankStmtSummary);
     }
 

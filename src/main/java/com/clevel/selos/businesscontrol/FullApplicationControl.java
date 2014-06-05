@@ -12,7 +12,6 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -73,6 +72,11 @@ public class FullApplicationControl extends BusinessControl {
     CustomerDAO customerDAO;
     @Inject
     ReturnInfoHistoryDAO returnInfoHistoryDAO;
+    @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
+    DecisionDAO decisionDAO;
+
     @Inject
     ReturnInfoTransform returnInfoTransform;
     @Inject
@@ -1229,5 +1233,118 @@ public class FullApplicationControl extends BusinessControl {
                 }
             }
         }
+    }
+
+    public void updateTimeOfCheckCriteria(long workCaseId){
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
+            if(!Util.isNull(workCaseOwner)) {
+                int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();
+                timesOfCriteriaChecked = timesOfCriteriaChecked + 1;
+                workCaseOwner.setTimesOfCriteriaChecked(timesOfCriteriaChecked);
+                log.debug("Update time of criteria checked [timeOfCriteriaCheck] : {}", timesOfCriteriaChecked);
+                workCaseOwnerDAO.persist(workCaseOwner);
+            }
+        }catch(Exception ex){
+            log.error("Exception while update time of check criteria.", ex);
+        }
+    }
+
+    public void clearCaseUpdateFlag(long workCaseId){
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setCaseUpdateFlag(0);
+            workCaseDAO.persist(workCase);
+        }catch (Exception ex){
+            log.debug("Exception while clear case update flag : ", ex);
+        }
+    }
+
+    public int getTimesOfCriteriaCheck(long workCaseId){
+        int timesOfCriteriaCheck = 0;
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            if(!Util.isNull(workCaseOwner)){
+                log.debug("getTimesOfCriteriaCheck ::: workCaseOwner : {}", workCaseOwner);
+                timesOfCriteriaCheck = workCaseOwner.getTimesOfCriteriaChecked();
+            }
+            log.debug("getTimesOfCriteriaCheck ::: timesOfCriteriaCheck : {}", timesOfCriteriaCheck);
+        }catch(Exception ex){
+            log.error("Exception while get time of check criteria : ", ex);
+        }
+
+        return timesOfCriteriaCheck;
+    }
+
+    public int getRequestAppraisalRequire(long workCaseId){
+        int requestAppraisalRequire = 0;
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                requestAppraisalRequire = workCase.getRequestAppraisalRequire();
+            }
+        }catch (Exception ex){
+            log.error("Exception while getRequestAppraisalRequire : ", ex);
+        }
+
+        return requestAppraisalRequire;
+    }
+
+    public boolean checkCaseUpdate(long workCaseId){
+        boolean caseUpdateFlag = false;
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(!Util.isNull(workCase)) {
+            caseUpdateFlag = Util.isTrue(workCase.getCaseUpdateFlag());
+        }
+
+        return caseUpdateFlag;
+    }
+
+    public void calculateApprovedResult(long workCaseId){
+        log.debug("calculateApprovedResult");
+        try {
+            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            log.debug("calculateApprovedResult ::: decision : {}", decision);
+            log.debug("calculateApprovedResult ::: prpose : {}", newCreditFacility);
+
+            //Compare for total approved equal to propose or not
+            int sameRequest = 1;
+            if (!Util.isNull(decision)) {
+                BigDecimal totalApprovedCredit = decision.getTotalApproveCredit();
+                BigDecimal totalProposedCredit = newCreditFacility.getTotalPropose();
+                if (!Util.isNull(totalApprovedCredit) && !Util.isNull(totalProposedCredit)) {
+                    if (totalProposedCredit.compareTo(totalApprovedCredit) != 0) {
+                        sameRequest = 0;
+                    }
+                }
+            }
+            log.debug("calculateApprovedResult ::: sameRequest : {}", sameRequest);
+            int approvedType = calculateApprovedType(workCaseId);
+            //Update value in WorkCase
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setApprovedResult(sameRequest);
+            workCase.setApprovedType(approvedType);
+            workCaseDAO.persist(workCase);
+        } catch (Exception ex){
+            log.error("Exception while Calculate Approved Result : ", ex);
+        }
+    }
+
+    public int calculateApprovedType(long workCaseId){
+        int requestType = 1;        //for new = 1, new+change = 2;
+        log.debug("calculateApprovedType");
+        List<NewCreditDetail> newCreditDetailApprovedList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+        log.debug("calculateApprovedType ::: newCreditDetailApprovedList size : {}", newCreditDetailApprovedList != null ? newCreditDetailApprovedList.size() : null);
+        for(NewCreditDetail newCreditDetail : newCreditDetailApprovedList){
+            log.debug("calculateApprovedType ::: newCreditDetail : {}", newCreditDetail);
+            if(newCreditDetail.getUwDecision() == DecisionType.APPROVED && newCreditDetail.getRequestType() == RequestTypes.CHANGE.value()) {
+                requestType = 2;
+                break;
+            }
+        }
+
+        return requestType;
     }
 }

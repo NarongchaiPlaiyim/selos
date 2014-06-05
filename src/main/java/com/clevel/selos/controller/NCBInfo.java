@@ -431,7 +431,7 @@ public class NCBInfo extends BaseController {
         try {
             //Remove checked NCB Detail list
             //if (ncbDetailViewList.size() > 0) {
-                ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList, customerInfo);
+                ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList, customerInfo, workCaseId);
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");

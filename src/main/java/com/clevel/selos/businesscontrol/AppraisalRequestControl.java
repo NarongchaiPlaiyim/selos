@@ -125,6 +125,10 @@ public class AppraisalRequestControl extends BusinessControl {
             workCase = workCaseDAO.findById(workCaseId);
             workCasePrescreen = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            /*if(workCase != null){
+                workCase.setRequestAppraisal(1);
+                workCaseDAO.persist(workCase);
+            }*/
         }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             workCase = null;

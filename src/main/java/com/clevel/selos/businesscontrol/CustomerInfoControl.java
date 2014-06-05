@@ -193,7 +193,12 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
         }
+
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
         log.info("end - saveCustomerInfoIndividual ::: customerId : {}", customer.getId());
+
         return customer.getId();
     }
 

@@ -62,6 +62,9 @@ public class WorkCaseOwner {
     @Column(name = "modify_date")
     private Date modifyDate;
 
+    @Column(name = "times_of_criteria_checked", columnDefinition = "int default 0")
+    private int timesOfCriteriaChecked;
+
     public WorkCasePrescreen getWorkCasePrescreen() {
         return workCasePrescreen;
     }
@@ -142,6 +145,14 @@ public class WorkCaseOwner {
         this.modifyDate = modifyDate;
     }
 
+    public int getTimesOfCriteriaChecked() {
+        return timesOfCriteriaChecked;
+    }
+
+    public void setTimesOfCriteriaChecked(int timesOfCriteriaChecked) {
+        this.timesOfCriteriaChecked = timesOfCriteriaChecked;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -150,111 +161,12 @@ public class WorkCaseOwner {
                 .append("role", role)
                 .append("user", user)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("createBy", createBy)
                 .append("createDate", createDate)
                 .append("modifyBy", modifyBy)
                 .append("modifyDate", modifyDate)
+                .append("timesOfCriteriaChecked", timesOfCriteriaChecked)
                 .toString();
     }
-
-/*    @Column(name = "role_id")
-    private Integer roleid;
-    @Column(name = "user_id")
-    private String userid;
-    @Column(name = "workcase_id")
-    private Integer workCaseId;
-    @Column(name = "step_id")
-    private Integer stepId;
-    @Column(name = "workcase_prescreen_id")
-    private Integer workCasePrescreenId;*/
-/*    @Column(name = "create_by")
-    private String createBy;
-    @Column(name = "modify_by")
-    private String modifyBy;*/
-
-
-  /*  public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public String getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(String modifyBy) {
-        this.modifyBy = modifyBy;
-    }
-
-    public Integer getWorkCasePrescreenId() {
-        return workCasePrescreenId;
-    }
-
-    public void setWorkCasePrescreenId(Integer workCasePrescreenId) {
-        this.workCasePrescreenId = workCasePrescreenId;
-    }
-
-    public Integer getRoleid() {
-        return roleid;
-    }
-
-    public void setRoleid(Integer roleid) {
-        this.roleid = roleid;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public Integer getWorkCaseId() {
-        return workCaseId;
-    }
-
-    public void setWorkCaseId(Integer workCaseId) {
-        this.workCaseId = workCaseId;
-    }
-
-    public Integer getStepId() {
-        return stepId;
-    }
-
-    public void setStepId(Integer stepId) {
-        this.stepId = stepId;
-    }
-
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("roleid", roleid).
-                append("userid", userid).
-                append("workCaseId", workCaseId).
-                append("stepId", stepId).
-                toString();
-    }*/
-
 }

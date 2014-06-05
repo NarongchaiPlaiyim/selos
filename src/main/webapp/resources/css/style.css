@@ -904,3 +904,7 @@ table tbody tr.grandtotal_summary td {
 #reqApprDialogPanel label{
     font-size: 10px !important;
 }
+
+.mandateFieldDialog{
+    display: table;
+}
