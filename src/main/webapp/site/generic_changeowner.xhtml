@@ -64,8 +64,10 @@
 <!-- End Menu -->
 <div id="content_container">
     <div id="content_name">Change Owner</div>
-    <div style="color: red;">Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
+    <div style="color: red;">
         Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ
+        <br/>
+        Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
     </div>
     <div id="content">
         <table id="content_form">
@@ -180,6 +182,11 @@
                                 <h:outputText value="#{item.status}"/>
                             </p:column>
 
+                            <p:column headerText="From User" styleClass="center"
+                                      style="width: 110px;" sortBy="currentUser">
+                                <h:outputText value="#{item.fromUser}"/>
+                            </p:column>
+
                             <p:column headerText="At User" styleClass="center"
                                       style="width: 110px;" sortBy="currentUser">
                                 <h:outputText value="#{item.currentUser}"/>
@@ -188,6 +195,16 @@
                             <p:column headerText="At User Team" styleClass="center"
                                       style="width: 130px;" sortBy="teamName">
                                 <h:outputText value="#{item.teamName}"/>
+                            </p:column>
+
+                            <p:column headerText="Appointment Date" styleClass="center"
+                                      style="width: 110px;" sortBy="SLAEndTime">
+                                <h:outputText value="#{item.appointmentDate}" />
+                            </p:column>
+
+                            <p:column headerText="DOA Level" styleClass="center"
+                                      style="width: 110px;">
+                                <h:outputText value="#{item.doaLevel}"/>
                             </p:column>
 
                             <p:column headerText="SLAEndDate" styleClass="center"
