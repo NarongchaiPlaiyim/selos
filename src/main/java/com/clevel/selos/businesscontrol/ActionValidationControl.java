@@ -123,14 +123,14 @@ public class ActionValidationControl extends BusinessControl{
             MandateFieldClassView mandateFieldClassView = listMandateClassViewMap.get(parameterizedName);
             if(mandateFieldClassView != null){
                 if(object == null){
-                    addMandateFieldMessageView(mandateFieldClassView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassName()));
+                    addMandateFieldMessageView(mandateFieldClassView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassDescription()));
                     return;
                 } else {
                     Class objectClass = object.getClass();
                     if(objectClass.getName().equals(ArrayList.class.getName())){
                         ArrayList arrayList = (ArrayList<?>)object;
                         if(arrayList.size() == 0){
-                            addMandateFieldMessageView(mandateFieldClassView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassName()));
+                            addMandateFieldMessageView(mandateFieldClassView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassDescription()));
                         }
                     }
 

@@ -114,6 +114,7 @@ public class MandateFieldSubmitStep implements Serializable {
         log.info("-- begin onOpenAddStepActionField mandateFieldStepActionView:{}", mandateFieldStepActionView);
         if(mandateFieldStepActionView.getClassSAAdminViewList() == null){
             mandateFieldStepActionView.setClassSAAdminViewList(new ArrayList<MandateFieldClassSAAdminView>());
+
         }
         wrkMandateFieldClassSAAdminView = new MandateFieldClassSAAdminView();
         updatedMode = false;
@@ -157,6 +158,7 @@ public class MandateFieldSubmitStep implements Serializable {
                     wrkMandateFieldClassSAAdminView.setClassName(mandateFieldClassView.getClassName());
                     wrkMandateFieldClassSAAdminView.setPageName(mandateFieldClassView.getPageName());
                     wrkMandateFieldClassSAAdminView.setMandateFieldViewList(new ArrayList<MandateFieldView>());
+                    wrkMandateFieldClassSAAdminView.setMandateFieldConditionViewList(new ArrayList<MandateFieldConditionView>());
                     break;
                 }
             }

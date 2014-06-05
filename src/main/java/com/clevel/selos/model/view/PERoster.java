@@ -42,6 +42,33 @@ public class PERoster implements Serializable {
     private int fetchType;
     private String statusCode;
     private String atUser;
+    private String appointmentDate;
+    private String doaLevel;
+    private String fromUser;
+
+    public String getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(String fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getDoaLevel() {
+        return doaLevel;
+    }
+
+    public void setDoaLevel(String doaLevel) {
+        this.doaLevel = doaLevel;
+    }
 
     public String getStatusCode() {
         return statusCode;

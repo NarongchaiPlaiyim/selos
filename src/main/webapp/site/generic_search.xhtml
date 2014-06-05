@@ -339,6 +339,10 @@ function resetter()
                                                 <h:outputText value="#{item.status}"/>
                                             </p:column>
 
+                                            <p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="fromuser">
+                                                <h:outputText value="#{item.fromuser}"/>
+                                            </p:column>
+
                                             <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="atuser">
                                                 <h:outputText value="#{item.atuser}"/>
                                             </p:column>
@@ -347,13 +351,13 @@ function resetter()
                                                 <h:outputText value="#{item.atuserteam}" />
                                             </p:column>
 
-                                            <!--<p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="appointmentdate">
+                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="appointmentdate">
                                                 <h:outputText value="#{item.appointmentdate}"/>
                                             </p:column>
 
                                             <p:column headerText="DOA Level" styleClass="center" style="width: 110px;" sortBy="doalevel">
                                                 <h:outputText value="#{item.doalevel}"/>
-                                            </p:column>   -->
+                                            </p:column>
 
                                             <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="slaenddate" >
                                                 <h:outputText value="#{item.slaenddate}"/>

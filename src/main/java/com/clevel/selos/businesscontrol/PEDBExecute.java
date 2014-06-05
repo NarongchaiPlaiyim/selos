@@ -511,7 +511,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setStatus(rs.getString("Status"));
                 if(rs.getString("PreviousUser") != null)
                 {
-                    peInbox.setFromuser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                peInbox.setFromuser(userDAO.getUserNameById(rs.getString("PreviousUser")));
                 }
                 if(rs.getString("CurrentUser") != null)
                 {
@@ -621,6 +621,18 @@ public class PEDBExecute extends BusinessControl
 
                     peRoster.setCurrentUser(peRoster.getAtUser());
                 }
+
+                if(rs.getObject("AppointmentDate1")!=null)
+                {
+                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().trim()));
+                }
+
+                if(rs.getString("PreviousUser") != null)
+                {
+                    peRoster.setFromUser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                }
+
+                peRoster.setDoaLevel(rs.getString("DOALevel"));
 
                 peRoster.setStatusCode(rs.getString("StatusCode"));
 
@@ -2092,7 +2104,23 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setQueuename(inboxName);
 
-                peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
+                if(rs.getObject("ReceivedDate1")!=null)
+                {
+                    peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
+                }
+
+                if(rs.getObject("AppointmentDate1")!=null)
+                {
+                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().trim()));
+                }
+
+                if(rs.getString("PreviousUser") != null)
+                {
+                    peRoster.setFromUser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                }
+
+                peRoster.setDoaLevel(rs.getString("DOALevel"));
+
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
