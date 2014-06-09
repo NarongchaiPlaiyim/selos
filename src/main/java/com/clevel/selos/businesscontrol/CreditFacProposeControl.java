@@ -666,7 +666,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-            TCGView tcg = tcgInfoControl.getTcgView(workCaseId);
+            TCGView tcg = tcgInfoControl.getTCGView(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
 
             if (workCase.getProductGroup() != null && bankStatementSummary != null && tcg != null && basicInfoView != null && workCase != null) {
@@ -828,6 +828,7 @@ public class CreditFacProposeControl extends BusinessControl {
             maximumSMELimit = BigDecimal.ZERO;
         }
 
+        log.debug("Calculate for maximumSMELimit : {}", maximumSMELimit);
         newCreditFacilityView.setMaximumSMELimit(maximumSMELimit);
 
         return newCreditFacilityView;
@@ -1377,6 +1378,10 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         fullApplicationControl.calculatePricingDOA(workCaseId, newCreditFacility);
+
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
 
         return newCreditFacilityTransform.transformToView(newCreditFacility);
     }

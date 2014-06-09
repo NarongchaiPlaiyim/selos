@@ -379,6 +379,10 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("persist related RLOS existingCreditDetailList...");
         }
 
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
 
        /*
         List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
