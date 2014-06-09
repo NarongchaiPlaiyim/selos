@@ -1,9 +1,8 @@
 package com.clevel.selos.transform;
-import com.clevel.selos.dao.working.NewCollateralSubDAO;
+
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.NewCollateralHead;
 import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.view.NewCollateralSubView;
 import com.clevel.selos.util.Util;
@@ -154,6 +153,7 @@ public class NewCollateralSubTransform extends Transform {
             newCollateralSubView.setCollID(originalNewCollSubView.getCollID());
             newCollateralSubView.setHeadCollID(originalNewCollSubView.getHeadCollID());
             newCollateralSubView.setSubCollateralType(originalNewCollSubView.getSubCollateralType());
+            newCollateralSubView.setHeadCollType(originalNewCollSubView.getHeadCollType());
             newCollateralSubView.setAddress(originalNewCollSubView.getAddress());
             newCollateralSubView.setLandOffice(originalNewCollSubView.getLandOffice());
             newCollateralSubView.setTitleDeed(originalNewCollSubView.getTitleDeed());
@@ -174,6 +174,7 @@ public class NewCollateralSubTransform extends Transform {
             newCollateralSubView.setUsage(originalNewCollSubView.getUsage());
             newCollateralSubView.setTypeOfUsage(originalNewCollSubView.getTypeOfUsage());
             newCollateralSubView.setLineNo(originalNewCollSubView.getLineNo());
+            newCollateralSubView.setSubId(originalNewCollSubView.getSubId());
         }
         return newCollateralSubView;
     }

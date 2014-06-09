@@ -160,6 +160,9 @@ public class AppraisalAppointmentControl extends BusinessControl {
             customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreenId(workCasePreScreenId);
         }
 
+        log.debug("onSaveAppraisalAppointment ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
+        log.debug("onSaveAppraisalAppointment ::: newCreditFacility : {}", newCreditFacility);
+
         if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
 
             appraisal = appraisalTransform.transformToModel(appraisalView, workCase, workCasePrescreen, getCurrentUser());

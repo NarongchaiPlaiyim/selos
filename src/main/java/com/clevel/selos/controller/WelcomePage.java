@@ -9,7 +9,6 @@ import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.bpm.model.BPMInbox;
 import com.clevel.selos.integration.bpm.model.FieldName;
 import com.clevel.selos.integration.bpm.model.OrderType;
-import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
@@ -46,7 +45,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "welcomePage")

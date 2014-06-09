@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.util.Util;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class CustomerAttorneyView implements Serializable {
 	private static final long serialVersionUID = 3741911726626140767L;

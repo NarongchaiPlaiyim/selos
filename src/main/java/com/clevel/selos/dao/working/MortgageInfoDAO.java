@@ -1,13 +1,12 @@
 package com.clevel.selos.dao.working;
 
-import java.util.List;
-
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.working.MortgageInfo;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.working.MortgageInfo;
+import java.util.List;
 
 public class MortgageInfoDAO extends GenericDAO<MortgageInfo, Long>{
 	

@@ -39,6 +39,14 @@ public class UserSysParameterControl extends BusinessControl{
         }
     }
 
+    public UserSysParameterView getSysParameterValue(String key){
+        initialUserSysParameter();
+        if(userSysParameterViewMap.containsKey(key)){
+            return userSysParameterViewMap.get(key);
+        }
+        return null;
+    }
+
     /*public List<String> getSysParameterValue(String key){
         initialUserSysParameter();
 

@@ -7,7 +7,6 @@ import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;

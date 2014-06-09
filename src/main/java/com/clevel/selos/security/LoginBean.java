@@ -8,8 +8,8 @@ import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.Language;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.UserStatus;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
 import com.clevel.selos.security.encryption.EncryptionService;
@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.List;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -108,7 +107,7 @@ public class LoginBean {
     {
         log.info("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
 
-        log.info("controler in login method of loginbean class");
+        log.info("controller in login method of loginbean class");
 
         loginExceptionMessage = "";
 
@@ -282,7 +281,7 @@ public class LoginBean {
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {*/
-            if((Long)httpSession.getAttribute("stepId") !=0 && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
+            if((Long)httpSession.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)httpSession.getAttribute("wobNumber");
                 bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));

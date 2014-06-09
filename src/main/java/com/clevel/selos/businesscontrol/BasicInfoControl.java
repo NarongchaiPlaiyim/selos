@@ -270,6 +270,8 @@ public class BasicInfoControl extends BusinessControl {
 
         workCase.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
         workCase.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
+        //----Set update flag for require in Check Criteria----
+        workCase.setCaseUpdateFlag(1);
         workCaseDAO.persist(workCase);
 
         //for new Open Account

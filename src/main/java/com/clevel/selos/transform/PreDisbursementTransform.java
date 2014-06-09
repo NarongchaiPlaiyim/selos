@@ -1,21 +1,13 @@
 package com.clevel.selos.transform;
 
 
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.PreDisbursementData;
 import com.clevel.selos.model.db.working.PreDisbursement;
 import com.clevel.selos.model.db.working.PreDisbursementDetail;
 import com.clevel.selos.model.view.PreDisbursementDetailView;
 import com.clevel.selos.model.view.PreDisbursementView;
-import com.clevel.selos.util.Util;
-
-import org.joda.time.DateTime;	
-import org.slf4j.Logger;
-
-import javax.inject.Inject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PreDisbursementTransform extends Transform {

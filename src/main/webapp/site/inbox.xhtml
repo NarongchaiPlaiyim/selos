@@ -80,58 +80,70 @@
                                             <p:column headerText="" styleClass="center" style="width:22px;"  >
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
-                                            <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="#{item.receiveddate}" >
+                                            <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="receiveddate" >
                                                 <h:outputText value="#{item.receiveddate}"/>
                                             </p:column>
 
-                                            <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="#{item.applicationno}">
+                                            <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="applicationno">
                                                 <h:outputText value="#{item.applicationno}"/>
                                             </p:column>
-                                            <p:column headerText="Name" styleClass="center" style="width: 60px;">
+                                            <p:column headerText="Name" styleClass="center" style="width: 60px;" sortBy="name">
                                                 <h:outputText value="#{item.name}"/>
                                             </p:column>
-                                            <p:column headerText="Product Group" style="width: 60px;" styleClass="center" sortBy="#{item.productgroup}">
+                                            <p:column headerText="Product Group" style="width: 60px;" styleClass="center" sortBy="productgroup">
                                                 <h:outputText value="#{item.productgroup}"/>
                                             </p:column>
-                                            <p:column headerText="Request Type" style="width: 60px;" styleClass="center" >
+                                            <p:column headerText="Request Type" style="width: 60px;" styleClass="center" sortBy="requestTypeStr">
                                                 <h:outputText value="#{item.requestTypeStr}"/>
                                             </p:column>
-                                            <p:column headerText="Step" styleClass="center" style="width: 60px;" sortBy="#{item.step}">
+                                            <p:column headerText="Step" styleClass="center" style="width: 60px;" sortBy="step">
                                                 <h:outputText  value="#{item.step}"/>
                                             </p:column>
-                                            <p:column headerText="Status" styleClass="center" style="width: 60px;" sortBy="#{item.status}">
+                                            <p:column headerText="Status" styleClass="center" style="width: 60px;" sortBy="status">
                                                 <h:outputText value="#{item.status}"/>
                                             </p:column>
-                                            <p:column headerText="From User" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="From User" styleClass="center" style="width: 60px;" sortBy="fromuser" >
                                                 <h:outputText value="#{item.fromuser}"/>
                                             </p:column>
-                                            <p:column headerText="At User" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="At User" styleClass="center" style="width: 60px;" sortBy="atuser">
                                                 <h:outputText value="#{item.atuser}"/>
                                             </p:column>
 
-                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;">
+                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;" sortBy="atuserteam">
                                                 <h:outputText value="#{item.atuserteam}" />
                                             </p:column>
-                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 60px;" sortBy="appointmentdate" >
                                                 <h:outputText value="#{item.appointmentdate}"/>
                                             </p:column>
-                                            <p:column headerText="DOA Level" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="DOA Level" styleClass="center" style="width: 60px;" sortBy="doalevel">
                                                 <h:outputText value="#{item.doalevel}"/>
                                             </p:column>
-                                            <p:column headerText="Action" styleClass="center" style="width: 60px;"  >
-                                                <h:outputText  value="#{item.action}"/>
-                                            </p:column>
-                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 60px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="#{item.slaenddate}">
+                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 60px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="slaenddate">
                                                 <h:outputText style="" value="#{item.slaenddate}"/>
                                             </p:column>
-                                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 60px;" sortBy="#{item.totaltimespentatuser}">
+                                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 60px;" sortBy="totaltimespentatuser">
                                                 <h:outputText  value="#{item.totaltimespentatuser}"/>
                                             </p:column>
-                                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 60px;" sortBy="#{item.totaltimespentatprocess}">
+                                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 60px;" sortBy="totaltimespentatprocess" >
                                                 <h:outputText value="#{item.totaltimespentatprocess}"/>
+                                            </p:column>
+                                            <p:column headerText="">
+                                                <p:commandButton icon="ui-icon-pencil" title="View" action="#{peInbox.onSelectInbox}" onclick="blockInbox.show()" >
+                                                    <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
+                                                </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
 
+                                        <table >
+
+                                        <tr>
+                                            <td colspan="100%" style="color: red;">
+                                                <p:commandButton value="Assign to Me" disabled="#{peInbox.disableAssign}" rendered="#{peInbox.inboxName == 'Pool Box'}"
+                                                                 id="reassignButtonId" action="#{peInbox.onAssignBulk()}" styleClass="medium" >
+                                                </p:commandButton>
+                                                <p:spacer width="20px;"/> </td>
+                                        </tr>
+                                        </table>
                                         <!--Result for Pool Box-->
                                         <p:dataTable id="resultPoolBox" value="#{peInbox.inboxViewList}" var="item" tableStyle="width:auto"
                                                      rendered="#{peInbox.inboxName == 'Pool Box'}"
@@ -142,56 +154,66 @@
                                             <p:ajax event="rowSelect" update=":frmMain:resultPoolBox" listener="#{peInbox.onClickPickUpCase()}">
                                                 <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
                                             </p:ajax>
+
                                             <p:column headerText="" styleClass="center" style="width:22px;"  >
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
-                                            <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="#{item.receiveddate}" >
+                                            <p:column headerText="" styleClass="center" style="width:22px;" >
+                                                <p:selectBooleanCheckbox id="checkBoxId" value="#{peInbox.checked[item.fwobnumber]}">
+                                                    <p:ajax update=":frmMain:reassignButtonId" process="@this" listener="#{peInbox.checkAssign}"/>
+                                                </p:selectBooleanCheckbox>
+                                            </p:column>
+                                            <p:column headerText="Received Date" styleClass="center" style="width: 60px;" sortBy="receiveddate" >
                                                 <h:outputText value="#{item.receiveddate}"/>
                                             </p:column>
-                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;">
-                                                <h:outputText value="#{item.atuserteam}" />
-                                            </p:column>
-                                            <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="#{item.applicationno}">
+
+                                            <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="applicationno">
                                                 <h:outputText value="#{item.applicationno}"/>
                                             </p:column>
-                                            <p:column headerText="Name" styleClass="center" style="width: 60px;">
+                                            <p:column headerText="Name" styleClass="center" style="width: 60px;" sortBy="name">
                                                 <h:outputText value="#{item.name}"/>
                                             </p:column>
-                                            <p:column headerText="Product Group" style="width: 60px;" styleClass="center" sortBy="#{item.productgroup}">
+                                            <p:column headerText="Product Group" style="width: 60px;" styleClass="center" sortBy="productgroup">
                                                 <h:outputText value="#{item.productgroup}"/>
                                             </p:column>
-                                            <p:column headerText="Request Type" style="width: 60px;" styleClass="center" >
+                                            <p:column headerText="Request Type" style="width: 60px;" styleClass="center" sortBy="requestTypeStr" >
                                                 <h:outputText value="#{item.requestTypeStr}"/>
                                             </p:column>
-                                            <p:column headerText="Step" styleClass="center" style="width: 60px;" sortBy="#{item.step}">
+                                            <p:column headerText="Step" styleClass="center" style="width: 60px;" sortBy="step">
                                                 <h:outputText  value="#{item.step}"/>
                                             </p:column>
-                                            <p:column headerText="Status" styleClass="center" style="width: 60px;" sortBy="#{item.status}">
+                                            <p:column headerText="Status" styleClass="center" style="width: 60px;" sortBy="status">
                                                 <h:outputText value="#{item.status}"/>
                                             </p:column>
-                                            <p:column headerText="From User" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="From User" styleClass="center" style="width: 60px;" sortBy="fromuser">
                                                 <h:outputText value="#{item.fromuser}"/>
                                             </p:column>
-                                            <p:column headerText="At User" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="At User" styleClass="center" style="width: 60px;">
                                                 <h:outputText value="#{item.atuser}"/>
                                             </p:column>
-                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="At User Team" styleClass="center" style="width: 60px;" sortBy="atuserteam">
+                                                <h:outputText value="#{item.atuserteam}" />
+                                            </p:column>
+                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 60px;" sortBy="appointmentdate">
                                                 <h:outputText value="#{item.appointmentdate}"/>
                                             </p:column>
-                                            <p:column headerText="DOA Level" styleClass="center" style="width: 60px;" >
+                                            <p:column headerText="DOA Level" styleClass="center" style="width: 60px;" sortBy="doalevel">
                                                 <h:outputText value="#{item.doalevel}"/>
                                             </p:column>
-                                            <p:column headerText="Action" styleClass="center" style="width: 60px;"  >
-                                                <h:outputText  value="#{item.action}"/>
-                                            </p:column>
-                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 60px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="#{item.slaenddate}">
+                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 60px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="slaenddate">
                                                 <h:outputText style="" value="#{item.slaenddate}"/>
                                             </p:column>
-                                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 60px;" sortBy="#{item.totaltimespentatuser}">
+                                            <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 60px;" sortBy="totaltimespentatuser">
                                                 <h:outputText  value="#{item.totaltimespentatuser}"/>
                                             </p:column>
-                                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 60px;" sortBy="#{item.totaltimespentatprocess}">
+                                            <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 60px;" sortBy="totaltimespentatprocess">
                                                 <h:outputText value="#{item.totaltimespentatprocess}"/>
+                                            </p:column>
+
+                                            <p:column headerText="">
+                                                <p:commandButton icon="ui-icon-arrowstop-1-s" title="View" action="#{peInbox.onClickPickUpCase()}" >
+                                                    <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
+                                                </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
                                     </td>
@@ -214,7 +236,7 @@
                                      process="@this"
                                      update="frmMain"
                                      onstart="blockInbox.show()"
-                                     oncomplete="msgBoxConfirmDlg.hide()"/>
+                                     onclick="PF('msgBoxConfirmDlg').hide()"/>
                     <p:commandButton value="#{msg.get('app.button.no')}"
                                      process="@this"
                                      oncomplete="msgBoxConfirmDlg.hide()"/>
@@ -231,7 +253,26 @@
                                          update="frmMain"
                                          oncomplete="msgBoxErrorDlg.hide()"/>
                     </p:confirmDialog>
+
+
+                    <p:confirmDialog id="msgBoxErrorDialog1" widgetVar="msgBoxErrorDlg5" styleClass="messageDialog"
+                                     closable="false"
+                                     header="Exception.">
+                        <f:facet name="message">
+                            <h:outputText value="Please Select 5 or less cases" escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="Ok" styleClass="small" onclick="msgBoxErrorDlg5.close();"/>
+                    </p:confirmDialog>
                 </p:panel>
+
+                <p:confirmDialog id="successDialog" widgetVar="successDlg" styleClass="messageDialog"
+                                 closable="false"
+                                 header="Success.">
+                    <f:facet name="message">
+                        <h:outputText value="Assign Successfull!!" escape="false"/>
+                    </f:facet>
+                    <p:commandButton value="Ok" styleClass="small" onclick="successDlg.close();"/>
+                </p:confirmDialog>
             </h:form>
         </p:panel>
         <p:blockUI widgetVar="blockInbox" block=":frmMain">

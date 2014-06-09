@@ -3,22 +3,15 @@ package com.clevel.selos.integration.brms.convert;
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
-import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
-import com.clevel.selos.integration.brms.model.response.UWRulesResult;
-import com.clevel.selos.model.UWRuleType;
-import com.clevel.selos.util.Util;
-import com.tmbbank.enterprise.model.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
-import com.ilog.rules.decisionservice.DecisionServiceResponse;
 import com.ilog.rules.param.UnderwritingRequest;
-import com.ilog.rules.param.UnderwritingResult;
-
+import com.tmbbank.enterprise.model.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class FullApplicationConverter extends Converter{
 
@@ -43,6 +36,7 @@ public class FullApplicationConverter extends Converter{
             logger.error("Could not transform Date");
         }
         applicationType.setTotalMonthlyIncome(getValueForInterface(applicationInfo.getNetMonthlyIncome()));
+        applicationType.setAggregatedCreditExposureLimit(applicationInfo.getFinalGroupExposure());
 
         //1. Convert Value for Application Level//
         List<AttributeType> attributeTypeList = applicationType.getAttribute();
@@ -87,6 +81,7 @@ public class FullApplicationConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.COUNTRY_OF_BUSINESS, applicationInfo.getCountryOfRegistration()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TRADE_CHEQUE_RETURN_PERCENT, applicationInfo.getTradeChequeReturnPercent()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXISTING_GROUP_EXPOSURE, applicationInfo.getExistingGroupExposure()));
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
@@ -282,20 +277,34 @@ public class FullApplicationConverter extends Converter{
             enquiryTypeList.add(ncbEnquiryType);
             ncbReportList.add(ncbReportType);
 
-            //Conver Warning Code into Customer.
+            //Convert Warning Code into Customer.
             List<WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
             List<String> csiFullyMatchList = customerInfo.getCsiFullyMatchCode();
-            for(String csiFullyMatchCode : csiFullyMatchList){
+            int csiFullyMatchSize = 0;
+            if(csiFullyMatchList != null && csiFullyMatchList.size() > 0) {
+                csiFullyMatchSize = csiFullyMatchList.size();
+                for (String csiFullyMatchCode : csiFullyMatchList) {
+                    WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
+                    warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
+                    warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
+                }
+            } else {
                 WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
-                warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
+                warningCodeFullMatchedType.setCode("");
                 warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
             }
 
             List<WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
             List<String> csiSomeMatchList = customerInfo.getCsiSomeMatchCode();
-            for(String csiSomeMatchCode : csiSomeMatchList){
+            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0 && csiFullyMatchSize == 0) {
+                for (String csiSomeMatchCode : csiSomeMatchList) {
+                    WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
+                    warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
+                    warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
+                }
+            } else {
                 WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
-                warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
+                warningCodePartialMatchedType.setCode("");
                 warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
             }
 

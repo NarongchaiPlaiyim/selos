@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 public class UWRuleResultSummaryView implements Serializable {
@@ -17,7 +16,7 @@ public class UWRuleResultSummaryView implements Serializable {
     private UWResultColor uwResultColor;
     private UWDeviationFlagView uwDeviationFlagView;
     private UWRejectGroupView rejectGroupView;
-    private Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap;
+    private Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap;
 
     public long getId() {
         return id;
@@ -75,11 +74,11 @@ public class UWRuleResultSummaryView implements Serializable {
         this.rejectGroupView = rejectGroupView;
     }
 
-    public Map<Integer, UWRuleResultDetailView> getUwRuleResultDetailViewMap() {
+    public Map<String, UWRuleResultDetailView> getUwRuleResultDetailViewMap() {
         return uwRuleResultDetailViewMap;
     }
 
-    public void setUwRuleResultDetailViewMap(Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap) {
+    public void setUwRuleResultDetailViewMap(Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap) {
         this.uwRuleResultDetailViewMap = uwRuleResultDetailViewMap;
     }
 

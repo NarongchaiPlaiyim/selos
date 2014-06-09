@@ -3,13 +3,12 @@ package com.clevel.selos.model.report;
 import com.clevel.selos.model.view.ExistingCreditTierDetailView;
 import com.clevel.selos.model.view.ExistingSplitLineDetailView;
 import com.clevel.selos.report.ReportModel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 
 public class BorrowerCreditDecisionReport extends ReportModel{

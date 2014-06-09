@@ -9,10 +9,7 @@ import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.master.SubDistrict;
 import org.slf4j.Logger;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.List;
 
 public class AddressFilterControl extends BusinessControl {

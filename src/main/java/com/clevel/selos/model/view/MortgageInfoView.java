@@ -1,13 +1,13 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class MortgageInfoView implements Serializable {
 	private static final long serialVersionUID = 3331548097385786737L;

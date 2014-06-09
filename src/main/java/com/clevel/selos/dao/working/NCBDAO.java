@@ -9,7 +9,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.Date;
 import java.util.List;
 
 public class NCBDAO extends GenericDAO<NCB, Long> {

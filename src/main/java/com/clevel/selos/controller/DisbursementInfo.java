@@ -1,23 +1,15 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.businesscontrol.AccountInfoControl;
-import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.DisbursementControl;
-import com.clevel.selos.dao.master.BankBranchDAO;
-import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.db.master.Bank;
-import com.clevel.selos.model.db.master.BankBranch;
-import com.clevel.selos.model.db.master.CrossType;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -27,7 +19,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;

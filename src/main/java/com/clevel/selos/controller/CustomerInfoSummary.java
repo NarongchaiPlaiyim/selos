@@ -22,7 +22,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +52,8 @@ public class CustomerInfoSummary extends BaseController {
     @Inject
     private CustomerInfoControl customerInfoControl;
 
-    //*** Drop down List ***//
     private List<CustomerEntity> customerEntityList;
 
-    //*** View ***//
     private CustomerInfoSummaryView customerInfoSummaryView;
 
     //session

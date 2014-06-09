@@ -1,8 +1,7 @@
 package com.clevel.selos.model.db.working;
 
-import java.io.Serializable;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "wrk_mortgage_coll_sub")

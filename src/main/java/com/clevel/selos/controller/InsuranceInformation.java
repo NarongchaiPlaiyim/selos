@@ -3,11 +3,9 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.InsuranceInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
-import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
-
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -15,10 +13,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped

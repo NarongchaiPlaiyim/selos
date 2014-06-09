@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.User;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import com.clevel.selos.model.db.master.User;
 
 public class GuarantorInfoView implements Serializable {
 	private static final long serialVersionUID = -6571658410554052874L;

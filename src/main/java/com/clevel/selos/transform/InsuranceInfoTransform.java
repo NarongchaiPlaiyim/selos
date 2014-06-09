@@ -1,27 +1,15 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.CollateralTypeDAO;
-import com.clevel.selos.dao.master.MortgageTypeDAO;
-import com.clevel.selos.dao.master.SubCollateralTypeDAO;
-import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.MortgageType;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.model.view.insurance.InsuranceCompanyView;
-import com.clevel.selos.model.view.insurance.InsuranceInfoHeadCollView;
+import com.clevel.selos.model.db.working.NewCollateral;
+import com.clevel.selos.model.view.NewCollateralHeadView;
+import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
-import com.clevel.selos.util.Util;
-
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class InsuranceInfoTransform extends Transform {

@@ -48,36 +48,31 @@ public class DecisionFollowConditionTransform extends Transform {
 
     public List<DecisionFollowCondition> transformToModel(List<DecisionFollowConditionView> decisionFollowConditionViewList, WorkCase workCase) {
         List<DecisionFollowCondition> decisionFollowConditionList = new ArrayList<DecisionFollowCondition>();
-        if (decisionFollowConditionViewList == null) {
-            return decisionFollowConditionList;
-        }
-
-        for (DecisionFollowConditionView decisionFollowConditionView : decisionFollowConditionViewList) {
-            decisionFollowConditionList.add(transformToModel(decisionFollowConditionView, workCase));
+        if(decisionFollowConditionViewList != null && decisionFollowConditionViewList.size() > 0){
+            for (DecisionFollowConditionView decisionFollowConditionView : decisionFollowConditionViewList) {
+                decisionFollowConditionList.add(transformToModel(decisionFollowConditionView, workCase));
+            }
         }
         return decisionFollowConditionList;
     }
 
     public DecisionFollowConditionView transformToView(DecisionFollowCondition decisionFollowCondition) {
         DecisionFollowConditionView decisionFollowConditionView = new DecisionFollowConditionView();
-        if (decisionFollowCondition == null) {
-            return decisionFollowConditionView;
+        if(decisionFollowCondition != null){
+            decisionFollowConditionView.setId(decisionFollowCondition.getId());
+            decisionFollowConditionView.setConditionView(followConditionTransform.transformToView(decisionFollowCondition.getFollowCondition()));
+            decisionFollowConditionView.setDetail(decisionFollowCondition.getDetail());
+            decisionFollowConditionView.setFollowDate(decisionFollowCondition.getFollowDate());
         }
-        decisionFollowConditionView.setId(decisionFollowCondition.getId());
-        decisionFollowConditionView.setConditionView(followConditionTransform.transformToView(decisionFollowCondition.getFollowCondition()));
-        decisionFollowConditionView.setDetail(decisionFollowCondition.getDetail());
-        decisionFollowConditionView.setFollowDate(decisionFollowCondition.getFollowDate());
         return decisionFollowConditionView;
     }
 
     public List<DecisionFollowConditionView> transformToView(List<DecisionFollowCondition> decisionFollowConditionList) {
         List<DecisionFollowConditionView> decisionFollowConditionViewList = new ArrayList<DecisionFollowConditionView>();
-        if (decisionFollowConditionList == null) {
-            return decisionFollowConditionViewList;
-        }
-
-        for (DecisionFollowCondition decisionFollowCondition : decisionFollowConditionList) {
-            decisionFollowConditionViewList.add(transformToView(decisionFollowCondition));
+        if(decisionFollowConditionList != null){
+            for (DecisionFollowCondition decisionFollowCondition : decisionFollowConditionList) {
+                decisionFollowConditionViewList.add(transformToView(decisionFollowCondition));
+            }
         }
         return decisionFollowConditionViewList;
     }

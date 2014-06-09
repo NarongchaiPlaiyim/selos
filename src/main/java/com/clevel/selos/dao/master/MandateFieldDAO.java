@@ -2,7 +2,10 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.MandateField;
+import com.clevel.selos.model.db.master.Status;
+import com.clevel.selos.model.db.master.Step;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -26,8 +29,17 @@ public class MandateFieldDAO extends GenericDAO<MandateField, Long> {
         criteria.add(Restrictions.eq("step", step));
         criteria.add(Restrictions.eq("status", status));
         criteria.add(Restrictions.eq("action", action));
-        List<MandateField> mandateFieldConfigureList = criteria.list();
-        logger.debug("retrun List<MandateFieldConfigure> {}", mandateFieldConfigureList);
-        return mandateFieldConfigureList;
+        List<MandateField> mandateFieldList = criteria.list();
+        logger.debug("retrun List<mandateFieldList> {}", mandateFieldList);
+        return mandateFieldList;
+    }
+
+    public List<MandateField> findByClass(long mandateFieldClassId){
+        logger.debug("-- begin findByClass mandateFieldClassId: {}", mandateFieldClassId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("mandateFieldClass.id", mandateFieldClassId));
+        List<MandateField> mandateFieldList = criteria.list();
+        logger.debug("-- end findByClass return: {}", mandateFieldList);
+        return mandateFieldList;
     }
 }

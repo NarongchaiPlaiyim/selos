@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.util.Util;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoCustomerView>{
 

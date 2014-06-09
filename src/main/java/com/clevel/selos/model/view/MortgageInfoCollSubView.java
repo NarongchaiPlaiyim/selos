@@ -1,9 +1,9 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.util.Util;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import com.clevel.selos.util.Util;
 
 public class MortgageInfoCollSubView implements Serializable,Comparable<MortgageInfoCollSubView> {
 	private static final long serialVersionUID = -8382657364110336483L;

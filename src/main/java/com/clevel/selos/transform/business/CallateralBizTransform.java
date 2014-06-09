@@ -6,10 +6,11 @@ import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.NewCollateralHeadView;
+import com.clevel.selos.model.view.NewCollateralSubView;
+import com.clevel.selos.model.view.NewCollateralView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

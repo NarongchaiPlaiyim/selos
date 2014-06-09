@@ -2,8 +2,9 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.master.CreditType;
+import com.clevel.selos.model.db.master.ExistingProductFormula;
+import com.clevel.selos.model.db.master.ProductProgram;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;

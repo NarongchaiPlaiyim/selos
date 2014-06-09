@@ -1,10 +1,9 @@
 package com.clevel.selos.dao.working;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.working.AccountInfoSummary;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 
 public class AccountInfoSummaryDAO extends GenericDAO<AccountInfoSummary, Long>{
 	private static final long serialVersionUID = 2658245274551346468L;

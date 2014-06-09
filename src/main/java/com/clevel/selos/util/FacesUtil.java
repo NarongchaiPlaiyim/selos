@@ -1,9 +1,8 @@
 package com.clevel.selos.util;
 
+import com.clevel.selos.model.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.clevel.selos.model.Language;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -11,7 +10,6 @@ import javax.faces.context.Flash;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +60,10 @@ public class FacesUtil implements Serializable {
             log.error("Exception while redirection! (contextPath: {}, uriPath: {})", contextPath, uriPath);
             log.error("", e);
         }
+    }
+
+    public static void redirectToInbox(){
+        redirect("/site/inbox.jsf");
     }
 
     public static final String getParameter(String name) {

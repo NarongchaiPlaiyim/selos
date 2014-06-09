@@ -2,7 +2,6 @@ package com.clevel.selos.dao;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
-
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -10,11 +9,9 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -82,6 +79,8 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         return entity;
     }
 
+
+
     public void persist(List<T> entities) {
         for (T entity : entities) {
             getSession().saveOrUpdate(entity);
@@ -93,6 +92,10 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
             getSession().saveOrUpdate(entity);
         }
         return entities;
+    }
+
+    public void update(T entity) {
+        getSession().update(entity);
     }
 
     public void delete(T entity) {

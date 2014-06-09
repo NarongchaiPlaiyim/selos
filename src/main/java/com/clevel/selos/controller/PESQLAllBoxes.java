@@ -5,19 +5,14 @@ import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.dao.master.StepDAO;
-import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
-import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -224,7 +219,7 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
-        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getFwobnumber());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), Util.parseLong(inboxViewSelectItem.getStatuscode(), 0), inboxViewSelectItem.getFwobnumber());
         session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
 
         try
@@ -268,7 +263,7 @@ public class PESQLAllBoxes implements Serializable
             String wobNumber = inboxViewSelectItem.getFwobnumber();
             inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
             //TODO Reload all value for Inbox Select
-            onSelectInbox();
+            //onSelectInbox();
         } catch (Exception ex){
             log.error("Exception while select case from PoolBox : ", ex);
             RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");

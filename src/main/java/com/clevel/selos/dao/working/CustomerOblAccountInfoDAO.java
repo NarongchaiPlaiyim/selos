@@ -2,7 +2,6 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.working.CustomerOblAccountInfo;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;

@@ -1,10 +1,8 @@
 package com.clevel.selos.integration.bpm.service;
 
-import com.clevel.selos.exception.BPMInterfaceException;
 import com.clevel.selos.integration.BPM;
 import com.clevel.selos.integration.bpm.model.*;
 import com.clevel.selos.integration.bpm.module.DBExecute;
-import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import org.slf4j.Logger;

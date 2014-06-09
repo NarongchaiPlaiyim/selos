@@ -1,14 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.working.CustomerAttorneyDAO;
@@ -25,6 +16,13 @@ import com.clevel.selos.model.view.CustomerAttorneyView;
 import com.clevel.selos.model.view.CustomerInfoPostIndvView;
 import com.clevel.selos.transform.CustomerAttorneyTransform;
 import com.clevel.selos.transform.CustomerTransform;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Stateless
 public class PostCustomerInfoIndvControl extends BusinessControl {

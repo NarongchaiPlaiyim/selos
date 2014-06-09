@@ -1,31 +1,14 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.businesscontrol.InsuranceInfoControl;
 import com.clevel.selos.businesscontrol.PreDisbursementControl;
-import com.clevel.selos.businesscontrol.TCGInfoControl;
-import com.clevel.selos.dao.master.PotentialCollateralDAO;
-import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
-import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.PreDisbursementView;
-import com.clevel.selos.model.view.TCGDetailView;
-import com.clevel.selos.model.view.TCGView;
-import com.clevel.selos.system.message.ExceptionMessage;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.rits.cloning.Cloner;
-
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -33,12 +16,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 @ViewScoped

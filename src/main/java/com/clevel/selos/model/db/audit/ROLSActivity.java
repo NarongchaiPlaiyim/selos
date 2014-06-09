@@ -15,7 +15,7 @@ public class ROLSActivity implements Serializable {
     @SequenceGenerator(name = "SEQ_ADT_RLOS_ID", sequenceName = "SEQ_ADT_RLOS_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADT_RLOS_ID")
     private long id;
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
     @Column(name = "action", nullable = false)
     private String action;

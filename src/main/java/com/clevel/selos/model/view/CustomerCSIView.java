@@ -1,12 +1,9 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.WarningCode;
 import com.clevel.selos.model.db.working.Customer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CustomerCSIView implements Serializable {
     private long id;

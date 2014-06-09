@@ -1,11 +1,12 @@
 package com.clevel.selos.controller;
 
-
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MessageDialogSeverity;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
@@ -16,6 +17,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -25,31 +27,21 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @ViewScoped
 @ManagedBean(name = "tcgInfo")
-public class TCGInfo implements Serializable {
+public class TCGInfo extends BaseController {
 
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
-
-    @Inject
-    @ValidationMessage
-    Message validationMsg;
-
-    @Inject
-    @ExceptionMessage
-    Message exceptionMsg;
-
 
     private List<TCGDetailView> TCGDetailViewList;
     private TCGDetailView tcgDetailView;
@@ -57,7 +49,6 @@ public class TCGInfo implements Serializable {
     private TCGView TCGView;
     private int rowIndex;
     private Long workCaseId;
-    //private User user;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -68,6 +59,7 @@ public class TCGInfo implements Serializable {
     private ModeForDB modeForDB;
     private String messageHeader;
     private String message;
+    private String messageSeverity;
     private boolean messageErr;
 
     private List<PotentialCollateral> potentialCollateralList;
@@ -79,141 +71,90 @@ public class TCGInfo implements Serializable {
     private PotentialColToTCGColDAO potentialColToTCGColDAO;
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
+
     @Inject
     TCGInfoControl tcgInfoControl;
-//    @Inject
-//    UserDAO userDAO;
 
     public TCGInfo() {
+    }
+
+    public void preRender(){
+        log.debug("preRender");
+        HttpSession session = FacesUtil.getSession(true);
+
+        if(checkSession(session)){
+            //TODO Check valid step
+            log.debug("preRender ::: Check valid stepId");
+        }else{
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
+        }
     }
 
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-//        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        } else {
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
-        }
-
-        if (workCaseId != null) {
-            TCGView = tcgInfoControl.getTcgView(workCaseId);
-
-            if (TCGView != null) {
-                TCGDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
+        if(checkSession(session)){
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            TCGView = tcgInfoControl.getTCGView(workCaseId);
+            loadFieldControl(workCaseId, Screen.TCG_INFO);
+            if(TCGView != null){
+                TCGDetailViewList = tcgInfoControl.getTcgDetailViewList(TCGView);
                 modeForDB = ModeForDB.EDIT_DB;
-            } else if (TCGView == null) {
+            }else{
                 TCGView = new TCGView();
                 modeForDB = ModeForDB.ADD_DB;
             }
+
+            if(tcgDetailView == null)
+                tcgDetailView = new TCGDetailView();
+
+
+            if(TCGDetailViewList == null)
+                TCGDetailViewList = new ArrayList<TCGDetailView>();
+
+            potentialCollateralList = potentialCollateralDAO.findAll();
         }
-
-        if (tcgDetailView == null) {
-            tcgDetailView = new TCGDetailView();
-        }
-
-        if (TCGDetailViewList == null) {
-            TCGDetailViewList = new ArrayList<TCGDetailView>();
-        }
-
-        if (potentialCollateralList == null) {
-            potentialCollateralList = new ArrayList<PotentialCollateral>();
-        }
-
-        potentialCollateralList = potentialCollateralDAO.findAll();
-
     }
-
 
     public void onChangePotentialCollateralType() {
         if (tcgDetailView.getPotentialCollateral().getId() != 0) {
-            log.info("onChangePotentialCollateralType ::: TCGDetailView.getPotentialCollateral().getId() : {}", tcgDetailView.getPotentialCollateral().getId());
-
-//        try {
-            PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
-
-            if (potentialCollateral != null) {
-                log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
-
-                //*** Get TCG Collateral  List from Potential Collateral    ***//
-                potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateral);
-
-                if (potentialColToTCGColList == null) {
-                    potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
-                }
-
-                log.info("onChangePotentialCollateralType ::: potentialColToTCGColList size : {}", potentialColToTCGColList.size());
+            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral().getId());
+            if (potentialColToTCGColList == null) {
+                potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
             }
         }
-//        } catch (Exception e) {
-//            log.error("onChangePotentialCollateralType  error ::: {}", e.getMessage());
-//        }
-
     }
 
-    // onclick ADD button
     public void onAddCollateralDetail() {
-        log.info("onAddCollateralDetail :: reset form");
         modeForButton = ModeForButton.ADD;
         tcgDetailView = new TCGDetailView();
         tcgDetailView.reset();
     }
 
-    // onclick edit button
     public void onEditCollateralDetail() {
-        log.info("onEditCollateralDetail rowIndex {} ", rowIndex);
+        log.info("onEditCollateralDetail ::: rowIndex ::: {} ", rowIndex);
         modeForButton = ModeForButton.EDIT;
-        log.info("onEditCollateralDetail ::: selectCollateralItem  : {}", selectCollateralItem.toString());
         Cloner cloner = new Cloner();
         tcgDetailView = new TCGDetailView();
         tcgDetailView = cloner.deepClone(selectCollateralItem);
-        potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral());
-        /*if (rowIndex < TCGDetailViewList.size()) {
-            TCGDetailView detailView = cloner.deepClone(selectCollateralItem);
-            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(detailView.getPotentialCollateral());
-            TCGCollateralType tcgCollateralTypeEdit = detailView.getTcgCollateralType();
-
-            tcgDetailView.setPotentialCollateral(detailView.getPotentialCollateral());
-            tcgDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
-            tcgDetailView.setProposeInThisRequest(detailView.getProposeInThisRequest());
-            tcgDetailView.setLtvValue(detailView.getLtvValue());
-            tcgDetailView.setAppraisalAmount(detailView.getAppraisalAmount());
-
-        }*/
+        if(tcgDetailView.getPotentialCollateral() != null && tcgDetailView.getPotentialCollateral().getId() != 0){
+            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral().getId());
+            if (potentialColToTCGColList == null) {
+                potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+            }
+        } else {
+            potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+        }
     }
 
-//    public void calculateLtvValue(){
-//        if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
-//            BigDecimal ltvValueBig ;
-//            log.info("TCGDetailView AppraisalAmount :: {}" , tcgDetailView.getAppraisalAmount());
-//
-//            ltvValueBig = tcgInfoControl.toCalculateLtvValue(tcgDetailView, this.workCaseId);
-//            tcgDetailView.setLtvValue(ltvValueBig);
-//        }
-//    }
-
     public void onSaveCollateralDetail() {
-        log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
-
+        log.info("onSaveCollateralDetail ::: modeForButton : {}", modeForButton);
         RequestContext context = RequestContext.getCurrentInstance();
-        boolean complete = false;
-
-        log.info("TCGDetailView.getPotentialCollateral().getId() :: {}", tcgDetailView.getPotentialCollateral().getId());
-        log.info("TCGDetailView.getTcgCollateralType().getId() :: {}", tcgDetailView.getTcgCollateralType().getId());
-
+        boolean complete;
         if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
-
             if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
                 PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
                 TCGDetailView tcgDetailViewSave = new TCGDetailView();
@@ -223,9 +164,7 @@ public class TCGInfo implements Serializable {
                 tcgDetailViewSave.setLtvValue(BigDecimal.ZERO);
                 tcgDetailViewSave.setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
                 TCGDetailViewList.add(tcgDetailViewSave);
-
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-                log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
                 PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
                 TCGDetailViewList.get(rowIndex).setPotentialCollateral(potentialCollateralSave);
@@ -233,20 +172,15 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewList.get(rowIndex).setAppraisalAmount(tcgDetailView.getAppraisalAmount());
                 TCGDetailViewList.get(rowIndex).setLtvValue(BigDecimal.ZERO);
                 TCGDetailViewList.get(rowIndex).setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
-
             } else {
-                log.info("onSaveCollateralDetail ::: Undefined modeForbutton !!");
+                log.info("onSaveCollateralDetail ::: Undefined modeForButton !!");
             }
-
             complete = true;
             calculate();
         } else {
-
-            log.info("onSaveCollateralDetail ::: validation failed.");
+            log.info("onSaveCollateralDetail ::: Validation Failed.");
             complete = false;
         }
-
-        log.info("  complete >>>>  :  {}", complete);
         context.addCallbackParam("functionComplete", complete);
     }
 
@@ -255,70 +189,53 @@ public class TCGInfo implements Serializable {
         calculate();
     }
 
-    public void calculate() {
-        log.info("calculateAfterDelete :: {} ");
-        if (TCGDetailViewList.size() > 0) {
-            log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
+    public void calculate(){
+        if (TCGDetailViewList != null && TCGDetailViewList.size() > 0) {
             TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumAppraisalValue(TCGDetailViewList));
             TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumLtvValue(TCGDetailViewList));
             TCGView.setSumInThisAppraisalAmount(tcgInfoControl.toCalculateSumAppraisalInThis(TCGDetailViewList));
             TCGView.setSumInThisLtvValue(tcgInfoControl.toCalculateSumLtvInThis(TCGDetailViewList));
         } else {
-            TCGView.setSumAppraisalAmount(new BigDecimal(0));
-            TCGView.setSumLtvValue(new BigDecimal(0));
-            TCGView.setSumInThisAppraisalAmount(new BigDecimal(0));
-            TCGView.setSumInThisLtvValue(new BigDecimal(0));
+            TCGView.setSumAppraisalAmount(BigDecimal.ZERO);
+            TCGView.setSumLtvValue(BigDecimal.ZERO);
+            TCGView.setSumInThisAppraisalAmount(BigDecimal.ZERO);
+            TCGView.setSumInThisLtvValue(BigDecimal.ZERO);
         }
-
     }
 
     public void onSaveTcgInfo() {
-        log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
+        log.info("onSaveTcgInfo ::: modeForDB  {}", modeForDB);
         try {
-            if (TCGDetailViewList.size() > 0) {
-                if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
-                } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
-                }
+            tcgInfoControl.saveTCGInfo(TCGView, TCGDetailViewList, workCaseId);
 
-                messageHeader = msg.get("app.header.save.success");
-                message = msg.get("app.tcg.response.save.success");
-                onCreation();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                messageHeader = msg.get("app.tcg.response.cannot.save");
-                message = msg.get("app.tcg.response.desc.cannot.save");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
-
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.tcg.response.save.success");
+            messageSeverity = MessageDialogSeverity.INFO.severity();
+            onCreation();
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
-
-            if (ex.getCause() != null) {
-                message = msg.get("app.tcg.response.save.failed") + " cause : " + ex.getCause().toString();
-            } else {
-                message = msg.get("app.tcg.response.save.failed") + ex.getMessage();
-            }
-
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            messageSeverity = MessageDialogSeverity.ALERT.severity();
             messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
         }
-
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
-
 
     public void onCancelTcgInfo() {
         modeForDB = ModeForDB.CANCEL_DB;
-        log.info("onCancelTcgInfo ::: ");
-
         for (int i = 0; i < TCGDetailViewList.size(); i++) {
             TCGDetailViewList.remove(TCGDetailViewList.get(i));
         }
-
         onCreation();
+    }
+
+    public void onChangeTCG() {
+        if(TCGView.getTCG() == 2){ // yes
+            setMandateValue("requestLimitRequiredTCG",true);
+        } else {
+            setMandateValue("requestLimitRequiredTCG",false);
+        }
     }
 
     public List<TCGDetailView> getTCGDetailViewList() {
@@ -409,5 +326,12 @@ public class TCGInfo implements Serializable {
         this.messageHeader = messageHeader;
     }
 
+    public String getMessageSeverity() {
+        return messageSeverity;
+    }
+
+    public void setMessageSeverity(String messageSeverity) {
+        this.messageSeverity = messageSeverity;
+    }
 }
 

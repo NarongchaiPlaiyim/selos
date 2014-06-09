@@ -1,14 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.master.FieldsControlDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
@@ -20,6 +11,13 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.transform.FieldsControlTransform;
 import com.clevel.selos.util.FacesUtil;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.util.Collections;
+import java.util.List;
 
 @Stateless
 public class MandatoryFieldsControl extends BusinessControl {
@@ -40,6 +38,7 @@ public class MandatoryFieldsControl extends BusinessControl {
     Status status;
     User user;
     long stepId;
+
 
     protected List<FieldsControlView> initialCreation(Screen screen) {
         log.debug("initialCreation - Screen : {}",screen);
@@ -74,13 +73,15 @@ public class MandatoryFieldsControl extends BusinessControl {
         return fieldsControlViewList;
     }
 
-    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productGroupId, int productProgramId, int specialTypeId) {
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId) {
         if (workCaseId <=0 || screen == null)
             return Collections.emptyList();
         User user = getCurrentUser();
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         long stepId = workCase.getStep().getId();
-        List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, productProgramId, specialTypeId);
+        int productGroupId = workCase.getProductGroup().getId();
+        Status status = workCase.getStatus();
+        List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, productProgramId, specialTypeId, status);
         List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
         return fieldsControlViewList;
     }

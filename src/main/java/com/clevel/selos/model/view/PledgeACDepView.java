@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class PledgeACDepView implements Serializable {
 	private static final long serialVersionUID = 6818524179568474194L;

@@ -101,7 +101,7 @@ public class NewCollateralTransform extends Transform {
 
 
             if (Util.safetyList(newCollateralView.getProposeCreditDetailViewList()).size() > 0) {
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newCollateral, newCreditFacility, proposeType, user);
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelList(newCollateralView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newCollateral, newCreditFacility, proposeType, user);
                 newCollateral.setNewCollateralCreditList(newCollateralCreditList);
             }
 
@@ -109,7 +109,7 @@ public class NewCollateralTransform extends Transform {
                 List<NewCollateralHead> newCollateralHeadList = new ArrayList<NewCollateralHead>();
                 for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
                     //--- Transform for Collateral Head ---//
-                    NewCollateralHead newCollateralHead = transformCollateralHeadToModel(newCollateralHeadView, newCollateral, user, workCase);
+                    NewCollateralHead newCollateralHead = transformCollateralHeadToModel(newCollateralHeadView, newCollateral, user, workCase, proposeType);
                     newCollateralHeadList.add(newCollateralHead);
                 }
                 newCollateral.setNewCollateralHeadList(newCollateralHeadList);
@@ -121,7 +121,7 @@ public class NewCollateralTransform extends Transform {
         return newCollateralList;
     }
 
-    public NewCollateralHead transformCollateralHeadToModel(NewCollateralHeadView newCollateralHeadView, NewCollateral collateralDetail, User user, WorkCase workCase) {
+    public NewCollateralHead transformCollateralHeadToModel(NewCollateralHeadView newCollateralHeadView, NewCollateral collateralDetail, User user, WorkCase workCase, ProposeType proposeType) {
         NewCollateralHead collateralHeaderDetail = new NewCollateralHead();
         log.debug("Start... transformCollateralHeadToModel ::: newCollateralHeadView : {}", newCollateralHeadView);
         if (newCollateralHeadView.getId() != 0) {
@@ -145,15 +145,16 @@ public class NewCollateralTransform extends Transform {
         collateralHeaderDetail.setModifyBy(newCollateralHeadView.getModifyBy());
         collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
         collateralHeaderDetail.setHeadTcgCollType(newCollateralHeadView.getTcgCollateralType());
+        collateralHeaderDetail.setProposeType(String.valueOf(proposeType.value()));
 
         if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
             if (newCollateralHeadView.getNewCollateralSubDeleteList().size() > 0) {
-                List<NewCollateralSub> newCollSubDelList = transformCollateralSubToModel(newCollateralHeadView, collateralHeaderDetail, user, workCase);
+                List<NewCollateralSub> newCollSubDelList = transformCollateralSubToModel(newCollateralHeadView, collateralHeaderDetail, user, workCase, proposeType);
                 log.info("newCollSubDelList :: {}", newCollSubDelList.size());
                 newCollateralSubDAO.delete(newCollSubDelList);
             }
 
-            List<NewCollateralSub> newCollateralSubList = transformCollateralSubToModel(newCollateralHeadView, collateralHeaderDetail, user, workCase);
+            List<NewCollateralSub> newCollateralSubList = transformCollateralSubToModel(newCollateralHeadView, collateralHeaderDetail, user, workCase, proposeType);
             collateralHeaderDetail.setNewCollateralSubList(newCollateralSubList);
         }
 
@@ -163,7 +164,7 @@ public class NewCollateralTransform extends Transform {
         return collateralHeaderDetail;
     }
 
-    public List<NewCollateralSub> transformCollateralSubToModel(NewCollateralHeadView newCollateralHeadView, NewCollateralHead newCollateralHead, User user, WorkCase workCase) {
+    public List<NewCollateralSub> transformCollateralSubToModel(NewCollateralHeadView newCollateralHeadView, NewCollateralHead newCollateralHead, User user, WorkCase workCase, ProposeType proposeType) {
         //--- Transform for Collateral Sub ---//
         List<NewCollateralSub> newCollateralSubList = new ArrayList<NewCollateralSub>();
         NewCollateralSub newCollateralSub;
@@ -198,7 +199,7 @@ public class NewCollateralTransform extends Transform {
                     newCollateralSubMortgage.setMortgageType(mortgageType);
                     newCollateralSubMortgage.setNewCollateralSub(newCollateralSub);
                     newCollateralSubMortgage.setWorkCase(workCase);
-                    newCollateralSubMortgage.setProposeType(ProposeType.P);
+                    newCollateralSubMortgage.setProposeType(proposeType);
                     newCollateralSubMortgageList.add(newCollateralSubMortgage);
                 }
                 newCollateralSub.setNewCollateralSubMortgageList(newCollateralSubMortgageList);
@@ -213,7 +214,7 @@ public class NewCollateralTransform extends Transform {
                     newCollateralSubOwner.setCustomer(customer);
                     newCollateralSubOwner.setNewCollateralSub(newCollateralSub);
                     newCollateralSubOwner.setWorkCase(workCase);
-                    newCollateralSubOwner.setProposeType(ProposeType.P);
+                    newCollateralSubOwner.setProposeType(proposeType);
                     newCollateralSubOwnerList.add(newCollateralSubOwner);
                 }
                 newCollateralSub.setNewCollateralSubOwnerList(newCollateralSubOwnerList);
@@ -342,7 +343,7 @@ public class NewCollateralTransform extends Transform {
         log.info("proposeCreditDetailTransform :: newCreditDetailList size :: {}", newCreditDetailList.size());
         log.info("proposeCreditDetailTransform :: existingCreditDetailList size :: {}", existingCreditDetailList.size());
 
-        List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
+        List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToViewList(newCreditDetailList);
         // todo: find credit existing and propose in this workCase
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         ProposeCreditDetailView proposeCreditDetailView;
@@ -737,8 +738,8 @@ public class NewCollateralTransform extends Transform {
             newCollateralView = new NewCollateralView();
             newCollateralView.setId(isNewId ? 0 : originalCollateralView.getId());
             newCollateralView.setJobID(originalCollateralView.getJobID());
-            newCollateralView.setProposeType(proposeType);
             newCollateralView.setAppraisalDate(originalCollateralView.getAppraisalDate());
+            newCollateralView.setNumberMonthsFromApprDate(originalCollateralView.getNumberMonthsFromApprDate());
             newCollateralView.setAadDecision(originalCollateralView.getAadDecision());
             newCollateralView.setAadDecisionReason(originalCollateralView.getAadDecisionReason());
             newCollateralView.setAadDecisionReasonDetail(originalCollateralView.getAadDecisionReasonDetail());
@@ -754,9 +755,13 @@ public class NewCollateralTransform extends Transform {
             newCollateralView.setModifyDate(originalCollateralView.getModifyDate());
             newCollateralView.setModifyBy(originalCollateralView.getModifyBy());
             newCollateralView.setPremiumAmount(originalCollateralView.getPremiumAmount());
+            newCollateralView.setProposeType(proposeType);
             newCollateralView.setComs(originalCollateralView.isComs());
+
             newCollateralView.setNewCollateralHeadViewList(newCollateralHeadTransform.copyToNewViews(originalCollateralView.getNewCollateralHeadViewList(), isNewId));
             newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailTransform.copyToNewViews(originalCollateralView.getProposeCreditDetailViewList(), isNewId));
+
+            newCollateralView.setJobIDSearch(originalCollateralView.getJobIDSearch());
         }
         return newCollateralView;
     }

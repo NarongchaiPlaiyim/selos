@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class DBContext implements Serializable {
     @Inject

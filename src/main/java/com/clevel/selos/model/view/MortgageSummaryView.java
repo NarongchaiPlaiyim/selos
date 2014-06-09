@@ -1,10 +1,10 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.clevel.selos.model.MortgageConfirmedType;
 import com.clevel.selos.model.db.master.User;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class MortgageSummaryView implements Serializable {
     private static final long serialVersionUID = 5116739393766192381L;

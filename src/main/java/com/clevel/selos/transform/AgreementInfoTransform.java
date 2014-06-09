@@ -1,9 +1,5 @@
 package com.clevel.selos.transform;
 
-import java.util.Date;
-
-import javax.inject.Inject;
-
 import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.UserZoneDAO;
 import com.clevel.selos.model.MortgageSignLocationType;
@@ -12,6 +8,9 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AgreementInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.AgreementInfoView;
+
+import javax.inject.Inject;
+import java.util.Date;
 
 public class AgreementInfoTransform extends Transform {
 

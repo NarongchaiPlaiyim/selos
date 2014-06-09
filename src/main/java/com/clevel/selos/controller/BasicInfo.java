@@ -172,16 +172,9 @@ public class BasicInfo extends BaseController {
     private List<CustomerInfoView> accountNameList;
     private CustomerInfoView selectAccountName;
 
+    private boolean permissionCheck;
+
     public BasicInfo(){
-    }
-
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
     }
 
     public void preRender(){
@@ -268,19 +261,21 @@ public class BasicInfo extends BaseController {
             onChangeExistingSMEInit();
             onChangeBAInit();
             onChangeReqLGInit();
+
+            loadUserAccessMatrix(Screen.BASIC_INFO);
+            permissionCheck = canAccess(Screen.BASIC_INFO);
         }
     }
 
     public void onInitAddAccount(){
+        modeForButton = ModeForButton.ADD;
+
         openAccountView = new OpenAccountView();
+        accountNameList = new ArrayList<CustomerInfoView>();
+        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
+        accountProductList = new ArrayList<BankAccountProduct>();
 
         customerId = 0;
-
-        accountNameList = new ArrayList<CustomerInfoView>();
-
-        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-
-        accountProductList = new ArrayList<BankAccountProduct>();
 
         accountPurposeList = accountPurposeDAO.findAll();
         bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
@@ -289,12 +284,12 @@ public class BasicInfo extends BaseController {
             purposeView.setPurpose(oap);
             bankAccountPurposeViewList.add(purposeView);
         }
-
-        modeForButton = ModeForButton.ADD;
     }
 
     public void onSelectEditAccount(){
         try {
+            modeForButton = ModeForButton.EDIT;
+
             customerId = 0;
 
             Cloner cloner = new Cloner();
@@ -310,16 +305,15 @@ public class BasicInfo extends BaseController {
                 bankAccountPurposeViewList.add(purposeView);
             }
 
-            for(BankAccountPurposeView biapv : openAccountView.getBankAccountPurposeView()){
-                if(biapv.isSelected()){
+            for(BankAccountPurposeView bapv : openAccountView.getBankAccountPurposeView()){
+                if(bapv.isSelected()){
                     for(BankAccountPurposeView purposeView : bankAccountPurposeViewList){
-                        if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
+                        if(bapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
                             purposeView.setSelected(true);
                         }
                     }
                 }
             }
-            modeForButton = ModeForButton.EDIT;
         } catch (Exception e) {
             log.error("onSelectEditAccount Exception : {}",e);
         }
@@ -332,21 +326,21 @@ public class BasicInfo extends BaseController {
     public void onSave(){
         try{
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
+            onCreation();
+
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save data in basic information success.";
             severity = MessageDialogSeverity.INFO.severity();
-            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = msg.get("app.messageHeader.error");
             if(ex.getCause() != null){
                 message = "Save basic info data failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save basic info data failed. Cause : " + ex.getMessage();
             }
+            messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
         }
     }
 
@@ -1180,5 +1174,13 @@ public class BasicInfo extends BaseController {
 
     public void setSelectAccountName(CustomerInfoView selectAccountName) {
         this.selectAccountName = selectAccountName;
+    }
+
+    public boolean isPermissionCheck() {
+        return permissionCheck;
+    }
+
+    public void setPermissionCheck(boolean permissionCheck) {
+        this.permissionCheck = permissionCheck;
     }
 }

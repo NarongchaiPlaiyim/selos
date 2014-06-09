@@ -4,7 +4,6 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ApprovalHistory;
-import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -41,6 +40,7 @@ public class ApprovalHistoryDAO extends GenericDAO<ApprovalHistory, Long> {
     }
 
     public ApprovalHistory findByWorkCaseAndUserAndApproveType(long workCaseId, User user, int approveType) {
+        log.debug("getApprovalHistory ");
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("isSubmit", 0));

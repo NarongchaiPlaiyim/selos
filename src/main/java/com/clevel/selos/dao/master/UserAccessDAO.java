@@ -30,7 +30,7 @@ public class UserAccessDAO extends GenericDAO<UserAccess,Integer> {
         criteria.add(Restrictions.eq("active", 1));
 
         userAccessList = criteria.list();
-
+        log.debug("getUserAccess ::: userAccessList : {}", userAccessList);
         if(Util.isNull(userAccessList)){
             userAccessList = new ArrayList<UserAccess>();
         }

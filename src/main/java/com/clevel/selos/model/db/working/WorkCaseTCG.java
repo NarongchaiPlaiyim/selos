@@ -1,7 +1,6 @@
 package com.clevel.selos.model.db.working;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "wrk_case_tcg")

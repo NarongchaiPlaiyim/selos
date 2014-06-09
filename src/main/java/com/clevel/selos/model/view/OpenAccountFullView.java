@@ -1,11 +1,11 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ConfirmAccountType;
+import com.clevel.selos.model.RequestAccountType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.clevel.selos.model.ConfirmAccountType;
-import com.clevel.selos.model.RequestAccountType;
 
 public class OpenAccountFullView implements Serializable,Cloneable {
 	private static final long serialVersionUID = 5325274175463654261L;

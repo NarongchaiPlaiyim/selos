@@ -1896,6 +1896,11 @@ body .ui-tooltip {
     background: #aaaaaa url("#{resource['primefaces-theme:images/ui-bg_flat_0_aaaaaa_40x100.png']}") 50% 50% repeat-x;
     opacity: .3;
     filter: Alpha(Opacity=30);
+    z-index: 900;
+}
+
+.ui-blockui-content {
+    z-index: 901;
 }
 
 .ui-widget-shadow {

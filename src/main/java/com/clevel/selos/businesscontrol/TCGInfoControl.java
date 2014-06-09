@@ -24,6 +24,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +39,6 @@ public class TCGInfoControl extends BusinessControl {
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;
-    
     @Inject
     TCGInfoTransform tcgInfoTransform;
 
@@ -56,9 +56,9 @@ public class TCGInfoControl extends BusinessControl {
     PotentialCollateralDAO potentialCollateralDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
-
     @Inject
     TCGInfoDAO tcgInfoDAO;
+
     @Inject
     public void TCGInfoControl() {
 
@@ -89,70 +89,68 @@ public class TCGInfoControl extends BusinessControl {
     	}
     	tcgInfoDAO.persist(tcgInfo);
     	log.debug("persist tcgInfo");
+
+        //--Update flag in WorkCase ( for check before submit )
+
     }
 
-    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
-        log.debug("onEditTCGToDB begin");
-        log.debug("workCaseId {} ", workCaseId);
+    public void saveTCGInfo(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, long workCaseId) {
+        log.debug("saveTCGInfo ::: begin....");
+        log.debug("saveTCGInfo ::: workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
 
-        toCalculateLtvValue(workCaseId, tcgView, tcgDetailViewList);
+        calculateLTVValue(workCaseId, tcgView, tcgDetailViewList);
 
-        TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase, user);
+        TCG tcg = tcgTransform.transformToModel(tcgView, workCase, user);
         TCGDAO.persist(tcg);
-        log.debug("persist tcg");
+        log.debug("saveTCGInfo ::: persist tcg : {}", tcg.getId());
 
         List<TCGDetail> tcgDetailListToDelete = TCGDetailDAO.findTCGDetailByTcgId(tcg.getId());
-        log.debug("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
+        log.debug("saveTCGInfo ::: tcgDetailListToDelete : {}", tcgDetailListToDelete.size());
 
-        if (tcgDetailListToDelete.size() > 0) {
+        if(tcgDetailListToDelete.size() > 0)
             TCGDetailDAO.delete(tcgDetailListToDelete);
-            log.debug("delete tcgDetailListToDelete");
-        }
 
-        List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
+        List<TCGDetail> tcgDetailList = tcgDetailTransform.transformToModel(tcgDetailViewList, tcg);
         TCGDetailDAO.persist(tcgDetailList);
-        log.debug("persist tcgDetailList");
+        log.debug("saveTCGInfo ::: persist tcgDetailList");
 
-
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
     }
 
 
-    public TCGView getTcgView(long workCaseId) {
-        log.debug("getTcgView :: workCaseId  :: {}", workCaseId);
+    public TCGView getTCGView(long workCaseId) {
+        log.debug("getTCGView :: workCaseId  : {}", workCaseId);
         TCGView tcgView = null;
+        TCG tcg = TCGDAO.findByWorkCaseId(workCaseId);
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        log.debug("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
-        if (workCase != null) {
-            TCG tcg = TCGDAO.findByWorkCase(workCase);
-
-            if (tcg != null) {
-                log.debug("tcg :: {} ", tcg.getId());
-                tcgView = tcgTransform.transformTCGToTcgView(tcg);
-            }
+        if(!Util.isNull(tcg)){
+            log.debug("getTCGView :: tcg : {} ", tcg.getId());
+            tcgView = tcgTransform.transformToView(tcg);
         }
 
         return tcgView;
     }
 
-    public List<TCGDetailView> getTcgDetailListView(TCGView tcgView) {
-        log.debug("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
-        List<TCGDetailView> tcgDetailViewList = null;
+    public List<TCGDetailView> getTcgDetailViewList(TCGView tcgView) {
+        log.debug("getTcgDetailViewList :: tcgId  :: {}", tcgView.getId());
+        List<TCGDetailView> tcgDetailViewList = new ArrayList<TCGDetailView>();
 
         List<TCGDetail> TCGDetailList = TCGDetailDAO.findTCGDetailByTcgId(tcgView.getId());
 
-        if (TCGDetailList.size() > 0) {
-            tcgDetailViewList = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
+        if (!Util.isNull(TCGDetailList) && TCGDetailList.size() > 0) {
+            tcgDetailViewList = tcgDetailTransform.transformToView(TCGDetailList);
         }
 
         return tcgDetailViewList;
     }
 
     //TODO find LTV Percent
-    public void toCalculateLtvValue(long workCaseId, TCGView tcgView, List<TCGDetailView> tcgDetailViewList) {
-        log.debug("toCalculateLtvValue LTV Value of all collateral ::  ");
+    public void calculateLTVValue(long workCaseId, TCGView tcgView, List<TCGDetailView> tcgDetailViewList) {
+        log.debug("calculateLTVValue LTV Value of all collateral ::  ");
 
         for (TCGDetailView tcgDetailView : tcgDetailViewList) {
 
@@ -234,51 +232,40 @@ public class TCGInfoControl extends BusinessControl {
 
 
     public BigDecimal toCalculateSumAppraisalValue(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
                 sum = sum.add(tcgDetailView.getAppraisalAmount());
             }
         }
-
-        log.debug("sum ::: {} ", sum);
         return sum;
     }
 
 
     public BigDecimal toCalculateSumLtvValue(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
                 sum = sum.add(tcgDetailView.getLtvValue());
             }
         }
-
-        log.debug("sum ::: {} ", sum);
         return sum;
     }
 
     public BigDecimal toCalculateSumAppraisalInThis(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
-            log.debug("tcgDetailView.getProposeInThisRequest() :: {}", tcgDetailView.getProposeInThisRequest());
             if (tcgDetailView != null) {
                 if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
                     sum = sum.add(tcgDetailView.getAppraisalAmount());
                 }
             }
         }
-        log.debug("sum ::: {} ", sum);
-
         return sum;
     }
 
     public BigDecimal toCalculateSumLtvInThis(List<TCGDetailView> TCGDetailViewList) {
-        BigDecimal sum = new BigDecimal(0);
-
+        BigDecimal sum = BigDecimal.ZERO;
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
                 if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
@@ -286,8 +273,6 @@ public class TCGInfoControl extends BusinessControl {
                 }
             }
         }
-        log.debug("sum ::: {} ", sum);
-
         return sum;
     }
 

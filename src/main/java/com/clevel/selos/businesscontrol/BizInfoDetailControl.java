@@ -1,19 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
-import com.clevel.selos.dao.working.BizInfoDetailDAO;
-import com.clevel.selos.dao.working.BizInfoSummaryDAO;
-import com.clevel.selos.dao.working.BizProductDetailDAO;
-import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.BizInfoDetail;
-import com.clevel.selos.model.db.working.BizInfoSummary;
-import com.clevel.selos.model.db.working.BizProductDetail;
-import com.clevel.selos.model.db.working.BizStakeHolderDetail;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizProductDetailView;
@@ -23,7 +17,6 @@ import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -50,6 +43,8 @@ public class BizInfoDetailControl extends BusinessControl {
     BizProductDetailDAO bizProductDetailDAO;
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
     @Inject
     BizProductDetailTransform bizProductDetailTransform;
@@ -83,50 +78,30 @@ public class BizInfoDetailControl extends BusinessControl {
 
         User user = getCurrentUser();
 
-        if(bizInfoDetailView.getId() == 0){
-            bizInfoDetailView.setCreateBy(user);
-            bizInfoDetailView.setCreateDate(DateTime.now().toDate());
-        }
-        bizInfoDetailView.setModifyBy(user);
-
         try {
-            log.info("onSaveBizInfoToDB begin");
-
             bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
 
-            bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
+            bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView, user);
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
-
             bizInfoDetailDAO.persist(bizInfoDetail);
-            log.info("bizInfoDetailDAO persist end id is {}",bizInfoDetail.getId());
-
 
             supplierDetailList = bizInfoDetailView.getSupplierDetailList();
             buyerDetailList = bizInfoDetailView.getBuyerDetailList();
             bizProductDetailViewList = bizInfoDetailView.getBizProductDetailViewList();
             bizProductDetailList = new ArrayList<BizProductDetail>();
 
-//            if (bizProductDetailViewList.size() > 0) {
-                List<BizProductDetail> bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
-                bizProductDetailDAO.delete(bizProductDetailLisDelete);
-//            }
+            List<BizProductDetail> bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
+            bizProductDetailDAO.delete(bizProductDetailLisDelete);
 
             for (BizProductDetailView aBizProductDetailViewList : bizProductDetailViewList) {
                 bizProductDetailViewTemp = aBizProductDetailViewList;
                 bizProductDetailTemp = bizProductDetailTransform.transformToModel(bizProductDetailViewTemp, bizInfoDetail);
                 bizProductDetailList.add(bizProductDetailTemp);
             }
-
             bizProductDetailDAO.persist(bizProductDetailList);
-            log.info("bizProductDetailDAO persist end");
 
-
-//            if (supplierDetailList.size() > 0) {
-                List<BizStakeHolderDetail> bizSupplierListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
-
-                bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
-                log.info("supplierDetailList delete end {}",bizSupplierListDelete.size());
-//            }
+            List<BizStakeHolderDetail> bizSupplierListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
+            bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
 
             bizSupplierList = new ArrayList<BizStakeHolderDetail>();
             for (BizStakeHolderDetailView aSupplierDetailList : supplierDetailList) {
@@ -136,12 +111,8 @@ public class BizInfoDetailControl extends BusinessControl {
                 bizSupplierList.add(bizStakeHolderDetailTemp);
             }
             bizStakeHolderDetailDAO.persist(bizSupplierList);
-            log.info("bizSupplierListDetailDAO persist end");
-
-//            if (buyerDetailList.size() > 0) {
-                List<BizStakeHolderDetail> bizBuyerListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "2");
-                bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
-//            }
+            List<BizStakeHolderDetail> bizBuyerListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "2");
+            bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
 
             bizBuyerList = new ArrayList<BizStakeHolderDetail>();
             for(BizStakeHolderDetailView bizStakeHolderDetailView : buyerDetailList){
@@ -151,11 +122,14 @@ public class BizInfoDetailControl extends BusinessControl {
             }
 
             bizStakeHolderDetailDAO.persist(bizBuyerList);
-            log.info("bizBuyerListDetailDAO persist end");
-
             bizInfoDetailView.setId(bizInfoDetail.getId());
-
             onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
+
+            //--Update flag in WorkCase ( for check before submit )
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setCaseUpdateFlag(1);
+            workCaseDAO.persist(workCase);
+
             return bizInfoDetailView;
         } catch (Exception e) {
             log.error("onSaveBizInfoToDB error: {}",e);
@@ -166,7 +140,7 @@ public class BizInfoDetailControl extends BusinessControl {
     }
 
 
-    public void onSaveSumOnSummary(long bizInfoSummaryId , long workCaseId){
+    public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId){
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
         BigDecimal bankStatementAvg = BigDecimal.ZERO;
@@ -180,9 +154,7 @@ public class BizInfoDetailControl extends BusinessControl {
         log.debug("bizInfoDetailList : {}",bizInfoDetailList);
 
         HttpSession session = FacesUtil.getSession(true);
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
         log.debug("stepId : {}",stepId);
 
