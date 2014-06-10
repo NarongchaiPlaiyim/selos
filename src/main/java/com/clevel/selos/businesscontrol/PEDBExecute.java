@@ -517,7 +517,7 @@ public class PEDBExecute extends BusinessControl
                 if(rs.getString("CurrentUser") != null)
                 {
 
-                    User user = userDAO.findById(rs.getString("CurrentUser"));
+                    User user = userDAO.findUserByID(rs.getString("CurrentUser"));
                     int roleId = user.getRole().getId();
                     if(roleId == RoleValue.BDM.id() || roleId == RoleValue.ABDM.id())
                     {
