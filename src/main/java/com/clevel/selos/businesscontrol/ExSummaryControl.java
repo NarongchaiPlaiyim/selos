@@ -575,6 +575,11 @@ public class ExSummaryControl extends BusinessControl {
     }
 
     //TODO : Method Call For Page
+    public void calForPropose(long workCaseId){
+        calIncomeBorrowerCharacteristic(workCaseId);
+        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+    }
+
     public void calForCreditFacility(long workCaseId){
         calIncomeBorrowerCharacteristic(workCaseId);
         calRecommendedWCNeedBorrowerCharacteristic(workCaseId);

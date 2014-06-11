@@ -382,8 +382,8 @@ public class CreditFacPropose extends BaseController {
         modeEditReduceFront = false;
         editProposeColl = false;
 
-        creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
-        countryViewList = countryTransform.transformToView(countryDAO.findAll());
+        creditRequestTypeViewList = creditRequestTypeTransform.transformToViewList(creditRequestTypeDAO.findAll());
+        countryViewList = countryTransform.transformToViewList(countryDAO.findAll());
         loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
         disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
         potentialCollViewList = potentialCollateralTransform.transformToView(potentialCollateralDAO.findAll());
@@ -849,6 +849,7 @@ public class CreditFacPropose extends BaseController {
             if(a < 1){ // can delete
                 deleteCreditIdList.add(newCreditDetailSelected.getId());
                 newCreditFacilityView.getNewCreditDetailViewList().remove(newCreditDetailSelected);
+                creditFlag = true;
             } else {
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.propose.error.delete.credit");
@@ -856,7 +857,6 @@ public class CreditFacPropose extends BaseController {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         }
-        creditFlag = true;
     }
 
     //   **************************************** END Propose Credit Information  **************************************** //

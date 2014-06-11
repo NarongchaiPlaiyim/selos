@@ -403,8 +403,8 @@ public class Decision extends BaseController {
         flagButtonCollateral = true;
 
         // ========== Retrieve Pricing/Fee ========== //
-        creditRequestTypeViewList = creditRequestTypeTransform.transformToView(creditRequestTypeDAO.findAll());
-        countryViewList = countryTransform.transformToView(countryDAO.findAll());
+        creditRequestTypeViewList = creditRequestTypeTransform.transformToViewList(creditRequestTypeDAO.findAll());
+        countryViewList = countryTransform.transformToViewList(countryDAO.findAll());
         // ================================================== //
 
         // ========== Approve Credit Dialog ========== //
