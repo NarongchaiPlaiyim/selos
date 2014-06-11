@@ -654,7 +654,7 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
-            <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="btnSave, btnCancel">
+            <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="btnSave, btnCancel, btnAddFacility, btnAddCustomerInfo, btnAddBusinessInfo, btnAddCollateral">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
@@ -689,23 +689,23 @@
     </p:panel>
 
     <p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
-              modal="true" width="400" height="150">
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false" closable="false"
+              modal="true" width="400">
         <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
     </p:dialog>
     <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
-              onShow="hideWindowsScrollBar();" onHide="showWindowsScrollBar()" resizable="false"
-              closable="false"
+              onShow="hideWindowsScrollBar();" onHide="showWindowsScrollBar()" resizable="false" closable="false"
               modal="true" width="850" height="550">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>
     <p:dialog id="businessDialog" widgetVar="businessDlg" header="Business Information"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false" closable="false"
               modal="true" width="500">
         <ui:include src="dialog/prescreenBusinessDialog.xhtml"/>
     </p:dialog>
     <p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Collateral Information"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="400" height="100">
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false" closable="false"
+              modal="true" width="400">
         <ui:include src="dialog/prescreenProposeCollateralDialog.xhtml"/>
     </p:dialog>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">

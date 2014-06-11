@@ -323,7 +323,7 @@ public class BankStatementSummary extends BaseController {
                     hasDataFromRetrieve = false;
 
                     messageHeader = msg.get("app.messageHeader.error");
-                    message = "Retrieve data from DWH is FAILED!, " + actionStatusView.getStatusDesc();
+                    message = "Retrieve data from DWH is failed!, " + actionStatusView.getStatusDesc();
                     severity = MessageDialogSeverity.ALERT.severity();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
@@ -338,7 +338,8 @@ public class BankStatementSummary extends BaseController {
                 hasDataFromRetrieve = true;
 
                 if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
-                    // delete previous TMB data
+                    log.debug("onRefresh BankStatement remove data for TMB Account.");
+                    //--- delete previous TMB data ---
                     Iterator<BankStmtView> i = summaryView.getTmbBankStmtViewList().iterator();
                     while (i.hasNext()) {
                         BankStmtView tmbBankStmtView = i.next();
@@ -348,7 +349,7 @@ public class BankStatementSummary extends BaseController {
                             } catch (Exception e) {
                                 log.debug("", e);
                                 messageHeader = msg.get("app.messageHeader.error");
-                                message = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+                                message = Util.getMessageException(e);
                                 severity = MessageDialogSeverity.ALERT.severity();
                                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                                 return;
@@ -359,9 +360,11 @@ public class BankStatementSummary extends BaseController {
                         }
                         i.remove();
                     }
+                    summaryView.setTmbBankStmtViewList(null);
                 }
 
                 if (isNotAlignWithPrevData && (summaryView.getOthBankStmtViewList() != null && summaryView.getOthBankStmtViewList().size() > 0)) {
+                    log.debug("onRefresh BankStatement data not align with expected submit date. Remove data for Other Account.");
                     // if not align with previous data -> delete all Other Bank statement
                     Iterator<BankStmtView> j = summaryView.getOthBankStmtViewList().iterator();
                     while (j.hasNext()) {
@@ -383,6 +386,7 @@ public class BankStatementSummary extends BaseController {
                         }
                         j.remove();
                     }
+                    summaryView.setOthBankStmtViewList(null);
                 }
 
                 // replace previous data
@@ -390,27 +394,30 @@ public class BankStatementSummary extends BaseController {
                 BankStmtView newBankStmtView;
                 for (BankStmtView originalTMBBankStmt : retrieveResult.getTmbBankStmtViewList()) {
                     newBankStmtView = bankStmtTransform.copyToNewBankStmtView(originalTMBBankStmt);
-                    if (newBankStmtView.getBankStmtDetailViewList() != null && newBankStmtView.getBankStmtDetailViewList().size() > 0) {
-                        int numOfMonths = newBankStmtView.getBankStmtDetailViewList().size();
-                        Date tmpDate;
-                        for (int i=(numOfMonths-1), j=0; i>=0; i--, j++) {
-                            BankStmtDetailView bankStmtDetailView = newBankStmtView.getBankStmtDetailViewList().get(j);
-                            // Replace the AsOfDate to NULL
-                            if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
-                                tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
-                                bankStmtDetailView.setAsOfDate(tmpDate);
-                                bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
-                                bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+                    if(!Util.isNull(newBankStmtView) && !Util.isEmpty(newBankStmtView.getAccountNumber())) {
+                        if (newBankStmtView.getBankStmtDetailViewList() != null && newBankStmtView.getBankStmtDetailViewList().size() > 0) {
+                            int numOfMonths = newBankStmtView.getBankStmtDetailViewList().size();
+                            Date tmpDate;
+                            for (int i = (numOfMonths - 1), j = 0; i >= 0; i--, j++) {
+                                BankStmtDetailView bankStmtDetailView = newBankStmtView.getBankStmtDetailViewList().get(j);
+                                // Replace the AsOfDate to NULL
+                                if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
+                                    tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+                                    bankStmtDetailView.setAsOfDate(tmpDate);
+                                    bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+                                    bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+                                }
                             }
                         }
+                        newTMBBankStmtViewList.add(newBankStmtView);
                     }
-                    newTMBBankStmtViewList.add(newBankStmtView);
                 }
                 summaryView.setTmbBankStmtViewList(newTMBBankStmtViewList);
 
                 // calculate data from DWH
                 for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
                     bankStmtControl.bankStmtDetailCalculation(tmbBankStmtView, seasonalFlag);
+                    //---to set source of collateral proof in to bankStatementView
                     bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
                     bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
                 }
@@ -428,7 +435,8 @@ public class BankStatementSummary extends BaseController {
 
                 try {
                     bankStmtControl.bankStmtSumTotalCalculation(summaryView, true);
-                    summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+                    //summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+                    summaryView = bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
                     // update related parts
                     dbrControl.updateValueOfDBR(workCaseId);
                     exSummaryControl.calForBankStmtSummary(workCaseId);
@@ -445,13 +453,12 @@ public class BankStatementSummary extends BaseController {
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
 
-            }
-            else {
+            } else {
                 log.debug("No more data from DWH");
                 hasDataFromRetrieve = false;
 
                 messageHeader = msg.get("app.messageHeader.info");
-                message = "No more data from DWH.";
+                message = "No data from DWH.";
                 severity = MessageDialogSeverity.INFO.severity();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }

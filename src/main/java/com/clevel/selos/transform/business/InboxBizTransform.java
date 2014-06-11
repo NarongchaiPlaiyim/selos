@@ -40,7 +40,7 @@ public class InboxBizTransform extends BusinessTransform {
             inboxView.setListKey(listKey);
             if (item.getCaseData().containsKey("F_WobNum")) {
                 inboxView.setFnWobNum(item.getCaseData().get("F_WobNum"));
-                if(Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_MAKER.value() ||
+                if(Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_INITIAL.value() ||
                         Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_CHECKER.value() ||
                             Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_MAKER.value()){
 

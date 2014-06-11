@@ -4,6 +4,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
+<p:panel id="exSumDeviateDlgPanel" styleClass="panel-dialog">
     <h:form id="exSumDeviateDlgForm">
         <table class="content_form">
             <tr>
@@ -59,14 +60,14 @@
                                      oncomplete="handleExSumDeviateRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      type="button" process="@this" update=":exSumDeviateDlgForm"
-                                     onclick="exSumDeviateDlg.hide()"/>
+                                     onclick="PF('exSumDeviateDlg').hide()"/>
                 </td>
             </tr>
         </table>
-
-        <p:blockUI widgetVar="blockExSumDeviateDlg" block="exSumDeviateDlgForm" trigger=":exSumDeviateDlgForm:dlgSaveBasicAccBtn">
-            LOADING<br />
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
     </h:form>
+</p:panel>
+<p:blockUI widgetVar="blockExSumDeviateDlg" block="exSumDeviateDlgPanel" trigger=":exSumDeviateDlgForm:dlgSaveBasicAccBtn">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

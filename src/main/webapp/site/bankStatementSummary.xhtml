@@ -798,9 +798,12 @@
                                                  action="#{bankStatementSummary.onConfirmBeforeAction()}"
                                                  process="@form"
                                                  update=":frmMain,:msgBoxSystemMessagePanel,:confirmActionDialog"
-                                                 styleClass="smaller">
+                                                 styleClass="small">
                                     <f:setPropertyActionListener value="1" target="#{bankStatementSummary.actionNo}"/>
                                 </p:commandButton>
+                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                                 process="@this" update=":frmMain"
+                                                 actionListener="#{bankStatementSummary.onCreation()}"/>
                             </td>
                         </tr>
                     </table>
@@ -819,7 +822,7 @@
             </div>
 
             <p:blockUI widgetVar="blockUI" block=":frmMain"
-                       trigger=":frmMain:btnRefresh,:frmMain:btnAddTmbBank,:frmMain:btnAddOthBank,:frmMain:btnSave">
+                       trigger="btnRefresh, btnAddTmbBank, btnAddOthBank, btnSave, btnCancel">
                 LOADING<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

@@ -158,7 +158,7 @@ public class InboxDevControl extends BusinessControl {
 
     //Tempory to remove
     public List<WorkCasePrescreen> getWorkCasePreScreen() {
-        List<WorkCasePrescreen> workCasePrescreenList = workCasePrescreenDAO.findAll();
+        List<WorkCasePrescreen> workCasePrescreenList = workCasePrescreenDAO.getListForDev();
 
         return workCasePrescreenList;
     }
