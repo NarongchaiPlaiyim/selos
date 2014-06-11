@@ -224,7 +224,6 @@ public class PESQLInbox implements Serializable
         session.setAttribute("fetchType",0);
     }
 
-
     public void onSelectInbox() {
         HttpSession session = FacesUtil.getSession(false);
 
@@ -436,6 +435,44 @@ public class PESQLInbox implements Serializable
             disableAssign = true;
 
             log.info("Reassign Button disabled : {}",disableAssign);
+        }
+    }
+
+    public void onRestartCase()
+    {
+
+        String queueName = inboxViewSelectItem.getQueuename();
+        String wobNumber = inboxViewSelectItem.getFwobnumber();
+        log.debug("onRestartCase ::: inboxViewSelectItem : {}", inboxViewSelectItem);
+        HashMap<String,String> fieldsMap = new HashMap<String, String>();
+        try {
+
+            fieldsMap.put(BPMConstants.BPM_FIELD_ACTION_NAME, "Restart");
+
+            if(queueName != null && wobNumber != null && fieldsMap.size() !=0)
+            {
+
+                bpmInterfaceImpl.dispatchCase(queueName,wobNumber,fieldsMap);
+
+                log.info("restart successful.... ");
+
+                onCreation();
+            }
+
+            RequestContext.getCurrentInstance().execute("successDlg1.show()");
+
+            return;
+
+        }
+
+        catch (Exception e)
+        {
+
+            fieldsMap = null;
+            log.error("Error in restart : {}",e);
+            message = Util.getMessageException(e);
+            RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+            return;
         }
     }
 
