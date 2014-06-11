@@ -6,13 +6,19 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.rlos.csi.model.CSIData;
+import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
+import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
@@ -67,6 +73,11 @@ public class FullApplicationControl extends BusinessControl {
     @Inject
     ReturnInfoHistoryDAO returnInfoHistoryDAO;
     @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
+    DecisionDAO decisionDAO;
+
+    @Inject
     ReturnInfoTransform returnInfoTransform;
     @Inject
     UserTransform userTransform;
@@ -82,12 +93,33 @@ public class FullApplicationControl extends BusinessControl {
     AuthorizationDOADAO authorizationDOADAO;
     @Inject
     UserToAuthorizationDOADAO userToAuthorizationDOADAO;
+    @Inject
+    CustomerCSIDAO customerCSIDAO;
+    @Inject
+    CustomerAccountDAO customerAccountDAO;
+    @Inject
+    CustomerAccountNameDAO customerAccountNameDAO;
+    @Inject
+    CustomerTransform customerTransform;
+    @Inject
+    IndividualDAO individualDAO;
+    @Inject
+    JuristicDAO juristicDAO;
+    @Inject
+    RLOSInterface rlosInterface;
+    @Inject
+    WarningCodeDAO warningCodeDAO;
+    @Inject
+    UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
 
     @Inject
     AppraisalRequestControl appraisalRequestControl;
 
     @Inject
     BPMExecutor bpmExecutor;
+
+    @Inject
+    ActionValidationControl actionValidationControl;
 
     public List<User> getABDMUserList(){
         User currentUser = getCurrentUser();
@@ -133,7 +165,7 @@ public class FullApplicationControl extends BusinessControl {
         WorkCase workCase = null;
         String productGroup = "";
         String deviationCode = "";
-        String resultCode = "G"; //TODO: get result code
+        String resultCode = "G";
         int requestType = 0;
         int appraisalRequestRequire = 0;
         BigDecimal totalCommercial = BigDecimal.ZERO;
@@ -148,8 +180,18 @@ public class FullApplicationControl extends BusinessControl {
 
                 //TODO: get total com and retail
 
-                if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
-                    deviationCode = "AD"; //TODO:
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                    if(uwRuleResultSummary.getUwResultColor()!=null){
+                        resultCode = uwRuleResultSummary.getUwResultColor().code();
+                    }
+
+                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
+                        deviationCode = "AD";
+                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
+                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
+                        }
+                    }
                 }
 
                 bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
@@ -176,8 +218,8 @@ public class FullApplicationControl extends BusinessControl {
         String zmPricingRequestFlag = "";
         BigDecimal totalCommercial = BigDecimal.ZERO; //TODO
         BigDecimal totalRetail = BigDecimal.ZERO; //TODO
-        String resultCode = "G"; //TODO
-        String deviationCode = ""; //TODO
+        String resultCode = "G";
+        String deviationCode = "";
         int requestType = 0;
         int priceDOALevel = 0;
         ApprovalHistory approvalHistoryEndorseCA = null;
@@ -240,8 +282,19 @@ public class FullApplicationControl extends BusinessControl {
                         approvalHistoryEndorseCA.setSubmitDate(new Date());
                     }
                 }
-                if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase("R")){
-                    deviationCode = "AD"; //TODO:
+
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                    if(uwRuleResultSummary.getUwResultColor()!=null){
+                        resultCode = uwRuleResultSummary.getUwResultColor().code();
+                    }
+
+                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
+                        deviationCode = "AD";
+                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
+                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
+                        }
+                    }
                 }
 
                 bpmExecutor.submitRM(queueName, wobNumber, zmDecisionFlag, zmPricingRequestFlag, totalCommercial, totalRetail, resultCode, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
@@ -258,7 +311,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToGH(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String rgmDecisionFlag = "E"; //TODO
+        String rgmDecisionFlag = "E";
         int priceDOALevel = 0;
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
@@ -298,7 +351,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToCSSO(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String ghDecisionFlag = "E"; //TODO
+        String ghDecisionFlag = "E";
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
         int priceDOALevel = 0;
@@ -399,7 +452,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToUWFromCSSO(String queueName, long workCaseId) throws Exception {
-        String cssoDecisionFlag = "A"; //TODO
+        String cssoDecisionFlag = "A";
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
@@ -430,7 +483,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void submitToUWFromZM(String queueName, long workCaseId) throws Exception {
-        String zmDecisionFlag = "A"; //TODO
+        String zmDecisionFlag = "A";
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorsePricing = null;
 
@@ -643,7 +696,6 @@ public class FullApplicationControl extends BusinessControl {
             throw new Exception("exception while request appraisal, cause session variable expired.");
         }
 
-        //TODO Insert data into WRK_APPRAISAL
         WorkCaseAppraisal workCaseAppraisal = new WorkCaseAppraisal();
         workCaseAppraisal.setAppNumber(appNumber);
         workCaseAppraisal.setCreateDate(DateTime.now().toDate());
@@ -1048,7 +1100,7 @@ public class FullApplicationControl extends BusinessControl {
     public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
         ReasonType reasonType = reasonTypeDAO.findById(reasonTypeValue.value());
         List<Reason> reasonList = reasonDAO.getList(reasonType);
-        if(Util.isNull(reasonList)){
+        if(reasonList == null){
             reasonList = new ArrayList<Reason>();
         }
 
@@ -1070,5 +1122,229 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         return reasonDescription;
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void updateCSIDataFullApp(long workCaseId) throws Exception{
+        List<Customer> customers = customerDAO.findByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customers);
+        List<CSIResult> csiResultList = new ArrayList<CSIResult>();
+        long customerId = 0;
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            customerId = customerInfoView.getId();
+            log.debug("updateCSIDataFullApp ::: customerId : {}", customerId);
+            if(customerId != 0){
+                List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomerId(customerId);
+                log.debug("updateCSIDataFullApp ::: customerAccountList : {}", customerAccountList);
+                List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomerId(customerId);
+                log.debug("updateCSIDataFullApp ::: customerAccountNameList : {}", customerAccountNameList);
+
+                List<AccountInfoId> accountInfoIdList = new ArrayList<AccountInfoId>();
+                for(CustomerAccount customerAccount : customerAccountList){
+                    AccountInfoId accountInfoId = new AccountInfoId();
+                    accountInfoId.setIdNumber(customerAccount.getIdNumber());
+                    if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 1){
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CITIZEN_ID);
+                    }else if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 2){
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.PASSPORT);
+                    }else if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 3){
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CORPORATE_ID);
+                    }
+                    accountInfoIdList.add(accountInfoId);
+                }
+
+                List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                for(CustomerAccountName customerAccountName : customerAccountNameList){
+                    AccountInfoName accountInfoName = new AccountInfoName();
+
+                    accountInfoName.setNameTh(customerAccountName.getNameTh());
+                    accountInfoName.setNameEn(customerAccountName.getNameEn());
+                    accountInfoName.setSurnameTh(customerAccountName.getSurnameTh());
+                    accountInfoName.setSurnameEn(customerAccountName.getSurnameEn());
+
+                    accountInfoNameList.add(accountInfoName);
+                }
+
+                log.debug("updateCSIDataFullApp ::: accountInfoIdList : {}", accountInfoIdList);
+                log.debug("updateCSIDataFullApp ::: accountInfoNameList : {}", accountInfoNameList);
+
+                CSIInputData csiInputData = new CSIInputData();
+                csiInputData.setIdModelList(accountInfoIdList);
+                csiInputData.setNameModelList(accountInfoNameList);
+
+                log.info("getCSI ::: csiInputData : {}", csiInputData);
+                CSIResult csiResult = new CSIResult();
+                String idNumber = "";
+                Customer customer = new Customer();
+                if(customerInfoView.getCustomerEntity().getId() == 1){
+                    idNumber = customerInfoView.getCitizenId();
+                    customer = individualDAO.findCustomerByCitizenIdAndWorkCase(idNumber, workCaseId);
+                } else if (customerInfoView.getCustomerEntity().getId() == 2){
+                    idNumber = customerInfoView.getRegistrationId();
+                    customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(idNumber, workCaseId);
+                }
+                try{
+                    User user = getCurrentUser();
+                    csiResult = rlosInterface.getCSIData(user.getId(), csiInputData);
+
+                    csiResult.setIdNumber(idNumber);
+                    csiResult.setActionResult(ActionResult.SUCCESS);
+                    csiResult.setResultReason("SUCCESS");
+                    csiResultList.add(csiResult);
+
+                    List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+                    List<CustomerCSI> customerCSIListDel = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
+                    customerCSIDAO.delete(customerCSIListDel);
+
+                    if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
+                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType(CSIMatchedType.F.name());
+                            customerCSIList.add(customerCSI);
+                        }
+                    }
+
+                    if(csiResult != null && csiResult.getWarningCodePartialMatched() != null && csiResult.getWarningCodePartialMatched().size() > 0){
+                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType(CSIMatchedType.P.name());
+                            customerCSIList.add(customerCSI);
+                        }
+                    }
+
+                    log.info("getCSI ::: customerCSIList : {}", customerCSIList);
+                    if(customerCSIList != null && customerCSIList.size() > 0){
+                        log.info("getCSI ::: persist item");
+                        customerCSIDAO.persist(customerCSIList);
+                    }
+                    log.info("getCSI ::: end...");
+
+                } catch (Exception ex){
+                    log.error("getCSI ::: error ", ex);
+                    throw ex;
+                }
+            }
+        }
+    }
+
+    public void updateTimeOfCheckCriteria(long workCaseId){
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
+            if(!Util.isNull(workCaseOwner)) {
+                int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();
+                timesOfCriteriaChecked = timesOfCriteriaChecked + 1;
+                workCaseOwner.setTimesOfCriteriaChecked(timesOfCriteriaChecked);
+                log.debug("Update time of criteria checked [timeOfCriteriaCheck] : {}", timesOfCriteriaChecked);
+                workCaseOwnerDAO.persist(workCaseOwner);
+            }
+        }catch(Exception ex){
+            log.error("Exception while update time of check criteria.", ex);
+        }
+    }
+
+    public void clearCaseUpdateFlag(long workCaseId){
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setCaseUpdateFlag(0);
+            workCaseDAO.persist(workCase);
+        }catch (Exception ex){
+            log.debug("Exception while clear case update flag : ", ex);
+        }
+    }
+
+    public int getTimesOfCriteriaCheck(long workCaseId){
+        int timesOfCriteriaCheck = 0;
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            if(!Util.isNull(workCaseOwner)){
+                log.debug("getTimesOfCriteriaCheck ::: workCaseOwner : {}", workCaseOwner);
+                timesOfCriteriaCheck = workCaseOwner.getTimesOfCriteriaChecked();
+            }
+            log.debug("getTimesOfCriteriaCheck ::: timesOfCriteriaCheck : {}", timesOfCriteriaCheck);
+        }catch(Exception ex){
+            log.error("Exception while get time of check criteria : ", ex);
+        }
+
+        return timesOfCriteriaCheck;
+    }
+
+    public int getRequestAppraisalRequire(long workCaseId){
+        int requestAppraisalRequire = 0;
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                requestAppraisalRequire = workCase.getRequestAppraisalRequire();
+            }
+        }catch (Exception ex){
+            log.error("Exception while getRequestAppraisalRequire : ", ex);
+        }
+
+        return requestAppraisalRequire;
+    }
+
+    public boolean checkCaseUpdate(long workCaseId){
+        boolean caseUpdateFlag = false;
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(!Util.isNull(workCase)) {
+            caseUpdateFlag = Util.isTrue(workCase.getCaseUpdateFlag());
+        }
+
+        return caseUpdateFlag;
+    }
+
+    public void calculateApprovedResult(long workCaseId){
+        log.debug("calculateApprovedResult");
+        try {
+            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            log.debug("calculateApprovedResult ::: decision : {}", decision);
+            log.debug("calculateApprovedResult ::: prpose : {}", newCreditFacility);
+
+            //Compare for total approved equal to propose or not
+            int sameRequest = 1;
+            if (!Util.isNull(decision)) {
+                BigDecimal totalApprovedCredit = decision.getTotalApproveCredit();
+                BigDecimal totalProposedCredit = newCreditFacility.getTotalPropose();
+                if (!Util.isNull(totalApprovedCredit) && !Util.isNull(totalProposedCredit)) {
+                    if (totalProposedCredit.compareTo(totalApprovedCredit) != 0) {
+                        sameRequest = 0;
+                    }
+                }
+            }
+            log.debug("calculateApprovedResult ::: sameRequest : {}", sameRequest);
+            int approvedType = calculateApprovedType(workCaseId);
+            //Update value in WorkCase
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setApprovedResult(sameRequest);
+            workCase.setApprovedType(approvedType);
+            workCaseDAO.persist(workCase);
+        } catch (Exception ex){
+            log.error("Exception while Calculate Approved Result : ", ex);
+        }
+    }
+
+    public int calculateApprovedType(long workCaseId){
+        int requestType = 1;        //for new = 1, new+change = 2;
+        log.debug("calculateApprovedType");
+        List<NewCreditDetail> newCreditDetailApprovedList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+        log.debug("calculateApprovedType ::: newCreditDetailApprovedList size : {}", newCreditDetailApprovedList != null ? newCreditDetailApprovedList.size() : null);
+        for(NewCreditDetail newCreditDetail : newCreditDetailApprovedList){
+            log.debug("calculateApprovedType ::: newCreditDetail : {}", newCreditDetail);
+            if(newCreditDetail.getUwDecision() == DecisionType.APPROVED && newCreditDetail.getRequestType() == RequestTypes.CHANGE.value()) {
+                requestType = 2;
+                break;
+            }
+        }
+
+        return requestType;
     }
 }

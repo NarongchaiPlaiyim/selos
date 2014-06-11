@@ -355,7 +355,7 @@ public class CreditFacPropose extends BaseController {
                 }
             }
 
-            tcgView = tcgInfoControl.getTcgView(workCaseId);
+            tcgView = tcgInfoControl.getTCGView(workCaseId);
             if (tcgView != null) {
                 applyTCG = tcgView.getTCG();
             }

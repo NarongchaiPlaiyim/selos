@@ -91,7 +91,7 @@ public class AbstractWorkCase implements Serializable{
     @JoinColumn(name = "modify_by")
     protected User modifyBy;
 
-    @Column(name = "bpm_active", length = 1, columnDefinition = "int default 1")
+    @Column(name = "bpm_active", columnDefinition = "int default 1")
     protected int bpmActive;
 
     public Date getCreateDate() {

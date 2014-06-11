@@ -39,17 +39,6 @@
                                 <table class="content_table_form">
                                     <tr>
                                         <td colspan="100%">
-                                            <p:commandButton id="addListObjButton" value="#{msg.get('app.button.add')}"
-                                                             process="@this"
-                                                             oncomplete="p_mandateConditionDlg.show();"
-                                                             action="#{mandateFieldSubmit.onOpenAddMandateCondition}"
-                                                             update=":mandateClassListDlg">
-                                                <p:resetInput target=":mandateClassListDlg" />
-                                            </p:commandButton>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="100%">
                                             <p:dataTable id='className_tbl' value="#{mandateFieldSubmit.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
                                             <p:column styleClass="center">
                                                 <h:outputText value="#{rowIndex+1}"
@@ -104,15 +93,6 @@
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
-        <p:dialog id='mandateClassListDlg' widgetVar="p_mandateClassListDlg"
-                  header="#{msg.get('app.mandateField.class.header')}"
-                  onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
-                  modal='true' closeOnEscape="true" closable="true"
-                  dynamic="true" width="700">
-            <ui:include src="dialog/mandateClassListDlg.xhtml">
-                <ui:param name="name" value="p_mandateClassListDlg"/>
-            </ui:include>
-        </p:dialog>
     </h:body>
 </f:view>
 </html>

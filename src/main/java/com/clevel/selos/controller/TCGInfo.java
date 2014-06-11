@@ -1,11 +1,11 @@
 package com.clevel.selos.controller;
 
-
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
@@ -17,6 +17,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -30,7 +31,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @ViewScoped
 @ManagedBean(name = "tcgInfo")
 public class TCGInfo extends BaseController {
@@ -38,17 +38,10 @@ public class TCGInfo extends BaseController {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
-
-    @Inject
-    @ValidationMessage
-    Message validationMsg;
-
-    @Inject
-    @ExceptionMessage
-    Message exceptionMsg;
 
     private List<TCGDetailView> TCGDetailViewList;
     private TCGDetailView tcgDetailView;
@@ -56,7 +49,6 @@ public class TCGInfo extends BaseController {
     private TCGView TCGView;
     private int rowIndex;
     private Long workCaseId;
-    //private User user;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -67,6 +59,7 @@ public class TCGInfo extends BaseController {
     private ModeForDB modeForDB;
     private String messageHeader;
     private String message;
+    private String messageSeverity;
     private boolean messageErr;
 
     private List<PotentialCollateral> potentialCollateralList;
@@ -78,19 +71,11 @@ public class TCGInfo extends BaseController {
     private PotentialColToTCGColDAO potentialColToTCGColDAO;
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
+
     @Inject
     TCGInfoControl tcgInfoControl;
 
     public TCGInfo() {
-    }
-
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
     }
 
     public void preRender(){
@@ -100,7 +85,6 @@ public class TCGInfo extends BaseController {
         if(checkSession(session)){
             //TODO Check valid step
             log.debug("preRender ::: Check valid stepId");
-
         }else{
             log.debug("preRender ::: No session for case found. Redirect to Inbox");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -112,26 +96,24 @@ public class TCGInfo extends BaseController {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
         if(checkSession(session)){
-            workCaseId = (Long)session.getAttribute("workCaseId");
-            TCGView = tcgInfoControl.getTcgView(workCaseId);
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            TCGView = tcgInfoControl.getTCGView(workCaseId);
             loadFieldControl(workCaseId, Screen.TCG_INFO);
-            if (TCGView != null) {
-                TCGDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
+            if(TCGView != null){
+                TCGDetailViewList = tcgInfoControl.getTcgDetailViewList(TCGView);
                 modeForDB = ModeForDB.EDIT_DB;
-            } else {
+            }else{
                 TCGView = new TCGView();
                 modeForDB = ModeForDB.ADD_DB;
             }
 
-            if (tcgDetailView == null) {
+            if(tcgDetailView == null)
                 tcgDetailView = new TCGDetailView();
-            }
 
-            if (TCGDetailViewList == null) {
+
+            if(TCGDetailViewList == null)
                 TCGDetailViewList = new ArrayList<TCGDetailView>();
-            }
 
-            potentialCollateralList = new ArrayList<PotentialCollateral>();
             potentialCollateralList = potentialCollateralDAO.findAll();
         }
     }
@@ -224,32 +206,20 @@ public class TCGInfo extends BaseController {
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: modeForDB  {}", modeForDB);
         try {
-            if (TCGDetailViewList.size() > 0) {
-                if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
-                } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
-                }
-                messageHeader = msg.get("app.header.save.success");
-                message = msg.get("app.tcg.response.save.success");
-                onCreation();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                messageHeader = msg.get("app.tcg.response.cannot.save");
-                message = msg.get("app.tcg.response.desc.cannot.save");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
+            tcgInfoControl.saveTCGInfo(TCGView, TCGDetailViewList, workCaseId);
+
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.tcg.response.save.success");
+            messageSeverity = MessageDialogSeverity.INFO.severity();
+            onCreation();
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
-            if (ex.getCause() != null) {
-                message = msg.get("app.tcg.response.save.failed") + " cause : " + ex.getCause().toString();
-            } else {
-                message = msg.get("app.tcg.response.save.failed") + ex.getMessage();
-            }
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            messageSeverity = MessageDialogSeverity.ALERT.severity();
             messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancelTcgInfo() {
@@ -356,5 +326,12 @@ public class TCGInfo extends BaseController {
         this.messageHeader = messageHeader;
     }
 
+    public String getMessageSeverity() {
+        return messageSeverity;
+    }
+
+    public void setMessageSeverity(String messageSeverity) {
+        this.messageSeverity = messageSeverity;
+    }
 }
 

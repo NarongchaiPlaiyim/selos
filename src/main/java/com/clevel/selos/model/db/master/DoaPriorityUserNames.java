@@ -18,6 +18,9 @@ public class DoaPriorityUserNames implements Serializable
     @Column(name = "user_id")
     private String userid;
 
+    @Column(name = "active")
+    private int active;
+
     public String getUserid() {
         return userid;
     }
@@ -34,5 +37,11 @@ public class DoaPriorityUserNames implements Serializable
         this.id = id;
     }
 
+    public int getActive() {
+        return active;
+    }
 
+    public void setActive(int active) {
+        this.active = active;
+    }
 }

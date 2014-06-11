@@ -1,19 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
-import com.clevel.selos.dao.working.BizInfoDetailDAO;
-import com.clevel.selos.dao.working.BizInfoSummaryDAO;
-import com.clevel.selos.dao.working.BizProductDetailDAO;
-import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.BizInfoDetail;
-import com.clevel.selos.model.db.working.BizInfoSummary;
-import com.clevel.selos.model.db.working.BizProductDetail;
-import com.clevel.selos.model.db.working.BizStakeHolderDetail;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizProductDetailView;
@@ -49,6 +43,8 @@ public class BizInfoDetailControl extends BusinessControl {
     BizProductDetailDAO bizProductDetailDAO;
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
     @Inject
     BizProductDetailTransform bizProductDetailTransform;
@@ -128,6 +124,12 @@ public class BizInfoDetailControl extends BusinessControl {
             bizStakeHolderDetailDAO.persist(bizBuyerList);
             bizInfoDetailView.setId(bizInfoDetail.getId());
             onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
+
+            //--Update flag in WorkCase ( for check before submit )
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setCaseUpdateFlag(1);
+            workCaseDAO.persist(workCase);
+
             return bizInfoDetailView;
         } catch (Exception e) {
             log.error("onSaveBizInfoToDB error: {}",e);
@@ -138,7 +140,7 @@ public class BizInfoDetailControl extends BusinessControl {
     }
 
 
-    public void onSaveSumOnSummary(long bizInfoSummaryId , long workCaseId){
+    public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId){
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
         BigDecimal bankStatementAvg = BigDecimal.ZERO;
@@ -152,9 +154,7 @@ public class BizInfoDetailControl extends BusinessControl {
         log.debug("bizInfoDetailList : {}",bizInfoDetailList);
 
         HttpSession session = FacesUtil.getSession(true);
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
         log.debug("stepId : {}",stepId);
 

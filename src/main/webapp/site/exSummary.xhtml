@@ -1470,11 +1470,13 @@
                 </div>
                 <div class="clear"></div>
                 <!-- Start Footer -->
+                <h:inputHidden id="pagename" value="mnudecision"/>
+                <h:inputHidden id="subpagename" value="submnuexsum"/>
                 <ui:include src="include/footer.xhtml"/>
                 <!-- End Footer -->
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn">
+            <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:saveBtn">
                 LOADING<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
@@ -1516,7 +1518,7 @@
               modal="true" width="500" height="130" closable="false">
         <ui:include src="dialog/exSumDeviateDialog.xhtml"/>
     </p:dialog>
-
+	<ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>

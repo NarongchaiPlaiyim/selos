@@ -1167,14 +1167,14 @@
                 <div class="bottom_line"></div>
             </div>
             <div class="clear"></div>
-                <!-- Start Footer -->
+            <!-- Start Footer -->
+            <h:inputHidden id="pagename" value="mnubusinessinfo"/>
+            <h:inputHidden id="subpagename" value="submnubusinessinfo"/>
             <ui:include src="include/footer.xhtml" />
-                <!-- End Footer -->
-            <h:inputHidden id="pagename" value="mnuprescreen"/>
-            <h:inputHidden id="subpagename" value="submnuprescreen"/>
+            <!-- End Footer -->
         </div>
 
-        <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

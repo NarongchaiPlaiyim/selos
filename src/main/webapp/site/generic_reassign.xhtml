@@ -68,8 +68,14 @@
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Reassign</div>
+                <div style="color: red;">
+                    Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
+                    <br/>
+                    Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ
+                </div>
                 <div id="content">
                     <table id="content_form">
+
                         <!--<tr>
                             <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Reassign:</label></td>
                         </tr>
@@ -136,7 +142,7 @@
                                                  id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()"
                                                  disabled="#{reassignteamnames.disableReassign}">
                                         <p:resetInput target=":reassignDialog"></p:resetInput>
-                                </p:commandButton>
+                                </p:commandButton> เลือก Reassign ได้ไม่เกินครั้งละ 5 cases.
                                 <p:spacer width="20px;"/> </td>
                         </tr>
 
@@ -205,9 +211,9 @@
                                         <h:outputText value="#{item.status}"/>
                                     </p:column>
 
-                                    <!--<p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="fromuser">
+                                    <p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="fromuser">
                                         <h:outputText value="#{item.fromuser}"/>
-                                    </p:column>-->
+                                    </p:column>
 
                                     <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="atuser">
                                         <h:outputText value="#{item.atuser}"/>
@@ -217,13 +223,13 @@
                                        <h:outputText value="#{item.atuserteam}" />
                                    </p:column>
 
-                                    <!--<p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="appointmentdate" >
+                                    <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="appointmentdate" >
                                         <h:outputText value="#{item.appointmentdate}"/>
                                     </p:column>
 
                                     <p:column headerText="DOA Level" styleClass="center" style="width: 110px;" sortBy="doalevel">
                                         <h:outputText value="#{item.doalevel}"/>
-                                    </p:column>-->
+                                    </p:column>
 
                                     <p:column headerText="SLA End Date" styleClass="center" style="width: 110px;  background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="slaenddate" >
                                         <h:outputText  value="#{item.slaenddate}"/>

@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
@@ -63,7 +64,7 @@ public class NCBInfoControl extends BusinessControl {
     private final BigDecimal plusMRR = BigDecimal.valueOf(6);
 
 
-    public void onSaveNCBToDB(NCBInfoView ncbInfoView, List<NCBDetailView> ncbDetailViewList, Customer customerInfo) {
+    public void onSaveNCBToDB(NCBInfoView ncbInfoView, List<NCBDetailView> ncbDetailViewList, Customer customerInfo, long workCaseId) {
         log.info("onSaveNCBToDB begin");
 
         if(ncbInfoView.getId() == 0){
@@ -90,6 +91,12 @@ public class NCBInfoControl extends BusinessControl {
         ncbDAO.persist(ncb);
         log.info("persist ncb");
         ncbDetailDAO.persist(ncbDetailList);
+
+        //--Update flag in WorkCase ( for check before submit )
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
         //TODO Call function
 
     }

@@ -916,9 +916,13 @@ public class ExSummaryControl extends BusinessControl {
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = BigDecimal.ZERO;
         BigDecimal groupExposureUW = BigDecimal.ZERO;
-        if((newCreditFacility != null && newCreditFacility.getId() != 0) && (decision != null && decision.getId() != 0)){
+        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
             groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
-            groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+            if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
+                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+            } else {
+                groupExposureUW = newCreditFacility.getTotalExposure();
+            }
         }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);

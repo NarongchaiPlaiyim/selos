@@ -421,7 +421,7 @@ public class Isa implements Serializable {
         isaUserDetailView.setDepartment(userDepartmentDAO.findById(isaManageUserView.getUserDepartment().getId()).getName());
         isaUserDetailView.setDivision(userDivisionDAO.findById(isaManageUserView.getUserDivision().getId()).getName());
         isaUserDetailView.setRegion(userRegionDAO.findById(isaManageUserView.getUserRegion().getId()).getName());
-        isaUserDetailView.setTeam(userTeamDAO.findById(isaManageUserView.getUserTeam().getId()).getName());
+        //isaUserDetailView.setTeam(userTeamDAO.findById(isaManageUserView.getUserTeam().getId()).getName());
         isaUserDetailView.setTitle(userTitleDAO.findById(isaManageUserView.getUserTitle().getId()).getName());
         isaUserDetailView.setZone(userZoneDAO.findById(isaManageUserView.getUserZone().getId()).getName());
         isaUserDetailView.setActive(isaManageUserView.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);

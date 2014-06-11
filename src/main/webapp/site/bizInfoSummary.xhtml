@@ -912,10 +912,12 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
+            <h:inputHidden id="pagename" value="mnubusinessinfo"/>
+            <h:inputHidden id="subpagename" value="submnubusinessinfo"/>
             <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
         </div>
-        <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoSummary, :frmMain:btnAddBizInfoDetail, :frmMain:btnCancelBizInfoSummary">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnAddBizInfoSummary, :frmMain:btnAddBizInfoDetail, :frmMain:btnCancelBizInfoSummary">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

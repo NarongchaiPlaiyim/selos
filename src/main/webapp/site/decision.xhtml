@@ -3980,11 +3980,13 @@
 
         <div id="bottom_line"></div>
         <!-- Start Footer -->
+        <h:inputHidden id="pagename" value="mnudecision"/>
+        <h:inputHidden id="subpagename" value="submnudecision"/>
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
         </div>
 
-        <p:blockUI block=":frmMain"
+        <p:blockUI widgetVar="blockUI" block=":frmMain"
                    trigger=":frmMain:btnAddApprovedCredit,
                :frmMain:btnRetrievePricingFee
                :frmMain:btnAddApprovedGuarantor,
@@ -4093,7 +4095,7 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-
+<ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>

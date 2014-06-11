@@ -44,8 +44,19 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "uw_doa2")
     private AuthorizationDOA uwDOA2;
 
-    @Column(name = "ref_app_number")
+    @Column(name = "ref_app_number", length = 50)
     private String refAppNumber;
+
+    @Column(name = "case_update_flag", columnDefinition = "int default 0")
+    private int caseUpdateFlag;
+
+    //for set approved type new/new+change
+    @Column(name = "approved_type", columnDefinition = "int default 0")
+    private int approvedType;
+
+    //for set approved result same request/not same request
+    @Column(name = "approved_result", columnDefinition = "int default 0")
+    private int approvedResult;
 
     public String getRefAppNumber() {
         return refAppNumber;
@@ -135,18 +146,44 @@ public class WorkCase extends AbstractWorkCase{
         this.requestAppraisalRequire = requestAppraisalRequire;
     }
 
+    public int getCaseUpdateFlag() {
+        return caseUpdateFlag;
+    }
+
+    public void setCaseUpdateFlag(int caseUpdateFlag) {
+        this.caseUpdateFlag = caseUpdateFlag;
+    }
+
+    public int getApprovedType() {
+        return approvedType;
+    }
+
+    public void setApprovedType(int approvedType) {
+        this.approvedType = approvedType;
+    }
+
+    public int getApprovedResult() {
+        return approvedResult;
+    }
+
+    public void setApprovedResult(int approvedResult) {
+        this.approvedResult = approvedResult;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("requestAppraisalRequire", requestAppraisalRequire)
                 .append("requestAppraisal", requestAppraisal)
                 .append("requestPricing", requestPricing)
                 .append("pricingDoaLevel", pricingDoaLevel)
                 .append("uwDOA1", uwDOA1)
                 .append("uwDOA2", uwDOA2)
-                .append("refAppNumber",refAppNumber)
+                .append("refAppNumber", refAppNumber)
+                .append("caseUpdateFlag", caseUpdateFlag)
                 .toString();
     }
 }

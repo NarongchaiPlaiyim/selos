@@ -221,11 +221,6 @@
 										update=":frmMain:full_main_container,:result_dialog"
 										disabled="#{mortgageConfirm.isDisabled('saveButton')}"
 	                                 	 />
-	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
-										styleClass="medium"
-										oncomplete="p_cancelDlg.show()"
-										disabled="#{mortgageConfirm.isDisabled('cancelButton')}"
-										/>
 	                             </td>
 	                        </tr>
                         </table>
@@ -251,14 +246,8 @@
 		<ui:param name="action" value="onSaveMortgageConfirm"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
-	<ui:include src="dialog/confirmCancelDlg.xhtml">
-		<ui:param name="id" value="cancelDlg"/>
-		<ui:param name="name" value="p_cancelDlg"/>
-		<ui:param name="formId" value="cancelFrm"/>
-		<ui:param name="controller" value="#{mortgageConfirm}"/>
-		<ui:param name="action" value="onCancelMortgageConfirm"/>
-		<ui:param name="update" value=":frmMain:full_main_container"/>
-	</ui:include>
+	
+	<ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>
