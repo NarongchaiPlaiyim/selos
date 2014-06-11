@@ -120,9 +120,9 @@
 
             </p:commandButton>
             <!--Check Criteria (BRMS)-->
-            <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')} [#{headerController.timesOfCriteriaCheck}]" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
+            <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
                              onclick="PF('blockUI').show()"
-                             rendered="#{headerController.checkButton('Check Criteria')}" disabled="#{not headerController.canCheckCriteria}"
+                             rendered="#{headerController.checkButton('Check Criteria')}"
                              actionListener="#{headerController.onCheckCriteria}"
                              oncomplete="blockUI.hide()"
                              update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:msgBoxMandateMessagePanel">
@@ -175,7 +175,7 @@
             <!--Return to AAD Admin ( UW2 )-->
             <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                              title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisalRequire == 1}"
+                             rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and (headerController.requestAppraisalRequire == 1 or headerController.requestAppraisal == 1)}"
                              actionListener="#{headerController.onOpenReturnAADMByUW2()}"
                              update=":frmMain:returnAADM_UW2Panel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
             </p:commandButton>
@@ -607,7 +607,7 @@
 </p:confirmDialog>
 <p:panel id="msgBoxBaseRefreshPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxBaseRefreshDialog" widgetVar="msgBoxBaseRefreshDlg" styleClass="messageDialog"
-                     header="#{headerController.messageHeader}">
+                     header="#{headerController.messageHeader}" closable="false">
         <f:facet name="message">
             <h:outputText value="#{headerController.message}" escape="false"/>
         </f:facet>
@@ -758,7 +758,7 @@
 </p:panel>
 
 <p:panel id="returnAADM_UW2Panel" styleClass="panel"
-         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and headerController.requestAppraisalRequire == 1}">
+         rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and (headerController.requestAppraisalRequire == 1 or headerController.requestAppraisal == 1)}">
     <p:dialog id="returnAADM_UW2Dialog" widgetVar="returnAADM_UW2Dlg" header="Return to AAD Admin"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="160" closable="false">
