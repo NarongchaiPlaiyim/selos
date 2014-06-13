@@ -14,6 +14,11 @@ public class CustomerAcceptanceView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    
+    //Zone manager
+    private String zoneMgrName;
+    private String zoneMgrTel;
+    private String zoneMgrEmail;
 
     public long getId() {
         return id;
@@ -62,5 +67,24 @@ public class CustomerAcceptanceView implements Serializable {
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
     }
+    
+    public String getZoneMgrEmail() {
+		return zoneMgrEmail;
+	}
+    public String getZoneMgrName() {
+		return zoneMgrName;
+	}
+    public String getZoneMgrTel() {
+		return zoneMgrTel;
+	}
+    public void setZoneMgrEmail(String zoneMgrEmail) {
+		this.zoneMgrEmail = zoneMgrEmail;
+	}
+    public void setZoneMgrName(String zoneMgrName) {
+		this.zoneMgrName = zoneMgrName;
+	}
+    public void setZoneMgrTel(String zoneMgrTel) {
+		this.zoneMgrTel = zoneMgrTel;
+	}
 
 }
