@@ -393,7 +393,7 @@ public class Decision extends BaseController {
             }
         }
 
-        TCGView tcgView = tcgInfoControl.getTcgView(workCaseId);
+        TCGView tcgView = tcgInfoControl.getTCGView(workCaseId);
         if (tcgView != null) {
             applyTCG = tcgView.getTCG();
         }

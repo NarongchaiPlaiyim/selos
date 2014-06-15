@@ -12,7 +12,6 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -48,74 +47,88 @@ public class FullApplicationControl extends BusinessControl {
     private Message msg;
 
     @Inject
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Inject
-    RoleDAO roleDAO;
+    private RoleDAO roleDAO;
     @Inject
-    AppraisalDAO appraisalDAO;
+    private AppraisalDAO appraisalDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    WorkCasePrescreenDAO workCasePrescreenDAO;
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
-    WorkCaseAppraisalDAO workCaseAppraisalDAO;
+    private WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
-    NewCreditDetailDAO newCreditDetailDAO;
+    private NewCollateralDAO newCollateralDAO;
     @Inject
-    ReasonDAO reasonDAO;
+    private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
-    ReasonTypeDAO reasonTypeDAO;
+    private NewCollateralSubDAO newCollateralSubDAO;
     @Inject
-    ReturnInfoDAO returnInfoDAO;
+    private NewCreditDetailDAO newCreditDetailDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private ReasonDAO reasonDAO;
     @Inject
-    ReturnInfoHistoryDAO returnInfoHistoryDAO;
+    private ReasonTypeDAO reasonTypeDAO;
     @Inject
-    ReturnInfoTransform returnInfoTransform;
+    private ReturnInfoDAO returnInfoDAO;
     @Inject
-    UserTransform userTransform;
+    private CustomerDAO customerDAO;
     @Inject
-    StepTransform stepTransform;
+    private ReturnInfoHistoryDAO returnInfoHistoryDAO;
     @Inject
-    StepDAO stepDAO;
+    private WorkCaseOwnerDAO workCaseOwnerDAO;
     @Inject
-    RelTeamUserDetailsDAO relTeamUserDetailsDAO;
+    private DecisionDAO decisionDAO;
     @Inject
-    ApprovalHistoryDAO approvalHistoryDAO;
+    private BasicInfoDAO basicInfoDAO;
     @Inject
-    AuthorizationDOADAO authorizationDOADAO;
+    private StepDAO stepDAO;
     @Inject
-    UserToAuthorizationDOADAO userToAuthorizationDOADAO;
+    private RelTeamUserDetailsDAO relTeamUserDetailsDAO;
     @Inject
-    CustomerCSIDAO customerCSIDAO;
+    private ApprovalHistoryDAO approvalHistoryDAO;
     @Inject
-    CustomerAccountDAO customerAccountDAO;
+    private AuthorizationDOADAO authorizationDOADAO;
     @Inject
-    CustomerAccountNameDAO customerAccountNameDAO;
+    private UserToAuthorizationDOADAO userToAuthorizationDOADAO;
     @Inject
-    CustomerTransform customerTransform;
+    private CustomerCSIDAO customerCSIDAO;
     @Inject
-    IndividualDAO individualDAO;
+    private CustomerAccountDAO customerAccountDAO;
     @Inject
-    JuristicDAO juristicDAO;
+    private CustomerAccountNameDAO customerAccountNameDAO;
     @Inject
-    RLOSInterface rlosInterface;
+    private CustomerTransform customerTransform;
     @Inject
-    WarningCodeDAO warningCodeDAO;
+    private IndividualDAO individualDAO;
     @Inject
-    UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    private JuristicDAO juristicDAO;
+    @Inject
+    private RLOSInterface rlosInterface;
+    @Inject
+    private WarningCodeDAO warningCodeDAO;
+    @Inject
+    private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    @Inject
+    private TCGDAO tcgDAO;
 
     @Inject
-    AppraisalRequestControl appraisalRequestControl;
+    private ReturnInfoTransform returnInfoTransform;
+    @Inject
+    private UserTransform userTransform;
+    @Inject
+    private StepTransform stepTransform;
 
     @Inject
-    BPMExecutor bpmExecutor;
+    private AppraisalRequestControl appraisalRequestControl;
+    @Inject
+    private ActionValidationControl actionValidationControl;
 
     @Inject
-    ActionValidationControl actionValidationControl;
+    private BPMExecutor bpmExecutor;
 
     public List<User> getABDMUserList(){
         User currentUser = getCurrentUser();
@@ -1229,5 +1242,187 @@ public class FullApplicationControl extends BusinessControl {
                 }
             }
         }
+    }
+
+    public void updateTimeOfCheckCriteria(long workCaseId){
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
+            if(!Util.isNull(workCaseOwner)) {
+                int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();
+                timesOfCriteriaChecked = timesOfCriteriaChecked + 1;
+                workCaseOwner.setTimesOfCriteriaChecked(timesOfCriteriaChecked);
+                log.debug("Update time of criteria checked [timeOfCriteriaCheck] : {}", timesOfCriteriaChecked);
+                workCaseOwnerDAO.persist(workCaseOwner);
+            }
+        }catch(Exception ex){
+            log.error("Exception while update time of check criteria.", ex);
+        }
+    }
+
+    public void clearCaseUpdateFlag(long workCaseId){
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setCaseUpdateFlag(0);
+            workCaseDAO.persist(workCase);
+        }catch (Exception ex){
+            log.debug("Exception while clear case update flag : ", ex);
+        }
+    }
+
+    public int getTimesOfCriteriaCheck(long workCaseId){
+        int timesOfCriteriaCheck = 0;
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            if(!Util.isNull(workCaseOwner)){
+                log.debug("getTimesOfCriteriaCheck ::: workCaseOwner : {}", workCaseOwner);
+                timesOfCriteriaCheck = workCaseOwner.getTimesOfCriteriaChecked();
+            }
+            log.debug("getTimesOfCriteriaCheck ::: timesOfCriteriaCheck : {}", timesOfCriteriaCheck);
+        }catch(Exception ex){
+            log.error("Exception while get time of check criteria : ", ex);
+        }
+
+        return timesOfCriteriaCheck;
+    }
+
+    public int getRequestAppraisalRequire(long workCaseId){
+        int requestAppraisalRequire = 0;
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                requestAppraisalRequire = workCase.getRequestAppraisalRequire();
+            }
+        }catch (Exception ex){
+            log.error("Exception while getRequestAppraisalRequire : ", ex);
+        }
+
+        return requestAppraisalRequire;
+    }
+
+    public boolean checkCaseUpdate(long workCaseId){
+        boolean caseUpdateFlag = false;
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(!Util.isNull(workCase)) {
+            caseUpdateFlag = Util.isTrue(workCase.getCaseUpdateFlag());
+        }
+
+        return caseUpdateFlag;
+    }
+
+    public void calculateApprovedResult(long workCaseId){
+        log.debug("calculateApprovedResult");
+        try {
+            Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            log.debug("calculateApprovedResult ::: decision : {}", decision);
+            log.debug("calculateApprovedResult ::: prpose : {}", newCreditFacility);
+
+            //Compare for total approved equal to propose or not
+            int sameRequest = 1;
+            if (!Util.isNull(decision)) {
+                BigDecimal totalApprovedCredit = decision.getTotalApproveCredit();
+                BigDecimal totalProposedCredit = newCreditFacility.getTotalPropose();
+                if (!Util.isNull(totalApprovedCredit) && !Util.isNull(totalProposedCredit)) {
+                    if (totalProposedCredit.compareTo(totalApprovedCredit) != 0) {
+                        sameRequest = 0;
+                    }
+                }
+            }
+            log.debug("calculateApprovedResult ::: sameRequest : {}", sameRequest);
+            int approvedType = calculateApprovedType(workCaseId);
+            Date limitSetupExpiryDate = calculateLimitSetupExpiryDate();
+            int tcgFlag = calculateTCGFlag(workCaseId);
+            int premiumQuote = calculatePremiumQuote(workCaseId);
+
+            //Update value in BasicInfo
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            basicInfo.setApproveResult(sameRequest == 1 ? ApproveResult.SAME_REQUEST : ApproveResult.DIFF_REQUEST);
+            basicInfo.setApproveType(approvedType == 1 ? ApproveType.NEW : ApproveType.NEW_CHANGE);
+            basicInfo.setLimitSetupExpiryDate(limitSetupExpiryDate);
+            basicInfo.setTcgFlag(tcgFlag);
+            basicInfo.setPremiumQuote(premiumQuote);
+
+            basicInfoDAO.persist(basicInfo);
+        } catch (Exception ex){
+            log.error("Exception while Calculate Approved Result : ", ex);
+        }
+    }
+
+    public int calculateApprovedType(long workCaseId){
+        int requestType = 1;        //for new = 1, new+change = 2;
+        try {
+            log.debug("calculateApprovedType");
+            List<NewCreditDetail> newCreditDetailApprovedList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+            log.debug("calculateApprovedType ::: newCreditDetailApprovedList size : {}", newCreditDetailApprovedList != null ? newCreditDetailApprovedList.size() : null);
+            for (NewCreditDetail newCreditDetail : newCreditDetailApprovedList) {
+                log.debug("calculateApprovedType ::: newCreditDetail : {}", newCreditDetail);
+                if (newCreditDetail.getUwDecision() == DecisionType.APPROVED && newCreditDetail.getRequestType() == RequestTypes.CHANGE.value()) {
+                    requestType = 2;
+                    break;
+                }
+            }
+        } catch (Exception ex){
+            log.debug("Exception while calculateApprovedType : ", ex);
+        }
+
+        return requestType;
+    }
+
+    public Date calculateLimitSetupExpiryDate(){
+        Date today = new Date();
+        Date limitSetupExpiryDate = DateTimeUtil.addDays(today, 90);
+
+        return limitSetupExpiryDate;
+    }
+
+    public int calculatePremiumQuote(long workCaseId){
+        int premiumQuote = 0;
+        int insuranceFlagCount = 0;
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        if(!Util.isNull(newCreditFacility)) {
+            List<NewCollateral> newCollateralList = newCreditFacility.getNewCollateralDetailList();
+            if(!Util.isNull(newCollateralList)){
+                for(NewCollateral newCollateral : newCollateralList){
+                    List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
+                    if(!Util.isNull(newCollateralHeadList)){
+                        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+                            List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
+                            if(!Util.isNull(newCollateralSubList)){
+                                for(NewCollateralSub newCollateralSub : newCollateralSubList){
+                                    if(!Util.isNull(newCollateralSub.getSubCollateralType()) && newCollateralSub.getSubCollateralType().getInsuranceFlag() == 1){
+                                        insuranceFlagCount = insuranceFlagCount + 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(insuranceFlagCount > 0)
+                                break;
+                        }
+                    }
+                    if(insuranceFlagCount > 0)
+                        break;
+                }
+            }
+        }
+
+        if(insuranceFlagCount > 0){
+            premiumQuote = 1;
+        }
+
+        return premiumQuote;
+    }
+
+    public int calculateTCGFlag(long workCaseId){
+        int tcgFlag = 0;
+
+        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+
+        if(!Util.isNull(tcg)){
+            if(tcg.getTcgFlag() == RadioValue.YES.value())
+                tcgFlag = 1;
+        }
+
+        return tcgFlag;
     }
 }

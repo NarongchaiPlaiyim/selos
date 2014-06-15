@@ -4,11 +4,11 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-
+<p:panel id="bizProductViewDlgPanel" styleClass="panel-dialog">
     <h:form id="bizProductViewDlgForm">
-        <table class="content_form">
+        <table class="content_form" align="center">
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title right" style="width: 200px;">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productType')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizProduct.productType')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -20,7 +20,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentSalesVolume')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizProduct.percentSalesVolumn')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -37,7 +37,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizProduct.percentEBIT')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -54,7 +54,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizProduct.productDetail')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -72,22 +72,22 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <p:commandButton
-                            id="btnSaveBizProductView"
+                    <p:commandButton id="btnSaveBizProductView" styleClass="small"
                             binding="#{saveBizProductBtn}"
                             value="#{msg.get('app.button.ok')}"
                             action="#{bizInfoDetail.onSaveBizProductDetailView()}"
-                            process=":bizProductViewDlgForm"
+                            process="@form"
                             update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
                             oncomplete="handleFullappBizProductRequest(xhr, status, args)"/>
-                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}"
-                                     update=":bizProductViewDlgForm" onclick="bizProductViewDlg.hide()"/>
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                     update=":bizProductViewDlgForm" onclick="PF('bizProductViewDlg').hide()"/>
                 </td>
             </tr>
         </table>
     </h:form>
-    <p:blockUI block=":bizProductViewDlgForm" trigger=":bizProductViewDlgForm:btnSaveBizProductView">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+</p:panel>
+<p:blockUI block=":bizProductViewDlgForm" trigger=":bizProductViewDlgForm:btnSaveBizProductView">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

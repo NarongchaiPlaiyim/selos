@@ -9,7 +9,6 @@
 <h:head>
     <title>SE-LOS : Prescreen Result</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
 </h:head>
 
@@ -536,7 +535,7 @@
         <h:inputHidden id="pagename" value="mnuprescreen"/>
         <h:inputHidden id="subpagename" value="submnuprescreen"/>
     </div>
-        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="btnSave">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="btnSave, btnRetrieveInterfaceInfo">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
@@ -544,7 +543,7 @@
 </p:panel>
 <p:panel id="msgBoxSystemMessageResultPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageResultDialog" widgetVar="msgBoxSystemMessageResultDlg" styleClass="messageDialog"
-                     header="#{prescreenResult.messageHeader}">
+                     header="#{prescreenResult.messageHeader}" closeable="false">
         <f:facet name="message">
             <h:outputText value="#{prescreenResult.message}" escape="false"/>
         </f:facet>
@@ -556,7 +555,7 @@
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
-                     header="#{prescreenMaker.messageHeader}">
+                     header="#{prescreenMaker.messageHeader}" closeable="false">
         <f:facet name="message">
             <h:outputText value="#{prescreenMaker.message}" escape="false"/>
         </f:facet>
@@ -568,7 +567,7 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
-                     header="#{prescreenMaker.messageHeader}">
+                     header="#{prescreenMaker.messageHeader}" closeable="false">
         <f:facet name="message">
             <h:outputText value="#{prescreenMaker.message}" escape="false"/>
         </f:facet>
@@ -579,11 +578,6 @@
                          oncomplete="msgBoxRedirectDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-<p:blockUI widgetVar="blockInbox" block=":frmMain" trigger="frmMain:btnRetrieveInterfaceInfo">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
-
 </h:body>
 </f:view>
 </html>

@@ -5,10 +5,11 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
+<p:panel id="stakeholderViewDlgPanel" styleClass="panel-dialog">
     <h:form id="stakeholderViewDlgForm">
-        <table class="content_form">
+        <table class="content_form" align="center">
             <tr>
-                <td class="title">
+                <td class="title right" style="width: 130px;">
                     <h:outputText value="#{bizInfoDetail.dlgStakeName}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.name')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -22,7 +23,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactName')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.contactName')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -33,7 +34,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.phoneNo')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.phoneNo')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -49,7 +50,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactYear')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.contactYear')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -64,7 +65,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{bizInfoDetail.dlgStakeSaleType}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.percentBuyVolumn')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -82,7 +83,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.percentCash')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.percentCash')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -102,7 +103,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.percentCredit')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.percentCredit')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -119,7 +120,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">
+                <td class="title right">
                     <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.creditTerm')}"/>
                     <h:outputText value="#{bizInfoDetail.mandate('bizSupplier.creditTerm')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -142,24 +143,25 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <p:commandButton id="btnSaveStakeholderView"
+                    <p:commandButton id="btnSaveStakeholderView" styleClass="small"
                                      value="#{msg.get('app.button.ok')}"
                                      binding="#{saveStakeholderBtn}"
-                                     process=":stakeholderViewDlgForm"
+                                     process="@form"
                                      action="#{bizInfoDetail.onSaveBizStakeHolderDetailView()}"
-                                     update=":frmMain:supplierTable,:frmMain:buyerTable,:msgBoxSystemMessagePanel,:stakeholderViewDlgForm"
+                                     update=":frmMain:supplierTable, :frmMain:buyerTable, :msgBoxSystemMessagePanel, :stakeholderViewDlgForm"
                                      oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"/>
 
-                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}"
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      update=":stakeholderViewDlgForm"
-                                     onclick="stakeholderViewDlg.hide()"/>
+                                     onclick="PF('stakeholderViewDlg').hide()"/>
 
                 </td>
             </tr>
         </table>
     </h:form>
-    <p:blockUI block=":stakeholderViewDlgForm" trigger=":stakeholderViewDlgForm:btnSaveStakeholderView">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+</p:panel>
+<p:blockUI block=":stakeholderViewDlgForm" trigger=":stakeholderViewDlgForm:btnSaveStakeholderView">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

@@ -32,25 +32,21 @@
                     <div id="content">
                         <div id="content_info">
                             <div id="content_trackchange">[ View Track Change ]</div>
-                            <div id="content_lastupdate">Last update by <h:outputText
-                                    value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, <h:outputText
-                                    value="#{prescreenMaker.prescreenView.modifyDate}"/></div>
+                            <div id="content_lastupdate">Last update by <h:outputText value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, <h:outputText value="#{prescreenMaker.prescreenView.modifyDate}"/></div>
                         </div>
                         <div id="content_form">
                             <!-- start content -->
                             <table class="content_table_form">
                             <tr>
-                                <td class="title" style="min-width: 200px; width: 200px;"><h:outputText
-                                        value="#{msg.get('app.label.productgroup')}"/> <h:outputText value="*" styleClass="require-field"/>:
+                                <td class="title" style="min-width: 200px; width: 200px;">
+                                    <h:outputText value="#{msg.get('app.label.productgroup')}"/> <h:outputText value="*" styleClass="require-field"/>:
                                 </td>
                                 <td>
                                     <h:inputHidden value="#{prescreenMaker.previousProductGroupId}"/>
-                                    <p:selectOneMenu id="selProdGroupId"
-                                                     styleClass="largest"
-                                                     size="1"
+                                    <p:selectOneMenu id="selProdGroupId" styleClass="largest" size="1"
                                                      value="#{prescreenMaker.prescreenView.productGroup.id}"
                                                      required="#{not empty param[btnAddFacility.clientId] || not empty param[btnSaveInitialButton.clientId]}">
-                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                        var="productGroupList"
                                                        itemLabel="#{productGroupList.name}"
@@ -59,12 +55,12 @@
                                     </p:selectOneMenu>
                                     <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg" header="Confirm"
                                                      message="#{msg.get('app.prescreen.message.changeproductgroup')}">`
-                                        <p:commandButton value="YES"
+                                        <p:commandButton value="#{msg.get('app.button.yes')}"
                                                          process="@this"
                                                          actionListener="#{prescreenMaker.onChangeProductGroup()}"
                                                          oncomplete="PF('msgBoxFacilityDlg').hide()"
                                                          update=":frmMain:resultTableFacility,:facilityDlgForm"/>
-                                        <p:commandButton value="NO"
+                                        <p:commandButton value="#{msg.get('app.button.no')}"
                                                          process="@this"
                                                          actionListener="#{prescreenMaker.onCancelChangeProductGroup()}"
                                                          oncomplete="PF('msgBoxFacilityDlg').hide()"
@@ -239,7 +235,7 @@
                 <h:inputHidden id="pagename" value="mnuprescreen"/>
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
-        <p:blockUI block=":frmMain" trigger="btnSave" widgetVar="blockPrescreen">
+        <p:blockUI block=":frmMain" trigger="btnSave, btnAddCustomerInfo, btnAddFacility" widgetVar="blockPrescreen">
             LOADING<br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
@@ -273,7 +269,7 @@
 </p:panel>
 <p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-          modal="true" width="400" height="150">
+          modal="true" width="400">
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"

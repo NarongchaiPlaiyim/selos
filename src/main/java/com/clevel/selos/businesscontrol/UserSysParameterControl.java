@@ -39,6 +39,14 @@ public class UserSysParameterControl extends BusinessControl{
         }
     }
 
+    public UserSysParameterView getSysParameterValue(String key){
+        initialUserSysParameter();
+        if(userSysParameterViewMap.containsKey(key)){
+            return userSysParameterViewMap.get(key);
+        }
+        return null;
+    }
+
     /*public List<String> getSysParameterValue(String key){
         initialUserSysParameter();
 
@@ -67,7 +75,7 @@ public class UserSysParameterControl extends BusinessControl{
                 }
             }
         } catch (Exception ex){
-            logger.debug("Cannot Load User Sys Parameter. Please Check the system");
+            logger.error("Cannot Load User Sys Parameter. Please Check the system", ex);
         }
         logger.debug("-- end loadUserSysParameter {}", userSysParameterViewMap);
         return true;

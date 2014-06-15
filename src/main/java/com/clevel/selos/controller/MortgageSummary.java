@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.MortgageSummaryControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.MortgageSignLocationType;
@@ -10,6 +11,7 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -21,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -39,12 +42,13 @@ public class MortgageSummary implements Serializable {
 	
 	@Inject
 	private MortgageSummaryControl mortgageSummaryControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	private List<SelectItem> branches;
 	private List<SelectItem> zones; 
@@ -116,7 +120,6 @@ public class MortgageSummary implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		
 		branches = mortgageSummaryControl.listBankBranches();
@@ -132,7 +135,7 @@ public class MortgageSummary implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.CollateralMortgageInfoSum, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;

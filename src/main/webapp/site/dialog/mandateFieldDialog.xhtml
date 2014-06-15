@@ -4,40 +4,49 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="MadateDetail" rendered="#{headerController.mandateFieldMessageViewList != null}" styleClass="panel">
-    <table class="content_table_form" style="width: 100%">
-    <tr>
-        <td colspan="100%">
-            <p:dataTable id="mandateField" var="msgItem" value="#{headerController.mandateFieldMessageViewList}"
-                         paginator="false" rowKey="#{msgItem.MandateFieldMessageView}"
-                         rowIndexVar="msgRowIndex">
+<p:panel id="MadateDetail" rendered="#{headerController.mandateFieldMessageViewList != null}" styleClass="panel" style="display: table">
+    <table class="content_table_form">
+        <tr>
+            <td>
+                <p:dataTable id="mandateField" var="msgItem" value="#{headerController.mandateFieldMessageViewList}"
+                             paginator="false" rowKey="#{msgItem.MandateFieldMessageView}"
+                             rowIndexVar="msgRowIndex">
 
-                <p:column headerText="No." styleClass="center" style="width:22px;">
-                    <h:outputText value="#{msgRowIndex+1}"/>
-                </p:column>
+                    <p:column headerText="No." styleClass="center" style="width:22px;">
+                        <h:outputText value="#{msgRowIndex+1}"/>
+                    </p:column>
 
-                <p:column headerText="#{msg.get('app.mandate.message.header.page')}"
-                          styleClass="center"
-                          style="width: 150px;text-align: left">
-                    <h:outputText
-                            value="#{msgItem.pageName}"/>
-                </p:column>
+                    <p:column headerText="#{msg.get('app.mandate.message.header.page')}"
+                              styleClass="center"
+                              style="width: 150px;text-align: left">
+                        <h:outputText
+                                value="#{msgItem.pageName}"/>
+                    </p:column>
 
-                <p:column
-                        headerText="#{msg.get('app.mandate.message.header.field')}"
-                        styleClass="center"
-                        style="width: 150px;">
-                    <h:outputText value="#{msgItem.fieldDesc}"/>
-                </p:column>
+                    <p:column
+                            headerText="#{msg.get('app.mandate.message.header.field')}"
+                            styleClass="center"
+                            style="width: 150px;">
+                        <h:outputText value="#{msgItem.fieldDesc}"/>
+                    </p:column>
 
-                <p:column
-                        headerText="#{msg.get('app.mandate.message.header.desc')}"
-                        styleClass="center" style="width: 300px;">
-                    <h:outputText value="#{msgItem.message}"/>
-                </p:column>
-            </p:dataTable>
-        </td>
-    </tr>
+                    <p:column
+                            headerText="#{msg.get('app.mandate.message.header.desc')}"
+                            styleClass="center" style="width: 300px;">
+                        <h:outputText value="#{msgItem.message}"/>
+                    </p:column>
+                </p:dataTable>
+            </td>
+        </tr>
+        <tr>
+            <td class="center">
+                <p:commandButton value="OK"
+                                 styleClass="medium"
+                                 process="@this"
+                                 oncomplete="msgBoxMandateMessageDlg.hide()"/>
+            </td>
+        </tr>
     </table>
+
 </p:panel>
 </ui:composition>

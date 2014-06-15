@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -515,6 +516,17 @@ public class PEDBExecute extends BusinessControl
                 }
                 if(rs.getString("CurrentUser") != null)
                 {
+
+                    User user = userDAO.findUserByID(rs.getString("CurrentUser"));
+                    int roleId = user.getRole().getId();
+                    if(roleId == RoleValue.BDM.id() || roleId == RoleValue.ABDM.id())
+                    {
+                        peInbox.setBdmFlag("Y");
+                    }
+                    else
+                    {
+                        peInbox.setBdmFlag("N");
+                    }
                     peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
                 }
                 peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
@@ -621,6 +633,18 @@ public class PEDBExecute extends BusinessControl
 
                     peRoster.setCurrentUser(peRoster.getAtUser());
                 }
+
+                if(rs.getObject("AppointmentDate1")!=null)
+                {
+                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().trim()));
+                }
+
+                if(rs.getString("PreviousUser") != null)
+                {
+                    peRoster.setFromUser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                }
+
+                peRoster.setDoaLevel(rs.getString("DOALevel"));
 
                 peRoster.setStatusCode(rs.getString("StatusCode"));
 
@@ -2092,7 +2116,23 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setQueuename(inboxName);
 
-                peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
+                if(rs.getObject("ReceivedDate1")!=null)
+                {
+                    peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
+                }
+
+                if(rs.getObject("AppointmentDate1")!=null)
+                {
+                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().trim()));
+                }
+
+                if(rs.getString("PreviousUser") != null)
+                {
+                    peRoster.setFromUser(userDAO.getUserNameById(rs.getString("PreviousUser")));
+                }
+
+                peRoster.setDoaLevel(rs.getString("DOALevel"));
+
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));

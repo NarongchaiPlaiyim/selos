@@ -47,6 +47,9 @@ public class WorkCase extends AbstractWorkCase{
     @Column(name = "ref_app_number", length = 50)
     private String refAppNumber;
 
+    @Column(name = "case_update_flag", columnDefinition = "int default 0")
+    private int caseUpdateFlag;
+
     public String getRefAppNumber() {
         return refAppNumber;
     }
@@ -135,18 +138,28 @@ public class WorkCase extends AbstractWorkCase{
         this.requestAppraisalRequire = requestAppraisalRequire;
     }
 
+    public int getCaseUpdateFlag() {
+        return caseUpdateFlag;
+    }
+
+    public void setCaseUpdateFlag(int caseUpdateFlag) {
+        this.caseUpdateFlag = caseUpdateFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("requestAppraisalRequire", requestAppraisalRequire)
                 .append("requestAppraisal", requestAppraisal)
                 .append("requestPricing", requestPricing)
                 .append("pricingDoaLevel", pricingDoaLevel)
                 .append("uwDOA1", uwDOA1)
                 .append("uwDOA2", uwDOA2)
-                .append("refAppNumber",refAppNumber)
+                .append("refAppNumber", refAppNumber)
+                .append("caseUpdateFlag", caseUpdateFlag)
                 .toString();
     }
 }
