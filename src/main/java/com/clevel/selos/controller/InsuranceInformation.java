@@ -1,7 +1,14 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.InsuranceInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.insurance.InsuranceInfoSummaryView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
 import com.clevel.selos.system.message.Message;
@@ -19,6 +26,8 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -33,7 +42,10 @@ public class InsuranceInformation implements Serializable {
     Message msg;
 
     //*** View ***//
+    private InsuranceInfoSummaryView infoSummaryView;
     private List<InsuranceInfoView> insuranceInfoViewList;
+    
+    private BasicInfoView basicInfoView;
     
     //New / New + Change
     private int approvedType;
@@ -51,6 +63,9 @@ public class InsuranceInformation implements Serializable {
     
     @Inject
     private InsuranceInfoControl insuranceInfoControl;
+    
+    @Inject
+	private BasicInfoControl basicInfoControl;
 
     @Inject
     public InsuranceInformation() {
@@ -106,6 +121,7 @@ public class InsuranceInformation implements Serializable {
          if(session.getAttribute("workCaseId") != null){
         	 
              workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+             basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
              log.info("init ::: workCaseId is " + workCaseId);
          }else{
              log.info("init ::: workCaseId is null.");
@@ -116,9 +132,9 @@ public class InsuranceInformation implements Serializable {
                  log.info("Exception :: {}",ex);
              }
          }
-         
+        this.infoSummaryView = this.insuranceInfoControl.getInsuranceInforSummaryView(workCaseId);
         this.insuranceInfoViewList = this.insuranceInfoControl.getInsuranceInfo(workCaseId);
-         
+        _loadFieldControl(); 
         addition();
     }
 
@@ -137,13 +153,22 @@ public class InsuranceInformation implements Serializable {
         this.insuranceInfoViewList = insuranceInfoViewList;
     }
 
-    public int getApprovedType() {
-        return approvedType;
-    }
-
-    public void setApprovedType(int approvedType) {
-        this.approvedType = approvedType;
-    }
+    public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
+    
+    public Date getLastUpdateDateTime() {
+		return infoSummaryView.getModifyDate();
+	}
+	public String getLastUpdateBy() {
+		if (infoSummaryView.getModifyBy() != null)
+			return infoSummaryView.getModifyBy().getDisplayName();
+		else
+			return null;
+	}
 
     public BigDecimal getTotal() {
         return total;
@@ -158,4 +183,35 @@ public class InsuranceInformation implements Serializable {
     	insuranceInfoControl.saveInsuranceInfo(insuranceInfoViewList, this.total, workCaseId);
     	this.onCreation();
     }
+    
+    
+    /*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.InsuranceInfo);
+		fieldMap.clear();
+		
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+		
+		
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}	
 }

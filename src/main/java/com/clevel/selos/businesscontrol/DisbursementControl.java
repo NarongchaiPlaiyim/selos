@@ -35,7 +35,10 @@ import com.clevel.selos.model.db.working.DisbursementMCCredit;
 import com.clevel.selos.model.db.working.DisbursementTR;
 import com.clevel.selos.model.db.working.DisbursementTRCredit;
 import com.clevel.selos.model.db.working.NewCreditDetail;
+import com.clevel.selos.model.db.working.OpenAccount;
+import com.clevel.selos.model.db.working.OpenAccountCredit;
 import com.clevel.selos.model.db.working.OpenAccountName;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.view.CreditTypeDetailView;
 import com.clevel.selos.model.view.DisbursementBahtnetDetailView;
 import com.clevel.selos.model.view.DisbursementCreditTypeView;
@@ -44,6 +47,7 @@ import com.clevel.selos.model.view.DisbursementInfoView;
 import com.clevel.selos.model.view.DisbursementMcDetailView;
 import com.clevel.selos.model.view.DisbursementSummaryView;
 import com.clevel.selos.model.view.DisbursementTypeView;
+import com.clevel.selos.model.view.OpenAccountNameView;
 import com.clevel.selos.transform.CreditTypeDetailTransform;
 import com.clevel.selos.transform.DisbursementTypeTransform;
 
@@ -365,7 +369,7 @@ public class DisbursementControl extends BusinessControl {
 				disbursementTR.setDisbursement(disbursement);
 
 			}
-			disbursementTR.setOpenAccount(openAccountDAO.findByAccountNumber(depositBaDetailView.getAccountNumber()));
+			//disbursementTR.setOpenAccount(openAccountDAO.findByAccountNumber(depositBaDetailView.getAccountNumber()));
 			disbursementTRDAO.persist(disbursementTR);
 			// Disbursement TR credit
 			for (DisbursementCreditTypeView disbursementCreditTypeView : depositBaDetailView.getDisbursementCreditTypeView()) {
@@ -449,6 +453,48 @@ public class DisbursementControl extends BusinessControl {
 			disbursementDepositBaDetailViewList.add(depositBaDetailView);
 		}
 		return disbursementDepositBaDetailViewList;
+	}
+
+	public List<DisbursementCreditTypeView> getDisbursementCreditViewByOpenAccountId(long openAccountId){
+		OpenAccount openAccount = openAccountDAO.findById(openAccountId); 
+		List<OpenAccountCredit> openAccountCreditList = openAccount.getOpenAccountCreditList();
+		List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
+		if (openAccountCreditList != null && !openAccountCreditList.isEmpty()) {
+    		for (OpenAccountCredit openAccountCredit : openAccountCreditList) {
+    			NewCreditDetail newCreditDetail = openAccountCredit.getNewCreditDetail();
+    			DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
+    			disbursementCreditView.setNewCreditDetailId(newCreditDetail.getId());
+    			disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());
+    			disbursementCreditView.setCreditFacility(newCreditDetail.getCreditType().getName());
+    			disbursementCreditView.setLimitAmount(newCreditDetail.getLimit());
+    			disbursementCreditViewList.add(disbursementCreditView);
+    		}
+    	}
+		return disbursementCreditViewList;
+	}
+	
+	public List<SelectItem> getOpenAccountsForTransfer(long workCaseId) {
+		List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
+		List<OpenAccount> models = openAccountDAO.findByWorkCaseId(workCaseId);
+		for (OpenAccount model : models) {
+			SelectItem item = new SelectItem();
+			for (OpenAccountPurpose openAccountPurpose : model.getOpenAccountPurposeList()){
+				if (openAccountPurpose.getAccountPurpose().getName().equals("โอนสินเชื่อเข้าบัญชี")){
+					item.setValue(model.getId());
+					item.setLabel(model.getAccountNumber());
+					StringBuilder accountName = new StringBuilder();
+					for ( OpenAccountName openAccountName : model.getOpenAccountNameList()){
+						accountName.append(openAccountName.getCustomer().getNameEn());
+						accountName.append(",");
+					}
+					accountName.setLength(accountName.length() - 1);
+					item.setDescription(accountName.toString());
+					break;
+				}
+			}
+			rtnDatas.add(item);
+		}
+		return rtnDatas;
 	}
 
 	public List<SelectItem> getBankBranches() {

@@ -23,6 +23,10 @@ public class PreDisbursementTransform extends Transform {
     public PreDisbursementView transformToPreDisbursementView(PreDisbursement preDisbursement){
     	PreDisbursementView preDisbursementView = new PreDisbursementView();
     	preDisbursementView.setRemark(preDisbursement.getRemark());
+    	preDisbursementView.setCreateBy(preDisbursement.getCreateBy());
+    	preDisbursementView.setModifyBy(preDisbursement.getModifyBy());
+    	preDisbursementView.setCreateDate(preDisbursement.getCreateDate());
+    	preDisbursementView.setModifyDate(preDisbursement.getModifyDate());
 		return preDisbursementView;
     }
 

@@ -15,9 +15,12 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.LimitSetupControl;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.LimitSetupView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -40,8 +43,11 @@ public class LimitSetup implements Serializable {
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private LimitSetupView limitSetupView;
+	private BasicInfoView basicInfoView;
 	private User user;
 	
+	@Inject
+	private BasicInfoControl basicInfoControl;
 	
 	
 	public LimitSetup() {
@@ -69,7 +75,10 @@ public class LimitSetup implements Serializable {
 			user = (User) session.getAttribute("user");
 		}
 		_loadInitData();
+		if (workCaseId > 0){
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		this.setLimitSetupView(limitSetupControl.getLimitSetupView(workCaseId));
+	}
 	}
 	
 	public void preRender() {
@@ -115,5 +124,12 @@ public class LimitSetup implements Serializable {
 	}
 	public void setLimitSetupView(LimitSetupView limitSetupView) {
 		this.limitSetupView = limitSetupView;
+	}
+	
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
 	}
 }

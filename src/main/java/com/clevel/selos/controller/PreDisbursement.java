@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.businesscontrol.InsuranceInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.PreDisbursementControl;
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
@@ -9,11 +10,13 @@ import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.PreDisbursementView;
 import com.clevel.selos.model.view.TCGDetailView;
 import com.clevel.selos.model.view.TCGView;
@@ -38,6 +41,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -78,7 +82,7 @@ public class PreDisbursement implements Serializable {
 			user = (User) session.getAttribute("user");
 			preDisbursementView = this.preDisbursementControl.getPreDisbursementView(workCaseId);
 		}
-
+		_loadFieldControl();
     }
   
 
@@ -97,11 +101,17 @@ public class PreDisbursement implements Serializable {
 	
 	public Date getLastUpdateDateTime() {
 		//TODO 
+		if (preDisbursementView.getModifyDate() != null){
+			return preDisbursementView.getModifyDate();
+		}
 		return new Date();
 	}
 	public String getLastUpdateBy() {
 		//TODO
-		return user.getDisplayName();
+		if (preDisbursementView.getModifyBy() != null){
+			return preDisbursementView.getModifyBy().getDisplayName();
+		}		
+		return "";
 	}
 
 	public PreDisbursementView getPreDisbursementView() {
@@ -111,6 +121,36 @@ public class PreDisbursement implements Serializable {
 	public void setPreDisbursementView(PreDisbursementView preDisbursementView) {
 		this.preDisbursementView = preDisbursementView;
 	}
+	
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PreDisbursement);
+		fieldMap.clear();
+		
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+		
+		
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}	
 
 }
 

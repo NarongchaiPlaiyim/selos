@@ -33,6 +33,8 @@ public enum Screen {
     addBAPAInfoDialog(8500),
     AccountInfo(8500),
     AddAccountInfoDialog(8600),
+    PreDisbursement(9200),
+    TCGInfo(9700),
     
     PostCustomerInfoSum(5300),
     PostCustomerInfoIndv(0),

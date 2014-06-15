@@ -115,8 +115,7 @@ public class ApproveDetailInformation implements Serializable {
 	}
 	
 	public void onSaveApproveDetail() {
-		
-		
+		this.approveDetailInformationControl.saveApproveDetailInformationView(approveDetailInformationView, workCaseId);
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}

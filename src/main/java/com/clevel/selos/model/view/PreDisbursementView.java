@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.clevel.selos.model.db.master.User;
+
 
 public class PreDisbursementView implements Serializable {
     private int approvedType = 0;
@@ -17,6 +19,11 @@ public class PreDisbursementView implements Serializable {
     private Date submission_date;
     private Date return_date;
        
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+    
    
     private HashMap<String, List<PreDisbursementDetailView>> preDisBursementDetailViewMap;
 
@@ -106,5 +113,37 @@ public class PreDisbursementView implements Serializable {
 			preDisbursementDetailView.setValue(0);
 		}
 		this.selectedTest2_2 = selectedTest2_2;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public User getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(User createBy) {
+		this.createBy = createBy;
+	}
+
+	public User getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
 	}
 }

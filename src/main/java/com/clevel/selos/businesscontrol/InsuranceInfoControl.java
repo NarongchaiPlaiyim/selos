@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.controller.InsuranceInformation;
 import com.clevel.selos.dao.master.StepLandingPageDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
@@ -16,6 +17,7 @@ import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.model.view.NewCollateralHeadView;
 import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
+import com.clevel.selos.model.view.insurance.InsuranceInfoSummaryView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.transform.CustomerTransform;
@@ -69,6 +71,16 @@ public class InsuranceInfoControl extends BusinessControl {
 
     }
     
+    public InsuranceInfoSummaryView getInsuranceInforSummaryView(long workCaseId){
+    	InsuranceInfo insuranceInfo = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
+    	InsuranceInfoSummaryView insuranceInfoSummaryView = new InsuranceInfoSummaryView();
+    	if (insuranceInfo != null ){
+    		insuranceInfoSummaryView = insuranceInfoTransform.transformsInsuranceInfoToView(insuranceInfo);
+    	}
+    	return insuranceInfoSummaryView;
+    }
+    
+    
     public List<InsuranceInfoView> getInsuranceInfo(long workCaseId){
     	List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateralByTypeA(workCaseId);
     	return insuranceInfoTransform.transformsNewCollateralToView(newCollateralList);
@@ -92,14 +104,14 @@ public class InsuranceInfoControl extends BusinessControl {
     			newCollateralHeadDAO.persist(newCollateralHead);
     		}
     	}
-    	List<InsuranceInfo> insuranceInfoList = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
-    	if (insuranceInfoList.size() > 0){
-    		insuranceInfoList.get(0).setTotalPremiumAmount(totalPremiumAmount);
-    		insuranceInfoList.get(0).setModifyBy(user);
-    		insuranceInfoList.get(0).setModifyDate(new Date());
-    		insuranceInfoDAO.persist(insuranceInfoList.get(0));
+    	InsuranceInfo insuranceInfo = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
+    	if (insuranceInfo != null){
+    		insuranceInfo.setTotalPremiumAmount(totalPremiumAmount);
+    		insuranceInfo.setModifyBy(user);
+    		insuranceInfo.setModifyDate(new Date());
+    		insuranceInfoDAO.persist(insuranceInfo);
     	}else{ // New
-    		InsuranceInfo insuranceInfo = new InsuranceInfo();
+    		insuranceInfo = new InsuranceInfo();
     		insuranceInfo.setCreateBy(user);
     		insuranceInfo.setCreateDate(new Date());
     		insuranceInfo.setTotalPremiumAmount(totalPremiumAmount);

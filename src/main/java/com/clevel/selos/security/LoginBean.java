@@ -113,7 +113,7 @@ public class LoginBean {
         loginExceptionMessage = "";
 
         // make authentication with AD first
-        if (Util.isTrue(ldapEnable))
+        /*if (Util.isTrue(ldapEnable))
         {
             log.info("LDAP authentication enabled.");
 
@@ -139,7 +139,7 @@ public class LoginBean {
                 }
                 return "failed";
             }
-        }
+        }*/
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
@@ -205,7 +205,7 @@ public class LoginBean {
 
         try
         {
-            HttpServletRequest httpServletRequest = FacesUtil.getRequest();
+            /*HttpServletRequest httpServletRequest = FacesUtil.getRequest();
 
             HttpServletResponse httpServletResponse = FacesUtil.getResponse();
 
@@ -233,7 +233,7 @@ public class LoginBean {
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "", new Date());
 
-            log.info("retrun type in logiinbean class is : {}",user.getRole().getRoleType().getRoleTypeName().name());
+            log.info("retrun type in logiinbean class is : {}",user.getRole().getRoleType().getRoleTypeName().name());*/
 
             return user.getRole().getRoleType().getRoleTypeName().name();
 

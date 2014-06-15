@@ -72,6 +72,8 @@ public class DisbursementInfo implements Serializable {
     
     private List<SelectItem> bankBranchList;
     
+    private List<SelectItem> accountList;
+    
     private HashMap<Integer, String> bankMap;
     private HashMap<Integer, String> crossTypeMap;
     private HashMap<Integer, String> bankBranchMap;
@@ -91,25 +93,39 @@ public class DisbursementInfo implements Serializable {
     
     @PostConstruct
     public void onCreate() {
-    	_loadDropdown();
-    	_loadData();
     	HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
+		if (workCaseId > 0){
+			_loadDropdown();
+	    	_loadData();
 		this.disbursementInfoView = disbursementControl.getDisbursementInfoView(workCaseId);
 		calculationSummaryTotalMc();
 		calculationSummaryTotalDeposit();
 		calculationSummaryTotalBahtnet();
 		calculationSummary();
 		calculationSummaryTotalBa();
+                }
     }
     
     private void _loadDropdown() {
     	bankList = disbursementControl.getBanks();
     	crossTypeList = disbursementControl.getCrossTypes();
     	bankBranchList = disbursementControl.getBankBranches();
+    	accountList =  disbursementControl.getOpenAccountsForTransfer(workCaseId);
+    	log.debug("accountList");
+    	//if (accountList.size() <= 0){
+    	/*	for (long i=0; i<=5; i++){
+    			SelectItem item = new SelectItem();
+    			item.setValue(i);
+				item.setLabel(i+"99-9-99999-9");
+				item.setDescription(i+"_accountName");
+				log.debug("accountList: " + i);
+				accountList.add(item);
+    		}*/
+    	//}
     }
     
     private void _loadData() {
@@ -163,6 +179,23 @@ public class DisbursementInfo implements Serializable {
         //disbursementMcDetailView.setPayeeSubname(newDisbursementMcDetailView.getPayeeSubname());
         //disbursementMcDetailView.setCrossType(newDisbursementMcDetailView.getCrossType());
         //disbursementMcDetailView.setCreditType(cloneCreditTypeList(newDisbursementMcDetailView.getCreditType()));
+    }
+
+    public void updateAccountName(){
+    	log.debug("updateAccountName()");
+    	
+    	log.debug("disbursementDepositDetailView.getOpenAccountId: " +  disbursementDepositDetailView.getOpenAccountId());
+    	if (disbursementDepositDetailView.getOpenAccountId() > 0){
+	    	for (SelectItem item : accountList){
+	    		log.debug("updateAccountName item: " + item.getValue());
+	    		if ( disbursementDepositDetailView.getOpenAccountId() == ((Long) item.getValue())){
+	    			log.debug("updateAccountName description: " + item.getDescription());
+	    			disbursementDepositDetailView.setAccountName(item.getDescription());
+	    			break;
+	    		}
+	    	}   
+	    	disbursementDepositDetailView.setDisbursementCreditTypeView(disbursementControl.getDisbursementCreditViewByOpenAccountId(disbursementDepositDetailView.getOpenAccountId()));
+    	}
     }
 
     public void onOpenAddDepositDialog() {
@@ -644,6 +677,14 @@ public class DisbursementInfo implements Serializable {
 
 	public void setBankBranchMap(HashMap<Integer, String> bankBranchMap) {
 		this.bankBranchMap = bankBranchMap;
+	}
+
+	public List<SelectItem> getAccountList() {
+		return accountList;
+	}
+
+	public void setAccountList(List<SelectItem> accountList) {
+		this.accountList = accountList;
 	}
 
 }

@@ -1,421 +1,466 @@
 <!DOCTYPE html>
 <html>
 <f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
 
-<h:head>
-    <title>#{msg.get('app.approveDetail.title')}</title>
-    <h:outputStylesheet name="css/style.css" />
-    <h:outputScript library="js" name="custom.js" />
-<style type="text/css">
+	<h:head>
+		<title>#{msg.get('app.approveDetail.title')}</title>
+		<h:outputStylesheet name="css/style.css" />
+		<h:outputScript library="js" name="custom.js" />
+		<style type="text/css">
 .row_even td {
-	background-color : #e6e6e6;
+	background-color: #e6e6e6;
 }
+
 .row_odd td {
+	
 }
 </style>
-</h:head>
+	</h:head>
 
-<h:body>
-    <f:event type="preRenderView" listener="#{approveDetailInformation.preRender()}" />
-    
-    <p:panel id="pnl_maincontainer" styleClass="panel">
-        <h:form id="frmMain">
-            <div id="main_container">
-            <!-- Start Header Logo -->
-            <ui:include src="include/header_logo.xhtml" />
-            <!-- End Header Logo -->
-            <!-- Start Header Detail -->
-            <ui:include src="include/header_detail.xhtml" />
-            <!-- End Header Detail -->
-            <!-- Start Menu -->
-            <ui:include src="include/menubar.xhtml" />
-           
-            <!-- End Menu -->
-			<h:panelGroup id="full_main_container" layout="block">
-            <div id="content_container">
-                <div id="content_name">#{msg.get('app.approveDetail.subtitle')}</div>
-                <div id="content">
-                    <div id="content_info">
-                        <div id="content_trackchange">
-                        	[
-                        	<h:outputLink value="#">
-                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
-                        	</h:outputLink>
-                        	]
-                        </div>
-                        <div id="content_lastupdate">
-                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
-                        	<h:outputText value="#{approveDetailInformation.lastUpdateBy}"/>, 
-                        	<h:outputText value="#{approveDetailInformation.lastUpdateDateTime}">
-                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
-                        	</h:outputText>
-                        </div>
-                    </div>
-                    <div id="content_form">
-                        <!-- start content -->
-                        <table class="content_table_form">
-	                        <tr>
-                               <td colspan="100%">
-                                    <table>
-                                        <tr>
-                                            <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}" styleClass="center"/>
-                                            </td>
-                                            <td style="width:200px;">
-                                                <p:selectOneRadio disabled="true" value="#{approveDetailInformation.approveType}">
-                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
-                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
-                                                		/>
-                                                </p:selectOneRadio>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td colspan="100%"><div class="separate"><!-- --></div></td>
-                        	</tr>
-                        	<tr>
-	                            <td class="title" colspan="100%">
-	                            	<h2><h:outputText value="#{msg.get('app.approveDetail.approvedCredit.title')}" /></h2>
-	                             </td>
-	                        </tr>
-	                        <tr>
-	                        	<td colspan="100%">
-	                        		<table class="table_content" style="width:100%;line-height: normal;">
-	                        			<thead>
-	                        				<tr>
-                        					  <th style="width: 30px;"/>
-                                              <th style="width: 100px;">#{msg.get('app.approveDetail.approvedCredit.table.decision')}</th>
-                                              <th style="width: 150px;">#{msg.get('app.approveDetail.approvedCredit.table.productProgram')}</th>
-                                              <th style="width: 150px;">#{msg.get('app.approveDetail.approvedCredit.table.creditType')}</th>
-                                              <th style="min-width: 150px;">#{msg.get('app.approveDetail.approvedCredit.table.code')}</th>
-                                              <th style="width: 100px;">#{msg.get('app.approveDetail.approvedCredit.table.limit')}</th>
-                                              <th style="width: 100px;"><h:outputText value="#{msg.get('app.approveDetail.approvedCredit.table.standardPrice')}" escape="false" /></th>
-                                              <th style="width: 100px;"><h:outputText value="#{msg.get('app.approveDetail.approvedCredit.table.suggestPrice')}" escape="false" /></th>
-                                              <th style="width: 100px;"><h:outputText value="#{msg.get('app.approveDetail.approvedCredit.table.finalPrice')}" escape="false" /></th>
-                                              <th style="width: 100px;">#{msg.get('app.approveDetail.approvedCredit.table.installment')}</th>
-                                              <th style="width: 80px;"><h:outputText value="#{msg.get('app.approveDetail.approvedCredit.table.tenor')}" escape="false" /></th>
-                                              <th style="width: 100px;"><h:outputText value="#{msg.get('app.approveDetail.approvedCredit.table.frontEndFee')}" escape="false" /></th>
-                                           </tr>                         
-	                        			</thead>
-	                        			<tbody>
-	                        				<ui:repeat varStatus="rowStatus" value="#{approveDetailInformation.approveDetailInformationView.newCreditDetailViewList}"	var="item">
-	                        					<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
-	                        						<td class="center" rowspan="2">
-	                        							#{rowStatus.index + 1}
-	                        						</td>
-			                        				<td class="center" rowspan="2">
-			                        					<!--  decision  -->
-			                        					<h:outputText value="#{item.uwDecision}" />
-			                        				</td>	
-			                        				<td>
-			                        					<!--  product program -->
-			                        					<h:outputText value="#{item.productProgramView.name}" />
-			                        				</td>
-			                        				<td>
-			                        					<!--  credit type -->
-			                        					<h:outputText value="#{item.creditTypeView.name}" />
-			                        				</td>
-			                        				<td>
-			                        					<!--  code -->
-			                        					<table border="">
-			                        						<tr>
-			                        							<td><h:outputText value="#{item.productCode}" /></td>
-			                        						</tr>
-			                        						<tr>
-			                        							<td><h:outputText value="#{item.projectCode}" /></td>
-			                        						</tr>
-			                        					</table>
-			                        				</td>
-			                        				<td class="right">
-			                        					<!--  limit  -->
-			                        					<h:outputText value="#{item.limit}">
-			                        						<f:convertNumber pattern="#,##0.00"/>
-			                        					</h:outputText>			                        				
-			                        				</td>
-			                        				<td>
-			                        					<!-- Standard price  -->
-			                        					<p:dataTable value="#{item.newCreditTierDetailViewList}"	var="creditItem">
-			                        						<p:row>
-			                        							<h:outputText value="#{creditItem.standardBasePrice.value}" />
-			                        						</p:row>
-			                        					</p:dataTable>
-			                        				</td>
-			                        				<td>
-			                        					<!-- Suggest price  -->
-			                        					<p:dataTable value="#{item.newCreditTierDetailViewList}"	var="creditItem">
-			                        						<p:row>
-			                        							<h:outputText value="#{creditItem.suggestBasePrice.value}" />
-			                        						</p:row>
-			                        					</p:dataTable>
-			                        				</td>
-			                        				<td>
-			                        					<!-- Final price  -->
-			                        					<p:dataTable value="#{item.newCreditTierDetailViewList}"	var="creditItem">
-			                        						<p:row>
-			                        							<h:outputText value="#{creditItem.finalBasePrice.value}" />
-			                        						</p:row>
-			                        					</p:dataTable>
-			                        				</td>
-			                        				<td class="right">
-			                        					<!--  installment  -->
-			                        					<h:outputText value="#{item.installment}">
-			                        						<f:convertNumber pattern="#,##0.00"/>
-			                        					</h:outputText>			                        				
-			                        				</td>
-			                        				<td class="right">
-			                        					<!--  tenor  -->
-			                        					<h:outputText value="#{item.tenor}">
-			                        						<f:convertNumber pattern="0"/>
-			                        					</h:outputText>			                        				
-			                        				</td>
-			                        				<td class="right">
-			                        					<!--  tenor  -->
-			                        					<h:outputText value="#{item.frontEndFee}">
-			                        						<f:convertNumber pattern="#,##0.00"/>
-			                        					</h:outputText>			                        				
-			                        				</td>
-	                        					</tr>
-	                        					<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
-	                        						<td colspan="10">
-	                        							<table border="">
-	                        								<tr>
-	                        									<td style="width:100px" class="title">
-	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.requestType')}
-	                        									</td>
-	                        									<td style="width:100px">
-	                        										<h:outputText value="#{item.requestType}" />
-	                        									</td>
-	                        									<td style="width:100px" class="title">
-	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.refinance')}
-	                        									</td>
-	                        									<td style="width:100px">
-	                        										<h:outputText value="#{item.refinance}" />
-	                        									</td>
-	                        								</tr>
-	                        								<tr>
-	                        									<td class="title">
-	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.purpose')}
-	                        									</td>
-	                        									<td colspan="3">
-	                        										<h:outputText value="#{item.loanPurposeView.description}" />
-	                        									</td>
-	                        								</tr>
-	                        								<tr>
-	                        									<td class="title">
-	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.purposeDetail')}
-	                        									</td>
-	                        									<td colspan="3">
-	                        										<h:outputText value="#{item.loanPurposeView.description}" />
-	                        									</td>
-	                        								</tr>
-	                        								<tr>
-	                        									<td class="title">
-	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.disbursement')}
-	                        									</td>
-	                        									<td>
-	                        									<h:outputText value="#{item.disbursementTypeView.disbursement}" />
-	                        									</td>
-	                        									<td class="title">
-	                        										#{msg.get('app.approveDetail.approvedCredit.table.detail.holdAmount')}
-	                        									</td>
-	                        									<td>
-	                        										<h:outputText value="#{item.holdLimitAmount}">
-	                        											<f:convertNumber pattern="#,##0.00"/>
-	                        										</h:outputText>
-	                        									</td>
-	                        								</tr>
-	                        							</table>
-	                        						</td>
-	                        					</tr>
-	                        				</ui:repeat>
-	                        			</tbody>
-	                        			<tfoot>
-	                        				<tr class="total_summary">
-	                        					<td colspan="5" class="title">
-	                        						#{msg.get('app.approveDetail.approvedCredit.table.total')}
-	                        					</td>
-	                        					<td colspan="7" class="title">
-	                        						<h:outputText value="0" >
-	                        							<f:convertNumber pattern="#,##0.00"/>
-	                        						</h:outputText>
-	                        					</td>
-	                        				</tr>
-	                        			</tfoot>
-	                        		</table>
-	                        	</td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:spacer width="5px"/></td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:separator/></td>
-	                        </tr>
-	                        <tr>
-	                            <td class="title" colspan="100%">
-	                            	<h2><h:outputText value="#{msg.get('app.approveDetail.conditionApproval.title')}" /></h2>
-	                             </td>
-	                        </tr>
-	                        <tr>
-	                        	<td colspan="100%">
-	                        		<p:dataTable rowIndexVar="rowIdx" styleClass="full_table">
-	                        			<p:column style="width:30px" styleClass="center">
+	<h:body>
+		<f:event type="preRenderView"
+			listener="#{approveDetailInformation.preRender()}" />
+
+		<p:panel id="pnl_maincontainer" styleClass="panel">
+			<h:form id="frmMain">
+				<div id="main_container">
+					<!-- Start Header Logo -->
+					<ui:include src="include/header_logo.xhtml" />
+					<!-- End Header Logo -->
+					<!-- Start Header Detail -->
+					<ui:include src="include/header_detail.xhtml" />
+					<!-- End Header Detail -->
+					<!-- Start Menu -->
+					<ui:include src="include/menubar.xhtml" />
+
+					<!-- End Menu -->
+					<h:panelGroup id="full_main_container" layout="block">
+						<div id="content_container">
+							<div id="content_name">#{msg.get('app.approveDetail.subtitle')}</div>
+							<div id="content">
+								<div id="content_info">
+									<div id="content_trackchange">
+										[
+										<h:outputLink value="#">
+											<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+										</h:outputLink>
+										]
+									</div>
+									<div id="content_lastupdate">
+										<h:outputText value="#{msg.get('app.lastUpdateBy')} " />
+										<h:outputText value="#{approveDetailInformation.lastUpdateBy}" />
+										,
+										<h:outputText
+											value="#{approveDetailInformation.lastUpdateDateTime}">
+											<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"
+												locale="th_TH" />
+										</h:outputText>
+									</div>
+								</div>
+								<div id="content_form">
+									<!-- start content -->
+									<table class="content_table_form">
+										<tr>
+											<td colspan="100%">
+												<table>
+													<tr>
+														<td class="title" style="width: 200px;"><p:outputLabel
+																value="#{msg.get('app.approveType')}"
+																styleClass="center" /></td>
+														<td style="width: 200px;"><p:selectOneRadio
+																disabled="true"
+																value="#{approveDetailInformation.approveType}">
+																<f:selectItems
+																	value="#{enumGeneralControl.approveTypes}"
+																	var="approveType"
+																	itemLabel="#{msg.get(approveType.msgKey)}"
+																	itemValue="#{approveType}" />
+															</p:selectOneRadio></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="100%"><div class="separate">
+													<!-- -->
+												</div></td>
+										</tr>
+										<tr>
+											<td class="title" colspan="100%">
+												<h2>
+													<h:outputText
+														value="#{msg.get('app.approveDetail.approvedCredit.title')}" />
+												</h2>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="100%">
+												<table class="table_content"
+													style="width: 100%; line-height: normal;">
+													<thead>
+														<tr>
+															<th style="width: 30px;" />
+															<th style="width: 100px;">#{msg.get('app.approveDetail.approvedCredit.table.decision')}</th>
+															<th style="width: 150px;">#{msg.get('app.approveDetail.approvedCredit.table.productProgram')}</th>
+															<th style="width: 150px;">#{msg.get('app.approveDetail.approvedCredit.table.creditType')}</th>
+															<th style="min-width: 150px;">#{msg.get('app.approveDetail.approvedCredit.table.code')}</th>
+															<th style="width: 100px;">#{msg.get('app.approveDetail.approvedCredit.table.limit')}</th>
+															<th style="width: 100px;"><h:outputText
+																	value="#{msg.get('app.approveDetail.approvedCredit.table.standardPrice')}"
+																	escape="false" /></th>
+															<th style="width: 100px;"><h:outputText
+																	value="#{msg.get('app.approveDetail.approvedCredit.table.suggestPrice')}"
+																	escape="false" /></th>
+															<th style="width: 100px;"><h:outputText
+																	value="#{msg.get('app.approveDetail.approvedCredit.table.finalPrice')}"
+																	escape="false" /></th>
+															<th style="width: 100px;">#{msg.get('app.approveDetail.approvedCredit.table.installment')}</th>
+															<th style="width: 80px;"><h:outputText
+																	value="#{msg.get('app.approveDetail.approvedCredit.table.tenor')}"
+																	escape="false" /></th>
+															<th style="width: 100px;"><h:outputText
+																	value="#{msg.get('app.approveDetail.approvedCredit.table.frontEndFee')}"
+																	escape="false" /></th>
+														</tr>
+													</thead>
+													<tbody>
+														<ui:repeat varStatus="rowStatus"
+															value="#{approveDetailInformation.approveDetailInformationView.newCreditDetailViewList}"
+															var="item">
+															<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
+																<td class="center" rowspan="2">#{rowStatus.index +
+																	1}</td>
+																<td class="center" rowspan="2">
+																	<!--  decision  --> <h:outputText
+																		value="#{item.uwDecision}" />
+																</td>
+																<td>
+																	<!--  product program --> <h:outputText
+																		value="#{item.productProgramView.name}" />
+																</td>
+																<td>
+																	<!--  credit type --> <h:outputText
+																		value="#{item.creditTypeView.name}" />
+																</td>
+																<td>
+																	<!--  code -->
+																	<table class="table_noborder" style="width: 100%;">
+																		<tr>
+																			<td><h:outputText value="#{msg.get('app.approveDetail.table.tr.td.label.product')}" /><h:outputText value="#{item.productCode}" /></td>
+																		</tr>
+																		<tr>
+																			<td><h:outputText value="#{msg.get('app.approveDetail.table.tr.td.label.project')}" /><h:outputText value="#{item.projectCode}" /></td>
+																		</tr>
+																	</table>
+															</td>
+															<td class="right">
+																<!--  limit  --> <h:outputText value="#{item.limit}">
+																	<f:convertNumber pattern="#,##0.00" />
+																</h:outputText>
+															</td>
+															<td>
+																<!-- Standard price  -->
+																<table class="table_noborder" >
+																	<ui:repeat varStatus="rowStatus"
+																	value="#{item.newCreditTierDetailViewList}"
+																	var="creditItem">
+																		<tr style="border-bottom: 1;">
+																			<h:outputText value="#{creditItem.standardBasePrice.value}" />
+																		</tr>
+																	</ui:repeat>
+																</table>
+															</td>
+															<td>
+																<!-- Suggest price  --> 
+																<table class="table_noborder" >
+																	<ui:repeat varStatus="rowStatus"
+																	value="#{item.newCreditTierDetailViewList}"
+																	var="creditItem">
+																		<tr style="border-bottom: 1;">
+																			<h:outputText value="#{creditItem.suggestBasePrice.value}" />
+																		</tr>
+																	</ui:repeat>
+																</table>
+															</td>
+															<td>
+																<!-- Final price  -->
+																<table class="table_noborder" >
+																	<ui:repeat varStatus="rowStatus"
+																	value="#{item.newCreditTierDetailViewList}"
+																	var="creditItem">
+																		<tr style="border-bottom: 1;">
+																			<h:outputText value="#{creditItem.finalBasePrice.value}" />
+																		</tr>
+																	</ui:repeat>
+																</table>
+															</td>
+															<td class="right">
+																<!--  installment  -->
+																<table class="table_noborder" >
+																	<ui:repeat varStatus="rowStatus"
+																	value="#{item.newCreditTierDetailViewList}"
+																	var="creditItem">
+																		<tr style="border-bottom: 1;">
+																			<h:outputText value="#{creditItem.installment}" />
+																		</tr>
+																	</ui:repeat>
+																</table>
+															</td>
+															<td class="right">
+																<!--  tenor  --> <h:outputText value="#{item.tenor}">
+																	<f:convertNumber pattern="0" />
+																</h:outputText>
+															</td>
+															<td class="right">
+																<!--  tenor  --> <h:outputText
+																	value="#{item.frontEndFee}">
+																	<f:convertNumber pattern="#,##0.00" />
+																</h:outputText>
+															</td>
+															</tr>
+															<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
+																<td colspan="10">
+																	<table class="table_noborder">
+																		<tr>
+																			<td style="width: 120px" class="title">
+																				#{msg.get('app.approveDetail.approvedCredit.table.detail.requestType')}
+																			</td>
+																			<td><h:outputText value="#{item.requestType}" />
+																			</td>
+																			<td style="width: 120px" class="title">
+																				#{msg.get('app.approveDetail.approvedCredit.table.detail.refinance')}
+																			</td>
+																			<td><h:outputText value="#{item.refinance}" />
+																			</td>
+																		</tr>
+																		<tr>
+																			<td class="title">
+																				#{msg.get('app.approveDetail.approvedCredit.table.detail.purpose')}
+																			</td>
+																			<td colspan="3"><h:outputText
+																					value="#{item.loanPurposeView.description}" /></td>
+																		</tr>
+																		<tr>
+																			<td class="title">
+																				#{msg.get('app.approveDetail.approvedCredit.table.detail.purposeDetail')}
+																			</td>
+																			<td colspan="3"><h:outputText
+																					value="#{item.remark}" /></td>
+																		</tr>
+																		<tr>
+																			<td class="title">
+																				#{msg.get('app.approveDetail.approvedCredit.table.detail.disbursement')}
+																			</td>
+																			<td><h:outputText
+																					value="#{item.disbursementTypeView.disbursement}" />
+																			</td>
+																			<td class="title">
+																				#{msg.get('app.approveDetail.approvedCredit.table.detail.holdAmount')}
+																			</td>
+																			<td><h:outputText
+																					value="#{item.holdLimitAmount}">
+																					<f:convertNumber pattern="#,##0.00" />
+																				</h:outputText></td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+														</ui:repeat>
+													</tbody>
+													<tfoot>
+														<tr class="total_summary">
+															<td colspan="5" class="title">
+																#{msg.get('app.approveDetail.approvedCredit.table.total')}
+															</td>
+															<td colspan="7" class="title"><h:outputText
+																	value="#{approveDetailInformation.approveDetailInformationView.totalApprovedCredit}">
+																	<f:convertNumber pattern="#,##0.00" />
+																</h:outputText></td>
+														</tr>
+													</tfoot>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:spacer width="5px" /></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:separator /></td>
+										</tr>
+										<tr>
+											<td class="title" colspan="100%">
+												<h2>
+													<h:outputText
+														value="#{msg.get('app.approveDetail.conditionApproval.title')}" />
+												</h2>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:dataTable
+													value="#{approveDetailInformation.approveDetailInformationView.newCreditFacilityView.newConditionDetailViewList}"
+													var="item" rowIndexVar="rowIdx" styleClass="full_table">
+													<p:column style="width:30px" styleClass="center">
 	                        				#{rowIdx+1}
 	                        			</p:column>
-	                        			<p:column style="width:500px"
-	                        				headerText="#{msg.get('app.approveDetail.conditionApproval.table.condition')}"
-	                        				>
-	                        				
-	                        			</p:column>
-	                        			<p:column headerText="#{msg.get('app.approveDetail.conditionApproval.table.detail')}"
-	                        				>
-	                        				
-	                        			</p:column>
-	                        			<p:column style="width:100px" styleClass="center"
-	                        				headerText="#{msg.get('app.approveDetail.conditionApproval.table.date')}"
-	                        				>
-	                        			</p:column>
-	                        		</p:dataTable>
-	                        	</td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:spacer width="5px"/></td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:separator/></td>
-	                        </tr>
-	                        <tr>
-	                            <td class="title" colspan="100%">
-	                            	<h2><h:outputText value="#{msg.get('app.approveDetail.accountDeposit.title')}" /></h2>
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                        	<td colspan="100%">
-	                        		<p:dataTable rowIndexVar="rowIdx">
-	                        			<p:column style="width:30px" styleClass="center">
+													<p:column style="width:500px"
+														headerText="#{msg.get('app.approveDetail.conditionApproval.table.condition')}">
+														<h:outputText value="#{item.loanType}" />
+													</p:column>
+													<p:column
+														headerText="#{msg.get('app.approveDetail.conditionApproval.table.detail')}">
+														<h:outputText value="#{item.conditionDesc}" />
+													</p:column>
+													<p:column style="width:100px" styleClass="center"
+														headerText="#{msg.get('app.approveDetail.conditionApproval.table.date')}">
+														<h:outputText value="#{item.modifyDate}" />
+													</p:column>
+												</p:dataTable></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:spacer width="5px" /></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:separator /></td>
+										</tr>
+										<tr>
+											<td class="title" colspan="100%">
+												<h2>
+													<h:outputText
+														value="#{msg.get('app.approveDetail.accountDeposit.title')}" />
+												</h2>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:dataTable
+													value="#{approveDetailInformation.approveDetailInformationView.openAccountFullViewList}"
+													var="item" rowIndexVar="rowIdx">
+													<p:column style="width:30px" styleClass="center">
 	                        				#{rowIdx+1}
 	                        			</p:column>
-	                        			<p:column style="width:200px"
-	                        				headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountName')}"
-	                        				>
-	                        				
-	                        			</p:column>
-	                        			<p:column style="width:200px"
-	                        				headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountNumber')}"
-	                        				>
-	                        				
-	                        			</p:column>
-	                        			<p:column style="min-width:300px"
-	                        				headerText="#{msg.get('app.approveDetail.accountDeposit.table.creditType')}"
-	                        				>
-	                        				
-	                        			</p:column>
-	                        			<p:column style="width:300px"
-	                        				headerText="#{msg.get('app.approveDetail.accountDeposit.table.purpose')}"
-	                        				>
-	                        			</p:column>
-	                        		</p:dataTable>
-	                        	</td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:spacer width="5px"/></td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:separator/></td>
-	                        </tr>
-	                        <tr>
-	                            <td class="title" colspan="100%">
-	                            	<h2><h:outputText value="#{msg.get('app.approveDetail.loanPaymentDetail.title')}" /></h2>
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                        	<td class="title" style="width:180px">
-	                        		<p:outputLabel for="loan_signdate" 
-	                        			value="#{msg.get('app.approveDetail.loanPaymentDetail.signingDate')}"/>	
-	                        	</td>
-	                        	<td>
-	                        		<p:inputText id='loan_signdate' 
-	                        			readonly="true" styleClass="readonly">
-	                        		 	<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-	                        		</p:inputText>
-	                        	</td>
-	                        </tr>
-	                         <tr>
-	                        	<td class="title" style="width:180px">
-	                        		<p:outputLabel for="loan_firstpaydate" 
-	                        			value="#{msg.get('app.approveDetail.loanPaymentDetail.firstPaymentDate')}"/>	
-	                        	</td>
-	                        	<td>
-	                        		<p:calendar id='loan_firstpaydate' 
-	                        			pattern="dd/MM/yyyy" showOn="button"
-                                   		autocomplete="false"
-                                    		/> 	
-	                        	</td>
-	                        </tr>
-	                         <tr>
-	                        	<td class="title" style="width:180px">
-	                        		<p:outputLabel for="loan_paydate" 
-	                        			value="#{msg.get('app.approveDetail.loanPaymentDetail.payDate')}"/>	
-	                        	</td>
-	                        	<td>
-	                        		<p:inputText id='loan_paydate' 
-	                        			>
-	                        		 	<f:convertNumber pattern="#0"/>
-	                        		</p:inputText>
-	                        	</td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:spacer width="5px"/></td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:separator/></td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="100%"><p:spacer width="5px"/></td>
-	                        </tr>
-	                        <tr>
-	                             <td colspan="100%" class="center">
-	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
-	                                 	styleClass="medium"
-										onstart="handleOnStartOpenCfmDlg();"
-										oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveApproveDetailDlg);"
-										update=":frmMain:full_main_container,:result_dialog"
-										/>
-	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
-										styleClass="medium"
-										/>
-	                             </td>
-	                        </tr>
-                        </table>
-                    </div>
-                </div>
-                <div id="bottom_line"><!-- --></div>
-            </div>
-           
-            <div class="clear"></div>
-            <!-- Start Footer -->
-            <ui:include src="include/footer.xhtml" />
-            <!-- End Footer -->
-            </h:panelGroup>
-            </div>
-        </h:form>
-    </p:panel>
-    
-	<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
-	<ui:include src="dialog/confirmEditDlg.xhtml">
-		<ui:param name="id" value="saveApproveDetailDlg"/>
-		<ui:param name="name" value="p_saveApproveDetailDlg"/>
-		<ui:param name="formId" value="saveApproveDetailFrm"/>
-		<ui:param name="controller" value="#{approveDetailInformation}"/>
-		<ui:param name="action" value="onSaveApproveDetail"/>
-		<ui:param name="update" value=":frmMain:full_main_container"/>
-	</ui:include>
-</h:body>
+													<p:column style="width:200px"
+														headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountName')}">
+														<h:outputText value="#{item.allAccountNames}" />
+													</p:column>
+													<p:column style="width:150px"
+														headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountNumber')}">
+														<h:outputText value="#{item.accountNo}" />
+													</p:column>
+													<p:column style="min-width:450px;"
+														headerText="#{msg.get('app.approveDetail.accountDeposit.table.creditType')}">
+														
+														<table class="table_noborder" style="border-style: none;" >
+															<ui:repeat varStatus="rowStatus"
+															value="#{item.credits}"
+															var="credit">
+																<tr >
+																	<td style="border-style: none !important;;"><h:outputText value="#{credit.accountName}" /></td>
+																	<td style="border-style: none !important;;"><h:outputText value="#{credit.productProgram}" /></td>
+																	<td style="border-style: none !important;;"><h:outputText value="#{credit.limit}" /></td>
+																</tr>
+															</ui:repeat>
+														</table>
+														
+								
+													</p:column>
+													<p:column style="min-width:500px"
+														headerText="#{msg.get('app.approveDetail.accountDeposit.table.purpose')}">
+														<h:outputText value="#{item.getAllPurposes(',')}" />
+													</p:column>
+												</p:dataTable></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:spacer width="5px" /></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:separator /></td>
+										</tr>
+										<tr>
+											<td class="title" colspan="100%">
+												<h2>
+													<h:outputText
+														value="#{msg.get('app.approveDetail.loanPaymentDetail.title')}" />
+												</h2>
+											</td>
+										</tr>
+										<tr>
+											<td class="title" style="width: 180px"><p:outputLabel
+													for="loan_signdate"
+													value="#{msg.get('app.approveDetail.loanPaymentDetail.signingDate')}" />
+											</td>
+											<td><p:inputText id='loan_signdate' readonly="true"
+													styleClass="readonly">
+													<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH" />
+												</p:inputText></td>
+										</tr>
+										<tr>
+											<td class="title" style="width: 180px"><p:outputLabel
+													for="loan_firstpaydate"
+													value="#{msg.get('app.approveDetail.loanPaymentDetail.firstPaymentDate')}" />
+											</td>
+											<td><p:calendar id='loan_firstpaydate'
+													value="#{approveDetailInformation.approveDetailInformationView.firstPaymentDate}"
+													pattern="dd/MM/yyyy" showOn="button" autocomplete="false" />
+											</td>
+										</tr>
+										<tr>
+											<td class="title" style="width: 180px"><p:outputLabel
+													for="loan_paydate"
+													value="#{msg.get('app.approveDetail.loanPaymentDetail.payDate')}" />
+											</td>
+											<td><p:inputText id='loan_paydate'
+													value="#{approveDetailInformation.approveDetailInformationView.payDate}">
+													<f:convertNumber pattern="#0" />
+												</p:inputText></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:spacer width="5px" /></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:separator /></td>
+										</tr>
+										<tr>
+											<td colspan="100%"><p:spacer width="5px" /></td>
+										</tr>
+										<tr>
+											<td colspan="100%" class="center"><p:commandButton
+													id="saveBtn" value="#{msg.get('app.button.save')}"
+													styleClass="medium" onstart="handleOnStartOpenCfmDlg();"
+													oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveApproveDetailDlg);"
+													update=":frmMain:full_main_container,:result_dialog" />
+												<p:commandButton id="cancelBtn"
+													value="#{msg.get('app.button.cancel')}" styleClass="medium" />
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div id="bottom_line">
+								<!-- -->
+							</div>
+						</div>
+
+						<div class="clear"></div>
+						<!-- Start Footer -->
+						<ui:include src="include/footer.xhtml" />
+						<!-- End Footer -->
+					</h:panelGroup>
+				</div>
+			</h:form>
+		</p:panel>
+
+		<ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
+		<ui:include src="dialog/confirmEditDlg.xhtml">
+			<ui:param name="id" value="saveApproveDetailDlg" />
+			<ui:param name="name" value="p_saveApproveDetailDlg" />
+			<ui:param name="formId" value="saveApproveDetailFrm" />
+			<ui:param name="controller" value="#{approveDetailInformation}" />
+			<ui:param name="action" value="onSaveApproveDetail" />
+			<ui:param name="update" value=":frmMain:full_main_container" />
+		</ui:include>
+	</h:body>
 </f:view>
 </html>
