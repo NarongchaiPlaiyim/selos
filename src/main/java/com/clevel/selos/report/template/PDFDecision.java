@@ -878,12 +878,11 @@ public class PDFDecision implements Serializable {
             log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
             for (NewCollateralView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
-
+                approvedCollateralDecisionReport.setPath(pathsub);
                 if (view.getUwDecision().equals("APPROVED")){
                     log.debug("fillApprovedCollaterral to APPROVED. {}",view.getUwDecision());
 
                     approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
-                    approvedCollateralDecisionReport.setPath(pathsub);
                     approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                     approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                     approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
