@@ -360,14 +360,15 @@ public class PDFExecutiveSummary implements Serializable {
         return riskInfoExSumReport;
     }
 
-    public DecisionExSumReport fillDecision(){
+    public List<DecisionExSumReport> fillDecision(){
 //        init();
-        DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
+        List<DecisionExSumReport> exSumReportList = new ArrayList<DecisionExSumReport>();
         List<ExSumDecisionView> exSumDecisionView = exSummaryView.getExSumDecisionListView();
-
+        int id = 0;
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
-                decisionExSumReport.setId(decisionView.getId());
+                DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
+                decisionExSumReport.setId(id++);
 
                 if (decisionView.getFlag().code() == "Y"){
                     decisionExSumReport.setFlag("YELLOW");
@@ -386,11 +387,12 @@ public class PDFExecutiveSummary implements Serializable {
                 decisionExSumReport.setRuleName(Util.checkNullString(decisionView.getRuleName()));
                 decisionExSumReport.setCusName(Util.checkNullString(decisionView.getCusName()));
                 decisionExSumReport.setDeviationReason(Util.checkNullString(decisionView.getDeviationReason()));
+                exSumReportList.add(decisionExSumReport);
             }
         } else {
-            log.debug("ExSumDecisionView in Method fillDecision is Null. {}",exSumDecisionView);
+            log.debug("ExSumDecisionView in Method fillDecision is Null. {}",exSumReportList);
         }
-        return decisionExSumReport;
+        return exSumReportList;
     }
 
     public BizSupportExSumReport fillBizSupport(){
