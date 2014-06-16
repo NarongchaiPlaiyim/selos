@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a2f0260-1118-46b2-ac1f-b3c5002dac16">
 	<property name="ireport.zoom" value="1.4641000000000062"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="335"/>
+	<property name="ireport.y" value="287"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1508,14 +1508,14 @@ Asset]]></text>
 				<staticText>
 					<reportElement uuid="be7ab39c-a381-4c1b-b91b-c0cf003b7699" x="0" y="18" width="101" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ชื่อสถานประกอบการ :]]></text>
 				</staticText>
 				<staticText>
 					<reportElement uuid="74f9715c-1e8d-40b1-937e-a5371e6d9667" x="0" y="31" width="101" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[สถานประกอบการเป็นที่เช่า :]]></text>
 				</staticText>
@@ -1527,7 +1527,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="55948f6c-d3ff-4232-bce5-a9ceaa42abf0" x="100" y="18" width="170" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getBizLocationName()]]></textFieldExpression>
 				</textField>
@@ -1539,154 +1539,154 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				<staticText>
 					<reportElement uuid="0d95c9e3-ee57-47c8-a0fc-fa789294fbcd" x="117" y="31" width="118" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[No  กรรมสิทธิ์สถานประกอบการ :]]></text>
 				</staticText>
 				<staticText>
 					<reportElement uuid="dd4db2be-6b8b-4763-b31b-007a096f9a11" x="117" y="43" width="118" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[Yes  Expiry Date :]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="19ec356d-32a0-4db9-bfc8-a797daa0ad65" x="234" y="31" width="170" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getOwnerName()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="a3846396-7161-491e-8aac-20de36deff98" x="234" y="43" width="170" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExpiryDate()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="0d8bed77-4bb6-4b93-bbd3-4098e6799589" x="0" y="57" width="101" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ที่อยู่สถานประกอบการ :]]></text>
 				</staticText>
 				<staticText>
 					<reportElement uuid="293a1c13-4ae2-4622-a370-cd7df518281d" x="100" y="57" width="20" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ที่อยู่]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="ff777b16-7605-4321-b1fb-1fa3e8ad93ff" x="119" y="57" width="45" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getAddressNo()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="db4fd3db-58bc-43be-a1cf-2491f13bbd8d" x="185" y="57" width="45" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getAddressMoo()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="c900bcbe-6b13-4f46-8b1a-54371e346fa9" x="166" y="57" width="20" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[หมู่ที่]]></text>
 				</staticText>
 				<staticText>
 					<reportElement uuid="7fddd1f8-9e18-47e7-a69f-dcb7667ab919" x="231" y="57" width="55" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[อาคาร/หมู่บ้าน]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="09cd45a6-3e44-4885-a36a-53dcc2fb0839" x="285" y="57" width="119" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getAddressBuilding()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="938681ce-9dbc-4c5c-94cd-13b64acb445f" x="100" y="70" width="60" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ตรอก/ซอย/ถนน]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="2c52e6d0-fe6a-4e40-bc6b-0e7a61f076c4" x="159" y="70" width="245" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getAddressStreet()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="cf2ddbd4-4a06-451c-92cf-08e119cbcf9c" x="100" y="83" width="100" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getProvinceName()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="5bbbed28-3ca3-4bf3-95b9-5de84c93b25b" x="202" y="83" width="100" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getDistrictName()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="c26fad52-106c-44f6-accd-6de6b2ea30d6" x="304" y="83" width="100" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getSubDisName()]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="caba3fb1-3f4d-4165-8d4f-d4bee309ee86" x="159" y="96" width="90" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getPostCode()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="56e3fd94-4fd4-47d2-985f-3293e7034c63" x="100" y="96" width="60" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[รหัสไปรษณีย์]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="c35b8223-8f30-4b07-9162-a089b98ca0c0" x="159" y="109" width="126" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCountryBizName()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="2a8b0c75-3cdb-40eb-b5cd-6c0599bb2130" x="100" y="109" width="60" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[ประเทศ :]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="8d8a03db-2b9b-47e7-a8f4-6bb7b2d5235d" x="159" y="122" width="245" height="13"/>
 					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getAddressEng()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="bcbef1b7-e1af-4752-823f-64f309f7d323" x="100" y="122" width="60" height="13"/>
 					<textElement>
-						<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<text><![CDATA[Address]]></text>
 				</staticText>
@@ -2076,9 +2076,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				<text><![CDATA[    Total Proposed Credit]]></text>
 			</staticText>
 		</band>
-		<band height="125">
+		<band height="109">
 			<frame>
-				<reportElement uuid="87f8a2b8-79cb-4990-bc6f-7273188ba0a6" mode="Opaque" x="0" y="0" width="555" height="125"/>
+				<reportElement uuid="87f8a2b8-79cb-4990-bc6f-7273188ba0a6" mode="Opaque" x="0" y="0" width="555" height="109"/>
 				<box>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -2112,63 +2112,49 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					<text><![CDATA[Prime]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="dff12825-7561-402d-b496-88ea685f3ce1" x="1" y="57" width="88" height="13"/>
-					<textElement>
-						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					</textElement>
-					<text><![CDATA[ประเภทการขอสินเชื่อ :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="be16d5d1-a0aa-430f-9aad-76a63b33bedd" x="1" y="70" width="136" height="13"/>
+					<reportElement uuid="be16d5d1-a0aa-430f-9aad-76a63b33bedd" x="1" y="54" width="136" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[ประเทศที่ต้องการนำเงินไปลงทุน :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="8c1d70a3-3185-4efe-803a-23edf94b138a" x="1" y="83" width="210" height="13"/>
+					<reportElement uuid="8c1d70a3-3185-4efe-803a-23edf94b138a" x="1" y="67" width="210" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ) :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="66c206de-0759-45ce-91a4-9a7be8432a69" x="298" y="83" width="49" height="13"/>
+					<reportElement uuid="66c206de-0759-45ce-91a4-9a7be8432a69" x="298" y="67" width="49" height="13"/>
 					<textElement>
 						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<text><![CDATA[วงเงินสูงสุด :]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="f35336c5-a39e-4df1-a2e1-136418fd4912" x="89" y="57" width="122" height="13"/>
-					<textElement verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCrdRequestTypeName()]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="99369df0-2cd9-4e85-90ce-87444640a9cf" x="137" y="70" width="122" height="13"/>
+					<reportElement uuid="99369df0-2cd9-4e85-90ce-87444640a9cf" x="137" y="54" width="122" height="13"/>
 					<textElement verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getCountryName()]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="ab905451-b540-478a-8038-3145ac4a9b26" mode="Opaque" x="206" y="83" width="75" height="13" backcolor="#CCCCFF"/>
+					<reportElement uuid="ab905451-b540-478a-8038-3145ac4a9b26" mode="Opaque" x="206" y="67" width="75" height="13" backcolor="#CCCCFF"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getExistingSMELimit()]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="0e8d258b-29e4-480d-a415-a9724d81d564" mode="Opaque" x="347" y="83" width="75" height="13" backcolor="#CCCCFF"/>
+					<reportElement uuid="0e8d258b-29e4-480d-a415-a9724d81d564" mode="Opaque" x="347" y="67" width="75" height="13" backcolor="#CCCCFF"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillTotalMasterReport}.getMaximumSMELimit()]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement uuid="e0c122a1-463c-4390-bf64-396633afe22a" x="0" y="98" width="555" height="27"/>
+					<reportElement uuid="e0c122a1-463c-4390-bf64-396633afe22a" x="0" y="82" width="555" height="27"/>
 					<subreportParameter name="fillSubProposedCredit">
 						<subreportParameterExpression><![CDATA[]]></subreportParameterExpression>
 					</subreportParameter>
