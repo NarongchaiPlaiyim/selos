@@ -7,6 +7,7 @@ import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -505,6 +506,7 @@ public class PEDBExecute extends BusinessControl
                 peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                 peInbox.setAtuserteam(rs.getString("TeamName"));
                 peInbox.setApplicationno(rs.getString("AppNumber"));
+                peInbox.setRefAppNumber(rs.getString("RefAppNumber"));
                 peInbox.setName(rs.getString("BorrowerName"));
                 peInbox.setProductgroup(rs.getString("ProductGroup"));
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
@@ -650,6 +652,7 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
+                peRoster.setRefAppNumber(rs.getString("RefAppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
                 peRoster.setProductGroup(rs.getString("ProductGroup"));
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
@@ -1249,6 +1252,7 @@ public class PEDBExecute extends BusinessControl
                     }
 
                     peInbox.setApplicationno(completedCasesWKItems.getApplicationNo());
+                    peInbox.setRefAppNumber(completedCasesWKItems.getRefAppNumber());
 
                     if(peInbox.getApplicationno()!=null)
                     {
@@ -1295,22 +1299,11 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setRequestTypeStr("");
                     }
 
+                    Integer stepId = new Integer(StepValue.COMPLETED_STEP.value());
 
-                    if(completedCasesWKItems.getStepid()!=null)
-                    {
-                        Integer a = completedCasesWKItems.getStepid();
+                    peInbox.setStep(stepDAO.stepNameById(StepValue.COMPLETED_STEP.value()));
 
-                        peInbox.setStepId(Long.parseLong(a.toString()));
-                    }
-
-                    else
-                    {
-                        peInbox.setStepId(null);
-                    }
-
-                    //if(completedCasesWKItems.gets)
-
-                    peInbox.setStep(stepDAO.stepNameById(0));
+                    peInbox.setStepId(Long.parseLong(stepId.toString()));
 
                     if(completedCasesWKItems.getStatusid()!=null)
                     {
@@ -1452,6 +1445,8 @@ public class PEDBExecute extends BusinessControl
 
                 peInbox.setApplicationno(rs.getString("AppNumber"));
 
+                peInbox.setRefAppNumber(rs.getString("RefAppNumber"));
+
                 if(peInbox.getApplicationno()!=null)
                 {
 
@@ -1483,6 +1478,9 @@ public class PEDBExecute extends BusinessControl
                     peInbox.setName(names);
 
                 }
+
+                peInbox.setStatuscode(rs.getString("StatusCode"));
+
                 //peInbox.setName(rs.getString("BorrowerName"));
                 peInbox.setProductgroup(rs.getString("ProductGroup"));
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
@@ -2022,6 +2020,7 @@ public class PEDBExecute extends BusinessControl
 
                         peInbox.setAtuserteam(rs.getString("TeamName"));
                         peInbox.setApplicationno(rs.getString("AppNumber"));
+                        peInbox.setRefAppNumber(rs.getString("RefAppNumber"));
                         peInbox.setName(rs.getString("BorrowerName"));
                         peInbox.setProductgroup(rs.getString("ProductGroup"));
                         peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
@@ -2135,6 +2134,7 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
+                peRoster.setRefAppNumber(rs.getString("RefAppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
                 peRoster.setProductGroup(rs.getString("ProductGroup"));
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));

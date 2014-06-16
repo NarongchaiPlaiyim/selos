@@ -38,6 +38,15 @@ public class PEInbox implements Serializable
     private String createBy;
     private String terminateDate;
     private String bdmFlag;
+    private String refAppNumber;
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
 
     public String getBdmFlag() {
         return bdmFlag;
@@ -105,8 +114,6 @@ public class PEInbox implements Serializable
         this.requestTypeStr = requestTypeStr;
     }
 
-
-
     public String getStatuscode() {
         return statuscode;
     }
@@ -114,8 +121,6 @@ public class PEInbox implements Serializable
     public void setStatuscode(String statuscode) {
         this.statuscode = statuscode;
     }
-
-
 
     public String getSlastatus() {
         return slastatus;
@@ -132,8 +137,6 @@ public class PEInbox implements Serializable
     public void setQueuename(String queuename) {
         this.queuename = queuename;
     }
-
-
 
     public long getWorkCasePreScreenId() {
 
@@ -152,8 +155,6 @@ public class PEInbox implements Serializable
         this.stepId = stepId;
     }
 
-
-
     public long getWorkCaseId() {
         return workCaseId;
     }
@@ -161,8 +162,6 @@ public class PEInbox implements Serializable
     public void setWorkCaseId(long workCaseId) {
         this.workCaseId = workCaseId;
     }
-
-
 
     public String getReceiveddate() {
         return receiveddate;
@@ -195,8 +194,6 @@ public class PEInbox implements Serializable
     public void setName(String name) {
         this.name = name;
     }
-
-
 
     public String getProductgroup() {
         return productgroup;
@@ -314,6 +311,11 @@ public class PEInbox implements Serializable
                 .append("stepId", stepId)
                 .append("queuename",queuename)
                 .append("fetchType",fetchType)
+                .append("refAppNumber",refAppNumber)
+                .append("createBy",createBy)
+                .append("createDate",createDate)
+                .append("terminateDate",terminateDate)
+                .append("bdmFlag",bdmFlag)
                 .toString();
     }
 

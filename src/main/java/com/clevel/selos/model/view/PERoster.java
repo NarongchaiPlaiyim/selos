@@ -45,6 +45,15 @@ public class PERoster implements Serializable {
     private String appointmentDate;
     private String doaLevel;
     private String fromUser;
+    private String refAppNumber;
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
 
     public String getFromUser() {
         return fromUser;
@@ -270,6 +279,10 @@ public class PERoster implements Serializable {
                 .append("fetchType",fetchType)
                 .append("atUser",atUser)
                 .append("statusCode",statusCode)
+                .append("appointmentDate",appointmentDate)
+                .append("doaLevel",doaLevel)
+                .append("fromUser",fromUser)
+                .append("refAppNumber",refAppNumber)
                 .toString();
     }
 
