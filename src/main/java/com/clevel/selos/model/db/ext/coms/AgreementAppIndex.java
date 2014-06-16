@@ -31,7 +31,7 @@ public class AgreementAppIndex implements Serializable{
     @Column(name = "modify_date")
     private Date modifyDate;
 
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "modify_by")
     private User modifyBy;
 

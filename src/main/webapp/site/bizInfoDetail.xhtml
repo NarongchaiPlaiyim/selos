@@ -394,7 +394,7 @@
                             <td class="title" colspan="4">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.supplierDetail')}"/>
                                 <p:spacer width="10px"/>
-                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                <p:commandButton id="btnAddBizSupplier" value="#{msg.get('app.button.add')}"
                                                  styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
@@ -593,7 +593,7 @@
                             <td class="title" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.buyerDetail')}"/>
                                 <p:spacer width="10px"/>
-                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                <p:commandButton id="btnAddBizBuyer" value="#{msg.get('app.button.add')}"
                                                  process="@this"
                                                  styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
@@ -1174,7 +1174,7 @@
             <!-- End Footer -->
         </div>
 
-        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnAddBizInfoDetailFull">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="btnAddBizInfoDetailFull, btnAddBizProduct, btnAddBizSupplier, btnAddBizBuyer">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
@@ -1182,7 +1182,7 @@
     </p:panel>
 
     <p:dialog id="stakeholderViewDialog" header="#{bizInfoDetail.dlgStakeHeader}" widgetVar="stakeholderViewDlg" resizable="false"
-              modal="true" width="280" height="300" closeOnEscape="false" closable="false">
+              modal="true" width="340" height="300" closeOnEscape="false" closable="false">
         <ui:include src="dialog/bizStakeholderDialog.xhtml"/>
     </p:dialog>
 

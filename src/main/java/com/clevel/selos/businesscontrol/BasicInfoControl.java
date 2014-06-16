@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.master.ProductGroupDAO;
 import com.clevel.selos.dao.master.RequestTypeDAO;
@@ -10,6 +11,7 @@ import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.SBFScore;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -63,6 +65,8 @@ public class BasicInfoControl extends BusinessControl {
     OpenAccountTransform openAccountTransform;
     @Inject
     CustomerInfoControl customerInfoControl;
+    @Inject
+    BPMExecutor bpmExecutor;
 
     @Inject
     public BasicInfoControl(){
@@ -237,7 +241,7 @@ public class BasicInfoControl extends BusinessControl {
         return basicInfo;
     }
 
-    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId) {
+    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId, String queueName, String wobNumber) {
         log.info("saveBasicInfo ::: workCaseId : {} , basicInfoView : {}", workCaseId,basicInfoView);
         User user = getCurrentUser();
 
@@ -268,11 +272,19 @@ public class BasicInfoControl extends BusinessControl {
         bapaInfo.setModifyDate(new Date());
         bapaInfoDAO.persist(bapaInfo);
 
-        workCase.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
+        ProductGroup productGroup = productGroupDAO.findById(basicInfoView.getProductGroup().getId());
+        workCase.setProductGroup(productGroup);
         workCase.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
         //----Set update flag for require in Check Criteria----
         workCase.setCaseUpdateFlag(1);
         workCaseDAO.persist(workCase);
+
+        //update product group to
+        try {
+            bpmExecutor.updateProductGroup(productGroup != null ? productGroup.getDescription() : "", queueName, wobNumber);
+        }catch (Exception ex){
+            log.error("Exception while update product group to BPM : ", ex);
+        }
 
         //for new Open Account
         //delete
@@ -322,5 +334,8 @@ public class BasicInfoControl extends BusinessControl {
                 }
             }
         }
+
+        //update product group to BPM
+        //bpmExecutor.updateProductGroup(basicInfo.get)
     }
 }

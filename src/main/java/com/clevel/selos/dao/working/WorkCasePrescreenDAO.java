@@ -37,6 +37,14 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
         return workCasePreScreenId;
     }
 
+    public List<WorkCasePrescreen> getListForDev(){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("bpmActive", 1));
+        List<WorkCasePrescreen> workCasePrescreenList = criteria.list();
+
+        return workCasePrescreenList;
+    }
+
     public WorkCasePrescreen findByWobNumber(String wobNumber) {
         log.info("findByWobNumber : {}", wobNumber);
         WorkCasePrescreen workCasePrescreen;

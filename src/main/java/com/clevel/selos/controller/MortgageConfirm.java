@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.MortgageConfirmControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.Screen;
@@ -12,6 +13,7 @@ import com.clevel.selos.model.view.MortgageInfoView;
 import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -22,6 +24,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -39,12 +42,13 @@ public class MortgageConfirm implements Serializable {
 	
 	@Inject
 	private MortgageConfirmControl mortgageConfirmControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	
 	//Property
@@ -89,7 +93,6 @@ public class MortgageConfirm implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		_loadFieldControl();
 		_loadInitData();
@@ -102,8 +105,7 @@ public class MortgageConfirm implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (!userAccessControl.canUserAccess(Screen.AgreementAndMortgageConfirm, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;

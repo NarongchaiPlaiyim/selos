@@ -386,11 +386,11 @@ public class BankStmtTransform extends Transform {
             }
             bankStatement.setBankStatementDetailList(bankStatementDetailList);
             //set new source of collateral proof from view to model
-            List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList = new ArrayList<BankStmtSrcOfCollateralProof>();
+            /*List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList = new ArrayList<BankStmtSrcOfCollateralProof>();
             for (BankStmtSrcOfCollateralProofView srcOfCollateralProofView : Util.safetyList(bankStmtView.getSrcOfCollateralProofViewList())) {
                 srcOfCollateralProofList.add(getSrcOfCollateralProof(srcOfCollateralProofView, bankStatement));
             }
-            bankStatement.setSrcOfCollateralProofList(srcOfCollateralProofList);
+            bankStatement.setSrcOfCollateralProofList(srcOfCollateralProofList);*/
             //set parent
             bankStatement.setBankStatementSummary(bankStatementSummary);
         }

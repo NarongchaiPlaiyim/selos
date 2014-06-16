@@ -278,19 +278,26 @@ public class BRMSControl extends BusinessControl {
 
             if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 logger.debug("found guarantor!");
-                numberOfGuarantor = numberOfGuarantor + 1;
+                if(customer.getReference() != null){
+                    logger.debug("customer reference : {}", customer.getReference().getBrmsCode());
+                    if(customer.getReference().getBrmsCode().equalsIgnoreCase("004") || customer.getReference().getBrmsCode().equalsIgnoreCase("005")) {
+                        logger.debug("found guarantor with reference 004/005");
+                        numberOfGuarantor = numberOfGuarantor + 1;
+                    }
+                }
             }
 
             customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
-        logger.debug("number of guarantor ({})",numberOfGuarantor);
+        logger.debug("number of guarantor ({}), mainBorrower ({})",numberOfGuarantor, mainBorrower);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
+            logger.debug("Juristic should have at least one guarantor. mainBorrower : {}, numberOfGuarantor : {}", mainBorrower, numberOfGuarantor);
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");
             mandateFieldMessageView.setFieldDesc("Guarantor Info.");
-            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor.");
+            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor with authorization.");
             mandateFieldMessageView.setPageName("Customer Info.");
             List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
             mandateFieldMessageViewList.add(mandateFieldMessageView);
@@ -417,7 +424,13 @@ public class BRMSControl extends BusinessControl {
         for(Customer customer : customerList){
             if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 logger.debug("found guarantor!");
-                numberOfGuarantor = numberOfGuarantor + 1;
+                if(customer.getReference() != null){
+                    logger.debug("customer reference : {}", customer.getReference().getBrmsCode());
+                    if(customer.getReference().getBrmsCode().equalsIgnoreCase("004") || customer.getReference().getBrmsCode().equalsIgnoreCase("005")) {
+                        logger.debug("found guarantor with reference 004/005");
+                        numberOfGuarantor = numberOfGuarantor + 1;
+                    }
+                }
             }
 
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
@@ -427,7 +440,8 @@ public class BRMSControl extends BusinessControl {
                 if(juristic.getFinancialYear() > latestFinancialStmtYear){
                     latestFinancialStmtYear = juristic.getFinancialYear();
                 }
-                shareHolderRatio = shareHolderRatio.add(juristic.getShareHolderRatio());
+                if(juristic.getShareHolderRatio() != null)
+                    shareHolderRatio = shareHolderRatio.add(juristic.getShareHolderRatio());
             }
 
             customerInfoList.add(brmsCustomerInfo);
@@ -443,7 +457,7 @@ public class BRMSControl extends BusinessControl {
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");
             mandateFieldMessageView.setFieldDesc("Guarantor Info.");
-            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor.");
+            mandateFieldMessageView.setMessage("Juristic should have at least one guarantor with authorization.");
             mandateFieldMessageView.setPageName("Customer Info.");
             List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
             mandateFieldMessageViewList.add(mandateFieldMessageView);
@@ -655,11 +669,11 @@ public class BRMSControl extends BusinessControl {
 
 
         if(basicInfo!=null){
-            applicationInfo.setAbleToGettingGuarantorJob(getRadioBoolean(basicInfo.getAbleToGettingGuarantorJob()));
-            applicationInfo.setNoClaimLGHistory(getRadioBoolean(basicInfo.getNoClaimLGHistory()));
-            applicationInfo.setNoRevokedLicense(getRadioBoolean(basicInfo.getNoRevokedLicense()));
-            applicationInfo.setNoLateWorkDelivery(getRadioBoolean(basicInfo.getNoLateWorkDelivery()));
-            applicationInfo.setAdequateOfCapital(getRadioBoolean(basicInfo.getAdequateOfCapitalResource()));
+            applicationInfo.setAbleToGettingGuarantorJob(Util.isTrue(basicInfo.getAbleToGettingGuarantorJob()));
+            applicationInfo.setNoClaimLGHistory(Util.isTrue(basicInfo.getNoClaimLGHistory()));
+            applicationInfo.setNoRevokedLicense(Util.isTrue(basicInfo.getNoRevokedLicense()));
+            applicationInfo.setNoLateWorkDelivery(Util.isTrue(basicInfo.getNoLateWorkDelivery()));
+            applicationInfo.setAdequateOfCapital(Util.isTrue(basicInfo.getAdequateOfCapitalResource()));
         }
 
 

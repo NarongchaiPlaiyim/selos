@@ -1080,7 +1080,7 @@
 
                                         <p:column styleClass="center">
                                             <p:inputTextarea value="#{itemDecision.deviationReason}" style="width: 100%; margin-top: 5px; margin-left: -3px;"
-                                                             required="#{itemDecision.flag == 'RED'}"
+                                                             required="#{itemDecision.flag == 'RED' and not empty param[btnSave.clientId]}"
                                                              readonly="#{executiveSummary.isDisabled('decision.deviationReason')}"/>
                                         </p:column>
 

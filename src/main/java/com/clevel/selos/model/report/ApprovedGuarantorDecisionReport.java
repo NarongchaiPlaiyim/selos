@@ -20,6 +20,7 @@ public class ApprovedGuarantorDecisionReport extends ReportModel{
 
     private BigDecimal totalLimitGuaranteeAmount;
     private String uwDecision;
+    private String guarantorType;
 
     public ApprovedGuarantorDecisionReport() {
         count = 0;
@@ -85,6 +86,14 @@ public class ApprovedGuarantorDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public String getGuarantorType() {
+        return guarantorType;
+    }
+
+    public void setGuarantorType(String guarantorType) {
+        this.guarantorType = guarantorType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -94,6 +103,7 @@ public class ApprovedGuarantorDecisionReport extends ReportModel{
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("uwDecision", uwDecision)
+                .append("guarantorType", guarantorType)
                 .toString();
     }
 }
