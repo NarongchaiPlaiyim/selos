@@ -218,6 +218,8 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
 
                     completedCasesWKItems.setTotaltimeatuser(workCasePrescreen.getTotalTimeAtUser());
 
+                    completedCasesWKItems.setRefAppNumber(workCasePrescreen.getRefAppNumber());
+
                     completedCasesWKItemsList.add(completedCasesWKItems);
 
                 }
