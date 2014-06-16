@@ -27,6 +27,9 @@ public class SubCollateralType implements Serializable {
     @Column(name = "default_type", length = 1, columnDefinition = "int default 0")
     private int defaultType;
 
+    @Column(name = "insurance_flag", length = 1, columnDefinition = "int default 0")
+    private int insuranceFlag;
+
     @Column(name = "active")
     private int active;
 
@@ -62,6 +65,14 @@ public class SubCollateralType implements Serializable {
         this.collateralType = collateralType;
     }
 
+    public int getInsuranceFlag() {
+        return insuranceFlag;
+    }
+
+    public void setInsuranceFlag(int insuranceFlag) {
+        this.insuranceFlag = insuranceFlag;
+    }
+
     public int getActive() {
         return active;
     }
@@ -86,6 +97,7 @@ public class SubCollateralType implements Serializable {
                 .append("description", description)
                 .append("collateralType", collateralType)
                 .append("defaultType", defaultType)
+                .append("insuranceFlag", insuranceFlag)
                 .append("active", active)
                 .toString();
     }

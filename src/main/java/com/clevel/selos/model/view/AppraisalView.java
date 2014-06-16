@@ -1,7 +1,6 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -45,6 +44,8 @@ public class AppraisalView implements Serializable {
     private User aadCommittee;
     private User aadAdmin;
 
+    private List<Long> removeCollListId;
+
     public AppraisalView(){
         init();
     }
@@ -62,6 +63,7 @@ public class AppraisalView implements Serializable {
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         appraisalContactDetailView = new AppraisalContactDetailView();
+        removeCollListId = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -300,6 +302,14 @@ public class AppraisalView implements Serializable {
 
     public void setAadAdmin(User aadAdmin) {
         this.aadAdmin = aadAdmin;
+    }
+
+    public List<Long> getRemoveCollListId() {
+        return removeCollListId;
+    }
+
+    public void setRemoveCollListId(List<Long> removeCollListId) {
+        this.removeCollListId = removeCollListId;
     }
 
     @Override

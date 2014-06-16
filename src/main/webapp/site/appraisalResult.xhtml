@@ -398,13 +398,13 @@
                     <tr>
                         <td class="center" colspan="6">
                             <p:commandButton id="btnSave"
-                                     value="#{msg.get('app.saveButton')}"
+                                     value="#{msg.get('app.button.save')}"
                                      styleClass="medium"
                                      process=":frmMain"
                                      action="#{appraisalResult.onSaveAppraisalResult()}"
                                      update=":msgBoxSystemMessagePanel"/>
 
-                            <p:commandButton value="#{msg.get('app.cancelButton')}"
+                            <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      id="btnCancel"
                                      styleClass="medium"
                                      process=":frmMain"
@@ -425,7 +425,7 @@
 </p:panel>
 
 <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-          modal="true" width="700" height="500" >
+          modal="true" width="700" height="500" closable="false">
     <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
 </p:dialog>
 

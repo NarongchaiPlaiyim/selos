@@ -1,15 +1,23 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import com.clevel.selos.businesscontrol.BAPAInfoControl;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.BAPAType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.BAResultHC;
+import com.clevel.selos.model.db.master.InsuranceCompany;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.SelectableDataModel;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,28 +28,11 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.SelectableDataModel;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.BAPAInfoControl;
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.BAPAType;
-import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.BAResultHC;
-import com.clevel.selos.model.db.master.InsuranceCompany;
-import com.clevel.selos.model.view.BAPAInfoCreditToSelectView;
-import com.clevel.selos.model.view.BAPAInfoCreditView;
-import com.clevel.selos.model.view.BAPAInfoCustomerView;
-import com.clevel.selos.model.view.BAPAInfoView;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name="baInfo")
@@ -56,13 +47,14 @@ public class BAInfo implements Serializable {
 
     @Inject
     private BAPAInfoControl bapaInfoControl;
-
+    @Inject
+    private UserAccessControl userAccessControl;
+    
     //Private variable
     private boolean preRenderCheck = false;
     private long workCaseId = -1;
     private long stepId = -1;
-	private long stageId = -1;
-    private BasicInfoView basicInfoView;
+	private BasicInfoView basicInfoView;
     private List<BAPAInfoCreditView> deleteCreditList;
     private List<BAPAInfoCreditToSelectView> toSelectCredits;
     private BAPAInfoCreditView toUpdCreditView;
@@ -217,7 +209,6 @@ public class BAInfo implements Serializable {
         if (session != null) {
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
             stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-            stageId = Util.parseLong(session.getAttribute("stageId"), -1);
         }
         insuranceCompanies = bapaInfoControl.getInsuranceCompanies();
         baResultHCs = bapaInfoControl.getBAResultHCs();
@@ -235,7 +226,7 @@ public class BAInfo implements Serializable {
 
         String redirectPage = null;
         if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.BAInfo, stepId)) {
                 redirectPage = "/site/inbox.jsf";
             } else {
                 return;

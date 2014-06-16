@@ -7,7 +7,6 @@ import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.AppraisalContactDetailTransform;
 import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.AppraisalTransform;
 import com.clevel.selos.transform.NewCollateralTransform;
@@ -126,14 +125,18 @@ public class AppraisalRequestControl extends BusinessControl {
             workCase = workCaseDAO.findById(workCaseId);
             workCasePrescreen = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            /*if(workCase != null){
+                workCase.setRequestAppraisal(1);
+                workCaseDAO.persist(workCase);
+            }*/
         }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             workCase = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         }
 
-        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}");
         log.debug("onSaveAppraisalRequest ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
+        log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
 
         if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
             log.debug("onSaveAppraisalRequest ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);

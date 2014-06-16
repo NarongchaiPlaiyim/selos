@@ -1,20 +1,15 @@
 package com.clevel.selos.report;
 
-import com.clevel.selos.util.Util;
-import net.sf.jasperreports.engine.*;
 import com.clevel.selos.integration.SELOS;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.joda.time.DateTime;
-import org.primefaces.model.StreamedContent;
+import net.sf.jasperreports.engine.*;
 import org.slf4j.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.Date;
-import java.util.Enumeration;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 
 public class ReportService implements Serializable {

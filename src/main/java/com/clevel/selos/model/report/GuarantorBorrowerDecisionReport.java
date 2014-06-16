@@ -1,14 +1,13 @@
 package com.clevel.selos.model.report;
 
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.ExistingCreditTypeDetailView;
 import com.clevel.selos.report.ReportModel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class GuarantorBorrowerDecisionReport extends ReportModel{
 

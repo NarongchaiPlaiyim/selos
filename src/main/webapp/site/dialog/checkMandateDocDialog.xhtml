@@ -44,7 +44,7 @@
                 </td>
             </tr>
             <ui:repeat value="#{headerController.checkMandateDocView.mandatoryDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
-                <tr>
+                <tr >
                     <td >
                         <p:outputLabel value="#{mandatoryItem.documentType}"/>
                     </td>
@@ -75,7 +75,7 @@
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
-                    <td class="center">
+                    <td class="center" style="#{mandatoryItem.complete == 2 ? 'background-color: #F04C05': ''}">
                         <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or mandatoryItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
@@ -105,7 +105,7 @@
                 </td>
             </tr>
             <ui:repeat value="#{headerController.checkMandateDocView.optionalDocumentsList}" var="optionalItem" varStatus="optionalItemIndex">
-                <tr>
+                <tr >
                     <td >
                         <p:outputLabel value="#{optionalItem.documentType}"/>
                     </td>
@@ -135,14 +135,14 @@
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
-                    <td class="center">
+                    <td class="center" style="#{optionalItem.complete == 2 ? 'background-color: #F04C05': ''}">
                         <p:selectOneRadio layout="grid" value="#{optionalItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or optionalItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
                         </p:selectOneRadio>
                     </td>
-                    <td class="left">
+                    <td >
                         <p:selectBooleanCheckbox value="#{optionalItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')} "  /> <br />
 
@@ -167,7 +167,7 @@
                 </td>
             </tr>
             <ui:repeat value="#{headerController.checkMandateDocView.otherDocumentsList}" var="otherItem" varStatus="otherItemIndex">
-                <tr>
+                <tr >
                     <td >
                         <p:outputLabel value="#{otherItem.documentType}"/>
                     </td>
@@ -197,14 +197,14 @@
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
-                    <td class="center">
+                    <td class="center" style="#{otherItem.complete == 2 ? 'background-color: #F04C05': ''}">
                         <p:selectOneRadio layout="grid" value="#{otherItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or otherItem.completeFlag}">
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
                         </p:selectOneRadio>
                     </td>
-                    <td class="left">
+                    <td class="left" >
                         <p:selectBooleanCheckbox value="#{otherItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/> <br />
                         <p:selectBooleanCheckbox value="#{otherItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
@@ -214,7 +214,7 @@
                         <p:selectBooleanCheckbox value="#{otherItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
                         <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
                     </td>
-                    <td class="center">
+                    <td class="center" >
                         <p:inputTextarea value="#{otherItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or otherItem.remarkFlag}"/>
                     </td>
                 </tr>
@@ -223,13 +223,13 @@
             <tr>
                 <td class="center" colspan="7">
                     <p:commandButton id="btnSaveMandateDoc"
-                                     value="#{msg.get('app.saveButton')}"
+                                     value="#{msg.get('app.button.save')}"
                                      styleClass="medium"
                                      process="@form"
                                      action="#{headerController.onSaveCheckMandateDoc()}"
                                      update=":frmMain:msgBoxBaseMessagePanel"/>
 
-                    <p:commandButton value="#{msg.get('app.cancelButton')}"
+                    <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      id="btnCancelMandateDoc"
                                      styleClass="medium"
                                      process="@form"

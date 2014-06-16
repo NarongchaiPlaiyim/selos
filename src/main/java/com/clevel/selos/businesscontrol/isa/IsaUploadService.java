@@ -2,7 +2,6 @@ package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
 import org.slf4j.Logger;
 

@@ -3,7 +3,6 @@ package com.clevel.selos.model.db.master;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.security.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -177,8 +176,6 @@ public class CompletedCasesWKItems implements Serializable
     public void setFromuserid(String fromuserid) {
         this.fromuserid = fromuserid;
     }
-
-
 
     public Date getAppointmentDate() {
         return appointmentDate;

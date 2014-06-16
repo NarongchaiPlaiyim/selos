@@ -1,10 +1,21 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.PostCustomerInfoJurisControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -15,25 +26,11 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.businesscontrol.PostCustomerInfoJurisControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.CustomerInfoPostAddressView;
-import com.clevel.selos.model.view.CustomerInfoPostJurisView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "postCustomerInfoJuris")
@@ -49,12 +46,12 @@ public class PostCustomerInfoJuris  implements Serializable {
 	private PostCustomerInfoJurisControl postCustomerInfoJurisControl;
 	@Inject
 	private GeneralPeopleInfoControl generalPeopleInfoControl;
-	
+	@Inject
+	private UserAccessControl userAccessControl;
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
 	private BasicInfoView basicInfoView;
 	
 	private long customerId = -1;
@@ -135,7 +132,6 @@ public class PostCustomerInfoJuris  implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		
 		customerId = Util.parseLong(FacesUtil.getFlash().get("customerId"),-1L);
@@ -143,7 +139,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 		fromCustomerId = Util.parseLong(FacesUtil.getFlash().get("customer_fromid"),-1L);
 		fromJuristic = "true".equals(FacesUtil.getFlash().get("customer_fromjuris"));
 		
-		canUpdateInfo = true; //TODO
+		canUpdateInfo = true;
 		_loadFieldControl();
 		_loadDropdown();
 		_loadInitData();
@@ -155,7 +151,7 @@ public class PostCustomerInfoJuris  implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			if (stepId <= 0 || !(stageId >= 300 && stageId < 400)) {
+			if (!userAccessControl.canUserAccess(Screen.PostCustomerInfoJuris, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				if (customerId <= 0) {

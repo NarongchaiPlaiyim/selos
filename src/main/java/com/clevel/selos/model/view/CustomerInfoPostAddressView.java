@@ -1,11 +1,10 @@
 package com.clevel.selos.model.view;
 
+import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.faces.model.SelectItem;
 
 public class CustomerInfoPostAddressView implements Serializable {
 	private static final long serialVersionUID = 6453045708735225439L;

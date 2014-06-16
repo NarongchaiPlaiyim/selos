@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
+
 import javax.inject.Inject;
 import java.io.Serializable;
 

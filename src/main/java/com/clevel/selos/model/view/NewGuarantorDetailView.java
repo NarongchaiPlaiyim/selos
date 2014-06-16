@@ -22,7 +22,6 @@ public class NewGuarantorDetailView implements Serializable {
     private DecisionType uwDecision;
     private GuarantorCategory guarantorCategory;
 
-
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
     private Date createDate;
@@ -41,7 +40,6 @@ public class NewGuarantorDetailView implements Serializable {
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         this.proposeType = ProposeType.P;
         this.uwDecision = DecisionType.NO_DECISION;
-
     }
 
     public long getId() {

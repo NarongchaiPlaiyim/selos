@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TCGDetailTransform extends Transform {
 
-    public List<TCGDetail> transformTCGDetailViewToModel(List<TCGDetailView> tcgDetailViewList, TCG tcg) {
+    public List<TCGDetail> transformToModel(List<TCGDetailView> tcgDetailViewList, TCG tcg) {
         List<TCGDetail> tcgDetailList = new ArrayList<TCGDetail>();
         for (TCGDetailView tcgDetailView : tcgDetailViewList) {
             TCGDetail tcgDetail = new TCGDetail();
@@ -25,7 +25,7 @@ public class TCGDetailTransform extends Transform {
         return tcgDetailList;
     }
 
-    public List<TCGDetailView> transformTCGDetailModelToView(List<TCGDetail> tcgDetailList) {
+    public List<TCGDetailView> transformToView(List<TCGDetail> tcgDetailList) {
         List<TCGDetailView> tcgDetailViewList = new ArrayList<TCGDetailView>();
         for (TCGDetail tcgDetail : tcgDetailList) {
             TCGDetailView tcgDetailView = new TCGDetailView();

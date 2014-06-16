@@ -1,9 +1,8 @@
 package com.clevel.selos.transform;
-import com.clevel.selos.dao.working.NewCollateralHeadDAO;
+
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCollateralHead;
 import com.clevel.selos.model.view.NewCollateralHeadView;
 import com.clevel.selos.util.Util;
@@ -165,8 +164,10 @@ public class NewCollateralHeadTransform extends Transform {
             newCollateralHeadView.setCollateralLocation(originalNewCollateralHeadView.getCollateralLocation());
             newCollateralHeadView.setAppraisalValue(originalNewCollateralHeadView.getAppraisalValue());
             newCollateralHeadView.setHeadCollType(originalNewCollateralHeadView.getHeadCollType());
+            newCollateralHeadView.setSubCollType(originalNewCollateralHeadView.getSubCollType());
             newCollateralHeadView.setCollTypePercentLTV(originalNewCollateralHeadView.getCollTypePercentLTV());
             newCollateralHeadView.setPotentialCollateral(originalNewCollateralHeadView.getPotentialCollateral());
+            newCollateralHeadView.setTcgCollateralType(originalNewCollateralHeadView.getTcgCollateralType());
             newCollateralHeadView.setCollID(originalNewCollateralHeadView.getCollID());
             newCollateralHeadView.setExistingCredit(originalNewCollateralHeadView.getExistingCredit());
             newCollateralHeadView.setInsuranceCompany(originalNewCollateralHeadView.getInsuranceCompany());

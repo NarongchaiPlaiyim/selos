@@ -16,12 +16,12 @@ public class UserTeam implements Serializable
     @Id
     @Column(name = "id")
     private int id;
+
     @Column(name = "name", length = 100)
     private String name;
+
     @Column(name = "description", length = 100)
     private String description;
-    @Column(name = "active")
-    private int active;
 
     @Column(name = "team_name")
     private String team_name;
@@ -32,21 +32,13 @@ public class UserTeam implements Serializable
     @Column(name = "team_type", columnDefinition = "int default 0")
     private int team_type;
 
-    /*@Column(name = "role")
-    private String role;*/
-
     @Column(name = "role_id")
-    private String roleId;
+    private Integer roleId;
+
+    @Column(name = "active")
+    private int active;
 
     public UserTeam() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -105,11 +97,19 @@ public class UserTeam implements Serializable
         this.role = role;
     }*/
 
-    public String getRoleId() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 

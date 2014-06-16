@@ -1,43 +1,30 @@
 package com.clevel.selos.businesscontrol;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.dao.master.BAResultHCDAO;
 import com.clevel.selos.dao.master.InsuranceCompanyDAO;
-import com.clevel.selos.dao.working.BAPAInfoCreditDAO;
-import com.clevel.selos.dao.working.BAPAInfoCustomerDAO;
-import com.clevel.selos.dao.working.BAPAInfoDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.NewCreditDetailDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BAPAType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Address;
-import com.clevel.selos.model.db.working.BAPAInfo;
-import com.clevel.selos.model.db.working.BAPAInfoCredit;
-import com.clevel.selos.model.db.working.BAPAInfoCustomer;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.BAPAInfoCreditToSelectView;
 import com.clevel.selos.model.view.BAPAInfoCreditView;
 import com.clevel.selos.model.view.BAPAInfoCustomerView;
 import com.clevel.selos.model.view.BAPAInfoView;
 import com.clevel.selos.transform.BAPAInfoTransform;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Stateless
 public class BAPAInfoControl extends BusinessControl {

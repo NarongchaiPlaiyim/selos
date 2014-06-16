@@ -6,10 +6,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.model.DocMandateType;
 import com.clevel.selos.model.db.master.Role;
-import com.clevel.selos.model.db.working.MandateDoc;
-import com.clevel.selos.model.db.working.MandateDocBRMS;
-import com.clevel.selos.model.db.working.MandateDocCust;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
@@ -129,16 +126,16 @@ public class CheckMandateDocTransform extends Transform {
         log.debug("-- OtherDocumentsList.size()[{}]", view.getOtherDocumentsList().size());
         return view;
     }
-    public List<MandateDoc> transformToModel(final CheckMandateDocView checkMandateDocView, final long workCaseId, final Role role){
+    public List<MandateDoc> transformToModel(final CheckMandateDocView checkMandateDocView, final WorkCase workCase, final WorkCasePrescreen workCasePrescreen, final Role role){
         List<MandateDoc> mandateDocList = new ArrayList<MandateDoc>();
         MandateDoc model = null;
-        workCase = workCaseDAO.findById(workCaseId);
 
         mandatoryDocumentsList = Util.safetyList(checkMandateDocView.getMandatoryDocumentsList());
         for(CheckMandatoryDocView view : mandatoryDocumentsList){
             model = new MandateDoc();
             log.debug("-- [NEW]CheckMandatoryDocView Created");
             model.setWorkCase(workCase);
+            model.setWorkCasePrescreen(workCasePrescreen);
             model.setRole(role);
             model.setEcmDocType(view.getKey());
             model.setEcmDocTypeDesc(view.getDocumentType());

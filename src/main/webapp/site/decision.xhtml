@@ -2569,7 +2569,9 @@
                                 <!-- Propose - Fee Information -->
                                 <p:dataTable id="dtProFeeInfo"
                                              var="feeInfoDetail" value="#{decision.decisionView.proposeFeeInfoList}"
-                                             paginator="false" rowKey="#{feeInfoDetail}" rowIndexVar="rowIndex"
+                                             paginator="false" 
+                                             rowKey="#{feeInfoDetail}" 
+                                             rowIndexVar="rowIndex"
                                              style="width: 100%">
 
                                     <p:columnGroup type="header">
@@ -2585,15 +2587,50 @@
 
                                     <p:column styleClass="center top">#{feeInfoDetail.productProgram}</p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.standardFrontEndFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.standardFrontEndFee ? not empty feeInfoDetail.standardFrontEndFee.percentFee ?
+                                                                         feeInfoDetail.standardFrontEndFee.percentFee : '0.00' : '0.00'} % ,
+                                                             #{not empty feeInfoDetail.standardFrontEndFee ? not empty feeInfoDetail.standardFrontEndFee.feeYear ?
+                                                                         feeInfoDetail.standardFrontEndFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.standardFrontEndFee ? not empty feeInfoDetail.standardFrontEndFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.commitmentFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.commitmentFee ? not empty feeInfoDetail.commitmentFee.percentFee ?
+                                                                         feeInfoDetail.commitmentFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.commitmentFee ? not empty feeInfoDetail.commitmentFee.feeYear ?
+                                                                         feeInfoDetail.commitmentFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.commitmentFee ? not empty feeInfoDetail.commitmentFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.extensionFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.extensionFee ? not empty feeInfoDetail.extensionFee.percentFee ?
+                                                                         feeInfoDetail.extensionFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.extensionFee ? not empty feeInfoDetail.extensionFee.feeYear ?
+                                                                         feeInfoDetail.extensionFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.extensionFee ? not empty feeInfoDetail.extensionFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.prepaymentFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.prepaymentFee ? not empty feeInfoDetail.prepaymentFee.percentFee ?
+                                                                         feeInfoDetail.prepaymentFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.prepaymentFee ? not empty feeInfoDetail.prepaymentFee.feeYear ?
+                                                                         feeInfoDetail.prepaymentFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.prepaymentFee ? not empty feeInfoDetail.prepaymentFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
-                                    <p:column styleClass="center top">#{feeInfoDetail.cancellationFee}</p:column>
+                                    <p:column styleClass="center top">
+                                        <h:outputText value="#{not empty feeInfoDetail.cancellationFee ? not empty feeInfoDetail.cancellationFee.percentFee ?
+                                                                         feeInfoDetail.cancellationFee.percentFee : '0.00' : '0.00'} %,
+                                                             #{not empty feeInfoDetail.cancellationFee ? not empty feeInfoDetail.cancellationFee.feeYear ?
+                                                                         feeInfoDetail.cancellationFee.feeYear : '-' : '-'}
+                                                             #{not empty feeInfoDetail.cancellationFee ? not empty feeInfoDetail.cancellationFee.feeYear ?
+                                                                         ' Years' : '' : ''}"/>
+                                    </p:column>
 
                                 </p:dataTable>
                             </td>
@@ -2723,8 +2760,8 @@
                                         <tr>
                                             <td class="title">#{msg.get('app.decision.label.collTypePercentLTV')}</td>
                                             <td class="left" colspan="3">
-                                                <h:outputText value="#{collHead.collTypePercentLTV.description}"
-                                                              rendered="#{not empty collHead.collTypePercentLTV}"/>
+                                                <h:outputText value="#{collHead.tcgCollateralType.description}"
+                                                              rendered="#{not empty collHead.tcgCollateralType}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -3042,8 +3079,8 @@
                                         <tr>
                                             <td class="title">#{msg.get('app.decision.label.collTypePercentLTV')}</td>
                                             <td class="left" colspan="3">
-                                                <h:outputText value="#{collHeader.collTypePercentLTV.description}"
-                                                              rendered="#{not empty collHeader.collTypePercentLTV}"/>
+                                                <h:outputText value="#{collHeader.tcgCollateralType.description}"
+                                                              rendered="#{not empty collHeader.tcgCollateralType}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -3363,6 +3400,8 @@
                                                           rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.titleTh}"/>
                                             <h:outputText value="#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                           rendered="#{not empty guarantor.guarantorName}"/>
+                                            <h:outputText value="#{msg.get('app.select.item1')}"
+                                                          rendered="#{empty guarantor.guarantorName}"/>
                                         </p:column>
 
                                         <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
@@ -3612,7 +3651,7 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.intFeeDOA}"
-                                                         readonly="true"
+                                                         disabled="#{decision.isDisabled('intFeeDOA')}"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
@@ -3626,7 +3665,7 @@
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
-                                                         readonly="true"
+                                                         disabled="#{decision.isDisabled('frontendFeeDOA')}"
                                                          styleClass="right">
                                                 <f:convertNumber pattern="##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
@@ -3739,8 +3778,7 @@
                         </tr>
                         <h:panelGroup rendered="#{decision.decisionDialog}">
                             <!--APPROVE FOR ENDORSE CA-->
-                            <h:panelGroup rendered="#{decision.roleId != 104 and decision.roleId != 105 and decision.roleId != 106}">
-
+                            <h:panelGroup rendered="#{decision.endorseDecisionDialog}">
                                 <tr>
                                     <td class="center" colspan="2">
                                         <div class="ui-datatable ui-widget">
@@ -3778,7 +3816,7 @@
                                                         <tr>
                                                             <td class="center">
                                                                 <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
-                                                                                  required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
+                                                                                  required="#{decision.roleUW and decision.endorseDecisionDialog and not empty param[saveDecisionBtn.clientId]}"
                                                                                   styleClass="ovr-border">
                                                                     <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
@@ -3829,7 +3867,7 @@
                             <tr>
                                 <td colspan="2" style="height:28px;"></td>
                             </tr>
-                            <h:panelGroup rendered="#{decision.requestPricing and not decision.roleUW}">
+                            <h:panelGroup rendered="#{decision.requestPricing and decision.pricingDecisionDialog}">
                                 <tr>
                                     <td class="center" colspan="2">
                                         <div class="ui-datatable ui-widget">
@@ -3867,7 +3905,7 @@
                                                     <tr>
                                                         <td class="center">
                                                             <p:selectOneRadio value="#{decision.approvalHistoryPricingView.uwDecision}"
-                                                                              required="#{decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
+                                                                              required="#{not decision.roleUW and not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
@@ -3916,23 +3954,6 @@
                                 </tr>
                             </h:panelGroup>
                         </h:panelGroup>
-                        <tr>
-                            <td colspan="2">
-                                <div class="separate"><!-- --></div>
-
-                                <!-- Hidden Field -->
-                                <h:inputHidden value="#{decision.decisionView.approveTotalNumOfNewOD}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalNumProposeCreditFac}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalNumContingentPropose}"/>
-
-                                <h:inputHidden value="#{decision.decisionView.grandTotalNumOfCoreAsset}"/>
-                                <h:inputHidden value="#{decision.decisionView.grandTotalNumOfNonCoreAsset}"/>
-
-                                <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
-                                <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
-                            </td>
-                        </tr>
 
                         <!-- Save & Cancel Decision Buttons -->
                         <tr>
@@ -3942,13 +3963,13 @@
                                                  action="#{decision.onSaveDecision()}"
                                                  process="@form"
                                                  update=":frmMain,:msgBoxSystemMessagePanel"
-                                                 styleClass="smaller"/>
+                                                 styleClass="small"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                  action="#{decision.onCreation()}"
                                                  process="@form"
                                                  update=":frmMain"
-                                                 styleClass="smaller"/>
+                                                 styleClass="small"/>
                             </td>
                         </tr>
                     </table>
@@ -3959,11 +3980,13 @@
 
         <div id="bottom_line"></div>
         <!-- Start Footer -->
+        <h:inputHidden id="pagename" value="mnudecision"/>
+        <h:inputHidden id="subpagename" value="submnudecision"/>
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
         </div>
 
-        <p:blockUI block=":frmMain"
+        <p:blockUI widgetVar="blockUI" block=":frmMain"
                    trigger=":frmMain:btnAddApprovedCredit,
                :frmMain:btnRetrievePricingFee
                :frmMain:btnAddApprovedGuarantor,
@@ -4072,7 +4095,7 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-
+<ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>

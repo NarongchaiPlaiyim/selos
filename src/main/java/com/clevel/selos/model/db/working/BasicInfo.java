@@ -3,12 +3,10 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.*;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -161,6 +159,13 @@ public class BasicInfo implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "limit_setup_expiry_date")
     private Date limitSetupExpiryDate;
+
+    @Column(name = "premium_quote", columnDefinition = "int default 0")
+    private int premiumQuote;
+
+    @Column(name = "tcgFlage", columnDefinition = "int default 0")
+    private int tcgFlag;
+
 
     public long getId() {
         return id;
@@ -497,49 +502,69 @@ public class BasicInfo implements Serializable {
         this.limitSetupExpiryDate = limitSetupExpiryDate;
     }
 
+    public int getPremiumQuote() {
+        return premiumQuote;
+    }
+
+    public void setPremiumQuote(int premiumQuote) {
+        this.premiumQuote = premiumQuote;
+    }
+
+    public int getTcgFlag() {
+        return tcgFlag;
+    }
+
+    public void setTcgFlag(int tcgFlag) {
+        this.tcgFlag = tcgFlag;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("workCase", workCase).
-                append("caNumber", caNumber).
-                append("refAppNumber", refAppNumber).
-                append("requestReason", requestReason).
-                append("borrowerType", borrowerType).
-                append("noUnpaidFeeInsurance", noUnpaidFeeInsurance).
-                append("noPendingClaimLG", noPendingClaimLG).
-                append("constructionRequestLG", constructionRequestLG).
-                append("ableToGettingGuarantorJob", ableToGettingGuarantorJob).
-                append("noClaimLGHistory", noClaimLGHistory).
-                append("noRevokedLicense", noRevokedLicense).
-                append("noLateWorkDelivery", noLateWorkDelivery).
-                append("adequateOfCapitalResource", adequateOfCapitalResource).
-                append("applySpecialProgram", applySpecialProgram).
-                append("specialProgram", specialProgram).
-                append("refinanceIN", refinanceIN).
-                append("refinanceInValue", refinanceInValue).
-                append("refinanceOUT", refinanceOUT).
-                append("refinanceOutValue", refinanceOutValue).
-                append("riskCustomerType", riskCustomerType).
-                append("qualitativeType", qualitativeType).
-                append("existingSMECustomer", existingSMECustomer).
-                append("existingSMECustomerSince", existingSMECustomerSince).
-                append("lastReviewDate", lastReviewDate).
-                append("extendedReviewDate", extendedReviewDate).
-                append("sbfScore", sbfScore).
-                append("requestLoanWithSameName", requestLoanWithSameName).
-                append("haveLoanInOneYear", haveLoanInOneYear).
-                append("passAnnualReview", passAnnualReview).
-                append("loanRequestPattern", loanRequestPattern).
-                append("referralName", referralName).
-                append("referralID", referralID).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                append("retrievedFlag", retrievedFlag).
-                append("approveType",approveType).
-                append("approveResult",approveResult).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCase", workCase)
+                .append("caNumber", caNumber)
+                .append("refAppNumber", refAppNumber)
+                .append("requestReason", requestReason)
+                .append("borrowerType", borrowerType)
+                .append("noUnpaidFeeInsurance", noUnpaidFeeInsurance)
+                .append("noPendingClaimLG", noPendingClaimLG)
+                .append("constructionRequestLG", constructionRequestLG)
+                .append("ableToGettingGuarantorJob", ableToGettingGuarantorJob)
+                .append("noClaimLGHistory", noClaimLGHistory)
+                .append("noRevokedLicense", noRevokedLicense)
+                .append("noLateWorkDelivery", noLateWorkDelivery)
+                .append("adequateOfCapitalResource", adequateOfCapitalResource)
+                .append("applySpecialProgram", applySpecialProgram)
+                .append("specialProgram", specialProgram)
+                .append("refinanceIN", refinanceIN)
+                .append("refinanceInValue", refinanceInValue)
+                .append("refinanceOUT", refinanceOUT)
+                .append("refinanceOutValue", refinanceOutValue)
+                .append("riskCustomerType", riskCustomerType)
+                .append("qualitativeType", qualitativeType)
+                .append("existingSMECustomer", existingSMECustomer)
+                .append("existingSMECustomerSince", existingSMECustomerSince)
+                .append("lastReviewDate", lastReviewDate)
+                .append("extendedReviewDate", extendedReviewDate)
+                .append("sbfScore", sbfScore)
+                .append("requestLoanWithSameName", requestLoanWithSameName)
+                .append("haveLoanInOneYear", haveLoanInOneYear)
+                .append("passAnnualReview", passAnnualReview)
+                .append("loanRequestPattern", loanRequestPattern)
+                .append("referralName", referralName)
+                .append("referralID", referralID)
+                .append("bdmSubmitDate", bdmSubmitDate)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("retrievedFlag", retrievedFlag)
+                .append("approveType", approveType)
+                .append("approveResult", approveResult)
+                .append("limitSetupExpiryDate", limitSetupExpiryDate)
+                .append("premiumQuote", premiumQuote)
+                .append("tcgFlag", tcgFlag)
+                .toString();
     }
 }

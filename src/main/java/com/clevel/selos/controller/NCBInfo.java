@@ -10,6 +10,7 @@ import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Month;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.SettlementStatus;
@@ -32,7 +33,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "ncbInfo")
-public class NCBInfo implements Serializable {
+public class NCBInfo extends BaseController {
 
     @Inject
     @SELOS
@@ -236,6 +236,8 @@ public class NCBInfo implements Serializable {
 
                 yearList = DateTimeUtil.getPreviousHundredYearTH();
             }
+
+            loadFieldControl(workCaseId, Screen.NCB_DETAIL);
         }
     }
 
@@ -279,6 +281,17 @@ public class NCBInfo implements Serializable {
         if (selectNcbRecordItem != null) {
             ncbDetailView = new NCBDetailView();
             ncbDetailView = cloner.deepClone(selectNcbRecordItem);
+            if(ncbDetailView.getRefinanceCheck()){
+                ncbDetailView.setRefinanceFlag(RadioValue.YES.value());
+            } else {
+                ncbDetailView.setRefinanceFlag(RadioValue.NO.value());
+            }
+
+            if(ncbDetailView.getWcCheck()){
+                ncbDetailView.setWcFlag(RadioValue.YES.value());
+            } else {
+                ncbDetailView.setWcFlag(RadioValue.NO.value());
+            }
         }
     }
 
@@ -418,7 +431,7 @@ public class NCBInfo implements Serializable {
         try {
             //Remove checked NCB Detail list
             //if (ncbDetailViewList.size() > 0) {
-                ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList, customerInfo);
+                ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList, customerInfo, workCaseId);
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");

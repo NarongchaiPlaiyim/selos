@@ -50,6 +50,10 @@ public class StepToStatus implements Serializable {
     @JoinColumn(name = "next_status_id")
     private Status nextStatus;
 
+    @OneToOne
+    @JoinColumn(name = "next_step_id")
+    private Step nextStep;
+
     @Column(name = "comments")
     private String comments;
 
@@ -156,6 +160,14 @@ public class StepToStatus implements Serializable {
         this.active = active;
     }
 
+    public Step getNextStep() {
+        return nextStep;
+    }
+
+    public void setNextStep(Step nextStep) {
+        this.nextStep = nextStep;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -169,6 +181,7 @@ public class StepToStatus implements Serializable {
                 .append("pricingRequestFlag", pricingRequestFlag)
                 .append("buUwFlag", buUwFlag)
                 .append("nextStatus", nextStatus)
+                .append("nextStep", nextStep)
                 .append("comments", comments)
                 .append("active", active)
                 .toString();

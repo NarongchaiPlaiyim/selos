@@ -3,7 +3,6 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.DocumentTypeDAO;
 import com.clevel.selos.dao.master.ReferenceDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.SELOS;
@@ -11,8 +10,9 @@ import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateRes
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.DocumentType;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
@@ -134,6 +134,14 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
 
+        if(customer.getIsCommittee() == 1){
+            Customer cusJuristic = customerDAO.findById(customer.getJuristicId());
+            BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
+            BigDecimal share = customer.getShares();
+            BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
+            customer.setPercentShare(percentShare);
+        }
+
         customerDAO.persist(customer);
         individualDAO.persist(customer.getIndividual());
         addressDAO.persist(customer.getAddressesList());
@@ -159,6 +167,14 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
 
+            if(spouse.getIsCommittee() == 1){
+                Customer cusJuristic = customerDAO.findById(spouse.getJuristicId());
+                BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
+                BigDecimal share = spouse.getShares();
+                BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
+                spouse.setPercentShare(percentShare);
+            }
+
             spouse.setIsSpouse(1);
             spouse.setSpouseId(0);
             customerDAO.persist(spouse);
@@ -177,7 +193,12 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
         }
+
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
         log.info("end - saveCustomerInfoIndividual ::: customerId : {}", customer.getId());
+
         return customer.getId();
     }
 
@@ -206,17 +227,6 @@ public class CustomerInfoControl extends BusinessControl {
         customerInfoView.setPercentShare(Util.multiply(Util.divide(share,totalShare),100));
 
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase, getCurrentUser());
-        //TODO: Do this for check Reference to cal %Share
-//        if(customerJuristic.getReference() != null){
-//            if(customerJuristic.getReference().getId() != 0){
-//                Reference reference = referenceDAO.findById(customerJuristic.getReference().getId());
-//                if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
-//                    if(customerJuristic.getShares() != null && customerJuristic.getJuristic().getTotalShare() != null){
-//                        customerJuristic.setPercentShare(Util.divide(customerJuristic.getShares(),customerJuristic.getJuristic().getTotalShare()));
-//                    }
-//                }
-//            }
-//        }
 
         if(customerJuristic.getCustomerOblInfo() != null){
             customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
@@ -238,34 +248,11 @@ public class CustomerInfoControl extends BusinessControl {
             for(CustomerInfoView cusIndividual : customerInfoView.getIndividualViewList()){
                 BigDecimal mainCusShare = cusIndividual.getShares();
                 cusIndividual.setPercentShare(Util.multiply(Util.divide(mainCusShare,totalShare),100));
-
-                //TODO: Do this for check Reference to cal %Share
-//                if(cusIndividual.getReference() != null){
-//                    if(cusIndividual.getReference().getId() != 0){
-//                        Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
-//                        if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
-//                            if(customerJuristic.getJuristic().getTotalShare() != null && cusIndividual.getShares() != null){
-//                                cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
-//                            }
-//                        }
-//                    }
-//                }
                 cusIndividual.setIsCommittee(1);
                 cusIndividual.setCommitteeId(customerJuristic.getId());
                 if(cusIndividual.getSpouse() != null){
                     BigDecimal spouseCusShare = cusIndividual.getSpouse().getShares();
                     cusIndividual.getSpouse().setPercentShare(Util.multiply(Util.divide(spouseCusShare,totalShare),100));
-                    //TODO: Do this for check Reference to cal %Share
-//                    if(cusIndividual.getSpouse().getReference() != null){
-//                        if(cusIndividual.getSpouse().getReference().getId() != 0){
-//                            Reference reference = referenceDAO.findById(cusIndividual.getSpouse().getReference().getId());
-//                            if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
-//                                if(customerJuristic.getShares() != null && cusIndividual.getSpouse().getShares() != null){
-//                                    cusIndividual.getSpouse().setPercentShare(Util.divide(cusIndividual.getSpouse().getShares(),customerJuristic.getJuristic().getTotalShare()));
-//                                }
-//                            }
-//                        }
-//                    }
                     cusIndividual.getSpouse().setIsCommittee(0);
                 }
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);
@@ -767,5 +754,25 @@ public class CustomerInfoControl extends BusinessControl {
         } else {
             return isExist;
         }
+    }
+
+    public CustomerInfoView getCustomerInfoViewById(long id, List<CustomerInfoView> customerInfoViewList) {
+        CustomerInfoView returnCusInfoView = new CustomerInfoView();
+        if (customerInfoViewList != null && !customerInfoViewList.isEmpty() && id != 0) {
+            for (CustomerInfoView customerInfoView : customerInfoViewList) {
+                if (customerInfoView.getId() == id) {
+                    returnCusInfoView.setId(customerInfoView.getId());
+                    returnCusInfoView.setFirstNameTh(customerInfoView.getFirstNameTh());
+                    returnCusInfoView.setFirstNameEn(customerInfoView.getFirstNameEn());
+                    returnCusInfoView.setLastNameTh(customerInfoView.getLastNameTh());
+                    returnCusInfoView.setLastNameEn(customerInfoView.getLastNameEn());
+                    returnCusInfoView.setTitleTh(customerInfoView.getTitleTh());
+                    returnCusInfoView.setTitleEn(customerInfoView.getTitleEn());
+                    returnCusInfoView.setCustomerEntity(customerInfoView.getCustomerEntity());
+                    break;
+                }
+            }
+        }
+        return returnCusInfoView;
     }
 }

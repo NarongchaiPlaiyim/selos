@@ -9,7 +9,7 @@ import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
-import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -19,9 +19,7 @@ import com.clevel.selos.transform.AccountStatusTransform;
 import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.transform.BankTransform;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -32,12 +30,13 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "bankStatementDetail")
-public class BankStatementDetail implements Serializable {
+public class BankStatementDetail extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -108,67 +107,67 @@ public class BankStatementDetail implements Serializable {
     private long workCaseId;
 
     private boolean bankAccTypeSelectRequired;
-    private boolean roleUW;
     private boolean clickSaveSuccess;
 
     public BankStatementDetail() {
     }
 
-    private void preRender() {
-        log.info("preRender ::: setSession ");
-
+    public void preRender() {
+        log.info("preRender");
         HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            } catch (Exception e) {
-                log.info("Exception :: {}", e);
-            }
-        }
 
-        if (FacesUtil.getSessionMapValue("bankStmtSumView") == null
-                || FacesUtil.getSessionMapValue("isTmbBank") == null
-                || FacesUtil.getSessionMapValue("lastMonthDate") == null
-                || FacesUtil.getSessionMapValue("numberOfMonths") == null) {
+        if (checkSession(session)) {
+            log.debug("preRender ::: Found session for case.");
 
-            log.error("Some necessary parameters from Bank statement summary is null!");
-            FacesUtil.redirect("/site/bankStatementSummary.jsf");
-            return;
-        } else {
-            summaryView = (BankStmtSummaryView) FacesUtil.getSessionMapValue("bankStmtSumView");
-            isTmbBank = (Boolean) FacesUtil.getSessionMapValue("isTmbBank");
-            lastMonthDate = (Date) FacesUtil.getSessionMapValue("lastMonthDate");
-            numberOfMonths = (Integer) FacesUtil.getSessionMapValue("numberOfMonths");
-            bankStmtView = (BankStmtView) FacesUtil.getSessionMapValue("selectedBankStmtView");
+            if (FacesUtil.getSessionMapValue("bankStmtSumView") == null ||
+                FacesUtil.getSessionMapValue("isTmbBank") == null ||
+                FacesUtil.getSessionMapValue("lastMonthDate") == null ||
+                FacesUtil.getSessionMapValue("numberOfMonths") == null) {
 
-            log.debug("Passed parameters from Bank statement summary ::: bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
-                    isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
-
-            if (numberOfMonths == 0) {
-                log.error("Number of months from Bank statement summary is zero(0)!, Can not generate Bank statement detail table.");
+                log.error("Some necessary parameters from Bank statement summary is null!");
                 FacesUtil.redirect("/site/bankStatementSummary.jsf");
-                return;
             }
-        }
+            else if ((Integer) FacesUtil.getSessionMapValue("numberOfMonths") == 0) {
+                log.error("Number of months from Bank statement summary = 0!");
+                FacesUtil.redirect("/site/bankStatementSummary.jsf");
+            }
 
-        // set Role
-        int roleId = bankStmtControl.getUserRoleId();
-        if (RoleValue.UW.id() == roleId) {
-            roleUW = true;
+        }
+        else {
+            log.debug("preRender ::: No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        preRender();
-        initViewFormAndSelectItems();
-        checkRequiredBankAccTypeSelected();
-        clickSaveSuccess = false;
+        log.debug("onCreation");
+        HttpSession session = FacesUtil.getSession(true);
+
+        if (checkSession(session)) {
+            workCaseId = (Long)session.getAttribute("workCaseId");
+
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL);
+
+            if (FacesUtil.getSessionMapValue("bankStmtSumView") != null &&
+                FacesUtil.getSessionMapValue("isTmbBank") != null &&
+                FacesUtil.getSessionMapValue("lastMonthDate") != null &&
+                FacesUtil.getSessionMapValue("numberOfMonths") != null &&
+                (Integer) FacesUtil.getSessionMapValue("numberOfMonths") != 0) {
+
+                summaryView = (BankStmtSummaryView) FacesUtil.getSessionMapValue("bankStmtSumView");
+                isTmbBank = (Boolean) FacesUtil.getSessionMapValue("isTmbBank");
+                lastMonthDate = (Date) FacesUtil.getSessionMapValue("lastMonthDate");
+                numberOfMonths = (Integer) FacesUtil.getSessionMapValue("numberOfMonths");
+                bankStmtView = (BankStmtView) FacesUtil.getSessionMapValue("selectedBankStmtView");
+
+                log.debug("Passed parameters from Bank statement summary ::: bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
+                        isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
+                initViewFormAndSelectItems();
+                checkRequiredBankAccTypeSelected();
+                clickSaveSuccess = false;
+            }
+        }
     }
 
     private void initViewFormAndSelectItems() {
@@ -277,7 +276,11 @@ public class BankStatementDetail implements Serializable {
             // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
 
-            summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+            BankStmtSummaryView resultBankStmtSumView = bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
+            if (resultBankStmtSumView != null) {
+                summaryView = resultBankStmtSumView;
+            }
+
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
@@ -404,14 +407,6 @@ public class BankStatementDetail implements Serializable {
 
     public void setBankAccTypeSelectRequired(boolean bankAccTypeSelectRequired) {
         this.bankAccTypeSelectRequired = bankAccTypeSelectRequired;
-    }
-
-    public boolean isRoleUW() {
-        return roleUW;
-    }
-
-    public void setRoleUW(boolean roleUW) {
-        this.roleUW = roleUW;
     }
 
     public String getSeverity() {

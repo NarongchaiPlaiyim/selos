@@ -11,7 +11,6 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.CaseRequestTypes;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
-import com.clevel.selos.model.db.master.RequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;

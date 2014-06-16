@@ -6,6 +6,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
 
+
+
 	<h:head>
 		<title>#{msg.get('app.approveDetail.title')}</title>
 		<h:outputStylesheet name="css/style.css" />
@@ -150,77 +152,84 @@
 																	<!--  code -->
 																	<table class="table_noborder" style="width: 100%;">
 																		<tr>
-																			<td><h:outputText value="#{msg.get('app.approveDetail.table.tr.td.label.product')}" /><h:outputText value="#{item.productCode}" /></td>
+																			<td><h:outputText
+																					value="#{msg.get('app.approveDetail.table.tr.td.label.product')}" />
+																				<h:outputText value="#{item.productCode}" /></td>
 																		</tr>
 																		<tr>
-																			<td><h:outputText value="#{msg.get('app.approveDetail.table.tr.td.label.project')}" /><h:outputText value="#{item.projectCode}" /></td>
+																			<td><h:outputText
+																					value="#{msg.get('app.approveDetail.table.tr.td.label.project')}" />
+																				<h:outputText value="#{item.projectCode}" /></td>
 																		</tr>
 																	</table>
-															</td>
-															<td class="right">
-																<!--  limit  --> <h:outputText value="#{item.limit}">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputText>
-															</td>
-															<td>
-																<!-- Standard price  -->
-																<table class="table_noborder" >
-																	<ui:repeat varStatus="rowStatus"
-																	value="#{item.newCreditTierDetailViewList}"
-																	var="creditItem">
-																		<tr style="border-bottom: 1;">
-																			<h:outputText value="#{creditItem.standardBasePrice.value}" />
-																		</tr>
-																	</ui:repeat>
-																</table>
-															</td>
-															<td>
-																<!-- Suggest price  --> 
-																<table class="table_noborder" >
-																	<ui:repeat varStatus="rowStatus"
-																	value="#{item.newCreditTierDetailViewList}"
-																	var="creditItem">
-																		<tr style="border-bottom: 1;">
-																			<h:outputText value="#{creditItem.suggestBasePrice.value}" />
-																		</tr>
-																	</ui:repeat>
-																</table>
-															</td>
-															<td>
-																<!-- Final price  -->
-																<table class="table_noborder" >
-																	<ui:repeat varStatus="rowStatus"
-																	value="#{item.newCreditTierDetailViewList}"
-																	var="creditItem">
-																		<tr style="border-bottom: 1;">
-																			<h:outputText value="#{creditItem.finalBasePrice.value}" />
-																		</tr>
-																	</ui:repeat>
-																</table>
-															</td>
-															<td class="right">
-																<!--  installment  -->
-																<table class="table_noborder" >
-																	<ui:repeat varStatus="rowStatus"
-																	value="#{item.newCreditTierDetailViewList}"
-																	var="creditItem">
-																		<tr style="border-bottom: 1;">
-																			<h:outputText value="#{creditItem.installment}" />
-																		</tr>
-																	</ui:repeat>
-																</table>
-															</td>
-															<td class="right">
-																<!--  tenor  --> <h:outputText value="#{item.tenor}">
-																	<f:convertNumber pattern="0" />
-																</h:outputText>
-															</td>
-															<td class="right">
-																<!--  tenor  --> <h:outputText
-																	value="#{item.frontEndFee}">
-																	<f:convertNumber pattern="#,##0.00" />
-																</h:outputText>
-															</td>
+																</td>
+																<td class="right">
+																	<!--  limit  --> <h:outputText value="#{item.limit}">
+																		<f:convertNumber pattern="#,##0.00" />
+																	</h:outputText>
+																</td>
+																<td>
+																	<!-- Standard price  -->
+																	<table class="table_noborder">
+																		<ui:repeat varStatus="rowStatus"
+																			value="#{item.newCreditTierDetailViewList}"
+																			var="creditItem">
+																			<tr style="border-bottom: 1;">
+																				<h:outputText
+																					value="#{creditItem.standardBasePrice.value}" />
+																			</tr>
+																		</ui:repeat>
+																	</table>
+																</td>
+																<td>
+																	<!-- Suggest price  -->
+																	<table class="table_noborder">
+																		<ui:repeat varStatus="rowStatus"
+																			value="#{item.newCreditTierDetailViewList}"
+																			var="creditItem">
+																			<tr style="border-bottom: 1;">
+																				<h:outputText
+																					value="#{creditItem.suggestBasePrice.value}" />
+																			</tr>
+																		</ui:repeat>
+																	</table>
+																</td>
+																<td>
+																	<!-- Final price  -->
+																	<table class="table_noborder">
+																		<ui:repeat varStatus="rowStatus"
+																			value="#{item.newCreditTierDetailViewList}"
+																			var="creditItem">
+																			<tr style="border-bottom: 1;">
+																				<h:outputText
+																					value="#{creditItem.finalBasePrice.value}" />
+																			</tr>
+																		</ui:repeat>
+																	</table>
+																</td>
+																<td class="right">
+																	<!--  installment  -->
+																	<table class="table_noborder">
+																		<ui:repeat varStatus="rowStatus"
+																			value="#{item.newCreditTierDetailViewList}"
+																			var="creditItem">
+																			<tr style="border-bottom: 1;">
+																				<h:outputText value="#{creditItem.installment}" />
+																			</tr>
+																		</ui:repeat>
+																	</table>
+																</td>
+																<td class="right">
+																	<!--  tenor  --> <h:outputText value="#{item.tenor}">
+																		<f:convertNumber pattern="0" />
+																	</h:outputText>
+																</td>
+																<td class="right">
+																	<!--  tenor  --> <h:outputText
+																		value="#{item.frontEndFee}">
+																		<f:convertNumber pattern="#,##0.00" />
+																	</h:outputText>
+																</td>
 															</tr>
 															<tr class='#{rowStatus.even ? "row_even" : "row_odd"}'>
 																<td colspan="10">
@@ -351,20 +360,22 @@
 													</p:column>
 													<p:column style="min-width:450px;"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.creditType')}">
-														
-														<table class="table_noborder" style="border-style: none;" >
-															<ui:repeat varStatus="rowStatus"
-															value="#{item.credits}"
-															var="credit">
-																<tr >
-																	<td style="border-style: none !important;;"><h:outputText value="#{credit.accountName}" /></td>
-																	<td style="border-style: none !important;;"><h:outputText value="#{credit.productProgram}" /></td>
-																	<td style="border-style: none !important;;"><h:outputText value="#{credit.limit}" /></td>
+
+														<table class="table_noborder" style="border-style: none;">
+															<ui:repeat varStatus="rowStatus" value="#{item.credits}"
+																var="credit">
+																<tr>
+																	<td style="border-style: none !important;"><h:outputText
+																			value="#{credit.accountName}" /></td>
+																	<td style="border-style: none !important;"><h:outputText
+																			value="#{credit.productProgram}" /></td>
+																	<td style="border-style: none !important;"><h:outputText
+																			value="#{credit.limit}" /></td>
 																</tr>
 															</ui:repeat>
 														</table>
-														
-								
+
+
 													</p:column>
 													<p:column style="min-width:500px"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.purpose')}">
@@ -430,10 +441,9 @@
 													id="saveBtn" value="#{msg.get('app.button.save')}"
 													styleClass="medium" onstart="handleOnStartOpenCfmDlg();"
 													oncomplete="handleOnCompleteOpenCfmDlg(args,p_saveApproveDetailDlg);"
-													update=":frmMain:full_main_container,:result_dialog" />
-												<p:commandButton id="cancelBtn"
-													value="#{msg.get('app.button.cancel')}" styleClass="medium" />
-											</td>
+													update=":frmMain:full_main_container,:result_dialog" /> <p:commandButton
+													id="cancelBtn" value="#{msg.get('app.button.cancel')}"
+													styleClass="medium" /></td>
 										</tr>
 									</table>
 								</div>
@@ -461,6 +471,7 @@
 			<ui:param name="action" value="onSaveApproveDetail" />
 			<ui:param name="update" value=":frmMain:full_main_container" />
 		</ui:include>
+		<ui:include src="include/footer_outside_frmmain.xhtml" />
 	</h:body>
 </f:view>
 </html>

@@ -2,6 +2,7 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.relation.RelTeamUserDetails;
 import com.clevel.selos.model.view.ReassignTeamNameId;
@@ -10,7 +11,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
-import com.clevel.selos.model.db.master.User;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;

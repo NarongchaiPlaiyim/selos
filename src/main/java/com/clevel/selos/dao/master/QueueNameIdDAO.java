@@ -3,12 +3,13 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.QueueNameId;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
-import com.clevel.selos.model.db.master.QueueNameId;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;

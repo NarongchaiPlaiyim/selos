@@ -1,10 +1,5 @@
 package com.clevel.selos.transform;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import javax.inject.Inject;
-
 import com.clevel.selos.dao.master.InsuranceCompanyDAO;
 import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.RadioValue;
@@ -12,6 +7,10 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BAPAInfoView;
+
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class BAPAInfoTransform extends Transform{
 

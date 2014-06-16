@@ -2,20 +2,14 @@ package com.clevel.selos.dao.relation;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.relation.RelTeamUserDetails;
-import com.clevel.selos.model.db.relation.RelationCustomer;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class RelTeamUserDetailsDAO extends GenericDAO<RelTeamUserDetails, Integer> {

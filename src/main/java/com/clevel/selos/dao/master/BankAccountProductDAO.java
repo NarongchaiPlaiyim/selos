@@ -5,13 +5,11 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 public class BankAccountProductDAO extends GenericDAO<BankAccountProduct, Integer> {

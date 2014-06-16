@@ -7,7 +7,6 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
-import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -41,7 +40,7 @@ public class InboxBizTransform extends BusinessTransform {
             inboxView.setListKey(listKey);
             if (item.getCaseData().containsKey("F_WobNum")) {
                 inboxView.setFnWobNum(item.getCaseData().get("F_WobNum"));
-                if(Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_MAKER.value() ||
+                if(Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_INITIAL.value() ||
                         Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_CHECKER.value() ||
                             Integer.parseInt(item.getCaseData().get("Step_Code")) == StepValue.PRESCREEN_MAKER.value()){
 

@@ -85,6 +85,8 @@ public class DecisionView implements Serializable {
 
     private List<ApprovalHistoryView> approvalHistoryList;
 
+    private long newCreditFacilityViewId;
+
     public DecisionView() {
     }
 
@@ -606,5 +608,13 @@ public class DecisionView implements Serializable {
 
     public void setApproveTotalODLimit(BigDecimal approveTotalODLimit) {
         this.approveTotalODLimit = approveTotalODLimit;
+    }
+
+    public long getNewCreditFacilityViewId() {
+        return newCreditFacilityViewId;
+    }
+
+    public void setNewCreditFacilityViewId(long newCreditFacilityViewId) {
+        this.newCreditFacilityViewId = newCreditFacilityViewId;
     }
 }

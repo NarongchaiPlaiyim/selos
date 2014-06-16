@@ -1,6 +1,5 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
@@ -67,6 +66,21 @@
                                                value="#{msg.get('app.button.print')}"
                                                styleClass="small"
                                                actionListener="#{report.onPrintAppraisal()}"
+                                               ajax="false"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="title" style="width: 150px">
+                              <p:outputLabel value="OfferLetter" />
+                          </td>
+                          <td style="width: 230px">
+                              <h:outputText value="#{report.reportView.nameReportOfferLetter}" />
+                          </td>
+                          <td class="right">
+                              <p:commandButton id="dlgPrintReportOfferLetterBtn"
+                                               value="#{msg.get('app.button.print')}"
+                                               styleClass="small"
+                                               actionListener="#{report.onPrintOfferletter()}"
                                                ajax="false"/>
                           </td>
                       </tr>

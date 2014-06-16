@@ -625,10 +625,14 @@ button.ui-button::-moz-focus-inner {
 
 .ui-dialog .ui-dialog-content {
     position: relative;
-    /*padding: 0!important;*/
+    padding: 0!important;
     border: 0;
     background: none;
     overflow: auto;
+}
+
+.ui-confirm-dialog .ui-dialog-content {
+    padding: .5em!important;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
@@ -1896,6 +1900,11 @@ body .ui-tooltip {
     background: #aaaaaa url("#{resource['primefaces-theme:images/ui-bg_flat_0_aaaaaa_40x100.png']}") 50% 50% repeat-x;
     opacity: .3;
     filter: Alpha(Opacity=30);
+    z-index: 900;
+}
+
+.ui-blockui-content {
+    z-index: 901;
 }
 
 .ui-widget-shadow {

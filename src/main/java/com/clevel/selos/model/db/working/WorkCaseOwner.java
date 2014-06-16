@@ -7,8 +7,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Created with IntelliJ IDEA.
+ * User: Sreenu
+ * Date: 3/20/14
+ * Time: 9:32 AM
+ * To change this template use File | Settings | File Templates.
+ */
 @Entity(name = "com.clevel.selos.model.db.working.WorkCaseOwner")
 @Table(name = "wrk_case_owner")
 public class WorkCaseOwner {
@@ -18,7 +26,6 @@ public class WorkCaseOwner {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CASE_OWNER_ID")
     @Column(name = "id", nullable = false)
     private long id;
-
     @ManyToOne
     @JoinColumn(name = "step_id")
     private Step step;
@@ -36,6 +43,10 @@ public class WorkCaseOwner {
     private WorkCase workCase;
 
     @ManyToOne
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
+    @ManyToOne
     @JoinColumn(name = "create_by")
     private User createBy;
 
@@ -50,6 +61,17 @@ public class WorkCaseOwner {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
+
+    @Column(name = "times_of_criteria_checked", columnDefinition = "int default 0")
+    private int timesOfCriteriaChecked;
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
 
     public long getId() {
         return id;
@@ -123,6 +145,14 @@ public class WorkCaseOwner {
         this.modifyDate = modifyDate;
     }
 
+    public int getTimesOfCriteriaChecked() {
+        return timesOfCriteriaChecked;
+    }
+
+    public void setTimesOfCriteriaChecked(int timesOfCriteriaChecked) {
+        this.timesOfCriteriaChecked = timesOfCriteriaChecked;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -131,10 +161,12 @@ public class WorkCaseOwner {
                 .append("role", role)
                 .append("user", user)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("createBy", createBy)
                 .append("createDate", createDate)
                 .append("modifyBy", modifyBy)
                 .append("modifyDate", modifyDate)
+                .append("timesOfCriteriaChecked", timesOfCriteriaChecked)
                 .toString();
     }
 }

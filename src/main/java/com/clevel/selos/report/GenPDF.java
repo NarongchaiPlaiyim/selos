@@ -3,10 +3,7 @@ package com.clevel.selos.report;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ReportView;
-import com.clevel.selos.report.template.PDFAppraisalAppointment;
-import com.clevel.selos.report.template.PDFDecision;
-import com.clevel.selos.report.template.PDFExecutiveSummary;
-import com.clevel.selos.report.template.PDFRejectLetter;
+import com.clevel.selos.report.template.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -67,6 +64,9 @@ public class GenPDF extends ReportService implements Serializable {
     @Inject
     PDFAppraisalAppointment pdfAppraisalAppointment;
 
+    @Inject
+    PDFOfferLetter pdfOfferLetter;
+
     private ReportView reportView;
 
     long workCaseId;
@@ -103,11 +103,6 @@ public class GenPDF extends ReportService implements Serializable {
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
-//        String nameOpShect = "_OpSheet.pdf";
-//        String nameExSum = "_ExSum.pdf";
-//        String nameRejectLetter = "_RejectLetter.pdf";
-//        String nameAppraisal = "_AppraisalAppointment.pdf";
-//        String nameOfferLetter = "_OfferLetter.pdf";
         String date = Util.createDateTime(new Date());
         String[] month = date.split("");
         log.debug("--month. {}",month);
@@ -121,20 +116,23 @@ public class GenPDF extends ReportService implements Serializable {
 
             StringBuilder nameOpShect =new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
+            log.debug("--nameOpShect",nameOpShect);
 
             StringBuilder nameExSum =new StringBuilder();
             nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
+            log.debug("--nameExSum",nameExSum);
 
             StringBuilder nameRejectLetter =new StringBuilder();
             nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
+            log.debug("--nameRejectLetter",nameRejectLetter);
 
             StringBuilder nameAppraisal =new StringBuilder();
             nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AppraisalAppointment.pdf");
+            log.debug("--nameAppraisal",nameAppraisal);
 
             StringBuilder nameOfferLetter =new StringBuilder();
             nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
-
-
+            log.debug("--nameOfferLetter",nameOfferLetter);
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
@@ -163,6 +161,8 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
         map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
         map.put("decision", pdfExecutiveSummary.fillDecision());
+        map.put("fillHeader",pdfExecutiveSummary.fillHeader());
+        map.put("fillFooter",pdfExecutiveSummary.fillFooter());
 
 //        pdfName = "Executive_Summary_Report_";
 
@@ -197,15 +197,14 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillTotalMasterReport",pdfDecision.fillTotalMasterReport());
         map.put("fillFollowDetail",pdfDecision.fillFollowDetail());
         map.put("fillPriceFee",pdfDecision.fillPriceFee());
-
-
-//        pdfName = "Decision_Report_";
+        map.put("fillHeader",pdfDecision.fillHeader());
+        map.put("fillFooter",pdfDecision.fillFooter());
 
         generatePDF(pathDecision, map, reportView.getNameReportOpShect());
     }
 
     public void onPrintRejectLetter() throws Exception {
-
+        log.debug("--onPrintRejectLetter");
         pdfReject_letter.init();
 
         HashMap map = new HashMap<String, Object>();
@@ -216,7 +215,7 @@ public class GenPDF extends ReportService implements Serializable {
         generatePDF(pathRejectLetter,map,reportView.getNameReportRejectLetter());
     }
     public void onPrintAppraisal() throws Exception {
-
+        log.debug("--onPrintAppraisal");
         pdfAppraisalAppointment.init();
 
         HashMap map = new HashMap<String, Object>();
@@ -230,10 +229,17 @@ public class GenPDF extends ReportService implements Serializable {
     }
 
     public void onPrintOfferletter() throws Exception {
-
+        log.debug("--onPrintOfferletter");
+        pdfOfferLetter.init();
 
         HashMap map = new HashMap<String, Object>();
-        generatePDF(pathAppraisal,map,reportView.getNameReportOfferLetter());
+        map.put("path",pathsub);
+        map.put("fillApprovedCredit",pdfOfferLetter.fillApprovedCredit());
+        map.put("fillGuarantor",pdfOfferLetter.fillGuarantor(pathsub));
+        map.put("fillFollowCondition",pdfOfferLetter.fillFollowCondition());
+        map.put("fillMasterOfferLetter",pdfOfferLetter.fillMasterOfferLetter());
+
+        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter());
     }
 
     public ReportView getReportView() {

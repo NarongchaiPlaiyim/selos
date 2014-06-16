@@ -62,11 +62,11 @@ public class NCBDetailTransform extends Transform {
             ncbDetail.setAsOfDate(ncbDetailViewItem.getDateOfInfo());
             ncbDetail.setLastReStructureDate(ncbDetailViewItem.getDateOfDebtRestructuring());
             ncbDetail.setInstallment(ncbDetailViewItem.getInstallment());
-            ncbDetail.setRefinanceFlag(ncbDetailViewItem.getRefinanceFlag());
+            ncbDetail.setRefinanceFlag(ncbDetailViewItem.getRefinanceCheck() == true ? 2:1);
             ncbDetail.setOutstanding(ncbDetailViewItem.getOutstanding());
             ncbDetail.setOutstandingIn12Month(ncbDetailViewItem.getNoOfOutstandingPaymentIn12months());
             ncbDetail.setLimit(ncbDetailViewItem.getLimit());
-            ncbDetail.setWcFlag(ncbDetailViewItem.getWcFlag());
+            ncbDetail.setWcFlag(ncbDetailViewItem.getWcCheck() == true ? 2:1);
             ncbDetail.setOverLimit(ncbDetailViewItem.getNoOfOverLimit());
             ncbDetail.setCanToEdit(ncbDetailViewItem.isCanToEdit());
 

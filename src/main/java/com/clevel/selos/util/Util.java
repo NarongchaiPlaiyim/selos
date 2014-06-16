@@ -52,6 +52,10 @@ public class Util implements Serializable {
         return createDateStringTH(date, "dd/MM/yyyy");
     }
 
+    public static String createDateAndTimeTh(Date date) {
+        return createDateStringTH(date, "dd/MM/yyyy HH:mm");
+    }
+
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = null;
@@ -409,6 +413,23 @@ public class Util implements Serializable {
 	    		return defaultValue;
 	    	}
     	}
+    }
+
+    public static int parseInt(Object input, int defaultValue){
+        if(input == null)
+            return defaultValue;
+        else if (input instanceof Integer)
+            return (Integer) input;
+        else {
+            String inputStr = input.toString();
+            if(isEmpty(inputStr))
+                return defaultValue;
+            try{
+                return Integer.parseInt(inputStr);
+            }catch (ClassCastException e){
+                return defaultValue;
+            }
+        }
     }
 
     public static String parseString(Object input, String defaultValue){

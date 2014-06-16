@@ -1,14 +1,10 @@
 package com.clevel.selos.transform;
 
-import java.util.List;
-
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.MortgageInfoCollSub;
-import com.clevel.selos.model.db.working.NewCollateralSub;
-import com.clevel.selos.model.db.working.NewCollateralSubOwner;
-import com.clevel.selos.model.db.working.NewCollateralSubRelated;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.util.Util;
+
+import java.util.List;
 
 public class MortgageInfoCollSubTransform extends Transform {
 	

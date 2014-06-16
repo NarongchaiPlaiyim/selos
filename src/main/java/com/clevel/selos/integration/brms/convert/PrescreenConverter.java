@@ -6,13 +6,12 @@ import com.clevel.selos.integration.brms.model.request.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
 import com.ilog.rules.param.UnderwritingRequest;
 import com.tmbbank.enterprise.model.*;
-
-
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class PrescreenConverter extends Converter{
     @Inject
@@ -64,7 +63,7 @@ public class PrescreenConverter extends Converter{
         SELOSProductProgramType selosProductProgramType = new SELOSProductProgramType();
         List<CreditFacilityType> creditFacilityTypeList = null;
         for(BRMSAccountRequested accountRequested: accountRequestedList){
-            if(!accountRequested.getProductProgram().equals(selosProductProgramType.getName())){
+            if(accountRequested.getProductProgram()!=null && !accountRequested.getProductProgram().equals(selosProductProgramType.getName())){
                 if(selosProductProgramType.getName() != null && !"".equals(selosProductProgramType.getName())){
                     selosProductProgramTypeList.add(selosProductProgramType);
                     selosProductProgramType = new SELOSProductProgramType();
@@ -124,21 +123,17 @@ public class PrescreenConverter extends Converter{
             cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_ID, customerInfo.getSpousePersonalID()));
             cusAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_RELATIONSHIP_TYPE, customerInfo.getSpouseRelationType()));
 
-            if(customerInfo.isIndividual()){
-                IndividualType individualType = new IndividualType();
-                individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
-                individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
-                individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
-                borrowerType.setIndividual(individualType);
-            }
+            IndividualType individualType = new IndividualType();
+            individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
+            individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
+            individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
+            borrowerType.setIndividual(individualType);
 
             //Set NCB and NCB Equity in Customer Level
             List<NCBReportType> ncbReportTypeList = borrowerType.getNcbReport();
             NCBReportType ncbReportType = new NCBReportType();
             List<AttributeType> ncbAttributeTypeList = ncbReportType.getAttribute();
             ncbAttributeTypeList.add(getAttributeType(BRMSFieldAttributes.NCB_FLAG, customerInfo.isNcbFlag()));
-
-
 
             List<NCBAccountType> ncbAccountTypeList = ncbReportType.getNcbAccount();
             List<BRMSNCBAccountInfo> ncbAccountInfoList = customerInfo.getNcbAccountInfoList();
@@ -181,19 +176,34 @@ public class PrescreenConverter extends Converter{
             ncbEnquiryTypeList.add(ncbEnquiryType);
             ncbReportTypeList.add(ncbReportType);
 
+            //Convert Warning Code into Customer.
             List<WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
             List<String> csiFullyMatchList = customerInfo.getCsiFullyMatchCode();
-            for(String csiFullyMatchCode : csiFullyMatchList){
+            int csiFullyMatchSize = 0;
+            if(csiFullyMatchList != null && csiFullyMatchList.size() > 0) {
+                csiFullyMatchSize = csiFullyMatchList.size();
+                for (String csiFullyMatchCode : csiFullyMatchList) {
+                    WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
+                    warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
+                    warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
+                }
+            } else {
                 WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
-                warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
+                warningCodeFullMatchedType.setCode("");
                 warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
             }
 
             List<WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
             List<String> csiSomeMatchList = customerInfo.getCsiSomeMatchCode();
-            for(String csiSomeMatchCode : csiSomeMatchList){
+            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0 && csiFullyMatchSize == 0) {
+                for (String csiSomeMatchCode : csiSomeMatchList) {
+                    WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
+                    warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
+                    warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
+                }
+            } else {
                 WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
-                warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
+                warningCodePartialMatchedType.setCode("");
                 warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
             }
 
@@ -201,8 +211,7 @@ public class PrescreenConverter extends Converter{
 
             List<AccountType> accountTypeList = borrowerType.getAccount();
             List<BRMSTMBAccountInfo> tmbAccountInfoList = customerInfo.getTmbAccountInfoList();
-            //TODO Check condition with BRMS Sheet...
-            if(customerInfo.isNcbFlag()){
+            if(tmbAccountInfoList != null) {
                 for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
                     AccountType accountType = new AccountType();
                     List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
@@ -225,20 +234,21 @@ public class PrescreenConverter extends Converter{
         }
 
         List<AccountType> accountTypeList = applicationType.getAccount();
-        //TODO Check condition with BRMS sheet...
         List<BRMSAccountStmtInfo> accountStmtInfoList = applicationInfo.getAccountStmtInfoList();
-        for(BRMSAccountStmtInfo accountStmtInfo : accountStmtInfoList){
-            AccountType accountType = new AccountType();
-            List<AttributeType> accAttributeList = accountType.getAttribute();
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.UTILIZATION_PERCENT, accountStmtInfo.getAvgUtilizationPercent()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.SWING_PERCENT, accountStmtInfo.getAvgSwingPercent()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.HIGHEST_INFLOW_FLAG, accountStmtInfo.isHighestInflow()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_ACCOUNT_FLAG, accountStmtInfo.isTmb()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.EXCLUDE_INCOME_FLAG, accountStmtInfo.isNotCountIncome()));
-            accountTypeList.add(accountType);
+        if(accountStmtInfoList != null){
+            for(BRMSAccountStmtInfo accountStmtInfo : accountStmtInfoList){
+                AccountType accountType = new AccountType();
+                List<AttributeType> accAttributeList = accountType.getAttribute();
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.UTILIZATION_PERCENT, accountStmtInfo.getAvgUtilizationPercent()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.SWING_PERCENT, accountStmtInfo.getAvgSwingPercent()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.HIGHEST_INFLOW_FLAG, accountStmtInfo.isHighestInflow()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_ACCOUNT_FLAG, accountStmtInfo.isTmb()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.EXCLUDE_INCOME_FLAG, accountStmtInfo.isNotCountIncome()));
+                accountTypeList.add(accountType);
+            }
         }
 
         UnderwritingApprovalRequestType underwritingApprovalRequestType = new UnderwritingApprovalRequestType();

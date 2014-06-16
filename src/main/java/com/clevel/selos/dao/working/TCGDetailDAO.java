@@ -22,12 +22,15 @@ public class TCGDetailDAO extends GenericDAO<TCGDetail, Integer> {
 
     public List<TCGDetail> findTCGDetailByTcgId(long tcgId) {
         log.info("findTCGDetailByTcgId ::: {}", tcgId);
+
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("tcg.id", tcgId));
         criteria.addOrder(Order.asc("id"));
         List<TCGDetail> tcgDetailList = (List<TCGDetail>) criteria.list();
+
         if (tcgDetailList != null)
         	log.info("tcgDetailList ::: size : {}", tcgDetailList.size());
+
         return tcgDetailList;
     }
 }

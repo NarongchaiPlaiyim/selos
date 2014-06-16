@@ -2,17 +2,17 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.working.Address;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.RejectLetterReport;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.AppBorrowerHeaderView;
+import com.clevel.selos.model.view.AppHeaderView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
@@ -22,11 +22,9 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class PDFRejectLetter implements Serializable {
     @Inject

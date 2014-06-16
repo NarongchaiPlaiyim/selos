@@ -26,6 +26,17 @@ public class BizStakeHolderDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    public BizStakeHolderDetailView() {
+        reset();
+    }
+
+    public void reset() {
+        this.percentSalesVolume = BigDecimal.ZERO;
+        this.percentCash = BigDecimal.ZERO;
+        this.percentCredit = BigDecimal.ZERO;
+        this.creditTerm = BigDecimal.ZERO;
+    }
+
     public String getStakeHolderType() {
         return stakeHolderType;
     }

@@ -1,11 +1,22 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import com.clevel.selos.businesscontrol.AccountInfoControl;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.RequestAccountType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
+import org.primefaces.component.selectonemenu.SelectOneMenu;
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -16,28 +27,12 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.component.selectonemenu.SelectOneMenu;
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.AccountInfoControl;
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.RequestAccountType;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.AccountInfoSummaryView;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.model.view.OpenAccountCreditView;
-import com.clevel.selos.model.view.OpenAccountFullView;
-import com.clevel.selos.model.view.OpenAccountNameView;
-import com.clevel.selos.model.view.OpenAccountPurposeView;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "accountInfo")
@@ -52,12 +47,14 @@ public class AccountInfo implements Serializable {
 	private BasicInfoControl basicInfoControl;
 	@Inject
 	private AccountInfoControl accountInfoControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
+	
 	private BasicInfoView basicInfoView;
 	private AccountInfoSummaryView summaryView;
 	private boolean addDialog = false;
@@ -157,7 +154,6 @@ public class AccountInfo implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		accountInfoControl.initialOpenAccount(workCaseId);
 		
@@ -172,7 +168,7 @@ public class AccountInfo implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.AccountInfo, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;

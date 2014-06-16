@@ -1,13 +1,12 @@
 package com.clevel.selos.dao.working;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.AttorneyType;
 import com.clevel.selos.model.db.working.CustomerAttorney;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.List;
 
 public class CustomerAttorneyDAO extends GenericDAO<CustomerAttorney, Long>{
 	

@@ -4,9 +4,7 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ncb.nccrs.models.response.*;
-import com.clevel.selos.integration.ncb.nccrs.models.response.TransactionModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.models.response.*;
@@ -45,6 +43,7 @@ public class NCBBizTransform extends BusinessTransform {
     private final String TMB_BANK = "TMB";
     private final String ACCOUNT_TYPE_OD_IND = "04";
     private final String ENQ_PURPOSE_IND = "01";
+    private final String NCB_ACCOUNT_STATUS_TMB = "BRMS Rule";
 
     @Inject
     @Config(name = "ncb.nccrs.bank.tmb")
@@ -99,6 +98,7 @@ public class NCBBizTransform extends BusinessTransform {
                                 enquiryDate = Util.strYYYYMMDDtoDateFormat(dateStr);
                             }
                             ncbInfoView.setEnquiryDate(enquiryDate);
+                            ncbInfoView.setPaymentClass(NCB_ACCOUNT_STATUS_TMB);
 
                             if (ncrsResponseModel.getBodyModel().getTransaction().getTuefresponse() != null) {
                                 tuefResponseModel = ncrsResponseModel.getBodyModel().getTransaction().getTuefresponse();
@@ -1241,6 +1241,7 @@ public class NCBBizTransform extends BusinessTransform {
                                 enquiryDate = Util.strYYYYMMDDtoDateFormat(dateStr);
                             }
                             ncbInfoView.setEnquiryDate(enquiryDate);
+                            ncbInfoView.setPaymentClass(NCB_ACCOUNT_STATUS_TMB);
 
                             H2HResponseModel h2HResponseModel = null;
                             if (nccrsResponseModel.getBody().getTransaction().getH2hresponse() != null) {

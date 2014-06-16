@@ -4,7 +4,6 @@ import com.clevel.selos.dao.working.QualitativeADAO;
 import com.clevel.selos.dao.working.QualitativeBDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -42,6 +41,10 @@ public class QualitativeControl extends BusinessControl {
         QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase, getCurrentUser());
         qualitativeADAO.persist(qualitativeA);
 
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
     }
 
     public QualitativeView getQualitativeA(long workCaseId){
@@ -78,6 +81,9 @@ public class QualitativeControl extends BusinessControl {
         QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase, getCurrentUser());
         qualitativeBDAO.persist(qualitativeB);
 
+        //--Update flag in WorkCase ( for check before submit )
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
     }
 
     public QualitativeView getQualitativeB(long workCaseId){

@@ -2,7 +2,6 @@ package com.clevel.selos.businesscontrol;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,36 +9,31 @@ import java.util.List;
 
 import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.dao.working.NewCreditDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountPurpose;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AgreementInfo;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.db.working.OpenAccountCredit;
-import com.clevel.selos.model.db.working.OpenAccountDeposit;
 import com.clevel.selos.model.db.working.OpenAccountName;
 import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ApproveDetailInformationView;
-import com.clevel.selos.model.view.LimitSetupView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditFacilityView;
 import com.clevel.selos.model.view.OpenAccountCreditView;
 import com.clevel.selos.model.view.OpenAccountFullView;
 import com.clevel.selos.model.view.OpenAccountNameView;
 import com.clevel.selos.model.view.OpenAccountPurposeView;
-import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.transform.ApproveDetailInformationTransform;
 import com.clevel.selos.transform.CreditDetailSimpleTransform;
 import com.clevel.selos.transform.NewCreditDetailTransform;
 import com.clevel.selos.transform.NewCreditFacilityTransform;
 import com.clevel.selos.transform.OpenAccountTransform;
-
-import filenet.pe.peorb.FileNet_PERPC.longOrVWExeption;
-
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;

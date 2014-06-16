@@ -3,6 +3,27 @@
 	<property name="ireport.zoom" value="1.1000000000000016"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<field name="productProgramName" class="java.lang.String">
+		<fieldDescription><![CDATA[productProgramName]]></fieldDescription>
+	</field>
+	<field name="creditTypeName" class="java.lang.String">
+		<fieldDescription><![CDATA[creditTypeName]]></fieldDescription>
+	</field>
+	<field name="limit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[limit]]></fieldDescription>
+	</field>
+	<field name="finalPriceLabel" class="java.lang.String">
+		<fieldDescription><![CDATA[finalPriceLabel]]></fieldDescription>
+	</field>
+	<field name="installment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[installment]]></fieldDescription>
+	</field>
+	<field name="tenor" class="java.lang.Integer">
+		<fieldDescription><![CDATA[tenor]]></fieldDescription>
+	</field>
+	<field name="purpose" class="java.lang.String">
+		<fieldDescription><![CDATA[purpose]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
@@ -150,6 +171,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{productProgramName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="649cf711-5885-477a-8a6b-c1f1072ac94d" stretchType="RelativeToBandHeight" mode="Opaque" x="87" y="0" width="67" height="13" backcolor="#FFFFFF"/>
@@ -163,6 +185,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{creditTypeName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="92ab2b23-45e2-4a50-9491-0b4247a5290b" stretchType="RelativeToBandHeight" mode="Opaque" x="219" y="0" width="64" height="13" backcolor="#FFFFFF"/>
@@ -176,6 +199,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{finalPriceLabel}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="623c156c-f043-430b-b3f0-9830ee97705b" stretchType="RelativeToBandHeight" mode="Opaque" x="283" y="0" width="52" height="13" backcolor="#FFFFFF"/>
@@ -189,6 +213,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{tenor}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="ec342532-9ff9-4fc1-9bc8-2f70209d45df" stretchType="RelativeToBandHeight" mode="Opaque" x="335" y="0" width="70" height="13" backcolor="#FFFFFF"/>
@@ -202,6 +227,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="1b892f96-e8a5-40de-9005-3639417edd01" stretchType="RelativeToBandHeight" mode="Opaque" x="405" y="0" width="76" height="13" backcolor="#FFFFFF"/>
@@ -228,6 +254,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{purpose}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="60c68f74-47e6-4623-bd16-8a2c71402242" stretchType="RelativeToBandHeight" mode="Opaque" x="154" y="0" width="65" height="13" backcolor="#FFFFFF"/>
@@ -241,6 +268,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

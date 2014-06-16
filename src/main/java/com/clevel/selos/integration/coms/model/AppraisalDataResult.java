@@ -1,12 +1,10 @@
 package com.clevel.selos.integration.coms.model;
 
-import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class AppraisalDataResult implements Serializable {
     private ActionResult actionResult;

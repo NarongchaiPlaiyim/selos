@@ -203,6 +203,8 @@
                                            var="potentialItem"
                                            itemLabel="#{potentialItem.description}"
                                            itemValue="#{potentialItem.id}"/>
+                            <p:ajax event="change" listener="#{decision.onChangePotentialCollateralType(collHeadDetail)}"
+                                    process="@form" update=":collateralDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -212,7 +214,7 @@
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
                     </td>
                     <td class="left" colspan="3">
-                        <p:selectOneMenu id="dlgCollTypePercentLTV"
+                        <!--<p:selectOneMenu id="dlgCollTypePercentLTV"
                                          value="#{collHeadDetail.collTypePercentLTV.id}"
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}">
@@ -221,6 +223,21 @@
                                            var="collTypePercentItem"
                                            itemLabel="#{collTypePercentItem.description}"
                                            itemValue="#{collTypePercentItem.id}"/>
+                        </p:selectOneMenu>-->
+                        <p:selectOneMenu id="dlgCollTypePercentLTV"
+                                         value="#{collHeadDetail.tcgCollateralType.id}"
+                                         required="#{not empty param[saveCollateralButton.clientId]}"
+                                         styleClass="largest"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItems value="#{decision.potentialColToTCGColList}"
+                                           var="dlgPotentialColToTCGColList"
+                                           itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
+                                           itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
+                            <p:ajax event="change"
+                                    listener="#{decision.onChangeCollTypeLTV(collHeadDetail)}"
+                                    process="@form"
+                                    update=":collateralDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -292,7 +309,7 @@
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.headCollType')}"/>
                     </td>
                     <td class="left">
-                        <p:selectOneMenu id="dlgHeadCollType"
+                        <!--<p:selectOneMenu id="dlgHeadCollType"
                                          value="#{collHeadDetail.headCollType.id}"
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}">
@@ -301,6 +318,20 @@
                                            var="collateralTypeItem"
                                            itemLabel="#{collateralTypeItem.description}"
                                            itemValue="#{collateralTypeItem.id}"/>
+                        </p:selectOneMenu>-->
+                        <p:selectOneMenu id="dlgHeadCollType"
+                                         value="#{collHeadDetail.headCollType.id}"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
+                                         required="#{not empty param[saveCollateralButton.clientId]}">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItems value="#{decision.headCollTypeViewList}"
+                                           var="headCollateralTypeItem"
+                                           itemLabel="#{headCollateralTypeItem.description}"
+                                           itemValue="#{headCollateralTypeItem.id}"/>
+                            <p:ajax event="change"
+                                    listener="#{decision.onChangeHeadCollType(collHeadDetail)}"
+                                    process="@form"
+                                    update=":collateralDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

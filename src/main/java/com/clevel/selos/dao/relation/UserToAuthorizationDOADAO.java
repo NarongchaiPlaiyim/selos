@@ -2,6 +2,7 @@ package com.clevel.selos.dao.relation;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
 import org.hibernate.Criteria;
@@ -10,7 +11,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;

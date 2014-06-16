@@ -40,6 +40,51 @@ public class PERoster implements Serializable {
     private String step;
     private String slastatus;
     private int fetchType;
+    private String statusCode;
+    private String atUser;
+    private String appointmentDate;
+    private String doaLevel;
+    private String fromUser;
+
+    public String getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(String fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getDoaLevel() {
+        return doaLevel;
+    }
+
+    public void setDoaLevel(String doaLevel) {
+        this.doaLevel = doaLevel;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getAtUser() {
+        return atUser;
+    }
+
+    public void setAtUser(String atUser) {
+        this.atUser = atUser;
+    }
 
     public int getFetchType() {
         return fetchType;
@@ -223,6 +268,8 @@ public class PERoster implements Serializable {
                 .append("TotalTimeAtProcess", TotalTimeAtProcess)
                 .append("F_WobNum",F_WobNum)
                 .append("fetchType",fetchType)
+                .append("atUser",atUser)
+                .append("statusCode",statusCode)
                 .toString();
     }
 

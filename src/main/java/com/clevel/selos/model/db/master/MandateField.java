@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.master;
 
 
+import com.clevel.selos.model.MandateFieldType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,13 +12,15 @@ import java.io.Serializable;
 @Table(name = "mst_mandate_fields")
 public class MandateField implements Serializable{
     @Id
-    @Column(name = "id")
+    @SequenceGenerator(name = "SEQ_MST_MAND_FIELD", sequenceName = "SEQ_MST_MAND_FIELD", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAND_FIELD")
     private long id;
 
-    @Column(name = "class_name", length = 200)
-    private String className;
+    @ManyToOne
+    @JoinColumn(name = "class_name_id")
+    private MandateFieldClass mandateFieldClass;
 
-    @Column(name = "parameterized_name", length = 200)
+    @Column(name = "parameterized_name", length = 150)
     private String parameterizedName;
 
     @Column(name = "field_name", length = 50)
@@ -25,6 +28,10 @@ public class MandateField implements Serializable{
 
     @Column(name = "field_description", length = 100)
     private String fieldDescription;
+
+    @Column(name = "field_type", length = 1, columnDefinition = "int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private MandateFieldType mandateFieldType;
 
     @Column(name = "page_name", length = 100)
     private String page;
@@ -49,12 +56,12 @@ public class MandateField implements Serializable{
         this.id = id;
     }
 
-    public String getClassName() {
-        return className;
+    public MandateFieldClass getMandateFieldClass() {
+        return mandateFieldClass;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setMandateFieldClass(MandateFieldClass mandateFieldClass) {
+        this.mandateFieldClass = mandateFieldClass;
     }
 
     public String getParameterizedName() {
@@ -121,14 +128,22 @@ public class MandateField implements Serializable{
         this.notMatchedValue = notMatchedValue;
     }
 
+    public MandateFieldType getMandateFieldType() {
+        return mandateFieldType;
+    }
+
+    public void setMandateFieldType(MandateFieldType mandateFieldType) {
+        this.mandateFieldType = mandateFieldType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("className", className)
-                .append("parameterizedName", parameterizedName)
+                .append("mandateFieldClass", mandateFieldClass)
                 .append("fieldName", fieldName)
                 .append("fieldDescription", fieldDescription)
+                .append("mandateFieldType", mandateFieldType)
                 .append("page", page)
                 .append("minValue", minValue)
                 .append("maxValue", maxValue)

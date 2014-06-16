@@ -1,13 +1,19 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import com.clevel.selos.businesscontrol.FeeCalculationControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.FeeCollectionAccountView;
+import com.clevel.selos.model.view.FeeCollectionDetailView;
+import com.clevel.selos.model.view.FeeSummaryView;
+import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -17,19 +23,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.FeeCalculationControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.FeeCollectionAccountView;
-import com.clevel.selos.model.view.FeeCollectionDetailView;
-import com.clevel.selos.model.view.FeeSummaryView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name="feeCalculation")
@@ -42,12 +39,13 @@ public class FeeCalculation implements Serializable {
 	
 	@Inject
 	private FeeCalculationControl feeCalculationControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
 	
 	private List<BigDecimal> totalAgreementList;
 	private List<BigDecimal> totalNonAgreementList;
@@ -104,7 +102,6 @@ public class FeeCalculation implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		_loadFieldControl();
 		_loadInitData(false);
@@ -116,7 +113,7 @@ public class FeeCalculation implements Serializable {
 		preRenderCheck = true;
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.FeeCalculation, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;

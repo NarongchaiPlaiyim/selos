@@ -1,6 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.working.*;
+import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;

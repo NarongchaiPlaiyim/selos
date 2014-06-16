@@ -1,0 +1,22 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://java.sun.com/jsf/html">
+    <div id="header_logo">
+        <div id="header_logo_image">
+            <h:graphicImage library="images" name="shared/header_logo.jpg" alt="" title="TMB SE-LOS Application" />
+        </div>
+        <div id="header_userinfo">
+            <div id="header_user">
+                Login as : <h:outputText value="#{headerController.user.userName}"/>
+            </div>
+            <div id="header_menu">
+                <a href="#{request.contextPath}/site/inbox.jsf" class="header_menu">inbox</a> |
+                <a href="#{request.contextPath}/site/generic_search.jsf" class="header_menu">search</a> |
+                <a href="#" class="header_menu">download</a> |
+                <p:commandLink value="logout" title="Click to logout" action="#{loginBean.signOut}"/>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</ui:composition>

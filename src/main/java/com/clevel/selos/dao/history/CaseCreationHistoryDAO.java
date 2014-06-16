@@ -5,12 +5,10 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory, Long> {
     @Inject

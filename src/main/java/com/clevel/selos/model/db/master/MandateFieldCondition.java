@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.master;
 
-import com.clevel.selos.model.ConditionType;
+import com.clevel.selos.model.MandateConditionType;
+import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,18 +14,30 @@ import java.util.List;
 public class MandateFieldCondition implements Serializable{
 
     @Id
-    @Column(name = "id")
+    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_COND", sequenceName = "SEQ_MST_MAN_FIELD_COND", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_COND")
     private long id;
 
     @Column(name = "condition_type", length = 100)
     @Enumerated(EnumType.STRING)
-    private ConditionType conditionType;
+    private MandateConditionType mandateConditionType;
+
+    @Column(name = "condition_name", length = 30)
+    private String name;
 
     @Column(name = "description", length = 200)
     private String conditionDesc;
 
-    @Column(name = "class_name", length = 200)
-    private String className;
+    @OneToOne
+    @JoinColumn(name = "class_id")
+    private MandateFieldClass mandateFieldClass;
+
+    @Column(name = "depend_type", length = 100)
+    @Enumerated(EnumType.STRING)
+    private MandateDependType dependType;
+
+    @Column(name = "depend_con_id")
+    private long dependCondition = 0;
 
     @OneToMany(mappedBy = "mandateFieldCondition")
     private List<MandateFieldConditionDetail> mandateFieldConditionDetailList;
@@ -37,12 +50,20 @@ public class MandateFieldCondition implements Serializable{
         this.id = id;
     }
 
-    public ConditionType getConditionType() {
-        return conditionType;
+    public String getName() {
+        return name;
     }
 
-    public void setConditionType(ConditionType conditionType) {
-        this.conditionType = conditionType;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public MandateConditionType getMandateConditionType() {
+        return mandateConditionType;
+    }
+
+    public void setMandateConditionType(MandateConditionType mandateConditionType) {
+        this.mandateConditionType = mandateConditionType;
     }
 
     public String getConditionDesc() {
@@ -53,12 +74,28 @@ public class MandateFieldCondition implements Serializable{
         this.conditionDesc = conditionDesc;
     }
 
-    public String getClassName() {
-        return className;
+    public MandateFieldClass getMandateFieldClass() {
+        return mandateFieldClass;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setMandateFieldClass(MandateFieldClass mandateFieldClass) {
+        this.mandateFieldClass = mandateFieldClass;
+    }
+
+    public MandateDependType getDependType() {
+        return dependType;
+    }
+
+    public void setDependType(MandateDependType dependType) {
+        this.dependType = dependType;
+    }
+
+    public long getDependCondition() {
+        return dependCondition;
+    }
+
+    public void setDependCondition(long dependCondition) {
+        this.dependCondition = dependCondition;
     }
 
     public List<MandateFieldConditionDetail> getMandateFieldConditionDetailList() {
@@ -73,9 +110,12 @@ public class MandateFieldCondition implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("conditionType", conditionType)
+                .append("mandateConditionType", mandateConditionType)
+                .append("name", name)
                 .append("conditionDesc", conditionDesc)
-                .append("className", className)
+                .append("mandateFieldClass", mandateFieldClass)
+                .append("dependType", dependType)
+                .append("dependCondition", dependCondition)
                 .append("mandateFieldConditionDetailList", mandateFieldConditionDetailList)
                 .toString();
     }

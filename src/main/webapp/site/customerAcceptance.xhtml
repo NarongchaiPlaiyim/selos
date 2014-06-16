@@ -99,21 +99,21 @@
 	                                        </td>
 	                                        <td class="left">
 	                                        	<p:inputText styleClass="large" readonly="#{customerAcceptance.isDisabled('cusaccept.name')}"
-	                                        		value="Mr. Zone Manager" /> 
+	                                        		value="#{customerAcceptance.customerAcceptanceView.zoneMgrName}" /> 
 	                                        </td>
 	                                        <td class="title left" style="width: 100px;">
 	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.tel')}#{customerAcceptance.mandate('cusaccept.phoneNo')}" />
 	                                        </td>
 	                                        <td class="left">
 	                                        	<p:inputText styleClass="large" readonly="#{customerAcceptance.isDisabled('cusaccept.phoneNo')}"
-	                                        		value="Telephone" />
+	                                        		value="#{customerAcceptance.customerAcceptanceView.zoneMgrTel}" />
 	                                        </td>
 	                                        <td class="title left">
 	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.emailAddress')}#{customerAcceptance.mandate('cusaccept.email')}" />
 	                                        </td>
 	                                        <td class="left">
 	                                        	<p:inputText readonly="#{customerAcceptance.isDisabled('cusaccept.email')}" size="30"
-	                                        		value="zone.manager@tmbbank.com" />
+	                                        		value="#{customerAcceptance.customerAcceptanceView.zoneMgrEmail}" />
 	                                        </td>
 	                                    </tr>
 	                                    <tr>
@@ -320,6 +320,7 @@
 		<ui:param name="action" value="onSaveCustomerAcceptance"/>
 		<ui:param name="update" value=":frmMain:full_main_container"/>
 	</ui:include>
+	<ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>

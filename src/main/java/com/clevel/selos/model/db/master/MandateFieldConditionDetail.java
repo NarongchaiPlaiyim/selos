@@ -11,7 +11,8 @@ import java.io.Serializable;
 public class MandateFieldConditionDetail implements Serializable{
 
     @Id
-    @Column(name = "id")
+    @SequenceGenerator(name = "SEQ_MST_MAN_FIELD_COND_DET", sequenceName = "SEQ_MST_MAN_FIELD_COND_DET", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_COND_DET")
     private long id;
 
     @ManyToOne
@@ -21,6 +22,9 @@ public class MandateFieldConditionDetail implements Serializable{
     @ManyToOne
     @JoinColumn(name = "mandate_fields_id")
     private MandateField mandateField;
+
+    @Column(name = "base_value")
+    private String baseValue;
 
     public long getId() {
         return id;
@@ -44,6 +48,14 @@ public class MandateFieldConditionDetail implements Serializable{
 
     public void setMandateField(MandateField mandateField) {
         this.mandateField = mandateField;
+    }
+
+    public String getBaseValue() {
+        return baseValue;
+    }
+
+    public void setBaseValue(String baseValue) {
+        this.baseValue = baseValue;
     }
 
     @Override

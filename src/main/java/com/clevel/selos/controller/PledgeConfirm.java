@@ -1,10 +1,20 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.PledgeConfirmControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.PledgeInfoView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -14,20 +24,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.businesscontrol.PledgeConfirmControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
-import com.clevel.selos.model.view.PledgeInfoView;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name="pledgeConfirm")
@@ -40,12 +41,13 @@ public class PledgeConfirm implements Serializable {
 	
 	@Inject
 	private PledgeConfirmControl pledgeConfirmControl;
-
+	@Inject
+	private UserAccessControl userAccessControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
 	
 	private BasicInfoView basicInfoView;
 	private Date lastUpdateDate;
@@ -85,7 +87,6 @@ public class PledgeConfirm implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		_loadFieldControl();
 		_loadInitData();
@@ -98,8 +99,7 @@ public class PledgeConfirm implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (!userAccessControl.canUserAccess(Screen.PledgeConfirm, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;

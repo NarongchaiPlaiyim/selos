@@ -1,18 +1,23 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.master.RoleDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ContactRecordDetailDAO;
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
 import com.clevel.selos.dao.working.TCGInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.db.working.TCGInfo;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.model.view.TCGInfoView;
@@ -20,10 +25,12 @@ import com.clevel.selos.transform.ContactRecordDetailTransform;
 import com.clevel.selos.transform.CustomerAcceptanceTransform;
 import com.clevel.selos.transform.TCGInfoTransform;
 import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +62,12 @@ public class CustomerAcceptanceControl extends BusinessControl {
 	
 	@Inject
 	private ReasonDAO reasonDAO;
+	
+	@Inject
+	private RoleDAO roleDAO;
+	@Inject
+	private WorkCaseOwnerDAO workCaseOwnerDAO;
+	
 	
 	
 	public Status getWorkCaseStatus(long workCaseId) {
@@ -111,8 +124,20 @@ public class CustomerAcceptanceControl extends BusinessControl {
 
         if (result == null)
             return new CustomerAcceptanceView();
-        else
-            return customerAcceptanceTransform.transformToView(result);
+        else {
+            CustomerAcceptanceView view = customerAcceptanceTransform.transformToView(result);
+            //add zonemgr info
+            Role zmRole = roleDAO.findRoleByName("ZM");
+            if (zmRole != null) {
+            	WorkCaseOwner owner = workCaseOwnerDAO.getLatestWorkCaseOwnerByRole(workCaseId, zmRole.getId());
+            	if (owner != null) {
+	            	view.setZoneMgrName(owner.getUser().getDisplayName());
+	            	view.setZoneMgrEmail(owner.getUser().getEmailAddress());
+	            	view.setZoneMgrTel(owner.getUser().getPhoneNumber());
+            	}
+            }
+            return view;
+        }
     }
 	
 	public List<ContactRecordDetailView> getContactRecordDetails(long customerAcceptanceId) {

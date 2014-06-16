@@ -2,10 +2,10 @@ package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
+import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.BRMSYesNo;
-import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.model.DocLevel;
 import com.clevel.selos.model.UWRuleType;
 import com.clevel.selos.util.Util;
@@ -199,7 +199,7 @@ public class Converter implements Serializable {
                         if(attributeType.getName().equals(BRMSFieldAttributes.UW_RULE_ORDER.value())){
                             uwRulesResult.setRuleOrder(attributeType.getStringValue());
                         }
-                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID)){
+                        if(attributeType.getName().equals(BRMSFieldAttributes.UW_PERSONAL_ID.value())){
                             String _attrValue = attributeType.getStringValue();
                             if(_attrValue != null){
                                 uwRulesResult.setPersonalID(_attrValue);
@@ -217,7 +217,12 @@ public class Converter implements Serializable {
                     uwRulesResult.setRuleOrder("0001");
                 }
                 logger.debug("uwRulesResult : {}", uwRulesResult);
-                uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+                if(_ruleType == UWRuleType.CUS_LEVEL){
+                    String keyMap = uwRulesResult.getRuleOrder().concat(uwRulesResult.getPersonalID());
+                    uwRulesResultMap.put(keyMap, uwRulesResult);
+                } else {
+                    uwRulesResultMap.put(uwRulesResult.getRuleOrder(), uwRulesResult);
+                }
             }
             uwRulesResponse.setUwRulesResultMap(uwRulesResultMap);
         }

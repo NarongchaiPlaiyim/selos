@@ -357,6 +357,9 @@ public class AppraisalResult implements Serializable {
     }
 
     public void onDeleteCollateralDetailView(){
+        if(selectCollateralDetailView.getId() != 0){
+            appraisalView.getRemoveCollListId().add(selectCollateralDetailView.getId());
+        }
         newCollateralViewList.remove(selectCollateralDetailView);
         log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());
     }
@@ -365,7 +368,6 @@ public class AppraisalResult implements Serializable {
         log.info("-- onSaveAppraisalResult");
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
-
             appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");

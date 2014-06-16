@@ -895,7 +895,7 @@
                                                  styleClass="largest"
                                                  size="1"
                                                  required="#{(qualitative.requiredReason) and (not empty param[addQualitativeB.clientId])}">
-                                    <f:selectItem itemLabel="- please select -" itemValue=""/>
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsB"
                                                    itemLabel="#{qualityItemsB.description}"
@@ -1020,24 +1020,23 @@
 </div>
 <div class="clear"></div>
 <!-- Start Footer -->
+<h:inputHidden id="pagename" value="mnuborrowerinfo"/>
+<h:inputHidden id="subpagename" value="submnuqualitative"/>
 <ui:include src="include/footer.xhtml"/>
 <!-- End Footer -->
-<h:inputHidden id="pagename" value="mnuprescreen"/>
-<h:inputHidden id="subpagename" value="submnuprescreen"/>
 </div>
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+<p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
 </h:form>
 </p:panel>
-
-
-
-
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{qualitative.messageHeader}" message="#{qualitative.message}">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog" closable="false"
+                     header="#{qualitative.messageHeader}">
+        <f:facet name="message">
+            <h:outputText value="#{qualitative.message}" escape="true"/>
+        </f:facet>
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"

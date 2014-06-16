@@ -4,15 +4,15 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SearchUserId;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import org.hibernate.Criteria;
 
 public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
 {
@@ -41,7 +41,7 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
 
         log.info("workcaseidlist size is : {}",workCaseIdList.size());
 
-        Iterator iterator = workCaseIdList.iterator();
+/*        Iterator iterator = workCaseIdList.iterator();
 
         int id;
 
@@ -63,7 +63,7 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
             log.info("id value is : {}",id);
 
             log.info("workcaseid value is : {}",workcaseid);
-        }
+        }*/
 
         return workCaseIdList;
 

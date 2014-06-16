@@ -1,8 +1,8 @@
 package com.clevel.selos.model.view;
 
-import java.util.Date;
-
 import com.clevel.selos.util.Util;
+
+import java.util.Date;
 
 public class CustomerInfoPostJurisView extends CustomerInfoPostBaseView<CustomerInfoPostJurisView> {
 	private static final long serialVersionUID = 7810126343864665205L;

@@ -1,0 +1,134 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+<h:form id="contactRecordViewDlgFrm">   
+    <p:panel styleClass="panel-dialog" rendered="#{not empty customerAcceptancePre.contactRecord}">
+    	<p:messages/>
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width:180px">
+                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callDateTime')}"
+                		for='calling_datetime'
+                		/>
+                </td>
+                <td>
+                	<p:inputText id='calling_datetime' readonly="true"
+                	     value="#{customerAcceptancePre.contactRecord.callingDate}"
+                	     >
+                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
+                      </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callResult')}"
+                		for='calling_result'
+                		/>
+                </td>
+                <td>
+                    <p:selectOneRadio id="calling_result" value="#{customerAcceptancePre.contactRecord.callingResult}"
+                    	required="#{customerAcceptancePre.isDialogMandate('callResult')}" requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}"
+
+                    	>
+                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
+                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.nextCallDateTime')}"
+                		for='nextcalling_datetime'
+                		/>
+                </td>
+                <td>
+                	 <clv:BECalendar id='nextcalling_datetime' 
+                         pattern="dd/MM/yyyy HH:mm" 
+                         showOn="button" 
+                         value="#{customerAcceptancePre.contactRecord.nextCallingDate}"
+                         locale='th_TH'
+                         mindate="#{customerAcceptancePre.minDate}"
+                         autocomplete="false"
+                         required="#{customerAcceptancePre.isDialogMandate('nextCall')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
+
+                        />
+                       
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.reason')}"
+                		for='reason' 
+                		/>
+                </td>
+                <td>
+                	<p:selectOneMenu id='reason' value='#{customerAcceptancePre.contactRecord.updReasonId}'
+                		required="#{customerAcceptancePre.isDialogMandate('reason')}"  requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
+
+                		>
+                		<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                		<f:selectItems value="#{customerAcceptancePre.reasons}" var="contactReason"
+                			itemLabel="#{contactReason.description}" itemValue="#{contactReason.id}" 
+                			/>
+                	</p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.remark')}"
+                		for='remark' 
+                		/>
+                </td>
+                <td>
+                    <p:inputTextarea id='remark' 
+                    	value="#{customerAcceptancePre.contactRecord.remark}"
+                    	autoResize="false"
+                    	required="#{customerAcceptancePre.isDialogMandate('remark')}"  requiredMessage="#{msg.get('app.cusaccept.validate.remark')}"
+                		readonly="#{customerAcceptancePre.isDialogDisable('remark')}"
+                    	rows="3" cols="40" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p:spacer></p:spacer>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                         id="addContactRecordBtn"
+                         value="#{msg.get('app.button.ok')}"
+                         actionListener="#{customerAcceptancePre.onAddContactRecord()}"
+                         update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
+                         oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
+                         styleClass="small"
+
+                         rendered="#{customerAcceptancePre.addDialog}"/>
+                     <p:commandButton
+                         id="updContactRecordBtn"
+                         value="#{msg.get('app.button.ok')}"
+                         actionListener="#{customerAcceptancePre.onUpdateContactRecord()}"
+                         update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
+                         oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
+                         styleClass="small"
+
+                         rendered="#{not customerAcceptancePre.addDialog}"/>
+                    <p:commandButton
+                    	type='button' styleClass="small" 
+
+                    	value="#{msg.get('app.button.cancel')}" onclick="p_contactRecordDlg.hide()"/>
+                    
+                </td>
+            </tr>
+        </table>
+	</p:panel>
+	<p:blockUI block="contactRecordViewDlgFrm" trigger="addContactRecordBtn,updContactRecordBtn">
+	    LOADING<br />
+	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+	</p:blockUI>
+ </h:form>
+</ui:composition>

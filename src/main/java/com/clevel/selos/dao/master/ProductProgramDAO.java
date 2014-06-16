@@ -2,7 +2,6 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.system.Config;
 import org.hibernate.Criteria;

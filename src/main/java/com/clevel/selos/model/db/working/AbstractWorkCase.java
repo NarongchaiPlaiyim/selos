@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -93,7 +91,7 @@ public class AbstractWorkCase implements Serializable{
     @JoinColumn(name = "modify_by")
     protected User modifyBy;
 
-    @Column(name = "bpm_active", length = 1, columnDefinition = "int default 1")
+    @Column(name = "bpm_active", columnDefinition = "int default 1")
     protected int bpmActive;
 
     public Date getCreateDate() {

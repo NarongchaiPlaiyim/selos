@@ -5,7 +5,8 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        >
 
 <h:head>
     <title>#{msg.get('app.feecalculation.title')}</title>
@@ -111,19 +112,22 @@
 			                               			</tr>
 		                               			</ui:fragment> 				
                                				</ui:repeat>
-                               				<tr class='grandtotal_summary'>
-	                               				<td colspan="4" class="left title">
-	                               					#{msg.get('app.feecalculation.table.grandtotal_agreement')}
-	                               				</td>
-	                               				<td class="right" >
-                               						<h:outputText value="#{feeCalculation.grandTotalAgreement}">
-                               							<f:convertNumber pattern="#,##0.00"/>
-                               						</h:outputText>
-                               					</td>
-	                               			</tr>
-	                               			<tr>
-	                               				<td colspan="100%"></td>
-	                               			</tr>
+                               				<c:if test="#{not empty feeCalculation.detailsAgreement}">
+	                               				<tr class='grandtotal_summary'>
+		                               				<td colspan="4" class="left title">
+		                               					#{msg.get('app.feecalculation.table.grandtotal_agreement')}
+		                               				</td>
+		                               				<td class="right" >
+	                               						<h:outputText value="#{feeCalculation.grandTotalAgreement}">
+	                               							<f:convertNumber pattern="#,##0.00"/>
+	                               						</h:outputText>
+	                               					</td>
+		                               			</tr>
+		                               			<tr>
+		                               				<td colspan="100%"></td>
+		                               			</tr>
+		                               		</c:if>
+	                               			
                                				<ui:repeat var="nonAgreementList" value="#{feeCalculation.detailsNonAgreement}"
                                					varStatus="nonAgreementRowStatus">
 												<ui:repeat var="nonAgreement" value="#{nonAgreementList}"
@@ -293,6 +297,7 @@
         <ui:param name="action" value="onCancelFeeCalculation"/>
         <ui:param name="update" value=":frmMain:full_main_container"/>
      </ui:include>
+     <ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>

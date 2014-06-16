@@ -69,11 +69,50 @@ public class BizInfoDetailView implements Serializable {
 
     private int isMainDetail;
 
+    public BizInfoDetailView() {
+        reset();
+    }
+
     public void reset() {
-        this.bizDesc = new BusinessDescription();
-        this.bizDesc.setBusinessGroup(new BusinessGroup());
         this.bizGroup = new BusinessGroup();
+        this.bizDesc = new BusinessDescription();
         this.bizType = new BusinessType();
+        this.bizActivity = new BusinessActivity();
+        this.bizPermission = "N";
+        this.adjustedIncomeFactor = BigDecimal.ZERO;
+        this.incomeAmount = BigDecimal.ZERO;
+        this.percentBiz = BigDecimal.ZERO;
+        this.percentExpIndCountryName = BigDecimal.ZERO;
+        this.supplierTotalPercentBuyVolume = BigDecimal.ZERO;
+        this.supplierTotalPercentCredit = BigDecimal.ZERO;
+        this.supplierTotalCreditTerm = BigDecimal.ZERO;
+        this.supplierUWAdjustPercentCredit = BigDecimal.ZERO;
+        this.supplierUWAdjustCreditTerm = BigDecimal.ZERO;
+        this.buyerTotalPercentBuyVolume = BigDecimal.ZERO;
+        this.buyerTotalPercentCredit = BigDecimal.ZERO;
+        this.buyerTotalCreditTerm = BigDecimal.ZERO;
+        this.buyerUWAdjustPercentCredit = BigDecimal.ZERO;
+        this.buyerUWAdjustCreditTerm = BigDecimal.ZERO;
+        this.standardAccountReceivable = BigDecimal.ZERO;
+        this.averagePurchaseAmount = BigDecimal.ZERO;
+        this.purchasePercentCash = BigDecimal.ZERO;
+        this.purchasePercentCredit = BigDecimal.ZERO;
+        this.purchasePercentLocal = BigDecimal.ZERO;
+        this.purchasePercentForeign = BigDecimal.ZERO;
+        this.purchaseTerm = BigDecimal.ZERO;
+        this.standardAccountPayable = BigDecimal.ZERO;
+        this.averagePayableAmount = BigDecimal.ZERO;
+        this.payablePercentCash = BigDecimal.ZERO;
+        this.payablePercentCredit = BigDecimal.ZERO;
+        this.payablePercentLocal = BigDecimal.ZERO;
+        this.payablePercentForeign = BigDecimal.ZERO;
+        this.payableTerm = BigDecimal.ZERO;
+        this.standardStock = BigDecimal.ZERO;
+        this.stockDurationBDM = BigDecimal.ZERO;
+        this.stockDurationUW = BigDecimal.ZERO;
+        this.stockValueBDM = BigDecimal.ZERO;
+        this.stockValueUW = BigDecimal.ZERO;
+        this.weightIncomeFactor = BigDecimal.ZERO;
     }
 
     public long getId() {

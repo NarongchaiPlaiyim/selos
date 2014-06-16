@@ -3,7 +3,6 @@ package com.clevel.selos.integration.brms.convert;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.BRMSApplicationInfo;
 import com.clevel.selos.integration.brms.model.response.DocAppraisalResponse;
-import com.clevel.selos.integration.brms.model.response.DocCustomerResponse;
 import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.model.DocLevel;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;

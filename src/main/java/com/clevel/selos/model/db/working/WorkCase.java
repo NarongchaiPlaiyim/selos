@@ -1,12 +1,11 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name = "wrk_case")
@@ -25,6 +24,9 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
+    @Column(name = "request_appraisal_require", columnDefinition = "int default 0")
+    private int requestAppraisalRequire;
+
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
 
@@ -42,8 +44,11 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "uw_doa2")
     private AuthorizationDOA uwDOA2;
 
-    @Column(name = "ref_app_number")
+    @Column(name = "ref_app_number", length = 50)
     private String refAppNumber;
+
+    @Column(name = "case_update_flag", columnDefinition = "int default 0")
+    private int caseUpdateFlag;
 
     public String getRefAppNumber() {
         return refAppNumber;
@@ -125,18 +130,36 @@ public class WorkCase extends AbstractWorkCase{
         this.uwDOA2 = uwDOA2;
     }
 
+    public int getRequestAppraisalRequire() {
+        return requestAppraisalRequire;
+    }
+
+    public void setRequestAppraisalRequire(int requestAppraisalRequire) {
+        this.requestAppraisalRequire = requestAppraisalRequire;
+    }
+
+    public int getCaseUpdateFlag() {
+        return caseUpdateFlag;
+    }
+
+    public void setCaseUpdateFlag(int caseUpdateFlag) {
+        this.caseUpdateFlag = caseUpdateFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("requestAppraisalRequire", requestAppraisalRequire)
                 .append("requestAppraisal", requestAppraisal)
                 .append("requestPricing", requestPricing)
                 .append("pricingDoaLevel", pricingDoaLevel)
                 .append("uwDOA1", uwDOA1)
                 .append("uwDOA2", uwDOA2)
-                .append("refAppNumber",refAppNumber)
+                .append("refAppNumber", refAppNumber)
+                .append("caseUpdateFlag", caseUpdateFlag)
                 .toString();
     }
 }

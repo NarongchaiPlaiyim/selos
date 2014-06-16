@@ -1,11 +1,11 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ConfirmAccountType;
+import com.clevel.selos.model.RequestAccountType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.clevel.selos.model.ConfirmAccountType;
-import com.clevel.selos.model.RequestAccountType;
 
 public class OpenAccountFullView implements Serializable,Cloneable {
 	private static final long serialVersionUID = 5325274175463654261L;
@@ -185,6 +185,21 @@ public class OpenAccountFullView implements Serializable,Cloneable {
 					continue;
 				builder.append(purpose.getPurpose());
 				builder.append("<br/>");
+			}
+			if (builder.length() > 0)
+				builder.setLength(builder.length() - 5);
+		}
+		return builder.toString();
+	}
+	public String getAllPurposes(String seperator) {
+		StringBuilder builder = new StringBuilder();
+		List<OpenAccountPurposeView> purposes = getPurposes();
+		if (purposes != null && !purposes.isEmpty()) {
+			for (OpenAccountPurposeView purpose : purposes) {
+				if (!purpose.isChecked())
+					continue;
+				builder.append(purpose.getPurpose());
+				builder.append(seperator);
 			}
 			if (builder.length() > 0)
 				builder.setLength(builder.length() - 5);

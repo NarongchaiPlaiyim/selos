@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.HeaderControl;
-import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.InboxDevControl;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.integration.BPMInterface;
@@ -128,7 +127,7 @@ public class InboxDev implements Serializable {
         }
 
         //*** Get Information for Header ***//
-        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getCaNo());
+        AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), inboxViewSelectItem.getStatusCode(), inboxViewSelectItem.getCaNo());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
         long selectedStepId = inboxViewSelectItem.getStepId();

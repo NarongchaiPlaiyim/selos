@@ -4,17 +4,14 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
-import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
@@ -29,6 +26,17 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
         log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
+        log.info("newCreditDetailList ::: size : {}", newCreditDetailList.size());
+        return newCreditDetailList;
+    }
+
+    public List<NewCreditDetail> findNewCreditDetailByNewCreditFacility(NewCreditFacility newCreditFacility, ProposeType proposeType) {
+        log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility.getId());
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.addOrder(Order.asc("id"));
         List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
         log.info("newCreditDetailList ::: size : {}", newCreditDetailList.size());

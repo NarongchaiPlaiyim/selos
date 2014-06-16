@@ -37,6 +37,15 @@ public class NewCollateralSubMortgageDAO extends GenericDAO<NewCollateralSubMort
 
     }
 
+    public List<NewCollateralSubMortgage> findByNewCollateralSubId(final long newCollateralSubId) {
+        log.info("-- findByNewCollateralSubId NewCollateralSubId.id[{}]", newCollateralSubId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateralSub.id", newCollateralSubId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateralSubMortgage> newCollateralSubMortgageList = (List<NewCollateralSubMortgage>) criteria.list();
+        log.debug("--NewCollateralSubMortgageList[{}]", newCollateralSubMortgageList);
+        return newCollateralSubMortgageList;
+    }
 
     public List<NewCollateralSubMortgage> getListByWorkCase(WorkCase workCase , ProposeType proposeType){
 //        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);

@@ -2,7 +2,6 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.MandateField;
 import com.clevel.selos.model.db.master.MandateFieldStepAction;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -28,5 +27,17 @@ public class MandateFieldStepActionDAO extends GenericDAO<MandateFieldStepAction
         List<MandateFieldStepAction> mandateFieldStepActionList = criteria.list();
         logger.debug("retrun List<MandateFieldStepAction> {}", mandateFieldStepActionList);
         return mandateFieldStepActionList;
+    }
+
+    public MandateFieldStepAction findByActionAndField(long stepId, long actionId, long fieldId){
+        logger.debug("findByCriteria Step:{}, Action:{}", stepId, actionId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("action.id", actionId));
+        criteria.add(Restrictions.eq("mandateField.id", fieldId));
+        MandateFieldStepAction mandateFieldStepAction = (MandateFieldStepAction)criteria.uniqueResult();
+        logger.debug("retrun MandateFieldStepAction {}", mandateFieldStepAction);
+        return mandateFieldStepAction;
+
     }
 }

@@ -8,8 +8,8 @@ import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.Language;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.UserStatus;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.UserToAuthorizationDOA;
 import com.clevel.selos.security.encryption.EncryptionService;
@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.List;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -108,12 +107,12 @@ public class LoginBean {
     {
         log.info("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
 
-        log.info("controler in login method of loginbean class");
+        log.info("controller in login method of loginbean class");
 
         loginExceptionMessage = "";
 
         // make authentication with AD first
-        /*if (Util.isTrue(ldapEnable))
+        if (Util.isTrue(ldapEnable))
         {
             log.info("LDAP authentication enabled.");
 
@@ -139,7 +138,7 @@ public class LoginBean {
                 }
                 return "failed";
             }
-        }*/
+        }
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
@@ -205,7 +204,7 @@ public class LoginBean {
 
         try
         {
-            /*HttpServletRequest httpServletRequest = FacesUtil.getRequest();
+            HttpServletRequest httpServletRequest = FacesUtil.getRequest();
 
             HttpServletResponse httpServletResponse = FacesUtil.getResponse();
 
@@ -233,7 +232,7 @@ public class LoginBean {
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "", new Date());
 
-            log.info("retrun type in logiinbean class is : {}",user.getRole().getRoleType().getRoleTypeName().name());*/
+            log.info("retrun type in logiinbean class is : {}",user.getRole().getRoleType().getRoleTypeName().name());
 
             return user.getRole().getRoleType().getRoleTypeName().name();
 
@@ -282,7 +281,7 @@ public class LoginBean {
 
                 if(isLocked.equalsIgnoreCase("true"))
                 {*/
-            if((Long)httpSession.getAttribute("stepId") !=0 && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
+            if((Long)httpSession.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)httpSession.getAttribute("wobNumber");
                 bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));

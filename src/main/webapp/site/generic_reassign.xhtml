@@ -68,8 +68,14 @@
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Reassign</div>
+                <div style="color: red;">
+                    Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
+                    <br/>
+                    Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ
+                </div>
                 <div id="content">
                     <table id="content_form">
+
                         <!--<tr>
                             <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Reassign:</label></td>
                         </tr>
@@ -134,10 +140,9 @@
                             <td colspan="100%" style="color: red;">
                                 <p:commandButton value="Reassign"
                                                  id="reassignButtonId" styleClass="medium" onclick="reassignDlg.show()"
-                                                 readonly="#{reassignteamnames.selectedUserName eq 'ALL'}"
-                                                 disabled="#{reassignteamnames.selectedUserName eq 'ALL' or !param['frmMain:checkBoxId']}">
+                                                 disabled="#{reassignteamnames.disableReassign}">
                                         <p:resetInput target=":reassignDialog"></p:resetInput>
-                                </p:commandButton>
+                                </p:commandButton> เลือก Reassign ได้ไม่เกินครั้งละ 5 cases.
                                 <p:spacer width="20px;"/> </td>
                         </tr>
 
@@ -167,78 +172,78 @@
                                     </p:column>
 
                                     <p:column headerText="" styleClass="center" style="width:22px;" >
-                                        <h:selectBooleanCheckbox id="checkBoxId"  onclick="onOneClick('frmMain:reassignButtonId',false);" disabled="false" value="#{reassignteamnames.checked[item.fwobnumber]}"/>
+
+                                        <p:selectBooleanCheckbox id="checkBoxId" disabled="#{item.locked eq 1}" value="#{reassignteamnames.checked[item.fwobnumber]}">
+                                            <p:ajax update=":frmMain:reassignButtonId" process="@this" listener="#{reassignteamnames.checkReassign}"/>
+                                            <!--<f:ajax event="change" execute="@this" render=":frmMain:reassignButtonId" listener="{reassignteamnames.checkReassign}"/>-->
+                                        </p:selectBooleanCheckbox>
                                     </p:column>
 
                                     <p:column headerText="Lock" styleClass="center" style="width:8px;" >
                                           <h:graphicImage value="../resources/images/table/Lock1.png" rendered="#{item.locked eq 1}" />
                                     </p:column>
 
-                                    <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="#{item.receiveddate}" >
+                                    <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="receiveddate" >
                                         <h:outputText value="#{item.receiveddate}"/>
                                     </p:column>
 
-                                    <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="#{item.applicationno}">
+                                    <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="applicationno">
                                         <h:outputText value="#{item.applicationno}"/>
                                     </p:column>
 
-                                    <p:column headerText="Name" styleClass="center" style="width: 110px;">
+                                    <p:column headerText="Name" styleClass="center" style="width: 110px;" sortBy="name">
                                         <h:outputText value="#{item.name}"/>
                                     </p:column>
 
-                                    <p:column headerText="Product Group" style="width: 120px;" styleClass="center" sortBy="#{item.productgroup}">
+                                    <p:column headerText="Product Group" style="width: 120px;" styleClass="center" sortBy="productgroup">
                                         <h:outputText value="#{item.productgroup}"/>
                                     </p:column>
 
-                                    <p:column headerText="Request Type" style="width: 120px;" styleClass="center" >
+                                    <p:column headerText="Request Type" style="width: 120px;" styleClass="center" sortBy="requestTypeStr">
                                         <h:outputText value="#{item.requestTypeStr}"/>
                                     </p:column>
 
-                                    <p:column headerText="Step" styleClass="center" style="width: 110px;" sortBy="#{item.step}">
+                                    <p:column headerText="Step" styleClass="center" style="width: 110px;" sortBy="step">
                                         <h:outputText  value="#{item.step}"/>
                                     </p:column>
 
-                                    <p:column headerText="Status" styleClass="center" style="width: 110px;" sortBy="#{item.status}">
+                                    <p:column headerText="Status" styleClass="center" style="width: 110px;" sortBy="status">
                                         <h:outputText value="#{item.status}"/>
                                     </p:column>
 
-                                    <p:column headerText="From User" styleClass="center" style="width: 110px;" >
+                                    <p:column headerText="From User" styleClass="center" style="width: 110px;" sortBy="fromuser">
                                         <h:outputText value="#{item.fromuser}"/>
                                     </p:column>
 
-                                    <p:column headerText="At User" styleClass="center" style="width: 110px;" >
+                                    <p:column headerText="At User" styleClass="center" style="width: 110px;" sortBy="atuser">
                                         <h:outputText value="#{item.atuser}"/>
                                     </p:column>
 
-                                   <p:column headerText="At User Team" styleClass="center" style="width: 130px;">
+                                   <p:column headerText="At User Team" styleClass="center" style="width: 130px;" sortBy="atuserteam">
                                        <h:outputText value="#{item.atuserteam}" />
                                    </p:column>
 
-                                    <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" >
+                                    <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="appointmentdate" >
                                         <h:outputText value="#{item.appointmentdate}"/>
                                     </p:column>
 
-                                    <p:column headerText="DOA Level" styleClass="center" style="width: 110px;" >
+                                    <p:column headerText="DOA Level" styleClass="center" style="width: 110px;" sortBy="doalevel">
                                         <h:outputText value="#{item.doalevel}"/>
                                     </p:column>
 
-                                    <p:column headerText="Action" styleClass="center" style="width: 110px;"  >
-                                        <h:outputText  value="#{item.action}"/>
-                                    </p:column>
-
-                                    <p:column headerText="SLA End Date" styleClass="center" style="width: 110px;  background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="#{item.slaenddate}" >
+                                    <p:column headerText="SLA End Date" styleClass="center" style="width: 110px;  background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="slaenddate" >
                                         <h:outputText  value="#{item.slaenddate}"/>
                                     </p:column>
 
-                                    <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatuser}">
+                                    <p:column headerText="Total Time Spent At User " styleClass="center" style="width: 110px;" sortBy="totaltimespentatuser">
                                         <h:outputText  value="#{item.totaltimespentatuser}"/>
                                     </p:column>
 
-                                    <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 110px;" sortBy="#{item.totaltimespentatprocess}">
+                                    <p:column headerText="Total Time Spent At Process" styleClass="center" style="width: 110px;" sortBy="totaltimespentatprocess">
                                         <h:outputText value="#{item.totaltimespentatprocess}"/>
                                     </p:column>
 
-                                    <p:column headerText="View">
+                                    <p:column headerText="">
                                         <p:commandButton icon="ui-icon-search" title="View" action="#{reassignteamnames.onSelectInbox}" onclick="blockInbox.show()">
                                             <f:setPropertyActionListener value="#{item}" target="#{reassignteamnames.searchViewSelectItem}"/>
                                         </p:commandButton>
@@ -284,6 +289,20 @@
                                  header="Exception.">
                     <f:facet name="message">
                         <h:outputText value="Another User is Working on this case!! Please Retry Later." escape="false"/>
+                    </f:facet>
+                    <p:commandButton value="#{msg.get('app.button.ok')}"
+                                     process="@this"
+                                     update="frmMain"
+                                     oncomplete="msgBoxErrorDlg.hide()"/>
+                </p:confirmDialog>
+            </p:panel>
+
+            <p:panel id="msgBoxErrorPanel1" styleClass="panel">
+                <p:confirmDialog id="msgBoxErrorDialog3" widgetVar="msgBoxErrorDlg3" styleClass="messageDialog"
+                                 closable="false"
+                                 header="Exception.">
+                    <f:facet name="message">
+                        <h:outputText value="#{peInbox.message}" escape="false"/>
                     </f:facet>
                     <p:commandButton value="#{msg.get('app.button.ok')}"
                                      process="@this"

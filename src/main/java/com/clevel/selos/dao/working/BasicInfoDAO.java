@@ -5,12 +5,10 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.BasicInfo;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import javax.persistence.FetchType;
 
 public class BasicInfoDAO extends GenericDAO<BasicInfo, Long> {
     @Inject

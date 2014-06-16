@@ -9,16 +9,26 @@ public enum Screen {
     PRESCREEN_RESULT(1400),
 
     //Full Application
-    //Basic Info
     BASIC_INFO(2100),
+    CUSTOMER_INFO_SUMMARY(2200),
+//    CUSTOMER_INFO_INDIVIDUAL(3003),
+//    CUSTOMER_INFO_JURISTIC(3004),
+    NCB_SUMMARY(2500),
+    NCB_DETAIL(2510),
+    TCG_INFO(2600),
+    BUSINESS_INFO_SUMMARY(2700),
+    BUSINESS_INFO_DETAIL(2710),
+    BANK_STATEMENT_SUMMARY(2810),
+    BANK_STATEMENT_DETAIL(2820),
     DBR_INFO(2830),
+    CREDIT_FACILITY_EXISTING(2850),
+    CREDIT_FACILITY_PROPOSE(2880),
+    EXECUTIVE_SUMMARY(2910),
 
-    //Customer Info
-    CUSTOMER_INFO_SUMMARY(3002),
-    CUSTOMER_INFO_INDIVIDUAL(3003),
-    CUSTOMER_INFO_JURISTIC(3004),
+    //Decision
+    DECISION(2920),
     
-    //Step 301 Screen //TODO
+    //Step 301 Screen 
     InsuranceInfo(3100),
     ContactRecord(3300),
     CallingRecordDialog(3500),
@@ -30,18 +40,28 @@ public enum Screen {
     GuarantorDetail(8200),
     BAInfo(8300),
     applyBAinfoDialog(8400),
-    addBAPAInfoDialog(8500),
+    addBAPAInfoDialog(10300),
     AccountInfo(8500),
     AddAccountInfoDialog(8600),
     PreDisbursement(9200),
     TCGInfo(9700),
-    
     PostCustomerInfoSum(5300),
-    PostCustomerInfoIndv(0),
+    PostCustomerInfoIndv(5400),
     PostCustomerInfoJuris(9100),
     AgreementAndMortgageConfirm(9800),
     AgreementSign(9900),
     PledgeConfirm(10000),
+
+    ApproveDetailInfo(8700),
+    AddMCDisburseInfoDialog(8800) ,
+    AddDepositDisburseInfoDialog(8900) ,
+    AddBahtNetDisburseInfoDialog(9000) ,
+    Disbursement(9300) ,
+    
+    PostDecision(9500) , //???
+    UpdateCollateralInfo(9600) ,
+    PerfectionReview(10100) ,
+    ConfirmLimitSetUp(10200)
     
     ;
     int value;

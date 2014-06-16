@@ -12,7 +12,6 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
-import com.clevel.selos.transform.UWRuleResultTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -22,7 +21,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 @Stateless
 public class ExSummaryControl extends BusinessControl {
@@ -183,7 +185,7 @@ public class ExSummaryControl extends BusinessControl {
 
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 if(bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
-                    bizSize = bankStatementSummary.getGrdTotalIncomeGross();
+                    bizSize = Util.multiply(bankStatementSummary.getGrdTotalIncomeGross(),BigDecimal.valueOf(12));
                 }
             } else { // use customer
                 if(cusListView != null && cusListView.size() > 0){
@@ -342,12 +344,14 @@ public class ExSummaryControl extends BusinessControl {
                 for(NewCollateralView acl : decisionView.getApproveCollateralList()){
                     if(acl.getNewCollateralHeadViewList() != null && acl.getNewCollateralHeadViewList().size() > 0){
                         for(NewCollateralHeadView nch : acl.getNewCollateralHeadViewList()){
-                            if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
-                                tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
-                            } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
-                            } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                            if(nch != null && nch.getPotentialCollateral() != null){
+                                if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                    tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                    tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                    tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                }
                             }
                         }
                     }
@@ -907,9 +911,13 @@ public class ExSummaryControl extends BusinessControl {
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = BigDecimal.ZERO;
         BigDecimal groupExposureUW = BigDecimal.ZERO;
-        if((newCreditFacility != null && newCreditFacility.getId() != 0) && (decision != null && decision.getId() != 0)){
+        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
             groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
-            groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+            if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
+                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+            } else {
+                groupExposureUW = newCreditFacility.getTotalExposure();
+            }
         }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);

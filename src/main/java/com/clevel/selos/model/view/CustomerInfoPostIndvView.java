@@ -1,11 +1,11 @@
 package com.clevel.selos.model.view;
 
-import java.util.Date;
-
 import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.util.Util;
+
+import java.util.Date;
 
 public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerInfoPostIndvView> {
 	private static final long serialVersionUID = -3021510855802034155L;

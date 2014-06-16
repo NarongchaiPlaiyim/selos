@@ -1,10 +1,19 @@
 package com.clevel.selos.controller;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.clevel.selos.businesscontrol.ApproveDetailInformationControl;
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.ApproveDetailInformationView;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -14,18 +23,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.ApproveDetailInformationControl;
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.ApproveDetailInformationView;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 @ViewScoped
 @ManagedBean(name = "approveDetailInformation")
@@ -40,6 +42,8 @@ public class ApproveDetailInformation implements Serializable {
 	
 	@Inject
 	private ApproveDetailInformationControl approveDetailInformationControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
@@ -88,15 +92,14 @@ public class ApproveDetailInformation implements Serializable {
 	}
 	
 	public void preRender() {
-		if (preRenderCheck)
+		/*if (preRenderCheck)
 			return;
 		preRenderCheck = true;
 		
 		String redirectPage = null;
 		log.info("preRender workCase Id = "+workCaseId);
 		if (workCaseId > 0) {
-			//TODO Validate step 
-			if (stepId <= 0) {
+			if (!userAccessControl.canUserAccess(Screen.ApproveDetailInfo, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;
@@ -111,7 +114,7 @@ public class ApproveDetailInformation implements Serializable {
 			ec.redirect(ec.getRequestContextPath()+redirectPage);
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to "+redirectPage,e);
-		}
+		}*/
 	}
 	
 	public void onSaveApproveDetail() {

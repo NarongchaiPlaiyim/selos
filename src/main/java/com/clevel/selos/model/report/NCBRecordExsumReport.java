@@ -1,8 +1,5 @@
 package com.clevel.selos.model.report;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 public class NCBRecordExsumReport {
     private String ncbCusName;
     private int checkIn6Month;

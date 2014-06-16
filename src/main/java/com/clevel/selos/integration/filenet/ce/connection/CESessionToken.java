@@ -1,11 +1,10 @@
 package com.clevel.selos.integration.filenet.ce.connection;
 
-import java.net.URLEncoder;
-
 import com.filenet.wcm.api.ObjectFactory;
 import com.filenet.wcm.api.Session;
 
 import javax.inject.Inject;
+import java.net.URLEncoder;
 
 public class CESessionToken {
 

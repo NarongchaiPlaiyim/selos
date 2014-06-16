@@ -37,7 +37,15 @@ public class PEInbox implements Serializable
     private String createDate;
     private String createBy;
     private String terminateDate;
+    private String bdmFlag;
 
+    public String getBdmFlag() {
+        return bdmFlag;
+    }
+
+    public void setBdmFlag(String bdmFlag) {
+        this.bdmFlag = bdmFlag;
+    }
 
     public String getTerminateDate() {
         return terminateDate;

@@ -10,7 +10,6 @@ import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
-import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
@@ -27,12 +26,11 @@ import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.hibernate.Criteria;
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -43,6 +41,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "reassignteamnames")
@@ -90,6 +89,8 @@ public class ReassignTeamNames implements Serializable
 
     private String popupremark;
 
+    private boolean disableReassign = true;
+
     private Map<String, Boolean> checked =  new HashMap<String, Boolean>();
 
     List<ReassignTeamNameId> popupreasignteamnames ;
@@ -97,6 +98,16 @@ public class ReassignTeamNames implements Serializable
     List<String> poupreasignUsernames;
 
     Map.Entry entry;
+
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     @Inject
     PEDBExecute pedbExecute;
@@ -140,6 +151,14 @@ public class ReassignTeamNames implements Serializable
     @Inject
     @Config(name = "interface.pe.rosterName")
     String rostername;
+
+    public boolean isDisableReassign() {
+        return disableReassign;
+    }
+
+    public void setDisableReassign(boolean disableReassign) {
+        this.disableReassign = disableReassign;
+    }
 
     public String getSelectedUserName() {
         return selectedUserName;
@@ -375,26 +394,18 @@ public class ReassignTeamNames implements Serializable
     public void init()
     {
 
+        disableReassign = true;
+
         //Clear all session before selectInbox
         HttpSession session = FacesUtil.getSession(false);
         try
         {
-            /*if(session.getAttribute("isLocked")!=null)
+
+            if((Long)session.getAttribute("stepId")!= StepValue.COMPLETED_STEP.value() &&session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
             {
-
-                String isLocked = (String) session.getAttribute("isLocked");
-
-                if(isLocked.equalsIgnoreCase("true"))
-                {*/
-                    String wobNumber = (String)session.getAttribute("wobNumber");
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
-                /*}
-                else
-                {
-                    session.removeAttribute("isLocked");
-                }
-
-            }*/
+                String wobNumber = (String)session.getAttribute("wobNumber");
+                bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+            }
         }
         catch (Exception e)
         {
@@ -421,6 +432,9 @@ public class ReassignTeamNames implements Serializable
 
     public List<User> valueChangeMethod(ValueChangeEvent e)
     {
+
+        disableReassign = true;
+
         log.info("controller comes to valueChangeMethod of ReassignTeamNames class");
 
         teamuserslist = new ArrayList<String>();
@@ -457,6 +471,8 @@ public class ReassignTeamNames implements Serializable
 
     public List<PEInbox> reassignSearch()
     {
+
+        disableReassign = true;
 
          log.info("Controller comes to reassignSearch method of ReassignTeamNames class");
 
@@ -560,15 +576,18 @@ public class ReassignTeamNames implements Serializable
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
 
-        long stepId = searchViewSelectItem.getStepId();
-        String appNumber = searchViewSelectItem.getApplicationno();
+        long stepId = Util.parseLong(searchViewSelectItem.getStepId(), 0);
+        long statusId = Util.parseLong(searchViewSelectItem.getStatuscode(), 0);
         long wrkCasePreScreenId = 0L;
         long wrkCaseId = 0L;
         long wrkCaseAppraisalId = 0L;
-        long statusId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
-        String queueName = searchViewSelectItem.getQueuename();
+        int fetchType = Util.parseInt(searchViewSelectItem.getFetchType(), 0);
+        String appNumber = Util.parseString(searchViewSelectItem.getApplicationno(), "");
+        String queueName = Util.parseString(searchViewSelectItem.getQueuename(), "0");
+        String wobNumber = Util.parseString(searchViewSelectItem.getFwobnumber(), "");
+        String caseOwner = Util.parseString(searchViewSelectItem.getAtuser(), "");
 
         try {
 
@@ -585,7 +604,55 @@ public class ReassignTeamNames implements Serializable
                 //log.error("Error while opening case",e);
             }
 
-            if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
+            if(stepId != 0){
+                Step step = stepDAO.findById(stepId);
+                stageId = step != null ? step.getStage().getId() : 0;
+            }
+
+            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            if(!Util.isNull(workCase)){
+                wrkCaseId = workCase.getId();
+                requestAppraisalFlag = workCase.getRequestAppraisal();
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                wrkCasePreScreenId = workCasePrescreen.getId();
+                requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+            }
+
+            if(Util.isTrue(requestAppraisalFlag)){
+                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
+                wrkCaseAppraisalId = workCaseAppraisal.getId();
+            }
+
+            session.setAttribute("workCaseId", wrkCaseId);
+            session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
+            session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
+            session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("wobNumber", wobNumber);
+            session.setAttribute("statusId", statusId);
+            session.setAttribute("fetchType", fetchType);
+            session.setAttribute("stepId", stepId);
+            session.setAttribute("stageId", stageId);
+            session.setAttribute("caseOwner", caseOwner);
+            session.setAttribute("queueName", queueName);
+
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, searchViewSelectItem.getApplicationno());
+            session.setAttribute("appHeaderInfo", appHeaderView);
+
+            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
+
+            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
+
+            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
+                FacesUtil.redirect(landingPage);
+                return;
+            } else {
+                log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
+                message = "Can not find landing page for step [" + stepId + "]";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg3.show()");
+            }
+
+            /*if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 if(workCasePrescreen != null){
                     wrkCasePreScreenId = workCasePrescreen.getId();
@@ -651,7 +718,7 @@ public class ReassignTeamNames implements Serializable
                 session.setAttribute("queueName", queueName);
             }
 
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, searchViewSelectItem.getFwobnumber());
+            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, Util.parseLong(searchViewSelectItem.getStatuscode(), 0), searchViewSelectItem.getFwobnumber());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
             String landingPage = inboxControl.getLandingPage(stepId,0);
@@ -663,7 +730,7 @@ public class ReassignTeamNames implements Serializable
                 return;
             } else {
                 //TODO Show dialog
-            }
+            }*/
 
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
@@ -672,67 +739,13 @@ public class ReassignTeamNames implements Serializable
             log.error("Error while opening case",e);
         }
 
-        /*userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        log.info("userDetails  : "+userDetail);
-
-        if(userDetail == null)
-        {
-            FacesUtil.redirect("/login.jsf");
-            return;
-        }
-
-        HttpSession session = FacesUtil.getSession(false);
-        log.info("onSelectInbox ::: setSession ");
-        log.info("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
-
-        if(!Util.isEmpty(Long.toString(searchViewSelectItem.getWorkCasePreScreenId()))){
-            session.setAttribute("workCasePreScreenId", searchViewSelectItem.getWorkCasePreScreenId());
-        } else {
-            session.setAttribute("workCasePreScreenId", 0);
-        }
-        if(!Util.isEmpty(Long.toString(searchViewSelectItem.getWorkCaseId()))){
-            session.setAttribute("workCaseId", searchViewSelectItem.getWorkCaseId());
-        } else {
-            session.setAttribute("workCaseId", 0);
-        }
-
-        session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-        session.setAttribute("statusId", Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
-        session.setAttribute("stepId", searchViewSelectItem.getStepId());
-        session.setAttribute("queuename",searchViewSelectItem.getQueuename());
-        session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
-        session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
-
-        try
-        {
-
-            bpmInterfaceImpl.lockCase(searchViewSelectItem.getQueuename(),searchViewSelectItem.getFwobnumber(),searchViewSelectItem.getFetchType());
-            session.setAttribute("isLocked","true");
-
-        }
-        catch (Exception e)
-        {
-            log.error("Error while Locking case in queue : {}, wobNumber : {}",searchViewSelectItem.getQueuename(), searchViewSelectItem.getFwobnumber(), e);
-        }
-
-       *//* AppHeaderView appHeaderView = pedbExecute.getHeaderInformation(searchViewSelectItem.getWorkCasePreScreenId(), searchViewSelectItem.getWorkCaseId());
-        session.setAttribute("appHeaderInfo", appHeaderView);*//*
-
-        long selectedStepId = searchViewSelectItem.getStepId();
-        String landingPage = inboxControl.getLandingPage(selectedStepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
-
-        if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-            FacesUtil.redirect(landingPage);
-            return;
-        } else {
-
-        }*/
-
     }
 
     public List<User> changeUserNameBasedOnTeamName(AjaxBehaviorEvent ajaxBehaviorEvent)
     {
+
+        disableReassign = true;
+
         log.info("controller comes to changeUserNameBasedOnTeamName of ReassignTeamNames class ");
 
         poupreasignUsernames = new ArrayList<String>();
@@ -784,6 +797,9 @@ public class ReassignTeamNames implements Serializable
 
     public void reassignDisptchRecords()
     {
+
+        disableReassign = true;
+
         ReassignTeamNameId reassignTeamNameId = new ReassignTeamNameId();
 
         log.info("controller entered in to reassignDispatchRecords method of ReassignTeamNames");
@@ -867,9 +883,6 @@ public class ReassignTeamNames implements Serializable
                 checked.clear();
                 setChecked(checked);
                 reassignSearchViewList = pedbExecute.getReassignSearch(selectedTeamName,queryusername);
-                log.info("before execute dialog..");
-                RequestContext.getCurrentInstance().execute("successDlg.show()");
-                log.info("after execute dialog..");
             }
             log.info("reassignsearchviewlist size is :::::: {}",reassignSearchViewList.size());
 
@@ -889,13 +902,110 @@ public class ReassignTeamNames implements Serializable
 
             setPopupremark("");
 
+            RequestContext.getCurrentInstance().execute("successDlg.show()");
+
+            return;
+
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            log.error("Error while reassigning : ",e);
         }
         finally
         {
+
+        }
+
+    }
+
+    public void checkReassign(AjaxBehaviorEvent ajaxBehaviorEvent)
+    {
+
+        log.info("Selected User Name : {}",selectedUserName);
+
+        popupselectedteamname= "";
+
+        setPopupselectedteamname("");
+
+        popupselectedusername = "";
+
+        setPopupselectedusername("");
+
+        popupremark = "";
+
+        setPopupremark("");
+
+        if(selectedUserName.equalsIgnoreCase("ALL"))
+        {
+            disableReassign = true;
+
+            log.info("Reassign Button disabled : {}",disableReassign);
+        }
+
+        else
+        {
+            UIComponent source = (UIComponent)ajaxBehaviorEvent.getSource();
+
+            log.info("UIComponent source : {}",source);
+
+            if(source!= null)
+            {
+                log.info("Value:" + ((SelectBooleanCheckbox) source).getValue());
+
+                String selectedCase= ((SelectBooleanCheckbox)source).getValue().toString();
+
+                log.info("Selected Case WobNum : {}",selectedCase);
+
+                int noOfCases = 0;
+
+                for ( Map.Entry<String, Boolean> entry : checked.entrySet())
+                {
+
+                    if (entry.getValue()==true)
+                    {
+                        String wobNo = entry.getKey().toString();
+
+                        log.info("WobNum : {}",wobNo);
+
+                        noOfCases++;
+
+                    }
+                }
+
+                log.info("No. Of Cases Selected : {}", noOfCases);
+
+                if(selectedCase.equalsIgnoreCase("true") || noOfCases > 0)
+                {
+
+                    disableReassign = false;
+
+                    log.info("Reassign Button enabled : {}",disableReassign);
+                }
+
+                else
+                {
+                    disableReassign =true;
+
+                    log.info("Reassign Button disabled : {}",disableReassign);
+                }
+
+                if(noOfCases >5 )
+                {
+                    disableReassign =true;
+
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg1.show()");
+
+                    log.info("Reassign Button disabled : {}",disableReassign);
+                }
+
+            }
+
+            else
+            {
+                disableReassign = true;
+
+                log.info("Reassign Button disabled : {}",disableReassign);
+            }
 
         }
 

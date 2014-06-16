@@ -20,6 +20,15 @@ public class BizProductDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    public BizProductDetailView() {
+        reset();
+    }
+
+    public void reset() {
+        this.percentSalesVolume = BigDecimal.ZERO;
+        this.percentEBIT = BigDecimal.ZERO;
+    }
+
     public long getNo() {
         return no;
     }

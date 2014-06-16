@@ -69,7 +69,7 @@ public class UWRuleResultTransform extends Transform{
             return null;
 
         UWRuleResultSummaryView uwRuleResultSummaryView = new UWRuleResultSummaryView();
-        Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = new TreeMap<Integer, UWRuleResultDetailView>();
+        Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap = new TreeMap<String, UWRuleResultDetailView>();
         for(UWRulesResult uwRulesResult : uwRulesResultMap.values()){
             logger.debug("transform uwRuleResult: {}", uwRulesResult);
             UWRuleName uwRuleName = null;
@@ -169,7 +169,13 @@ public class UWRuleResultTransform extends Transform{
                         throw new BRMSInterfaceException(null, ExceptionMapping.BRMS_INVALID_RETURN_DATA, exceptionMsg.get(ExceptionMapping.BRMS_INVALID_RETURN_DATA, "customer was not return " + uwRulesResult.getPersonalID()));
                     }
                 }
-                uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
+
+                if(uwRulesResult.getType() == UWRuleType.CUS_LEVEL){
+                    String keyMap = uwRuleResultDetailView.getRuleOrder()+""+uwRulesResult.getPersonalID();
+                    uwRuleResultDetailViewMap.put(keyMap, uwRuleResultDetailView);
+                } else {
+                    uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getRuleOrder()+"", uwRuleResultDetailView);
+                }
             } else {
                 logger.debug("Found UW Final Result {}", uwRuleName);
                 uwRuleResultSummaryView.setUwDeviationFlagView(transformToView(uwDeviationFlag));
@@ -205,7 +211,7 @@ public class UWRuleResultTransform extends Transform{
         uwRuleResultSummary.setUwDeviationFlag(transformToModel(uwRuleResultSummaryView.getUwDeviationFlagView()));
 
         List<UWRuleResultDetail> uwRuleResultDetailList = new ArrayList<UWRuleResultDetail>();
-        Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+        Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
         for(UWRuleResultDetailView uwRuleResultDetailView : uwRuleResultDetailViewMap.values()){
             UWRuleResultDetail uwRuleResultDetail = transformToModel(uwRuleResultDetailView);
             if(uwRuleResultDetail != null)
@@ -344,12 +350,17 @@ public class UWRuleResultTransform extends Transform{
             uwRuleResultSummaryView.setWorkCaseId(uwRuleResultSummary.getWorkCase().getId());
         uwRuleResultSummaryView.setUwResultColor(uwRuleResultSummary.getUwResultColor());
 
-        Map<Integer, UWRuleResultDetailView> uwRuleResultDetailViewMap = new TreeMap<Integer, UWRuleResultDetailView>();
+        Map<String, UWRuleResultDetailView> uwRuleResultDetailViewMap = new TreeMap<String, UWRuleResultDetailView>();
         List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
         for(UWRuleResultDetail uwRuleResultDetail : uwRuleResultDetailList){
             UWRuleResultDetailView uwRuleResultDetailView = transformToView(uwRuleResultDetail);
             if(uwRuleResultDetailView != null)
-                uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getRuleOrder(), uwRuleResultDetailView);
+                if(uwRuleResultDetail.getUwRuleType() == UWRuleType.CUS_LEVEL){
+                    String keyMap = uwRuleResultDetailView.getRuleOrder()+""+uwRuleResultDetailView.getCustomerInfoSimpleView().getCitizenId();
+                    uwRuleResultDetailViewMap.put(keyMap, uwRuleResultDetailView);
+                } else {
+                    uwRuleResultDetailViewMap.put(uwRuleResultDetailView.getRuleOrder()+"", uwRuleResultDetailView);
+                }
         }
         uwRuleResultSummaryView.setUwRuleResultDetailViewMap(uwRuleResultDetailViewMap);
         logger.debug("transformToView return uwRuleResultSummaryView {}", uwRuleResultSummaryView);

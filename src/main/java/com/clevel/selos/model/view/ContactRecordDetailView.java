@@ -1,14 +1,13 @@
 package com.clevel.selos.model.view;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class ContactRecordDetailView implements Serializable {
 	private static final long serialVersionUID = 466737071113972055L;

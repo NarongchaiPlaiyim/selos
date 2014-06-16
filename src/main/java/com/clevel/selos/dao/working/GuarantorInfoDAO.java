@@ -1,12 +1,11 @@
 package com.clevel.selos.dao.working;
 
-import java.util.List;
-
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.working.GuarantorInfo;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
-import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.working.GuarantorInfo;
+import java.util.List;
 
 public class GuarantorInfoDAO extends GenericDAO<GuarantorInfo, Long> {
 

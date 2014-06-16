@@ -1,8 +1,6 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.ExistingCreditFacilityDAO;
-import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;

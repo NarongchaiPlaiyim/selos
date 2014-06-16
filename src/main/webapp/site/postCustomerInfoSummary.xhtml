@@ -5,7 +5,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
+        >
 
 <h:head>
     <title>#{msg.get('app.custInfoSummary.title')}</title>
@@ -249,6 +249,7 @@
         </h:form>
     </p:panel>
     <ui:include src="dialog/postLoadingAndErrorDialog.xhtml" />
+    <ui:include src="include/footer_outside_frmmain.xhtml" />
 </h:body>
 </f:view>
 </html>
