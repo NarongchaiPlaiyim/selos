@@ -125,8 +125,10 @@ public class PrescreenResult implements Serializable {
         if(customerInfoViews != null){
             customerInfoViewList = generateCustomerInfoList(customerInfoViews);
         }
+        HttpSession session = FacesUtil.getSession(false);
         try{
-            prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
+            long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView, workCasePreScreenId);
             messageHeader = "Information.";
             message = "Retrieve interface info success.";
         } catch (Exception ex){

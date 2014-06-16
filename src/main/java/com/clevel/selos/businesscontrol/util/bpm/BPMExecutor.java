@@ -652,6 +652,14 @@ public class BPMExecutor implements Serializable {
         bpmInterface.updateCase(queueName, wobNumber, fields);
     }
 
+    public void updateProductGroup(String productGroup, String queueName, String wobNumber) throws Exception {
+        HashMap<String, String> fields = new HashMap<String, String>();
+        fields.put("ProductGroup", productGroup);
+
+        log.debug("updateProductGroup : fields : {}", fields);
+        bpmInterface.updateCase(queueName, wobNumber, fields);
+    }
+
     public void selectCase(long actionCode, String queueName, String wobNumber) throws Exception{
         Action action = null;
         if (actionCode >= 0)

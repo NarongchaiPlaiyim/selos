@@ -41,6 +41,26 @@ public class UserDAO extends GenericDAO<User,String> {
     public UserDAO() {
     }
 
+    public User findUserByID(String userId)
+    {
+        Criteria criteria1 = getSession().createCriteria(User.class);
+
+        criteria1.add(Restrictions.eq("id",userId).ignoreCase());
+
+        List<User> usersList = criteria1.list();
+
+        User user = new User();
+
+        Iterator<User> iterator1 = usersList.iterator();
+
+        while(iterator1.hasNext())
+        {
+            user = iterator1.next();
+        }
+
+        return user;
+    }
+
     public String getUserNameById(String userId)
     {
 

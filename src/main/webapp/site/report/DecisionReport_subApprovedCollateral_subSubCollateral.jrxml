@@ -77,7 +77,7 @@
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Collateral Owner
-(ADD)]]></text>
+(AAD)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="26e2564e-8e66-42bf-b80c-45350b97f81b" style="header" x="271" y="0" width="72" height="21"/>

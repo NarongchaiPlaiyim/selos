@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -24,6 +26,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -41,12 +44,14 @@ public class CustomerAcceptance implements Serializable {
 	
 	@Inject
 	private BasicInfoControl basicInfoControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
+	
 	private User user;
 	private Status workCaseStatus;
 	private List<ContactRecordDetailView> deleteList;
@@ -137,7 +142,6 @@ public class CustomerAcceptance implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 			user = (User) session.getAttribute("user");
 		}
 		_loadFieldControl();
@@ -152,7 +156,7 @@ public class CustomerAcceptance implements Serializable {
 		String redirectPage = null;
 		log.info("preRender workCase Id = "+workCaseId);
 		if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.ContactRecord, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				return;

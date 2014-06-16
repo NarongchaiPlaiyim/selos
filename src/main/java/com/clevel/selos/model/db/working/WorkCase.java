@@ -50,14 +50,6 @@ public class WorkCase extends AbstractWorkCase{
     @Column(name = "case_update_flag", columnDefinition = "int default 0")
     private int caseUpdateFlag;
 
-    //for set approved type new/new+change
-    @Column(name = "approved_type", columnDefinition = "int default 0")
-    private int approvedType;
-
-    //for set approved result same request/not same request
-    @Column(name = "approved_result", columnDefinition = "int default 0")
-    private int approvedResult;
-
     public String getRefAppNumber() {
         return refAppNumber;
     }
@@ -152,22 +144,6 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setCaseUpdateFlag(int caseUpdateFlag) {
         this.caseUpdateFlag = caseUpdateFlag;
-    }
-
-    public int getApprovedType() {
-        return approvedType;
-    }
-
-    public void setApprovedType(int approvedType) {
-        this.approvedType = approvedType;
-    }
-
-    public int getApprovedResult() {
-        return approvedResult;
-    }
-
-    public void setApprovedResult(int approvedResult) {
-        this.approvedResult = approvedResult;
     }
 
     @Override

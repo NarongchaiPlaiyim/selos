@@ -794,7 +794,33 @@ public class RMService implements Serializable {
                             customerAccountListModel.setCd(resSearchCustomerAccount.getBody().getAccountList().get(i).getCd());
                             customerAccountListModel.setpSO(resSearchCustomerAccount.getBody().getAccountList().get(i).getPSO());
                             customerAccountListModel.setAppl(resSearchCustomerAccount.getBody().getAccountList().get(i).getAppl());
-                            customerAccountListModel.setAccountNo(resSearchCustomerAccount.getBody().getAccountList().get(i).getAccountNo());
+                            String accountNumber = "";
+                            String accountTypeCode = "";
+                            if(!Util.isEmpty(resSearchCustomerAccount.getBody().getAccountList().get(i).getAppl())){
+                                String accountType = resSearchCustomerAccount.getBody().getAccountList().get(i).getAppl().trim();
+
+                                if(!Util.isEmpty(resSearchCustomerAccount.getBody().getAccountList().get(i).getAccountNo()))
+                                    accountNumber = resSearchCustomerAccount.getBody().getAccountList().get(i).getAccountNo();
+                                if(!Util.isEmpty(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl4()))
+                                    accountTypeCode = resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl4();
+
+                                if("AL".equalsIgnoreCase(accountType)){
+                                    if(accountNumber.length() >= 14)
+                                        accountNumber = accountNumber.substring(1,11);
+                                } else if("LB".equalsIgnoreCase(accountType)){
+                                    if(accountNumber.length() > 10)
+                                        accountNumber = accountNumber.substring(0, 10);
+                                } else if("ST".equalsIgnoreCase(accountType)){
+                                    if(Util.parseInt(accountTypeCode, 0) == 200) {
+                                        if (accountNumber.length() >= 14)
+                                            accountNumber = accountNumber.substring(4, 14);
+                                    }else{
+                                        if (accountNumber.length() >= 14)
+                                            accountNumber = accountNumber.substring(1, 11);
+                                    }
+                                }
+                            }
+                            customerAccountListModel.setAccountNo(accountNumber);
                             customerAccountListModel.setTrlr(resSearchCustomerAccount.getBody().getAccountList().get(i).getTrlr());
                             customerAccountListModel.setBalance(resSearchCustomerAccount.getBody().getAccountList().get(i).getBalance());
                             customerAccountListModel.setDir(resSearchCustomerAccount.getBody().getAccountList().get(i).getDir());

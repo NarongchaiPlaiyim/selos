@@ -143,7 +143,7 @@
                             <p:column headerText="" styleClass="center" style="width:22px;">
                                 <h:outputText value="#{rowIndex+1}"/>
                             </p:column>
-                            <p:column headerText="Select" styleClass="center" style="width:22px;">
+                            <p:column headerText="" styleClass="center" style="width:22px;">
                                 <p:selectBooleanCheckbox id="checkBoxId" value="#{change.checked[item.f_WobNum]}">
                                     <p:ajax update=":frmMain:change" process="@this" listener="#{change.checkReassign}"/>
                                 </p:selectBooleanCheckbox>
