@@ -500,7 +500,8 @@ public class PrescreenMaker extends BaseController {
     public void onLoadSelectList() {
         log.debug("onLoadSelectList :::");
 
-        productGroupList = productGroupDAO.findAll();
+        //---Load product group for Propose only---//
+        productGroupList = productGroupDAO.findProposeProductGroup();
         log.debug("onLoadSelectList ::: productGroupList size : {}", productGroupList.size());
 
         if (prescreenView.getProductGroup() != null) {
