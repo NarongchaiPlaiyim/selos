@@ -217,22 +217,23 @@ public class FullApplicationConverter extends Converter{
             //7. Convert Acc/TMB Acc information//
             List<BRMSTMBAccountInfo> brmsTMBAccountInfoList = customerInfo.getTmbAccountInfoList();
             List<AccountType> cusAccountList = borrowerType.getAccount();
-            for(BRMSTMBAccountInfo brmsTMBAccountInfo : brmsTMBAccountInfoList){
-                AccountType cusAccount = new AccountType();
+            if(brmsTMBAccountInfoList != null){
+                for(BRMSTMBAccountInfo brmsTMBAccountInfo : brmsTMBAccountInfoList){
+                    AccountType cusAccount = new AccountType();
+                    List<AttributeType> cusAccountAttributeList = cusAccount.getAttribute();
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, brmsTMBAccountInfo.isActiveFlag()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, brmsTMBAccountInfo.getDataSource()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, brmsTMBAccountInfo.getAccountRef()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, brmsTMBAccountInfo.getCustToAccountRelationCD()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, brmsTMBAccountInfo.isTmbTDRFlag()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, brmsTMBAccountInfo.getNumMonthIntPastDue()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, brmsTMBAccountInfo.getNumMonthIntPastDueTDRAcc()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, brmsTMBAccountInfo.getTmbDelPriDay()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, brmsTMBAccountInfo.getTmbDelIntDay()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, brmsTMBAccountInfo.getTmbBlockCode()));
 
-                List<AttributeType> cusAccountAttributeList = cusAccount.getAttribute();
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, brmsTMBAccountInfo.isActiveFlag()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, brmsTMBAccountInfo.getDataSource()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, brmsTMBAccountInfo.getAccountRef()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, brmsTMBAccountInfo.getCustToAccountRelationCD()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, brmsTMBAccountInfo.isTmbTDRFlag()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, brmsTMBAccountInfo.getNumMonthIntPastDue()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, brmsTMBAccountInfo.getNumMonthIntPastDueTDRAcc()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, brmsTMBAccountInfo.getTmbDelPriDay()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, brmsTMBAccountInfo.getTmbDelIntDay()));
-                cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, brmsTMBAccountInfo.getTmbBlockCode()));
-
-                cusAccountList.add(cusAccount);
+                    cusAccountList.add(cusAccount);
+                }
             }
 
             //8. Convert NCB Account//

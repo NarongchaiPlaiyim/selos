@@ -4,6 +4,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
+<p:panel id="basicInfoAccountDlgPanel" styleClass="panel-dialog">
     <h:form id="basicInfoAccountDlgForm">
         <table class="content_form">
             <tr>
@@ -140,8 +141,9 @@
             </tr>
         </table>
     </h:form>
-    <p:blockUI widgetVar="blockBasicInfoAccDlg" block="basicInfoAccountDlgForm" trigger=":basicInfoAccountDlgForm:dlgSaveBasicAccBtn">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+</p:panel>
+<p:blockUI widgetVar="blockBasicInfoAccDlg" block="basicInfoAccountDlgPanel" trigger=":basicInfoAccountDlgForm:dlgSaveBasicAccBtn">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

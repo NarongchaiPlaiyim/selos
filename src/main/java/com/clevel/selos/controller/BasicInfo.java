@@ -19,6 +19,7 @@ import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
@@ -324,8 +325,11 @@ public class BasicInfo extends BaseController {
     }
 
     public void onSave(){
+        HttpSession session = FacesUtil.getSession(false);
         try{
-            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");

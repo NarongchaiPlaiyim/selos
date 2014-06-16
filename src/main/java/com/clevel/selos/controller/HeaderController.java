@@ -72,6 +72,8 @@ public class HeaderController extends BaseController {
     StepStatusControl stepStatusControl;
     @Inject
     UserSysParameterControl userSysParameterControl;
+    @Inject
+    PrescreenBusinessControl prescreenBusinessControl;
 
     @Inject
     ReturnInfoTransform returnInfoTransform;
@@ -722,10 +724,6 @@ public class HeaderController extends BaseController {
                 complete = false;
                 log.error("onSubmitUW2 ::: submit failed (UW2 not selected)");
             }
-
-            if(complete){
-                fullApplicationControl.calculateApprovedResult(workCaseId);
-            }
         } catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
@@ -785,35 +783,35 @@ public class HeaderController extends BaseController {
                 if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
                     messageHeader = "Information.";
                     message = "Submit case fail. Please check return information before submit again.";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-                    log.error("onSubmitCA ::: fail.");
                 } else {
                     returnControl.saveReturnHistory(workCaseId,user);
-
                     fullApplicationControl.submitCA(queueName, workCaseId);
 
                     messageHeader = "Information.";
                     message = "Submit case success";
-                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-
-                    log.debug("onSubmitCA ::: success.");
+                    complete = true;
                 }
             }
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-            complete = true;
-            log.debug("onSubmitCA ::: success.");
+
+            if(complete) {
+                fullApplicationControl.calculateApprovedResult(workCaseId);
+                showMessageRedirect();
+
+                log.debug("onSubmitCA ::: success.");
+            } else {
+                showMessageBox();
+
+                log.error("onSubmitCA ::: fail.");
+            }
         } catch (Exception ex){
             messageHeader = "Information.";
             message = "Submit case fail, cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            showMessageBox();
 
             log.error("onSubmitCA ::: exception occurred : ", ex);
         }
 
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
 
     public void onOpenReturnBDMByBU(){
@@ -1100,9 +1098,11 @@ public class HeaderController extends BaseController {
         long workCasePreScreenId = 0;
         boolean success = false;
         HttpSession session = FacesUtil.getSession(true);
-        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        if(workCasePreScreenId != 0){
             try{
+                mandateFieldMessageViewList = null;
+                prescreenBusinessControl.updateCSIData(workCasePreScreenId);
                 UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
                 log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
                 if(uwRuleResponseView != null){
@@ -1799,7 +1799,8 @@ public class HeaderController extends BaseController {
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         if(workCaseId != 0){
             try{
-                //fullApplicationControl.updateCSIDataFullApp(workCaseId);
+                mandateFieldMessageViewList = null;
+                fullApplicationControl.updateCSIDataFullApp(workCaseId);
                 //----Delete all UWRuleResult----//
                 UWRuleResponseView uwRuleResponseDeleteView = new UWRuleResponseView();
                 UWRuleResultSummaryView uwRuleResultSummaryDeleteView = new UWRuleResultSummaryView();
@@ -1862,6 +1863,8 @@ public class HeaderController extends BaseController {
         boolean accessible = false;
         HttpSession session = FacesUtil.getSession(true);
         long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
+        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         if("PRESCREEN".equalsIgnoreCase(stageString)){
             if(stageId == 101){
                 accessible = true;

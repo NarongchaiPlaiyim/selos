@@ -2,19 +2,24 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.UserAccessDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.UserAccess;
 import com.clevel.selos.model.view.UserAccessView;
 import com.clevel.selos.transform.UserAccessTransform;
+
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class UserAccessControl extends BusinessControl {
-    @Inject
+    private static final long serialVersionUID = 8893510842761267033L;
+
+	@Inject
     @SELOS
     private Logger log;
 
@@ -40,5 +45,19 @@ public class UserAccessControl extends BusinessControl {
         }
 
         return userAccessViewList;
+    }
+    
+    public boolean canUserAccess(Screen screen,long stepId) {
+    	if (getCurrentUser() == null || screen == null || stepId <= 0)
+    		return false;
+    	int roleId = getCurrentUser().getRole().getId();
+    	List<UserAccess> list = userAccessDAO.getUserAccess(stepId, screen.value(), roleId);
+    	if (list == null || list.isEmpty())
+    		return false;
+    	for (UserAccess access : list) {
+    		if (access.getAccessFlag() == 1)
+    			return true;
+    	}
+    	return false;
     }
 }
