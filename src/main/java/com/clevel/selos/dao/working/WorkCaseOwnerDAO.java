@@ -123,6 +123,17 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         return workCaseOwner;
     }
+    public WorkCaseOwner getLatestWorkCaseOwnerByRole(long workCaseId, int roleId) {
+    	Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("role.id", roleId));
+        criteria.addOrder(Order.desc("id"));
+        List<WorkCaseOwner> list = criteria.list();
+        if (list == null || list.isEmpty())
+        	return null;
+        else
+        	return list.get(0);
+    }
 
     public WorkCaseOwner getLatestUWActionDate(Long workCaseId)
     {
