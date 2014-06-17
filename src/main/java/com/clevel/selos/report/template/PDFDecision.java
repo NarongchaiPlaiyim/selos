@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1163,7 +1164,15 @@ public class PDFDecision implements Serializable {
         totalDecisionReport.setProposeTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getProposeTotalGuaranteeAmt()));
 
         //Approved Guarantor
-        totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
+        List<NewGuarantorDetailView> newGuarantorDetails = Util.safetyList(decisionView.getApproveGuarantorList());
+
+        for (NewGuarantorDetailView view : newGuarantorDetails){
+            if (("APPROVED").equals(view.getUwDecision())) {
+                totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
+            } else {
+                totalDecisionReport.setApproveTotalGuaranteeAmt(BigDecimal.ZERO);
+            }
+        }
 
         //BizInfo Address
         if (!Util.isNull(bizInfoSummaryView)){
