@@ -878,12 +878,11 @@ public class PDFDecision implements Serializable {
             log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
             for (NewCollateralView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
-
+                approvedCollateralDecisionReport.setPath(pathsub);
                 if (view.getUwDecision().equals("APPROVED")){
                     log.debug("fillApprovedCollaterral to APPROVED. {}",view.getUwDecision());
 
                     approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
-                    approvedCollateralDecisionReport.setPath(pathsub);
                     approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                     approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
                     approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
@@ -995,11 +994,11 @@ public class PDFDecision implements Serializable {
             for (NewGuarantorDetailView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
+                approvedGuarantorDecisionReport.setPath(pathsub);
                 if (view.getUwDecision().equals("APPROVED")) {
                     log.debug("fillApprovedGuarantor to APPROVED. {}",view.getUwDecision());
 
                     approvedGuarantorDecisionReport.setCount(count++);
-                    approvedGuarantorDecisionReport.setPath(pathsub);
 
                     StringBuffer name = new StringBuffer();
                     name = name.append(Util.checkNullString(!Util.isNull(view.getGuarantorName()) ? !Util.isNull(view.getGuarantorName().getTitleTh()) ? view.getGuarantorName().getTitleTh().getTitleTh()+view.getGuarantorName().getFirstNameTh() : SPACE : SPACE))

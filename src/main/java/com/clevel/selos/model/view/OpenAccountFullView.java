@@ -191,6 +191,21 @@ public class OpenAccountFullView implements Serializable,Cloneable {
 		}
 		return builder.toString();
 	}
+	public String getAllPurposes(String seperator) {
+		StringBuilder builder = new StringBuilder();
+		List<OpenAccountPurposeView> purposes = getPurposes();
+		if (purposes != null && !purposes.isEmpty()) {
+			for (OpenAccountPurposeView purpose : purposes) {
+				if (!purpose.isChecked())
+					continue;
+				builder.append(purpose.getPurpose());
+				builder.append(seperator);
+			}
+			if (builder.length() > 0)
+				builder.setLength(builder.length() - 5);
+		}
+		return builder.toString();
+	}
 	public void setNeedUpdate(boolean needUpdate) {
 		this.needUpdate = needUpdate;
 	}

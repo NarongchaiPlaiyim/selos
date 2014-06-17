@@ -54,7 +54,7 @@
 								<table class="content_table_form">
 									<tr>
 										<td class="title" style="width: 200px;"><p:outputLabel
-												value="#{msg.get('app.approveType')}" styleClass="center" />
+												value="#{msg.get('app.approveType')}#{tcgApprovalInfo.mandate('approvedType')}" styleClass="center" />
 										</td>
 										<td style="width: 200px;"><p:selectOneRadio
 												disabled="true" value="#{tcgApprovalInfo.approveType}">
@@ -84,7 +84,7 @@
 										<td></td>
 									</tr>
 									<tr>
-										<td class="title">#{msg.get('app.tcgApprovalInfo.approveResult')}</td>
+										<td class="title"><h:outputText value="#{msg.get('app.tcgApprovalInfo.approveResult')}#{tcgApprovalInfo.mandate('approveResult')}" /></td>
 										<td><p:selectOneRadio
 												disabled="#{tcgApprovalInfo.isEnableApprove}"
 												value="#{tcgApprovalInfo.tcgInfoView.approvedResult}"
@@ -93,7 +93,7 @@
 												<f:selectItem itemLabel="#{'Not Approved'}" itemValue="2" />
 											</p:selectOneRadio></td>
 										<td class="title" style="width: 130px;"><h:outputText
-												value="#{msg.get('app.tcgApprovalInfo.approveDate')}" /></td>
+												value="#{msg.get('app.tcgApprovalInfo.approveDate')}#{tcgApprovalInfo.mandate('approveDate')}" /></td>
 										<td class="left">
 										<td class="left"><p:calendar
 												disabled="#{tcgApprovalInfo.isEnableApprove}"
