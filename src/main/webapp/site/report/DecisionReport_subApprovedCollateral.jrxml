@@ -20,7 +20,7 @@
 		</box>
 	</style>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:/ProjectSELOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/SLOSSharedLib/reportTemplate/"]]></defaultValueExpression>
 	</parameter>
 	<field name="jobID" class="java.lang.String">
 		<fieldDescription><![CDATA[jobID]]></fieldDescription>
@@ -250,13 +250,6 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{mortgageConditionDetail}]]></textFieldExpression>
 				</textField>
-				<subreport>
-					<reportElement uuid="8fb05b67-bf26-42eb-96c9-e6dbc589de77" x="111" y="95" width="444" height="39"/>
-					<dataSourceExpression><![CDATA[$F{proposeCreditDetailViewList}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
-				</subreport>
 				<staticText>
 					<reportElement uuid="17fdca7f-a46f-4ee2-8641-25f2039e2d25" x="0" y="67" width="111" height="14"/>
 					<textElement verticalAlignment="Top">
@@ -281,6 +274,11 @@ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCredit
 					</textElement>
 					<textFieldExpression><![CDATA[$F{approved}]]></textFieldExpression>
 				</textField>
+				<subreport>
+					<reportElement uuid="3a7f13c0-0237-400b-a48f-bb1ad213da98" x="66" y="95" width="489" height="39"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
+				</subreport>
 			</frame>
 		</band>
 		<band height="172">
@@ -419,7 +417,7 @@ new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCredit
 					<dataSourceExpression><![CDATA[$F{subViewList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{subViewList})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral.jasper"]]></subreportExpression>
 				</subreport>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="34164a13-7434-435d-8444-53b63c79eded" x="111" y="0" width="133" height="14"/>
