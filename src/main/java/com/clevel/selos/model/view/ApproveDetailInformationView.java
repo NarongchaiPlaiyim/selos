@@ -2,10 +2,12 @@ package com.clevel.selos.model.view;
 
 
 import com.clevel.selos.model.db.master.User;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +15,14 @@ public class ApproveDetailInformationView implements Serializable{
 
 	private long id;
 	private List<NewCreditDetailView> newCreditDetailViewList;
+	private NewCreditFacilityView newCreditFacilityView;
+	private List<OpenAccountFullView> openAccountFullViewList;
+	
+	private BigDecimal totalApprovedCredit;
+	
+	private Date signingDate;
+	private Date firstPaymentDate;
+	private int payDate;
 
     private User modifyBy;
     private Date modifyDate;
@@ -62,6 +72,66 @@ public class ApproveDetailInformationView implements Serializable{
 
 	public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
 		this.newCreditDetailViewList = newCreditDetailViewList;
+	}
+
+
+	public BigDecimal getTotalApprovedCredit() {
+		return totalApprovedCredit;
+	}
+
+
+	public void setTotalApprovedCredit(BigDecimal totalApprovedCredit) {
+		this.totalApprovedCredit = totalApprovedCredit;
+	}
+
+
+	public NewCreditFacilityView getNewCreditFacilityView() {
+		return newCreditFacilityView;
+	}
+
+
+	public void setNewCreditFacilityView(NewCreditFacilityView newCreditFacilityView) {
+		this.newCreditFacilityView = newCreditFacilityView;
+	}
+
+
+	public Date getSigningDate() {
+		return signingDate;
+	}
+
+
+	public void setSigningDate(Date signingDate) {
+		this.signingDate = signingDate;
+	}
+
+
+	public Date getFirstPaymentDate() {
+		return firstPaymentDate;
+	}
+
+
+	public void setFirstPaymentDate(Date firstPaymentDate) {
+		this.firstPaymentDate = firstPaymentDate;
+	}
+
+
+	public int getPayDate() {
+		return payDate;
+	}
+
+
+	public void setPayDate(int payDate) {
+		this.payDate = payDate;
+	}
+
+
+	public List<OpenAccountFullView> getOpenAccountFullViewList() {
+		return openAccountFullViewList;
+	}
+
+
+	public void setOpenAccountFullViewList(List<OpenAccountFullView> openAccountFullViewList) {
+		this.openAccountFullViewList = openAccountFullViewList;
 	}
 
 }
