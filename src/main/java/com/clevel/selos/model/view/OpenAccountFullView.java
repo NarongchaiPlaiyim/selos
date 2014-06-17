@@ -163,6 +163,9 @@ public class OpenAccountFullView implements Serializable,Cloneable {
 				return ConfirmAccountType.NA;
 		}
 	}
+	public void setConfirmAccountType(ConfirmAccountType type) {
+		//DO Nothing
+	}
 	
 	public String getAllAccountNames() {
 		StringBuilder builder = new StringBuilder();

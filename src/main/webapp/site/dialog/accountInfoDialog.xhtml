@@ -34,10 +34,11 @@
 							value="#{msg.get('app.accountInfo.account.dialog.accountNo')}#{accountInfo.mandateDialog('accountNumber')}" />
 					</td>
 					<td>
-						<p:inputText id="accountNo"
-							readonly="#{accountInfo.openAccount.fromPledge or accountInfo.isDialogDisable('accountNumber')}"
+						<p:inputMask id="accountNo"
+						 	readonly="#{accountInfo.openAccount.fromPledge or accountInfo.isDialogDisable('accountNumber')}"
 							value="#{accountInfo.openAccount.accountNo}"
-							/>
+							mask="999-9-99999-9" 
+						/>
 					</td>
 				</tr>
 				<tr>
@@ -66,7 +67,7 @@
 						<p:selectOneMenu id="accountType" style="width:200px"
 							value="#{accountInfo.openAccount.accountTypeId}"
 							binding="#{accountInfo.accountTypeBind}"
-							diabled="#{accountInfo.isDialogDisable('accountType')}"
+							disabled="#{accountInfo.isDialogDisable('accountType')}"
 							>
 							<p:ajax update="productType" listener="#{accountInfo.onSelectAccountType()}"
 								/>
