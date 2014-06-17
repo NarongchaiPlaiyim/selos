@@ -199,7 +199,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillProposedCredit",pdfDecision.fillProposedCredit(pathsub));
         map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
         map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral(pathsub));
-        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral(pathsub));
+        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral(pathsub));   //TODO
         map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor(pathsub));
         map.put("fillApprovedGuarantor",pdfDecision.fillApprovedGuarantor(pathsub));
         map.put("fillFollowUpCondition",pdfDecision.fillFollowUpCondition());
@@ -211,6 +211,8 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFooter",pdfDecision.fillFooter());
         map.put("borrowerCharacteristic", pdfDecision.fillBorrowerCharacteristic());
 //        map.put("fillBizInfoSum", pdfDecision.fillBizInfoSum());
+
+
 
         generatePDF(pathDecision, map, reportView.getNameReportOpShect());
     }

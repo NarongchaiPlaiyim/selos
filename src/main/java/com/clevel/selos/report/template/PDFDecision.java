@@ -862,24 +862,24 @@ public class PDFDecision implements Serializable {
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
             ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
             collateralDecisionReport.setPath(pathsub);
-            collateralDecisionReport.setPath(pathsub);
             proposedCollateralDecisionReportList.add(collateralDecisionReport);
         }
         return proposedCollateralDecisionReportList;
     }
 
-    public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(String pathsub){
+    public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(final String pathsub){
 //        init();
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
-        List<NewCollateralView> newCollateralViews = decisionView.getApproveCollateralList();
+        List<NewCollateralView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
         List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
 
-        if (Util.safetyList(newCollateralViews).size() > 0){
+        if (!Util.isZero(newCollateralViews.size())){
             log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
             for (NewCollateralView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
-                if (view.getUwDecision().equals("APPROVED")){
+                log.debug("--Path. {}",pathsub);
+                if("APPROVED".equals(view.getUwDecision())){
                     log.debug("fillApprovedCollaterral to APPROVED. {}",view.getUwDecision());
 
                     approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
@@ -891,7 +891,7 @@ public class PDFDecision implements Serializable {
                     approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                     approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 //                approvedCollateralDecisionReport.setUwDecision(Util.checkNullString(view.getUwDecision().getValue()));
-                    if (view.getUwDecision().equals("APPROVED")){
+                    if ("APPROVED".equals(view.getUwDecision())){
                         approvedCollateralDecisionReport.setApproved("Approved");
                     }
 //                else if(view.getUwDecision().equals("REJECTED")){
