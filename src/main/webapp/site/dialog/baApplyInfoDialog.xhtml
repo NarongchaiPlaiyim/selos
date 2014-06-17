@@ -2,7 +2,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:clv="http://clevel.com/ui">
 <h:form id="baApplyInfoDlgForm">
 	<p:panel styleClass="panel-dialog" rendered="#{not empty baInfo.bapaInfoCustomerView}">
 		<p:messages />
@@ -71,12 +72,14 @@
 						value="#{msg.get('app.baInfo.ba.dialog.checkDate')}#{baInfo.mandateDialogBA('ba.checkDate')}" />
 				</td>
 				<td>
-					<p:calendar id='checkdate'
-						value="#{baInfo.bapaInfoCustomerView.checkDate}"
+					<clv:BECalendar id='checkdate' 
 						pattern="dd/MM/yyyy" showOn="button"
-						disabled="#{not baInfo.enableCheckDate}"		
-						autocomplete="false"
-						/>
+                   		value="#{baInfo.bapaInfoCustomerView.checkDate}"
+                   		mindate="#{baInfo.minCheckDate}"
+                   		maxdate="#{baInfo.maxCheckDate}"
+                   		autocomplete="false"  locale="th_TH"
+                   		disabled="#{not baInfo.enableCheckDate}"
+                   		/>
 				</td>
 			</tr>
 			 <tr>
