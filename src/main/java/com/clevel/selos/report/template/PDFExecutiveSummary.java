@@ -16,6 +16,8 @@ import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -66,6 +68,10 @@ public class PDFExecutiveSummary implements Serializable {
 
     @Inject
     DecisionView decisionView;
+
+    @Inject
+    @NormalMessage
+    Message msg;
 
     long workCaseId;
     private final String SPACE = " ";
@@ -1021,9 +1027,9 @@ public class PDFExecutiveSummary implements Serializable {
                 }
 
                 if(Util.isNull(view.getTotalLimitGuaranteeAmount())){
-                    approvedGuarantorDecisionReport.setGuarantorType("ลด/ยกเลิกการค้ำประกัน");
+                    approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
                 } else {
-                    approvedGuarantorDecisionReport.setGuarantorType("บุคคลค้ำประกัน/นิติบุคคลค้ำประกัน");
+                    approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
                 }
 
                 approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);

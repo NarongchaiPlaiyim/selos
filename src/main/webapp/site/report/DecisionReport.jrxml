@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a2f0260-1118-46b2-ac1f-b3c5002dac16">
 	<property name="ireport.zoom" value="1.4641000000000062"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1727"/>
+	<property name="ireport.y" value="1871"/>
 	<style name="Total" mode="Opaque" forecolor="#000000" backcolor="#FCFF79" hAlign="Left" vAlign="Middle" fontSize="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2351,9 +2351,7 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 				</box>
 				<subreport>
 					<reportElement uuid="88ad72cf-c292-4c70-aca9-bc4514aba17b" x="0" y="13" width="555" height="38" isRemoveLineWhenBlank="true"/>
-					<dataSourceExpression><![CDATA[$P{fillApprovedCollaterral}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource()
-:new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillApprovedCollaterral})]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillApprovedCollaterral})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subApprovedCollateral.jasper"]]></subreportExpression>
 				</subreport>
 				<staticText>
