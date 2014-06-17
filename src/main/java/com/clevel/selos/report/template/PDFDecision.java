@@ -933,9 +933,9 @@ public class PDFDecision implements Serializable {
                     } else {
                         log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
                     }
-
                     approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                 } else {
+                    approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                     log.debug("fillApprovedCollaterral to Rejected. {}",view.getUwDecision());
                 }
             }
@@ -1018,13 +1018,14 @@ public class PDFDecision implements Serializable {
 //                    }
 
                     if(Util.isNull(view.getTotalLimitGuaranteeAmount())){
-                        approvedGuarantorDecisionReport.setGuarantorType("ลด/ยกเลิกการค้ำประกัน");
+                        approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
                     } else {
-                        approvedGuarantorDecisionReport.setGuarantorType("บุคคลค้ำประกัน/นิติบุคคลค้ำประกัน");
+                        approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
                     }
 
                     approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
                 } else {
+                    approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
                     log.debug("fillApprovedGuarantor to REJECTED. {}",view.getUwDecision());
                 }
             }

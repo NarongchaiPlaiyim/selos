@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
 	<property name="ireport.zoom" value="1.2396694214876238"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1088"/>
+	<property name="ireport.y" value="2639"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -716,9 +716,9 @@
 				</subreport>
 			</frame>
 		</band>
-		<band height="190">
+		<band height="132">
 			<frame>
-				<reportElement uuid="5ae701fb-1e6d-498a-9fe1-9498969b1628" style="Frame" mode="Opaque" x="0" y="0" width="555" height="190" backcolor="#FFFFFF"/>
+				<reportElement uuid="5ae701fb-1e6d-498a-9fe1-9498969b1628" style="Frame" mode="Opaque" x="0" y="0" width="555" height="132" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1151,93 +1151,6 @@
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getINV()]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement uuid="a41b76e3-63f2-4b7f-a6c4-09a043cdc3a8" x="0" y="164" width="101" height="20"/>
-					<box>
-						<pen lineWidth="0.0"/>
-						<topPen lineWidth="0.0"/>
-						<leftPen lineWidth="0.0"/>
-						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.0"/>
-					</box>
-					<textElement verticalAlignment="Middle">
-						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					</textElement>
-					<text><![CDATA[Expiry Date :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="fab521ee-f156-4ae4-b1aa-ef2999e6c0c9" x="0" y="124" width="101" height="20"/>
-					<box>
-						<pen lineWidth="0.0"/>
-						<topPen lineWidth="0.0"/>
-						<leftPen lineWidth="0.0"/>
-						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.0"/>
-					</box>
-					<textElement verticalAlignment="Middle">
-						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					</textElement>
-					<text><![CDATA[Business Operation Activity :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="1a20d95a-69dc-4472-9813-21c48c1f5261" x="0" y="144" width="101" height="20"/>
-					<box>
-						<pen lineWidth="0.0"/>
-						<topPen lineWidth="0.0"/>
-						<leftPen lineWidth="0.0"/>
-						<bottomPen lineWidth="0.0"/>
-						<rightPen lineWidth="0.0"/>
-					</box>
-					<textElement verticalAlignment="Middle">
-						<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					</textElement>
-					<text><![CDATA[Business Permission :]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="c069ba92-4679-4706-b260-6b6a608dcb18" x="101" y="124" width="404" height="20"/>
-					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessOperationActivity()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="a4cec60d-6377-4a56-a309-0b9b6641d05e" x="101" y="164" width="404" height="20"/>
-					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getExpiryDate()]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="49580639-0ce2-48c3-b4ea-2482d3dcbac7" x="101" y="144" width="404" height="20"/>
-					<box>
-						<pen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-						<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessPermission()]]></textFieldExpression>
 				</textField>
 				<frame>
 					<reportElement uuid="b4c2eacf-6a18-4943-80a3-16f51d8a2ad3" x="0" y="23" width="555" height="23"/>
@@ -1701,9 +1614,9 @@ Asset]]></text>
 				</frame>
 			</frame>
 		</band>
-		<band height="74">
+		<band height="150">
 			<frame>
-				<reportElement uuid="251ce552-de16-476e-b9fa-1772ce3de10a" style="Frame" mode="Opaque" x="0" y="0" width="555" height="74" backcolor="#FFFFFF"/>
+				<reportElement uuid="251ce552-de16-476e-b9fa-1772ce3de10a" style="Frame" mode="Opaque" x="0" y="76" width="555" height="74" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -1723,6 +1636,93 @@ Asset]]></text>
 					<subreportExpression><![CDATA[$P{path} + "ExSummary_subreportNCB_Record.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
+			<staticText>
+				<reportElement uuid="2c3558e7-4dee-489a-b04a-ab85c3570ecd" x="0" y="40" width="101" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Expiry Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3a508188-5480-4382-9228-2b9e82b8fa39" x="0" y="0" width="101" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Business Operation Activity :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e9f45790-6b74-4488-ac78-b30767058c97" x="101" y="40" width="404" height="20"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getExpiryDate()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fb802e0a-af37-4d65-b7a8-d574666de2ab" x="101" y="0" width="404" height="20"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessOperationActivity()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a0662a5b-b5d8-43c9-b944-61aa96a0059c" x="0" y="20" width="101" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Business Permission :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c439708d-283a-4ada-a69f-ebdeeca54bf9" x="101" y="20" width="404" height="20"/>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getBusinessPermission()]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="73">
 			<frame>
@@ -3212,9 +3212,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</textField>
 			</frame>
 		</band>
-		<band height="68">
+		<band height="58">
 			<frame>
-				<reportElement uuid="4f47ee4b-d202-481a-85a3-6d1fd37690a1" style="Frame" mode="Opaque" x="0" y="0" width="555" height="68" backcolor="#FFFFFF"/>
+				<reportElement uuid="4f47ee4b-d202-481a-85a3-6d1fd37690a1" style="Frame" mode="Opaque" x="0" y="0" width="555" height="58" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
@@ -3250,35 +3250,41 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</textElement>
 					<text><![CDATA[UW Comment]]></text>
 				</staticText>
+				<break>
+					<reportElement uuid="2a349092-6b00-41e5-8221-d2e248d62a02" x="0" y="57" width="100" height="1"/>
+				</break>
 			</frame>
 		</band>
-		<band height="69">
-			<subreport runToBottom="false">
-				<reportElement uuid="f781690c-c587-4799-b4e4-6b8dbc4bb69d" stretchType="RelativeToBandHeight" x="0" y="54" width="555" height="15" isPrintWhenDetailOverflows="true"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCreditBorrower})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditBorrower.jasper"]]></subreportExpression>
-			</subreport>
-			<staticText>
-				<reportElement uuid="ea255384-bc23-4d33-b187-e68b76fcc7de" x="0" y="39" width="100" height="13"/>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[Borrower :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="f8ed54d5-94e4-4fda-9b3a-10d1e566acbc" x="0" y="22" width="100" height="14"/>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[Existing Credit]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="968b99fb-0324-436c-8412-f494b442be35" x="0" y="0" width="100" height="20"/>
-				<textElement>
-					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[Decision]]></text>
-			</staticText>
+		<band height="69" splitType="Prevent">
+			<frame>
+				<reportElement uuid="e86a7290-9baa-42ac-ace4-b3c9bc064d03" x="0" y="0" width="556" height="69"/>
+				<subreport runToBottom="false">
+					<reportElement uuid="f781690c-c587-4799-b4e4-6b8dbc4bb69d" stretchType="RelativeToBandHeight" x="0" y="54" width="555" height="15" isPrintWhenDetailOverflows="true"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillCreditBorrower})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{path} + "DecisionReport_subCreditBorrower.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement uuid="ea255384-bc23-4d33-b187-e68b76fcc7de" x="0" y="39" width="100" height="13"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Borrower :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f8ed54d5-94e4-4fda-9b3a-10d1e566acbc" x="0" y="22" width="100" height="14"/>
+					<textElement>
+						<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Existing Credit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="968b99fb-0324-436c-8412-f494b442be35" x="0" y="0" width="100" height="20"/>
+					<textElement>
+						<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<text><![CDATA[Decision]]></text>
+				</staticText>
+			</frame>
 		</band>
 		<band height="15">
 			<staticText>
@@ -3536,6 +3542,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
+				<break>
+					<reportElement uuid="b25c4c2b-bacd-450a-80f3-a7a526922200" x="0" y="101" width="100" height="1"/>
+				</break>
 			</frame>
 		</band>
 		<band height="31">
@@ -3803,7 +3812,7 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 				</staticText>
 			</frame>
 		</band>
-		<band height="70">
+		<band height="70" splitType="Prevent">
 			<frame>
 				<reportElement uuid="024fac59-5ade-4da7-9a84-61773d3f9751" mode="Opaque" x="0" y="0" width="555" height="70"/>
 				<box>
@@ -3817,6 +3826,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</textElement>
 					<text><![CDATA[Group]]></text>
 				</staticText>
+				<break>
+					<reportElement uuid="231bd592-bf32-42a8-ac5d-51f985a0f415" x="0" y="69" width="100" height="1"/>
+				</break>
 				<staticText>
 					<reportElement uuid="32fbcda4-9715-4f1f-bbd2-814b7075fd6d" style="Total" x="13" y="13" width="246" height="15"/>
 					<textElement>
