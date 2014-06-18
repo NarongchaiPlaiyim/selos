@@ -424,7 +424,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{jurLv}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement uuid="9330b7be-531b-4b95-9af9-4d9d2706850e" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="411" y="0" width="31" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>

@@ -211,8 +211,7 @@ public class PrescreenConverter extends Converter{
 
             List<AccountType> accountTypeList = borrowerType.getAccount();
             List<BRMSTMBAccountInfo> tmbAccountInfoList = customerInfo.getTmbAccountInfoList();
-            //TODO Check condition with BRMS Sheet...
-            if(customerInfo.isNcbFlag()){
+            if(tmbAccountInfoList != null) {
                 for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
                     AccountType accountType = new AccountType();
                     List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
@@ -235,20 +234,21 @@ public class PrescreenConverter extends Converter{
         }
 
         List<AccountType> accountTypeList = applicationType.getAccount();
-        //TODO Check condition with BRMS sheet...
         List<BRMSAccountStmtInfo> accountStmtInfoList = applicationInfo.getAccountStmtInfoList();
-        for(BRMSAccountStmtInfo accountStmtInfo : accountStmtInfoList){
-            AccountType accountType = new AccountType();
-            List<AttributeType> accAttributeList = accountType.getAttribute();
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.UTILIZATION_PERCENT, accountStmtInfo.getAvgUtilizationPercent()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.SWING_PERCENT, accountStmtInfo.getAvgSwingPercent()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.HIGHEST_INFLOW_FLAG, accountStmtInfo.isHighestInflow()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_ACCOUNT_FLAG, accountStmtInfo.isTmb()));
-            accAttributeList.add(getAttributeType(BRMSFieldAttributes.EXCLUDE_INCOME_FLAG, accountStmtInfo.isNotCountIncome()));
-            accountTypeList.add(accountType);
+        if(accountStmtInfoList != null){
+            for(BRMSAccountStmtInfo accountStmtInfo : accountStmtInfoList){
+                AccountType accountType = new AccountType();
+                List<AttributeType> accAttributeList = accountType.getAttribute();
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.UTILIZATION_PERCENT, accountStmtInfo.getAvgUtilizationPercent()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.SWING_PERCENT, accountStmtInfo.getAvgSwingPercent()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.HIGHEST_INFLOW_FLAG, accountStmtInfo.isHighestInflow()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_ACCOUNT_FLAG, accountStmtInfo.isTmb()));
+                accAttributeList.add(getAttributeType(BRMSFieldAttributes.EXCLUDE_INCOME_FLAG, accountStmtInfo.isNotCountIncome()));
+                accountTypeList.add(accountType);
+            }
         }
 
         UnderwritingApprovalRequestType underwritingApprovalRequestType = new UnderwritingApprovalRequestType();
