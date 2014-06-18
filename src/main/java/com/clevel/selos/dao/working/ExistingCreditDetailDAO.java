@@ -5,12 +5,14 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
+import com.clevel.selos.model.view.ExistingCreditDetailView;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExistingCreditDetailDAO extends GenericDAO<ExistingCreditDetail, Long> {
@@ -41,5 +43,21 @@ public class ExistingCreditDetailDAO extends GenericDAO<ExistingCreditDetail, Lo
         criteria.addOrder(Order.asc("no"));
         List<ExistingCreditDetail> existingCreditDetailList = criteria.list();
         return existingCreditDetailList;
+    }
+
+    public List<ExistingCreditDetail> findByExistingCreditDetailIdList(List<ExistingCreditDetailView> existingCreditDetailViews) {
+        log.info("findByExistingCreditDetailIdList , existingCreditDetailViews size : {}", existingCreditDetailViews.size());
+        if(existingCreditDetailViews.size()>0){
+            List<Long> existingCreditDetailIdList = new ArrayList<Long>();
+            for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
+                existingCreditDetailIdList.add(existingCreditDetailView.getId());
+            }
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.in("id", existingCreditDetailIdList));
+            criteria.addOrder(Order.asc("no"));
+            List<ExistingCreditDetail> existingCreditDetailList = criteria.list();
+            return existingCreditDetailList;
+        }
+        return null;
     }
 }
