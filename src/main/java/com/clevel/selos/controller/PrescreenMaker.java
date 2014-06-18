@@ -171,6 +171,8 @@ public class PrescreenMaker extends BaseController {
     private boolean enableCustomerEntity;
     private boolean enableSearchForm;
 
+    private MaritalStatus previousMaritalStatus;
+
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
     @Inject
@@ -863,6 +865,7 @@ public class PrescreenMaker extends BaseController {
             relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value(), borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, 0);
         }
         log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
+        previousMaritalStatus = cloner.deepClone(borrowerInfo.getMaritalStatus());
         if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
             spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         } else {
@@ -1717,7 +1720,7 @@ public class PrescreenMaker extends BaseController {
             }
             //complete = true;
         }
-
+        previousMaritalStatus = null;
         context.addCallbackParam("functionComplete", complete);
         log.debug("customerInfoViewList after save : {}", customerInfoViewList);
 
@@ -2224,7 +2227,34 @@ public class PrescreenMaker extends BaseController {
     public void onChangeMaritalStatus() {
         log.debug("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
         //TODO Check Spouse.. if any spouse remove it
+        if(borrowerInfo != null && borrowerInfo.getMaritalStatus().getId() == 0){
+            return;
+        }
 
+        boolean maritalStatusFlag;
+        boolean previousStatusFlag;
+        MaritalStatus maritalStatus = maritalStatusDAO.findById(borrowerInfo.getMaritalStatus().getId());
+        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+            maritalStatusFlag = true;
+        } else {
+            maritalStatusFlag = false;
+        }
+
+        if(previousMaritalStatus != null) {
+            MaritalStatus prvMaritalStatus = maritalStatusDAO.findById(previousMaritalStatus.getId());
+            if (prvMaritalStatus != null && prvMaritalStatus.getSpouseFlag() == 1) {
+                previousStatusFlag = true;
+            } else {
+                previousStatusFlag = false;
+            }
+
+            if (maritalStatusFlag == false && previousStatusFlag == true) {
+                messageHeader = "Information.";
+                message = "Can not change marriage status to single or remove borrower at this step.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                borrowerInfo.setMaritalStatus(previousMaritalStatus);
+            }
+        }
     }
 
     public void onChangeDocType() {
