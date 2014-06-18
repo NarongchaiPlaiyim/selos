@@ -1546,7 +1546,15 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         totalDecisionReport.setProposeTotalCreditLimit(Util.convertNullToZERO(decisionView.getProposeTotalCreditLimit()));
 
         //Approved Propose Credit
-        totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
+        newCreditDetailViewList = decisionView.getApproveCreditList();
+        for (NewCreditDetailView detailView : newCreditDetailViewList){
+            if ((DecisionType.APPROVED).equals(detailView.getUwDecision())){
+                totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
+            } else {
+                totalDecisionReport.setApproveTotalCreditLimit(BigDecimal.ZERO);
+            }
+        }
+
         if (decisionView.getCreditCustomerType() == CreditCustomerType.NORMAL){
             totalDecisionReport.setCreditCusType(1);
         } else if (decisionView.getCreditCustomerType() == CreditCustomerType.PRIME){
