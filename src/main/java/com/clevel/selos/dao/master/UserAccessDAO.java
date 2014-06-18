@@ -37,4 +37,17 @@ public class UserAccessDAO extends GenericDAO<UserAccess,Integer> {
 
         return userAccessList;
     }
+    public List<UserAccess> getUserAccess(long stepId, int roleId){
+        List<UserAccess> userAccessList = new ArrayList<UserAccess>();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("role.id", roleId));
+        criteria.add(Restrictions.eq("active", 1));
+
+        userAccessList = criteria.list();
+        if(Util.isNull(userAccessList)){
+            userAccessList = new ArrayList<UserAccess>();
+        }
+        return userAccessList;
+    }
 }
