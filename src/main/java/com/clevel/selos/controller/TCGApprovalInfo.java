@@ -1,14 +1,18 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.TCGInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.TCGInfoView;	
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +22,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 
 @ViewScoped
@@ -61,20 +67,21 @@ public class TCGApprovalInfo implements Serializable {
 		this.setTcgInfoView(this.tcgInfoControl.getTCGInfoView(workCaseId));
 		
 		//Disable Button
-		if (stepId == 2222){
+		/*if (stepId == 0){
 			this.isEnableSubmit = true;
 			this.isEnableApprove = false;
 		}else{
 			this.isEnableSubmit = false;
 			this.isEnableApprove = true;
-		}
-		
+		}*/
+		_loadFieldControl();
     }
     
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: workCaseId  {}", workCaseId);
         log.info("onSaveTcgInfo ::: stepId  {}", stepId);
-        this.tcgInfoControl.onSaveTCGInfo(tcgInfoView, workCaseId, user);       
+        this.tcgInfoControl.onSaveTCGInfo(tcgInfoView, workCaseId, user);
+       
     }
 
 
@@ -100,7 +107,7 @@ public class TCGApprovalInfo implements Serializable {
 		if (tcgInfoView.getModifyDate() != null){
 			return tcgInfoView.getModifyDate();
 		}
-		return tcgInfoView.getCreateDate();
+		return new Date();
 	}
 	public String getLastUpdateBy() {
 		//TODO
@@ -108,7 +115,7 @@ public class TCGApprovalInfo implements Serializable {
 		if (tcgInfoView.getModifyBy() != null){
 			return tcgInfoView.getModifyBy().getDisplayName();
 		}		
-		return tcgInfoView.getCreateBy().getDisplayName();
+		return "";
 	}
 
 	public TCGInfoView getTcgInfoView() {
@@ -126,6 +133,36 @@ public class TCGApprovalInfo implements Serializable {
 	public boolean getIsEnableApprove() {
 		return isEnableApprove;
 	}
+	
+	/*
+	 * Mandate and read-only
+	 */
+	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+	private void _loadFieldControl() {
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.TCGInfo);
+		fieldMap.clear();
+		
+		for (FieldsControlView field : fields) {
+			fieldMap.put(field.getFieldName(), field);
+		}
+		
+		
+	}
+	public String mandate(String name) {
+		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
+		FieldsControlView field = fieldMap.get(name);
+		if (field != null)
+			isMandate = field.isMandate();
+		return isMandate ? " *" : "";
+	}
+	
+	public boolean isDisabled(String name) {
+		FieldsControlView field = fieldMap.get(name);
+		if (field == null)
+			return FieldsControlView.DEFAULT_READONLY;
+		return field.isReadOnly();
+	}	
 
 }
 

@@ -115,18 +115,16 @@ public class PESearch implements Serializable
             if(session.getAttribute("stepId")!=null)
             {
 
-                //String isLocked = (String) session.getAttribute("isLocked");
-
                 if((Long)session.getAttribute("stepId") !=StepValue.COMPLETED_STEP.value() && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                 {
                     String wobNumber = (String)session.getAttribute("wobNumber");
-                    log.debug("unlocking case queue: {}, wobNumber : {}, fetchtype: {}", session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                    String queueName = (String)session.getAttribute("queueName");
+                    if(wobNumber.trim().length()!=0 || queueName.trim().length()!=0)
+                    {
+                        log.debug("unlocking case queue: {}, wobNumber : {}, fetchtype: {}", session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                    }
                 }
-                /*else
-                {
-                    session.removeAttribute("isLocked");
-                }*/
 
             }
         }
@@ -260,8 +258,8 @@ public class PESearch implements Serializable
 
             try{
                 //Try to Lock case
-                log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName, searchViewSelectItem.getFwobnumber(), searchViewSelectItem.getFetchType());
-                if(searchViewSelectItem.getStepId() != StepValue.COMPLETED_STEP.value()) {
+                log.info("locking case queue: {}, WobNum : {}, fetchtype: {}, Step Id:{}",queueName, searchViewSelectItem.getFwobnumber(), searchViewSelectItem.getFetchType(),searchViewSelectItem.getStepId());
+                if(searchViewSelectItem.getStepId().intValue() != StepValue.COMPLETED_STEP.value()) {
                     bpmInterfaceImpl.lockCase(queueName, wobNumber, searchViewSelectItem.getFetchType());
                 }
                 /*session.setAttribute("isLocked","true");*/

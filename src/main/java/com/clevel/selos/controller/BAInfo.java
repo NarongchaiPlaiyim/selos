@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BAPAInfoControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.BAPAType;
@@ -13,6 +14,7 @@ import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.SelectableDataModel;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -44,13 +47,14 @@ public class BAInfo implements Serializable {
 
     @Inject
     private BAPAInfoControl bapaInfoControl;
-
+    @Inject
+    private UserAccessControl userAccessControl;
+    
     //Private variable
     private boolean preRenderCheck = false;
     private long workCaseId = -1;
     private long stepId = -1;
-	private long stageId = -1;
-    private BasicInfoView basicInfoView;
+	private BasicInfoView basicInfoView;
     private List<BAPAInfoCreditView> deleteCreditList;
     private List<BAPAInfoCreditToSelectView> toSelectCredits;
     private BAPAInfoCreditView toUpdCreditView;
@@ -205,7 +209,6 @@ public class BAInfo implements Serializable {
         if (session != null) {
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
             stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-            stageId = Util.parseLong(session.getAttribute("stageId"), -1);
         }
         insuranceCompanies = bapaInfoControl.getInsuranceCompanies();
         baResultHCs = bapaInfoControl.getBAResultHCs();
@@ -223,7 +226,7 @@ public class BAInfo implements Serializable {
 
         String redirectPage = null;
         if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.BAInfo, stepId)) {
                 redirectPage = "/site/inbox.jsf";
             } else {
                 return;

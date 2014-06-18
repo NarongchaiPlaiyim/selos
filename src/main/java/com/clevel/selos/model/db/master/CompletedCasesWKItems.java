@@ -72,6 +72,17 @@ public class CompletedCasesWKItems implements Serializable
     @Temporal(TemporalType.TIMESTAMP)
     private Date receiveddate;
 
+    @Column(name = "ref_app_number")
+    private String refAppNumber;
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
     public String getCreateBy() {
         return createBy;
     }

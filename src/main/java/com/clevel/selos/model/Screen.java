@@ -28,7 +28,7 @@ public enum Screen {
     //Decision
     DECISION(2920),
     
-    //Step 301 Screen //TODO
+    //Step 301 Screen 
     InsuranceInfo(3100),
     ContactRecord(3300),
     CallingRecordDialog(3500),
@@ -40,16 +40,28 @@ public enum Screen {
     GuarantorDetail(8200),
     BAInfo(8300),
     applyBAinfoDialog(8400),
-    addBAPAInfoDialog(8500),
+    addBAPAInfoDialog(10300),
     AccountInfo(8500),
     AddAccountInfoDialog(8600),
-    
+    PreDisbursement(9200),
+    TCGInfo(9700),
     PostCustomerInfoSum(5300),
-    PostCustomerInfoIndv(0),
+    PostCustomerInfoIndv(5400),
     PostCustomerInfoJuris(9100),
     AgreementAndMortgageConfirm(9800),
     AgreementSign(9900),
     PledgeConfirm(10000),
+
+    ApproveDetailInfo(8700),
+    AddMCDisburseInfoDialog(8800) ,
+    AddDepositDisburseInfoDialog(8900) ,
+    AddBahtNetDisburseInfoDialog(9000) ,
+    Disbursement(9300) ,
+    
+    PostDecision(9500) , //???
+    UpdateCollateralInfo(9600) ,
+    PerfectionReview(10100) ,
+    ConfirmLimitSetUp(10200)
     
     ;
     int value;

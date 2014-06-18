@@ -156,7 +156,9 @@
 
                             <p:column headerText="Application Number" styleClass="center"
                                       style="width: 110px;" sortBy="appNumber" >
-                                <h:outputText value="#{item.appNumber}"/>
+                                <h:outputText value="App No.: #{item.appNumber}"/>
+                                <br/>
+                                <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                             </p:column>
 
                             <p:column headerText="Name" styleClass="center"
