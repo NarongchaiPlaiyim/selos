@@ -922,8 +922,8 @@ public class PDFExecutiveSummary implements Serializable {
 //        //Proposed Guarantor
 //        totalDecisionReport.setProposeTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getProposeTotalGuaranteeAmt()));
 //
-//        //Approved Guarantor
-//        totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
+        //Approved Guarantor
+        totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
 
         return totalDecisionReport;
     }
