@@ -9,8 +9,27 @@ import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.CrossType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.db.working.BAPAInfo;
+import com.clevel.selos.model.db.working.BAPAInfoCredit;
+import com.clevel.selos.model.db.working.Disbursement;
+import com.clevel.selos.model.db.working.DisbursementBahtnet;
+import com.clevel.selos.model.db.working.DisbursementBahtnetCredit;
+import com.clevel.selos.model.db.working.DisbursementCredit;
+import com.clevel.selos.model.db.working.DisbursementMC;
+import com.clevel.selos.model.db.working.DisbursementMCCredit;
+import com.clevel.selos.model.db.working.DisbursementTR;
+import com.clevel.selos.model.db.working.DisbursementTRCredit;
+import com.clevel.selos.model.db.working.NewCreditDetail;
+import com.clevel.selos.model.db.working.OpenAccount;
+import com.clevel.selos.model.db.working.OpenAccountCredit;
+import com.clevel.selos.model.db.working.OpenAccountName;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
+import com.clevel.selos.model.view.DisbursementBahtnetDetailView;
+import com.clevel.selos.model.view.DisbursementCreditTypeView;
+import com.clevel.selos.model.view.DisbursementDepositBaDetailView;
+import com.clevel.selos.model.view.DisbursementInfoView;
+import com.clevel.selos.model.view.DisbursementMcDetailView;
+import com.clevel.selos.model.view.DisbursementSummaryView;
 import com.clevel.selos.transform.CreditTypeDetailTransform;
 import org.slf4j.Logger;
 
@@ -328,7 +347,7 @@ public class DisbursementControl extends BusinessControl {
 				disbursementTR.setDisbursement(disbursement);
 
 			}
-			disbursementTR.setOpenAccount(openAccountDAO.findByAccountNumber(depositBaDetailView.getAccountNumber()));
+			//disbursementTR.setOpenAccount(openAccountDAO.findByAccountNumber(depositBaDetailView.getAccountNumber()));
 			disbursementTRDAO.persist(disbursementTR);
 			// Disbursement TR credit
 			for (DisbursementCreditTypeView disbursementCreditTypeView : depositBaDetailView.getDisbursementCreditTypeView()) {
@@ -412,6 +431,48 @@ public class DisbursementControl extends BusinessControl {
 			disbursementDepositBaDetailViewList.add(depositBaDetailView);
 		}
 		return disbursementDepositBaDetailViewList;
+	}
+
+	public List<DisbursementCreditTypeView> getDisbursementCreditViewByOpenAccountId(long openAccountId){
+		OpenAccount openAccount = openAccountDAO.findById(openAccountId); 
+		List<OpenAccountCredit> openAccountCreditList = openAccount.getOpenAccountCreditList();
+		List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
+		if (openAccountCreditList != null && !openAccountCreditList.isEmpty()) {
+    		for (OpenAccountCredit openAccountCredit : openAccountCreditList) {
+    			NewCreditDetail newCreditDetail = openAccountCredit.getNewCreditDetail();
+    			DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
+    			disbursementCreditView.setNewCreditDetailId(newCreditDetail.getId());
+    			disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());
+    			disbursementCreditView.setCreditFacility(newCreditDetail.getCreditType().getName());
+    			disbursementCreditView.setLimitAmount(newCreditDetail.getLimit());
+    			disbursementCreditViewList.add(disbursementCreditView);
+    		}
+    	}
+		return disbursementCreditViewList;
+	}
+	
+	public List<SelectItem> getOpenAccountsForTransfer(long workCaseId) {
+		List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
+		List<OpenAccount> models = openAccountDAO.findByWorkCaseId(workCaseId);
+		for (OpenAccount model : models) {
+			SelectItem item = new SelectItem();
+			for (OpenAccountPurpose openAccountPurpose : model.getOpenAccountPurposeList()){
+				if (openAccountPurpose.getAccountPurpose().getName().equals("โอนสินเชื่อเข้าบัญชี")){
+					item.setValue(model.getId());
+					item.setLabel(model.getAccountNumber());
+					StringBuilder accountName = new StringBuilder();
+					for ( OpenAccountName openAccountName : model.getOpenAccountNameList()){
+						accountName.append(openAccountName.getCustomer().getNameEn());
+						accountName.append(",");
+					}
+					accountName.setLength(accountName.length() - 1);
+					item.setDescription(accountName.toString());
+					break;
+				}
+			}
+			rtnDatas.add(item);
+		}
+		return rtnDatas;
 	}
 
 	public List<SelectItem> getBankBranches() {

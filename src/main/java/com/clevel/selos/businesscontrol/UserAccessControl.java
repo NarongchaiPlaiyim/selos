@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Stateless
@@ -59,5 +60,17 @@ public class UserAccessControl extends BusinessControl {
     			return true;
     	}
     	return false;
+    }
+    
+    public List<UserAccessView> getUserAccessList(long stepId) {
+    	if (getCurrentUser() == null || stepId <= 0)
+    		return Collections.emptyList();
+    	int roleId = getCurrentUser().getRole().getId();
+    	List<UserAccess> list = userAccessDAO.getUserAccess(stepId, roleId);
+    	if(list != null && !list.isEmpty()){
+            return userAccessTransform.transformToViewList(list);
+        } else {
+        	return Collections.emptyList();
+        }
     }
 }

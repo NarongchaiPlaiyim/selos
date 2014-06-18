@@ -33,7 +33,7 @@
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="126" y="0" width="55" height="23"/>
+				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="126" y="0" width="54" height="23"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -68,7 +68,7 @@
 				<textFieldExpression><![CDATA[$F{accountSuf}.equals( null ) ? "Suf.:" : "Suf.:" +$F{accountSuf}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="181" y="0" width="49" height="23"/>
+				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="180" y="0" width="49" height="23"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>

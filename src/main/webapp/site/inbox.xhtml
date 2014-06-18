@@ -85,7 +85,9 @@
                                             </p:column>
 
                                             <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="applicationno">
-                                                <h:outputText value="#{item.applicationno}"/>
+                                                <h:outputText value="App No.: #{item.applicationno}"/>
+                                                <br/>
+                                                <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                                             </p:column>
                                             <p:column headerText="Name" styleClass="center" style="width: 60px;" sortBy="name">
                                                 <h:outputText value="#{item.name}"/>
@@ -174,7 +176,9 @@
                                             </p:column>
 
                                             <p:column headerText="Application Number" styleClass="center" style="width: 60px;" sortBy="applicationno">
-                                                <h:outputText value="#{item.applicationno}"/>
+                                                <h:outputText value="App No.: #{item.applicationno}"/>
+                                                <br/>
+                                                <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                                             </p:column>
                                             <p:column headerText="Name" styleClass="center" style="width: 60px;" sortBy="name">
                                                 <h:outputText value="#{item.name}"/>

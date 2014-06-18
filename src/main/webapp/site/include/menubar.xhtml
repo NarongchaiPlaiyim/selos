@@ -2,7 +2,8 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:h="http://java.sun.com/jsf/html">
+        xmlns:h="http://java.sun.com/jsf/html"
+         xmlns:c="http://java.sun.com/jsp/jstl/core">
 
     <h:outputStylesheet name="css/jquery.menu.css" />
     <h:outputScript library="js" name="jquery.menu.js" />
@@ -90,118 +91,173 @@
             </h:panelGroup>
             <h:panelGroup id="pnl_menu_step3" rendered="#{headerController.step3Screen}"
                      styleClass="panel">
-                <li>
-                	<a href="insuranceInfo.jsf" title="#{msg.get('app.menu.insurance_info')}">
-                		#{msg.get('app.menu.insurance_info')}
-                	</a>
-                	<ul>
-                		<li>
-                        	<a href="insuranceInfo.jsf" title="#{msg.get('app.menu.insurance_info')}">
-                        		#{msg.get('app.menu.insurance_info')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="baInfo.jsf" title="#{msg.get('app.menu.ba_info')}">
-                        		#{msg.get('app.menu.ba_info')}
-                        	</a>
-                        </li>
-                	</ul>
-                </li>
-                <li>
-                	<a href="customerAcceptance.jsf" title="#{msg.get('app.menu.contact_record')}">
-                		#{msg.get('app.menu.contact_record')}
-                	</a>
-                </li>
-                <li>
-                	<a href="feeCalculation.jsf" title="#{msg.get('app.menu.fee_calculation')}">
-                		#{msg.get('app.menu.fee_calculation')}
-                	</a>
-                </li>
-                <li>
-                	<a href="decision.jsf" title="#{msg.get('app.menu.summary')}">
-                		#{msg.get('app.menu.summary')}
-                	</a>
-                </li>
-                <li>
-                	<a href="postCustomerInfoSummary.jsf" title="#{msg.get('app.menu.registration')}">
-                		#{msg.get('app.menu.registration')}
-                	</a>
-                	<ul>
-                		<li>
-                        	<a href="postCustomerInfoSummary.jsf" title="#{msg.get('app.menu.customer_info')}">
-                        		#{msg.get('app.menu.customer_info')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="accountInfo.jsf" title="#{msg.get('app.menu.account_info')}">
-                        		#{msg.get('app.menu.account_info')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="approveDetailInformation.jsf" title="#{msg.get('app.menu.approve_detail')}">
-                        		#{msg.get('app.menu.approve_detail')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="mortgageSummary.jsf" title="#{msg.get('app.menu.collateral')}">
-                        		#{msg.get('app.menu.collateral')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="disbursement.jsf" title="#{msg.get('app.menu.disbursement')}">
-                        		#{msg.get('app.menu.disbursement')}
-                        	</a>
-                        </li>
-                	</ul>
-                </li>
+               	<c:if test="#{postAppGeneral.showGroupSummary()}">
+               		<li>
+	                    <h:link title="#{msg.get('app.menu.decision')}" value="#{msg.get('app.menu.decision')}"
+   	                		outcome="#{postAppGeneral.defaultOutcomeGroupSummary}"
+   	                		/>
+    	                <ul>
+    	                	<c:if test="#{postAppGeneral.canAccessMenu(2910)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.exSummary')}" value="#{msg.get('app.menu.exSummary')}"
+	        	                		outcome="exSummary"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(2920)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.decision')}" value="#{msg.get('app.menu.decision')}"
+	        	                		outcome="decision"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+                	    </ul>
+                	</li>
+               	</c:if>
+                <c:if test="#{postAppGeneral.canAccessMenu(3300)}">
+               		<li>
+               			<h:link title="#{msg.get('app.menu.contact_record')}" value="#{msg.get('app.menu.contact_record')}"
+	                		outcome="customerAcceptance"
+	                		/>
+	                </li>
+                </c:if>
                 
-                 <li>
-                	<a href="TCGApprovalInfo.jsf" title="#{msg.get('app.menu.tcg_info')}">
-                		#{msg.get('app.menu.tcg_info')}
-                	</a>
-                </li>
-                <li>
-                	<a href="perfectionReview.jsf" title="#{msg.get('app.menu.confirmation')}">
-                		#{msg.get('app.menu.confirmation')}
-                	</a>
-                	<ul>
-                		<li>
-                        	<a href="perfectionReview.jsf" title="#{msg.get('app.menu.perfect_review')}">
-                        		#{msg.get('app.menu.perfect_review')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="mortgageConfirm.jsf" title="#{msg.get('app.menu.agreement_mortgage')}">
-                        		#{msg.get('app.menu.agreement_mortgage')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="agreementSign.jsf" title="#{msg.get('app.menu.agreement_signing')}">
-                        		#{msg.get('app.menu.agreement_signing')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="feeCalculation.jsf" title="#{msg.get('app.menu.fee_collection')}">
-                        		#{msg.get('app.menu.fee_collection')}
-                        	</a>
-                        </li>
-                        <li>
-                        	<a href="pledgeConfirm.jsf" title="#{msg.get('app.menu.pledge_confirm')}">
-                        		#{msg.get('app.menu.pledge_confirm')}
-                        	</a>
-                        </li>
-                	</ul>
-                </li> 
-                <li>
-                	<a href="preDisbursement.jsf" title="#{msg.get('app.menu.pre_disbursement')}">
-                		#{msg.get('app.menu.pre_disbursement')}
-                	</a>
-                </li>
-                 <li>
-                	<a href="limitSetup.jsf" title="#{msg.get('app.menu.limit_setup')}">
-                		#{msg.get('app.menu.limit_setup')}
-                	</a>
-                </li>
+               <c:if test="#{postAppGeneral.showGroupRegister()}">
+               		<li>
+	                    <h:link title="#{msg.get('app.menu.registration')}" value="#{msg.get('app.menu.registration')}"
+   	                		outcome="#{postAppGeneral.defaultOutcomeGroupRegister}"
+   	                		/>
+    	                <ul>
+    	                	<c:if test="#{postAppGeneral.canAccessMenu(5300)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.customer_info')}" value="#{msg.get('app.menu.customer_info')}"
+	        	                		outcome="postCustomerInfoSummary"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(8500)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.account_info')}" value="#{msg.get('app.menu.account_info')}"
+	        	                		outcome="accountInfo"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(8700)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.approve_detail')}" value="#{msg.get('app.menu.approve_detail')}"
+	        	                		outcome="approveDetailInformation"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(3700)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.collateral')}" value="#{msg.get('app.menu.collateral')}"
+	        	                		outcome="mortgageSummary"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(9300)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.disbursement')}" value="#{msg.get('app.menu.disbursement')}"
+	        	                		outcome="disbursement"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	               
+                	    </ul>
+                	</li>
+               </c:if>
+               <c:if test="#{postAppGeneral.canAccessMenu(9400)}">
+               		<li>
+               			<h:link title="#{msg.get('app.menu.fee_calculation')}" value="#{msg.get('app.menu.fee_calculation')}"
+	                		outcome="feeCalculation"
+	                		/>
+	                </li>
+               </c:if>
+               <c:if test="#{postAppGeneral.showGroupInsurance()}">
+               		<li>
+	                    <h:link title="#{msg.get('app.menu.insurance_info')}" value="#{msg.get('app.menu.insurance_info')}"
+   	                		outcome='#{postAppGeneral.defaultOutcomeGroupInsurance}'
+   	                		/>
+    	                <ul>
+    	                	<c:if test="#{postAppGeneral.canAccessMenu(3100)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.insurance_info')}" value="#{msg.get('app.menu.insurance_info')}"
+	        	                		outcome="insuranceInfo"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(8300)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.ba_info')}" value="#{msg.get('app.menu.ba_info')}"
+	        	                		outcome="baInfo"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+                	    </ul>
+                	</li>
+               	</c:if>
+                <c:if test="#{postAppGeneral.canAccessMenu(9700)}">
+               		<li>
+               			<h:link title="#{msg.get('app.menu.tcg_info')}" value="#{msg.get('app.menu.tcg_info')}"
+	                		outcome="TCGApprovalInfo"
+	                		/>
+	                </li>
+               </c:if>
+               
+                <c:if test="#{postAppGeneral.showGroupConfirmation()}">
+               		<li>
+	                    <h:link title="#{msg.get('app.menu.confirmation')}" value="#{msg.get('app.menu.confirmation')}"
+   	                		outcome="#{postAppGeneral.defaultOutcomeGroupConfirmation}"
+   	                		/>
+    	                <ul>
+    	                	<c:if test="#{postAppGeneral.canAccessMenu(9800)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.agreement_mortgage')}" value="#{msg.get('app.menu.agreement_mortgage')}"
+	        	                		outcome="mortgageConfirm"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(9900)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.agreement_signing')}" value="#{msg.get('app.menu.agreement_signing')}"
+	        	                		outcome="agreementSign"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(10000)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.pledge_confirm')}" value="#{msg.get('app.menu.pledge_confirm')}"
+	        	                		outcome="pledgeConfirm"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+        	                <c:if test="#{postAppGeneral.canAccessMenu(10100)}">
+	        	                <li>
+	        	                	<h:link title="#{msg.get('app.menu.perfect_review')}" value="#{msg.get('app.menu.perfect_review')}"
+	        	                		outcome="perfectionReview"
+	        	                		/>
+	        	                </li>
+        	                </c:if>
+                	    </ul>
+                	</li>
+               </c:if>
+               
+               
+               <c:if test="#{postAppGeneral.canAccessMenu(9200)}">
+               		<li>
+               			<h:link title="#{msg.get('app.menu.pre_disbursement')}" value="#{msg.get('app.menu.pre_disbursement')}"
+	                		outcome="preDisbursement"
+	                		/>
+	                </li>
+               </c:if>
+               <c:if test="#{postAppGeneral.canAccessMenu(10200)}">
+               		<li>
+               			<h:link title="#{msg.get('app.menu.limit_setup')}" value="#{msg.get('app.menu.limit_setup')}"
+	                		outcome="limitSetup"
+	                		/>
+	                </li>
+               </c:if>
                 
             </h:panelGroup>
         </ul>

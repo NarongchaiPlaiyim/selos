@@ -43,6 +43,8 @@ public enum Screen {
     addBAPAInfoDialog(10300),
     AccountInfo(8500),
     AddAccountInfoDialog(8600),
+    PreDisbursement(9200),
+    TCGInfo(9700),
     PostCustomerInfoSum(5300),
     PostCustomerInfoIndv(5400),
     PostCustomerInfoJuris(9100),
@@ -54,12 +56,10 @@ public enum Screen {
     AddMCDisburseInfoDialog(8800) ,
     AddDepositDisburseInfoDialog(8900) ,
     AddBahtNetDisburseInfoDialog(9000) ,
-    PreDisbursement(9200) ,
     Disbursement(9300) ,
     
     PostDecision(9500) , //???
     UpdateCollateralInfo(9600) ,
-    TCGInfo(9700) ,
     PerfectionReview(10100) ,
     ConfirmLimitSetUp(10200)
     

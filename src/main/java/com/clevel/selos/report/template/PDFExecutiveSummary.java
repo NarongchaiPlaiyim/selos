@@ -16,6 +16,8 @@ import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -66,6 +68,10 @@ public class PDFExecutiveSummary implements Serializable {
 
     @Inject
     DecisionView decisionView;
+
+    @Inject
+    @NormalMessage
+    Message msg;
 
     long workCaseId;
     private final String SPACE = " ";
@@ -360,14 +366,15 @@ public class PDFExecutiveSummary implements Serializable {
         return riskInfoExSumReport;
     }
 
-    public DecisionExSumReport fillDecision(){
+    public List<DecisionExSumReport> fillDecision(){
 //        init();
-        DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
+        List<DecisionExSumReport> exSumReportList = new ArrayList<DecisionExSumReport>();
         List<ExSumDecisionView> exSumDecisionView = exSummaryView.getExSumDecisionListView();
-
+        int id = 0;
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
-                decisionExSumReport.setId(decisionView.getId());
+                DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
+                decisionExSumReport.setId(id++);
 
                 if (decisionView.getFlag().code() == "Y"){
                     decisionExSumReport.setFlag("YELLOW");
@@ -386,11 +393,12 @@ public class PDFExecutiveSummary implements Serializable {
                 decisionExSumReport.setRuleName(Util.checkNullString(decisionView.getRuleName()));
                 decisionExSumReport.setCusName(Util.checkNullString(decisionView.getCusName()));
                 decisionExSumReport.setDeviationReason(Util.checkNullString(decisionView.getDeviationReason()));
+                exSumReportList.add(decisionExSumReport);
             }
         } else {
-            log.debug("ExSumDecisionView in Method fillDecision is Null. {}",exSumDecisionView);
+            log.debug("ExSumDecisionView in Method fillDecision is Null. {}",exSumReportList);
         }
-        return decisionExSumReport;
+        return exSumReportList;
     }
 
     public BizSupportExSumReport fillBizSupport(){
@@ -1019,9 +1027,9 @@ public class PDFExecutiveSummary implements Serializable {
                 }
 
                 if(Util.isNull(view.getTotalLimitGuaranteeAmount())){
-                    approvedGuarantorDecisionReport.setGuarantorType("ลด/ยกเลิกการค้ำประกัน");
+                    approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
                 } else {
-                    approvedGuarantorDecisionReport.setGuarantorType("บุคคลค้ำประกัน/นิติบุคคลค้ำประกัน");
+                    approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
                 }
 
                 approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
