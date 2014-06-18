@@ -53,7 +53,7 @@ public class GenPDF extends ReportService implements Serializable {
     WorkCase workCase; // ห้าม @Inject
 
     @Inject
-    PDFExecutiveSummary pdfExecutiveSummary;
+    PDFExecutiveSummaryAndOpSheet pdfExecutiveSummary;
 
     @Inject
     PDFRejectLetter pdfReject_letter;
@@ -170,9 +170,21 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillRelatedCommercial",pdfExecutiveSummary.fillRelatedCommercial(pathsub));
         map.put("fillRelatedRetail",pdfExecutiveSummary.fillRelatedRetail(pathsub));
         map.put("fillRelatedAppInRLOS",pdfExecutiveSummary.fillRelatedAppInRLOS(pathsub));
-        map.put("fillTotalMasterReport",pdfExecutiveSummary.fillTotalMasterReport());
+        map.put("fillExistingCollateralBorrower",pdfExecutiveSummary.fillExistingCollateralBorrower(pathsub));
+        map.put("fillExistingCollateralRelated",pdfExecutiveSummary.fillExistingCollateralRelated(pathsub));
+        map.put("fillGuarantorBorrower",pdfExecutiveSummary.fillGuarantorBorrower(pathsub));
+        map.put("fillProposedCredit",pdfExecutiveSummary.fillProposedCredit(pathsub));
+        map.put("fillApprovedCredit",pdfExecutiveSummary.fillApprovedCredit(pathsub));
+        map.put("fillProposeFeeInformation",pdfExecutiveSummary.fillProposeFeeInformation());
+        map.put("fillProposedCollateral",pdfExecutiveSummary.fillProposedCollateral(pathsub));
         map.put("fillApprovedCollaterral",pdfExecutiveSummary.fillApprovedCollaterral(pathsub));
+        map.put("fillProposedGuarantor",pdfExecutiveSummary.fillProposedGuarantor(pathsub));
         map.put("fillApprovedGuarantor",pdfExecutiveSummary.fillApprovedGuarantor(pathsub));
+        map.put("fillFollowUpCondition",pdfExecutiveSummary.fillFollowUpCondition());
+        map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
+        map.put("fillTotalMasterReport",pdfExecutiveSummary.fillTotalMasterReport());
+        map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
+        map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
 //        pdfName = "Executive_Summary_Report_";
 
@@ -197,9 +209,10 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated(pathsub));
         map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower(pathsub));
         map.put("fillProposedCredit",pdfDecision.fillProposedCredit(pathsub));
+        map.put("fillApprovedCredit",pdfDecision.fillApprovedCredit(pathsub));
         map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
         map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral(pathsub));
-        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral(pathsub));   //TODO
+        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral(pathsub));
         map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor(pathsub));
         map.put("fillApprovedGuarantor",pdfDecision.fillApprovedGuarantor(pathsub));
         map.put("fillFollowUpCondition",pdfDecision.fillFollowUpCondition());
