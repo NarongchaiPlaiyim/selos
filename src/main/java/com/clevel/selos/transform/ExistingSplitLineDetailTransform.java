@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.ExistingSplitLineDetailDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingSplitLineDetail;
@@ -11,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 public class ExistingSplitLineDetailTransform extends Transform {
+
+    @Inject
+    ExistingSplitLineDetailDAO existingSplitLineDetailDAO;
 
     @Inject
     public ExistingSplitLineDetailTransform() {
@@ -54,6 +58,7 @@ public class ExistingSplitLineDetailTransform extends Transform {
 
         for(ExistingSplitLineDetail existingSplitLineDetail : existingSplitLineDetailList){
             existingSplitLineDetailView = new ExistingSplitLineDetailView();
+            existingSplitLineDetailView.setId(Integer.parseInt(existingSplitLineDetail.getId()+""));
             existingSplitLineDetailView.setCreateBy(existingSplitLineDetail.getCreateBy());
             existingSplitLineDetailView.setCreateDate(existingSplitLineDetail.getCreateDate());
             existingSplitLineDetailView.setNo(existingSplitLineDetail.getNo());
@@ -65,5 +70,34 @@ public class ExistingSplitLineDetailTransform extends Transform {
         }
 
         return existingSplitLineDetailViewList;
+    }
+
+    public List<ExistingSplitLineDetail> transformsToModelForUpdate(List<ExistingSplitLineDetailView> existingSplitLineDetailViewList,ExistingCreditDetail existingCreditDetail,User user) {
+
+        List<ExistingSplitLineDetail> existingSplitLineDetails = new ArrayList<ExistingSplitLineDetail>();
+        ExistingSplitLineDetail existingSplitLineDetail;
+
+        if(existingSplitLineDetailViewList!=null){
+            for (ExistingSplitLineDetailView existingSplitLineDetailView : existingSplitLineDetailViewList) {
+                existingSplitLineDetail = new ExistingSplitLineDetail();
+
+                if (existingSplitLineDetailView.getId() != 0) {
+                    existingSplitLineDetail = existingSplitLineDetailDAO.findById(existingSplitLineDetailView.getId());
+                } else { // id = 0 create new
+                    existingSplitLineDetail.setCreateDate(new Date());
+                    existingSplitLineDetail.setCreateBy(user);
+                }
+
+                existingSplitLineDetail.setNo(existingSplitLineDetailView.getNo());
+                existingSplitLineDetail.setProductProgram(existingSplitLineDetailView.getProductProgram());
+                existingSplitLineDetail.setLimit(existingSplitLineDetailView.getLimit());
+                existingSplitLineDetail.setExistingCreditDetail(existingCreditDetail);
+                existingSplitLineDetail.setModifyDate(new Date());
+                existingSplitLineDetail.setModifyBy(user);
+                existingSplitLineDetails.add(existingSplitLineDetail);
+            }
+        }
+
+        return existingSplitLineDetails;
     }
 }

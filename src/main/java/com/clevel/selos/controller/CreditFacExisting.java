@@ -361,6 +361,17 @@ public class CreditFacExisting extends BaseController {
                         borrowerExistingGuarantorDetailViewList = existingCreditFacilityView.getBorrowerGuarantorList();
                     }
                 }
+
+                existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+                existingCreditFacilityView.setBorrowerRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+                existingCreditFacilityView.setBorrowerAppInRLOSCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+                existingCreditFacilityView.setBorrowerExistingCreditPreScreenDeleteList(new ArrayList<ExistingCreditDetailView>());
+
+                existingCreditFacilityView.setRelatedComExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+                existingCreditFacilityView.setRelatedRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+                existingCreditFacilityView.setRelatedAppInRLOSCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+                existingCreditFacilityView.setRelateExistingCreditPresScreenDeleteList(new ArrayList<ExistingCreditDetailView>());
+
                 calTotalCreditBorrower();
                 calTotalCreditRelated();
                 calTotalCreditGroup();
@@ -540,15 +551,29 @@ public class CreditFacExisting extends BaseController {
             used = Integer.parseInt(hashBorrower.get(existingCreditDetailViewDel.getNo()).toString());
 
             log.info("before del use is  " +  used);
-             if(used ==0){
-                 log.info("use 0 ");
-                 existingCreditFacilityView.getBorrowerComExistingCredit().remove(existingCreditDetailViewDel);
-             }else{
-                 log.info("use > 0 ");
-                 messageHeader = msg.get("app.header.error");
-                 message = msg.get("app.credit.facility.message.err.credit.inused");
-                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-             }
+            if(used==0){
+                log.info("use 0 ");
+                //check is used by propose
+                if(existingCreditDetailViewDel.getId()!=0){
+                    if(creditFacExistingControl.isUsedInProposeCredit(existingCreditDetailViewDel.getId())){
+                        messageHeader = msg.get("app.header.error");
+                        message = msg.get("app.credit.facility.message.err.credit.inused.propose");
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    } else {
+                        List<ExistingCreditDetailView> brComCreditDetailViewDeleteList = existingCreditFacilityView.getBorrowerComExistingCreditDeleteList();
+                        brComCreditDetailViewDeleteList.add(existingCreditDetailViewDel);
+                        existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(brComCreditDetailViewDeleteList);
+                        existingCreditFacilityView.getBorrowerComExistingCredit().remove(existingCreditDetailViewDel);
+                    }
+                } else {
+                    existingCreditFacilityView.getBorrowerComExistingCredit().remove(existingCreditDetailViewDel);
+                }
+            }else{
+                log.info("use > 0 ");
+                messageHeader = msg.get("app.header.error");
+                message = msg.get("app.credit.facility.message.err.credit.inused");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
             onSetRowNoCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit());
             calTotalCreditBorrower();
             calTotalCreditGroup();
@@ -564,7 +589,21 @@ public class CreditFacExisting extends BaseController {
             log.info("before del use is  " +  used);
             if(used ==0){
                 log.info("use 0 ");
-                existingCreditFacilityView.getRelatedComExistingCredit().remove(existingCreditDetailViewDel);
+                //check is used by propose
+                if(existingCreditDetailViewDel.getId()!=0){
+                    if(creditFacExistingControl.isUsedInProposeCredit(existingCreditDetailViewDel.getId())){
+                        messageHeader = msg.get("app.header.error");
+                        message = msg.get("app.credit.facility.message.err.credit.inused.propose");
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    } else {
+                        List<ExistingCreditDetailView> rtComCreditDetailViewDeleteList = existingCreditFacilityView.getRelatedComExistingCreditDeleteList();
+                        rtComCreditDetailViewDeleteList.add(existingCreditDetailViewDel);
+                        existingCreditFacilityView.setRelatedComExistingCreditDeleteList(rtComCreditDetailViewDeleteList);
+                        existingCreditFacilityView.getRelatedComExistingCredit().remove(existingCreditDetailViewDel);
+                    }
+                } else {
+                    existingCreditFacilityView.getRelatedComExistingCredit().remove(existingCreditDetailViewDel);
+                }
             }else{
                 log.info("use > 0 ");
                 messageHeader = msg.get("app.header.error");
