@@ -263,7 +263,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             characteristicExSumReport.setIncome(Util.convertNullToZERO(exSumCharacteristicView.getIncome()));
             characteristicExSumReport.setRecommendedWCNeed(Util.convertNullToZERO(exSumCharacteristicView.getRecommendedWCNeed()));
             characteristicExSumReport.setActualWC(Util.convertNullToZERO(exSumCharacteristicView.getActualWC()));
-            characteristicExSumReport.setStartBusinessDate(exSumCharacteristicView.getStartBusinessDate());
+            characteristicExSumReport.setStartBusinessDate(DateTimeUtil.getCurrentDateTH(exSumCharacteristicView.getStartBusinessDate()));
             characteristicExSumReport.setYearInBusiness(Util.checkNullString(exSumCharacteristicView.getYearInBusiness()));
             characteristicExSumReport.setSalePerYearBDM(Util.convertNullToZERO(exSumCharacteristicView.getSalePerYearBDM()));
             characteristicExSumReport.setSalePerYearUW(Util.convertNullToZERO(exSumCharacteristicView.getSalePerYearUW()));
@@ -366,7 +366,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<DecisionExSumReport> fillDecision(){
         List<DecisionExSumReport> exSumReportList = new ArrayList<DecisionExSumReport>();
         List<ExSumDecisionView> exSumDecisionView = exSummaryView.getExSumDecisionListView();
-        int id = 0;
+        int id = 1;
         if(!Util.isNull(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
@@ -1256,8 +1256,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 StringBuilder standard = new StringBuilder();
 
                 if (!Util.isNull(view.getStandardFrontEndFee())){
-                    standard = standard.append(Util.convertNullToZERO(view.getStandardFrontEndFee().getPercentFee())).append(" % ")
-                            .append(Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeYear())).append(" Year");
+                    standard = standard.append(Util.convertNullToZERO(view.getStandardFrontEndFee().getPercentFee())).append(" % ").append(" , ")
+                            .append(!Util.isNull(view.getStandardFrontEndFee()) ?
+                             Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeYear()) : " - ");//.append(" Year");
                     proposeFeeInformationDecisionReport.setStandardFront(standard.toString());
                     } else {
                     proposeFeeInformationDecisionReport.setStandardFront("0.00% Year");
@@ -1265,38 +1266,41 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 if (!Util.isNull(view.getCommitmentFee())){
                     StringBuilder commit = new StringBuilder();
-                    commit = commit.append(Util.convertNullToZERO(view.getCommitmentFee().getPercentFee())).append(" % ")
-                            .append(Util.convertNullToZERO(view.getCommitmentFee().getFeeYear())).append(" Year");
+                    commit = commit.append(Util.convertNullToZERO(view.getCommitmentFee().getPercentFee())).append(" % ").append(" , ")
+                            .append(!Util.isNull(view.getCommitmentFee()) ?
+                            Util.convertNullToZERO(view.getCommitmentFee().getFeeYear()) : " - ");//.append(" Year");
                     proposeFeeInformationDecisionReport.setCommitmentFee(commit.toString());
                 } else {
-                    proposeFeeInformationDecisionReport.setCommitmentFee("0.00% Year");
+                    proposeFeeInformationDecisionReport.setCommitmentFee("0.00%, - ");
                 }
 
                 if (!Util.isNull(view.getExtensionFee())){
                     StringBuilder extension = new StringBuilder();
-                    extension = extension.append(Util.convertNullToZERO(view.getExtensionFee().getPercentFee())).append(" % ")
-                            .append(Util.convertNullToZERO(view.getExtensionFee().getFeeYear())).append(" Year");
+                    extension = extension.append(Util.convertNullToZERO(view.getExtensionFee().getPercentFee())).append(" % ").append(" , ")
+                            .append(!Util.isNull(view.getExtensionFee()) ?
+                            Util.convertNullToZERO(view.getExtensionFee().getFeeYear()) : " - ");//.append(" Year");
                     proposeFeeInformationDecisionReport.setExtensionFee(extension.toString());
                 } else {
-                    proposeFeeInformationDecisionReport.setExtensionFee("0.00% Year");
+                    proposeFeeInformationDecisionReport.setExtensionFee("0.00%, - ");
                 }
 
                 if (!Util.isNull(view.getPrepaymentFee())){
                     StringBuilder prepayment = new StringBuilder();
-                    prepayment = prepayment.append(Util.convertNullToZERO(view.getPrepaymentFee().getPercentFee())).append(" % ")
-                            .append(Util.convertNullToZERO(view.getPrepaymentFee().getFeeYear())).append(" Year");
+                    prepayment = prepayment.append(Util.convertNullToZERO(view.getPrepaymentFee().getPercentFee())).append(" % ").append(" , ")
+                            .append(!Util.isNull(view.getPrepaymentFee()) ?
+                            Util.convertNullToZERO(view.getPrepaymentFee().getFeeYear()) : " - ");//.append(" Year");
                     proposeFeeInformationDecisionReport.setPrepaymentFee(prepayment.toString());
                 } else {
-                    proposeFeeInformationDecisionReport.setPrepaymentFee("0.00% Year");
+                    proposeFeeInformationDecisionReport.setPrepaymentFee("0.00%, - ");
                 }
 
                 if (!Util.isNull(view.getCancellationFee())) {
                     StringBuilder cancellation = new StringBuilder();
-                    cancellation = cancellation.append(Util.convertNullToZERO(view.getCancellationFee().getPercentFee())).append(" % ")
+                    cancellation = cancellation.append(Util.convertNullToZERO(view.getCancellationFee().getPercentFee())).append(" % ").append(" , ")
                             .append(Util.convertNullToZERO(view.getCancellationFee().getFeeYear())).append(" Year");
                     proposeFeeInformationDecisionReport.setCancellationFee(cancellation.toString());
                 } else {
-                    proposeFeeInformationDecisionReport.setCancellationFee("0.00% Year");
+                    proposeFeeInformationDecisionReport.setCancellationFee("0.00%, - ");
                 }
                 proposeFeeInformationDecisionReportList.add(proposeFeeInformationDecisionReport);
             }
