@@ -92,7 +92,7 @@ public class ApproveDetailInformation implements Serializable {
 	}
 	
 	public void preRender() {
-		/*if (preRenderCheck)
+		if (preRenderCheck)
 			return;
 		preRenderCheck = true;
 		
@@ -114,7 +114,7 @@ public class ApproveDetailInformation implements Serializable {
 			ec.redirect(ec.getRequestContextPath()+redirectPage);
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to "+redirectPage,e);
-		}*/
+		}
 	}
 	
 	public void onSaveApproveDetail() {
