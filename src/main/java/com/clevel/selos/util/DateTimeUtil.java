@@ -81,7 +81,7 @@ public class DateTimeUtil implements Serializable {
         } catch (ParseException e){
             log.error("error, parsing date");
         }
-        return new Date();
+        return null;
     }
 
     public static Date convertStringToDate(String date, Locale locale){
