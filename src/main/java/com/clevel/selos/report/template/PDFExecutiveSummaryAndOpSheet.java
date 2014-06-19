@@ -1261,7 +1261,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                              Util.convertNullToZERO(view.getStandardFrontEndFee().getFeeYear()) : " - ");//.append(" Year");
                     proposeFeeInformationDecisionReport.setStandardFront(standard.toString());
                     } else {
-                    proposeFeeInformationDecisionReport.setStandardFront("0.00% Year");
+                    proposeFeeInformationDecisionReport.setStandardFront("0.00%, - ");
                 }
 
                 if (!Util.isNull(view.getCommitmentFee())){
