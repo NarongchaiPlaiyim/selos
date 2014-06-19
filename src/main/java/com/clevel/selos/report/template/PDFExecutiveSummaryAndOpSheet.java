@@ -420,7 +420,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
         if (!Util.isNull(exSummaryView)){
             uwDecisionExSumReport.setUwCode("6500000000");
-            uwDecisionExSumReport.setName(Util.checkNullString(exSummaryView.getApproveAuthority().getName()));
+            uwDecisionExSumReport.setName(!Util.isNull(exSummaryView.getApproveAuthority()) ? Util.checkNullString(exSummaryView.getApproveAuthority().getName()) : SPACE);
             uwDecisionExSumReport.setDecision(exSummaryView.getDecision());
             uwDecisionExSumReport.setUwComment(Util.checkNullString(exSummaryView.getUwComment()));
         } else {
