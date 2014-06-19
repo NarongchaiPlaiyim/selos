@@ -657,27 +657,99 @@ public class PDFDecision implements Serializable {
             log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
             for (NewCreditDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
+                proposedView.setPath(pathsub);
+                proposedView.setCount(count++);
+
+                proposedView.setProdName(Util.checkNullString(!Util.isNull(detailView.getProductProgramView()) ? detailView.getProductProgramView().getName() : ""));
 
                 if (detailView.getUwDecision() == DecisionType.APPROVED){
-                    log.debug("fillProposedCredit to APPROVED. {}",detailView.getUwDecision());
-                    proposedView.setCount(count++);
-                    proposedView.setPath(pathsub);
-                    proposedView.setProdName(Util.checkNullString(!Util.isNull(detailView.getProductProgramView()) ? detailView.getProductProgramView().getName() : ""));
-
-                    if (detailView.getUwDecision() == DecisionType.APPROVED){
-                        proposedView.setUwDecision("APPROVED");
-                    }
+                    proposedView.setUwDecision("APPROVED");
+                }
 //                    else if (detailView.getUwDecision() == DecisionType.REJECTED){
 //                        proposedView.setUwDecision("REJECTED");
 //                    } else {
 //                        proposedView.setUwDecision("-");
 //                    }
-                    proposedView.setCredittypeName(Util.checkNullString(!Util.isNull(detailView.getCreditTypeView()) ? detailView.getCreditTypeView().getName() : ""));
-                    proposedView.setProdCode(Util.checkNullString(detailView.getProductCode()));
-                    proposedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
-                    proposedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
-                    proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                    proposedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
+                proposedView.setCredittypeName(Util.checkNullString(!Util.isNull(detailView.getCreditTypeView()) ? detailView.getCreditTypeView().getName() : ""));
+                proposedView.setProdCode(Util.checkNullString(detailView.getProductCode()));
+                proposedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+                proposedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
+                proposedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
+
+                StringBuilder builder = new StringBuilder();
+
+                if (detailView.getRequestType() == RequestTypes.NEW.value()){
+                    builder = builder.append("Request Type : New    ");
+                } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
+                    builder = builder.append("Request Type : Change    ");
+                }
+
+                if (detailView.getRefinance() == RadioValue.YES.value()){
+                    builder = builder.append("Refinance : Yes").append("\n");
+                    proposedView.setRefinance("Yes");
+                } else if (detailView.getRefinance() == RadioValue.NO.value()){
+                    builder = builder.append("Refinance : No").append("\n");
+                }
+
+                if (!Util.isNull(detailView.getLoanPurposeView())){
+                    builder = builder.append("Purpose : ").append(Util.checkNullString(!Util.isNull(detailView.getLoanPurposeView()) ? detailView.getLoanPurposeView().getDescription() : "")).append("\n");
+                } else {
+                    builder =builder.append("Purpose : ").append("\n");
+                }
+
+                builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getRemark())).append("\n");
+
+                if (!Util.isNull(detailView.getDisbursementTypeView())){
+                    builder = builder.append("Disbursement : ").append(Util.checkNullString(!Util.isNull(detailView.getDisbursementTypeView()) ? detailView.getDisbursementTypeView().getDisbursement() : ""))
+                            .append(SPACE);
+                } else {
+                    builder = builder.append("Disbursement : ").append(SPACE);
+                }
+                builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
+
+                proposedView.setProposedDetail(builder.toString());
+                log.debug("--ProposedDetail. {}",builder.toString());
+                proposedCreditDecisionReportList.add(proposedView);
+            }
+        } else {
+            ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
+            proposedView.setPath(pathsub);
+            proposedCreditDecisionReportList.add(proposedView);
+            log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}",newCreditDetailViewList);
+        }
+        return proposedCreditDecisionReportList;
+    }
+
+    public List<ProposedCreditDecisionReport> fillApprovedCredit(String pathsub){
+        log.debug("on fillProposedCredit. {}");
+//        init();
+        newCreditDetailViewList = decisionView.getApproveCreditList();
+        List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
+
+        int count = 1;
+        if (Util.safetyList(newCreditDetailViewList).size() > 0){
+            log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
+            for (NewCreditDetailView detailView : newCreditDetailViewList){
+                ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
+                approvedView.setPath(pathsub);
+
+                if (detailView.getUwDecision() == DecisionType.APPROVED){
+                    log.debug("fillProposedCredit to APPROVED. {}",detailView.getUwDecision());
+                    approvedView.setCount(count++);
+
+                    approvedView.setProdName(Util.checkNullString(!Util.isNull(detailView.getProductProgramView()) ? detailView.getProductProgramView().getName() : ""));
+
+                    if (detailView.getUwDecision() == DecisionType.APPROVED){
+                        approvedView.setUwDecision("APPROVED");
+                    }
+
+                    approvedView.setCredittypeName(Util.checkNullString(!Util.isNull(detailView.getCreditTypeView()) ? detailView.getCreditTypeView().getName() : ""));
+                    approvedView.setProdCode(Util.checkNullString(detailView.getProductCode()));
+                    approvedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+                    approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                    approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
+                    approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
 
                     StringBuilder builder = new StringBuilder();
 
@@ -689,7 +761,7 @@ public class PDFDecision implements Serializable {
 
                     if (detailView.getRefinance() == RadioValue.YES.value()){
                         builder = builder.append("Refinance : Yes").append("\n");
-                        proposedView.setRefinance("Yes");
+                        approvedView.setRefinance("Yes");
                     } else if (detailView.getRefinance() == RadioValue.NO.value()){
                         builder = builder.append("Refinance : No").append("\n");
                     }
@@ -710,17 +782,18 @@ public class PDFDecision implements Serializable {
                     }
                     builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
 
-                    proposedView.setProposedDetail(builder.toString());
-                    log.debug("--ProposedDetail. {}",builder.toString());
-                    proposedCreditDecisionReportList.add(proposedView);
+                    approvedView.setProposedDetail(builder.toString());
+                    log.debug("--ApprovedView. {}",builder.toString());
+                    proposedCreditDecisionReportList.add(approvedView);
                 } else {
-                    log.debug("fillProposedCredit to REJECTED. {}",detailView.getUwDecision());
+                    proposedCreditDecisionReportList.add(approvedView);
+                    log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
                 }
             }
         } else {
-            ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
-            proposedView.setPath(pathsub);
-            proposedCreditDecisionReportList.add(proposedView);
+            ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
+            approvedView.setPath(pathsub);
+            proposedCreditDecisionReportList.add(approvedView);
             log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}",newCreditDetailViewList);
         }
         return proposedCreditDecisionReportList;

@@ -63,7 +63,7 @@ public class PrescreenConverter extends Converter{
         SELOSProductProgramType selosProductProgramType = new SELOSProductProgramType();
         List<CreditFacilityType> creditFacilityTypeList = null;
         for(BRMSAccountRequested accountRequested: accountRequestedList){
-            if(accountRequested.getProductProgram()!=null && !accountRequested.getProductProgram().equals(selosProductProgramType.getName())){
+            if(!accountRequested.getProductProgram().equals(selosProductProgramType.getName())){
                 if(selosProductProgramType.getName() != null && !"".equals(selosProductProgramType.getName())){
                     selosProductProgramTypeList.add(selosProductProgramType);
                     selosProductProgramType = new SELOSProductProgramType();

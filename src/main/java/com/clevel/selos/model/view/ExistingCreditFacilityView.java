@@ -62,6 +62,17 @@ public class ExistingCreditFacilityView implements Serializable {
 
     private List<ExistingGuarantorDetailView> borrowerGuarantorList;
 
+    private List<ExistingCreditDetailView> borrowerComExistingCreditDeleteList;
+    private List<ExistingCreditDetailView> borrowerRetailExistingCreditDeleteList;
+    private List<ExistingCreditDetailView> borrowerAppInRLOSCreditDeleteList;
+    private List<ExistingCreditDetailView> borrowerExistingCreditPreScreenDeleteList;
+
+    private List<ExistingCreditDetailView> relatedComExistingCreditDeleteList;
+    private List<ExistingCreditDetailView> relatedRetailExistingCreditDeleteList;
+    private List<ExistingCreditDetailView> relatedAppInRLOSCreditDeleteList;
+    private List<ExistingCreditDetailView> relateExistingCreditPresScreenDeleteList;
+
+
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -417,6 +428,70 @@ public class ExistingCreditFacilityView implements Serializable {
 
     public void setRelateExistingCreditPresScreen(List<ExistingCreditDetailView> relateExistingCreditPresScreen) {
         this.relateExistingCreditPresScreen = relateExistingCreditPresScreen;
+    }
+
+    public List<ExistingCreditDetailView> getBorrowerComExistingCreditDeleteList() {
+        return borrowerComExistingCreditDeleteList;
+    }
+
+    public void setBorrowerComExistingCreditDeleteList(List<ExistingCreditDetailView> borrowerComExistingCreditDeleteList) {
+        this.borrowerComExistingCreditDeleteList = borrowerComExistingCreditDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getBorrowerRetailExistingCreditDeleteList() {
+        return borrowerRetailExistingCreditDeleteList;
+    }
+
+    public void setBorrowerRetailExistingCreditDeleteList(List<ExistingCreditDetailView> borrowerRetailExistingCreditDeleteList) {
+        this.borrowerRetailExistingCreditDeleteList = borrowerRetailExistingCreditDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getBorrowerAppInRLOSCreditDeleteList() {
+        return borrowerAppInRLOSCreditDeleteList;
+    }
+
+    public void setBorrowerAppInRLOSCreditDeleteList(List<ExistingCreditDetailView> borrowerAppInRLOSCreditDeleteList) {
+        this.borrowerAppInRLOSCreditDeleteList = borrowerAppInRLOSCreditDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getBorrowerExistingCreditPreScreenDeleteList() {
+        return borrowerExistingCreditPreScreenDeleteList;
+    }
+
+    public void setBorrowerExistingCreditPreScreenDeleteList(List<ExistingCreditDetailView> borrowerExistingCreditPreScreenDeleteList) {
+        this.borrowerExistingCreditPreScreenDeleteList = borrowerExistingCreditPreScreenDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getRelatedComExistingCreditDeleteList() {
+        return relatedComExistingCreditDeleteList;
+    }
+
+    public void setRelatedComExistingCreditDeleteList(List<ExistingCreditDetailView> relatedComExistingCreditDeleteList) {
+        this.relatedComExistingCreditDeleteList = relatedComExistingCreditDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getRelatedRetailExistingCreditDeleteList() {
+        return relatedRetailExistingCreditDeleteList;
+    }
+
+    public void setRelatedRetailExistingCreditDeleteList(List<ExistingCreditDetailView> relatedRetailExistingCreditDeleteList) {
+        this.relatedRetailExistingCreditDeleteList = relatedRetailExistingCreditDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getRelatedAppInRLOSCreditDeleteList() {
+        return relatedAppInRLOSCreditDeleteList;
+    }
+
+    public void setRelatedAppInRLOSCreditDeleteList(List<ExistingCreditDetailView> relatedAppInRLOSCreditDeleteList) {
+        this.relatedAppInRLOSCreditDeleteList = relatedAppInRLOSCreditDeleteList;
+    }
+
+    public List<ExistingCreditDetailView> getRelateExistingCreditPresScreenDeleteList() {
+        return relateExistingCreditPresScreenDeleteList;
+    }
+
+    public void setRelateExistingCreditPresScreenDeleteList(List<ExistingCreditDetailView> relateExistingCreditPresScreenDeleteList) {
+        this.relateExistingCreditPresScreenDeleteList = relateExistingCreditPresScreenDeleteList;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CalLimitType;
 import com.clevel.selos.model.CreditCategory;
@@ -24,6 +25,9 @@ public class ExistingCreditDetailTransform extends Transform {
 
     @Inject
     BankAccountStatusTransform bankAccountStatusTransform;
+
+    @Inject
+    ExistingCreditDetailDAO existingCreditDetailDAO;
 
     @Inject
     public ExistingCreditDetailTransform() {
@@ -149,5 +153,58 @@ public class ExistingCreditDetailTransform extends Transform {
         }
 
         return existingCreditDetailViewList;
+    }
+
+    public List<ExistingCreditDetail> transformsToModelForUpdate(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditFacility existingCreditFacility, User user){
+        log.debug("transformsToModel");
+        List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
+        ExistingCreditDetail existingCreditDetail;
+
+        for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
+            existingCreditDetail = new ExistingCreditDetail();
+            if (existingCreditDetailView.getId() != 0) {
+                existingCreditDetail = existingCreditDetailDAO.findById(existingCreditDetailView.getId());
+            } else { // id = 0 create new
+                existingCreditDetail.setCreateDate(new Date());
+                existingCreditDetail.setCreateBy(user);
+            }
+
+            existingCreditDetail.setNo(existingCreditDetailView.getNo());
+            existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
+            existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
+            existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
+            log.debug(" existingCreditDetailView seq is {}",existingCreditDetailView.getSeq());
+            existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
+            log.debug(" existingCreditDetail seq is {}",existingCreditDetail.getSeq());
+
+            existingCreditDetail.setInUsed(existingCreditDetailView.getInUsed());
+            existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());
+            existingCreditDetail.setCreateBy(existingCreditDetailView.getCreateBy());
+            existingCreditDetail.setModifyDate(new Date());
+            existingCreditDetail.setModifyBy(user);
+            existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
+            existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
+            existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
+            existingCreditDetail.setExistAccountStatus(bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getExistAccountStatusView()));
+            existingCreditDetail.setExistProductProgram(productTransform.transformToModel(existingCreditDetailView.getExistProductProgramView()));
+            existingCreditDetail.setExistCreditType(productTransform.transformToModel(existingCreditDetailView.getExistCreditTypeView()));
+            existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
+            existingCreditDetail.setCreditType(existingCreditDetailView.getCreditType());
+            existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
+            existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
+            existingCreditDetail.setLimit(existingCreditDetailView.getLimit());
+            existingCreditDetail.setOutstanding(existingCreditDetailView.getOutstanding());
+            existingCreditDetail.setPceLimit(existingCreditDetailView.getPceLimit());
+            existingCreditDetail.setPcePercent(existingCreditDetailView.getPcePercent());
+            existingCreditDetail.setProductCode(existingCreditDetailView.getProductCode());
+            existingCreditDetail.setProjectCode(existingCreditDetailView.getProjectCode());
+            existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
+            existingCreditDetail.setExistProductSegment(existingCreditDetailView.getProductSegment());
+            existingCreditDetail.setExistingCreditFacility(existingCreditFacility);
+
+            existingCreditDetailList.add(existingCreditDetail);
+        }
+
+        return existingCreditDetailList;
     }
 }
