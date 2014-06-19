@@ -369,9 +369,11 @@
                                            itemLabel="#{maritalStatusItem.name}"
                                            itemValue="#{maritalStatusItem.id}"/>
                             <p:ajax event="change"
+                                    onstart="blockUIContentForm.show()"
                                     listener="#{prescreenMaker.onChangeMaritalStatus}"
                                     process="@form"
-                                    update=":customerDlgForm, :frmMain"/>
+                                    onsuccess="blockUIContentForm.hide()"
+                                    update=":customerDlgForm, :msgBoxSystemMessagePanel"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

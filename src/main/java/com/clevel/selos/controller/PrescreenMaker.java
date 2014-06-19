@@ -2240,7 +2240,7 @@ public class PrescreenMaker extends BaseController {
             maritalStatusFlag = false;
         }
 
-        if(previousMaritalStatus != null) {
+        if(previousMaritalStatus != null && borrowerInfo.getRelation() != null && borrowerInfo.getRelation().getId() == RelationValue.BORROWER.value()) {
             MaritalStatus prvMaritalStatus = maritalStatusDAO.findById(previousMaritalStatus.getId());
             if (prvMaritalStatus != null && prvMaritalStatus.getSpouseFlag() == 1) {
                 previousStatusFlag = true;
@@ -2249,10 +2249,11 @@ public class PrescreenMaker extends BaseController {
             }
 
             if (maritalStatusFlag == false && previousStatusFlag == true) {
+                Cloner cloner = new Cloner();
                 messageHeader = "Information.";
                 message = "Can not change marriage status to single or remove borrower at this step.";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                borrowerInfo.setMaritalStatus(previousMaritalStatus);
+                borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
             }
         }
     }

@@ -388,6 +388,28 @@ public class CustomerTransform extends Transform {
             customerInfoView.setPendingClaimLG(customerOblInfo.getPendingClaimLG());
         }
 
+        if(customer.getCustomerOblAccountInfoList() != null){
+            List<CustomerOblAccountInfoView> customerOblAccountInfoViewList = new ArrayList<CustomerOblAccountInfoView>();
+            for(CustomerOblAccountInfo customerOblAccountInfo : customer.getCustomerOblAccountInfoList()){
+                CustomerOblAccountInfoView customerOblAccountInfoView = new CustomerOblAccountInfoView();
+                customerOblAccountInfoView.setId(customerOblAccountInfo.getId());
+                customerOblAccountInfoView.setAccountActiveFlag(customerOblAccountInfo.isAccountActiveFlag());
+                customerOblAccountInfoView.setDataSource(customerOblAccountInfo.getDataSource());
+                customerOblAccountInfoView.setAccountRef(customerOblAccountInfo.getAccountRef());
+                customerOblAccountInfoView.setCusRelAccount(customerOblAccountInfo.getCusRelAccount());
+                customerOblAccountInfoView.setTdrFlag(customerOblAccountInfo.getTdrFlag());
+                customerOblAccountInfoView.setNumMonthIntPastDue(customerOblAccountInfo.getNumMonthIntPastDue());
+                customerOblAccountInfoView.setNumMonthIntPastDueTDRAcc(customerOblAccountInfo.getNumMonthIntPastDueTDRAcc());
+                customerOblAccountInfoView.setTmbDelIntDay(customerOblAccountInfo.getTmbDelIntDay());
+                customerOblAccountInfoView.setTmbDelPriDay(customerOblAccountInfo.getTmbDelPriDay());
+                customerOblAccountInfoView.setCardBlockCode(customerOblAccountInfo.getCardBlockCode());
+
+                customerOblAccountInfoViewList.add(customerOblAccountInfoView);
+            }
+
+            customerInfoView.setCustomerOblAccountInfoViewList(customerOblAccountInfoViewList);
+        }
+
         //for show jurLv
         if(customer.getIsCommittee() == 1){
             Customer cusCommittee = customerDAO.findById(customer.getJuristicId());
@@ -839,6 +861,30 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
 
+            //Set CustomerOblAccountInfo
+            if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+                List<CustomerOblAccountInfo> customerOblAccountInfoList = new ArrayList<CustomerOblAccountInfo>();
+                for(CustomerOblAccountInfoView customerOblAccountInfoView : customerInfoView.getCustomerOblAccountInfoViewList()){
+                    CustomerOblAccountInfo customerOblAccountInfo = new CustomerOblAccountInfo();
+                    if(customerOblAccountInfoView.getId() != 0){
+                        customerOblAccountInfo = customerOblAccountInfoDAO.findById(customerOblAccountInfoView.getId());
+                    }
+                    customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
+                    customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
+                    customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
+                    customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
+                    customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
+                    customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
+                    customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
+                    customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
+                    customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
+                    customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
+                    customerOblAccountInfo.setCustomer(customer);
+
+                    customerOblAccountInfoList.add(customerOblAccountInfo);
+                }
+                customer.setCustomerOblAccountInfoList(customerOblAccountInfoList);
+            }
 
 
         } else {
