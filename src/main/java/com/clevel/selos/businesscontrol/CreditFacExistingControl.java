@@ -87,6 +87,10 @@ public class CreditFacExistingControl extends BusinessControl {
     ExistingGuarantorDetailDAO existingGuarantorDetailDAO;
     @Inject
     private PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
+    @Inject
+    NewCollateralCreditDAO newCollateralCreditDAO;
+    @Inject
+    NewGuarantorRelationDAO newGuarantorRelationDAO;
 
 
     @Inject
@@ -180,7 +184,8 @@ public class CreditFacExistingControl extends BusinessControl {
         }
 
 
-        List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.COMMERCIAL);
+        //List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(),CreditCategory.COMMERCIAL);
+        List<ExistingCreditDetail> borrowerComExistingCreditListDel = existingCreditDetailDAO.findByExistingCreditDetailIdList(existingCreditFacilityView.getBorrowerComExistingCreditDeleteList());
         if(borrowerComExistingCreditListDel!=null && borrowerComExistingCreditListDel.size()>0){
             for (int i=0 ;i<borrowerComExistingCreditListDel.size();i++) {
                 log.info(" Round borrowerComExistingCreditListDel  is " + i );
@@ -200,7 +205,7 @@ public class CreditFacExistingControl extends BusinessControl {
         }
 
         if(existingCreditFacilityView.getBorrowerComExistingCredit()!=null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
-            List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user);
+            List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailTransform.transformsToModelForUpdate(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user);
             existingCreditDetailDAO.persist(borrowerComExistingCreditList);
             log.info("persist borrower existingCreditDetailList...");
 
@@ -228,14 +233,14 @@ public class CreditFacExistingControl extends BusinessControl {
                 ExistingCreditDetailView existingCreditDetailView = existingCreditFacilityView.getBorrowerComExistingCredit().get(i);
 
                 if(existingCreditDetailView.getExistingCreditTierDetailViewList()!=null && existingCreditDetailView.getExistingCreditTierDetailViewList().size()>0){
-                    List<ExistingCreditTierDetail> existingCreditTierDetailList = existingCreditTierTransform.transformsToModel(existingCreditDetailView.getExistingCreditTierDetailViewList(), existingCreditDetail, user);
+                    List<ExistingCreditTierDetail> existingCreditTierDetailList = existingCreditTierTransform.transformsToModelForUpdate(existingCreditDetailView.getExistingCreditTierDetailViewList(), existingCreditDetail, user);
                     log.info("persist borrower existingCreditDetailList..." + existingCreditDetail.getId() );
                     existingCreditTierDetailDAO.persist(existingCreditTierDetailList);
                     log.info("persist borrower existingCreditTierDetailList...");
                 }
 
                 if(existingCreditDetailView.getExistingSplitLineDetailViewList()!=null && existingCreditDetailView.getExistingSplitLineDetailViewList().size()>0){
-                    List<ExistingSplitLineDetail> existingSplitLineDetailList = existingSplitLineTransform.transformsToModel(existingCreditDetailView.getExistingSplitLineDetailViewList(), existingCreditDetail, user);
+                    List<ExistingSplitLineDetail> existingSplitLineDetailList = existingSplitLineTransform.transformsToModelForUpdate(existingCreditDetailView.getExistingSplitLineDetailViewList(), existingCreditDetail, user);
                     log.info("persist borrower existingCreditDetailList..." + existingCreditDetail.getId() );
                     existingSplitLineDetailDAO.persist(existingSplitLineDetailList);
                     log.info("persist borrower existingSplitLineDetailList...");
@@ -636,5 +641,19 @@ public class CreditFacExistingControl extends BusinessControl {
 
     public List<PrdGroupToPrdProgram> getPrdGroupToPrdProgramProposeByGroup(ProductGroup productGroup) {
         return prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
+    }
+
+    public boolean isUsedInProposeCredit(long id){
+        List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByExistingCreditDetailId(id);
+        if(newCollateralCredits!=null && newCollateralCredits.size()>0){
+            return true;
+        }
+
+        List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByExistingCreditDetailId(id);
+        if(newGuarantorCredits!=null && newGuarantorCredits.size()>0){
+            return true;
+        }
+
+        return false;
     }
 }

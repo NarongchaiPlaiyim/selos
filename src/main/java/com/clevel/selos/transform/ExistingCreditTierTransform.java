@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.ExistingCreditTierDetailDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditTierDetail;
@@ -15,6 +16,9 @@ public class ExistingCreditTierTransform extends Transform {
     BaseRateTransform baseRateTransform;
 
     @Inject
+    ExistingCreditTierDetailDAO existingCreditTierDetailDAO;
+
+    @Inject
     public ExistingCreditTierTransform() {
     }
 
@@ -27,7 +31,7 @@ public class ExistingCreditTierTransform extends Transform {
             existingCreditTierDetail = new ExistingCreditTierDetail();
 
             if (existingCreditTierDetailView.getId() != 0) {
-                existingCreditTierDetail.setId(existingCreditTierDetailView.getId());
+                //existingCreditTierDetail.setId(existingCreditTierDetailView.getId());
                 existingCreditTierDetail.setCreateDate(existingCreditTierDetailView.getCreateDate());
                 existingCreditTierDetail.setCreateBy(existingCreditTierDetailView.getCreateBy());
             } else { // id = 0 create existing
@@ -81,6 +85,7 @@ public class ExistingCreditTierTransform extends Transform {
         for(ExistingCreditTierDetail existingCreditTierDetail : existingCreditTierDetailList)
         {
             existingCreditTierDetailView = new ExistingCreditTierDetailView();
+            existingCreditTierDetailView.setId(existingCreditTierDetail.getId());
             existingCreditTierDetailView.setNo(existingCreditTierDetail.getNo());
             existingCreditTierDetailView.setCreateDate(existingCreditTierDetail.getCreateDate());
             existingCreditTierDetailView.setCreateBy(existingCreditTierDetail.getCreateBy());
@@ -105,5 +110,58 @@ public class ExistingCreditTierTransform extends Transform {
     }
 
         return existingCreditTierDetailViewList;
+    }
+
+    public List<ExistingCreditTierDetail> transformsToModelForUpdate(List<ExistingCreditTierDetailView> existingCreditTierDetailViewList,ExistingCreditDetail existingCreditDetail,User user){
+
+        List<ExistingCreditTierDetail> existingCreditTierDetailList = new ArrayList<ExistingCreditTierDetail>();
+        ExistingCreditTierDetail existingCreditTierDetail;
+
+        for (ExistingCreditTierDetailView existingCreditTierDetailView : existingCreditTierDetailViewList){
+            existingCreditTierDetail = new ExistingCreditTierDetail();
+
+            if (existingCreditTierDetailView.getId() != 0) {
+                existingCreditTierDetail = existingCreditTierDetailDAO.findById(existingCreditTierDetailView.getId());
+            } else { // id = 0 create existing
+                existingCreditTierDetail.setCreateDate(new Date());
+                existingCreditTierDetail.setCreateBy(user);
+            }
+
+            existingCreditTierDetail.setNo(existingCreditTierDetailView.getNo());
+            if(existingCreditTierDetailView.getFinalBasePrice()!=null && existingCreditTierDetailView.getFinalBasePrice().getId()!=0){
+                existingCreditTierDetail.setFinalBasePrice(baseRateTransform.transformToModel(existingCreditTierDetailView.getFinalBasePrice()));
+            }else{
+                existingCreditTierDetail.setFinalBasePrice(null);
+            }
+            existingCreditTierDetail.setFinalInterest(existingCreditTierDetailView.getFinalInterest());
+            existingCreditTierDetail.setFinalPriceRate(existingCreditTierDetailView.getFinalPriceRate());
+
+            existingCreditTierDetail.setInstallment(existingCreditTierDetailView.getInstallment());
+
+            if(existingCreditTierDetailView.getStandardBasePrice()!=null && existingCreditTierDetailView.getStandardBasePrice().getId()!=0){
+                existingCreditTierDetail.setStandardBasePrice(baseRateTransform.transformToModel(existingCreditTierDetailView.getStandardBasePrice()));
+            }else{
+                existingCreditTierDetail.setStandardBasePrice(null);
+            }
+            existingCreditTierDetail.setStandardInterest(existingCreditTierDetailView.getStandardInterest());
+            existingCreditTierDetail.setStandardPrice(existingCreditTierDetailView.getStandardPrice());
+
+            if(existingCreditTierDetailView.getSuggestBasePrice()!=null && existingCreditTierDetailView.getSuggestBasePrice().getId()!=0){
+                existingCreditTierDetail.setSuggestBasePrice(baseRateTransform.transformToModel(existingCreditTierDetailView.getSuggestBasePrice()));
+            }else{
+                existingCreditTierDetail.setSuggestBasePrice(null);
+            }
+
+            existingCreditTierDetail.setSuggestInterest(existingCreditTierDetailView.getSuggestInterest());
+            existingCreditTierDetail.setSuggestPrice(existingCreditTierDetailView.getSuggestPrice());
+
+            existingCreditTierDetail.setTenor(existingCreditTierDetailView.getTenor());
+            existingCreditTierDetail.setExistingCreditDetail(existingCreditDetail);
+            existingCreditTierDetail.setModifyDate(new Date());
+            existingCreditTierDetail.setModifyBy(user);
+            existingCreditTierDetailList.add(existingCreditTierDetail);
+        }
+
+        return existingCreditTierDetailList;
     }
 }
