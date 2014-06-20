@@ -1244,9 +1244,9 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
-    public void updateTimeOfCheckCriteria(long workCaseId){
+    public void updateTimeOfCheckCriteria(long workCaseId, long stepId){
         try{
-            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
             log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
             if(!Util.isNull(workCaseOwner)) {
                 int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();
@@ -1270,10 +1270,10 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
-    public int getTimesOfCriteriaCheck(long workCaseId){
+    public int getTimesOfCriteriaCheck(long workCaseId, long stepId){
         int timesOfCriteriaCheck = 0;
         try{
-            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID());
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
             if(!Util.isNull(workCaseOwner)){
                 log.debug("getTimesOfCriteriaCheck ::: workCaseOwner : {}", workCaseOwner);
                 timesOfCriteriaCheck = workCaseOwner.getTimesOfCriteriaChecked();

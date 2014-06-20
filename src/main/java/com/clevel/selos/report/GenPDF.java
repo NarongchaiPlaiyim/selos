@@ -59,9 +59,6 @@ public class GenPDF extends ReportService implements Serializable {
     PDFRejectLetter pdfReject_letter;
 
     @Inject
-    PDFDecision pdfDecision;
-
-    @Inject
     PDFAppraisalAppointment pdfAppraisalAppointment;
 
     @Inject
@@ -174,15 +171,15 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillExistingCollateralRelated",pdfExecutiveSummary.fillExistingCollateralRelated(pathsub));
         map.put("fillGuarantorBorrower",pdfExecutiveSummary.fillGuarantorBorrower(pathsub));
         map.put("fillProposedCredit",pdfExecutiveSummary.fillProposedCredit(pathsub));
-        map.put("fillApprovedCredit",pdfExecutiveSummary.fillApprovedCredit(pathsub));
+        map.put("fillApprovedCredit",pdfExecutiveSummary.fillExSumApprovedCredit(pathsub));
         map.put("fillProposeFeeInformation",pdfExecutiveSummary.fillProposeFeeInformation());
         map.put("fillProposedCollateral",pdfExecutiveSummary.fillProposedCollateral(pathsub));
-        map.put("fillApprovedCollaterral",pdfExecutiveSummary.fillApprovedCollaterral(pathsub));
+        map.put("fillApprovedCollaterral",pdfExecutiveSummary.fillExSumApprovedCollaterral(pathsub));
         map.put("fillProposedGuarantor",pdfExecutiveSummary.fillProposedGuarantor(pathsub));
-        map.put("fillApprovedGuarantor",pdfExecutiveSummary.fillApprovedGuarantor(pathsub));
+        map.put("fillApprovedGuarantor",pdfExecutiveSummary.fillExSumApprovedGuarantor(pathsub));
         map.put("fillFollowUpCondition",pdfExecutiveSummary.fillFollowUpCondition());
         map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
-        map.put("fillTotalMasterReport",pdfExecutiveSummary.fillTotalMasterReport());
+        map.put("fillTotalMasterReport",pdfExecutiveSummary.fillTotalMasterReport("all"));
         map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
@@ -194,38 +191,41 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintDecisionReport() throws Exception {
         log.debug("onPrintDecisionReport");
 
-        pdfDecision.init();
+        pdfExecutiveSummary.init();
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
-        map.put("fillCreditBorrower",pdfDecision.fillCreditBorrower(pathsub));
-        map.put("fillCondition",pdfDecision.fillCondition());
-        map.put("fillBorrowerRetail",pdfDecision.fillBorrowerRetail(pathsub));
-//        map.put("fillAppInRLOS",pdfDecision.fillAppInRLOS(pathsub));
-        map.put("fillRelatedCommercial",pdfDecision.fillRelatedCommercial(pathsub));
-        map.put("fillRelatedRetail",pdfDecision.fillRelatedRetail(pathsub));
-//        map.put("fillRelatedAppInRLOS",pdfDecision.fillRelatedAppInRLOS(pathsub));
-        map.put("fillExistingCollateralBorrower",pdfDecision.fillExistingCollateralBorrower(pathsub));
-        map.put("fillExistingCollateralRelated",pdfDecision.fillExistingCollateralRelated(pathsub));
-        map.put("fillGuarantorBorrower",pdfDecision.fillGuarantorBorrower(pathsub));
-        map.put("fillProposedCredit",pdfDecision.fillProposedCredit(pathsub));
-        map.put("fillApprovedCredit",pdfDecision.fillApprovedCredit(pathsub));
-        map.put("fillProposeFeeInformation",pdfDecision.fillProposeFeeInformation());
-        map.put("fillProposedCollateral",pdfDecision.fillProposedCollateral(pathsub));
-        map.put("fillApprovedCollaterral",pdfDecision.fillApprovedCollaterral(pathsub));
-        map.put("fillProposedGuarantor",pdfDecision.fillProposedGuarantor(pathsub));
-        map.put("fillApprovedGuarantor",pdfDecision.fillApprovedGuarantor(pathsub));
-        map.put("fillFollowUpCondition",pdfDecision.fillFollowUpCondition());
-        map.put("fillApprovalHistory",pdfDecision.fillApprovalHistory());
-        map.put("fillTotalMasterReport",pdfDecision.fillTotalMasterReport());
-        map.put("fillFollowDetail",pdfDecision.fillFollowDetail());
-        map.put("fillPriceFee",pdfDecision.fillPriceFee());
-        map.put("fillHeader",pdfDecision.fillHeader());
-        map.put("fillFooter",pdfDecision.fillFooter());
-        map.put("borrowerCharacteristic", pdfDecision.fillBorrowerCharacteristic());
-//        map.put("fillBizInfoSum", pdfDecision.fillBizInfoSum());
-
-
+        map.put("borrower", pdfExecutiveSummary.fillBorrowerRelatedProfile());
+        map.put("businessLocation", pdfExecutiveSummary.fillBorrower());
+        map.put("tradeFinance", pdfExecutiveSummary.fillTradeFinance());
+        map.put("borrowerCharacteristic", pdfExecutiveSummary.fillBorrowerCharacteristic());
+        map.put("ncbRecord", pdfExecutiveSummary.fillNCBRecord());
+        map.put("accountMovement", pdfExecutiveSummary.fillAccountMovement());
+        map.put("collateral", pdfExecutiveSummary.fillCollateral());
+        map.put("creditRisk", pdfExecutiveSummary.fillBorrowerRelatedProfile());
+        map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
+        map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
+//        map.put("fillDecision", pdfExecutiveSummary.fillDecision());
+        map.put("fillHeader",pdfExecutiveSummary.fillHeader());
+        map.put("fillFooter",pdfExecutiveSummary.fillFooter());
+        map.put("fillCreditBorrower",pdfExecutiveSummary.fillCreditBorrower(pathsub));
+        map.put("fillCondition",pdfExecutiveSummary.fillCondition());
+        map.put("fillBorrowerRetail",pdfExecutiveSummary.fillBorrowerRetail(pathsub));
+        map.put("fillRelatedCommercial",pdfExecutiveSummary.fillRelatedCommercial(pathsub));
+        map.put("fillRelatedRetail",pdfExecutiveSummary.fillRelatedRetail(pathsub));
+        map.put("fillExistingCollateralBorrower",pdfExecutiveSummary.fillExistingCollateralBorrower(pathsub));
+        map.put("fillExistingCollateralRelated",pdfExecutiveSummary.fillExistingCollateralRelated(pathsub));
+        map.put("fillGuarantorBorrower",pdfExecutiveSummary.fillGuarantorBorrower(pathsub));
+        map.put("fillApprovedCredit",pdfExecutiveSummary.fillApprovedCredit(pathsub));
+        map.put("fillProposeFeeInformation",pdfExecutiveSummary.fillProposeFeeInformation());
+        map.put("fillApprovedCollaterral",pdfExecutiveSummary.fillApprovedCollaterral(pathsub));
+        map.put("fillApprovedGuarantor",pdfExecutiveSummary.fillApprovedGuarantor(pathsub));
+        map.put("fillFollowUpCondition",pdfExecutiveSummary.fillFollowUpCondition());
+        map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
+        map.put("fillTotalMasterReport",pdfExecutiveSummary.fillTotalMasterReport("opsheet"));
+        map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
+        map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
+        map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
 
         generatePDF(pathDecision, map, reportView.getNameReportOpShect());
     }

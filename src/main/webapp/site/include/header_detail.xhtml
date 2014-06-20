@@ -109,7 +109,6 @@
         <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
             <!--Print Report-->
             <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
-                             rendered="#{headerController.checkButton('Print PDF')}"
                              actionListener="#{report.setNameReport()}"
                              oncomplete="printReportDlg.show()"
                              update=":frmMain:printReportPanel">
@@ -683,7 +682,7 @@
 <p:panel id="checkMandatePanel" styleClass="panel">
     <p:dialog id="checkMandateDialog" widgetVar="checkMandateDlg" header="Check MandateDoc"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="850" height="500" closable="false" maximizable="">
+              modal="true" width="1024" height="500" closable="false" maximizable="">
         <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
     </p:dialog>
 </p:panel>

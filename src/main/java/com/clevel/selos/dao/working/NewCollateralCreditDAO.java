@@ -92,4 +92,11 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
         log.debug("-- NewCollateralCreditList[{}]", newCollateralCreditList);
         return newCollateralCreditList;
     }
+
+    public List<NewCollateralCredit> getListByExistingCreditDetailId(long existingCreditDetailId) {
+        log.info("getListByExistingCreditDetailId. (existingCreditDetailId: {})", existingCreditDetailId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("existingCreditDetail.id", existingCreditDetailId));
+        return  criteria.list();
+    }
 }
