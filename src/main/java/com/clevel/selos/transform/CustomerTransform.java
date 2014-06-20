@@ -1312,14 +1312,26 @@ public class CustomerTransform extends Transform {
         for(Customer item : customerList){
             CustomerInfoView customerInfoView = new CustomerInfoView();
             customerInfoView.setId(item.getId());
+            if(!Util.isNull(item.getTitle())){
+                customerInfoView.setTitleTh(item.getTitle());
+            }
             customerInfoView.setFirstNameTh(item.getNameTh());
             if(!Util.isNull(item.getLastNameTh())){
                 customerInfoView.setLastNameTh(item.getLastNameTh());
             }
+            customerInfoView.setCustomerEntity(item.getCustomerEntity());
 
             customerInfoViewList.add(customerInfoView);
         }
 
         return customerInfoViewList;
+    }
+
+    public Customer transformSelectListToModel(CustomerInfoView customerInfoView) {
+        Customer customer = null;
+        if(customerInfoView.getId() != 0){
+            customer = customerDAO.findById(customerInfoView.getId());
+        }
+        return customer;
     }
 }
