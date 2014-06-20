@@ -206,7 +206,7 @@ public class BasicInfo extends BaseController {
 
             basicInfoView = new BasicInfoView();
 
-            productGroupList = productGroupDAO.findAll();
+            productGroupList = productGroupDAO.findProposeProductGroup();
             specialProgramList = specialProgramDAO.findAll();
             requestTypeList = requestTypeDAO.findAll();
             riskTypeList = riskTypeDAO.findAll();

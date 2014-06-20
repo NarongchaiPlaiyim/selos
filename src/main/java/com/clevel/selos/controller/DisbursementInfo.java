@@ -89,18 +89,17 @@ public class DisbursementInfo implements Serializable {
 		HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
-		if (workCaseId > 0) {
-			_loadDropdown();
-			_loadData();
-			this.disbursementInfoView = disbursementControl.getDisbursementInfoView(workCaseId);
-			calculationSummaryTotalMc();
-			calculationSummaryTotalDeposit();
-			calculationSummaryTotalBahtnet();
-			calculationSummary();
-			calculationSummaryTotalBa();
-		}
+		_loadDropdown();
+		_loadData();
+		this.disbursementInfoView = disbursementControl.getDisbursementInfoView(workCaseId);
+		calculationSummaryTotalMc();
+		calculationSummaryTotalDeposit();
+		calculationSummaryTotalBahtnet();
+		calculationSummary();
+		calculationSummaryTotalBa();
 	}
 
 	private void _loadDropdown() {

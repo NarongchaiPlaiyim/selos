@@ -113,9 +113,10 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
         return userList;
     }
 
-    public WorkCaseOwner getWorkCaseOwnerByRole(long workCaseId, int roleId, String userId){
+    public WorkCaseOwner getWorkCaseOwnerByRole(long workCaseId, int roleId, String userId, long stepId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("step.id", stepId));
         criteria.add(Restrictions.eq("role.id", roleId));
         criteria.add(Restrictions.eq("user.id", userId));
         WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();

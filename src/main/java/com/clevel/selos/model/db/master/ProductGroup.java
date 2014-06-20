@@ -25,6 +25,8 @@ public class ProductGroup implements Serializable {
     private int specialLTV;
     @Column(name = "active")
     private int active;
+    @Column(name = "add_propose_credit", columnDefinition = "int default 0")
+    private int addProposeCredit;
 
     public ProductGroup() {
     }
@@ -77,15 +79,24 @@ public class ProductGroup implements Serializable {
         this.active = active;
     }
 
+    public int getAddProposeCredit() {
+        return addProposeCredit;
+    }
+
+    public void setAddProposeCredit(int addProposeCredit) {
+        this.addProposeCredit = addProposeCredit;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("brmsCode", brmsCode).
-                append("specialLTV", specialLTV).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("description", description)
+                .append("brmsCode", brmsCode)
+                .append("specialLTV", specialLTV)
+                .append("active", active)
+                .append("addProposeCredit", addProposeCredit)
+                .toString();
     }
 }
