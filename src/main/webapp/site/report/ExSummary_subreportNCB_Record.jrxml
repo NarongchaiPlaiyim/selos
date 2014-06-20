@@ -190,7 +190,7 @@ TDR]]></text>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ncbCusName}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField pattern="#,##0.00">
 					<reportElement uuid="c638a41e-5d46-4fab-a385-f30cf4d58d9d" stretchType="RelativeToBandHeight" mode="Opaque" x="84" y="0" width="55" height="20" forecolor="#000000"/>
 					<box>
 						<pen lineWidth="0.5" lineColor="#CCCCCC"/>

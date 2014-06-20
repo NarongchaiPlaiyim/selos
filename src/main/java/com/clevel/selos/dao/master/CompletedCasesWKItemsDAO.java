@@ -60,7 +60,8 @@ public class CompletedCasesWKItemsDAO extends GenericDAO<CompletedCasesWKItems,S
                     .add(Projections.property("statusid"), "statusid")
                     .add(Projections.property("createBy"), "createBy")
                     .add(Projections.property("completedate"), "completedate")
-                    .add(Projections.property("createdate"),"createdate"));
+                    .add(Projections.property("createdate"),"createdate")
+                    .add(Projections.property("refAppNumber"),"refAppNumber"));
 
             boolean appNumberCriteria = false;
 

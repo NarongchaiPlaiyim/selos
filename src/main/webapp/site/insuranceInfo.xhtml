@@ -33,23 +33,35 @@
                 <div id="content_name">#{msg.get('app.insurance.header')}</div>
                 <div id="content">
                     <div id="content_info">
-                        <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                        <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-                                id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{insuranceInfo.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{insuranceInfo.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
                     </div>
                     <div id="content_form">
 
                         <!-- start content -->
                         <table class="content_table_form" border="0">
 
-                            <tr>
+                            <tr>                       	
                                 <td class="title" style="width: 150px;">
-                                    <p:outputLabel value="#{msg.get('app.insurance.approved')}"/>
+                                    <p:outputLabel value="#{msg.get('app.insurance.approved')}#{insuranceInfo.mandate('approvedType')}"/>
                                  </td>
                                 <td class="left">
-                                    <p:selectOneRadio value="#{insuranceInfo.approvedType}" layout="grid" columns="2">
-                                        <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new')}"         itemValue="0"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new.change')}" itemValue="1"/>
+                                    <p:selectOneRadio disabled="#{insuranceInfo.isDisabled('approvedType')}" value="#{insuranceInfo.approveType}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}" var="approveType"
+                                                		itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}" 
+                                                		/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -68,7 +80,7 @@
                                         <ui:repeat value="#{insuranceInfo.insuranceInfoViewList}" var="insuranceList" varStatus="rowInsuranceIndex">
                                             <tr>
                                                 <td class="title" style="width: 150px; max-width: 150px; min-width: 150px;">
-                                                    <h:outputText value="#{msg.get('app.insurance.job.id')}"/>
+                                                    <h:outputText value="#{msg.get('app.insurance.job.id')}#{insuranceInfo.mandate('insuranceInfo.jobID')}"/>
                                                 </td>
                                                 <td class="left" style="width: 900px; max-width: 900px; min-width: 900px;" >
                                                     <p:outputLabel value="#{insuranceList.jobID}"/>
@@ -91,7 +103,7 @@
 
                                                             <tr>
                                                                 <td class="title">
-                                                                    <p:outputLabel value="#{msg.get('app.insurance.head.coll.title')}"/>
+                                                                    <p:outputLabel value="#{msg.get('app.insurance.head.coll.title')}#{insuranceInfo.mandate('insuranceInfo.headcoll.titleDeed')}"/>
                                                                 </td>
                                                                 <td>
                                                                     <p:outputLabel value="#{sectionList.titleDeed}"/>
@@ -99,7 +111,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td class="title">
-                                                                    <p:outputLabel value="#{msg.get('app.insurance.company')}"/>
+                                                                    <p:outputLabel value="#{msg.get('app.insurance.company')}#{insuranceInfo.mandate('insuranceInfo.insurance.company')}"/>
                                                                 </td>
                                                                 <td>
                                                                     <p:selectOneRadio value="#{sectionList.company}" layout="grid" columns="2">
@@ -110,7 +122,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td class="title">
-                                                                    <p:outputLabel value="#{msg.get('app.insurance.head.coll.exiting.credit')}"/>
+                                                                    <p:outputLabel value="#{msg.get('app.insurance.head.coll.exiting.credit')}#{insuranceInfo.mandate('insuranceInfo.headcoll.exitingCredit')}"/>
                                                                 </td>
                                                                 <td>
                                                                     <p:selectOneRadio value="#{sectionList.existingCredit}" layout="grid" columns="3" >
@@ -136,7 +148,7 @@
 
                                             <tr>
                                                 <td class="title">
-                                                    <p:outputLabel value="#{msg.get('app.insurance.premium')}"/>
+                                                    <p:outputLabel value="#{msg.get('app.insurance.premium')}#{insuranceInfo.mandate('insuranceInfo.premium')}"/>
                                                 </td>
 
                                                 <td colspan="3">
@@ -157,7 +169,7 @@
                                         </ui:repeat>
                                         <tr>
                                             <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.insurance.total')}"/>
+                                                <p:outputLabel value="#{msg.get('app.insurance.total')}#{insuranceInfo.mandate('insuranceInfo.total')}"/>
                                             </td>
 
                                             <td colspan="3">

@@ -475,8 +475,10 @@ public class BRMSControl extends BusinessControl {
         actionValidationControl.validate(bankStatementSummary, BankStatement.class);
         if(bankStatementSummary!=null){
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
-            for(BankStatement bankStatement : bankStatementList){
-                accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
+            if(bankStatementList != null) {
+                for (BankStatement bankStatement : bankStatementList) {
+                    accountStmtInfoList.add(getBRMSAccountStmtInfo(bankStatement));
+                }
             }
             applicationInfo.setAccountStmtInfoList(accountStmtInfoList);
         }
@@ -487,8 +489,10 @@ public class BRMSControl extends BusinessControl {
         actionValidationControl.validate(bizInfoSummary, BizInfoSummary.class);
         if(bizInfoSummary!=null){
             List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
-            for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
-                brmsBizInfoList.add(getBRMSBizInfo(bizInfoDetail));
+            if(bizInfoDetailList != null) {
+                for (BizInfoDetail bizInfoDetail : bizInfoDetailList) {
+                    brmsBizInfoList.add(getBRMSBizInfo(bizInfoDetail));
+                }
             }
             applicationInfo.setBizInfoList(brmsBizInfoList);
         }

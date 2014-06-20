@@ -307,7 +307,7 @@ function resetter()
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
 
-                                            <p:column headerText="Start Date" styleClass="center" style="width: 130px;" sortBy="receiveddate">
+                                            <p:column headerText="Start Date" styleClass="center" style="width: 130px;" sortBy="longReceivedTime">
                                                 <h:outputText value="#{item.receiveddate}"/>
                                             </p:column>
 
@@ -316,7 +316,9 @@ function resetter()
                                             </p:column>
 
                                             <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="applicationno">
-                                                <h:outputText value="#{item.applicationno}" />
+                                                <h:outputText value="App No.: #{item.applicationno}" />
+                                                <br/>
+                                                <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                                             </p:column>
 
                                             <p:column headerText="Name" styleClass="center" style="width: 110px;" sortBy="name">
@@ -351,7 +353,7 @@ function resetter()
                                                 <h:outputText value="#{item.atuserteam}" />
                                             </p:column>
 
-                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="appointmentdate">
+                                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="longAppointmentDate">
                                                 <h:outputText value="#{item.appointmentdate}"/>
                                             </p:column>
 
@@ -359,7 +361,7 @@ function resetter()
                                                 <h:outputText value="#{item.doalevel}"/>
                                             </p:column>
 
-                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="slaenddate" >
+                                            <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="longSLAEndTime" >
                                                 <h:outputText value="#{item.slaenddate}"/>
                                             </p:column>
 

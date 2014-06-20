@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.MortgageDetailControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.AttorneyRelationType;
@@ -12,6 +13,7 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.SelectableDataModel;
@@ -26,6 +28,7 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -44,7 +47,8 @@ public class MortgageDetail implements Serializable {
 	
 	@Inject
 	private GeneralPeopleInfoControl generalPeopleInfoControl;
-	
+	@Inject
+	private UserAccessControl userAccessControl;
 	@Inject
 	private MortgageDetailControl mortgageDetailControl;
 	
@@ -52,7 +56,6 @@ public class MortgageDetail implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long stageId = -1;
 	private long mortgageId = -1;
 	private BasicInfoView basicInfoView;
 	private List<CustomerAttorneySelectView> attorneySelectViews;
@@ -245,7 +248,6 @@ public class MortgageDetail implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			stageId = Util.parseLong(session.getAttribute("stageId"), -1);
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");
 		mortgageId = Util.parseLong(params.get("mortgageId"),-1);
@@ -267,7 +269,7 @@ public class MortgageDetail implements Serializable {
 		
 		String redirectPage = null;
 		if (workCaseId > 0) {
-			if (stepId <= 0 || stageId != 301) {
+			if (!userAccessControl.canUserAccess(Screen.MortgageInfoDetail, stepId)) {
 				redirectPage = "/site/inbox.jsf";
 			} else {
 				if (mortgageId <= 0) {

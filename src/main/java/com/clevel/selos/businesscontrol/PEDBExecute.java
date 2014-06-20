@@ -7,6 +7,7 @@ import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -35,14 +36,6 @@ public class PEDBExecute extends BusinessControl
     @Inject
     @SELOS
     Logger log;
-
-/*    @Inject
-    @Config(name = "interface.pe.mysql.inbox.tablename")
-    String inboxQueryDB;
-
-    @Inject
-    @Config(name = "interface.pe.mysql.inbox.bdmsearchtablename")
-    String bdmsearchtablename;*/
 
     @Inject
     @Config(name = "interface.pe.sql.conn")
@@ -83,6 +76,10 @@ public class PEDBExecute extends BusinessControl
     @Inject
     @Config(name = "interface.pe.sql.searchrosterquery")
     String searchrosterquery;
+
+    @Inject
+    @Config(name = "interface.pe.appointmentdate.year")
+    String appointmentYear;
 
     @Inject
     private UserDAO userDAO;
@@ -503,8 +500,10 @@ public class PEDBExecute extends BusinessControl
                 PEInbox peInbox = new PEInbox();
                 //log.info("in while");
                 peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
+                peInbox.setLongReceivedTime(rs.getLong("ReceivedTime"));
                 peInbox.setAtuserteam(rs.getString("TeamName"));
                 peInbox.setApplicationno(rs.getString("AppNumber"));
+                peInbox.setRefAppNumber(rs.getString("RefAppNumber"));
                 peInbox.setName(rs.getString("BorrowerName"));
                 peInbox.setProductgroup(rs.getString("ProductGroup"));
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
@@ -529,11 +528,13 @@ public class PEDBExecute extends BusinessControl
                     }
                     peInbox.setAtuser(userDAO.getUserNameById(rs.getString("CurrentUser")));
                 }
-                peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+                peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().contains(appointmentYear)?"":rs.getObject("AppointmentDate1").toString().trim()));
+                peInbox.setLongAppointmentDate(peInbox.getAppointmentdate().equalsIgnoreCase("")?0:rs.getLong("AppointmentDate"));
                 peInbox.setDoalevel(rs.getString("DOALevel"));
                 peInbox.setAction(rs.getString("PreviousAction"));
                 peInbox.setSlastatus(rs.getString("SLAStatus"));
                 peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
+                peInbox.setLongSLAEndTime(rs.getLong("SLAEndTime"));
                 peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                 peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
                 peInbox.setStatuscode(rs.getString("StatusCode"));
@@ -621,11 +622,9 @@ public class PEDBExecute extends BusinessControl
                     peRoster.setReceivedDate(rs.getObject("ReceivedDate1").toString().trim()) ;
                 }
 
-                else
-                {
-                    peRoster.setReceivedDate("") ;
+                peRoster.setLongReceivedTime(rs.getLong("ReceivedTime"));
 
-                }
+                peRoster.setLongSLAEndTime(rs.getLong("SLAEndTime"));
 
                 if(rs.getString("CurrentUser") != null)
                 {
@@ -636,7 +635,8 @@ public class PEDBExecute extends BusinessControl
 
                 if(rs.getObject("AppointmentDate1")!=null)
                 {
-                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().trim()));
+                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().contains(appointmentYear)?"":rs.getObject("AppointmentDate1").toString().trim()));
+                    peRoster.setLongAppointmentDate(peRoster.getAppointmentDate().equalsIgnoreCase("")?0:rs.getLong("AppointmentDate"));
                 }
 
                 if(rs.getString("PreviousUser") != null)
@@ -650,6 +650,7 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
+                peRoster.setRefAppNumber(rs.getString("RefAppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
                 peRoster.setProductGroup(rs.getString("ProductGroup"));
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
@@ -676,11 +677,6 @@ public class PEDBExecute extends BusinessControl
                     peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim()) ;
                 }
 
-                else
-                {
-                    peRoster.setSLAEndTime("") ;
-
-                }
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));
@@ -1249,6 +1245,7 @@ public class PEDBExecute extends BusinessControl
                     }
 
                     peInbox.setApplicationno(completedCasesWKItems.getApplicationNo());
+                    peInbox.setRefAppNumber(completedCasesWKItems.getRefAppNumber());
 
                     if(peInbox.getApplicationno()!=null)
                     {
@@ -1295,22 +1292,11 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setRequestTypeStr("");
                     }
 
+                    Integer stepId = new Integer(StepValue.COMPLETED_STEP.value());
 
-                    if(completedCasesWKItems.getStepid()!=null)
-                    {
-                        Integer a = completedCasesWKItems.getStepid();
+                    peInbox.setStep(stepDAO.stepNameById(StepValue.COMPLETED_STEP.value()));
 
-                        peInbox.setStepId(Long.parseLong(a.toString()));
-                    }
-
-                    else
-                    {
-                        peInbox.setStepId(null);
-                    }
-
-                    //if(completedCasesWKItems.gets)
-
-                    peInbox.setStep(stepDAO.stepNameById(0));
+                    peInbox.setStepId(Long.parseLong(stepId.toString()));
 
                     if(completedCasesWKItems.getStatusid()!=null)
                     {
@@ -1328,7 +1314,7 @@ public class PEDBExecute extends BusinessControl
 
                     if(completedCasesWKItems.getAppointmentDate()!=null)
                     {
-                        peInbox.setAppointmentdate(completedCasesWKItems.getAppointmentDate().toString());
+                        peInbox.setAppointmentdate(completedCasesWKItems.getAppointmentDate().toString().contains(appointmentYear)?"":completedCasesWKItems.getAppointmentDate().toString().trim());
                     }
 
                     else
@@ -1443,14 +1429,13 @@ public class PEDBExecute extends BusinessControl
                     peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                 }
 
-                else
-                {
-                    peInbox.setReceiveddate("");
-                }
+                peInbox.setLongReceivedTime(rs.getLong("ReceivedTime"));
 
                 peInbox.setAtuserteam(rs.getString("TeamName"));
 
                 peInbox.setApplicationno(rs.getString("AppNumber"));
+
+                peInbox.setRefAppNumber(rs.getString("RefAppNumber"));
 
                 if(peInbox.getApplicationno()!=null)
                 {
@@ -1483,7 +1468,8 @@ public class PEDBExecute extends BusinessControl
                     peInbox.setName(names);
 
                 }
-                //peInbox.setName(rs.getString("BorrowerName"));
+
+                peInbox.setStatuscode(rs.getString("StatusCode"));
                 peInbox.setProductgroup(rs.getString("ProductGroup"));
                 peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
                 if(rs.getString("Step_Code")!=null)
@@ -1505,12 +1491,9 @@ public class PEDBExecute extends BusinessControl
 
                 if((rs.getObject("AppointmentDate1"))!=null)
                 {
-                    peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
-                }
+                    peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().contains(appointmentYear)?"":rs.getObject("AppointmentDate1").toString().trim()));
 
-                else
-                {
-                    peInbox.setAppointmentdate("");
+                    peInbox.setLongAppointmentDate(peInbox.getAppointmentdate().equalsIgnoreCase("")?0:rs.getLong("AppointmentDate"));
                 }
 
                 peInbox.setDoalevel(rs.getString("DOALevel"));
@@ -1524,6 +1507,8 @@ public class PEDBExecute extends BusinessControl
                     peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
 
                 }
+
+                peInbox.setLongSLAEndTime(rs.getLong("SLAEndTime"));
 
                 peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                 peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
@@ -2017,11 +2002,13 @@ public class PEDBExecute extends BusinessControl
                         {
                             peInbox.setReceiveddate((rs.getObject("ReceivedDate1").toString().trim()));
                         }
+                        peInbox.setLongReceivedTime(rs.getLong("ReceivedTime"));
 
                         peInbox.setFetchType(BPMConstants.FETCH_TYPE_QUEUE);
 
                         peInbox.setAtuserteam(rs.getString("TeamName"));
                         peInbox.setApplicationno(rs.getString("AppNumber"));
+                        peInbox.setRefAppNumber(rs.getString("RefAppNumber"));
                         peInbox.setName(rs.getString("BorrowerName"));
                         peInbox.setProductgroup(rs.getString("ProductGroup"));
                         peInbox.setRequestTypeStr(rs.getString("RequestTypeStr"));
@@ -2043,7 +2030,8 @@ public class PEDBExecute extends BusinessControl
 
                         if(rs.getObject("AppointmentDate1")!=null)
                         {
-                            peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().trim()));
+                            peInbox.setAppointmentdate((rs.getObject("AppointmentDate1").toString().contains(appointmentYear)?"":rs.getObject("AppointmentDate1").toString().trim()));
+                            peInbox.setLongAppointmentDate(peInbox.getAppointmentdate().equalsIgnoreCase("")?0:rs.getLong("AppointmentDate"));
                         }
 
                         peInbox.setDoalevel(rs.getString("DOALevel"));
@@ -2053,6 +2041,8 @@ public class PEDBExecute extends BusinessControl
                         {
                             peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
                         }
+
+                        peInbox.setLongSLAEndTime(rs.getLong("SLAEndTime"));
                         peInbox.setTotaltimespentatprocess(rs.getInt("TotalTimeAtProcess"));
                         peInbox.setTotaltimespentatuser(rs.getInt("TotalTimeAtUser"));
                         peInbox.setStatuscode(rs.getString("StatusCode"));
@@ -2123,7 +2113,8 @@ public class PEDBExecute extends BusinessControl
 
                 if(rs.getObject("AppointmentDate1")!=null)
                 {
-                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().trim()));
+                    peRoster.setAppointmentDate((rs.getObject("AppointmentDate1").toString().contains(appointmentYear)?"":rs.getObject("AppointmentDate1").toString().trim()));
+                    peRoster.setLongAppointmentDate(peRoster.getAppointmentDate().equalsIgnoreCase("")?0:rs.getLong("AppointmentDate"));
                 }
 
                 if(rs.getString("PreviousUser") != null)
@@ -2135,6 +2126,7 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setTeamName(rs.getString("TeamName"));
                 peRoster.setAppNumber(rs.getString("AppNumber"));
+                peRoster.setRefAppNumber(rs.getString("RefAppNumber"));
                 peRoster.setName(rs.getString("BorrowerName"));
                 peRoster.setProductGroup(rs.getString("ProductGroup"));
                 peRoster.setRequestType(rs.getString("RequestTypeStr"));
@@ -2150,6 +2142,8 @@ public class PEDBExecute extends BusinessControl
 
                 peRoster.setSlastatus(rs.getString("SLAStatus"));
                 peRoster.setSLAEndTime(rs.getObject("SLAEndTime1").toString().trim());
+                peRoster.setLongReceivedTime(rs.getLong("ReceivedTime"));
+                peRoster.setLongSLAEndTime(rs.getLong("SLAEndTime"));
                 peRoster.setTotalTimeAtUser(rs.getString("TotalTimeAtUser"));
                 peRoster.setTotalTimeAtProcess(rs.getString("TotalTimeAtProcess"));
                 peRoster.setF_WobNum(rs.getString("F_WobNum"));

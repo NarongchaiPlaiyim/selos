@@ -20,14 +20,12 @@ public class InsuranceInfoDAO extends GenericDAO<InsuranceInfo, Long> {
 
     }
     
-    public List<InsuranceInfo> findInsuranceInfoByWorkCaseId(long workCaseId) {
+    public InsuranceInfo findInsuranceInfoByWorkCaseId(long workCaseId) {
         log.info("-- findInsuranceInfoByWorkCaseId ::: {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        List<InsuranceInfo> insuranceInfoList = (List<InsuranceInfo>) criteria.list();
-        if (insuranceInfoList != null)
-        	log.info("-- newCollateralDetailList ::: size : {}", insuranceInfoList.size());
-        return insuranceInfoList;
+        InsuranceInfo insuranceInfo = (InsuranceInfo) criteria.uniqueResult();
+        return insuranceInfo;
     }
 
 

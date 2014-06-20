@@ -149,12 +149,14 @@
                                 <h:outputText value="#{rowIndex+1}"/>
                             </p:column>
 
-                            <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="receivedDate">
+                            <p:column headerText="Received Date" styleClass="center" style="width: 130px;" sortBy="longReceivedTime">
                                 <h:outputText value="#{item.receivedDate}"/>
                             </p:column>
 
                             <p:column headerText="Application Number" styleClass="center" style="width: 110px;" sortBy="appNumber">
-                                <h:outputText value="#{item.appNumber}" />
+                                <h:outputText value="App No.:#{item.appNumber}" />
+                                <br/>
+                                <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                             </p:column>
 
                             <p:column headerText="Name" styleClass="center" style="width: 110px;" sortBy="name">
@@ -189,7 +191,7 @@
                                 <h:outputText value="#{item.teamName}"/>
                             </p:column>
 
-                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="SLAEndTime" >
+                            <p:column headerText="Appointment Date" styleClass="center" style="width: 110px;" sortBy="longAppointmentDate" >
                                 <h:outputText value="#{item.appointmentDate}"/>
                             </p:column>
 
@@ -197,7 +199,7 @@
                                 <h:outputText value="#{item.doaLevel}"/>
                             </p:column>
 
-                            <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="SLAEndTime" >
+                            <p:column headerText="SLA End Date" styleClass="center" style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="longSLAEndTime" >
                                 <h:outputText value="#{item.SLAEndTime}"/>
                             </p:column>
 

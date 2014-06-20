@@ -150,13 +150,15 @@
                             </p:column>
 
                             <p:column headerText="Received Date" styleClass="center"
-                                      style="width: 130px;" sortBy="receivedDate">
+                                      style="width: 130px;" sortBy="longReceivedTime">
                                 <h:outputText value="#{item.receivedDate}"/>
                             </p:column>
 
                             <p:column headerText="Application Number" styleClass="center"
                                       style="width: 110px;" sortBy="appNumber" >
-                                <h:outputText value="#{item.appNumber}"/>
+                                <h:outputText value="App No.: #{item.appNumber}"/>
+                                <br/>
+                                <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                             </p:column>
 
                             <p:column headerText="Name" styleClass="center"
@@ -198,7 +200,7 @@
                             </p:column>
 
                             <p:column headerText="Appointment Date" styleClass="center"
-                                      style="width: 110px;" sortBy="SLAEndTime">
+                                      style="width: 110px;" sortBy="longAppointmentDate">
                                 <h:outputText value="#{item.appointmentDate}" />
                             </p:column>
 
@@ -208,7 +210,7 @@
                             </p:column>
 
                             <p:column headerText="SLAEndDate" styleClass="center"
-                                      style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="SLAEndTime">
+                                      style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="longSLAEndTime">
                                 <h:outputText value="#{item.SLAEndTime}" />
                             </p:column>
 

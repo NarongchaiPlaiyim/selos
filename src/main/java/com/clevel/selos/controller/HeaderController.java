@@ -273,7 +273,7 @@ public class HeaderController extends BaseController {
                 }
             }
 
-            timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId);
+            timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
             UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
             int limitTimeOfCriteriaCheck = 3;
             if(!Util.isNull(userSysParameterView)){
@@ -1820,7 +1820,7 @@ public class HeaderController extends BaseController {
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
 
                             //----Update Times of Check Criteria----//
-                            fullApplicationControl.updateTimeOfCheckCriteria(workCaseId);
+                            fullApplicationControl.updateTimeOfCheckCriteria(workCaseId, stepId);
                             fullApplicationControl.clearCaseUpdateFlag(workCaseId);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);

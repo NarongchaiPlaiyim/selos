@@ -1,6 +1,8 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.insurance.InsuranceInfoSummaryView;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.view.NewCollateralHeadView;
 import com.clevel.selos.model.view.NewCollateralView;
@@ -16,6 +18,7 @@ public class InsuranceInfoTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+    
     @Inject
     private NewCollateralTransform newCollateralTransform;
 
@@ -44,5 +47,15 @@ public class InsuranceInfoTransform extends Transform {
         	insuranceInfoViewList.add(insuranceInfoView);
         }
     	return insuranceInfoViewList;
+    }
+    
+    public InsuranceInfoSummaryView transformsInsuranceInfoToView(InsuranceInfo insuranceInfo){
+    	InsuranceInfoSummaryView infoSummaryView = new InsuranceInfoSummaryView();
+    	infoSummaryView.setId(insuranceInfo.getId());
+    	infoSummaryView.setTotalPremiumAmount(insuranceInfo.getTotalPremiumAmount());
+    	infoSummaryView.setModifyBy(insuranceInfo.getModifyBy());
+    	infoSummaryView.setModifyDate(insuranceInfo.getModifyDate());
+    	return infoSummaryView;
+    	
     }
 }

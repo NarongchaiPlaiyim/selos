@@ -45,6 +45,42 @@ public class PERoster implements Serializable {
     private String appointmentDate;
     private String doaLevel;
     private String fromUser;
+    private String refAppNumber;
+    private long longReceivedTime;
+    private long longAppointmentDate;
+    private long longSLAEndTime;
+
+    public long getLongReceivedTime() {
+        return longReceivedTime;
+    }
+
+    public void setLongReceivedTime(long longReceivedTime) {
+        this.longReceivedTime = longReceivedTime;
+    }
+
+    public long getLongAppointmentDate() {
+        return longAppointmentDate;
+    }
+
+    public void setLongAppointmentDate(long longAppointmentDate) {
+        this.longAppointmentDate = longAppointmentDate;
+    }
+
+    public long getLongSLAEndTime() {
+        return longSLAEndTime;
+    }
+
+    public void setLongSLAEndTime(long longSLAEndTime) {
+        this.longSLAEndTime = longSLAEndTime;
+    }
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
 
     public String getFromUser() {
         return fromUser;
@@ -270,6 +306,10 @@ public class PERoster implements Serializable {
                 .append("fetchType",fetchType)
                 .append("atUser",atUser)
                 .append("statusCode",statusCode)
+                .append("appointmentDate",appointmentDate)
+                .append("doaLevel",doaLevel)
+                .append("fromUser",fromUser)
+                .append("refAppNumber",refAppNumber)
                 .toString();
     }
 

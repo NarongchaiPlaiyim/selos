@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +18,10 @@ import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
 import com.clevel.selos.businesscontrol.PostAppBusinessControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.UserAccessView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
@@ -37,10 +41,13 @@ public class PostAppGeneral implements Serializable  {
 	private HeaderController headerController;
 	@Inject
 	private PostAppBusinessControl postAppBusinessControl;
+	@Inject
+	private UserAccessControl userAccessControl;
 	
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private long statusId = -1;
+	private String wobNumber = "";
 	private String queueName = "";
 	
 	//Submit02 Dialog value
@@ -57,6 +64,7 @@ public class PostAppGeneral implements Serializable  {
 	private List<SelectItem> returnReasonList;
 	private List<SelectItem> cancelReasonList;
 	
+	private final HashSet<Integer> accessSet = new HashSet<Integer>();
 	
 	
 	public String getCancel01_Remark() {
@@ -106,11 +114,19 @@ public class PostAppGeneral implements Serializable  {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			queueName = Util.parseString(session.getAttribute("queueName"), "");
+			wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 			statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+			
+			List<UserAccessView> accessList = userAccessControl.getUserAccessList(stepId);
+			for (UserAccessView access : accessList) {
+				if (access.isAccessFlag())
+					accessSet.add(access.getScreenId());
+			}
 		}
 		returnReasonList = generalPeopleInfoControl.listReturnReasons();
 		cancelReasonList = generalPeopleInfoControl.listCancelReasons();
 	}
+	
 	/*
 	 * 
 	 */
@@ -130,7 +146,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onSubmitCA() {
 		try {
-			postAppBusinessControl.submitCA(workCaseId, queueName, null);
+			postAppBusinessControl.submitCA(workCaseId, queueName,wobNumber, null);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -139,7 +155,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onSubmitCAWithRemark() {
 		try {
-			postAppBusinessControl.submitCA(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.submitCA(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -149,7 +165,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onReturnToBDM() {
 		try {
-			postAppBusinessControl.returnToBDM(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToBDM(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -159,7 +175,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onReturnUW2() {
 		try {
-			postAppBusinessControl.returnToUW2(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToUW2(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -168,7 +184,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnDataEntry() {
 		try {
-			postAppBusinessControl.returnToDataEntry(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToDataEntry(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -177,7 +193,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnToContactCenter() {
 		try {
-			postAppBusinessControl.returnToContactCenter(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToContactCenter(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -186,7 +202,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnToLARBC() {
 		try {
-			postAppBusinessControl.returnToLARBC(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToLARBC(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -195,7 +211,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onCancelCA() {
 		try {
-			postAppBusinessControl.cancelCA(workCaseId, queueName, cancel01_SelectedReasonId, cancel01_Remark);
+			postAppBusinessControl.cancelCA(workCaseId, queueName,wobNumber, cancel01_SelectedReasonId, cancel01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -204,7 +220,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onCancelDisbursement() {
 		try {
-			postAppBusinessControl.cancelDisbursement(workCaseId, queueName, cancel01_SelectedReasonId, cancel01_Remark);
+			postAppBusinessControl.cancelDisbursement(workCaseId, queueName,wobNumber, cancel01_SelectedReasonId, cancel01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -213,7 +229,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onRequestPriceReduction() {
 		try {
-			postAppBusinessControl.requestPriceReduction(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.requestPriceReduction(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -222,7 +238,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onGenerateAgreement() {
 		try {
-			postAppBusinessControl.generateAgreement(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.generateAgreement(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -231,7 +247,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onRegenerateAgreement() {
 		try {
-			postAppBusinessControl.regenerateAgreement(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.regenerateAgreement(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -240,7 +256,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onDataEntryComplete() {
 		try {
-			postAppBusinessControl.dataEntryComplete(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.dataEntryComplete(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -258,6 +274,73 @@ public class PostAppGeneral implements Serializable  {
 			return false;
 		return _notShowRemark();
 	}
+	
+	/*
+	 * Menu Management
+	 */
+	public boolean canAccessMenu(int screenValue) {
+		return accessSet.contains(screenValue);
+	}
+	public boolean showGroupSummary() {
+		return accessSet.contains(Screen.EXECUTIVE_SUMMARY.value()) || accessSet.contains(Screen.DECISION.value());
+	}
+	public boolean showGroupRegister() {
+		return accessSet.contains(Screen.PostCustomerInfoSum.value()) || accessSet.contains(Screen.AccountInfo.value()) 
+				|| accessSet.contains(Screen.ApproveDetailInfo.value()) || accessSet.contains(Screen.CollateralMortgageInfoSum.value())
+				|| accessSet.contains(Screen.Disbursement.value());
+	}
+	public boolean showGroupInsurance() {
+		return accessSet.contains(Screen.InsuranceInfo.value()) || accessSet.contains(Screen.BAInfo.value());
+	}
+	public boolean showGroupConfirmation() {
+		return accessSet.contains(Screen.AgreementAndMortgageConfirm.value()) || accessSet.contains(Screen.AgreementSign.value()) 
+				|| accessSet.contains(Screen.PledgeConfirm.value()) || accessSet.contains(Screen.PerfectionReview.value());
+	}
+	public String getDefaultOutcomeGroupSummary() {
+		if (!showGroupSummary())
+			return "";
+		if (canAccessMenu(Screen.EXECUTIVE_SUMMARY.value()))
+			return "exSummary";
+		else
+			return "decision";
+	}
+	public String getDefaultOutcomeGroupRegister() {
+		if (!showGroupRegister())
+			return "";
+		if (canAccessMenu(Screen.CollateralMortgageInfoSum.value()))
+			return "mortgageSummary";
+		else if (canAccessMenu(Screen.AccountInfo.value()))
+			return "accountInfo";
+		else if (canAccessMenu(Screen.PostCustomerInfoSum.value()))
+			return "postCustomerInfoSummary";
+		else if (canAccessMenu(Screen.ApproveDetailInfo.value())) 
+			return "approveDetailInformation";
+		else 
+			return "disbursement";
+			
+	}
+	public String getDefaultOutcomeGroupInsurance() {
+		if (!showGroupInsurance())
+			return "";
+		if (canAccessMenu(Screen.InsuranceInfo.value()))
+			return "insuranceInfo";
+		else
+			return "baInfo";
+	}
+	public String getDefaultOutcomeGroupConfirmation() {
+		if (!showGroupConfirmation())
+			return "";
+		if (canAccessMenu(Screen.PerfectionReview.value()))
+			return "perfectionReview";
+		else if (canAccessMenu(Screen.AgreementAndMortgageConfirm.value()))
+			return "mortgageConfirm";
+		else if (canAccessMenu(Screen.AgreementSign.value()))
+			return "agreementSign";
+		else
+			return "pledgeConfirm";
+	}
+	
+	
 	
 	private boolean _notShowRemark() {
 		int stepIdI = (int) stepId;
