@@ -31,80 +31,153 @@
                     </div>
                     <!--R pane-->
                     <div class="body_rpane">
-                        <label class="subject">User Profile</label>
-
-
-                            <p:panelGrid id="search" columns="2" columnClasses="isa_searchColumn1,isa_searchColumn2" styleClass="isaPanelGridSearch">
-                                <h:outputText value="เลขที่ผู้ใช้:" />
-                                <h:inputText value="#{isa.isaSearchView.id}"/>
-                                <h:outputText value="ชื่อผู้ใช้:"/>
-                                <h:inputText value="#{isa.isaSearchView.username}"/>
-                                <h:outputText value="Role:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.roleId.id}">
+                    <label class="subject">User Profile</label>
+                    <table border="0">
+                        <tr>
+                            <td style="width: 120px; min-width: 120px; max-width: 120px;" />
+                            <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="เลขที่ผู้ใช้:" />
+                            </td>
+                            <td>
+                                <p:inputText value="#{isa.isaSearchView.id}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="ชื่อผู้ใช้:"/>
+                            </td>
+                            <td>
+                                <p:inputText value="#{isa.isaSearchView.username}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="Role:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{isa.isaSearchView.roleId.id}"
+                                                 style="width: 250px; min-width: 250px; max-width: 250px;">
                                     <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userRoleList}"
                                                    var="roleItem"
                                                    itemLabel="#{roleItem.name}"
                                                    itemValue="#{roleItem.id}"/>
+                                    <p:ajax update="userTeam" listener="#{isa.onChangeRole()}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Department:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.departmentId.id}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="Team:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu id="userTeam" value="#{isa.isaSearchView.teamId.id}"
+                                                 style="width: 250px; min-width: 250px; max-width: 250px;">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                                    <f:selectItems value="#{isa.userTeamList}"
+                                                   var="teamItem"
+                                                   itemLabel="#{teamItem.team_name}"
+                                                   itemValue="#{teamItem.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="Department:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{isa.isaSearchView.departmentId.id}"
+                                                 style="width: 250px; min-width: 250px; max-width: 250px;">
                                     <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userDepartmentList}"
                                                    var="departmentItem"
                                                    itemLabel="#{departmentItem.name}"
                                                    itemValue="#{departmentItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Division:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.divisionId.id}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="Division:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{isa.isaSearchView.divisionId.id}"
+                                                 style="width: 250px; min-width: 250px; max-width: 250px;">
                                     <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userDivisionList}"
                                                    var="divisionItem"
                                                    itemLabel="#{divisionItem.name}"
                                                    itemValue="#{divisionItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Region:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.regionId.id}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="Region:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{isa.isaSearchView.regionId.id}"
+                                                 style="width: 250px; min-width: 250px; max-width: 250px;">
                                     <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userRegionList}"
                                                    var="regionItem"
                                                    itemLabel="#{regionItem.name}"
                                                    itemValue="#{regionItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Team:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.teamId.id}">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                                    <f:selectItems value="#{isa.userTeamList}"
-                                                   var="teamItem"
-                                                   itemLabel="#{teamItem.name}"
-                                                   itemValue="#{teamItem.id}"/>
-                                </p:selectOneMenu>
-                                <h:outputText value="Title:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.titleId.id}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="Title:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{isa.isaSearchView.titleId.id}"
+                                                 style="width: 250px; min-width: 250px; max-width: 250px;">
                                     <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userTitleList}"
                                                    var="titleItem"
                                                    itemLabel="#{titleItem.name}"
                                                    itemValue="#{titleItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Zone:"/>
-                                <p:selectOneMenu value="#{isa.isaSearchView.zoneId.id}">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                                    <f:selectItems value="#{isa.userZoneList}"
-                                                   var="zoneItem"
-                                                   itemLabel="#{zoneItem.name}"
-                                                   itemValue="#{zoneItem.id}"/>
-                                </p:selectOneMenu>
-                                <h:inputHidden/>
-                                <p:commandButton value="ค้นหา" actionListener="#{isa.onSearchUser()}" update=":userTableData,:msgBoxSystemMessagePanel"/>
-                            </p:panelGrid>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td/>
+                            <td>
+                                <p:commandButton value="ค้นหา"
+                                                 styleClass="medium"
+                                                 actionListener="#{isa.onSubmitSearchUser()}"
+                                                 update=":userTableData,:msgBoxSystemMessagePanel"/>
+                                <p:commandButton value="Export"
+                                                 styleClass="medium"
+                                                 actionListener="#{isa.onSubmitExportCSV()}"/>
+                                <p:commandButton value="Import"
+                                                 styleClass="medium"
+                                                 actionListener="#{isa.onSubmitImportCSV()}"/>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="title" >
+                                <p:outputLabel value="TotalUser:"/>
+                            </td>
+                            <td>
+                                <p:outputLabel value="#{isa.userSize}"/>
+                            </td>
+                        </tr>
+                    </table>
+
 
 
 
                             <div>
-                                <h:outputText value=" TotalUser : #{isa.userSize}"/>
 
-                                <p:commandButton value="Add New User" actionListener="#{isa.onOpenNewUserForm()}"
+                                <p:commandButton value="Add New User" actionListener="#{isa.onSubmitCreateNewUser()}"
                                                  oncomplete="PF('manageUserDlg').show()"
                                                  update=":manageDialogForm">
                                     <p:resetInput target=":manageDialogForm"/>
@@ -169,9 +242,6 @@
                             <p:column headerText="Title">
                                 <h:outputText value="#{c.title.name}"/>
                             </p:column>
-                            <p:column headerText="Zone">
-                                <h:outputText value="#{c.zone.name}"/>
-                            </p:column>
 
                             <p:column headerText="Status">
                                 <h:outputText value="#{c.userStatus}"/>
@@ -193,7 +263,7 @@
                                         <f:setPropertyActionListener value="#{c.id}"
                                                                      target="#{isa.id}"  />
 
-                                        </p:commandButton>
+                                </p:commandButton>
 
                             </p:column>
                         </p:dataTable>
@@ -211,7 +281,8 @@
 
     <p:dialog id="manageUserDialog" widgetVar="manageUserDlg" header="Manage User !"
                                    onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                                   modal="true" width="600" height="450">
+                                   closable="false"
+                                   modal="true" width="450" height="400">
         <ui:include src="../site/dialog/isaManageDialog.xhtml"/>
     </p:dialog>
 

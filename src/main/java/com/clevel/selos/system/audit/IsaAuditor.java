@@ -13,13 +13,12 @@ import java.io.Serializable;
 
 @Stateless
 public class IsaAuditor implements Serializable {
-
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
 
     @Inject
-    IsaActivityDAO isaActivityDAO;
+    private IsaActivityDAO isaActivityDAO;
 
     @Inject
     public IsaAuditor() {

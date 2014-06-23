@@ -11,7 +11,31 @@
         <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
     </h:head>
 
+
     <h:body>
+        <h:form id="ISATest">
+            <p:panel header="ISATestHeader">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value=""/>
+                    <p:commandButton id="submitOnClickISATest" value="Update" update="@form"
+                                     action="#{TestNCRS.onClickISA()}"/>
+
+                    <h:outputText value="Role ID : "/>
+                    <p:inputText value="#{TestNCRS.roleId}"/>
+
+                    <h:outputText value="Result"/>
+                    <p:inputTextarea value="#{TestNCRS.result}" rows="50" cols="100">
+
+                    </p:inputTextarea>
+
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+
+
         <h:form id="ECMCAPShare">
             <p:panel header="ECMCAPShareHeader">
                 <h:panelGrid columns="2">

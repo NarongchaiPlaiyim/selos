@@ -1,16 +1,17 @@
 package com.clevel.selos.controller.isa;
 
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
-import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.RoleDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageUserActive;
-import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
 import com.clevel.selos.model.view.isa.IsaSearchView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
 import com.clevel.selos.system.audit.IsaAuditor;
+import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -28,40 +29,17 @@ import java.util.List;
 @ViewScoped
 @ManagedBean(name = "isa")
 public class Isa implements Serializable {
-
     @Inject
     @SELOS
-    Logger log;
-
+    private Logger log;
     @Inject
-    UserDAO userDAO;
-
+    private UserDAO userDAO;
     @Inject
-    RoleDAO roleDAO;
-
+    private RoleDAO roleDAO;
     @Inject
-    UserDepartmentDAO userDepartmentDAO;
-
+    private IsaBusinessControl isaBusinessControl;
     @Inject
-    UserDivisionDAO userDivisionDAO;
-
-    @Inject
-    UserRegionDAO userRegionDAO;
-
-    @Inject
-    UserTeamDAO userTeamDAO;
-
-    @Inject
-    UserTitleDAO userTitleDAO;
-
-    @Inject
-    UserZoneDAO userZoneDAO;
-
-    @Inject
-    IsaBusinessControl isaBusinessControl;
-
-    @Inject
-    IsaAuditor isaAuditor;
+    private IsaAuditor isaAuditor;
 
     public Isa() {
 
@@ -102,11 +80,10 @@ public class Isa implements Serializable {
     
     private enum ModeForButton {ADD,EDIT,DELETE};
     private ModeForButton modeForButton;
-
+    private boolean complete;
 
     @PostConstruct
     public void onCreate() {
-        onSelectUser();
         isaManageUserView = new IsaManageUserView();
         isaSearchView = new IsaSearchView();
 
@@ -114,9 +91,95 @@ public class Isa implements Serializable {
         isaSearchView.reset();
 //        isaSearchView.getRoleId().setId(-1);
 
+        init();
     }
 
-    private boolean complete;
+    private void init(){
+        log.debug("-- init()");
+        onLoadAllOfSelectOneMenu();
+        onLoadUser();
+    }
+
+    private void onLoadAllOfSelectOneMenu(){
+        log.debug("-- onLoadAllOfSelectOneMenu");
+        onLoadRole();
+        onLoadUserTeam();
+        onLoadUserDepartment();
+        onLoadUserDivision();
+        onLoadUserRegion();
+        onLoadUserTitle();
+    }
+    private void onLoadRole(){
+        log.debug("-- onLoadRole()");
+        userRoleList = isaBusinessControl.getAllRole();
+    }
+    private void onLoadUserTeam(){
+        log.debug("-- onLoadUserTeam()");
+        userTeamList = new ArrayList<UserTeam>();
+    }
+    private void onLoadUserDepartment(){
+        log.debug("-- onLoadUserDepartment()");
+        userDepartmentList = isaBusinessControl.getAllUserDepartment();
+    }
+    private void onLoadUserDivision(){
+        log.debug("-- onLoadUserDivision()");
+        userDivisionList = isaBusinessControl.getAllUserDivision();
+    }
+    private void onLoadUserRegion(){
+        log.debug("-- onLoadUserRegion()");
+        userRegionList = isaBusinessControl.getAllUserRegion();
+    }
+    private void onLoadUserTitle(){
+        log.debug("-- onLoadUserTitle()");
+        userTitleList = isaBusinessControl.getAllUserTitle();
+    }
+    private void onLoadUser(){
+        log.debug("-- onLoadUser()");
+        userDetail = isaBusinessControl.getAllUser();
+        userSize = userDetail.size();
+    }
+
+    public void onChangeRole(){
+        log.debug("-- onChangeRole");
+        if(!Util.isNull(isaSearchView.getRoleId().getId()) && !Util.isZero(isaSearchView.getRoleId().getId())){
+            userTeamList = getUserTeamByRoleId(isaSearchView.getRoleId().getId());
+        } else {
+            userTeamList = getUserTeamByRoleId(isaManageUserView.getRole().getId());
+        }
+    }
+
+    private List<UserTeam> getUserTeamByRoleId(final int id){
+        return isaBusinessControl.getUserTeamByRoleId(id);
+    }
+
+
+    public void onSubmitExportCSV(){
+        log.debug("-- onSubmitExportCSV()");
+        RequestContext context = RequestContext.getCurrentInstance();
+        complete = true;
+        messageHeader = "Export to CSV";
+        try {
+            isaBusinessControl.exportProcess();
+            message = "Success.";
+        } catch (Exception e){
+            message = e.getMessage();
+        }
+        context.execute("msgBoxSystemMessageDlg.show()");
+    }
+
+    public void onSubmitImportCSV(){
+        log.debug("-- onSubmitImportCSV()");
+        RequestContext context = RequestContext.getCurrentInstance();
+        complete = true;
+        messageHeader = "Import to model";
+        try {
+            isaBusinessControl.importProcess();
+            message = "Success.";
+        } catch (Exception e){
+            message = e.getMessage();
+        }
+        context.execute("msgBoxSystemMessageDlg.show()");
+    }
 
 
     public void onManageUserAction() {
@@ -143,7 +206,7 @@ public class Isa implements Serializable {
 //                    System.out.println(userDetail.getUserName());
                     isaAuditor.add("ISA", modeForButton.name(),auditView.toString(), ActionResult.SUCCESS, "");
 
-                    onSelectUser();
+                    onLoadUser();
                     message = "Add New User Success.";
                 }
                 context.execute("msgBoxSystemMessageDlg.show()");
@@ -178,41 +241,29 @@ public class Isa implements Serializable {
 
     }
 
-    public void onSelectUser() {
 
-        log.debug("onSelectUser()");
-        userDetail = new ArrayList<User>();
-        userDetail = userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
-//        userDetail = userDAO.findAll();
-        getSelectUserDetailList();
-        userSize = userDetail.size();
-    }
+//    public void getSelectUserDetailList() {
+//        try {
+////            userRoleList = roleDAO.findAll();
+//            userDepartmentList = userDepartmentDAO.findAll();
+//            userDivisionList = userDivisionDAO.findAll();
+//            userRegionList = userRegionDAO.findAll();
+//            userTeamList = userTeamDAO.findAll();   //
+//            userTitleList = userTitleDAO.findAll();
+//            userZoneList = userZoneDAO.findAll();  //--
+//        } catch (Exception e) {
+//            log.error("",e);
+//        }
+//
+//    }
 
-    public void getSelectUserDetailList() {
-        try {
-            userRoleList = roleDAO.findAll();
-            userDepartmentList = userDepartmentDAO.findAll();
-            userDivisionList = userDivisionDAO.findAll();
-            userRegionList = userRegionDAO.findAll();
-            userTeamList = userTeamDAO.findAll();
-            userTitleList = userTitleDAO.findAll();
-            userZoneList = userZoneDAO.findAll();
-        } catch (Exception e) {
-            log.error("",e);
-        }
-
-    }
-
-
-    public void onOpenNewUserForm() {
-        log.debug("onCreateNewUser()");
-//        isaManageUserView = new IsaManageUserView();
-        isaManageUserView.reset();
-        isaManageUserView.getRole().setId(-1);
+    public void onSubmitCreateNewUser(){
+        log.debug("-- onSubmitCreateNewUser()");
         modeForButton = ModeForButton.ADD;
-
-        getSelectUserDetailList();
+        isaManageUserView = new IsaManageUserView();
+        onLoadUserTeam();
     }
+
 
 
     public void onOpenEditForm() {
@@ -228,7 +279,7 @@ public class Isa implements Serializable {
                 //set BeforeAudit
                 isaUserEditView=isaBusinessControl.SelectUserById(id);
                 modeForButton = ModeForButton.EDIT;
-                getSelectUserDetailList();
+//                getSelectUserDetailList();
 
             } else {
                 messageHeader = "Edit Form.";
@@ -254,7 +305,7 @@ public class Isa implements Serializable {
         try {
             isaBusinessControl.deleteUser(id);
             isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.SUCCESS,"");
-            onSelectUser();
+            onLoadUser();
         } catch (Exception e) {
             complete = false;
             messageHeader = "Delete User.";
@@ -319,7 +370,7 @@ public class Isa implements Serializable {
             context.execute("msgBoxSystemMessageDlg.show()");
             isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.EXCEPTION,message);
         }
-        onSelectUser();
+        onLoadUser();
     }
 
     public void editUser() {
@@ -335,7 +386,7 @@ public class Isa implements Serializable {
 
             isaAuditor.add("ISA",ModeForButton.EDIT.name(),"before : "+auditBefore.toString()+ ", after : "+auditAfter.toString(),ActionResult.SUCCESS,"");
 
-            onSelectUser();
+            onLoadUser();
             context.execute("manageUserDlg.hide()");
         } catch (Exception e) {
             messageHeader = "Edit User.";
@@ -351,14 +402,14 @@ public class Isa implements Serializable {
     }
 
 
-    public void onSearchUser() {
-        log.debug("onSearchUser()");
+
+    public void onSubmitSearchUser() {
+        log.debug("onSubmitSearchUser()");
         RequestContext context = RequestContext.getCurrentInstance();
         try {
             log.debug("{}",isaSearchView);
             userDetail = isaBusinessControl.searchUser(isaSearchView);
             userSize = userDetail.size();
-
         } catch (Exception e) {
             messageHeader = "Search User.";
             if (e.getCause() != null) {
@@ -393,7 +444,7 @@ public class Isa implements Serializable {
                 isaBusinessControl.editUserActive(selectUserDetail, ManageUserActive.INACTIVE);
                 isaAuditor.add("ISA",ModeForButton.EDIT.name(),"userId : "+builder +" To "+ManageUserActive.INACTIVE,ActionResult.SUCCESS,"");
             }
-            onSelectUser();
+            onLoadUser();
 
         } catch (Exception e) {
             if (e.getCause() != null) {
@@ -416,14 +467,14 @@ public class Isa implements Serializable {
         isaUserDetailView.setBuCode(isaManageUserView.getBuCode());
         isaUserDetailView.setEmailAddress(isaManageUserView.getEmailAddress());
         isaUserDetailView.setPhoneExt(isaManageUserView.getPhoneExt());
-        isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());
-        isaUserDetailView.setRole(roleDAO.findById(isaManageUserView.getRole().getId()).getName());
-        isaUserDetailView.setDepartment(userDepartmentDAO.findById(isaManageUserView.getUserDepartment().getId()).getName());
-        isaUserDetailView.setDivision(userDivisionDAO.findById(isaManageUserView.getUserDivision().getId()).getName());
-        isaUserDetailView.setRegion(userRegionDAO.findById(isaManageUserView.getUserRegion().getId()).getName());
-        //isaUserDetailView.setTeam(userTeamDAO.findById(isaManageUserView.getUserTeam().getId()).getName());
-        isaUserDetailView.setTitle(userTitleDAO.findById(isaManageUserView.getUserTitle().getId()).getName());
-        isaUserDetailView.setZone(userZoneDAO.findById(isaManageUserView.getUserZone().getId()).getName());
+        isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());             //TODO plz add method for query
+//        isaUserDetailView.setRole(roleDAO.findById(isaManageUserView.getRole().getId()).getName());
+//        isaUserDetailView.setDepartment(userDepartmentDAO.findById(isaManageUserView.getUserDepartment().getId()).getName());
+//        isaUserDetailView.setDivision(userDivisionDAO.findById(isaManageUserView.getUserDivision().getId()).getName());
+//        isaUserDetailView.setRegion(userRegionDAO.findById(isaManageUserView.getUserRegion().getId()).getName());
+//        //isaUserDetailView.setTeam(userTeamDAO.findById(isaManageUserView.getUserTeam().getId()).getName());
+//        isaUserDetailView.setTitle(userTitleDAO.findById(isaManageUserView.getUserTitle().getId()).getName());
+//        isaUserDetailView.setZone(userZoneDAO.findById(isaManageUserView.getUserZone().getId()).getName());
         isaUserDetailView.setActive(isaManageUserView.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
 
         return  isaUserDetailView;

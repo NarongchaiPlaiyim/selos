@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.businesscontrol.BRMSControl;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.BRMSInterface;
@@ -70,6 +71,7 @@ public class TestNCRS implements Serializable {
     @Inject
     private BRMSControl brmsControl;
 
+
     private String appNumber;
     private String crsCustName;
 
@@ -112,6 +114,9 @@ public class TestNCRS implements Serializable {
     //Call ECM
     private String caNumberECM = "04621809124082010060";
 
+    @Inject
+    private UserTeamDAO userTeamDAO;
+    private int roleId;
 
     @Inject
     public TestNCRS() {
@@ -325,6 +330,19 @@ public class TestNCRS implements Serializable {
             result = e.getMessage();
         } catch (Exception e) {
             log.error("-- Exception : {}", e.getMessage());
+            result = e.getMessage();
+        }
+    }
+
+
+    public void onClickISA(){
+        log.debug("-- onClickISA()");
+        try {
+            log.debug("-- RoleID : {}", roleId);
+            userTeamDAO.findByRoleId(roleId);
+            result = userTeamDAO.findByRoleId(roleId).toString();
+        } catch (Exception e) {
+            log.debug("", e);
             result = e.getMessage();
         }
     }
@@ -624,5 +642,13 @@ public class TestNCRS implements Serializable {
 
     public void setCrsCustName(String crsCustName) {
         this.crsCustName = crsCustName;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 }

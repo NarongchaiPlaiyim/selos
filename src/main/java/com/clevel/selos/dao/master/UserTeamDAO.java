@@ -6,7 +6,9 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.relation.RelTeamUserDetails;
 import com.clevel.selos.model.view.ReassignTeamNameId;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -36,6 +38,18 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
     @Inject
     public UserTeamDAO()
     {
+    }
+
+    public final List<UserTeam> findByRoleId(final int roleId){
+        log.debug("-- findByRoleId(Role ID : {})", roleId);
+        List<UserTeam> userTeamList = null;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("roleId", roleId));
+        criteria.add(Restrictions.eq("active", 1));
+        criteria.addOrder(Order.asc("id"));
+        userTeamList = Util.safetyList((List<UserTeam>)criteria.list());
+        log.debug("-- UserTeamList.size()[{}]", userTeamList.size());
+        return userTeamList;
     }
 
     public String teamNameById(int id)
