@@ -204,6 +204,9 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<CustomerAccountName> customerAccountNameList;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CustomerOblAccountInfo> customerOblAccountInfoList;
+
     public Customer() {
     }
 
@@ -661,6 +664,14 @@ public class Customer implements Serializable {
 
     public void setBusinessSubType(BusinessSubType businessSubType) {
         this.businessSubType = businessSubType;
+    }
+
+    public List<CustomerOblAccountInfo> getCustomerOblAccountInfoList() {
+        return customerOblAccountInfoList;
+    }
+
+    public void setCustomerOblAccountInfoList(List<CustomerOblAccountInfo> customerOblAccountInfoList) {
+        this.customerOblAccountInfoList = customerOblAccountInfoList;
     }
 
     @Override

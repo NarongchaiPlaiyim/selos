@@ -47,6 +47,7 @@ public class PostAppGeneral implements Serializable  {
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private long statusId = -1;
+	private String wobNumber = "";
 	private String queueName = "";
 	
 	//Submit02 Dialog value
@@ -113,6 +114,7 @@ public class PostAppGeneral implements Serializable  {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			queueName = Util.parseString(session.getAttribute("queueName"), "");
+			wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 			statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 			
 			List<UserAccessView> accessList = userAccessControl.getUserAccessList(stepId);
@@ -144,7 +146,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onSubmitCA() {
 		try {
-			postAppBusinessControl.submitCA(workCaseId, queueName, null);
+			postAppBusinessControl.submitCA(workCaseId, queueName,wobNumber, null);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -153,7 +155,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onSubmitCAWithRemark() {
 		try {
-			postAppBusinessControl.submitCA(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.submitCA(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -163,7 +165,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onReturnToBDM() {
 		try {
-			postAppBusinessControl.returnToBDM(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToBDM(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -173,7 +175,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onReturnUW2() {
 		try {
-			postAppBusinessControl.returnToUW2(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToUW2(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -182,7 +184,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnDataEntry() {
 		try {
-			postAppBusinessControl.returnToDataEntry(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToDataEntry(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -191,7 +193,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnToContactCenter() {
 		try {
-			postAppBusinessControl.returnToContactCenter(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToContactCenter(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -200,7 +202,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnToLARBC() {
 		try {
-			postAppBusinessControl.returnToLARBC(workCaseId, queueName, return01_SelectedReasonId, return01_Remark);
+			postAppBusinessControl.returnToLARBC(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -209,7 +211,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onCancelCA() {
 		try {
-			postAppBusinessControl.cancelCA(workCaseId, queueName, cancel01_SelectedReasonId, cancel01_Remark);
+			postAppBusinessControl.cancelCA(workCaseId, queueName,wobNumber, cancel01_SelectedReasonId, cancel01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -218,7 +220,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onCancelDisbursement() {
 		try {
-			postAppBusinessControl.cancelDisbursement(workCaseId, queueName, cancel01_SelectedReasonId, cancel01_Remark);
+			postAppBusinessControl.cancelDisbursement(workCaseId, queueName,wobNumber, cancel01_SelectedReasonId, cancel01_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -227,7 +229,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onRequestPriceReduction() {
 		try {
-			postAppBusinessControl.requestPriceReduction(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.requestPriceReduction(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -236,7 +238,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onGenerateAgreement() {
 		try {
-			postAppBusinessControl.generateAgreement(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.generateAgreement(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -245,7 +247,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onRegenerateAgreement() {
 		try {
-			postAppBusinessControl.regenerateAgreement(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.regenerateAgreement(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -254,7 +256,7 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onDataEntryComplete() {
 		try {
-			postAppBusinessControl.dataEntryComplete(workCaseId, queueName, submit02_Remark);
+			postAppBusinessControl.dataEntryComplete(workCaseId, queueName,wobNumber, submit02_Remark);
 			
 			_manageComplete();
 		} catch (Exception e) {

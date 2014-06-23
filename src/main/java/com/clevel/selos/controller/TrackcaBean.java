@@ -118,7 +118,12 @@ public class TrackcaBean implements Serializable
             if((Long)session.getAttribute("stepId") !=1 && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)session.getAttribute("wobNumber");
-                bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                String queueName = (String)session.getAttribute("queueName");
+                if(wobNumber.trim().length()!=0 || queueName.trim().length()!=0)
+                {
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                }
+
             }
         }
         catch (Exception e)

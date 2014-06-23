@@ -403,7 +403,7 @@ public class CreditFacPropose extends BaseController {
         standardBasePriceDlg = new BaseRate();
         standardInterestDlg = BigDecimal.ZERO;
 
-        prdGroupToPrdProgramViewAll = productControl.getPrdGroupToPrdProgramFromAllPrdProgram();
+        prdGroupToPrdProgramViewAll = productControl.getProductProgramForPropose();
         prdGroupToPrdProgramViewByGroup = productControl.getPrdGroupToPrdProgramProposeByGroup(productGroup);
 
         creditFlag = false;
@@ -533,7 +533,24 @@ public class CreditFacPropose extends BaseController {
                         }
                     }
 
+                    List<NewFeeDetailView> newFeeDetailViewShowList = new ArrayList<NewFeeDetailView>();
+                    List<NewFeeDetailView> newFeeDetailViewHiddenList = new ArrayList<NewFeeDetailView>();
+
+                    Map<String, NewFeeDetailView> proposeFeeDetailViewMap = new HashMap<String, NewFeeDetailView>();
+                    if(!Util.isNull(newFeeDetailViewList) && !Util.isZero(newFeeDetailViewList.size())) {
+                        for(NewFeeDetailView proFeeDetView : newFeeDetailViewList) {
+                            if(proposeFeeDetailViewMap.containsKey(proFeeDetView.getProductProgram())){
+                                newFeeDetailViewHiddenList.add(proFeeDetView);
+                            } else {
+                                proposeFeeDetailViewMap.put(proFeeDetView.getProductProgram(), proFeeDetView);
+                                newFeeDetailViewShowList.add(proFeeDetView);
+                            }
+                        }
+                    }
+
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+                    newCreditFacilityView.setNewFeeDetailViewShowList(newFeeDetailViewShowList);
+                    newCreditFacilityView.setNewFeeDetailViewHiddenList(newFeeDetailViewHiddenList);
 
                     log.debug("standardPricingResponse.getPricingInterest() : {}", standardPricingResponse.getPricingInterest());
                     if (standardPricingResponse.getPricingInterest() != null && standardPricingResponse.getPricingInterest().size() > 0) {

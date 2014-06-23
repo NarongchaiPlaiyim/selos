@@ -21,6 +21,17 @@ public class SearchUserId implements Serializable
     @Column(name = "user_id")
     private String userid;
 
+    @Column(name = "workcase_prescreen_id")
+    private Long workCasePreScreenId;
+
+    public Long getWorkCasePreScreenId() {
+        return workCasePreScreenId;
+    }
+
+    public void setWorkCasePreScreenId(Long workCasePreScreenId) {
+        this.workCasePreScreenId = workCasePreScreenId;
+    }
+
     public Integer getWorkcaseid() {
         return workcaseid;
     }
