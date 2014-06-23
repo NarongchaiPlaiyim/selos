@@ -3,9 +3,11 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.InsuranceInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSummaryView;
@@ -13,13 +15,19 @@ import com.clevel.selos.model.view.insurance.InsuranceInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,136 +38,136 @@ import java.util.List;
 @ViewScoped
 @ManagedBean(name = "insuranceInfo")
 public class InsuranceInformation implements Serializable {
-    @Inject
-    @SELOS
-    Logger log;
+	private static final long serialVersionUID = 6866647827035876947L;
 
-    @Inject
-    @NormalMessage
-    Message msg;
+	@Inject
+	@SELOS
+	Logger log;
 
-    //*** View ***//
-    private InsuranceInfoSummaryView infoSummaryView;
-    private List<InsuranceInfoView> insuranceInfoViewList;
-    
-    private BasicInfoView basicInfoView;
-    
-    //New / New + Change
-    private int approvedType;
+	@Inject
+	@NormalMessage
+	Message msg;
 
-    //Total Premium
-    private BigDecimal total;
+	// *** View ***//
+	private InsuranceInfoSummaryView infoSummaryView;
+	private List<InsuranceInfoView> insuranceInfoViewList;
 
-    //*** Mode for check Add or Edit ***//
-    enum ModeForButton{ ADD, EDIT }
-    private ModeForButton modeForButton;
-    private int rowIndex;
+	private BasicInfoView basicInfoView;
 
-    //session
-    private long workCaseId;
-    
-    @Inject
-    private InsuranceInfoControl insuranceInfoControl;
-    
-    @Inject
+	// New / New + Change
+	private int approvedType;
+
+	// Total Premium
+	private BigDecimal total;
+
+	// *** Mode for check Add or Edit ***//
+	enum ModeForButton {
+		ADD, EDIT
+	}
+
+	private ModeForButton modeForButton;
+	private int rowIndex;
+
+	// session
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private User user;
+
+	@Inject
+	private InsuranceInfoControl insuranceInfoControl;
+
+	@Inject
 	private BasicInfoControl basicInfoControl;
 
-    @Inject
-    public InsuranceInformation() {
-    }
+	@Inject
+	private UserAccessControl userAccessControl;
 
-    @PostConstruct
-    public void onCreation(){
-        init();
-    }
+	@Inject
+	public InsuranceInformation() {
+	}
 
-    private void init(){
-        /*insuranceInfoViewList = new ArrayList<InsuranceInfoView>();
-        InsuranceInfoSectionView sectionModel = null;
-        List<InsuranceInfoSectionView> sectionModelList = null;
+	/*
+	 * Action
+	 */
+	@PostConstruct
+	private void init() {
 
-        insuranceInfoView = new InsuranceInfoView();
-        insuranceInfoView.setJobID("#001");
-        insuranceInfoView.setPremium(new BigDecimal(9999999));
+		HttpSession session = FacesUtil.getSession(true);
 
-        sectionModelList = new ArrayList<InsuranceInfoSectionView>();
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			user = (User) session.getAttribute("user");
+			log.info("init ::: workCaseId is " + workCaseId);
+		} else {
+			log.info("init ::: workCaseId is null.");
+			try {
+				FacesUtil.redirect("/site/inbox.jsf");
+				return;
+			} catch (Exception ex) {
+				log.info("Exception :: {}", ex);
+			}
+		}
+		_loadInitData();
+		this.infoSummaryView = this.insuranceInfoControl.getInsuranceInforSummaryView(workCaseId);
+		this.insuranceInfoViewList = this.insuranceInfoControl.getInsuranceInfo(workCaseId);
+		_loadFieldControl();
+		addition();
+	}
 
-        sectionModel = new InsuranceInfoSectionView();
-        sectionModel.getHeadColl().setTitleDeed("#0001");
-        sectionModelList.add(sectionModel);
-        sectionModel = new InsuranceInfoSectionView();
-        sectionModel.getHeadColl().setTitleDeed("#0002");
-        sectionModelList.add(sectionModel);
+	public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
 
-        insuranceInfoView.setSectionList(sectionModelList);
-        insuranceInfoView.setSectionList(sectionModelList);
+		String redirectPage = null;
+		log.info("preRender workCase Id = " + workCaseId);
+		if (workCaseId > 0) {
+			if (!userAccessControl.canUserAccess(Screen.InsuranceInfo, stepId)) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		try {
+			log.info("preRender " + redirectPage);
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath() + redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to " + redirectPage, e);
+		}
+	}
 
-        insuranceInfoViewList.add(insuranceInfoView);
+	public void addition() {
+		total = BigDecimal.ZERO;
+		for (InsuranceInfoView view : insuranceInfoViewList) {
+			total = total.add(view.getPremium());
+		}
+	}
 
-        insuranceInfoView = new InsuranceInfoView();
-        insuranceInfoView.setJobID("#002");
-        insuranceInfoView.setPremium(new BigDecimal(6666666));
+	public List<InsuranceInfoView> getInsuranceInfoViewList() {
+		return insuranceInfoViewList;
+	}
 
-        sectionModelList = new ArrayList<InsuranceInfoSectionView>();
+	public void setInsuranceInfoViewList(List<InsuranceInfoView> insuranceInfoViewList) {
+		this.insuranceInfoViewList = insuranceInfoViewList;
+	}
 
-        sectionModel = new InsuranceInfoSectionView();
-        sectionModel.getHeadColl().setTitleDeed("#0001");
-        sectionModelList.add(sectionModel);
-        sectionModel = new InsuranceInfoSectionView();
-        sectionModel.getHeadColl().setTitleDeed("#0002");
-        sectionModelList.add(sectionModel);
-
-        insuranceInfoView.setSectionList(sectionModelList);
-        insuranceInfoView.setSectionList(sectionModelList);
-
-        insuranceInfoViewList.add(insuranceInfoView);*/
-    	 HttpSession session = FacesUtil.getSession(true);
-
-         if(session.getAttribute("workCaseId") != null){
-        	 
-             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-             basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-             log.info("init ::: workCaseId is " + workCaseId);
-         }else{
-             log.info("init ::: workCaseId is null.");
-             try{
-                 FacesUtil.redirect("/site/insuranceInfo.jsf");
-                 return;
-             }catch (Exception ex){
-                 log.info("Exception :: {}",ex);
-             }
-         }
-        this.infoSummaryView = this.insuranceInfoControl.getInsuranceInforSummaryView(workCaseId);
-        this.insuranceInfoViewList = this.insuranceInfoControl.getInsuranceInfo(workCaseId);
-        _loadFieldControl(); 
-        addition();
-    }
-
-    public void addition(){
-        total = BigDecimal.ZERO;
-        for(InsuranceInfoView view : insuranceInfoViewList){
-            total = total.add(view.getPremium());
-        }
-    }
-
-    public List<InsuranceInfoView> getInsuranceInfoViewList() {
-        return insuranceInfoViewList;
-    }
-
-    public void setInsuranceInfoViewList(List<InsuranceInfoView> insuranceInfoViewList) {
-        this.insuranceInfoViewList = insuranceInfoViewList;
-    }
-
-    public ApproveType getApproveType() {
+	public ApproveType getApproveType() {
 		if (basicInfoView == null)
 			return ApproveType.NA;
 		else
 			return basicInfoView.getApproveType();
 	}
-    
-    public Date getLastUpdateDateTime() {
+
+	public Date getLastUpdateDateTime() {
 		return infoSummaryView.getModifyDate();
 	}
+
 	public String getLastUpdateBy() {
 		if (infoSummaryView.getModifyBy() != null)
 			return infoSummaryView.getModifyBy().getDisplayName();
@@ -167,36 +175,47 @@ public class InsuranceInformation implements Serializable {
 			return null;
 	}
 
-    public BigDecimal getTotal() {
-        return total;
-    }
+	public BigDecimal getTotal() {
+		return total;
+	}
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-    
-    public void onSave(){
-    	log.info("InsuranceInfo: onSave()");
-    	insuranceInfoControl.saveInsuranceInfo(insuranceInfoViewList, this.total, workCaseId);
-    	this.onCreation();
-    }
-    
-    
-    /*
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public void onSave() {
+		log.info("InsuranceInfo: onSave()");
+		insuranceInfoControl.saveInsuranceInfo(insuranceInfoViewList, this.total, workCaseId);
+		init();
+	}
+
+	private void _loadInitData() {
+		preRenderCheck = false;
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+
+	}
+
+	/*
 	 * Mandate and read-only
 	 */
-	@Inject MandatoryFieldsControl mandatoryFieldsControl;
+	@Inject
+	MandatoryFieldsControl mandatoryFieldsControl;
 	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
+
 	private void _loadFieldControl() {
-		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.InsuranceInfo);
-		fieldMap.clear();
-		
-		for (FieldsControlView field : fields) {
-			fieldMap.put(field.getFieldName(), field);
+		if (workCaseId > 0) {
+			List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.InsuranceInfo);
+			fieldMap.clear();
+
+			for (FieldsControlView field : fields) {
+				fieldMap.put(field.getFieldName(), field);
+			}
 		}
-		
-		
+
 	}
+
 	public String mandate(String name) {
 		boolean isMandate = FieldsControlView.DEFAULT_MANDATE;
 		FieldsControlView field = fieldMap.get(name);
@@ -204,11 +223,11 @@ public class InsuranceInformation implements Serializable {
 			isMandate = field.isMandate();
 		return isMandate ? " *" : "";
 	}
-	
+
 	public boolean isDisabled(String name) {
 		FieldsControlView field = fieldMap.get(name);
 		if (field == null)
 			return FieldsControlView.DEFAULT_READONLY;
 		return field.isReadOnly();
-	}	
+	}
 }
