@@ -24,7 +24,7 @@
 					<ui:include src="include/header_logo.xhtml" />
 					<!-- End Header Logo -->
 					<!-- Start Header Detail -->
-					<!-- ui:include src="include/header_detail.xhtml" /-->
+					<ui:include src="include/header_detail.xhtml" />
 					<!-- End Header Detail -->
 					<!-- Start Menu -->
 					<ui:include src="include/menubar.xhtml" />
@@ -619,7 +619,7 @@
 			<ui:param name="formId" value="frmConfirmDeleteDisbursementMc" />
 			<ui:param name="controller" value="#{disbursementInfo}" />
 			<ui:param name="action" value="onDeleteDisbursementMcList" />
-			<ui:param name="update" value=":disbursementForm" />
+			<ui:param name="update" value=":frmMain" />
 		</ui:include>
 
 		<ui:include src="dialog/confirmDeleteDlg.xhtml">
@@ -628,7 +628,7 @@
 			<ui:param name="formId" value="frmConfirmDeleteDisbursementDeposit" />
 			<ui:param name="controller" value="#{disbursementInfo}" />
 			<ui:param name="action" value="onDeleteDisbursementDepositList" />
-			<ui:param name="update" value=":disbursementForm" />
+			<ui:param name="update" value=":frmMain" />
 		</ui:include>
 
 		<ui:include src="dialog/confirmDeleteDlg.xhtml">
@@ -637,7 +637,7 @@
 			<ui:param name="formId" value="frmConfirmDeleteDisbursementbahtnet" />
 			<ui:param name="controller" value="#{disbursementInfo}" />
 			<ui:param name="action" value="onDeleteDisbursementBahtnetList" />
-			<ui:param name="update" value=":disbursementForm" />
+			<ui:param name="update" value=":frmMain" />
 		</ui:include>
 		<ui:include src="include/footer_outside_frmmain.xhtml" />
 	</h:body>

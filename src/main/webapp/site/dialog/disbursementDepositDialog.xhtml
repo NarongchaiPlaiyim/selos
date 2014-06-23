@@ -53,11 +53,11 @@
                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementDeposit}"
                                      styleClass="smaller"
-                                     update=":disbursementForm ,:disbursementDepositForm"
+                                     update=":frmMain ,:disbursementDepositForm"
                                      oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="depositDisbursementDialog.hide()"
-                                     update=":disbursementForm"/>
+                                     update=":frmMain"/>
                 </td>
             </tr>
         </table>
