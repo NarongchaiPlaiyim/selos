@@ -126,6 +126,7 @@
         <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
             <!--Print Report-->
             <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Print PDF')}"
                              actionListener="#{report.setNameReport()}"
                              oncomplete="printReportDlg.show()"
                              update=":frmMain:printReportPanel">
@@ -636,7 +637,7 @@
 <p:panel id="printReportPanel" styleClass="panel">
     <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="750" height="200" closable="false">
+              modal="true" width="1024" height="480" closable="false">
         <ui:include src="/site/dialog/printReportDialog.xhtml"/>
     </p:dialog>
 </p:panel>
