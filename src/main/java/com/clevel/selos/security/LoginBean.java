@@ -274,26 +274,16 @@ public class LoginBean {
         HttpSession httpSession = FacesUtil.getSession(false);
         try
         {
-            /*if(httpSession.getAttribute("isLocked")!=null)
-            {
-
-                String isLocked = (String) httpSession.getAttribute("isLocked");
-
-                if(isLocked.equalsIgnoreCase("true"))
-                {*/
             if((Long)httpSession.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)httpSession.getAttribute("wobNumber");
-                bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));
+                String queueName = (String)httpSession.getAttribute("queueName");
+                if(wobNumber.trim().length()!=0 || queueName.trim().length()!=0)
+                {
+                    bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));
+                }
             }
 
-               /* }
-                else
-                {
-                    httpSession.removeAttribute("isLocked");
-                }
-
-            }*/
         }
         catch (Exception e)
         {
@@ -311,6 +301,23 @@ public class LoginBean {
     public void signOut(){
         log.debug("signing out.");
         HttpSession httpSession = FacesUtil.getSession(false);
+
+        try
+        {
+            if((Long)httpSession.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && httpSession.getAttribute("wobNumber")!=null && httpSession.getAttribute("queueName")!=null && httpSession.getAttribute("fetchType")!=null)
+            {
+                String wobNumber = (String)httpSession.getAttribute("wobNumber");
+                String queueName = (String)httpSession.getAttribute("queueName");
+                if(wobNumber.trim().length()!=0 || queueName.trim().length()!=0)
+                {
+                    bpmInterfaceImpl.unLockCase((String)httpSession.getAttribute("queueName"),wobNumber,(Integer)httpSession.getAttribute("fetchType"));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error while unlocking case in queue : {}, wobNumber : {}",httpSession.getAttribute("queueName"), httpSession.getAttribute("wobNumber"), e);
+        }
         httpSession.setAttribute("user", null);
         httpSession.setAttribute("workCaseId", null);
         httpSession.setAttribute("workCasePreScreenId", null);
