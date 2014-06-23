@@ -31,6 +31,8 @@ public class StatusName implements Serializable
 
     String statusnamechange = null;
 
+    String searchType = null;
+
     @Inject
     StatusNameDescriptionDAO statusNameDescriptionDAO;
 
@@ -43,6 +45,14 @@ public class StatusName implements Serializable
 
     @Inject
     PESearch peSearch;
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
 
     public String getStatustype() {
         return statustype;
@@ -168,6 +178,8 @@ public class StatusName implements Serializable
 
             statusnamelist.clear();
 
+            searchType = "CompletedCases";
+
             try
             {
 
@@ -184,17 +196,10 @@ public class StatusName implements Serializable
                     statusnamelist.add(statusdescriptionname.get(0));
                     i++;
                 }
-                /*statusnamelist.add("CA Cancelled");
-                statusnamelist.add("CA Rejected by UW1");
-                statusnamelist.add("CA Approved by UW1");
-                statusnamelist.add("CA Rejected");
-                statusnamelist.add("CA Approved");
-                statusnamelist.add("CA Approved by UW2");
-                statusnamelist.add("CA Rejected by UW2");*/
             }
             catch(Exception exception)
             {
-
+                 log.error("Error while getting Completed status list : {}",exception);
             }
             finally {
 
@@ -204,7 +209,8 @@ public class StatusName implements Serializable
         }
         else if(statusnamechange.equalsIgnoreCase("InprocessCases"))
         {
-           statusnamelist.clear();
+            statusnamelist.clear();
+            searchType = "InProcessCases";
         }
 
         return statusnamelist;
