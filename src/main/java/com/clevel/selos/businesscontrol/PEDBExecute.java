@@ -1591,6 +1591,14 @@ public class PEDBExecute extends BusinessControl
                             SearchApplicationNumberList.add(applicationnumbervalue);
                         }
                     }
+                    else
+                    {
+                        Long userIdBasedWorkCasePreScreenId = searchUserId.getWorkCasePreScreenId();
+
+                        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.getWorkCasePreScreenById(userIdBasedWorkCasePreScreenId);
+
+                        SearchApplicationNumberList.add(workCasePrescreen.getAppNumber());
+                    }
 
                 }
             }

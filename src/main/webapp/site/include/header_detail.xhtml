@@ -65,6 +65,23 @@
                              update=":frmMain:reqApprDialogPanel">
                 <p:resetInput target=":frmMain:reqApprDialogPanel"/>
             </p:commandButton>
+            <!--<p:commandButton id="btnReqApprPreScreen2" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                             rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                             onclick="PF('confrmReqParallelAppr').show()"/>
+                <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.cancelCA')}" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confrmReqParallelAppr" global="false" showEffect="fade"
+                                 rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}">
+                    <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                     process="@this" widgetVar="reqParallelApprOkBtn"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
+                                     actionListener="#{headerController.onRequestParallelAppraisal()}"
+                                     oncomplete="confrmReqParallelAppr.hide();reqParallelApprOkBtn.enable();reqParallelApprCancelBtn.enable()"
+                                     onclick="PF('cancelCASaveBtn').disable();PF('cancelCACancelBtn').disable();"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
+                                     process="@this" widgetVar="reqParallelApprCancelBtn"
+                                     onclick="PF('confrmReqParallelAppr').hide()"/>
+                </p:confirmDialog>-->
             <!-- Cancel CA -->
             <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                              rendered="#{headerController.checkButton('Cancel CA')}" type="button"
