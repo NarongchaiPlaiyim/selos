@@ -27,6 +27,8 @@ public class ProductProgram implements Serializable {
     private boolean ba;
     @Column(name = "is_existing", columnDefinition="int default 0")
     private int isExisting;
+    @Column(name = "is_propose", columnDefinition="int default 0")
+    private int isPropose;
 
     public ProductProgram() {
     }
@@ -85,16 +87,25 @@ public class ProductProgram implements Serializable {
         isExisting = existing;
     }
 
+    public int getPropose() {
+        return isPropose;
+    }
+
+    public void setPropose(int propose) {
+        isPropose = propose;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("name", name)
-                .append("description", description)
-                .append("brmsCode", brmsCode)
-                .append("active", active)
-                .append("ba",ba)
-                .append("isExisting",isExisting)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("name", name).
+                append("description", description).
+                append("brmsCode", brmsCode).
+                append("active", active).
+                append("ba", ba).
+                append("isExisting", isExisting).
+                append("isPropose", isPropose).
+                toString();
     }
 }
