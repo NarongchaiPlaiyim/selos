@@ -1244,6 +1244,20 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    public void requestParallelAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
+        log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+
+        if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setParallelAppraisalFlag(1);
+            workCaseDAO.persist(workCase);
+        } else if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setParallelAppraisalFlag(1);
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        }
+    }
+
     public void updateTimeOfCheckCriteria(long workCaseId, long stepId){
         try{
             WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
