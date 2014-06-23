@@ -26,6 +26,16 @@ public class ProductGroupDAO extends GenericDAO<ProductGroup, Integer> {
         return list;
     }
 
+    public List<ProductGroup> findProposeProductGroup(){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("addProposeCredit", 1));
+        criteria.add(Restrictions.eq("active", 1));
+
+        List<ProductGroup> list = criteria.list();
+
+        return list;
+    }
+
     public String productGroupNameById(Integer id)
     {
         Criteria criteria = getSession().createCriteria(getEntityClass()).add(Restrictions.eq("id",id));

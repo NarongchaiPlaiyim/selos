@@ -122,6 +122,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     RelationCustomerDAO relationCustomerDAO;
     @Inject
     ProductGroupDAO productGroupDAO;
+    @Inject
+    CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -340,6 +342,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             if(!Util.isEmpty(customerInfoView.getTmbCustomerId())) {
+                //Remove all CustomerOblAccountInfo
+                List<CustomerOblAccountInfo> customerOblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customerInfoView.getId());
+                customerOblAccountInfoDAO.delete(customerOblAccountInfoList);
+                customerInfoView.setCustomerOblAccountInfoViewList(null);
                 CustomerInfoView tmpCustomerInfoView = customerInfoControl.getCustomerCreditInfo(customerInfoView);
                 Customer customer = new Customer();
                 customer = customerTransform.transformToModel(tmpCustomerInfoView, workCasePrescreen, null, getCurrentUser());
