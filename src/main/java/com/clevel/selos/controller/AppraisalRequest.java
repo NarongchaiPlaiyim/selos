@@ -289,7 +289,7 @@ public class AppraisalRequest extends BaseController {
         //todo :  2 0 21
         boolean result = true;
 
-        if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
+        if(appraisalContactDetailView.getCustomerName1().length() == 0 || appraisalContactDetailView.getContactNo1().length() == 0 ){
             contactFlag = true;
             result = false;
         } else {
