@@ -243,7 +243,7 @@ public class GenPDF extends ReportService implements Serializable {
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
-        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport());
+        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport(pathsub));
         map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
         map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
