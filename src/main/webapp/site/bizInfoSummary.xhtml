@@ -362,9 +362,9 @@
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
-                                                <p:ajax event="change" update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:establishFrom,:frmMain:referredExperience"
+                                                <p:ajax event="change" update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:establishFrom"
                                                         listener="#{bizInfoSummary.onChangeEstablishDate()}"/>
-                                                <p:ajax event="dateSelect" update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:establishFrom,:frmMain:referredExperience"
+                                                <p:ajax event="dateSelect" update=":frmMain:establishDate,:frmMain:referExpId,:frmMain:establishFrom"
                                                         listener="#{bizInfoSummary.onChangeEstablishDate()}"/>
                                             </clv:BECalendar>
                                         </td>
@@ -374,7 +374,7 @@
                                             <h:outputText value=" :"/>
                                         </td>
                                         <td>
-                                            <p:selectOneMenu  id="referredExperience" idsize="1"
+                                            <p:selectOneMenu  idsize="1"
                                                               disabled="#{bizInfoSummary.isDisabled('establishFrom')}"
                                                               required="#{bizInfoSummary.bizInfoSummaryView.establishDate != null and not empty param[addBizInfoSummary.clientId]}"
                                                               value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"

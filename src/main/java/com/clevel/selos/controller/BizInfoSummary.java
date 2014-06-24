@@ -436,6 +436,7 @@ public class BizInfoSummary extends BaseController {
             setMandateValue("establishFrom",true);
         } else {
             setMandateValue("establishFrom",false);
+            referredExperienceList = new ArrayList<ReferredExperience>();
         }
     }
 
