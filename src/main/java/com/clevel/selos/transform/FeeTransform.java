@@ -7,6 +7,7 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.exception.BRMSInterfaceException;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.PricingFee;
+import com.clevel.selos.model.FeeLevel;
 import com.clevel.selos.model.db.master.FeePaymentMethod;
 import com.clevel.selos.model.db.master.FeeType;
 import com.clevel.selos.model.db.working.FeeDetail;
@@ -24,7 +25,9 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FeeTransform extends Transform{
 

@@ -78,6 +78,9 @@ public class NewCreditFacilityView implements Serializable {
     private int singleLendingLimit;
 
     private List<NewFeeDetailView> newFeeDetailViewList;
+    private List<NewFeeDetailView> newFeeDetailViewShowList;
+    private List<NewFeeDetailView> newFeeDetailViewHiddenList;
+
     private List<NewCreditDetailView> newCreditDetailViewList;
     private List<NewCollateralView> newCollateralViewList;
     private List<NewGuarantorDetailView> newGuarantorDetailViewList;
@@ -151,6 +154,9 @@ public class NewCreditFacilityView implements Serializable {
         this.reasonForReduction = "";
 
         this.newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+        this.newFeeDetailViewShowList = new ArrayList<NewFeeDetailView>();
+        this.newFeeDetailViewHiddenList = new ArrayList<NewFeeDetailView>();
+
         this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         this.newCollateralViewList = new ArrayList<NewCollateralView>();
         this.newGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
@@ -722,6 +728,22 @@ public class NewCreditFacilityView implements Serializable {
 
     public void setNewConditionViewDelList(List<NewConditionDetailView> newConditionViewDelList) {
         this.newConditionViewDelList = newConditionViewDelList;
+    }
+
+    public List<NewFeeDetailView> getNewFeeDetailViewShowList() {
+        return newFeeDetailViewShowList;
+    }
+
+    public void setNewFeeDetailViewShowList(List<NewFeeDetailView> newFeeDetailViewShowList) {
+        this.newFeeDetailViewShowList = newFeeDetailViewShowList;
+    }
+
+    public List<NewFeeDetailView> getNewFeeDetailViewHiddenList() {
+        return newFeeDetailViewHiddenList;
+    }
+
+    public void setNewFeeDetailViewHiddenList(List<NewFeeDetailView> newFeeDetailViewHiddenList) {
+        this.newFeeDetailViewHiddenList = newFeeDetailViewHiddenList;
     }
 
     @Override

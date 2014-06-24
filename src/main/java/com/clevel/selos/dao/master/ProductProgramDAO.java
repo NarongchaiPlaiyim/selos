@@ -50,4 +50,17 @@ public class ProductProgramDAO extends GenericDAO<ProductProgram, Integer> {
         }
         return null;
     }
+
+    public List<ProductProgram> findProposeProductProgram(){
+        try {
+            Criteria criteria = getSession().createCriteria(getEntityClass())
+                    .add(Restrictions.eq("isPropose", 1));
+            criteria.addOrder(Order.asc("name"));
+            List<ProductProgram> productProgramList = criteria.list();
+            return productProgramList;
+        } catch (Exception e){
+            log.error("findProposeProductProgram - Exception :: {}", e);
+        }
+        return null;
+    }
 }

@@ -100,4 +100,18 @@ public class ProductControl extends BusinessControl{
         return new ProductFormulaView();
     }
 
+    public List<PrdGroupToPrdProgramView> getProductProgramForPropose() {
+        List<PrdGroupToPrdProgramView> prdGroupToPrdProgramViewList = new ArrayList<PrdGroupToPrdProgramView>();
+        List<ProductProgram> productProgramList = productProgramDAO.findProposeProductProgram();
+        if (productProgramList != null) {
+            PrdGroupToPrdProgramView prdGroupToPrdProgramView;
+            for (ProductProgram productProgram : productProgramList) {
+                prdGroupToPrdProgramView = new PrdGroupToPrdProgramView();
+                prdGroupToPrdProgramView.setProductGroupView(new ProductGroupView());
+                prdGroupToPrdProgramView.setProductProgramView(productTransform.transformToView(productProgram));
+                prdGroupToPrdProgramViewList.add(prdGroupToPrdProgramView);
+            }
+        }
+        return prdGroupToPrdProgramViewList;
+    }
 }

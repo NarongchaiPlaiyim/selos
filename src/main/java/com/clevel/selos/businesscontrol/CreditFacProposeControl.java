@@ -168,10 +168,28 @@ public class CreditFacProposeControl extends BusinessControl {
                 List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
                 if (feeDetailList.size() > 0) {
                     log.debug("feeDetailList size :: {}", feeDetailList.size());
-                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
-                    log.debug("feeDetailViewList : {}", feeDetailViewList);
-                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
+//                    List<FeeDetailView> feeDetailViewList = feeTransform.transformToView(feeDetailList);
+//                    log.debug("feeDetailViewList : {}", feeDetailViewList);
+//                    List<NewFeeDetailView> newFeeDetailViewList = transFormNewFeeDetailViewList(feeDetailViewList);
+                    List<NewFeeDetailView> newFeeDetailViewList = transformProposeFeeToViewList(feeDetailList);
+                    List<NewFeeDetailView> newFeeDetailViewShowList = new ArrayList<NewFeeDetailView>();
+                    List<NewFeeDetailView> newFeeDetailViewHiddenList = new ArrayList<NewFeeDetailView>();
+
+                    Map<String, NewFeeDetailView> proposeFeeDetailViewMap = new HashMap<String, NewFeeDetailView>();
+                    if(!Util.isNull(newFeeDetailViewList) && !Util.isZero(newFeeDetailViewList.size())) {
+                        for(NewFeeDetailView proFeeDetView : newFeeDetailViewList) {
+                            if(proposeFeeDetailViewMap.containsKey(proFeeDetView.getProductProgram())){
+                                newFeeDetailViewHiddenList.add(proFeeDetView);
+                            } else {
+                                proposeFeeDetailViewMap.put(proFeeDetView.getProductProgram(), proFeeDetView);
+                                newFeeDetailViewShowList.add(proFeeDetView);
+                            }
+                        }
+                    }
+
                     newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
+                    newCreditFacilityView.setNewFeeDetailViewShowList(newFeeDetailViewShowList);
+                    newCreditFacilityView.setNewFeeDetailViewHiddenList(newFeeDetailViewHiddenList);
                 }
 
                 List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility, ProposeType.P);
@@ -1231,11 +1249,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
 
         //remove all fee
-//        List<FeeDetail> fdl = feeDetailDAO.findAllByWorkCaseId(workCaseId);
-//        feeDetailDAO.delete(fdl);
-
-        //--- Save to NewFeeCredit
-        if(deleteCreditIdList != null && deleteCreditIdList.size() > 0){
+        /*if(deleteCreditIdList != null && deleteCreditIdList.size() > 0){
             for(Long l : deleteCreditIdList){
                 if(newCreditFacilityView.getNewFeeDetailViewList() != null && newCreditFacilityView.getNewFeeDetailViewList().size() > 0){
                     for (Iterator<NewFeeDetailView> it = newCreditFacilityView.getNewFeeDetailViewList().iterator(); it.hasNext(); ) {
@@ -1246,7 +1260,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     }
                 }
             }
-        }
+        }*/
 
         if (Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newCreditFacilityView.getNewFeeDetailViewList()).size() : {}", newCreditFacilityView.getNewFeeDetailViewList().size());
@@ -1393,6 +1407,12 @@ public class CreditFacProposeControl extends BusinessControl {
         log.debug("deleteGuarantorIdList: {}", deleteGuarantorIdList.size());
         log.debug("deleteConditionIdList: {}", deleteConditionIdList.size());
 
+        //Remove All Fee
+        List<FeeDetail> feeDetailList = feeDetailDAO.findAllByWorkCaseId(workCaseId);
+        if(!Util.isNull(feeDetailList) && !Util.isZero(feeDetailList.size())) {
+            feeDetailDAO.delete(feeDetailList);
+        }
+
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
             for (Long id : deleteCollIdList) {
@@ -1446,5 +1466,69 @@ public class CreditFacProposeControl extends BusinessControl {
             }
             newCreditDetailDAO.delete(deleteCreditDetailList);
         }
+    }
+
+    public List<NewFeeDetailView> transformProposeFeeToViewList(List<FeeDetail> proposeFeeDetailList) {
+        List<NewFeeDetailView> proposeFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+        if (!Util.isNull(proposeFeeDetailList)) {
+            Map<Long, NewFeeDetailView> newFeeDetailViewMap = new HashMap<Long, NewFeeDetailView>();
+            NewFeeDetailView proposeFeeDetailView;
+            for(FeeDetail proposeFeeDetail : proposeFeeDetailList){
+                FeeDetailView feeDetailView = transformFeeDetailToView(proposeFeeDetail);
+                if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
+                    if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
+                        proposeFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
+                    } else {
+                        proposeFeeDetailView = new NewFeeDetailView();
+                        newFeeDetailViewMap.put(feeDetailView.getCreditDetailViewId(), proposeFeeDetailView);
+                    }
+
+                    NewCreditDetail proposeCreditInfo = proposeFeeDetail.getNewCreditDetail();
+                    if (!Util.isNull(proposeCreditInfo)) {
+                        proposeFeeDetailView.setNewCreditDetailView(newCreditDetailTransform.transformToView(proposeCreditInfo));
+                        if (!Util.isNull(proposeCreditInfo.getProductProgram())) {
+                            proposeFeeDetailView.setProductProgram(proposeCreditInfo.getProductProgram().getName());
+                        }
+                        if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                            proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                        } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                            proposeFeeDetailView.setPrepaymentFee(feeDetailView);
+                        } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                            proposeFeeDetailView.setCancellationFee(feeDetailView);
+                        } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                            proposeFeeDetailView.setExtensionFee(feeDetailView);
+                        } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                            proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                        }
+                    }
+                }
+            }
+
+            if (newFeeDetailViewMap.size() > 0) {
+                Iterator it = newFeeDetailViewMap.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry pairs = (Map.Entry) it.next();
+                    proposeFeeDetailViewList.add((NewFeeDetailView) pairs.getValue());
+                    it.remove(); // avoids a ConcurrentModificationException
+                }
+            }
+        }
+        return proposeFeeDetailViewList;
+    }
+
+    public FeeDetailView transformFeeDetailToView(FeeDetail proposeFeeDetail){
+        FeeDetailView feeDetailView = new FeeDetailView();
+        feeDetailView.setId(proposeFeeDetail.getId());
+        feeDetailView.setFeeYear(proposeFeeDetail.getFeeYear());
+        feeDetailView.setPercentFee(proposeFeeDetail.getPercentFee());
+        feeDetailView.setCreditDetailViewId(proposeFeeDetail.getNewCreditDetail().getId());
+        feeDetailView.setDescription(proposeFeeDetail.getDescription());
+        feeDetailView.setFeeLevel(proposeFeeDetail.getFeeLevel());
+        feeDetailView.setFeePaymentMethodView(feeTransform.getFeePaymentMethodView(proposeFeeDetail.getPaymentMethod().getBrmsCode()));
+        feeDetailView.setFeeTypeView(feeTransform.getFeeTypeView(proposeFeeDetail.getFeeType().getBrmsCode()));
+        feeDetailView.setPercentFeeAfter(proposeFeeDetail.getPercentFeeAfter());
+        feeDetailView.setFeeAmount(proposeFeeDetail.getAmount());
+
+        return feeDetailView;
     }
 }

@@ -26,6 +26,7 @@ public class AppraisalViewReport extends ReportModel {
     private String appointmentRemark;
 
     private String zoneLocation;
+    private  String path;
 
     public AppraisalViewReport() {
     }
@@ -149,6 +150,14 @@ public class AppraisalViewReport extends ReportModel {
 
     public void setZoneLocation(String zoneLocation) {
         this.zoneLocation = zoneLocation;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override
