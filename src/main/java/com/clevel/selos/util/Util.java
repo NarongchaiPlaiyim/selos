@@ -1,5 +1,6 @@
 package com.clevel.selos.util;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,10 @@ public class Util implements Serializable {
         return createDateStringTH(date, "dd/MM/yyyy HH:mm");
     }
 
+
+    public static String getFileNameForISA() {
+        return createDateString(DateTime.now().toDate(), "yyyyyMMddHHmmss");
+    }
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = null;

@@ -29,6 +29,21 @@
 
                     </p:inputTextarea>
 
+                    <p:fileUpload fileUploadListener="#{TestNCRS.fileUploadHandle(event)}"
+                                mode="simple"
+                                showButtons="false"
+                                allowTypes="/(\.|\/)(csv)$/"
+                                sizeLimit="5000000"
+                                update="@form"
+                                />
+                    <p:fileUpload fileUploadListener="#{TestNCRS.handleFileUpload}"
+                                allowTypes="/(\.|\/)(csv)$/"
+                                sizeLimit="5000000"
+                            />
+                    <p:commandButton value="Submit" ajax="false"
+                                     update="@form"
+                                     action="#{TestNCRS.onClickUpload()}"/>
+
 
                 </h:panelGrid>
             </p:panel>

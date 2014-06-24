@@ -6,38 +6,29 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class CSVModel implements Serializable {
+    private String command;
     private String userId;
     private String userName;
     private String active;
-    private  String role;
-    private  String department;
-    private  String division;
-    private  String region;
-    private  String team;
-    private  String title;
-    private  String status;
+    private String role;
+    private String department;
+    private String division;
+    private String region;
+    private String team;
+    private String title;
+    private String status;
 
     public CSVModel() {
 
     }
 
-    public CSVModel(String userId, String userName, String active, String role, String department, String division, String region, String team, String title, String status) {
-        this.userId = userId;
-        this.userName = userName;
-        this.active = active;
-        this.role = role;
-        this.department = department;
-        this.division = division;
-        this.region = region;
-        this.team = team;
-        this.title = title;
-        this.status = status;
+    public String getCommand() {
+        return command;
     }
 
-    public CSVModel createRecord(String userId, String userName, String active, String role, String department, String division, String region, String team, String title, String status) {
-        return new CSVModel(userId, userName, active, role, department, division, region, team, title, status);
+    public void setCommand(String command) {
+        this.command = command;
     }
-
 
     public String getUserId() {
         return userId;
@@ -122,6 +113,7 @@ public class CSVModel implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("command", command)
                 .append("userId", userId)
                 .append("userName", userName)
                 .append("active", active)

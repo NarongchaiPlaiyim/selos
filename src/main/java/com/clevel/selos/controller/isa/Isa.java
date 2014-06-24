@@ -14,6 +14,8 @@ import com.clevel.selos.system.audit.IsaAuditor;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -40,22 +42,8 @@ public class Isa implements Serializable {
     private IsaBusinessControl isaBusinessControl;
     @Inject
     private IsaAuditor isaAuditor;
-
-    public Isa() {
-
-    }
-
     private User[] selectUserDetail;
-
-    public User[] getSelectUserDetail() {
-        return selectUserDetail;
-    }
-
-    public void setSelectUserDetail(User[] selectUserDetail) {
-        this.selectUserDetail = selectUserDetail;
-    }
-
-    private List<User> userDetail;
+    private List<User> userList;
     private List<Role> userRoleList;
     private List<UserDepartment> userDepartmentList;
     private List<UserDivision> userDivisionList;
@@ -63,17 +51,13 @@ public class Isa implements Serializable {
     private List<UserTeam> userTeamList;
     private List<UserTitle> userTitleList;
     private List<UserZone> userZoneList;
-
-
     private IsaManageUserView isaManageUserView;
     private IsaManageUserView isaUserEditView;
     private IsaSearchView isaSearchView;
-
     private int userSize;
     private String id;
     private int active;
     private boolean readUserId;
-
     //dialogMessage
     private String messageHeader;
     private String message;
@@ -81,6 +65,11 @@ public class Isa implements Serializable {
     private enum ModeForButton {ADD,EDIT,DELETE};
     private ModeForButton modeForButton;
     private boolean complete;
+    private enum Result{Success};
+
+    public Isa() {
+
+    }
 
     @PostConstruct
     public void onCreate() {
@@ -135,12 +124,12 @@ public class Isa implements Serializable {
     }
     private void onLoadUser(){
         log.debug("-- onLoadUser()");
-        userDetail = isaBusinessControl.getAllUser();
-        userSize = userDetail.size();
+        userList = isaBusinessControl.getAllUser();
+        userSize = userList.size();
     }
 
     public void onChangeRole(){
-        log.debug("-- onChangeRole");
+        log.debug("-- onChangeRole()");
         if(!Util.isNull(isaSearchView.getRoleId().getId()) && !Util.isZero(isaSearchView.getRoleId().getId())){
             userTeamList = getUserTeamByRoleId(isaSearchView.getRoleId().getId());
         } else {
@@ -160,21 +149,27 @@ public class Isa implements Serializable {
         messageHeader = "Export to CSV";
         try {
             isaBusinessControl.exportProcess();
-            message = "Success.";
+            message = Result.Success.toString();
         } catch (Exception e){
             message = e.getMessage();
         }
         context.execute("msgBoxSystemMessageDlg.show()");
     }
 
-    public void onSubmitImportCSV(){
+    public void onSubmitImportCSV(FileUploadEvent event){
         log.debug("-- onSubmitImportCSV()");
         RequestContext context = RequestContext.getCurrentInstance();
+        UploadedFile file = null;
+        String fileName = null;
         complete = true;
         messageHeader = "Import to model";
         try {
-            isaBusinessControl.importProcess();
-            message = "Success.";
+            file = event.getFile();
+            fileName = file.getFileName();
+            if(!Util.isNull(fileName) && !Util.isZero(fileName.length())){
+                isaBusinessControl.importProcess(file.getInputstream());
+                message = Result.Success.toString();
+            }
         } catch (Exception e){
             message = e.getMessage();
         }
@@ -241,22 +236,6 @@ public class Isa implements Serializable {
 
     }
 
-
-//    public void getSelectUserDetailList() {
-//        try {
-////            userRoleList = roleDAO.findAll();
-//            userDepartmentList = userDepartmentDAO.findAll();
-//            userDivisionList = userDivisionDAO.findAll();
-//            userRegionList = userRegionDAO.findAll();
-//            userTeamList = userTeamDAO.findAll();   //
-//            userTitleList = userTitleDAO.findAll();
-//            userZoneList = userZoneDAO.findAll();  //--
-//        } catch (Exception e) {
-//            log.error("",e);
-//        }
-//
-//    }
-
     public void onSubmitCreateNewUser(){
         log.debug("-- onSubmitCreateNewUser()");
         modeForButton = ModeForButton.ADD;
@@ -266,56 +245,53 @@ public class Isa implements Serializable {
 
 
 
-    public void onOpenEditForm() {
-        log.debug("------------------ {}",id);
-
+    public void onClickEdit() {
+        log.debug("-- onClickEdit()");
+        modeForButton = ModeForButton.EDIT;
         RequestContext context = RequestContext.getCurrentInstance();
+        messageHeader = "Edit Form.";
         try {
-
-            isaManageUserView = isaBusinessControl.SelectUserById(id);
-            isaManageUserView.setReadOnlyUserId(true);
-            if (isaManageUserView != null) {
-
-                //set BeforeAudit
-                isaUserEditView=isaBusinessControl.SelectUserById(id);
-                modeForButton = ModeForButton.EDIT;
-//                getSelectUserDetailList();
-
+            isaManageUserView = isaBusinessControl.getUserById(id);
+            if (!Util.isNull(isaManageUserView)){
+                isaManageUserView.setReadOnlyUserId(true);
+                //to set this BeforeAudit Created by Win. I don't know why?
+                isaUserEditView=isaManageUserView;
+                message = Result.Success.toString();
+                onLoadUser();
             } else {
-                messageHeader = "Edit Form.";
-                message = "Open edit form failed. Cause : User is not found!";
-                context.execute("msgBoxSystemMessageDlg.show()");
+                message = id + " not found!";
             }
+            context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception e) {
-            messageHeader = "Edit Form.";
             if (e.getCause() != null) {
                 message = "Open edit form failed. Cause : " + e.getCause().getMessage();
             } else {
                 message = "Open edit form failed. Cause : " + e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
-
         }
     }
 
-    public void onDelete() {
-        log.debug("------------------ ",id);
+    public void onClickDelete() {
+        log.debug("-- onClickDelete()");
         complete = true;
-
+        RequestContext context = RequestContext.getCurrentInstance();
+        messageHeader = "Delete User.";
         try {
-            isaBusinessControl.deleteUser(id);
+            isaBusinessControl.deleteUserById(id);
             isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.SUCCESS,"");
             onLoadUser();
+            message = Result.Success.toString();
+            context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception e) {
             complete = false;
-            messageHeader = "Delete User.";
             if (e.getCause() != null) {
                 message = "Delete User failed. Cause : " + e.getCause().getMessage();
             } else {
                 message = "Delete User failed. Cause : " + e.getMessage();
             }
             isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.EXCEPTION,message);
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            context.execute("msgBoxSystemMessageDlg.show()");
         }
 
     }
@@ -408,8 +384,8 @@ public class Isa implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         try {
             log.debug("{}",isaSearchView);
-            userDetail = isaBusinessControl.searchUser(isaSearchView);
-            userSize = userDetail.size();
+            userList = isaBusinessControl.searchUser(isaSearchView);
+            userSize = userList.size();
         } catch (Exception e) {
             messageHeader = "Search User.";
             if (e.getCause() != null) {
@@ -422,7 +398,7 @@ public class Isa implements Serializable {
     }
 
     public void onEditUserActive() {
-        log.debug("onEditUserActive()");
+        log.debug("-- onEditUserActive()");
         RequestContext context = RequestContext.getCurrentInstance();
         try {
 
@@ -432,6 +408,16 @@ public class Isa implements Serializable {
 //            } else {
 //                context.execute("confirmDeleteUserListDlg.show()");
 //            }
+
+
+            if(!Util.isNull(selectUserDetail) && !Util.isZero(selectUserDetail.length)){
+
+            } else {
+
+            }
+
+
+
             StringBuilder builder=new StringBuilder("");
             for(User list:selectUserDetail){
                 builder.append(list.getId()); builder.append(",");
@@ -480,17 +466,20 @@ public class Isa implements Serializable {
         return  isaUserDetailView;
     }
 
-
-
-
-
-
-    public List<User> getUserDetail() {
-        return userDetail;
+    public User[] getSelectUserDetail() {
+        return selectUserDetail;
     }
 
-    public void setUserDetail(List<User> userDetail) {
-        this.userDetail = userDetail;
+    public void setSelectUserDetail(User[] selectUserDetail) {
+        this.selectUserDetail = selectUserDetail;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
     public List<Role> getUserRoleList() {

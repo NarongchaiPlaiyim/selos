@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol.util.stp;
 
+import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
 import com.clevel.selos.integration.SELOS;
 import oracle.jdbc.OracleTypes;
 import org.hibernate.Session;
@@ -45,6 +46,37 @@ public class STPExecutor implements Serializable {
         }
         return applicationNumber;
     }
+
+    public String createFromCSV(final CSVModel csv){
+        log.debug("-- createFromCSV(UserId : {})", csv.getUserId());
+        String result = "";
+        return result;
+    }
+
+    public String updateFromCSV(final CSVModel csv){
+        log.debug("-- createFromCSV(UserId : {})", csv.getUserId());
+        String result = "";
+        return result;
+    }
+
+    public String deleteFromCSV(final CSVModel csv){
+        log.debug("-- createFromCSV(UserId : {})", csv.getUserId());
+        final String[] result = {""};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                CallableStatement callStmt = connection.prepareCall("call SLOS.DELETEUSERBYISA( ? )");
+                callStmt.setString(1, csv.getUserId());
+                callStmt.registerOutParameter(2, OracleTypes.VARCHAR);
+                callStmt.executeUpdate();
+                result[0] =(String)callStmt.getObject(2);
+            }
+        });
+        return result[0];
+    }
+
+
+
 
     public String addUserFromFile( final Object... params)throws ServiceException { //todo : change this , AS ( To use Hibernate )
        final String result[]=new String[1];

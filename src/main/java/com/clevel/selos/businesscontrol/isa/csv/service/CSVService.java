@@ -1,11 +1,11 @@
 package com.clevel.selos.businesscontrol.isa.csv.service;
 
 import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
+import com.clevel.selos.businesscontrol.isa.csv.model.ResultModel;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
-import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
@@ -30,16 +30,19 @@ public class CSVService {
 
     }
 
-    public void CSVImport(final String fullPath) throws Exception{
+    public List<CSVModel> CSVImport(final InputStream inputStream) throws Exception{
         log.debug("-- CSVImport()");
         ICsvBeanReader beanReader = null;
         CSVModel customerModel = null;
+        List<CSVModel> csvModelList = null;
         try {
-            beanReader = new CsvBeanReader(new InputStreamReader(new FileInputStream(fullPath), UTF_8), CsvPreference.STANDARD_PREFERENCE);
+            beanReader = new CsvBeanReader(new InputStreamReader(inputStream, UTF_8), CsvPreference.STANDARD_PREFERENCE);
             final String[] header = beanReader.getHeader(true);
+            csvModelList = new ArrayList<CSVModel>();
             while( (customerModel = beanReader.read(CSVModel.class, header)) != null ) {
-                log.debug("-- Model[{}]", customerModel.toString());
+                csvModelList.add(customerModel);
             }
+            return csvModelList;
         } catch (Exception e) {
             log.error("", e);
             throw e;
@@ -55,6 +58,7 @@ public class CSVService {
     }
 
     public void CSVExport(final String fullPath, final List<User> userList) throws Exception{
+        log.debug("-- CSVExport(fullPath : {} List<User>.size() {})", fullPath, userList.size());
         ICsvBeanWriter beanWriter = null;
         try {
             File fileDir = new File(fullPath);
@@ -68,6 +72,34 @@ public class CSVService {
             List<CSVModel> csvModelList = covertModelToCSV(userList);
             for (final CSVModel csvModel : csvModelList) {
                 beanWriter.write(csvModel, header, getProcessors());
+            }
+            beanWriter.flush();
+        } catch (Exception e) {
+            log.error("", e);
+            throw e;
+        } finally {
+            if(!Util.isNull(beanWriter)){
+                try {
+                    beanWriter.close();
+                } catch (Exception e) {
+                    log.error("",e);
+                }
+            }
+        }
+    }
+
+    public void CSVExport(final String fullPath, final List<ResultModel> resultModelList, final String test) throws Exception{
+        log.debug("-- CSVExport(fullPath : {} List<ResultModel>.size() {})", fullPath, resultModelList.size());
+        ICsvBeanWriter beanWriter = null;
+        try {
+            File fileDir = new File(fullPath);
+            Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), UTF_8));
+            beanWriter = new CsvBeanWriter(out, CsvPreference.STANDARD_PREFERENCE);
+            final String[] header = new String[] {
+                    "command", "id", "result"};
+            beanWriter.writeHeader(header);
+            for (final ResultModel resultModel : resultModelList) {
+                beanWriter.write(resultModel, header);
             }
             beanWriter.flush();
         } catch (Exception e) {
@@ -134,30 +166,18 @@ public class CSVService {
         }
         return csvModelList;
     }
-
-    private List<User> covertCSVToModel(final List<CSVModel> csvModelList){
-        List<User> userList = null;
-        if(!Util.isZero(csvModelList.size())){
-
-        }
-        return userList;
-    }
-
-
-
     private CellProcessor[] getProcessors() {
         final CellProcessor[] processors = new CellProcessor[] {
                 new UniqueHashCode(), // userId (must be unique)
-                new NotNull(), // userName
-                new NotNull(), // active
-                new NotNull(), // role
-                new NotNull(), // department
-                new NotNull(), // division
-                new NotNull(), // region
-                new NotNull(), // team
-                new NotNull(), // active
-                new NotNull(), // title
-                new NotNull(), // status
+                null, // userName
+                null, // active
+                null, // role
+                null, // department
+                null, // division
+                null, // region
+                null, // team
+                null, // title
+                null, // status
         };
         return processors;
     }

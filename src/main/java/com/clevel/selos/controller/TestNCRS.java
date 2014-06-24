@@ -30,8 +30,11 @@ import com.clevel.selos.model.view.MandateDocView;
 import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.Util;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -114,12 +117,20 @@ public class TestNCRS implements Serializable {
     //Call ECM
     private String caNumberECM = "04621809124082010060";
 
+    private UploadedFile uploadedFile;
+
     @Inject
     private UserTeamDAO userTeamDAO;
     private int roleId;
 
     @Inject
     public TestNCRS() {
+
+    }
+
+    @PostConstruct
+    public void init(){
+
     }
 
     public void onClickNCRS() {
@@ -345,6 +356,40 @@ public class TestNCRS implements Serializable {
             log.debug("", e);
             result = e.getMessage();
         }
+    }
+
+    public void fileUploadHandle(final FileUploadEvent event) {
+        log.debug("-- fileUploadHandle()");
+        String fileName = null;
+        try {
+            uploadedFile = event.getFile();
+            fileName = uploadedFile.getFileName();
+            log.debug("-- FileName : {}", fileName);
+            result = fileName;
+            log.debug("-- Result : {}", result);
+        } catch (Exception e) {
+            log.debug("", e);
+            result = e.getMessage();
+        }
+    }
+
+    public void onClickUpload(){
+        log.debug("-- onClickUpload()");
+        try {
+            result = "Test : " + uploadedFile.getFileName();
+            log.debug("-- Result : {}", uploadedFile.getFileName());
+        } catch (Exception e) {
+            log.debug("", e);
+            result = e.getMessage();
+        }
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        log.debug("--asdlfjl;askdjf;lkasd");
+        UploadedFile file = event.getFile();
+        String fileName = file.getFileName();
+        long fileSize = file.getSize();
+        //Save myInputStream in a directory of your choice and store that path in DB
     }
 
     public void onClickECMCAPShareUpdate(){
@@ -650,5 +695,13 @@ public class TestNCRS implements Serializable {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
     }
 }

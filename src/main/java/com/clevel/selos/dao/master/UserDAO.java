@@ -45,6 +45,11 @@ public class UserDAO extends GenericDAO<User,String> {
 
     }
 
+    public boolean isExistId(final String id){
+        log.debug("-- isExistId(id : {})", id);
+        return isRecordExist(Restrictions.eq("id", id));
+    }
+
     public List<User> findByUserStatusNORMAL(){
         log.debug("-- findByUserStatusNORMAL()");
         List<User> userList = null;
