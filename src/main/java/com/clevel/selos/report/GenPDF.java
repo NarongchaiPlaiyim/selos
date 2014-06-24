@@ -113,23 +113,18 @@ public class GenPDF extends ReportService implements Serializable {
 
             StringBuilder nameOpShect =new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
-            log.debug("--nameOpShect",nameOpShect);
 
             StringBuilder nameExSum =new StringBuilder();
             nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
-            log.debug("--nameExSum",nameExSum);
 
             StringBuilder nameRejectLetter =new StringBuilder();
             nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
-            log.debug("--nameRejectLetter",nameRejectLetter);
 
             StringBuilder nameAppraisal =new StringBuilder();
-            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AppraisalAppointment.pdf");
-            log.debug("--nameAppraisal",nameAppraisal);
+            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest.pdf");
 
             StringBuilder nameOfferLetter =new StringBuilder();
             nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
-            log.debug("--nameOfferLetter",nameOfferLetter);
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
@@ -248,7 +243,7 @@ public class GenPDF extends ReportService implements Serializable {
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
-        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport());
+        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport(pathsub));
         map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
         map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 

@@ -128,7 +128,7 @@ Date/Time]]></text>
 	<detail>
 		<band height="14" splitType="Prevent">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="93b20286-0bd6-4b57-824f-b91561b9b75b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="16" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="93b20286-0bd6-4b57-824f-b91561b9b75b" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="16" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
@@ -136,14 +136,14 @@ Date/Time]]></text>
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a225490d-d1d9-4a6b-a2e6-d98c6270ba97" style="detail" stretchType="RelativeToBandHeight" x="16" y="0" width="53" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="a225490d-d1d9-4a6b-a2e6-d98c6270ba97" style="detail" stretchType="RelativeToBandHeight" x="16" y="0" width="53" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{callingDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1c3f1d6d-99b7-4ffc-a328-b1fa1652b9c4" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="69" y="0" width="77" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="1c3f1d6d-99b7-4ffc-a328-b1fa1652b9c4" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="69" y="0" width="77" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
@@ -152,7 +152,7 @@ Date/Time]]></text>
 "Cannot Contact" : " "]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e7273aec-9847-4888-a239-3ce21138f639" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="146" y="0" width="74" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="e7273aec-9847-4888-a239-3ce21138f639" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="146" y="0" width="74" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
@@ -161,47 +161,39 @@ Date/Time]]></text>
 "Not Accept" : " "]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7a8a4497-007b-42bc-a44c-9ef9ec191b60" style="detail" stretchType="RelativeToBandHeight" x="220" y="0" width="57" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="7a8a4497-007b-42bc-a44c-9ef9ec191b60" style="detail" stretchType="RelativeToBandHeight" x="220" y="0" width="57" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nextCallingDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="63e260ca-0101-48c3-918d-88b511cb6697" style="detail" stretchType="RelativeToBandHeight" x="277" y="0" width="65" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="63e260ca-0101-48c3-918d-88b511cb6697" style="detail" stretchType="RelativeToBandHeight" x="277" y="0" width="65" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{reasonDescription}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="2d766014-a480-42c8-ac37-c609bf65b46d" style="detail" stretchType="RelativeToBandHeight" x="342" y="0" width="102" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="2d766014-a480-42c8-ac37-c609bf65b46d" style="detail" stretchType="RelativeToBandHeight" x="342" y="0" width="102" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remark}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="00569166-d06b-4b9f-8fcb-7b6c7aa7cd8d" style="detail" stretchType="RelativeToBandHeight" x="444" y="0" width="68" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="00569166-d06b-4b9f-8fcb-7b6c7aa7cd8d" style="detail" stretchType="RelativeToBandHeight" x="444" y="0" width="68" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{statusDescription}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="d0ba6b0a-102d-4326-b495-d66bdc8d2b8f" style="detail" stretchType="RelativeToBandHeight" x="512" y="0" width="43" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="d0ba6b0a-102d-4326-b495-d66bdc8d2b8f" style="detail" stretchType="RelativeToBandHeight" x="512" y="0" width="43" height="14"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{displayName}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="add8f405-f233-41c6-93f7-d3ad30c6d6f8" style="detail" mode="Transparent" x="0" y="0" width="555" height="14" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Left">
-					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
-"No records found." : $F{count}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

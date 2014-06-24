@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AppraisalAppointment" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8626b90-09bf-4ee1-8d9e-eb95ce1ef9db">
-	<property name="ireport.zoom" value="1.6105100000000023"/>
+	<property name="ireport.zoom" value="1.4641000000000022"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="278"/>
+	<property name="ireport.y" value="124"/>
 	<style name="text" vAlign="Middle" isBlankWhenNull="true" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<pen lineColor="#000000"/>
@@ -34,6 +34,9 @@
 	<parameter name="fillAppraisalContactDetailViewReport" class="com.clevel.selos.model.report.AppraisalContactDetailViewReport"/>
 	<parameter name="fillContactRecordDetailViewReport" class="java.util.Collection"/>
 	<parameter name="path" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:/ProjectSELOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
+	</parameter>
 	<title>
 		<band height="21" splitType="Stretch">
 			<staticText>
@@ -203,14 +206,10 @@
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getDueDate()]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement uuid="d0eb5564-1f9a-4354-a004-c14ab78279f2" x="89" y="29" width="11" height="14"/>
-				<imageExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppraisalType() == 0 ?
-$P{path} + "true.jpg" : $P{path} + "false.jpg"]]></imageExpression>
-			</image>
-			<image>
 				<reportElement uuid="233df5b2-d472-4708-b20f-eb3fda5e024c" x="152" y="29" width="11" height="14"/>
-				<imageExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppraisalType() == 1 ?
-$P{path} + "true.jpg" : $P{path} + "false.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[($P{fillAppraisalDetailReport}.getAppraisalType()) == 1 ?
+$P{path} + "true.jpg" :
+$P{path} + "false.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement uuid="85ba2da8-5fdf-48fa-ae57-23898524002c" x="100" y="24" width="45" height="20"/>
@@ -229,6 +228,12 @@ $P{path} + "true.jpg" : $P{path} + "false.jpg"]]></imageExpression>
 				<text><![CDATA[External
 ]]></text>
 			</staticText>
+			<image>
+				<reportElement uuid="88a2f68d-3cbb-4ed7-a9f8-ba53eaf47a3d" x="86" y="29" width="11" height="14"/>
+				<imageExpression><![CDATA[($P{fillAppraisalDetailReport}.getAppraisalType()) == 0 ?
+$P{path} + "true.jpg" :
+$P{path} + "false.jpg"]]></imageExpression>
+			</image>
 		</band>
 		<band height="59">
 			<subreport>
