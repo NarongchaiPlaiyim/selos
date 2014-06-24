@@ -434,9 +434,11 @@ public class BizInfoSummary extends BaseController {
     public void onChangeEstablishDate(){
         if(bizInfoSummaryView.getEstablishDate() != null ) {
             setMandateValue("establishFrom",true);
+            referredExperienceList = referredExperienceDAO.findAll();
         } else {
             setMandateValue("establishFrom",false);
             referredExperienceList = new ArrayList<ReferredExperience>();
+            referredExperienceList = referredExperienceDAO.findAll();
         }
     }
 
