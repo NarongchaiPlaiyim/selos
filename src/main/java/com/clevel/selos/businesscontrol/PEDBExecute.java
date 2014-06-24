@@ -82,6 +82,22 @@ public class PEDBExecute extends BusinessControl
     String appointmentYear;
 
     @Inject
+    @Config(name = "interface.pe.checker.queuename")
+    String deCheckerQName;
+
+    @Inject
+    @Config(name = "interface.pe.maker.queuename")
+    String deMakerQName;
+
+    @Inject
+    @Config(name = "interface.pe.checker.viewname")
+    String deCheckerViewName;
+
+    @Inject
+    @Config(name = "interface.pe.maker.viewname")
+    String deMakerViewName;
+
+    @Inject
     private UserDAO userDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -484,6 +500,16 @@ public class PEDBExecute extends BusinessControl
                 fetchType = BPMConstants.FETCH_TYPE_QUEUE;
             }
 
+            if(inboxName.contains(deCheckerViewName))
+            {
+                inboxName = deCheckerQName;
+            }
+
+            else if(inboxName.contains(deMakerViewName))
+            {
+                inboxName = deMakerQName;
+            }
+
             log.info("inboxname : {}",inboxName);
 
             PreparedStatement statement = conn.prepareStatement(sqlquery);
@@ -612,6 +638,16 @@ public class PEDBExecute extends BusinessControl
             int fetchType = BPMConstants.FETCH_TYPE_ROSTER;
 
             String queueName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
+
+            if(queueName.contains(deCheckerViewName))
+            {
+                queueName = deCheckerQName;
+            }
+
+            else if(queueName.contains(deMakerViewName))
+            {
+                queueName = deMakerQName;
+            }
 
             while (rs.next()) {
 
@@ -1409,6 +1445,16 @@ public class PEDBExecute extends BusinessControl
 
             tableName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
 
+            if(tableName.contains(deCheckerViewName))
+            {
+                tableName = deCheckerQName;
+            }
+
+            else if(tableName.contains(deMakerViewName))
+            {
+                tableName = deMakerQName;
+            }
+
             int fetchType;
 
             if(tableName.contains("ROSTER"))
@@ -1502,7 +1548,6 @@ public class PEDBExecute extends BusinessControl
 
                 if(rs.getObject("SLAEndTime1")!=null)
                 {
-
 
                     peInbox.setSlaenddate((rs.getObject("SLAEndTime1").toString().trim()));
 
@@ -2002,6 +2047,16 @@ public class PEDBExecute extends BusinessControl
                         inboxName = inboxName.substring(inboxName.indexOf("_")+1,inboxName.length());
                     }
 
+                    if(inboxName.contains(deCheckerViewName))
+                    {
+                        inboxName = deCheckerQName;
+                    }
+
+                    else if(inboxName.contains(deMakerViewName))
+                    {
+                        inboxName = deMakerQName;
+                    }
+
                     while (rs.next())
                     {
                         PEInbox peInbox = new PEInbox();
@@ -2066,7 +2121,6 @@ public class PEDBExecute extends BusinessControl
 
                     }
 
-
                 }
             }
             rs.close();
@@ -2105,12 +2159,22 @@ public class PEDBExecute extends BusinessControl
             statement = conn.prepareStatement(sqlpequery);
             rs = statement.executeQuery();
 
+            String inboxName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
+
+            if(inboxName.contains(deCheckerViewName))
+            {
+                inboxName = deCheckerQName;
+            }
+
+            else if(inboxName.contains(deMakerViewName))
+            {
+                inboxName = deMakerQName;
+            }
+
             while (rs.next()) {
                 peRoster = new PERoster();
 
                 peRoster.setFetchType(BPMConstants.FETCH_TYPE_ROSTER);
-
-                String inboxName = tableName.substring(tableName.indexOf("_")+1,tableName.length());
 
                 peRoster.setQueuename(inboxName);
 
