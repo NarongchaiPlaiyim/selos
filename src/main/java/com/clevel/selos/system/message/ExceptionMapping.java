@@ -50,6 +50,7 @@ public interface ExceptionMapping {
     public static final String COMS_CONNECT_ERROR = "051";
     public static final String COMS_GETDATA_ERROR = "052";
     public static final String COMS_DATA_NOT_FOUND = "053";
+    public static final String COMS_WORKCASE_NOT_FOUND = "054";
 
     //RM
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
@@ -64,6 +65,7 @@ public interface ExceptionMapping {
     public static final String NCB_HTTPHOSTCONNECTEXCEPTION = "603";
     public static final String NCB_CONNECTTIMEOUTEXCEPTION = "604";
     public static final String NCB_CONNECT_ERROR = "605";
+    public static final String NCB_WORKCASE_NOT_FOUND = "606";
 
     //DB Inteface
     public static final String INVALID_SYSTEM_PARAM = "701";

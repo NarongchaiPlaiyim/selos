@@ -104,6 +104,8 @@ public class WelcomePage implements Serializable {
     COMSInterface coms;
     @Inject
     BPMInterface bpmInterface;
+    @Inject
+    NCBInterface ncbInterface;
 
     @Inject
     EndPoint endPointImp;
@@ -450,6 +452,26 @@ public class WelcomePage implements Serializable {
         BusinessDescription businessDescription = businessDescriptionDAO.findById(selectedBusinessDescription.getId());
         log.debug("{}", businessDescription);
         selectedText = "DESCRIPTION: " + businessDescription.getName();
+    }
+
+    public void testCOMSAgreement() {
+        try {
+            log.debug("testCOMSAgreement.");
+            coms.generateAgreement("10001",2020);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testRejectLetter() {
+        try {
+            log.debug("testRejectLetter.");
+            ncbInterface.generateRejectedLetter("10001",2020);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
     }
 
     @Inject
