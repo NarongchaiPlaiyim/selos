@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.coms;
 
+import com.clevel.selos.dao.ext.coms.AgreementAppIndexDAO;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMS;
 import com.clevel.selos.integration.coms.db.CollateralDecisionDetail;
@@ -12,17 +15,23 @@ import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.integration.coms.module.AddressTypeMapping;
 import com.clevel.selos.integration.coms.module.DBExecute;
+import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+@Stateless
 public class COMSService implements Serializable {
     @Inject
     @COMS
@@ -33,6 +42,15 @@ public class COMSService implements Serializable {
 
     @Inject
     AddressTypeMapping addressTypeMapping;
+
+    @Inject
+    AgreementAppIndexDAO agreementAppIndexDAO;
+
+    @Inject
+    WorkCaseDAO workCaseDAO;
+
+    @Inject
+    UserDAO userDAO;
 
     @Inject
     @ExceptionMessage
@@ -213,5 +231,32 @@ public class COMSService implements Serializable {
             throw new Exception(e.getMessage());
         }
         return appraisalData;
+    }
+
+    public boolean extractAgreementAppIndex(String userId, long workCaseId) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(workCase!=null && workCase.getId()>0){
+            AgreementAppIndex agreementAppIndex = agreementAppIndexDAO.findByWorkCaseId(workCaseId);
+            User user = userDAO.findUserByID(userId);
+            if(agreementAppIndex!=null){
+                //update extract type
+                agreementAppIndex.setExtractType("U");
+                agreementAppIndex.setModifyBy(user);
+                agreementAppIndex.setModifyDate(new Date());
+            } else {
+                //insert new
+                agreementAppIndex = new AgreementAppIndex();
+                agreementAppIndex.setExtractType("N");
+                agreementAppIndex.setExtractDate(new Date());
+                agreementAppIndex.setModifyBy(user);
+                agreementAppIndex.setModifyDate(new Date());
+                agreementAppIndex.setAppNumber(workCase.getAppNumber());
+                agreementAppIndex.setWorkCase(workCase);
+            }
+            agreementAppIndexDAO.save(agreementAppIndex);
+            return true;
+        } else {
+            throw new COMSInterfaceException(new Exception(msg.get(ExceptionMapping.COMS_WORKCASE_NOT_FOUND, workCaseId+"")),ExceptionMapping.COMS_WORKCASE_NOT_FOUND, msg.get(ExceptionMapping.COMS_WORKCASE_NOT_FOUND, workCaseId+""));
+        }
     }
 }

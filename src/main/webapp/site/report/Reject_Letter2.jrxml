@@ -2,15 +2,31 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reject_Letter2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17d95c3e-3985-40bb-98c1-ddcbcc9398a9">
 	<property name="ireport.zoom" value="1.1000000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="288"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="fillRejectLetter" class="com.clevel.selos.model.report.RejectLetterReport"/>
 	<parameter name="fillAllNameReject" class="java.util.List"/>
 	<parameter name="path" class="java.lang.String"/>
 	<pageHeader>
-		<band height="69" splitType="Stretch">
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b2079486-b223-45c9-b163-5425f51e5203" x="0" y="56" width="555" height="31"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4aec7739-66c2-4d77-858f-c920f37be981" x="0" y="87" width="555" height="26"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
+			</staticText>
 			<image>
-				<reportElement uuid="87b86a9b-84d5-47b6-bea0-9824764de03a" x="1" y="0" width="529" height="69"/>
-				<imageExpression><![CDATA[$P{path}+"07_tmb.jpg"]]></imageExpression>
+				<reportElement uuid="32b0a648-04bc-4bb0-b233-655c6e53a8df" x="0" y="0" width="204" height="56"/>
+				<imageExpression><![CDATA["C:\\Users\\pakorn\\Desktop\\tmb.gif"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>

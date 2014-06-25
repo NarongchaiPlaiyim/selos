@@ -2,13 +2,9 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.dao.working.AddressDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.Address;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.report.RejectLetterReport;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -32,6 +28,8 @@ public class PDFRejectLetter implements Serializable {
     Logger log;
 
     long workCaseId;
+    private long workCasePreScreenId;
+
     @Inject
     @NormalMessage
     Message msg;
@@ -44,30 +42,64 @@ public class PDFRejectLetter implements Serializable {
     private AddressDAO addressDAO;
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    @Inject
+    private UWRuleResultDetailDAO uwRuleResultDetailDAO;
 
     private List<CustomerInfoView> customerInfoView;
     private AppHeaderView appHeaderView;
+    private List<UWRuleResultDetail> uwRuleResultDetails;
+
+    private UWRuleResultSummary uwRuleResultSummary;
 
     WorkCase workCase;
 
+    private final String SPACE = " ";
+
     public PDFRejectLetter() {
+    }
+
+    public boolean checkSession(HttpSession session){
+        boolean checkSession = false;
+        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
+                (Long)session.getAttribute("stepId") != 0){
+            checkSession = true;
+        }
+
+        return checkSession;
     }
 
     public void init(){
         log.debug("--on init()");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.debug("workCaseId. {}",workCaseId);
-        }else{
-            log.debug("workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+        if(checkSession(session)){
+            if((Long)session.getAttribute("workCaseId") != 0){
+                workCaseId = (Long)session.getAttribute("workCaseId");
+            } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
+                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+            } else {
+                log.debug("workCaseId is null.");
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                }catch (Exception ex){
+                    log.error("Exception :: {}",ex);
+                }
             }
         }
+
+//        if(session.getAttribute("workCaseId") != null){
+//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+//            log.debug("workCaseId. {}",workCaseId);
+//        }else{
+//            log.debug("workCaseId is null.");
+//            try{
+//                FacesUtil.redirect("/site/inbox.jsf");
+//            }catch (Exception ex){
+//                log.error("Exception :: {}",ex);
+//            }
+//        }
 
         if (!Util.isNull(workCaseId)){
             customerInfoView = new ArrayList<CustomerInfoView>();
@@ -76,13 +108,46 @@ public class PDFRejectLetter implements Serializable {
         }
     }
 
+//    public static void main(String[] args) {
+//         System.out.println(new RejectLetterReport());
+//    }
+
+    public RejectLetterReport typeReport(){
+        log.debug("--On typeReport.");
+        uwRuleResultSummary = new UWRuleResultSummary();
+        if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+        } else if (!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+        }
+        log.debug("--uwRuleResultSummary. {}",uwRuleResultSummary);
+
+        uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
+        uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
+        log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
+
+        RejectLetterReport rejectLetterReport = new RejectLetterReport();
+        for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
+            if (!Util.isNull(ruleResultDetail.getRejectGroup())){
+                if (ruleResultDetail.getRejectGroup().getId() == 1){
+                    rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
+                } else if (ruleResultDetail.getRejectGroup().getId() == 2){
+                    rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+                } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+                    rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
+                }
+            } else {
+                log.debug("--RejectGroup is Null.");
+            }
+        }
+        log.debug("--rejectLetterReport. {}",rejectLetterReport);
+
+        return rejectLetterReport;
+    }
+
     public List<RejectLetterReport> fillAllNameReject (){
         log.debug("fillAllNameReject. {}");
-//        init();
         List<RejectLetterReport> reportList = new ArrayList<RejectLetterReport>();
-        StringBuilder stringName = new StringBuilder();
-
-        int i = 0;
         HttpSession session = FacesUtil.getSession(true);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
@@ -104,21 +169,17 @@ public class PDFRejectLetter implements Serializable {
     }
 
     public RejectLetterReport fillRejectLetter(){
-//        init();
         log.debug("fillRejectLetter. {}");
         RejectLetterReport letterReport = new RejectLetterReport();
         String date = Util.createDateTh(new Date());
-        log.debug("--date. {}",date);
         String[] spDate = date.split("/");
         int month = Integer.valueOf(spDate[1]);
-        String setMonth = null;
+        String setMonth;
         StringBuilder addressTH = null;
 
         if(!Util.isNull(workCaseId)){
             log.debug("--customerInfoView. {}",customerInfoView.size());
-
             letterReport.setAppNumber(workCase.getAppNumber());
-            log.debug("--AppNumber. {}",workCase.getAppNumber());
 
             for (CustomerInfoView view : customerInfoView){
                 Customer customer = customerDAO.findById(view.getId());
@@ -127,35 +188,33 @@ public class PDFRejectLetter implements Serializable {
                 if(!Util.isNull(customer.getAddressesList()) && customer.getAddressesList().size() > 0){
                     addressTH = new StringBuilder();
                     Address allAddress = customer.getAddressesList().get(0);
-                    addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(" "))
-                        .append((allAddress.getAddressNo() != null ? allAddress.getAddressNo() : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.addressMoo").concat(" "))
-                        .append((allAddress.getMoo() != null ? allAddress.getMoo() : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(" "))
-                        .append((allAddress.getBuilding() != null ? allAddress.getBuilding() : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.addressStreet").concat(" "))
-                        .append((allAddress.getRoad() != null ? allAddress.getRoad() : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.subdistrict").concat(" "))
-                        .append((allAddress.getSubDistrict() != null ? allAddress.getSubDistrict().getCode() != 0 ? allAddress.getSubDistrict().getName() : "-" : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.district").concat(" "))
-                        .append((allAddress.getDistrict() != null ? allAddress.getDistrict().getId() != 0 ? allAddress.getDistrict().getName() : "-" : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.province").concat(" "))
-                        .append((allAddress.getProvince() != null ? allAddress.getProvince().getCode() != 0 ? allAddress.getProvince().getName() : "-" : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.postCode").concat(" "))
-                        .append((allAddress.getPostalCode() != null ? allAddress.getPostalCode() : "-").concat(" "))
-                        .append(msg.get("app.bizInfoSummary.label.country").concat(" "))
-                        .append((allAddress.getCountry() != null ? allAddress.getCountry().getId() != 0 ? allAddress.getCountry().getName() : "-" : "-").concat(" "));
+                    addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(SPACE))
+                        .append((allAddress.getAddressNo() != null ? allAddress.getAddressNo() : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.addressMoo").concat(SPACE))
+                        .append((allAddress.getMoo() != null ? allAddress.getMoo() : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(SPACE))
+                        .append((allAddress.getBuilding() != null ? allAddress.getBuilding() : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.addressStreet").concat(SPACE))
+                        .append((allAddress.getRoad() != null ? allAddress.getRoad() : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.subdistrict").concat(SPACE))
+                        .append((allAddress.getSubDistrict() != null ? allAddress.getSubDistrict().getCode() != 0 ? allAddress.getSubDistrict().getName() : "-" : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.district").concat(SPACE))
+                        .append((allAddress.getDistrict() != null ? allAddress.getDistrict().getId() != 0 ? allAddress.getDistrict().getName() : "-" : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.province").concat(SPACE))
+                        .append((allAddress.getProvince() != null ? allAddress.getProvince().getCode() != 0 ? allAddress.getProvince().getName() : "-" : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.postCode").concat(SPACE))
+                        .append((allAddress.getPostalCode() != null ? allAddress.getPostalCode() : "-").concat(SPACE))
+                        .append(msg.get("app.bizInfoSummary.label.country").concat(SPACE))
+                        .append((allAddress.getCountry() != null ? allAddress.getCountry().getId() != 0 ? allAddress.getCountry().getName() : "-" : "-").concat(SPACE));
                     break;
                 } else {
-                    addressTH = addressTH.append("");
+                    addressTH = addressTH.append(SPACE);
                 }
             }
             if(!Util.isNull(addressTH.toString())){
                 letterReport.setAddress(addressTH.toString());
-                log.debug("--addressTH. {}",addressTH.toString());
             } else {
-                letterReport.setAddress("");
-                log.debug("--addressTH. {}","");
+                letterReport.setAddress(SPACE);
             }
 
 
@@ -172,18 +231,18 @@ public class PDFRejectLetter implements Serializable {
                 case 10: setMonth = msg.get("app.report.month.october"); break;
                 case 11: setMonth = msg.get("app.report.month.november"); break;
                 case 12: setMonth = msg.get("app.report.month.december"); break;
-                default:setMonth = "";
+                default:setMonth = SPACE;
 
             }
 
             StringBuilder stringBuilder =new StringBuilder();
             if(!Util.isNull(spDate) && spDate.length == 3){
-                stringBuilder = stringBuilder.append(spDate[0]).append(" ");
-                stringBuilder = stringBuilder.append(setMonth).append(" ");
+                stringBuilder = stringBuilder.append(spDate[0]).append(SPACE);
+                stringBuilder = stringBuilder.append(setMonth).append(SPACE);
                 stringBuilder =  stringBuilder.append(spDate[2]);
                 letterReport.setDate(stringBuilder.toString());
             } else {
-                letterReport.setDate("");
+                letterReport.setDate(SPACE);
             }
             log.debug("--stringBuilder. {}",stringBuilder.toString());
         }

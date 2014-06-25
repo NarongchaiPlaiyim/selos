@@ -52,4 +52,23 @@ public class COMSInterfaceImpl implements COMSInterface, Serializable {
         }
         return appraisalDataResult;
     }
+
+    public void generateAgreement(String userId, long workCaseId){
+        //TODO: add audit log
+        try{
+            comsService.extractAgreementAppIndex(userId, workCaseId);
+        } catch (COMSInterfaceException e){
+            log.error("Exception while generate COMS agreement data!", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while generate COMS agreement data!", e);
+            String exceptionMessage = msg.get(ExceptionMapping.COMS_EXCEPTION);
+            if(!Util.isEmpty(e.getMessage()) && !e.getMessage().trim().equalsIgnoreCase("null")){
+                exceptionMessage = e.getMessage();
+            }
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_EXCEPTION, exceptionMessage);
+        }
+    }
+
+
 }
