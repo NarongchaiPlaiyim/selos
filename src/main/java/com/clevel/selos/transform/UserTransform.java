@@ -44,14 +44,58 @@ public class UserTransform extends Transform {
             model.setPhoneExt(view.getPhoneExt());
             model.setPhoneNumber(view.getPhoneNumber());
             model.setEmailAddress(view.getEmailAddress());
-            model.setRole(view.getRole());
-            model.setDepartment(view.getUserDepartment());
-            model.setDivision(view.getUserDivision());
-            model.setRegion(view.getUserRegion());
-            model.setTeam(view.getUserTeam());
-            model.setTitle(view.getUserTitle());
-            model.setZone(view.getUserZone());
-            model.setActive(view.getActive());
+            if(!Util.isNull(view.getRole())){
+                model.setRole(view.getRole());
+            }
+            if(!Util.isNull(view.getUserTeam())){
+                model.setTeam(view.getUserTeam());
+            }
+            if(!Util.isNull(view.getUserDepartment())){
+                model.setDepartment(view.getUserDepartment());
+            }
+            if(!Util.isNull(view.getUserDivision())){
+                model.setDivision(view.getUserDivision());
+            }
+            if(!Util.isNull(view.getUserRegion())){
+                model.setRegion(view.getUserRegion());
+            }
+            if(!Util.isNull(view.getUserTitle())){
+                model.setTitle(view.getUserTitle());
+            }
+            model.setUserStatus(view.getUserStatus());
+        }
+        return model;
+    }
+
+    public User transformToNewModel(final IsaManageUserView view){
+        log.debug("-- transformToModel()");
+        User model = null;
+        if(!Util.isNull(view)){
+            model = new User();
+            model.setId(view.getId());
+            model.setUserName(view.getUsername());
+            model.setBuCode(view.getBuCode());
+            model.setPhoneExt(view.getPhoneExt());
+            model.setPhoneNumber(view.getPhoneNumber());
+            model.setEmailAddress(view.getEmailAddress());
+            if(!Util.isNull(view.getRole())){
+                model.setRole(view.getRole());
+            }
+            if(!Util.isNull(view.getUserTeam())){
+                model.setTeam(view.getUserTeam());
+            }
+            if(!Util.isNull(view.getUserDepartment())){
+                model.setDepartment(view.getUserDepartment());
+            }
+            if(!Util.isNull(view.getUserDivision())){
+                model.setDivision(view.getUserDivision());
+            }
+            if(!Util.isNull(view.getUserRegion())){
+                model.setRegion(view.getUserRegion());
+            }
+            if(!Util.isNull(view.getUserTitle())){
+                model.setTitle(view.getUserTitle());
+            }
             model.setUserStatus(view.getUserStatus());
         }
         return model;
@@ -60,6 +104,7 @@ public class UserTransform extends Transform {
     public IsaManageUserView transformToISAView(final User model){
         log.debug("-- transformToISAView()");
         IsaManageUserView view = null;
+        log.debug("-- {}", model.toString());
         if(!Util.isNull(model)){
             view = new IsaManageUserView();
             view.setId(model.getId());
@@ -105,6 +150,7 @@ public class UserTransform extends Transform {
             } else {
                 view.setUserZone(new UserZone());
             }
+            log.debug("-- View {}", view.toString());
         }
         return view;
     }

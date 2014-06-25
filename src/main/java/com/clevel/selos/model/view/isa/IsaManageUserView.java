@@ -33,6 +33,7 @@ public class IsaManageUserView implements Serializable {
 
     private void init(){
         id = "";
+        active = 1;
         userDepartment = new UserDepartment();
         role = new Role();
         userDivision = new UserDivision();

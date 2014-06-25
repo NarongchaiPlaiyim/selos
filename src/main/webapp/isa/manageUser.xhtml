@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="เลขที่ผู้ใช้:" />
+                                <p:outputLabel value="User ID" />
                             </td>
                             <td>
                                 <p:inputText value="#{isa.isaSearchView.id}" style="width: 250px; min-width: 250px; max-width: 250px;" />
@@ -47,7 +47,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="ชื่อผู้ใช้:"/>
+                                <p:outputLabel value="User Name"/>
                             </td>
                             <td>
                                 <p:inputText value="#{isa.isaSearchView.username}" style="width: 250px; min-width: 250px; max-width: 250px;" />
@@ -55,7 +55,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="Role:"/>
+                                <p:outputLabel value="Role"/>
                             </td>
                             <td>
                                 <p:selectOneMenu value="#{isa.isaSearchView.roleId.id}"
@@ -71,7 +71,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="Team:"/>
+                                <p:outputLabel value="Team"/>
                             </td>
                             <td>
                                 <p:selectOneMenu id="userTeam" value="#{isa.isaSearchView.teamId.id}"
@@ -87,7 +87,7 @@
 
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="Department:"/>
+                                <p:outputLabel value="Department"/>
                             </td>
                             <td>
                                 <p:selectOneMenu value="#{isa.isaSearchView.departmentId.id}"
@@ -102,7 +102,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="Division:"/>
+                                <p:outputLabel value="Division"/>
                             </td>
                             <td>
                                 <p:selectOneMenu value="#{isa.isaSearchView.divisionId.id}"
@@ -117,7 +117,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="Region:"/>
+                                <p:outputLabel value="Region"/>
                             </td>
                             <td>
                                 <p:selectOneMenu value="#{isa.isaSearchView.regionId.id}"
@@ -132,7 +132,7 @@
                         </tr>
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="Title:"/>
+                                <p:outputLabel value="Title"/>
                             </td>
                             <td>
                                 <p:selectOneMenu value="#{isa.isaSearchView.titleId.id}"
@@ -148,21 +148,17 @@
                         <tr>
                             <td/>
                             <td>
-                                <p:commandButton value="ค้นหา"
+                                <p:commandButton value="Search"
                                                  styleClass="medium"
                                                  actionListener="#{isa.onSubmitSearchUser()}"
                                                  update=":userTableData,:msgBoxSystemMessagePanel"/>
-
-                                <p:commandButton value="Import"
-                                                 styleClass="medium"
-                                                 actionListener="#{isa.onSubmitImportCSV()}"/>
                             </td>
                         </tr>
 
 
                         <tr>
                             <td class="title" >
-                                <p:outputLabel value="TotalUser:"/>
+                                <p:outputLabel value="Total User"/>
                             </td>
                             <td>
                                 <p:outputLabel value="#{isa.userSize}"/>
@@ -176,12 +172,12 @@
                                                  oncomplete="PF('manageUserDlg').show()"
                                                  update=":manageDialogForm">
                                     <p:resetInput target=":manageDialogForm"/>
-                                                 </p:commandButton>
+                                </p:commandButton>
 
-                                <p:commandButton value="เปิดการใช้งาน" oncomplete="confirmEditUserActiveDlg.show()">
+                                <p:commandButton value="Active" oncomplete="confirmEditUserActiveDlg.show()">
                                     <f:setPropertyActionListener value="1" target="#{isa.active}"/>
                                 </p:commandButton>
-                                <p:commandButton value="ปิดการใช้งาน" oncomplete="confirmEditUserActiveDlg.show()">
+                                <p:commandButton value="Inactive" oncomplete="confirmEditUserActiveDlg.show()">
                                     <f:setPropertyActionListener value="0" target="#{isa.active}"/>
                                 </p:commandButton>
 
@@ -217,7 +213,7 @@
                                 <h:outputText value="#{user.region.name}"/>
                             </p:column>
                             <p:column headerText="Team">
-                                <h:outputText value="#{user.team.name}"/>
+                                <h:outputText value="#{user.team.team_name}"/>
                             </p:column>
                             <p:column headerText="Title">
                                 <h:outputText value="#{user.title.name}"/>
@@ -293,7 +289,7 @@
             <ui:param name="name" value="confirmDeleteUserListDlg"/>
             <ui:param name="formId" value="frmConfirmDeleteUserList"/>
             <ui:param name="controller" value="#{isa}"/>
-            <ui:param name="action" value="deleteUserList"/>
+            <ui:param name="action" value="onDeleteUserList"/>
             <ui:param name="update" value=":userTableData"/>
         </ui:include>
 

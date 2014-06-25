@@ -30,6 +30,10 @@ public class CSVModel implements Serializable {
         this.command = command;
     }
 
+    public void set﻿command(String command) {
+        this.command = command;
+    }
+
     public String getUserId() {
         return userId;
     }

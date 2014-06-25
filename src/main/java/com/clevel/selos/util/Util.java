@@ -357,11 +357,12 @@ public class Util implements Serializable {
     }
 
     public static<T> boolean isNull(T object){
-        if(object != null){
-            return !"null".equalsIgnoreCase(object.toString().trim()) ? false : true;
-        } else {
-            return true;
-        }
+//        if(object != null){
+//            return !"null".equalsIgnoreCase(object.toString().trim()) ? false : true;
+//        } else {
+//            return true;
+//        }
+        return object == null;
     }
 
     public static boolean isZero(int id){

@@ -38,7 +38,6 @@ public class UserDAO extends GenericDAO<User,String> {
     Long workCaseId;
 
     long workCasePrescreenId;
-    int roleid;
 
     @Inject
     public UserDAO() {
@@ -48,6 +47,20 @@ public class UserDAO extends GenericDAO<User,String> {
     public boolean isExistId(final String id){
         log.debug("-- isExistId(id : {})", id);
         return isRecordExist(Restrictions.eq("id", id));
+    }
+
+    public boolean isExistUserName(final String userName){
+        log.debug("-- isExistUserName(userName : {})", userName);
+        return isRecordExist(Restrictions.eq("userName", userName));
+    }
+
+    public void updateActiveOrInactive(final User user, final int value){
+        log.debug("-- updateActiveOrInactive(User.id[{}], value : {})",user.getId(), value);
+        if(!Util.isNull(user)){
+            user.setActive(value);
+            persist(user);
+            log.debug("-- User.id[{}] updated", user.getId());
+        }
     }
 
     public List<User> findByUserStatusNORMAL(){
@@ -105,9 +118,6 @@ public class UserDAO extends GenericDAO<User,String> {
         }
         if (!Util.isZero(isaSearchView.getTitleId().getId())) {
             criteria.add(Restrictions.eq("title", isaSearchView.getTitleId()));
-        }
-        if (!Util.isZero(isaSearchView.getZoneId().getId())) {
-            criteria.add(Restrictions.eq("zone", isaSearchView.getZoneId()));
         }
         userList = Util.safetyList((List<User>) criteria.list());
         log.debug("-- UserList.size()[{}]", userList.size());

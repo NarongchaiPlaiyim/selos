@@ -1,7 +1,11 @@
 package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
+import com.clevel.selos.businesscontrol.isa.csv.command.CommandType;
+import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
+import com.clevel.selos.businesscontrol.isa.csv.model.ResultModel;
 import com.clevel.selos.businesscontrol.isa.csv.service.CSVService;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.*;
@@ -15,6 +19,8 @@ import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
 import com.clevel.selos.model.view.isa.IsaSearchView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.system.Config;
+import com.clevel.selos.system.audit.IsaAuditor;
 import com.clevel.selos.transform.UserTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
@@ -24,6 +30,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.InputStream;
 import java.util.*;
 
 @Stateless
@@ -37,11 +44,6 @@ public class IsaBusinessControl extends BusinessControl {
     private SecurityActivityDAO securityActivityDAO;
     @Inject
     private IsaActivityDAO isaActivityDAO;
-    @Inject
-    public IsaBusinessControl() {
-
-    }
-
     @Inject
     private RoleDAO roleDAO;
     @Inject
@@ -58,6 +60,26 @@ public class IsaBusinessControl extends BusinessControl {
     private UserTransform userTransform;
     @Inject
     private CSVService csvService;
+    @Inject
+    private IsaAuditor isaAuditor;
+    @Inject
+    @Config(name = "isa.path.temp")
+    private String path;
+    @Inject
+    @Config(name = "isa.path.export.fileName")
+    private String exportFileName;
+    @Inject
+    @Config(name = "isa.path.import.fileName")
+    private String importFileName;
+    @Inject
+    @Config(name = "isa.path.result.fileName")
+    private String resultFileName;
+    private final String CSV = ".csv";
+    @Inject
+    private STPExecutor stpExecutor;
+    @Inject
+    public IsaBusinessControl() {
+    }
     @PostConstruct
     public void onCreate() {
 
@@ -88,10 +110,9 @@ public class IsaBusinessControl extends BusinessControl {
     public List<User> getAllUser(){
         return Util.safetyList(userDAO.findByUserStatusNORMAL());
     }
-
     public void createUser(final IsaManageUserView isaManageUserView) throws Exception {
         log.debug("-- createUser()");
-        userDAO.createNewUserByISA(userTransform.transformToModel(isaManageUserView));
+        userDAO.createNewUserByISA(userTransform.transformToNewModel(isaManageUserView));
     }
     public void editUser(final IsaManageUserView isaManageUserView) throws Exception {
         log.debug("-- editUser()");
@@ -101,10 +122,9 @@ public class IsaBusinessControl extends BusinessControl {
             userDAO.persist(user);
         }
     }
-    public void deleteUser(final String id) throws Exception {
-        log.debug("deleteUser()");
+    public void deleteUserById(final String id) throws Exception {
+        log.debug("-- deleteUser(id : {})", id);
         userDAO.deleteUserByISA(id);
-
     }
     public void deleteUserList(final User[] users) throws Exception {
         log.debug("deleteUserList()");
@@ -112,45 +132,82 @@ public class IsaBusinessControl extends BusinessControl {
             userDAO.deleteUserByISA(user.getId());
         }
     }
-    public List<User> searchUser(IsaSearchView isaSearchView) throws Exception {
-        log.debug("searchUser()");
+    public List<User> getUserBySearch(final IsaSearchView isaSearchView) throws Exception {
+        log.debug("-- getUserBySearch()");
         return userDAO.findByISA(isaSearchView);
     }
+    public boolean isExistId(final String id) throws Exception{
+        return userDAO.isExistId(id);
+    }
+    public boolean isExistUserName(final String userId) throws Exception{
+        return userDAO.isExistUserName(userId);
+    }
+
 
     public void exportProcess() throws Exception {
         log.debug("-- exportProcess()");
         List<User> userList = null;
         userList = Util.safetyList(userDAO.findAll());
-        final String FULL_PATH = "D:/06232014test.csv";
+        String fullPath = null;
+        StringBuilder stringBuilder = null;
         if(!Util.isZero(userList.size())){
-            csvService.CSVExport(FULL_PATH, userList);
+            stringBuilder = new StringBuilder().append(path).append(exportFileName).append(Util.getFileNameForISA()).append(CSV);
+            fullPath = stringBuilder.toString();
+            csvService.CSVExport(fullPath, userList);
         }
     }
 
-    public void importProcess() throws Exception {
+    public void importProcess(final InputStream inputStream) throws Exception {
         log.debug("-- importProcess()");
-        final String FULL_PATH = "D:/06232014test.csv";
-        csvService.CSVImport(FULL_PATH);
+        List<CSVModel> csvModelList = Util.safetyList(csvService.CSVImport(inputStream));
+        String fullPath = null;
+        List<ResultModel> resultModelList = null;
+        ResultModel resultModel = null;
+        StringBuilder stringBuilder = null;
+        if(!Util.isZero(csvModelList.size())){
+            resultModelList = new ArrayList<ResultModel>();
+
+            for(final CSVModel csv : csvModelList){
+                resultModel = new ResultModel();
+                final String command = csv.getCommand();
+                resultModel.setCommand(command);
+                resultModel.setId(csv.getUserId());
+                if(CommandType.INSERT.equals(command)){
+                    resultModel.setResult(stpExecutor.createFromCSV(csv));
+                } else if(CommandType.UPDATE.equals(command)){
+                    resultModel.setResult(stpExecutor.updateFromCSV(csv));
+                } else if(CommandType.DELETE.equals(command)){
+                    resultModel.setResult(stpExecutor.deleteFromCSV(csv));
+                } else {
+                    resultModel.setResult("Command not found");
+                }
+                resultModelList.add(resultModel);
+            }
+
+            if(!Util.isZero(resultModelList.size())){
+                stringBuilder = new StringBuilder().append(path).append(resultFileName).append(Util.getFileNameForISA()).append(CSV);
+                fullPath = stringBuilder.toString();
+                csvService.CSVExport(fullPath, resultModelList, null);
+            }
+        }
     }
 
 
-    public IsaManageUserView SelectUserById(final String id) throws Exception {
-        log.debug("SelectUserById. (id: {})",id);
+    public IsaManageUserView getUserById(final String id) throws Exception {
+        log.debug("-- getUserById(id: {})",id);
         IsaManageUserView isaManageUserView = null;
         User user = userDAO.findById(id);
         if(!Util.isNull(user)){
             isaManageUserView = userTransform.transformToISAView(user);
         }
+        log.debug("-- view {}", isaManageUserView.toString());
         return isaManageUserView;
     }
 
-    public void editUserActive(User[] users, ManageUserActive manageUserActive) throws Exception {
-        log.debug("editUserActive()");
-        log.debug("========================= : {}",manageUserActive.getValue());
-        for (User list : users) {
-            User user = userDAO.findById(list.getId());
-            user.setActive(manageUserActive.getValue());
-            userDAO.persist(user);
+    public void editUserActive(User user, ManageUserActive manageUserActive) throws Exception {
+        log.debug("-- editUserActive()");
+        if(!Util.isNull(user)){
+            userDAO.updateActiveOrInactive(user, manageUserActive.getValue());
         }
 
     }
@@ -198,8 +255,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setUserName(userlist.getUserName());
             isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
             isaUserDetailView.setBuCode(userlist.getBuCode());
-            isaUserDetailView.setLastIp(userlist.getLastIP());
-            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
+//            isaUserDetailView.setLastIp(userlist.getLastIP());
+//            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
             isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
             isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
             isaUserDetailView.setRole(userlist.getRole()!=null && userlist.getRole().getName() != null? userlist.getRole().getName() : " ");
@@ -208,8 +265,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setRegion(userlist.getRegion()!=null && userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
             isaUserDetailView.setTeam(userlist.getTeam()!=null && userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
             isaUserDetailView.setTitle(userlist.getTitle()!=null && userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
-            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
-            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
+//            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
+//            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
             isaUserDetailView.setUserStatus(userlist.getUserStatus()!=null && userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
 
             list.add(isaUserDetailView);
@@ -257,8 +314,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setUserName(userlist.getUserName());
             isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
             isaUserDetailView.setBuCode(userlist.getBuCode());
-            isaUserDetailView.setLastIp(userlist.getLastIP());
-            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
+//            isaUserDetailView.setLastIp(userlist.getLastIP());
+//            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
             isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
             isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
             isaUserDetailView.setRole(userlist.getRole()!=null && userlist.getRole().getName() != null? userlist.getRole().getName() : " ");
@@ -267,8 +324,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setRegion(userlist.getRegion()!=null && userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
             isaUserDetailView.setTeam(userlist.getTeam()!=null && userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
             isaUserDetailView.setTitle(userlist.getTitle()!=null && userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
-            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
-            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
+//            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
+//            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
             isaUserDetailView.setUserStatus(userlist.getUserStatus()!=null && userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
 
             list.add(isaUserDetailView);
@@ -278,5 +335,36 @@ public class IsaBusinessControl extends BusinessControl {
     }
 
 
-
+    public IsaUserDetailView mappingToAudit(final IsaManageUserView isaManageUserView){
+        log.debug("-- mappingToAudit()");
+        IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
+        if(!Util.isNull(isaManageUserView)){
+            isaUserDetailView.setUserId(isaManageUserView.getId());
+            isaUserDetailView.setUserName(isaManageUserView.getUsername());
+            isaUserDetailView.setEmailAddress(isaManageUserView.getEmailAddress());
+            isaUserDetailView.setBuCode(isaManageUserView.getBuCode());
+            isaUserDetailView.setPhoneExt(isaManageUserView.getPhoneExt());
+            isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());
+            if(!Util.isNull(isaManageUserView.getRole())){
+                isaUserDetailView.setRole(isaManageUserView.getRole().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserTeam())){
+                isaUserDetailView.setTeam(isaManageUserView.getUserTeam().getTeam_name());
+            }
+            if(!Util.isNull(isaManageUserView.getUserDepartment())){
+                isaUserDetailView.setDepartment(isaManageUserView.getUserDepartment().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserDivision())){
+                isaUserDetailView.setDivision(isaManageUserView.getUserDivision().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserRegion())){
+                isaUserDetailView.setRegion(isaManageUserView.getUserRegion().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserTitle())){
+                isaUserDetailView.setTitle(isaManageUserView.getUserTitle().getName());
+            }
+            isaUserDetailView.setActive(isaManageUserView.getActive());
+        }
+        return isaUserDetailView;
+    }
 }

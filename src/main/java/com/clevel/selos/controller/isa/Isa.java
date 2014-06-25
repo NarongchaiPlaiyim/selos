@@ -4,25 +4,23 @@ import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.dao.master.RoleDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageUserActive;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
 import com.clevel.selos.model.view.isa.IsaSearchView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
 import com.clevel.selos.system.audit.IsaAuditor;
+import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.hibernate.criterion.Restrictions;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +64,8 @@ public class Isa implements Serializable {
     private ModeForButton modeForButton;
     private boolean complete;
     private enum Result{Success};
-
+    private String userId;
+    private User user;
     public Isa() {
 
     }
@@ -75,11 +74,6 @@ public class Isa implements Serializable {
     public void onCreate() {
         isaManageUserView = new IsaManageUserView();
         isaSearchView = new IsaSearchView();
-
-        isaManageUserView.reset();
-        isaSearchView.reset();
-//        isaSearchView.getRoleId().setId(-1);
-
         init();
     }
 
@@ -87,6 +81,7 @@ public class Isa implements Serializable {
         log.debug("-- init()");
         onLoadAllOfSelectOneMenu();
         onLoadUser();
+        onLoadAllUser();
     }
 
     private void onLoadAllOfSelectOneMenu(){
@@ -98,6 +93,21 @@ public class Isa implements Serializable {
         onLoadUserRegion();
         onLoadUserTitle();
     }
+
+    private void onLoadUser(){
+        log.debug("-- onLoadUser()");
+        HttpSession session = FacesUtil.getSession(true);
+        user = (User) session.getAttribute("user");
+        if(!Util.isNull(user)){
+            onLoadUserId(user);
+        }
+    }
+
+    private void onLoadUserId(final User user){
+        log.debug("-- onLoadUserId(id : {})", user.getId());
+        userId = user.getId();
+    }
+
     private void onLoadRole(){
         log.debug("-- onLoadRole()");
         userRoleList = isaBusinessControl.getAllRole();
@@ -122,8 +132,8 @@ public class Isa implements Serializable {
         log.debug("-- onLoadUserTitle()");
         userTitleList = isaBusinessControl.getAllUserTitle();
     }
-    private void onLoadUser(){
-        log.debug("-- onLoadUser()");
+    private void onLoadAllUser(){
+        log.debug("-- onLoadAllUser()");
         userList = isaBusinessControl.getAllUser();
         userSize = userList.size();
     }
@@ -134,7 +144,10 @@ public class Isa implements Serializable {
             userTeamList = getUserTeamByRoleId(isaSearchView.getRoleId().getId());
         } else {
             userTeamList = getUserTeamByRoleId(isaManageUserView.getRole().getId());
+            isaManageUserView.setUserTeam(new UserTeam());
         }
+
+
     }
 
     private List<UserTeam> getUserTeamByRoleId(final int id){
@@ -142,98 +155,48 @@ public class Isa implements Serializable {
     }
 
 
-    public void onSubmitExportCSV(){
-        log.debug("-- onSubmitExportCSV()");
+
+
+    public void onSubmitSaveDialog(){
+        log.debug("-- onSubmitSaveDialog()");
         RequestContext context = RequestContext.getCurrentInstance();
         complete = true;
-        messageHeader = "Export to CSV";
         try {
-            isaBusinessControl.exportProcess();
-            message = Result.Success.toString();
-        } catch (Exception e){
-            message = e.getMessage();
-        }
-        context.execute("msgBoxSystemMessageDlg.show()");
-    }
-
-    public void onSubmitImportCSV(FileUploadEvent event){
-        log.debug("-- onSubmitImportCSV()");
-        RequestContext context = RequestContext.getCurrentInstance();
-        UploadedFile file = null;
-        String fileName = null;
-        complete = true;
-        messageHeader = "Import to model";
-        try {
-            file = event.getFile();
-            fileName = file.getFileName();
-            if(!Util.isNull(fileName) && !Util.isZero(fileName.length())){
-                isaBusinessControl.importProcess(file.getInputstream());
-                message = Result.Success.toString();
-            }
-        } catch (Exception e){
-            message = e.getMessage();
-        }
-        context.execute("msgBoxSystemMessageDlg.show()");
-    }
-
-
-    public void onManageUserAction() {
-        log.debug("onCreateNewUser()");
-        RequestContext context = RequestContext.getCurrentInstance();
-        complete = true;
-        log.debug("{}",isaManageUserView);
-
-            IsaUserDetailView auditView=getAuditDesc(isaManageUserView);
-
-        try {
-            if (modeForButton == ModeForButton.ADD) {
-                messageHeader = "Add New User.";
-
-                User user = userDAO.findOneByCriteria(Restrictions.eq("id", isaManageUserView.getId()));
-                if (user != null) {
-                    complete = false;
-                    message = "Add new User failed. Cause : Duplicate UserId found in system!";
-
-                    isaAuditor.add("ISA", modeForButton.name(),auditView.toString(), ActionResult.FAILED, message);
-                } else {
-                    isaBusinessControl.createUser(isaManageUserView);
-//                    UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//                    System.out.println(userDetail.getUserName());
-                    isaAuditor.add("ISA", modeForButton.name(),auditView.toString(), ActionResult.SUCCESS, "");
-
-                    onLoadUser();
-                    message = "Add New User Success.";
+            if(!Util.isNull(isaManageUserView)){
+                log.debug("-- Mode : {}", modeForButton);
+                IsaUserDetailView isaUserDetailView = isaBusinessControl.mappingToAudit(isaManageUserView);
+                if(ModeForButton.ADD == modeForButton){
+                    messageHeader = "Add New User.";
+                    if(!isaBusinessControl.isExistId(isaManageUserView.getId())){
+                        if(!isaBusinessControl.isExistUserName(isaManageUserView.getUsername())){
+                            isaBusinessControl.createUser(isaManageUserView);
+                            message = Result.Success.toString();
+                            isaAuditor.addSucceed(userId, modeForButton.toString(), isaUserDetailView.toString());
+                        } else {
+                            message = "User Name already exists";
+                            isaAuditor.addFailed(userId, modeForButton.toString(), isaUserDetailView.toString(), message);
+                        }
+                    } else {
+                        message = "User ID already exists";
+                        isaAuditor.addFailed(userId, modeForButton.toString(), isaUserDetailView.toString(), message);
+                    }
+                } else if(ModeForButton.EDIT == modeForButton) {
+                    messageHeader = "Edit User.";
                 }
+                context.execute("manageUserDlg.hide()");
+                onLoadAllUser();
                 context.execute("msgBoxSystemMessageDlg.show()");
-            } else if (modeForButton == ModeForButton.EDIT) {
-                context.execute("confirmEditUserDlg.show()");
-                complete = false;
+
             }
-
-            context.addCallbackParam("functionComplete", complete);
-        } catch (ConstraintViolationException e) {
-            if (e.getCause() != null) {
-                message = "Edit User failed. Cause : " +e.getCause().getMessage();
-            } else {
-                message = "Edit User failed. Cause : " +e.getMessage();
-            }
-
-            isaAuditor.add("ISA", modeForButton.name(),auditView.toString(), ActionResult.EXCEPTION,message);
-
-            context.execute("msgBoxSystemMessageDlg.show()");
-        } catch (Exception ex) {
-            log.debug("Exception : {}", ex);
+        } catch (Exception e){
             complete = false;
-            if (ex.getCause() != null) {
-                message = "Add new customer failed. Cause : " + ex.getCause().getMessage();
+            if (e.getCause() != null) {
+                message = e.getCause().getMessage();
             } else {
-                message = "Add new customer failed. Cause : " + ex.getMessage();
+                message = e.getMessage();
             }
-
-            isaAuditor.add("ISA", modeForButton.name(),auditView.toString(), ActionResult.EXCEPTION, message);
             context.execute("msgBoxSystemMessageDlg.show()");
         }
-
     }
 
     public void onSubmitCreateNewUser(){
@@ -254,19 +217,20 @@ public class Isa implements Serializable {
             isaManageUserView = isaBusinessControl.getUserById(id);
             if (!Util.isNull(isaManageUserView)){
                 isaManageUserView.setReadOnlyUserId(true);
-                //to set this BeforeAudit Created by Win. I don't know why?
+                if(!Util.isNull(isaManageUserView.getUserTeam())){
+                    userTeamList.clear();
+                    userTeamList = isaBusinessControl.getUserTeamByRoleId(isaManageUserView.getRole().getId());
+                }
                 isaUserEditView=isaManageUserView;
-                message = Result.Success.toString();
-                onLoadUser();
             } else {
                 message = id + " not found!";
             }
-            context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception e) {
+            complete = false;
             if (e.getCause() != null) {
-                message = "Open edit form failed. Cause : " + e.getCause().getMessage();
+                message = e.getCause().getMessage();
             } else {
-                message = "Open edit form failed. Cause : " + e.getMessage();
+                message = e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
         }
@@ -277,194 +241,136 @@ public class Isa implements Serializable {
         complete = true;
         RequestContext context = RequestContext.getCurrentInstance();
         messageHeader = "Delete User.";
+        StringBuilder stringBuilder = null;
         try {
             isaBusinessControl.deleteUserById(id);
-            isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.SUCCESS,"");
-            onLoadUser();
+            stringBuilder=new StringBuilder();
+            isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
+            onLoadAllUser();
             message = Result.Success.toString();
             context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception e) {
             complete = false;
             if (e.getCause() != null) {
-                message = "Delete User failed. Cause : " + e.getCause().getMessage();
+                message = e.getCause().getMessage();
             } else {
-                message = "Delete User failed. Cause : " + e.getMessage();
+                message = e.getMessage();
             }
-            isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.EXCEPTION,message);
+            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
             context.execute("msgBoxSystemMessageDlg.show()");
         }
 
     }
 
     public void onDeleteUserList() {
-        log.debug("onDeleteUserList()");
-        log.debug("selectUserDetail length: {}",selectUserDetail.length);
+        log.debug("-- onDeleteUserList()");
         RequestContext context = RequestContext.getCurrentInstance();
+        StringBuilder stringBuilder = null;
         try {
             messageHeader = "Delete User.";
-
-            if (selectUserDetail.length == 0) {
-                message = "Please Select User ";
-                context.execute("msgBoxSystemMessageDlg.show()");
+            if (selectUserDetail.length != 0) {
+                for ( final User user : selectUserDetail){
+                    isaBusinessControl.deleteUserById(user.getId());
+                    stringBuilder=new StringBuilder();
+                    isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
+                }
+                message = Result.Success.toString();
             } else {
-                context.execute("confirmDeleteUserListDlg.show()");
+                message = "Please Select User ";
             }
-
+            onLoadAllUser();
+            context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception e) {
             complete = false;
-
             if (e.getCause() != null) {
-                message = "Delete User failed. Cause : " + e.getCause().getMessage();
+                message = e.getCause().getMessage();
             } else {
-                message = "Delete User failed. Cause : " + e.getMessage();
+                message = e.getMessage();
             }
+            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
             context.execute("msgBoxSystemMessageDlg.show()");
         }
     }
-
-    public void deleteUserList() {
-
-        RequestContext context = RequestContext.getCurrentInstance();
-        try {
-            StringBuilder builder=new StringBuilder("");
-            for(User list:selectUserDetail){
-                builder.append(list.getId()); builder.append(",");
-            }
-
-            isaBusinessControl.deleteUserList(selectUserDetail);
-
-            isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+builder,ActionResult.SUCCESS,"");
-
-        } catch (Exception e) {
-
-            messageHeader = "Delete User.";
-            if (e.getCause() != null) {
-                message = "Delete User failed. Cause : " + e.getCause().getMessage();
-            } else {
-                message = "Delete User failed. Cause : " + e.getMessage();
-            }
-            context.execute("msgBoxSystemMessageDlg.show()");
-            isaAuditor.add("ISA",ModeForButton.DELETE.name(),"userId : "+id,ActionResult.EXCEPTION,message);
-        }
-        onLoadUser();
-    }
-
-    public void editUser() {
-        log.debug("editUser()");
-        RequestContext context = RequestContext.getCurrentInstance();
-
-        IsaUserDetailView auditAfter=getAuditDesc(isaManageUserView);
-        IsaUserDetailView auditBefore=getAuditDesc(isaUserEditView);
-        try {
-
-
-            isaBusinessControl.editUser(isaManageUserView);
-
-            isaAuditor.add("ISA",ModeForButton.EDIT.name(),"before : "+auditBefore.toString()+ ", after : "+auditAfter.toString(),ActionResult.SUCCESS,"");
-
-            onLoadUser();
-            context.execute("manageUserDlg.hide()");
-        } catch (Exception e) {
-            messageHeader = "Edit User.";
-            if (e.getCause() != null) {
-                message = "Edit User failed. Cause : " + e.getCause().getMessage();
-            } else {
-                message = "Edit User failed. Cause : " + e.getMessage();
-            }
-            isaAuditor.add("ISA",ModeForButton.EDIT.name(),auditAfter.toString(),ActionResult.EXCEPTION,message);
-            context.execute("msgBoxSystemMessageDlg.show()");
-        }
-
-    }
-
-
 
     public void onSubmitSearchUser() {
-        log.debug("onSubmitSearchUser()");
+        log.debug("-- onSubmitSearchUser()");
         RequestContext context = RequestContext.getCurrentInstance();
+        messageHeader = "Search User.";
         try {
-            log.debug("{}",isaSearchView);
-            userList = isaBusinessControl.searchUser(isaSearchView);
-            userSize = userList.size();
+            if(!Util.isNull(isaSearchView)){
+                userList = Util.safetyList(isaBusinessControl.getUserBySearch(isaSearchView));
+                userSize = userList.size();
+                message = Result.Success.toString();
+                context.execute("msgBoxSystemMessageDlg.show()");
+            }
         } catch (Exception e) {
-            messageHeader = "Search User.";
+            complete = false;
             if (e.getCause() != null) {
-                message = "Search User failed. Cause : " + e.getCause().getMessage();
+                message = e.getCause().getMessage();
             } else {
-                message = "Search User failed. Cause : " + e.getMessage();
+                message = e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
         }
     }
-
-    public void onEditUserActive() {
+    public void onEditUserActive() {         //-- onDeleteUserList()
         log.debug("-- onEditUserActive()");
         RequestContext context = RequestContext.getCurrentInstance();
+        StringBuilder stringBuilder = null;
+        if (active == 1) {
+            messageHeader = "Active";
+        } else if (active == 0) {
+            messageHeader = "Inactive";
+        }
         try {
-
-//            if (selectUserDetail.length == 0) {
-//                message = "Please Select User ";
-//                context.execute("msgBoxSystemMessageDlg.show()");
-//            } else {
-//                context.execute("confirmDeleteUserListDlg.show()");
-//            }
-
-
+            log.debug("-- {} Selected", selectUserDetail.length);
             if(!Util.isNull(selectUserDetail) && !Util.isZero(selectUserDetail.length)){
-
+                if (active == 1) {
+                    for(final User user : selectUserDetail){
+                        if(ManageUserActive.ACTIVE.getValue() != user.getActive()){
+                            isaBusinessControl.editUserActive(user, ManageUserActive.ACTIVE);
+                            stringBuilder=new StringBuilder();
+                            isaAuditor.addSucceed(userId, ModeForButton.EDIT.name(),stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(ManageUserActive.ACTIVE.name()).toString());
+                        }
+                    }
+                    message = Result.Success.toString();
+                } else if (active == 0) {
+                    for(final User user : selectUserDetail){
+                        if(ManageUserActive.INACTIVE.getValue() != user.getActive()){
+                            isaBusinessControl.editUserActive(user, ManageUserActive.INACTIVE);
+                            stringBuilder=new StringBuilder();
+                            isaAuditor.addSucceed(userId, ModeForButton.EDIT.name(),stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(ManageUserActive.INACTIVE.name()).toString());
+                        }
+                    }
+                    message = Result.Success.toString();
+                }
+                onLoadAllUser();
             } else {
-
-            }
-
-
-
-            StringBuilder builder=new StringBuilder("");
-            for(User list:selectUserDetail){
-                builder.append(list.getId()); builder.append(",");
-            }
-
-            if (active == 1) {
-                isaBusinessControl.editUserActive(selectUserDetail, ManageUserActive.ACTIVE);
-                isaAuditor.add("ISA",ModeForButton.EDIT.name(),"userId : "+builder +" To "+ManageUserActive.ACTIVE,ActionResult.SUCCESS,"");
-            } else if (active == 0) {
-                isaBusinessControl.editUserActive(selectUserDetail, ManageUserActive.INACTIVE);
-                isaAuditor.add("ISA",ModeForButton.EDIT.name(),"userId : "+builder +" To "+ManageUserActive.INACTIVE,ActionResult.SUCCESS,"");
-            }
-            onLoadUser();
-
-        } catch (Exception e) {
-            if (e.getCause() != null) {
-                message = "Edit UserActive failed. Cause : " + e.getCause().getMessage();
-            } else {
-                message = "Edit UserActive failed. Cause : " + e.getMessage();
+                message = "Please select user";
             }
             context.execute("msgBoxSystemMessageDlg.show()");
-            isaAuditor.add("ISA",ModeForButton.EDIT.name(),"userId : "+id,ActionResult.EXCEPTION,message);
+        } catch (Exception e) {
+            complete = false;
+            if (e.getCause() != null) {
+                message = e.getCause().getMessage();
+            } else {
+                message = e.getMessage();
+            }
+            context.execute("msgBoxSystemMessageDlg.show()");
+            isaAuditor.addException(userId, ModeForButton.EDIT.name(), "userId : "+id, message);
         }
-
     }
 
 
-    public IsaUserDetailView getAuditDesc(IsaManageUserView isaManageUserView){
 
-        IsaUserDetailView isaUserDetailView=new IsaUserDetailView();
-        isaUserDetailView.setUserId(isaManageUserView.getId());
-        isaUserDetailView.setUserName(isaManageUserView.getUsername());
-        isaUserDetailView.setBuCode(isaManageUserView.getBuCode());
-        isaUserDetailView.setEmailAddress(isaManageUserView.getEmailAddress());
-        isaUserDetailView.setPhoneExt(isaManageUserView.getPhoneExt());
-        isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());             //TODO plz add method for query
-//        isaUserDetailView.setRole(roleDAO.findById(isaManageUserView.getRole().getId()).getName());
-//        isaUserDetailView.setDepartment(userDepartmentDAO.findById(isaManageUserView.getUserDepartment().getId()).getName());
-//        isaUserDetailView.setDivision(userDivisionDAO.findById(isaManageUserView.getUserDivision().getId()).getName());
-//        isaUserDetailView.setRegion(userRegionDAO.findById(isaManageUserView.getUserRegion().getId()).getName());
-//        //isaUserDetailView.setTeam(userTeamDAO.findById(isaManageUserView.getUserTeam().getId()).getName());
-//        isaUserDetailView.setTitle(userTitleDAO.findById(isaManageUserView.getUserTitle().getId()).getName());
-//        isaUserDetailView.setZone(userZoneDAO.findById(isaManageUserView.getUserZone().getId()).getName());
-        isaUserDetailView.setActive(isaManageUserView.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
 
-        return  isaUserDetailView;
-    }
+
+
+
+
+
+
+
 
     public User[] getSelectUserDetail() {
         return selectUserDetail;

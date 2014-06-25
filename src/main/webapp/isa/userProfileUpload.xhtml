@@ -38,23 +38,35 @@
                                     <td>
                                         <p:commandButton value="Download"
                                                          styleClass="medium"
-                                                         action="#{isa.onSubmitExportCSV()}"
+                                                         action="#{isaUpload.onSubmitExportCSV()}"
                                                          update=":msgBoxSystemMessagePanel"
                                                 />
                                     </td>
                                 </tr>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
+                                <tr/>
                                 <tr>
                                     <td class="title" >
                                         <p:outputLabel value="Import :"/>
                                     </td>
                                     <td colspan="2">
-                                        <p:fileUpload fileUploadListener="#{isa.onSubmitImportCSV}"
+                                        <p:fileUpload fileUploadListener="#{isaUpload.onSubmitImportCSV}"
                                                       allowTypes="/(\.|\/)(csv)$/"
                                                       sizeLimit="5000000"
                                                       required="true"
                                                       multiple="flase"
-                                                      update=":msgBoxSystemMessagePanel"
+                                                      update=":msgBoxSystemMessagePanel, @form"
                                                       fileLimit="1"
+                                                      auto="false"
                                                 />
                                     </td>
                                 </tr>
@@ -68,7 +80,7 @@
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
             <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                             header="#{isa.messageHeader}" message="#{isa.message}" >
+                             header="#{isaUpload.messageHeader}" message="#{isaUpload.message}" >
                 <p:commandButton value="OK"
                                  process="@this"
                                  oncomplete="msgBoxSystemMessageDlg.hide()"/>

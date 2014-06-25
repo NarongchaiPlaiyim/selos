@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.IsaActivity;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -16,16 +17,17 @@ public class IsaAuditor implements Serializable {
     @Inject
     @SELOS
     private Logger log;
-
     @Inject
     private IsaActivityDAO isaActivityDAO;
-
     @Inject
     public IsaAuditor() {
+
     }
 
-    public void add(String userName, String action, String actionDetail, ActionResult actionResult, String resultDetail) {
-        isaActivityDAO.persist(new IsaActivity(userName, action, actionDetail, actionResult, resultDetail, FacesUtil.getRequest().getRemoteAddr()));
+
+
+    private void add(String userName, String action, String actionDetail, ActionResult actionResult, String resultDetail) {
+        isaActivityDAO.persist(new IsaActivity(userName, action, actionDetail, DateTime.now().toDate(), actionResult, resultDetail, FacesUtil.getRequest().getRemoteAddr()));
     }
 
     public void addSucceed(String userName, String action, String actionDetail) {

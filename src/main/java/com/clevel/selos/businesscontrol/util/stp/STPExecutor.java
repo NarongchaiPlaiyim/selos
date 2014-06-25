@@ -28,7 +28,6 @@ public class STPExecutor implements Serializable {
     Logger log;
     @PersistenceContext
     protected EntityManager em;
-
     @Inject
     public STPExecutor() {
     }
@@ -54,18 +53,18 @@ public class STPExecutor implements Serializable {
     }
 
     public String updateFromCSV(final CSVModel csv){
-        log.debug("-- createFromCSV(UserId : {})", csv.getUserId());
+        log.debug("-- updateFromCSV(UserId : {})", csv.getUserId());
         String result = "";
         return result;
     }
 
     public String deleteFromCSV(final CSVModel csv){
-        log.debug("-- createFromCSV(UserId : {})", csv.getUserId());
+        log.debug("-- deleteFromCSV(UserId : {})", csv.getUserId());
         final String[] result = {""};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt = connection.prepareCall("call SLOS.DELETEUSERBYISA( ? )");
+                CallableStatement callStmt = connection.prepareCall("call SLOS.DELETEUSERBYISA(?, ?)");
                 callStmt.setString(1, csv.getUserId());
                 callStmt.registerOutParameter(2, OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
@@ -74,9 +73,6 @@ public class STPExecutor implements Serializable {
         });
         return result[0];
     }
-
-
-
 
     public String addUserFromFile( final Object... params)throws ServiceException { //todo : change this , AS ( To use Hibernate )
        final String result[]=new String[1];
