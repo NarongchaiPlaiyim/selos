@@ -1033,3 +1033,28 @@ function collapseDetail() {
         $("#header_information").fadeIn();
     }
 }
+
+function wireUpEvents() {
+    var out = false;
+    var refresh = false;
+    $("body").mouseover(function(){
+        out=false;
+    }).mouseout(function(){
+        out=true;
+    });
+
+    $(document).keydown(function(e) {
+        if((e.which == 82 && e.ctrlKey)   //Ctrl+R, F5, Enter
+            || e.which == 116
+            || e.which == 13) {
+            refresh = true;
+        }
+    });
+
+    $(window).bind('beforeunload', function(e){
+        if(out && !refresh)
+        {
+            return "WARNING!!! You are attempting to exit without log out.\nPlease stay on this page and log out first."
+        }
+    });
+}
