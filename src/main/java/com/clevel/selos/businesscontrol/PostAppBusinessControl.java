@@ -32,44 +32,44 @@ public class PostAppBusinessControl extends BusinessControl {
 	@Inject
 	private WorkCaseDAO workCaseDAO;
 	
-	public void submitCA(long workCaseId, String queueName,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1015, -1, remark);
+	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1015, -1, remark);
 	}
-	public void returnToBDM(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1005, reasonId, remark);
+	public void returnToBDM(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1005, reasonId, remark);
 	}
-	public void returnToUW2(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1033, reasonId, remark);
+	public void returnToUW2(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1033, reasonId, remark);
 	}
-	public void returnToDataEntry(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1034, reasonId, remark);
+	public void returnToDataEntry(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1034, reasonId, remark);
 	}
-	public void returnToContactCenter(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1037, reasonId, remark);
+	public void returnToContactCenter(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1037, reasonId, remark);
 	}
-	public void returnToLARBC(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1038, reasonId, remark);
+	public void returnToLARBC(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1038, reasonId, remark);
 	}
-	public void cancelCA(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1003, reasonId, remark);
+	public void cancelCA(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1003, reasonId, remark);
 	}
-	public void cancelDisbursement(long workCaseId, String queueName,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1040, reasonId, remark);
+	public void cancelDisbursement(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1040, reasonId, remark);
 	}
-	public void requestPriceReduction(long workCaseId,String queueName,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1028, -1, remark);
+	public void requestPriceReduction(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1028, -1, remark);
 	}
-	public void generateAgreement(long workCaseId,String queueName,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1036, -1, remark);
+	public void generateAgreement(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1036, -1, remark);
 	}
-	public void regenerateAgreement(long workCaseId,String queueName,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1039, -1, remark);
+	public void regenerateAgreement(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1039, -1, remark);
 	}
-	public void dataEntryComplete(long workCaseId,String queueName,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName, 1035, -1, remark);
+	public void dataEntryComplete(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1035, -1, remark);
 	}
 	
-	private void _executeBPM(long workCaseId,String queueName,long actionId,int reasonId,String remark) throws Exception {
+	private void _executeBPM(long workCaseId,String queueName,String wobNumber,long actionId,int reasonId,String remark) throws Exception {
 		WorkCase workCase = workCaseDAO.findById(workCaseId);
 		Action action = actionDAO.findById(actionId);
 		
@@ -106,7 +106,7 @@ public class PostAppBusinessControl extends BusinessControl {
         		_setupLimit(workCase, fields);
         	}
         }
-        bpmExecutor.execute(queueName, workCase.getWobNumber(), fields);
+        bpmExecutor.execute(queueName, wobNumber, fields);
 	}
 	
 	private void _checkDoc(WorkCase workCase, HashMap<String,String> fields) {

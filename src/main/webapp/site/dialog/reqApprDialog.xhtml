@@ -116,16 +116,18 @@
                     </td>
                     <td class="center">
                         <p:inputText id="customerName1" value="#{headerController.appraisalContactDetailView.customerName1}"
-                                     style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                     required="#{not empty param[addAppraisalRequsest.clientId] }"
                                      onkeydown="return onKeyDownName(event);"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
+                        <!--style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
                     </td>
                     <td class="center">
                         <p:inputText value="#{headerController.appraisalContactDetailView.contactNo1}"
+                                     required="#{not empty param[addAppraisalRequsest.clientId] }"
                                      onkeydown="return onKeyDownTelNo(event);"
-                                     onkeypress="return onKeyPressTelNo(event);"
-                                     style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                                     onkeypress="return onKeyPressTelNo(event);" />
+                        <!--style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
                     </td>
                 </tr>
                 <tr>
@@ -195,6 +197,7 @@
         <td class="center" colspan="2">
             <p:commandButton id="btnSubmitReqAppr"
                              value="#{msg.get('app.button.submit')}"
+                             binding = "#{addAppraisalRequsest}"
                              styleClass="medium"
                              process="@form"
                              actionListener="#{headerController.onSubmitRequestAppraisal()}"

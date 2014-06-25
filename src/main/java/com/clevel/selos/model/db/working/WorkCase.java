@@ -50,6 +50,9 @@ public class WorkCase extends AbstractWorkCase{
     @Column(name = "case_update_flag", columnDefinition = "int default 0")
     private int caseUpdateFlag;
 
+    @Column(name = "parallel_appraisal_flag", columnDefinition = "int default 0")
+    private int parallelAppraisalFlag;
+
     public String getRefAppNumber() {
         return refAppNumber;
     }
@@ -144,6 +147,14 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setCaseUpdateFlag(int caseUpdateFlag) {
         this.caseUpdateFlag = caseUpdateFlag;
+    }
+
+    public int getParallelAppraisalFlag() {
+        return parallelAppraisalFlag;
+    }
+
+    public void setParallelAppraisalFlag(int parallelAppraisalFlag) {
+        this.parallelAppraisalFlag = parallelAppraisalFlag;
     }
 
     @Override

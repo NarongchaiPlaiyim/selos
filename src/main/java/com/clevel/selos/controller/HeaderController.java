@@ -12,6 +12,7 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -273,7 +274,7 @@ public class HeaderController extends BaseController {
                 }
             }
 
-            timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId);
+            timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
             UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
             int limitTimeOfCriteriaCheck = 3;
             if(!Util.isNull(userSysParameterView)){
@@ -1820,7 +1821,7 @@ public class HeaderController extends BaseController {
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
 
                             //----Update Times of Check Criteria----//
-                            fullApplicationControl.updateTimeOfCheckCriteria(workCaseId);
+                            fullApplicationControl.updateTimeOfCheckCriteria(workCaseId, stepId);
                             fullApplicationControl.clearCaseUpdateFlag(workCaseId);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
@@ -1857,6 +1858,27 @@ public class HeaderController extends BaseController {
 
         }
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
+    }
+
+    //---- Function for Request Appraisal ( Parallel ) ----//
+    public void onRequestParallelAppraisal(){
+        HttpSession session = FacesUtil.getSession(false);
+
+        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
+        try {
+            log.debug("onRequestParallelAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+            fullApplicationControl.requestParallelAppraisal(workCaseId, workCasePreScreenId);
+            //Redirect to Appraisal Request Page
+            FacesUtil.redirect("/site/appraisalRequest.jsf");
+            return;
+        }catch (Exception ex){
+            log.error("Exception while request parallel appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = "Exception while request parallel appraisal, " + Util.getMessageException(ex);
+            showMessageBox();
+        }
     }
 
     public boolean checkAccessStage(String stageString){
