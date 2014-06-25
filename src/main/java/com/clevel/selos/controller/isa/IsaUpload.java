@@ -206,7 +206,7 @@ public class IsaUpload implements Serializable {
                 isaUploadService.processingUploadFile(PATH_FILE+"/"+userUploadId, filePath);
 //                initForm();
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                log.error("",e);
             }
 
 
