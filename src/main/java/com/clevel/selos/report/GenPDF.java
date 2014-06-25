@@ -34,8 +34,16 @@ public class GenPDF extends ReportService implements Serializable {
     String pathsub;
 
     @Inject
-    @Config(name = "report.rejectletter")
-    String pathRejectLetter;
+    @Config(name = "report.rejectletter.policy")
+    String pathPolicyRejectLetter;
+
+    @Inject
+    @Config(name = "report.rejectletter.income")
+    String pathIncomeRejectLetter;
+
+    @Inject
+    @Config(name = "report.rejectletter.policyincome")
+    String pathPolicyIncomeRejectLetter;
 
 
     @Inject
@@ -178,8 +186,6 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
-//        pdfName = "Executive_Summary_Report_";
-
         generatePDF(pathExsum, map, reportView.getNameReportExSum());
     }
 
@@ -200,7 +206,6 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("creditRisk", pdfExecutiveSummary.fillBorrowerRelatedProfile());
         map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
         map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
-//        map.put("fillDecision", pdfExecutiveSummary.fillDecision());
         map.put("fillHeader",pdfExecutiveSummary.fillHeader());
         map.put("fillFooter",pdfExecutiveSummary.fillFooter());
         map.put("fillCreditBorrower",pdfExecutiveSummary.fillCreditBorrower(pathsub));
@@ -228,13 +233,40 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintRejectLetter() throws Exception {
         log.debug("--onPrintRejectLetter");
         pdfReject_letter.init();
+        pdfReject_letter.typeReport().getTypeNCB();
+        String pathReportReject = null;
 
-        HashMap map = new HashMap<String, Object>();
-        map.put("path", pathsub);
-        map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
-        map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
+        if (!Util.isNull( pdfReject_letter.typeReport())){
+            if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
+                    Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject =  pathPolicyIncomeRejectLetter;
+            } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
+                    Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject =  pathIncomeRejectLetter;
+            } else if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject =  pathPolicyRejectLetter;
+            } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject = null;//NCBRejectLetter wait it
+            }
+            log.debug("--TypeNCB. {},--TypePolicy. {},--TypeIncome. {}",pdfReject_letter.typeReport().getTypeNCB(),pdfReject_letter.typeReport().getTypePolicy(),pdfReject_letter.typeReport().getTypeIncome());
 
-        generatePDF(pathRejectLetter,map,reportView.getNameReportRejectLetter());
+            HashMap map = new HashMap<String, Object>();
+            map.put("path", pathsub);
+            map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
+            map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
+
+            generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter());
+        } else {
+            log.debug("--RejectGroup is Null");
+        }
     }
     public void onPrintAppraisal() throws Exception {
         log.debug("--onPrintAppraisal");
