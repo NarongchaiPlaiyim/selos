@@ -236,30 +236,36 @@ public class GenPDF extends ReportService implements Serializable {
         pdfReject_letter.typeReport().getTypeNCB();
         String pathReportReject = null;
 
+        HashMap map = new HashMap<String, Object>();
+        map.put("path", pathsub);
+
         if (!Util.isNull( pdfReject_letter.typeReport())){
             if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
                     Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject =  pathPolicyIncomeRejectLetter;
+                log.debug("--path4. {}",pathReportReject);
             } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
                     Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject =  pathIncomeRejectLetter;
+                log.debug("--path3. {}",pathReportReject);
             } else if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
                     !Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject =  pathPolicyRejectLetter;
+                log.debug("--path2. {}",pathReportReject);
             } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject = null;//NCBRejectLetter wait it
+                log.debug("--path1. {}",pathReportReject);
             }
             log.debug("--TypeNCB. {},--TypePolicy. {},--TypeIncome. {}",pdfReject_letter.typeReport().getTypeNCB(),pdfReject_letter.typeReport().getTypePolicy(),pdfReject_letter.typeReport().getTypeIncome());
+            log.debug("----------------. {}",pathReportReject);
 
-            HashMap map = new HashMap<String, Object>();
-            map.put("path", pathsub);
             map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
             map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
