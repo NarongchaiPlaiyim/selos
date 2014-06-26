@@ -7,26 +7,19 @@
 	<parameter name="fillAllNameReject" class="java.util.List"/>
 	<parameter name="path" class="java.lang.String"/>
 	<pageHeader>
-		<band height="113" splitType="Stretch">
+		<band height="54" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="74f2f1d8-ed1a-458b-a765-ae7939c11494" x="0" y="56" width="555" height="31"/>
+				<reportElement uuid="74f2f1d8-ed1a-458b-a765-ae7939c11494" x="0" y="36" width="555" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
-				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111]]></text>
+				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111
+3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="5dea7374-bedf-4d44-b26f-22e2ec31e0e4" x="0" y="87" width="555" height="26"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<text><![CDATA[3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
-			</staticText>
-			<image scaleImage="RealSize">
-				<reportElement uuid="c11cabdb-474d-4cf8-aed2-2cd33de8e663" x="0" y="0" width="204" height="56"/>
-				<imageExpression><![CDATA["C:\\Users\\pakorn\\Desktop\\tmb.gif"]]></imageExpression>
+			<image scaleImage="RealSize" isUsingCache="false">
+				<reportElement uuid="c11cabdb-474d-4cf8-aed2-2cd33de8e663" x="0" y="0" width="300" height="36"/>
+				<imageExpression><![CDATA[$P{path} + "tmb.gif"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>

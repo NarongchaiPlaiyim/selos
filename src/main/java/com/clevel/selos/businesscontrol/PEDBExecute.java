@@ -583,7 +583,6 @@ public class PEDBExecute extends BusinessControl
         catch(Exception e)
         {
             log.error("Error :",e);
-            e.printStackTrace();
         }
 
         return resultQueryList;

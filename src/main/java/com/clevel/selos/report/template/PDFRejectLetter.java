@@ -132,9 +132,9 @@ public class PDFRejectLetter implements Serializable {
                 if (ruleResultDetail.getRejectGroup().getId() == 1){
                     rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
                 } else if (ruleResultDetail.getRejectGroup().getId() == 2){
-                    rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
-                } else if (ruleResultDetail.getRejectGroup().getId() == 3){
                     rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
+                } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+                    rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
                 }
             } else {
                 log.debug("--RejectGroup is Null.");

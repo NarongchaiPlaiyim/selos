@@ -75,6 +75,7 @@ public class GenPDF extends ReportService implements Serializable {
     private ReportView reportView;
 
     long workCaseId;
+    private boolean type;
 
     public GenPDF() {
 
@@ -112,7 +113,7 @@ public class GenPDF extends ReportService implements Serializable {
         String[] month = date.split("");
         log.debug("--month. {}",month);
 
-
+        type = false;
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
@@ -136,7 +137,19 @@ public class GenPDF extends ReportService implements Serializable {
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
-            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+
+            pdfReject_letter.init();
+            if (!Util.isNull( pdfReject_letter.typeReport())){
+                if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy())&&
+                        Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                    reportView.setNameReportRejectLetter(" - ");
+                    type = true;
+                } else {
+                    reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+                }
+            }
+            log.debug("--nameRejectLetter. {}",reportView.getNameReportRejectLetter());
+
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
         }
@@ -233,8 +246,9 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintRejectLetter() throws Exception {
         log.debug("--onPrintRejectLetter");
         pdfReject_letter.init();
-        pdfReject_letter.typeReport().getTypeNCB();
         String pathReportReject = null;
+        HashMap map = new HashMap<String, Object>();
+        map.put("path", pathsub);
 
         if (!Util.isNull( pdfReject_letter.typeReport())){
             if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
@@ -242,25 +256,25 @@ public class GenPDF extends ReportService implements Serializable {
                     Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject =  pathPolicyIncomeRejectLetter;
+                log.debug("--path4. {}",pathReportReject);
             } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
                     Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject =  pathIncomeRejectLetter;
+                log.debug("--path3. {}",pathReportReject);
             } else if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
                     !Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject =  pathPolicyRejectLetter;
+                log.debug("--path2. {}",pathReportReject);
             } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 pathReportReject = null;//NCBRejectLetter wait it
+                log.debug("--path1. {}",pathReportReject);
             }
-            log.debug("--TypeNCB. {},--TypePolicy. {},--TypeIncome. {}",pdfReject_letter.typeReport().getTypeNCB(),pdfReject_letter.typeReport().getTypePolicy(),pdfReject_letter.typeReport().getTypeIncome());
-
-            HashMap map = new HashMap<String, Object>();
-            map.put("path", pathsub);
-            map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
+            map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
             map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
             generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter());
@@ -302,5 +316,13 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void setReportView(ReportView reportView) {
         this.reportView = reportView;
+    }
+
+    public boolean isType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
     }
 }

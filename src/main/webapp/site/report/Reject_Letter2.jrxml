@@ -7,27 +7,20 @@
 	<parameter name="fillAllNameReject" class="java.util.List"/>
 	<parameter name="path" class="java.lang.String"/>
 	<pageHeader>
-		<band height="113" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="b2079486-b223-45c9-b163-5425f51e5203" x="0" y="56" width="555" height="31"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="4aec7739-66c2-4d77-858f-c920f37be981" x="0" y="87" width="555" height="26"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
-				</textElement>
-				<text><![CDATA[3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
-			</staticText>
-			<image>
-				<reportElement uuid="32b0a648-04bc-4bb0-b233-655c6e53a8df" x="0" y="0" width="204" height="56"/>
-				<imageExpression><![CDATA["C:\\Users\\pakorn\\Desktop\\tmb.gif"]]></imageExpression>
+		<band height="54" splitType="Stretch">
+			<image scaleImage="RealSize" isUsingCache="false">
+				<reportElement uuid="7198002b-1389-428b-a815-4fdb8f9b64eb" x="0" y="0" width="300" height="36"/>
+				<imageExpression><![CDATA[$P{path} + "tmb.gif"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement uuid="1684a6b0-71c4-4f00-a34f-de24b0870471" x="0" y="36" width="555" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111
+3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>

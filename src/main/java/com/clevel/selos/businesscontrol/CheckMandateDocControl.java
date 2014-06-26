@@ -111,6 +111,8 @@ public class CheckMandateDocControl extends BusinessControl{
         checkMandateDocView = null;
         mandateDoc = null;
         mandateDocResponseView = null;
+        getToken();
+        log.debug("-- UserToken = {}", userToken);
     }
 
     public CheckMandateDocView getMandateDocViewByChecker(final long workCasePreScreenId) throws Exception{
