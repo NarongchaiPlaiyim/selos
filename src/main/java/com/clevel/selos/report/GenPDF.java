@@ -136,7 +136,16 @@ public class GenPDF extends ReportService implements Serializable {
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
-            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+
+            if (!Util.isNull( pdfReject_letter.typeReport())){
+                if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy())&&
+                        Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                    reportView.setNameReportRejectLetter(" - ");
+                } else {
+                    reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+                }
+            }
+
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
         }
@@ -233,9 +242,7 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintRejectLetter() throws Exception {
         log.debug("--onPrintRejectLetter");
         pdfReject_letter.init();
-        pdfReject_letter.typeReport().getTypeNCB();
         String pathReportReject = null;
-
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
 
@@ -263,9 +270,6 @@ public class GenPDF extends ReportService implements Serializable {
                 pathReportReject = null;//NCBRejectLetter wait it
                 log.debug("--path1. {}",pathReportReject);
             }
-            log.debug("--TypeNCB. {},--TypePolicy. {},--TypeIncome. {}",pdfReject_letter.typeReport().getTypeNCB(),pdfReject_letter.typeReport().getTypePolicy(),pdfReject_letter.typeReport().getTypeIncome());
-            log.debug("----------------. {}",pathReportReject);
-
             map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
             map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
