@@ -434,7 +434,7 @@ public class UserDAO extends GenericDAO<User,String> {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error("",e);
         }
         finally {
             teamTypeValue = null;
@@ -500,7 +500,7 @@ public class UserDAO extends GenericDAO<User,String> {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("",e);
         }
         finally {
             roleList = null;
@@ -722,7 +722,6 @@ public class UserDAO extends GenericDAO<User,String> {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             log.error("Error:",e);
         }
         finally
@@ -900,7 +899,7 @@ public class UserDAO extends GenericDAO<User,String> {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error("",e);
         }
         finally {
             teamTypeValue = null;
@@ -939,7 +938,7 @@ public class UserDAO extends GenericDAO<User,String> {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error("",e);
         }
         finally {
 

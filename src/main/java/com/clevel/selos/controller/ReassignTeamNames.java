@@ -563,7 +563,7 @@ public class ReassignTeamNames implements Serializable
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            log.error("",e);
         }
         finally
         {

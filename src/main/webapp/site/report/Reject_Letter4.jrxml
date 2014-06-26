@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reject_Letter4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d8252afb-f37a-4f43-8867-798d735478cd">
-	<property name="ireport.zoom" value="1.0000000000000009"/>
+	<property name="ireport.zoom" value="1.2100000000000015"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="213"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="fillRejectLetter" class="com.clevel.selos.model.report.RejectLetterReport"/>
 	<parameter name="fillAllNameReject" class="java.util.List"/>
 	<parameter name="path" class="java.lang.String"/>
 	<pageHeader>
-		<band height="69" splitType="Stretch">
-			<image>
-				<reportElement uuid="9e0df807-5da3-4b55-b72b-f9042c4fc131" x="0" y="0" width="529" height="69"/>
-				<imageExpression><![CDATA[$P{path}+"07_tmb.jpg"]]></imageExpression>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="74f2f1d8-ed1a-458b-a765-ae7939c11494" x="0" y="36" width="555" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111
+3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
+			</staticText>
+			<image scaleImage="RealSize" isUsingCache="false">
+				<reportElement uuid="c11cabdb-474d-4cf8-aed2-2cd33de8e663" x="0" y="0" width="300" height="36"/>
+				<imageExpression><![CDATA[$P{path} + "tmb.gif"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
