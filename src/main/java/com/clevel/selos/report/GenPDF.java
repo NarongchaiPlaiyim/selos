@@ -75,6 +75,7 @@ public class GenPDF extends ReportService implements Serializable {
     private ReportView reportView;
 
     long workCaseId;
+    private boolean type;
 
     public GenPDF() {
 
@@ -112,7 +113,7 @@ public class GenPDF extends ReportService implements Serializable {
         String[] month = date.split("");
         log.debug("--month. {}",month);
 
-
+        type = false;
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
@@ -142,6 +143,7 @@ public class GenPDF extends ReportService implements Serializable {
                 if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy())&&
                         Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                     reportView.setNameReportRejectLetter(" - ");
+                    type = true;
                 } else {
                     reportView.setNameReportRejectLetter(nameRejectLetter.toString());
                 }
@@ -272,7 +274,7 @@ public class GenPDF extends ReportService implements Serializable {
                 pathReportReject = null;//NCBRejectLetter wait it
                 log.debug("--path1. {}",pathReportReject);
             }
-            map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
+            map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
             map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
             generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter());
@@ -314,5 +316,13 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void setReportView(ReportView reportView) {
         this.reportView = reportView;
+    }
+
+    public boolean isType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
     }
 }
