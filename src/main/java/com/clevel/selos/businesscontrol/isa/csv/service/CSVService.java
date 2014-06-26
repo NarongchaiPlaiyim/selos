@@ -54,6 +54,9 @@ public class CSVService {
                     log.error("",e);
                 }
             }
+            if(!Util.isNull(inputStream)){
+                inputStream.close();
+            }
         }
     }
 

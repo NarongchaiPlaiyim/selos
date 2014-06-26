@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
 import com.clevel.selos.businesscontrol.isa.csv.model.ResultModel;
 import com.clevel.selos.businesscontrol.isa.csv.service.CSVService;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
+import com.clevel.selos.controller.isa.download.model.DownloadModel;
 import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.*;
@@ -25,6 +26,7 @@ import com.clevel.selos.transform.UserTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -144,7 +146,7 @@ public class IsaBusinessControl extends BusinessControl {
     }
 
 
-    public void exportProcess() throws Exception {
+    public String exportProcess() throws Exception {
         log.debug("-- exportProcess()");
         List<User> userList = null;
         userList = Util.safetyList(userDAO.findAll());
@@ -155,15 +157,16 @@ public class IsaBusinessControl extends BusinessControl {
             fullPath = stringBuilder.toString();
             csvService.CSVExport(fullPath, userList);
         }
+        return fullPath;
     }
 
-    public void importProcess(final InputStream inputStream) throws Exception {
+    public DownloadModel importProcess(final InputStream inputStream) throws Exception {
         log.debug("-- importProcess()");
         List<CSVModel> csvModelList = Util.safetyList(csvService.CSVImport(inputStream));
-        String fullPath = null;
         List<ResultModel> resultModelList = null;
         ResultModel resultModel = null;
         StringBuilder stringBuilder = null;
+        DownloadModel downloadModel = null;
         if(!Util.isZero(csvModelList.size())){
             resultModelList = new ArrayList<ResultModel>();
 
@@ -185,11 +188,14 @@ public class IsaBusinessControl extends BusinessControl {
             }
 
             if(!Util.isZero(resultModelList.size())){
-                stringBuilder = new StringBuilder().append(path).append(resultFileName).append(Util.getFileNameForISA()).append(CSV);
-                fullPath = stringBuilder.toString();
+                final String fileName = new StringBuilder().append(resultFileName).append(Util.getFileNameForISA()).append(CSV).toString();
+                stringBuilder = new StringBuilder().append(path).append(fileName);
+                final String fullPath = stringBuilder.toString();
                 csvService.CSVExport(fullPath, resultModelList, null);
+                downloadModel = new DownloadModel(DateTime.now().toDate(), fullPath, fileName);
             }
         }
+        return downloadModel;
     }
 
 

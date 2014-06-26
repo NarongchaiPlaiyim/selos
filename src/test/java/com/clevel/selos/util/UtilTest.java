@@ -48,6 +48,7 @@ public class UtilTest {
     public void testIsNull() {
 //        log.info("-- testIsNullObject.");
         try {
+
             assertTrue(Util.isNull(null));
             Date date = null;
             assertTrue("expected true" , Util.isNull(date));

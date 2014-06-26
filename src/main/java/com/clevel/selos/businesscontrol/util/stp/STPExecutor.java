@@ -48,13 +48,13 @@ public class STPExecutor implements Serializable {
 
     public String createFromCSV(final CSVModel csv){
         log.debug("-- createFromCSV(UserId : {})", csv.getUserId());
-        String result = "";
+        String result = "this command is not ready";
         return result;
     }
 
     public String updateFromCSV(final CSVModel csv){
         log.debug("-- updateFromCSV(UserId : {})", csv.getUserId());
-        String result = "";
+        String result = "this command is not ready";
         return result;
     }
 

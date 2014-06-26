@@ -38,9 +38,12 @@
                                     <td>
                                         <p:commandButton value="Download"
                                                          styleClass="medium"
-                                                         action="#{isaUpload.onSubmitExportCSV()}"
-                                                         update=":msgBoxSystemMessagePanel"
-                                                />
+                                                         actionListener="#{isaUpload.onSubmitExportCSV()}"
+                                                         update=":msgBoxSystemMessagePanel, @form"
+                                                         ajax="false">
+                                            <p:fileDownload value="#{isaUpload.streamedContent}" />
+                                        </p:commandButton>
+
                                     </td>
                                 </tr>
                                 <tr/>
@@ -70,7 +73,34 @@
                                                 />
                                     </td>
                                 </tr>
+                            </table>
+                            <table>
+                                <ui:repeat value="#{isaUpload.downloadModelList}" var="downloadModel" varStatus="rowDownloadIndex">
+                                    <tr>
+                                        <td style="width: 150px; min-width: 150px; max-width: 150px;" />
+                                        <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+                                        <td style="width: 120px; min-width: 120px; max-width: 120px;" />
 
+                                    </tr>
+                                    <tr>
+                                        <td class="title" >
+                                            <p:outputLabel value="#{downloadModel.date}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm " />
+                                            </p:outputLabel>
+                                        </td>
+                                        <td >
+                                            <p:outputLabel value="#{downloadModel.fileName}" />
+                                        </td>
+                                        <td class="title" >
+                                            <p:commandButton value="Download" styleClass="medium"
+                                                             update=":msgBoxSystemMessagePanel, @form"
+                                                             ajax="false"
+                                                             actionListener="#{isaUpload.onSubmitDownloadResultFile(downloadModel.fullPath)}" >
+                                                <p:fileDownload value="#{isaUpload.streamedContent}" />
+                                            </p:commandButton>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
                             </table>
                         </div>
                     </h:form>
