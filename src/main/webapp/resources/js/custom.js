@@ -1044,9 +1044,10 @@ function wireUpEvents() {
     });
 
     $(document).keydown(function(e) {
-        if((e.which == 82 && e.ctrlKey)   //Ctrl+R, F5, Enter
+        if((e.which == 82 && e.ctrlKey)   //Ctrl+R, F5, Enter, backspace
             || e.which == 116
-            || e.which == 13) {
+            || e.which == 13
+            || e.which == 8) {
             refresh = true;
         }
     });

@@ -1,7 +1,9 @@
 package com.clevel.selos.report;
 
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.*;
 import com.clevel.selos.system.Config;
@@ -12,10 +14,16 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "report")
@@ -76,6 +84,9 @@ public class GenPDF extends ReportService implements Serializable {
 
     long workCaseId;
     private boolean type;
+
+    @Inject
+    private STPExecutor stpExecutor;
 
     public GenPDF() {
 
@@ -308,6 +319,60 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillMasterOfferLetter",pdfOfferLetter.fillMasterOfferLetter());
 
         generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter());
+    }
+
+    public void onPrintLogonOver90(HttpServletRequest request, HttpServletResponse response){
+        log.debug("--on onPrintLogonOver90.");
+        HashMap map = new HashMap<String, Object>();
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+
+        ResultSet rs = stpExecutor.getLogonOver90();
+        int i = 1;
+        String jasper = "LogonOver90";
+
+        try {
+            while (rs.next()){
+                ISAViewReport viewReport = new ISAViewReport();
+                viewReport.setRow(i++);
+                viewReport.setUserId(rs.getString("USER_ID"));
+                viewReport.setUserName(rs.getString("USER_NAME"));
+                viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                viewReport.setLogin(rs.getTimestamp("LAST_LOGIN_DATE"));
+                viewReport.setStatus(rs.getString("STATUS"));
+                viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
+                viewReportList.add(viewReport);
+            }
+            exportPDF(request,response,map,viewReportList,jasper);
+        } catch (SQLException e) {
+            log.debug("on getLogonOver90. {}",e);
+        } catch (Exception e) {
+            log.debug("onPrintLogonOver90. {}",e);
+        }
+    }
+
+    public void onPrintViolation(HttpServletRequest request, HttpServletResponse response){
+        log.debug("--on onPrintViolation.");
+        HashMap map = new HashMap<String, Object>();
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+        String jasper = "Violation";
+        ResultSet rs = stpExecutor.getViolation("02/6/2014","05/06/2014");
+
+        try {
+            while (rs.next());{
+                ISAViewReport viewReport = new ISAViewReport();
+                viewReport.setUserId(rs.getString("USER_ID"));
+                viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
+                viewReport.setLogin(rs.getTimestamp("LOGIB_DATE"));
+                viewReport.setStatus(rs.getString("STATUS"));
+                viewReport.setDescrition(rs.getString("DESCRITION"));
+                viewReportList.add(viewReport);
+            }
+            exportPDF(request,response,map,viewReportList,jasper);
+        } catch (SQLException e) {
+            log.debug("on getViolation. {}",e);
+        } catch (Exception e) {
+            log.debug("onPrintLogonOver90. {}",e);
+        }
     }
 
     public ReportView getReportView() {

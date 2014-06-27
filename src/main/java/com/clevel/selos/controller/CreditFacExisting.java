@@ -1975,6 +1975,15 @@ public class CreditFacExisting extends BaseController {
 
         ExistingCreditFacilityView existingCreditFacilityViewTmp = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
         existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
+        existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setBorrowerRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setBorrowerAppInRLOSCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setBorrowerExistingCreditPreScreenDeleteList(new ArrayList<ExistingCreditDetailView>());
+
+        existingCreditFacilityView.setRelatedComExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setRelatedRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setRelatedAppInRLOSCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setRelateExistingCreditPresScreenDeleteList(new ArrayList<ExistingCreditDetailView>());
 
         if(existingCreditFacilityViewTmp!=null && existingCreditFacilityViewTmp.getId()!=0){
             existingCreditFacilityView.setId(existingCreditFacilityViewTmp.getId());
