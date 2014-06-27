@@ -1,11 +1,13 @@
 package com.clevel.selos.businesscontrol.isa.csv.model;
 
+import com.clevel.selos.businesscontrol.isa.csv.command.CommandType;
+import com.clevel.selos.businesscontrol.isa.csv.validation.ValidationImp;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class CSVModel implements Serializable {
+public class CSVModel extends ValidationImp implements Serializable {
     private String command;
     private String userId;
     private String userName;
@@ -112,6 +114,10 @@ public class CSVModel implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String valid(CommandType commandType) {
+        return super.valid(this, commandType);
     }
 
     @Override

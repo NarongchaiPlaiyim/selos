@@ -1,5 +1,4 @@
 package com.clevel.selos.businesscontrol.isa.csv.command;
-
 public enum CommandType {
     INSERT{
         @Override
@@ -19,5 +18,6 @@ public enum CommandType {
             return "DELETE".equalsIgnoreCase(string);
         }
     };
+
     public abstract boolean equals(final String string);
 }

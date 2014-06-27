@@ -69,7 +69,7 @@ public class CSVService {
             beanWriter = new CsvBeanWriter(out, CsvPreference.STANDARD_PREFERENCE);
             final String[] header = new String[] {
                     "userId", "userName", "active", "role",
-                    "department", "division", "region", "team",
+                    "team", "department", "division", "region",
                     "title", "status" };
             beanWriter.writeHeader(header);
             List<CSVModel> csvModelList = covertModelToCSV(userList);
@@ -99,7 +99,7 @@ public class CSVService {
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), UTF_8));
             beanWriter = new CsvBeanWriter(out, CsvPreference.STANDARD_PREFERENCE);
             final String[] header = new String[] {
-                    "command", "id", "result"};
+                    "command", "id", "result", "detail"};
             beanWriter.writeHeader(header);
             for (final ResultModel resultModel : resultModelList) {
                 beanWriter.write(resultModel, header);

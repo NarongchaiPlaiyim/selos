@@ -7,6 +7,7 @@ public class ResultModel {
     private String command;
     private String id;
     private String result;
+    private String detail;
 
     public ResultModel() {
 
@@ -36,12 +37,21 @@ public class ResultModel {
         this.result = result;
     }
 
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("command", command)
                 .append("id", id)
                 .append("result", result)
+                .append("detail", detail)
                 .toString();
     }
 }

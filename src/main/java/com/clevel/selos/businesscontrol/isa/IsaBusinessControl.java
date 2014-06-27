@@ -171,18 +171,19 @@ public class IsaBusinessControl extends BusinessControl {
             resultModelList = new ArrayList<ResultModel>();
 
             for(final CSVModel csv : csvModelList){
-                resultModel = new ResultModel();
                 final String command = csv.getCommand();
-                resultModel.setCommand(command);
-                resultModel.setId(csv.getUserId());
                 if(CommandType.INSERT.equals(command)){
-                    resultModel.setResult(stpExecutor.createFromCSV(csv));
+                    resultModel = executeInsert(csv, CommandType.INSERT);
                 } else if(CommandType.UPDATE.equals(command)){
-                    resultModel.setResult(stpExecutor.updateFromCSV(csv));
+                    resultModel = executeUpdate(csv, CommandType.UPDATE);
                 } else if(CommandType.DELETE.equals(command)){
-                    resultModel.setResult(stpExecutor.deleteFromCSV(csv));
+                    resultModel = executeDelete(csv, CommandType.DELETE);
                 } else {
-                    resultModel.setResult("Command not found");
+                    resultModel = new ResultModel();
+                    resultModel.setCommand(command);
+                    resultModel.setId(csv.getUserId());
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail("Command not found");
                 }
                 resultModelList.add(resultModel);
             }
@@ -196,6 +197,100 @@ public class IsaBusinessControl extends BusinessControl {
             }
         }
         return downloadModel;
+    }
+
+    private ResultModel executeInsert(final CSVModel csvModel, final CommandType commandType){
+        String result = null;
+        ResultModel resultModel = null;
+        try {
+            result = csvModel.valid(commandType);
+            resultModel = new ResultModel();
+            resultModel.setCommand(commandType.toString());
+            resultModel.setId(csvModel.getUserId());
+            if(Util.isZero(result.length())){
+                result = stpExecutor.createFromCSV(csvModel);
+                if("SUCCESS".equalsIgnoreCase(result)){
+                    resultModel.setResult(ActionResult.SUCCESS.toString());
+                } else {
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail(result);
+                }
+            } else {
+                resultModel.setResult(ActionResult.FAILED.toString());
+                resultModel.setDetail(result);
+            }
+        } catch(Exception e){
+            if (e.getCause() != null) {
+                result = e.getCause().getMessage();
+            } else {
+                result = e.getMessage();
+            }
+            resultModel.setResult(ActionResult.EXCEPTION.toString());
+            resultModel.setDetail(result);
+        }
+        return resultModel;
+    }
+    private ResultModel executeUpdate(final CSVModel csvModel, final CommandType commandType){
+        String result = null;
+        ResultModel resultModel = null;
+        try {
+            result = csvModel.valid(commandType);
+            resultModel = new ResultModel();
+            resultModel.setCommand(commandType.toString());
+            resultModel.setId(csvModel.getUserId());
+            if(Util.isZero(result.length())){
+                result = stpExecutor.updateFromCSV(csvModel);
+                if("SUCCESS".equalsIgnoreCase(result)){
+                    resultModel.setResult(ActionResult.SUCCESS.toString());
+                } else {
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail(result);
+                }
+            } else {
+                resultModel.setResult(ActionResult.FAILED.toString());
+                resultModel.setDetail(result);
+            }
+        } catch(Exception e){
+            if (e.getCause() != null) {
+                result = e.getCause().getMessage();
+            } else {
+                result = e.getMessage();
+            }
+            resultModel.setResult(ActionResult.EXCEPTION.toString());
+            resultModel.setDetail(result);
+        }
+        return resultModel;
+    }
+    private ResultModel executeDelete(final CSVModel csvModel, final CommandType commandType){
+        String result = null;
+        ResultModel resultModel = null;
+        try {
+            result = csvModel.valid(commandType);
+            resultModel = new ResultModel();
+            resultModel.setCommand(commandType.toString());
+            resultModel.setId(csvModel.getUserId());
+            if(Util.isZero(result.length())){
+                result = stpExecutor.deleteFromCSV(csvModel);
+                if("SUCCESS".equalsIgnoreCase(result)){
+                    resultModel.setResult(ActionResult.SUCCESS.toString());
+                } else {
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail(result);
+                }
+            } else {
+                resultModel.setResult(ActionResult.FAILED.toString());
+                resultModel.setDetail(result);
+            }
+        } catch(Exception e){
+            if (e.getCause() != null) {
+                result = e.getCause().getMessage();
+            } else {
+                result = e.getMessage();
+            }
+            resultModel.setResult(ActionResult.EXCEPTION.toString());
+            resultModel.setDetail(result);
+        }
+        return resultModel;
     }
 
 

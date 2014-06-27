@@ -204,6 +204,9 @@
                             <p:column headerText="Role">
                                 <h:outputText value="#{user.role.name}"/>
                             </p:column>
+                            <p:column headerText="Team">
+                                <h:outputText value="#{user.team.team_name}"/>
+                            </p:column>
                             <p:column headerText="Department">
                                 <h:outputText value="#{user.department.name}"/>
                             </p:column>
@@ -212,9 +215,6 @@
                             </p:column>
                             <p:column headerText="Region">
                                 <h:outputText value="#{user.region.name}"/>
-                            </p:column>
-                            <p:column headerText="Team">
-                                <h:outputText value="#{user.team.team_name}"/>
                             </p:column>
                             <p:column headerText="Title">
                                 <h:outputText value="#{user.title.name}"/>
