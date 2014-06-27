@@ -1467,17 +1467,6 @@ public class CreditFacProposeControl extends BusinessControl {
                     deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
                 }
             }
-            //for remove fee detail
-            if(deleteCreditDetailList != null && deleteCreditDetailList.size() > 0){
-                for(NewCreditDetail ncd : deleteCreditDetailList){
-                    if(!Util.isNull(ncd)){
-                        List<FeeDetail> feeDetail = feeDetailDAO.findByCreditDetail(ncd);
-                        if(!Util.isNull(feeDetail)){
-                            feeDetailDAO.delete(feeDetail);
-                        }
-                    }
-                }
-            }
             newCreditDetailDAO.delete(deleteCreditDetailList);
         }
     }
