@@ -46,8 +46,9 @@ public class ExistingCreditDetailDAO extends GenericDAO<ExistingCreditDetail, Lo
     }
 
     public List<ExistingCreditDetail> findByExistingCreditDetailIdList(List<ExistingCreditDetailView> existingCreditDetailViews) {
-        log.info("findByExistingCreditDetailIdList , existingCreditDetailViews size : {}", existingCreditDetailViews.size());
-        if(existingCreditDetailViews.size()>0){
+        log.info("findByExistingCreditDetailIdList");
+        if(existingCreditDetailViews!=null && existingCreditDetailViews.size()>0){
+            log.info("findByExistingCreditDetailIdList , existingCreditDetailViews size : {}", existingCreditDetailViews.size());
             List<Long> existingCreditDetailIdList = new ArrayList<Long>();
             for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
                 existingCreditDetailIdList.add(existingCreditDetailView.getId());

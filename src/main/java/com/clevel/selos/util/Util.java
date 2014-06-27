@@ -508,4 +508,16 @@ public class Util implements Serializable {
         }
         return true;
     }
+
+    public static String getAccountNumberFormatForExistingCredit(String accountNumber){
+        if(accountNumber!=null && accountNumber.length()==10){
+            String first = accountNumber.substring(0,3);
+            String second = accountNumber.substring(3,4);
+            String third = accountNumber.substring(4,9);
+            String fourth = accountNumber.substring(9,10);
+
+            return first+"-"+second+"-"+third+"-"+fourth;
+        }
+        return accountNumber;
+    }
 }
