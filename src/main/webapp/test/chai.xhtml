@@ -198,6 +198,14 @@
                     </h:panelGrid>
                 </p:panel>
             </h:form>
+            <h:form id="onPrintLogonOver90">
+                <p:commandButton id="print" value="onPrintLogonOver90" update="@form"
+                                 action="#{report.onPrintLogonOver90()}"/>
+            </h:form>
+            <h:form id="onPrintViolation">
+                <p:commandButton id="print" value="onPrintViolation" update="@form"
+                                 action="#{report.onPrintViolation()}"/>
+            </h:form>
         </p:panel>
 
     </h:body>

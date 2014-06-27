@@ -13,13 +13,11 @@ import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.report.RejectedLetter;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.Individual;
-import com.clevel.selos.model.db.working.Juristic;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -56,6 +54,8 @@ public class RejectLetterService implements Serializable {
     @ExceptionMessage
     Message msg;
 
+    private final static String SPACE_BAR = " ";
+
     @Inject
     public RejectLetterService() {
 
@@ -74,6 +74,12 @@ public class RejectLetterService implements Serializable {
                 String nameTh = null;
                 String lastNameTh = null;
                 String borrowerName = "";
+                String addressLine1 = "-";
+                String addressLine2 = "-";
+                String addressLine3 = "-";
+                String addressLine4 = "-";
+                String province = "";
+                String zipCode = "";
 
                 rejectedLetter.setWorkCase(workCase);
                 rejectedLetter.setAppNumber(workCase.getAppNumber());
@@ -106,6 +112,69 @@ public class RejectLetterService implements Serializable {
                         case 1:
                             rejectedLetter.setBorrower1(borrowerName);
                             rejectedLetter.setCitizenId1(citizenId);
+
+                            List<Address> addressesList = customer.getAddressesList();
+                            for(Address address: addressesList){
+                                if(address.getAddressType() == customer.getMailingAddressType()){
+                                    String addrNo = Util.getStringNotNull(address.getAddressNo());
+                                    String building = Util.getStringNotNull(address.getBuilding());
+                                    String road = Util.getStringNotNull(address.getRoad());
+                                    String moo = Util.getStringNotNull(address.getMoo());
+                                    String subDistrict = Util.getStringNotNull(address.getSubDistrict().getName());
+                                    String district = Util.getStringNotNull(address.getDistrict().getName());
+                                    province = Util.getStringNotNull(address.getProvince().getName());
+                                    zipCode = Util.getStringNotNull(address.getPostalCode());
+
+                                    if(!addrNo.trim().equalsIgnoreCase("") && !addrNo.trim().equalsIgnoreCase("-")){
+                                        addressLine1 = addrNo;
+                                        if(!building.trim().equalsIgnoreCase("") && !building.trim().equalsIgnoreCase("-")){
+                                            addressLine1 = addressLine1+SPACE_BAR+building;
+                                            if(!road.trim().equalsIgnoreCase("") && !road.trim().equalsIgnoreCase("-")){
+                                                addressLine1 = addressLine1+SPACE_BAR+road;
+                                                if(!moo.trim().equalsIgnoreCase("") && !moo.trim().equalsIgnoreCase("-")){
+                                                    addressLine1 = addressLine1+SPACE_BAR+moo;
+                                                }
+                                            } else {
+                                                if(!moo.trim().equalsIgnoreCase("") && !moo.trim().equalsIgnoreCase("-")){
+                                                    addressLine1 = addressLine1+SPACE_BAR+moo;
+                                                }
+                                            }
+                                        } else {
+                                            if(!road.trim().equalsIgnoreCase("") && !road.trim().equalsIgnoreCase("-")){
+                                                addressLine1 = addressLine1+SPACE_BAR+road;
+                                                if(!moo.trim().equalsIgnoreCase("") && !moo.trim().equalsIgnoreCase("-")){
+                                                    addressLine1 = addressLine1+SPACE_BAR+moo;
+                                                }
+                                            } else {
+                                                if(!moo.trim().equalsIgnoreCase("") && !moo.trim().equalsIgnoreCase("-")){
+                                                    addressLine1 = addressLine1+SPACE_BAR+moo;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if(!building.trim().equalsIgnoreCase("") && !building.trim().equalsIgnoreCase("-")){
+                                            addressLine1 = building;
+                                        } else {
+                                            if(!road.trim().equalsIgnoreCase("") && !road.trim().equalsIgnoreCase("-")){
+                                                addressLine1 = road;
+                                            } else {
+                                                if(!moo.trim().equalsIgnoreCase("") && !moo.trim().equalsIgnoreCase("-")){
+                                                    addressLine1 = moo;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    addressLine2 = district+SPACE_BAR+subDistrict;
+
+                                    rejectedLetter.setAddrLine1(addressLine1);
+                                    rejectedLetter.setAddrLine2(addressLine2);
+                                    rejectedLetter.setAddrLine3(addressLine3);
+                                    rejectedLetter.setAddrLine4(addressLine4);
+                                    rejectedLetter.setProvince(province);
+                                    rejectedLetter.setZipcode(zipCode);
+                                }
+                            }
                             break;
                         case 2:
                             rejectedLetter.setBorrower2(borrowerName);

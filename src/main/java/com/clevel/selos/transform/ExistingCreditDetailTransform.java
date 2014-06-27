@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -105,7 +106,7 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setCreateBy(existingCreditDetail.getCreateBy());
             existingCreditDetailView.setModifyDate(existingCreditDetail.getModifyDate());
             existingCreditDetailView.setModifyBy(existingCreditDetail.getModifyBy());
-            existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
+            existingCreditDetailView.setAccountNumber(Util.getAccountNumberFormatForExistingCredit(existingCreditDetail.getAccountNumber()));
             existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
             existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
             existingCreditDetailView.setExistAccountStatusView(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getExistAccountStatus()));
