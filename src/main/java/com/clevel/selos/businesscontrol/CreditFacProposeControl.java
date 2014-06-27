@@ -1416,7 +1416,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
             for (Long id : deleteCollIdList) {
-                deleteCollateralList.add(newCollateralDAO.findNewCollateralId(id, ProposeType.P));
+                if(!Util.isZero(id)){
+                    deleteCollateralList.add(newCollateralDAO.findNewCollateralId(id, ProposeType.P));
+                }
             }
             //for remove sub relate
             if(deleteCollateralList != null && deleteCollateralList.size() > 0){
@@ -1425,8 +1427,10 @@ public class CreditFacProposeControl extends BusinessControl {
                         for(NewCollateralHead nch : nc.getNewCollateralHeadList()){
                             if(nch.getNewCollateralSubList() != null && nch.getNewCollateralSubList().size() > 0){
                                 for(NewCollateralSub ncs : nch.getNewCollateralSubList()){
-                                    List<NewCollateralSubRelated> newCollSub = newCollateralSubRelatedDAO.findByMainCollSubId(ncs.getId(),ProposeType.P);
-                                    newCollateralSubRelatedDAO.delete(newCollSub);
+                                    if(!Util.isZero(ncs.getId())){
+                                        List<NewCollateralSubRelated> newCollSub = newCollateralSubRelatedDAO.findByMainCollSubId(ncs.getId(),ProposeType.P);
+                                        newCollateralSubRelatedDAO.delete(newCollSub);
+                                    }
                                 }
                             }
                         }
@@ -1439,7 +1443,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteGuarantorIdList != null && deleteGuarantorIdList.size() > 0) {
             List<NewGuarantorDetail> deleteGuarantorList = new ArrayList<NewGuarantorDetail>();
             for (Long id : deleteGuarantorIdList) {
-                deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id, ProposeType.P));
+                if(!Util.isZero(id)){
+                    deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id, ProposeType.P));
+                }
             }
             newGuarantorDetailDAO.delete(deleteGuarantorList);
         }
@@ -1447,7 +1453,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteConditionIdList != null && deleteConditionIdList.size() > 0) {
             List<NewConditionDetail> deleteConditionList = new ArrayList<NewConditionDetail>();
             for (Long id : deleteConditionIdList) {
-                deleteConditionList.add(newConditionDetailDAO.findById(id));
+                if(!Util.isZero(id)){
+                    deleteConditionList.add(newConditionDetailDAO.findById(id));
+                }
             }
             newConditionDetailDAO.delete(deleteConditionList);
         }
@@ -1455,13 +1463,19 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
             for (Long id : deleteCreditIdList) {
-                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
+                if(!Util.isZero(id)){
+                    deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
+                }
             }
             //for remove fee detail
             if(deleteCreditDetailList != null && deleteCreditDetailList.size() > 0){
                 for(NewCreditDetail ncd : deleteCreditDetailList){
-                    List<FeeDetail> feeDetail = feeDetailDAO.findByCreditDetail(ncd);
-                    feeDetailDAO.delete(feeDetail);
+                    if(!Util.isNull(ncd)){
+                        List<FeeDetail> feeDetail = feeDetailDAO.findByCreditDetail(ncd);
+                        if(!Util.isNull(feeDetail)){
+                            feeDetailDAO.delete(feeDetail);
+                        }
+                    }
                 }
             }
             newCreditDetailDAO.delete(deleteCreditDetailList);
