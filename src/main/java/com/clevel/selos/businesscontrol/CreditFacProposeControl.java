@@ -987,14 +987,29 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public List<ProposeCreditDetailView> setNoFlagForCollateralRelateCredit(NewCollateralView newCollateralView,List<ProposeCreditDetailView> proposeCreditDetailViews,long creditFacId){
-        List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
-        if(newCollateralCredits != null && newCollateralCredits.size() > 0){
-            for(NewCollateralCredit newCollateralCredit : newCollateralCredits){
-                if(newCollateralCredit.getNewCollateral().getId() == newCollateralView.getId()){
-                    if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
-                        for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
-                            if(proposeCreditDetailView.getId() == newCollateralCredit.getNewCreditDetail().getId()){
-                                proposeCreditDetailView.setNoFlag(true);
+        if(!Util.isZero(newCollateralView.getId())) {
+            List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
+            if(newCollateralCredits != null && newCollateralCredits.size() > 0){
+                for(NewCollateralCredit newCollateralCredit : newCollateralCredits){
+                    if(newCollateralCredit.getNewCollateral().getId() == newCollateralView.getId()){
+                        if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                            for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                                if(proposeCreditDetailView.getId() == newCollateralCredit.getNewCreditDetail().getId()){
+                                    proposeCreditDetailView.setNoFlag(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if(!Util.isNull(newCollateralView.getProposeCreditDetailViewList()) && !Util.isZero(newCollateralView.getProposeCreditDetailViewList().size())) {
+                for(ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
+                    if(proposeCreditDetailView.isNoFlag()) {
+                        for (ProposeCreditDetailView proCreList : proposeCreditDetailViews) {
+                            if(proposeCreditDetailView.getSeq() == proCreList.getSeq()) {
+                                proCreList.setNoFlag(true);
+                                break;
                             }
                         }
                     }
@@ -1005,18 +1020,33 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public List<ProposeCreditDetailView> setNoFlagForGuarantorRelateCredit(NewGuarantorDetailView newGuarantorDetailView,List<ProposeCreditDetailView> proposeCreditDetailViews,long creditFacId){
-        List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
-        if(newGuarantorCredits != null && newGuarantorCredits.size() > 0){
-            for(NewGuarantorCredit newGuarantorCredit : newGuarantorCredits){
-                if(newGuarantorCredit != null && newGuarantorCredit.getNewGuarantorDetail() != null && newGuarantorDetailView != null){
-                    if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
-                        if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
-                            for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
-                                if(proposeCreditDetailView != null && newGuarantorCredit.getNewCreditDetail() != null){
-                                    if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
-                                        proposeCreditDetailView.setNoFlag(true);
+        if(!Util.isZero(newGuarantorDetailView.getId())) {
+            List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
+            if(newGuarantorCredits != null && newGuarantorCredits.size() > 0){
+                for(NewGuarantorCredit newGuarantorCredit : newGuarantorCredits){
+                    if(newGuarantorCredit != null && newGuarantorCredit.getNewGuarantorDetail() != null && newGuarantorDetailView != null){
+                        if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
+                            if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                                for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                                    if(proposeCreditDetailView != null && newGuarantorCredit.getNewCreditDetail() != null){
+                                        if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
+                                            proposeCreditDetailView.setNoFlag(true);
+                                        }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if(!Util.isNull(newGuarantorDetailView.getProposeCreditDetailViewList()) && !Util.isZero(newGuarantorDetailView.getProposeCreditDetailViewList().size())) {
+                for(ProposeCreditDetailView proposeCreditDetailView : newGuarantorDetailView.getProposeCreditDetailViewList()) {
+                    if(proposeCreditDetailView.isNoFlag()) {
+                        for (ProposeCreditDetailView proCreList : proposeCreditDetailViews) {
+                            if(proposeCreditDetailView.getSeq() == proCreList.getSeq()) {
+                                proCreList.setNoFlag(true);
+                                break;
                             }
                         }
                     }
