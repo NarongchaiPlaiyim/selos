@@ -171,7 +171,7 @@ public class IsaBusinessControl extends BusinessControl {
             resultModelList = new ArrayList<ResultModel>();
 
             for(final CSVModel csv : csvModelList){
-                final String command = csv.getCommand();
+                final String command = csv.getCommandType();
                 if(CommandType.INSERT.equals(command)){
                     resultModel = executeInsert(csv, CommandType.INSERT);
                 } else if(CommandType.UPDATE.equals(command)){

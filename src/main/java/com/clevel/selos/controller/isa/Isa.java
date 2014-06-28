@@ -146,16 +146,11 @@ public class Isa implements Serializable {
             userTeamList = getUserTeamByRoleId(isaManageUserView.getRole().getId());
             isaManageUserView.setUserTeam(new UserTeam());
         }
-
-
     }
 
     private List<UserTeam> getUserTeamByRoleId(final int id){
         return isaBusinessControl.getUserTeamByRoleId(id);
     }
-
-
-
 
     public void onSubmitSaveDialog(){
         log.debug("-- onSubmitSaveDialog()");
@@ -313,7 +308,7 @@ public class Isa implements Serializable {
             context.execute("msgBoxSystemMessageDlg.show()");
         }
     }
-    public void onEditUserActive() {         //-- onDeleteUserList()
+    public void onEditUserActive() {
         log.debug("-- onEditUserActive()");
         RequestContext context = RequestContext.getCurrentInstance();
         StringBuilder stringBuilder = null;

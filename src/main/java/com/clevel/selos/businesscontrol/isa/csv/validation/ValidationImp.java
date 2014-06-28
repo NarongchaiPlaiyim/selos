@@ -6,7 +6,7 @@ import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.util.Util;
 
 public class ValidationImp{
-    public String valid(final CSVModel csvModel, final CommandType commandType) {
+    protected String valid(final CSVModel csvModel, final CommandType commandType) {
         String result = "";
         if(CommandType.INSERT.equals(commandType.toString())){
             result = checkInsert(csvModel);

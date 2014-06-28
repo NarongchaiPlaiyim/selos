@@ -33,14 +33,14 @@ public class CSVService {
     public List<CSVModel> CSVImport(final InputStream inputStream) throws Exception{
         log.debug("-- CSVImport()");
         ICsvBeanReader beanReader = null;
-        CSVModel customerModel = null;
+        CSVModel csvModel = null;
         List<CSVModel> csvModelList = null;
         try {
             beanReader = new CsvBeanReader(new InputStreamReader(inputStream, UTF_8), CsvPreference.STANDARD_PREFERENCE);
             final String[] header = beanReader.getHeader(true);
             csvModelList = new ArrayList<CSVModel>();
-            while( (customerModel = beanReader.read(CSVModel.class, header)) != null ) {
-                csvModelList.add(customerModel);
+            while( (csvModel = beanReader.read(CSVModel.class, header, getProcessorsss())) != null ) {
+                csvModelList.add(csvModel);
             }
             return csvModelList;
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class CSVService {
                     "command", "id", "result", "detail"};
             beanWriter.writeHeader(header);
             for (final ResultModel resultModel : resultModelList) {
-                beanWriter.write(resultModel, header);
+                beanWriter.write(resultModel, header, getProcessor());
             }
             beanWriter.flush();
         } catch (Exception e) {
@@ -169,9 +169,35 @@ public class CSVService {
         }
         return csvModelList;
     }
+    private CellProcessor[] getProcessor() {
+        final CellProcessor[] processors = new CellProcessor[] {
+                null, // commandType
+                null, // id
+                null, // result
+                null, // detail
+        };
+        return processors;
+    }
     private CellProcessor[] getProcessors() {
         final CellProcessor[] processors = new CellProcessor[] {
                 new UniqueHashCode(), // userId (must be unique)
+                null, // userName
+                null, // active
+                null, // role
+                null, // department
+                null, // division
+                null, // region
+                null, // team
+                null, // title
+                null, // status
+        };
+        return processors;
+    }
+
+    private CellProcessor[] getProcessorsss() {
+        final CellProcessor[] processors = new CellProcessor[] {
+                null, // commandType
+                null, // userID
                 null, // userName
                 null, // active
                 null, // role

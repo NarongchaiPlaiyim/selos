@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class CSVModel extends ValidationImp implements Serializable {
-    private String command;
+    private String commandType;
     private String userId;
     private String userName;
     private String active;
@@ -20,20 +20,17 @@ public class CSVModel extends ValidationImp implements Serializable {
     private String title;
     private String status;
 
+
     public CSVModel() {
 
     }
 
-    public String getCommand() {
-        return command;
+    public String getCommandType() {
+        return commandType;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public void set﻿command(String command) {
-        this.command = command;
+    public void set﻿commandType(String commandType) {
+        this.commandType = commandType;
     }
 
     public String getUserId() {
@@ -123,7 +120,7 @@ public class CSVModel extends ValidationImp implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("command", command)
+                .append("commandType", commandType)
                 .append("userId", userId)
                 .append("userName", userName)
                 .append("active", active)
