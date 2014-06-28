@@ -1967,7 +1967,6 @@ public class PrescreenMaker extends BaseController {
                     int searchBy = borrowerInfo.getSearchBy();
                     String searchId = borrowerInfo.getSearchId();
                     log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-                    //TODO get Customer Segment
                     log.debug("onSearchCustomerInfo ::: getServiceSegment from CustomerInfo");
                     CustomerInfoView tmpCustomerInfoView = customerInfoResultView.getCustomerInfoView();
                     tmpCustomerInfoView = customerInfoControl.getCustomerCreditInfo(tmpCustomerInfoView);
@@ -2004,6 +2003,25 @@ public class PrescreenMaker extends BaseController {
                         }
                         if (borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
                             if (borrowerInfo.getSpouse() != null) {
+                                //--Check Citizen ID or TMB Customer ID to Search Again
+                                boolean searchSpouse = false;
+                                CustomerInfoView tmpSearchSpouseInfo = borrowerInfo.getSpouse();
+                                if(!Util.isEmpty(tmpSearchSpouseInfo.getTmbCustomerId())){
+                                    tmpSearchSpouseInfo.setSearchBy(2);
+                                    searchSpouse = true;
+                                }else if(!Util.isEmpty(tmpSearchSpouseInfo.getCitizenId())){
+                                    tmpSearchSpouseInfo.setSearchBy(1);
+                                    searchSpouse = true;
+                                }
+                                if(searchSpouse) {
+                                    tmpSearchSpouseInfo.setDocumentType(documentTypeDAO.findById(1));
+                                    CustomerInfoResultView spouseCustomerResultView = prescreenBusinessControl.getCustomerInfoFromRM(tmpSearchSpouseInfo, user);
+
+                                    if(spouseCustomerResultView.getActionResult() == ActionResult.SUCCESS) {
+                                        CustomerInfoView tmpSpouseInfo = spouseCustomerResultView.getCustomerInfoView();
+                                        borrowerInfo.setSpouse(tmpSpouseInfo);
+                                    }
+                                }
                                 /*if(Util.isEmpty(borrowerInfo.getSpouse().getCitizenId())){
                                     enableSpous
                                 }*/

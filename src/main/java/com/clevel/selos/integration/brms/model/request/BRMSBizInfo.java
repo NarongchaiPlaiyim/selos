@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.brms.model.request;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 
 public class BRMSBizInfo implements Serializable {
@@ -65,5 +68,18 @@ public class BRMSBizInfo implements Serializable {
 
     public void setEsrValue(String esrValue) {
         this.esrValue = esrValue;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("bizCode", bizCode)
+                .append("negativeValue", negativeValue)
+                .append("highRiskValue", highRiskValue)
+                .append("esrValue", esrValue)
+                .append("suspendValue", suspendValue)
+                .append("deviationValue", deviationValue)
+                .toString();
     }
 }
