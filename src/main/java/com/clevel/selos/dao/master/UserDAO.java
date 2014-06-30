@@ -68,6 +68,7 @@ public class UserDAO extends GenericDAO<User,String> {
         List<User> userList = null;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("userStatus", UserStatus.NORMAL));
+        criteria.addOrder(Order.asc("id"));
         userList = Util.safetyList((List<User>) criteria.list());
         log.debug("-- UserList.size()[{}]", userList.size());
         return userList;

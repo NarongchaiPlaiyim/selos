@@ -56,19 +56,29 @@ public class STPExecutor implements Serializable {
             @Override
             public void execute(Connection connection) throws SQLException {
                 CallableStatement callStmt = connection.prepareCall("{call SLOS.INSERTUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-                callStmt.setString("USERID", Util.parseString(csv.getUserId(), EMPTY));
-                callStmt.setString("USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
-                callStmt.setInt(   "ACTIVE", Util.parseInt(csv.getActive(), 3));
-                callStmt.setString("ROLE_NAME", Util.parseString(csv.getRole(), EMPTY));
-                callStmt.setString("DEPARTMENT_NAME", Util.parseString(csv.getDepartment(), EMPTY));
-                callStmt.setString("DIVISION_NAME", Util.parseString(csv.getDivision(), EMPTY));
-                callStmt.setString("REGION_NAME", Util.parseString(csv.getRegion(), EMPTY));
-                callStmt.setString("TEAM_NAME", Util.parseString(csv.getTeam(), EMPTY));
-                callStmt.setString("TITLE_NAME", Util.parseString(csv.getTitle(), EMPTY));
-                callStmt.setString("STATUS", Util.parseString(csv.getStatus(), EMPTY));
-                callStmt.registerOutParameter("RESULT", OracleTypes.VARCHAR);
+                callStmt.setString("IN_USER_ID", Util.parseString(csv.getUserId(), EMPTY));
+                log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString("IN_USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
+                log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
+                callStmt.setInt(   "IN_ACTIVE", Util.parseInt(csv.getActive(), 0));
+                log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                callStmt.setString("IN_ROLE_NAME", Util.parseString(csv.getRole(), EMPTY));
+                log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
+                callStmt.setString("IN_TEAM_NAME", Util.parseString(csv.getTeam(), EMPTY));
+                log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
+                callStmt.setString("IN_DEPARTMENT_NAME", Util.parseString(csv.getDepartment(), EMPTY));
+                log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString("IN_DIVISION_NAME", Util.parseString(csv.getDivision(), EMPTY));
+                log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString("IN_REGION_NAME", Util.parseString(csv.getRegion(), EMPTY));
+                log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString("IN_TITLE_NAME", Util.parseString(csv.getTitle(), EMPTY));
+                log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString("IN_STATUS", Util.parseString(csv.getStatus(), EMPTY));
+                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+                callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
-                result[0] =callStmt.getString("RESULT");
+                result[0] =callStmt.getString("OUT_RESULT");
             }
         });
         log.debug("-- result : {}", result[0]);
@@ -82,19 +92,29 @@ public class STPExecutor implements Serializable {
             @Override
             public void execute(Connection connection) throws SQLException {
                 CallableStatement callStmt = connection.prepareCall("{call SLOS.UPDATEUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-                callStmt.setString("USERID", Util.parseString(csv.getUserId(), EMPTY));
-                callStmt.setString("USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
-                callStmt.setInt(   "ACTIVE", Util.parseInt(csv.getActive(), 3));
-                callStmt.setString("ROLE_NAME", Util.parseString(csv.getRole(), EMPTY));
-                callStmt.setString("DEPARTMENT_NAME", Util.parseString(csv.getDepartment(), EMPTY));
-                callStmt.setString("DIVISION_NAME", Util.parseString(csv.getDivision(), EMPTY));
-                callStmt.setString("REGION_NAME", Util.parseString(csv.getRegion(), EMPTY));
-                callStmt.setString("TEAM_NAME", Util.parseString(csv.getTeam(), EMPTY));
-                callStmt.setString("TITLE_NAME", Util.parseString(csv.getTitle(), EMPTY));
-                callStmt.setString("STATUS", Util.parseString(csv.getStatus(), EMPTY));
-                callStmt.registerOutParameter("RESULT", OracleTypes.VARCHAR);
+                callStmt.setString("IN_USER_ID", Util.parseString(csv.getUserId(), EMPTY));
+                log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString("IN_USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
+                log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
+                callStmt.setInt(   "IN_ACTIVE", Util.parseInt(csv.getActive(), 0));
+                log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                callStmt.setString("IN_ROLE_NAME", Util.parseString(csv.getRole(), EMPTY));
+                log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
+                callStmt.setString("IN_TEAM_NAME", Util.parseString(csv.getTeam(), EMPTY));
+                log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
+                callStmt.setString("IN_DEPARTMENT_NAME", Util.parseString(csv.getDepartment(), EMPTY));
+                log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString("IN_DIVISION_NAME", Util.parseString(csv.getDivision(), EMPTY));
+                log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString("IN_REGION_NAME", Util.parseString(csv.getRegion(), EMPTY));
+                log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString("IN_TITLE_NAME", Util.parseString(csv.getTitle(), EMPTY));
+                log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString("IN_STATUS", Util.parseString(csv.getStatus(), EMPTY));
+                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+                callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
-                result[0] =callStmt.getString("RESULT");
+                result[0] =callStmt.getString("OUT_RESULT");
             }
         });
         log.debug("-- result : {}", result[0]);
@@ -108,10 +128,11 @@ public class STPExecutor implements Serializable {
             @Override
             public void execute(Connection connection) throws SQLException {
                 CallableStatement callStmt = connection.prepareCall("{call SLOS.DELETEUSERBYISA(?, ?)}");
-                callStmt.setString("USERID", csv.getUserId());
-                callStmt.registerOutParameter("RESULT", OracleTypes.VARCHAR);
+                callStmt.setString("IN_USER_ID", csv.getUserId());
+                log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
-                result[0] =callStmt.getString("RESULT");
+                result[0] =callStmt.getString("OUT_RESULT");
             }
         });
         log.debug("-- result : {}", result[0]);

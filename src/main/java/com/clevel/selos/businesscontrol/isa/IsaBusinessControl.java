@@ -79,6 +79,7 @@ public class IsaBusinessControl extends BusinessControl {
     private final String CSV = ".csv";
     @Inject
     private STPExecutor stpExecutor;
+    private String userId;
     @Inject
     public IsaBusinessControl() {
     }
@@ -91,6 +92,9 @@ public class IsaBusinessControl extends BusinessControl {
     private final Locale THAI_LOCALE = new Locale("th", "TH");
     private final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss.sss";
 
+    private void onLoadUserId(){
+        userId = getCurrentUserID();
+    }
     public List<UserTeam> getUserTeamByRoleId(final int roleId){
         return userTeamDAO.findByRoleId(roleId);
     }
@@ -211,6 +215,7 @@ public class IsaBusinessControl extends BusinessControl {
                 result = stpExecutor.createFromCSV(csvModel);
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
+                    isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
                 } else {
                     resultModel.setResult(ActionResult.FAILED.toString());
                     resultModel.setDetail(result);
@@ -227,6 +232,7 @@ public class IsaBusinessControl extends BusinessControl {
             }
             resultModel.setResult(ActionResult.EXCEPTION.toString());
             resultModel.setDetail(result);
+            isaAuditor.addException(userId, commandType.toString(), csvModel.toString(), result);
         }
         return resultModel;
     }
@@ -242,9 +248,11 @@ public class IsaBusinessControl extends BusinessControl {
                 result = stpExecutor.updateFromCSV(csvModel);
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
+                    isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
                 } else {
                     resultModel.setResult(ActionResult.FAILED.toString());
                     resultModel.setDetail(result);
+                    isaAuditor.addFailed(userId, commandType.toString(), csvModel.toString(), result);
                 }
             } else {
                 resultModel.setResult(ActionResult.FAILED.toString());
@@ -258,6 +266,7 @@ public class IsaBusinessControl extends BusinessControl {
             }
             resultModel.setResult(ActionResult.EXCEPTION.toString());
             resultModel.setDetail(result);
+            isaAuditor.addException(userId, commandType.toString(), csvModel.toString(), result);
         }
         return resultModel;
     }
@@ -273,9 +282,11 @@ public class IsaBusinessControl extends BusinessControl {
                 result = stpExecutor.deleteFromCSV(csvModel);
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
+                    isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
                 } else {
                     resultModel.setResult(ActionResult.FAILED.toString());
                     resultModel.setDetail(result);
+                    isaAuditor.addFailed(userId, commandType.toString(), csvModel.toString(), result);
                 }
             } else {
                 resultModel.setResult(ActionResult.FAILED.toString());
@@ -289,6 +300,7 @@ public class IsaBusinessControl extends BusinessControl {
             }
             resultModel.setResult(ActionResult.EXCEPTION.toString());
             resultModel.setDetail(result);
+            isaAuditor.addException(userId, commandType.toString(), csvModel.toString(), result);
         }
         return resultModel;
     }

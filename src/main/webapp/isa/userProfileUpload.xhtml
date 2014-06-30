@@ -40,6 +40,7 @@
                                                          styleClass="medium"
                                                          actionListener="#{isaUpload.onSubmitExportCSV()}"
                                                          update=":msgBoxSystemMessagePanel, @form"
+                                                         allowTypes="/(\.|\/)(csv)$/"
                                                          ajax="false">
                                             <p:fileDownload value="#{isaUpload.streamedContent}" />
                                         </p:commandButton>
