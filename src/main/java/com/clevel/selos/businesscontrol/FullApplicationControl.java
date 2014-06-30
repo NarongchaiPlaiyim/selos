@@ -580,7 +580,7 @@ public class FullApplicationControl extends BusinessControl {
             }
         }
 
-        bpmExecutor.submitCA(workCaseId, queueName, decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
+//        bpmExecutor.submitCA(workCaseId, queueName, decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 

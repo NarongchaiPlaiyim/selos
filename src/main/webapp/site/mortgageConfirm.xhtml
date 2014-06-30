@@ -167,39 +167,44 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable styleClass="full_table"
-                        				
-                        				rowIndexVar="rowIdx"
-                        				>
-                        				<p:column style="width:30px" styleClass="center">
-                        					#{rowIdx+1}                        					
-                        				</p:column>
-                        				<p:column style="width:300px;" 
-                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.type')}"
-                        					>
-                        					
-                        				</p:column>
-                        				<p:column style="width:100px" styleClass="center"
-                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.date')}"
-                        					>
-                        					
-                        				</p:column>
-                        				<p:column style="width:150px" styleClass="center"
-                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.completedDate')}"
-                        					>
-                        					
-                        				</p:column>
-                        				<p:column style="width:100px" styleClass="center"
-                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.status')}"
-                        					>
-                        					
-                        				</p:column>
-                        				<p:column
-                        					headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.remark')}"
-                        					>
-                        					
-                        				</p:column>
-                        			</p:dataTable>			
+                        			<p:dataTable styleClass="content_table_form full_table" 
+			                        	style="width:90%;margin:0 auto" 
+			                        	rowIndexVar="rowIdx" value="#{mortgageConfirm.perfectionReviews}"
+			                        	var="review"
+			                        	>
+			                        	<p:column style="width:30px" styleClass="center">
+			                        		#{rowIdx +1}
+			                        	</p:column>
+			                        	<p:column style="width:250px" styleClass="title"
+											headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.type')}"
+			                        		>
+			                        		#{msg.get(review.type.msgKey)}
+			                        	</p:column>
+			                        	<p:column style="width:120px" styleClass="center"
+											headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.date')}"
+			                        		>
+			                        		<h:outputText value="#{review.date}">
+			                        			<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+			                        		</h:outputText>
+			                        	</p:column>
+			                        	<p:column style="width:120px" styleClass="center"
+			                        		headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.completedDate')}"
+			                        		>
+			                        		<h:outputText value="#{review.completedDate}">
+			                        			<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+			                        		</h:outputText>
+			                        	</p:column>
+			                        	<p:column style="width:130px" styleClass="center"
+			                        		headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.status')}"
+			                        		>
+			                        		#{msg.get(review.status.msgKey)}
+			                        	</p:column>
+			                        	<p:column
+			                        		headerText="#{msg.get('app.mortgageReviewContract.perfectReview.table.remark')}"
+			                        		>
+			                        		#{review.remark}
+			                        	</p:column>
+			                        </p:dataTable>		
                         		</td>
                         	</tr>
 	                        
