@@ -1,9 +1,9 @@
 package com.clevel.selos.controller.isa;
 
+import com.clevel.selos.businesscontrol.isa.DownloadService;
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
-import com.clevel.selos.controller.isa.download.model.DownloadModel;
-import com.clevel.selos.controller.isa.download.service.DownloadService;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.view.isa.DownloadView;
 import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -36,7 +36,7 @@ public class IsaUpload implements Serializable {
     private String message;
     private boolean complete;
     private enum Result{Success};
-    private List<DownloadModel> downloadModelList;
+    private List<DownloadView> downloadViewList;
     @Inject
     public IsaUpload() {
 
@@ -50,7 +50,7 @@ public class IsaUpload implements Serializable {
 
     private void onLoadDownloadModel(){
         log.debug("-- onLoadDownloadModel()");
-        downloadModelList = new ArrayList<DownloadModel>();
+        downloadViewList = new ArrayList<DownloadView>();
     }
 
     public void onSubmitExportCSV(){
@@ -79,7 +79,7 @@ public class IsaUpload implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         UploadedFile file = null;
         String fileName = null;
-        DownloadModel downloadModel = null;
+        DownloadView downloadModel = null;
         complete = true;
         messageHeader = "Import to model";
         try {
@@ -88,7 +88,7 @@ public class IsaUpload implements Serializable {
             if(!Util.isNull(fileName) && !Util.isZero(fileName.length())){
                 downloadModel = isaBusinessControl.importProcess(file.getInputstream());
                 if(!Util.isNull(downloadModel)){
-                    downloadModelList.add(downloadModel);
+                    downloadViewList.add(downloadModel);
                 }
                 message = Result.Success.toString();
             }
@@ -139,12 +139,12 @@ public class IsaUpload implements Serializable {
         this.complete = complete;
     }
 
-    public List<DownloadModel> getDownloadModelList() {
-        return downloadModelList;
+    public List<DownloadView> getDownloadViewList() {
+        return downloadViewList;
     }
 
-    public void setDownloadModelList(List<DownloadModel> downloadModelList) {
-        this.downloadModelList = downloadModelList;
+    public void setDownloadViewList(List<DownloadView> downloadViewList) {
+        this.downloadViewList = downloadViewList;
     }
 
     public StreamedContent getStreamedContent() {

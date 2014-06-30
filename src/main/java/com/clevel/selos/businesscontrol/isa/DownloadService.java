@@ -1,4 +1,4 @@
-package com.clevel.selos.controller.isa.download.service;
+package com.clevel.selos.businesscontrol.isa;
 
 
 import com.clevel.selos.integration.SELOS;

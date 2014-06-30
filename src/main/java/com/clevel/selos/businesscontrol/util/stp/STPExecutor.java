@@ -1,8 +1,8 @@
 package com.clevel.selos.businesscontrol.util.stp;
 
-import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.isa.CSVModel;
 import com.clevel.selos.util.Util;
 import oracle.jdbc.OracleTypes;
 import org.hibernate.Session;

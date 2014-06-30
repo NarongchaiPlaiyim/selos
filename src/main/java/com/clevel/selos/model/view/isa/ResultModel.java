@@ -1,4 +1,4 @@
-package com.clevel.selos.businesscontrol.isa.csv.model;
+package com.clevel.selos.model.view.isa;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
