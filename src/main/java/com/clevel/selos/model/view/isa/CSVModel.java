@@ -1,7 +1,7 @@
-package com.clevel.selos.businesscontrol.isa.csv.model;
+package com.clevel.selos.model.view.isa;
 
-import com.clevel.selos.businesscontrol.isa.csv.command.CommandType;
 import com.clevel.selos.businesscontrol.isa.csv.validation.ValidationImp;
+import com.clevel.selos.model.CommandType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

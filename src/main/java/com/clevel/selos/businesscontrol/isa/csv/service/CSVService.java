@@ -1,9 +1,9 @@
 package com.clevel.selos.businesscontrol.isa.csv.service;
 
-import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
-import com.clevel.selos.businesscontrol.isa.csv.model.ResultModel;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.isa.CSVModel;
+import com.clevel.selos.model.view.isa.ResultModel;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;

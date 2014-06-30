@@ -1,4 +1,4 @@
-package com.clevel.selos.businesscontrol.isa.csv.command;
+package com.clevel.selos.model;
 public enum CommandType {
     INSERT{
         @Override
