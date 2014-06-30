@@ -259,29 +259,24 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("userName", userName)
-                .append("role", role)
-                .append("buCode", buCode)
-                .append("emailAddress", emailAddress)
-                .append("lastLogon", lastLogon)
-                .append("lastIP", lastIP)
-                .append("team", team)
-                .append("zone", zone)
-                .append("region", region)
-                .append("title", title)
-                .append("phoneNumber", phoneNumber)
-                .append("phoneExt", phoneExt)
-                .append("department", department)
-                .append("division", division)
-                .append("position", position)
-                .append("active", active)
-                .append("userStatus", userStatus)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("userName", userName).
+                append("role", role).
+                append("buCode", buCode).
+                append("emailAddress", emailAddress).
+                append("lastLogon", lastLogon).
+                append("lastIP", lastIP).
+                append("team", team).
+                append("zone", zone).
+                append("region", region).
+                append("title", title).
+                append("phoneNumber", phoneNumber).
+                append("phoneExt", phoneExt).
+                append("department", department).
+                append("division", division).
+                append("active", active).
+                append("userStatus", userStatus).
+                toString();
     }
 }
