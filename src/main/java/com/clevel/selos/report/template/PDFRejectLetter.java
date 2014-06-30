@@ -2,8 +2,12 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.report.RejectLetterReport;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
@@ -46,6 +50,14 @@ public class PDFRejectLetter implements Serializable {
     private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
     @Inject
     private UWRuleResultDetailDAO uwRuleResultDetailDAO;
+    @Inject
+    private UserDAO userDAO;
+    @Inject
+    private User userView;
+    @Inject
+    private UserTeamDAO userTeamDAO;
+    @Inject
+    private UserTeam userTeam;
 
     private List<CustomerInfoView> customerInfoView;
     private AppHeaderView appHeaderView;
@@ -105,6 +117,7 @@ public class PDFRejectLetter implements Serializable {
             customerInfoView = new ArrayList<CustomerInfoView>();
             customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
             workCase = workCaseDAO.findById(workCaseId);
+
         }
     }
 
@@ -170,6 +183,10 @@ public class PDFRejectLetter implements Serializable {
 
     public RejectLetterReport fillRejectLetter(){
         log.debug("fillRejectLetter. {}");
+
+        userView = userDAO.findByUserName(workCase.getCreateBy().getUserName());
+        userTeam = userTeamDAO.findByID(userView.getTeam().getId());
+
         RejectLetterReport letterReport = new RejectLetterReport();
         String date = Util.createDateTh(new Date());
         String[] spDate = date.split("/");
@@ -244,6 +261,10 @@ public class PDFRejectLetter implements Serializable {
             } else {
                 letterReport.setDate(SPACE);
             }
+
+            //PHONE_TEAM From NCB Reject Letter
+            letterReport.setTeam_phone(!Util.isNull(userTeam.getTeam_phone()) ? userTeam.getTeam_phone() : "-");
+            log.debug("--them_phone. {}",userTeam.getTeam_phone());
             log.debug("--stringBuilder. {}",stringBuilder.toString());
         }
         return letterReport;

@@ -8,10 +8,51 @@
 
     <h:head>
         <title>WelcomeWelcomeWelcomeWelcomeWelcome</title>
+        <h:outputScript library="js" name="custom.js" />
         <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
     </h:head>
 
+
     <h:body>
+
+        <h:form id="ISATest">
+            <p:panel header="ISATestHeader">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value=""/>
+                    <p:commandButton id="submitOnClickISATest" value="Update" update="@form"
+                                     action="#{TestNCRS.onClickISA()}"/>
+
+                    <h:outputText value="Role ID : "/>
+                    <p:inputText value="#{TestNCRS.roleId}"/>
+
+                    <h:outputText value="Result"/>
+                    <p:inputTextarea value="#{TestNCRS.result}" rows="50" cols="100">
+
+                    </p:inputTextarea>
+
+                    <p:fileUpload fileUploadListener="#{TestNCRS.fileUploadHandle(event)}"
+                                mode="simple"
+                                showButtons="false"
+                                allowTypes="/(\.|\/)(csv)$/"
+                                sizeLimit="5000000"
+                                update="@form"
+                                />
+                    <p:fileUpload fileUploadListener="#{TestNCRS.handleFileUpload}"
+                                allowTypes="/(\.|\/)(csv)$/"
+                                sizeLimit="5000000"
+                            />
+                    <p:commandButton value="Submit" ajax="false"
+                                     update="@form"
+                                     action="#{TestNCRS.onClickUpload()}"/>
+
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+
+
         <h:form id="ECMCAPShare">
             <p:panel header="ECMCAPShareHeader">
                 <h:panelGrid columns="2">

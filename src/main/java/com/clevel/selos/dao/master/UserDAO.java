@@ -2,19 +2,23 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
-import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.db.relation.RelTeamUserDetails;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.ChangeOwnerView;
+import com.clevel.selos.model.view.isa.IsaSearchView;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -35,10 +39,95 @@ public class UserDAO extends GenericDAO<User,String> {
     Long workCaseId;
 
     long workCasePrescreenId;
-    int roleid;
 
     @Inject
     public UserDAO() {
+
+    }
+
+    public boolean isExistId(final String id){
+        log.debug("-- isExistId(id : {})", id);
+        return isRecordExist(Restrictions.eq("id", id));
+    }
+
+    public boolean isExistUserName(final String userName){
+        log.debug("-- isExistUserName(userName : {})", userName);
+        return isRecordExist(Restrictions.eq("userName", userName));
+    }
+
+    public void updateActiveOrInactive(final User model, final int value, final User user){
+        log.debug("-- updateActiveOrInactive(User.id[{}], value : {})",model.getId(), value);
+        if(!Util.isNull(model)){
+            model.setActive(value);
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            persist(model);
+            log.debug("-- User.id[{}] updated", model.getId());
+        }
+    }
+
+    public List<User> findByUserStatusNORMAL(){
+        log.debug("-- findByUserStatusNORMAL()");
+        List<User> userList = null;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("userStatus", UserStatus.NORMAL));
+        criteria.addOrder(Order.asc("id"));
+        userList = Util.safetyList((List<User>) criteria.list());
+        log.debug("-- UserList.size()[{}]", userList.size());
+        return userList;
+    }
+
+    public void createNewUserByISA(final User user){
+        log.debug("-- createNewUserByISA()");
+        if(!Util.isNull(user)){
+            user.setUserStatus(UserStatus.NORMAL);
+            persist(user);
+        }
+    }
+
+    public void deleteUserByISA(final String id, final User user) throws Exception{
+        log.debug("-- deleteUserByISA(Id : {})", id);
+        User model = findById(id);
+        if(!Util.isNull(model)){
+            model.setUserStatus(UserStatus.MARK_AS_DELETED);
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            persist(model);
+        }
+    }
+
+    public List<User> findByISA(final IsaSearchView isaSearchView) throws Exception{
+        log.debug("-- findByISA(ISASearchView : {})", isaSearchView);
+        List<User> userList = null;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("userStatus", UserStatus.NORMAL));
+        if (!Util.isNull(isaSearchView.getId()) && !Util.isZero(isaSearchView.getId().length())) {
+            criteria.add(Restrictions.like("id", "%" + isaSearchView.getId() + "%"));
+        }
+        if (!Util.isNull(isaSearchView.getUsername()) && !Util.isZero(isaSearchView.getUsername().length())) {
+            criteria.add(Restrictions.like("userName", "%" + isaSearchView.getUsername() + "%"));
+        }
+        if (!Util.isZero(isaSearchView.getRoleId().getId())) {
+            criteria.add(Restrictions.eq("role", isaSearchView.getRoleId()));
+        }
+        if (!Util.isZero(isaSearchView.getDepartmentId().getId())) {
+            criteria.add(Restrictions.eq("department", isaSearchView.getDepartmentId()));
+        }
+        if (!Util.isZero(isaSearchView.getDivisionId().getId())) {
+            criteria.add(Restrictions.eq("division", isaSearchView.getDivisionId()));
+        }
+        if (!Util.isZero(isaSearchView.getRegionId().getId())) {
+            criteria.add(Restrictions.eq("region", isaSearchView.getRegionId()));
+        }
+        if (!Util.isZero(isaSearchView.getTeamId().getId())) {
+            criteria.add(Restrictions.eq("team", isaSearchView.getTeamId()));
+        }
+        if (!Util.isZero(isaSearchView.getTitleId().getId())) {
+            criteria.add(Restrictions.eq("title", isaSearchView.getTitleId()));
+        }
+        userList = Util.safetyList((List<User>) criteria.list());
+        log.debug("-- UserList.size()[{}]", userList.size());
+        return userList;
     }
 
     public User findUserByID(String userId)
