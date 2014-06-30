@@ -46,6 +46,10 @@ public class GenPDF extends ReportService implements Serializable {
     String pathPolicyRejectLetter;
 
     @Inject
+    @Config(name = "report.rejectletter.ncb")
+    String pathNCBRejectLetter;
+
+    @Inject
     @Config(name = "report.rejectletter.income")
     String pathIncomeRejectLetter;
 
@@ -150,17 +154,7 @@ public class GenPDF extends ReportService implements Serializable {
             reportView.setNameReportExSum(nameExSum.toString());
 
             pdfReject_letter.init();
-            if (!Util.isNull( pdfReject_letter.typeReport())){
-                if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy())&&
-                        Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
-                    reportView.setNameReportRejectLetter(" - ");
-                    type = true;
-                } else {
-                    reportView.setNameReportRejectLetter(nameRejectLetter.toString());
-                }
-            }
-            log.debug("--nameRejectLetter. {}",reportView.getNameReportRejectLetter());
-
+            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
         }
@@ -210,7 +204,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
-        generatePDF(pathExsum, map, reportView.getNameReportExSum());
+        generatePDF(pathExsum, map, reportView.getNameReportExSum(),null);
     }
 
     public void onPrintDecisionReport() throws Exception {
@@ -251,7 +245,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
         map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
 
-        generatePDF(pathDecision, map, reportView.getNameReportOpShect());
+        generatePDF(pathDecision, map, reportView.getNameReportOpShect(),null);
     }
 
     public void onPrintRejectLetter() throws Exception {
@@ -282,13 +276,13 @@ public class GenPDF extends ReportService implements Serializable {
                 log.debug("--path2. {}",pathReportReject);
             } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
-                pathReportReject = null;//NCBRejectLetter wait it
+                pathReportReject = pathNCBRejectLetter;//NCBRejectLetter wait it
                 log.debug("--path1. {}",pathReportReject);
             }
             map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
             map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
-            generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter());
+            generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter(),null);
         } else {
             log.debug("--RejectGroup is Null");
         }
@@ -304,7 +298,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
         map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
-        generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
+        generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal(),null);
     }
 
     public void onPrintOfferletter() throws Exception {
@@ -318,10 +312,10 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowCondition",pdfOfferLetter.fillFollowCondition());
         map.put("fillMasterOfferLetter",pdfOfferLetter.fillMasterOfferLetter());
 
-        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter());
+        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter(),null);
     }
 
-    public void onPrintLogonOver90(HttpServletRequest request, HttpServletResponse response){
+    public void onPrintLogonOver90(){
         log.debug("--on onPrintLogonOver90.");
         HashMap map = new HashMap<String, Object>();
         List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
@@ -342,7 +336,7 @@ public class GenPDF extends ReportService implements Serializable {
                 viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
                 viewReportList.add(viewReport);
             }
-            exportPDF(request,response,map,viewReportList,jasper);
+            exportPDF(map,viewReportList,jasper);
         } catch (SQLException e) {
             log.debug("on getLogonOver90. {}",e);
         } catch (Exception e) {
@@ -350,26 +344,51 @@ public class GenPDF extends ReportService implements Serializable {
         }
     }
 
-    public void onPrintViolation(HttpServletRequest request, HttpServletResponse response){
+    public void onPrintViolation(){
         log.debug("--on onPrintViolation.");
         HashMap map = new HashMap<String, Object>();
         List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-        String jasper = "Violation";
-        ResultSet rs = stpExecutor.getViolation("02/6/2014","05/06/2014");
+//        String jasper = "C:/Users/pakorn/Desktop/ISAREPORT/Violation";
 
         try {
+            String jasper = "C:/Users/pakorn/Desktop/ISAREPORT/Violation.jrxml";
+            ResultSet rs = stpExecutor.getViolation("30/05/2014","24/06/2014");
+            log.debug("--rs in onPrintViolation. {}",rs);
+            ISAViewReport viewReport = null;
+            int round = 0 ;
+
             while (rs.next());{
-                ISAViewReport viewReport = new ISAViewReport();
+                log.debug("round {}", round++);
+                round++;
+//                viewReport = new ISAViewReport();
+////                viewReport.setUserId(rs.getString("USER_ID"));
+////                log.debug("getUserId. {}",viewReport.getUserId());
+////                rs.getObject("USER_ID");
+////                rs.getObject("IP_ADDRESS");
+////                rs.getObject("LOGIN_DATE");
+////                rs.getObject("STATUS");
+////                rs.getObject("DESCRIPTI");
+//
+//                viewReport.setUserId("test");
+//                viewReport.setIpAddress("11111");
+//                viewReport.setLogin(new Date());
+//                viewReport.setStatus("22222");
+//                viewReport.setDescrition("33333");
+//                viewReportList.add(viewReport);
+//                log.debug("---------------------333333. {}",viewReportList.size());
+
                 viewReport.setUserId(rs.getString("USER_ID"));
                 viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
-                viewReport.setLogin(rs.getTimestamp("LOGIB_DATE"));
+                viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
                 viewReport.setStatus(rs.getString("STATUS"));
-                viewReport.setDescrition(rs.getString("DESCRITION"));
+                viewReport.setDescrition(rs.getString("DESCRIPTION"));
                 viewReportList.add(viewReport);
             }
-            exportPDF(request,response,map,viewReportList,jasper);
+            log.debug("--Path Report. {}",jasper);
+            generatePDF(jasper, map, "1111111111111",viewReportList);
+//            exportPDF(map,viewReportList,jasper);
         } catch (SQLException e) {
-            log.debug("on getViolation. {}",e);
+            log.debug("----on getViolation. {}",e);
         } catch (Exception e) {
             log.debug("onPrintLogonOver90. {}",e);
         }
