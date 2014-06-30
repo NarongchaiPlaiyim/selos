@@ -2,6 +2,7 @@ package com.clevel.selos.businesscontrol.util.stp;
 
 import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.util.Util;
 import oracle.jdbc.OracleTypes;
 import org.hibernate.Session;
@@ -49,13 +50,13 @@ public class STPExecutor implements Serializable {
         return applicationNumber;
     }
 
-    public String createFromCSV(final CSVModel csv) throws Exception {
+    public String createFromCSV(final CSVModel csv, final User user) throws Exception {
         log.debug("-- createFromCSV(CSVModel : {})", csv.toString());
         final String[] result = {""};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt = connection.prepareCall("{call SLOS.INSERTUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                CallableStatement callStmt = connection.prepareCall("{call SLOS.INSERTUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
                 callStmt.setString("IN_USER_ID", Util.parseString(csv.getUserId(), EMPTY));
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
                 callStmt.setString("IN_USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
@@ -76,6 +77,8 @@ public class STPExecutor implements Serializable {
                 log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
                 callStmt.setString("IN_STATUS", Util.parseString(csv.getStatus(), EMPTY));
                 log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+                callStmt.setString("IN_CREATE_BY", user.getId());
+                log.debug("-- IN_CREATE_BY :  {}", user.getId());
                 callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
                 result[0] =callStmt.getString("OUT_RESULT");
@@ -85,13 +88,13 @@ public class STPExecutor implements Serializable {
         return result[0];
     }
 
-    public String updateFromCSV(final CSVModel csv) throws Exception {
+    public String updateFromCSV(final CSVModel csv, final User user) throws Exception {
         log.debug("-- updateFromCSV(CSVModel : {})", csv.toString());
         final String[] result = {""};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt = connection.prepareCall("{call SLOS.UPDATEUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                CallableStatement callStmt = connection.prepareCall("{call SLOS.UPDATEUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
                 callStmt.setString("IN_USER_ID", Util.parseString(csv.getUserId(), EMPTY));
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
                 callStmt.setString("IN_USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
@@ -112,6 +115,8 @@ public class STPExecutor implements Serializable {
                 log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
                 callStmt.setString("IN_STATUS", Util.parseString(csv.getStatus(), EMPTY));
                 log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+                callStmt.setString("IN_CREATE_BY", user.getId());
+                log.debug("-- IN_CREATE_BY :  {}", user.getId());
                 callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
                 result[0] =callStmt.getString("OUT_RESULT");
@@ -121,15 +126,17 @@ public class STPExecutor implements Serializable {
         return result[0];
     }
 
-    public String deleteFromCSV(final CSVModel csv) throws Exception {
+    public String deleteFromCSV(final CSVModel csv, final User user) throws Exception {
         log.debug("-- deleteFromCSV(UserId : {})", csv.getUserId());
         final String[] result = {""};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt = connection.prepareCall("{call SLOS.DELETEUSERBYISA(?, ?)}");
+                CallableStatement callStmt = connection.prepareCall("{call SLOS.DELETEUSERBYISA(?, ?, ?)}");
                 callStmt.setString("IN_USER_ID", csv.getUserId());
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString("IN_CREATE_BY", user.getId());
+                log.debug("-- IN_CREATE_BY :  {}", user.getId());
                 callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
                 callStmt.executeUpdate();
                 result[0] =callStmt.getString("OUT_RESULT");

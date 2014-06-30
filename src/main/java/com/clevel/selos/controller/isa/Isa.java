@@ -164,7 +164,7 @@ public class Isa implements Serializable {
                     messageHeader = "Add New User.";
                     if(!isaBusinessControl.isExistId(isaManageUserView.getId())){
                         if(!isaBusinessControl.isExistUserName(isaManageUserView.getUsername())){
-                            isaBusinessControl.createUser(isaManageUserView);
+                            isaBusinessControl.createUser(isaManageUserView, user);
                             message = Result.Success.toString();
                             isaAuditor.addSucceed(userId, modeForButton.toString(), isaUserDetailView.toString());
                         } else {

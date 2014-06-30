@@ -6,6 +6,7 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.UserView;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -29,15 +30,19 @@ public class UserTransform extends Transform {
         return userView;
     }
 
-    public User transformToModel(final IsaManageUserView view){
+    public User transformToModel(final IsaManageUserView view, final User user){
         log.debug("-- transformToModel()");
         User model = null;
         if(!Util.isNull(view)){
             if(!Util.isNull(view.getId()) && !Util.isZero(view.getId().length())){
                 model = userDAO.findById(view.getId());
+                model.setModifyBy(user);
+                model.setModifyDate(DateTime.now().toDate());
             } else {
                 model = new User();
                 model.setId(view.getId());
+                model.setCreateBy(user);
+                model.setCreateDate(DateTime.now().toDate());
             }
             model.setUserName(view.getUsername());
             model.setBuCode(view.getBuCode());
@@ -67,7 +72,7 @@ public class UserTransform extends Transform {
         return model;
     }
 
-    public User transformToNewModel(final IsaManageUserView view){
+    public User transformToNewModel(final IsaManageUserView view, final User user){
         log.debug("-- transformToModel()");
         User model = null;
         if(!Util.isNull(view)){
@@ -97,6 +102,10 @@ public class UserTransform extends Transform {
                 model.setTitle(view.getUserTitle());
             }
             model.setUserStatus(view.getUserStatus());
+            model.setCreateBy(user);
+            model.setCreateDate(DateTime.now().toDate());
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
         }
         return model;
     }

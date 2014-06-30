@@ -18,6 +18,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -54,12 +55,14 @@ public class UserDAO extends GenericDAO<User,String> {
         return isRecordExist(Restrictions.eq("userName", userName));
     }
 
-    public void updateActiveOrInactive(final User user, final int value){
-        log.debug("-- updateActiveOrInactive(User.id[{}], value : {})",user.getId(), value);
-        if(!Util.isNull(user)){
-            user.setActive(value);
-            persist(user);
-            log.debug("-- User.id[{}] updated", user.getId());
+    public void updateActiveOrInactive(final User model, final int value, final User user){
+        log.debug("-- updateActiveOrInactive(User.id[{}], value : {})",model.getId(), value);
+        if(!Util.isNull(model)){
+            model.setActive(value);
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            persist(model);
+            log.debug("-- User.id[{}] updated", model.getId());
         }
     }
 
@@ -82,12 +85,14 @@ public class UserDAO extends GenericDAO<User,String> {
         }
     }
 
-    public void deleteUserByISA(final String id) throws Exception{
+    public void deleteUserByISA(final String id, final User user) throws Exception{
         log.debug("-- deleteUserByISA(Id : {})", id);
-        User user = findById(id);
-        if(!Util.isNull(user)){
-            user.setUserStatus(UserStatus.MARK_AS_DELETED);
-            persist(user);
+        User model = findById(id);
+        if(!Util.isNull(model)){
+            model.setUserStatus(UserStatus.MARK_AS_DELETED);
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            persist(model);
         }
     }
 

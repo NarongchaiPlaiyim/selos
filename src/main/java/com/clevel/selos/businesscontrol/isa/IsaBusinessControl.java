@@ -85,7 +85,7 @@ public class IsaBusinessControl extends BusinessControl {
     }
     @PostConstruct
     public void onCreate() {
-
+        onLoadUserId();
     }
 
     boolean complete = true;
@@ -93,6 +93,7 @@ public class IsaBusinessControl extends BusinessControl {
     private final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss.sss";
 
     private void onLoadUserId(){
+        log.debug("-- onLoadUserId()");
         userId = getCurrentUserID();
     }
     public List<UserTeam> getUserTeamByRoleId(final int roleId){
@@ -116,26 +117,26 @@ public class IsaBusinessControl extends BusinessControl {
     public List<User> getAllUser(){
         return Util.safetyList(userDAO.findByUserStatusNORMAL());
     }
-    public void createUser(final IsaManageUserView isaManageUserView) throws Exception {
+    public void createUser(final IsaManageUserView isaManageUserView, final User user) throws Exception {
         log.debug("-- createUser()");
-        userDAO.createNewUserByISA(userTransform.transformToNewModel(isaManageUserView));
+        userDAO.createNewUserByISA(userTransform.transformToNewModel(isaManageUserView, user));
     }
-    public void editUser(final IsaManageUserView isaManageUserView) throws Exception {
+    public void editUser(final IsaManageUserView isaManageUserView, final User user) throws Exception {
         log.debug("-- editUser()");
-        User user = null;
-        user = userTransform.transformToModel(isaManageUserView);
-        if(!Util.isNull(user)){
-            userDAO.persist(user);
+        User model = null;
+        model = userTransform.transformToModel(isaManageUserView, user);
+        if(!Util.isNull(model)){
+            userDAO.persist(model);
         }
     }
     public void deleteUserById(final String id) throws Exception {
         log.debug("-- deleteUser(id : {})", id);
-        userDAO.deleteUserByISA(id);
+        userDAO.deleteUserByISA(id, getCurrentUser());
     }
     public void deleteUserList(final User[] users) throws Exception {
         log.debug("deleteUserList()");
         for (final User user : users) {
-            userDAO.deleteUserByISA(user.getId());
+            userDAO.deleteUserByISA(user.getId(), getCurrentUser());
         }
     }
     public List<User> getUserBySearch(final IsaSearchView isaSearchView) throws Exception {
@@ -212,7 +213,7 @@ public class IsaBusinessControl extends BusinessControl {
             resultModel.setCommand(commandType.toString());
             resultModel.setId(csvModel.getUserId());
             if(Util.isZero(result.length())){
-                result = stpExecutor.createFromCSV(csvModel);
+                result = stpExecutor.createFromCSV(csvModel, getCurrentUser());
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
                     isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
@@ -245,7 +246,7 @@ public class IsaBusinessControl extends BusinessControl {
             resultModel.setCommand(commandType.toString());
             resultModel.setId(csvModel.getUserId());
             if(Util.isZero(result.length())){
-                result = stpExecutor.updateFromCSV(csvModel);
+                result = stpExecutor.updateFromCSV(csvModel, getCurrentUser());
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
                     isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
@@ -279,7 +280,7 @@ public class IsaBusinessControl extends BusinessControl {
             resultModel.setCommand(commandType.toString());
             resultModel.setId(csvModel.getUserId());
             if(Util.isZero(result.length())){
-                result = stpExecutor.deleteFromCSV(csvModel);
+                result = stpExecutor.deleteFromCSV(csvModel, getCurrentUser());
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
                     isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
@@ -317,10 +318,10 @@ public class IsaBusinessControl extends BusinessControl {
         return isaManageUserView;
     }
 
-    public void editUserActive(User user, ManageUserActive manageUserActive) throws Exception {
+    public void editUserActive(final User model, final ManageUserActive manageUserActive) throws Exception {
         log.debug("-- editUserActive()");
-        if(!Util.isNull(user)){
-            userDAO.updateActiveOrInactive(user, manageUserActive.getValue());
+        if(!Util.isNull(model)){
+            userDAO.updateActiveOrInactive(model, manageUserActive.getValue(), getCurrentUser());
         }
 
     }

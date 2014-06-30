@@ -3,9 +3,10 @@ package com.clevel.selos.controller.isa.download.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DownloadModel {
+public class DownloadModel implements Serializable{
     private Date date;
     private String fullPath;
     private String fileName;
