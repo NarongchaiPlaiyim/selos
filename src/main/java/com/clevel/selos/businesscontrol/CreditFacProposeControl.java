@@ -1391,7 +1391,9 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-        fullApplicationControl.calculatePricingDOA(workCaseId, newCreditFacility);
+        workCase = fullApplicationControl.calculatePricingDOA(workCase, newCreditFacility);
+        int insuranceFlag = fullApplicationControl.calculateInsuranceRequired(newCreditFacility);
+        workCase.setInsuranceFlag(insuranceFlag);
 
         //--Update flag in WorkCase ( for check before submit )
         workCase.setCaseUpdateFlag(1);
@@ -1399,6 +1401,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         return newCreditFacilityTransform.transformToView(newCreditFacility);
     }
+
 
     public void deleteAllNewCreditFacilityByIdList(List<Long> deleteCreditIdList, List<Long> deleteCollIdList, List<Long> deleteGuarantorIdList, List<Long> deleteConditionIdList, long workCaseId) {
         log.debug("deleteAllApproveByIdList()");

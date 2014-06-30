@@ -767,8 +767,9 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             User user = (User) session.getAttribute("user");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
             List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
 
@@ -786,7 +787,7 @@ public class HeaderController extends BaseController {
                     message = "Submit case fail. Please check return information before submit again.";
                 } else {
                     returnControl.saveReturnHistory(workCaseId,user);
-                    fullApplicationControl.submitCA(queueName, workCaseId);
+                    fullApplicationControl.submitCA(queueName, wobNumber, workCaseId);
 
                     messageHeader = "Information.";
                     message = "Submit case success";
