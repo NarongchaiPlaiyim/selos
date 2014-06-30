@@ -223,7 +223,7 @@ public class AppraisalResultControl extends BusinessControl {
             List<NewCollateralHead> newCollateralHeadList = Util.safetyList(newCollateral.getNewCollateralHeadList());
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                 newCollateralHead.setNewCollateral(newCollateral);
-                newCollateralHead.setProposeType("P");
+                newCollateralHead.setProposeType(ProposeType.P);
                 newCollateralHead.setAppraisalRequest(2);
                 List<NewCollateralSub> newCollateralSubList = Util.safetyList(newCollateralHead.getNewCollateralSubList());
                 for(NewCollateralSub newCollateralSub : newCollateralSubList){

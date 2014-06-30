@@ -54,6 +54,21 @@ public class UWRuleResultControl extends BusinessControl{
         logger.debug("-- end deleteUWRuleResult --");
     }
 
+    public void deleteUWRuleResult(long workCasePreScreenId, long workCaseId){
+        logger.debug("-- begin deleteUWRuleResult --");
+        UWRuleResultSummary uwRuleResultSummary;
+        if(workCasePreScreenId != 0)
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+        else
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+        if(!Util.isNull(uwRuleResultSummary)){
+            logger.debug("uwRuleResultSummary : {}", uwRuleResultSummary);
+            uwRuleResultDetailDAO.delete(uwRuleResultSummary.getUwRuleResultDetailList());
+            uwRuleResultSummaryDAO.delete(uwRuleResultSummary);
+        }
+        logger.debug("-- end deleteUWRuleResult --");
+    }
+
     public UWRuleResultSummaryView getUWRuleResultByWorkCasePrescreenId(long workCasePrescreenId){
         logger.debug("-- begin getUWRuleResultByWorkCasePrescreenId {}", workCasePrescreenId);
         UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePrescreenId);

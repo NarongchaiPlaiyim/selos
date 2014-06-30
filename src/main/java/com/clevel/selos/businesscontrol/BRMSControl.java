@@ -354,7 +354,7 @@ public class BRMSControl extends BusinessControl {
         /*End Set Account Request*/
 
         /*Start Set Business Info List*/
-        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
+        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(prescreen.getId());
         actionValidationControl.validate(businessList, PrescreenBusiness.class);
 
         List<BRMSBizInfo> bizInfoList = new ArrayList<BRMSBizInfo>();

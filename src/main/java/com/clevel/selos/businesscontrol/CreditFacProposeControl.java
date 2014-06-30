@@ -987,14 +987,29 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public List<ProposeCreditDetailView> setNoFlagForCollateralRelateCredit(NewCollateralView newCollateralView,List<ProposeCreditDetailView> proposeCreditDetailViews,long creditFacId){
-        List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
-        if(newCollateralCredits != null && newCollateralCredits.size() > 0){
-            for(NewCollateralCredit newCollateralCredit : newCollateralCredits){
-                if(newCollateralCredit.getNewCollateral().getId() == newCollateralView.getId()){
-                    if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
-                        for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
-                            if(proposeCreditDetailView.getId() == newCollateralCredit.getNewCreditDetail().getId()){
-                                proposeCreditDetailView.setNoFlag(true);
+        if(!Util.isZero(newCollateralView.getId())) {
+            List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
+            if(newCollateralCredits != null && newCollateralCredits.size() > 0){
+                for(NewCollateralCredit newCollateralCredit : newCollateralCredits){
+                    if(newCollateralCredit.getNewCollateral().getId() == newCollateralView.getId()){
+                        if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                            for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                                if(proposeCreditDetailView.getId() == newCollateralCredit.getNewCreditDetail().getId()){
+                                    proposeCreditDetailView.setNoFlag(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if(!Util.isNull(newCollateralView.getProposeCreditDetailViewList()) && !Util.isZero(newCollateralView.getProposeCreditDetailViewList().size())) {
+                for(ProposeCreditDetailView proposeCreditDetailView : newCollateralView.getProposeCreditDetailViewList()) {
+                    if(proposeCreditDetailView.isNoFlag()) {
+                        for (ProposeCreditDetailView proCreList : proposeCreditDetailViews) {
+                            if(proposeCreditDetailView.getSeq() == proCreList.getSeq()) {
+                                proCreList.setNoFlag(true);
+                                break;
                             }
                         }
                     }
@@ -1005,18 +1020,33 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public List<ProposeCreditDetailView> setNoFlagForGuarantorRelateCredit(NewGuarantorDetailView newGuarantorDetailView,List<ProposeCreditDetailView> proposeCreditDetailViews,long creditFacId){
-        List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
-        if(newGuarantorCredits != null && newGuarantorCredits.size() > 0){
-            for(NewGuarantorCredit newGuarantorCredit : newGuarantorCredits){
-                if(newGuarantorCredit != null && newGuarantorCredit.getNewGuarantorDetail() != null && newGuarantorDetailView != null){
-                    if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
-                        if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
-                            for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
-                                if(proposeCreditDetailView != null && newGuarantorCredit.getNewCreditDetail() != null){
-                                    if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
-                                        proposeCreditDetailView.setNoFlag(true);
+        if(!Util.isZero(newGuarantorDetailView.getId())) {
+            List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByNewCreditFacilityId(creditFacId,ProposeType.P);
+            if(newGuarantorCredits != null && newGuarantorCredits.size() > 0){
+                for(NewGuarantorCredit newGuarantorCredit : newGuarantorCredits){
+                    if(newGuarantorCredit != null && newGuarantorCredit.getNewGuarantorDetail() != null && newGuarantorDetailView != null){
+                        if(newGuarantorCredit.getNewGuarantorDetail().getId() == newGuarantorDetailView.getId()){
+                            if(proposeCreditDetailViews != null && proposeCreditDetailViews.size() > 0){
+                                for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViews){
+                                    if(proposeCreditDetailView != null && newGuarantorCredit.getNewCreditDetail() != null){
+                                        if(proposeCreditDetailView.getId() == newGuarantorCredit.getNewCreditDetail().getId()){
+                                            proposeCreditDetailView.setNoFlag(true);
+                                        }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if(!Util.isNull(newGuarantorDetailView.getProposeCreditDetailViewList()) && !Util.isZero(newGuarantorDetailView.getProposeCreditDetailViewList().size())) {
+                for(ProposeCreditDetailView proposeCreditDetailView : newGuarantorDetailView.getProposeCreditDetailViewList()) {
+                    if(proposeCreditDetailView.isNoFlag()) {
+                        for (ProposeCreditDetailView proCreList : proposeCreditDetailViews) {
+                            if(proposeCreditDetailView.getSeq() == proCreList.getSeq()) {
+                                proCreList.setNoFlag(true);
+                                break;
                             }
                         }
                     }
@@ -1416,7 +1446,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteCollIdList != null && deleteCollIdList.size() > 0) {
             List<NewCollateral> deleteCollateralList = new ArrayList<NewCollateral>();
             for (Long id : deleteCollIdList) {
-                deleteCollateralList.add(newCollateralDAO.findNewCollateralId(id, ProposeType.P));
+                if(!Util.isZero(id)){
+                    deleteCollateralList.add(newCollateralDAO.findNewCollateralId(id, ProposeType.P));
+                }
             }
             //for remove sub relate
             if(deleteCollateralList != null && deleteCollateralList.size() > 0){
@@ -1425,8 +1457,10 @@ public class CreditFacProposeControl extends BusinessControl {
                         for(NewCollateralHead nch : nc.getNewCollateralHeadList()){
                             if(nch.getNewCollateralSubList() != null && nch.getNewCollateralSubList().size() > 0){
                                 for(NewCollateralSub ncs : nch.getNewCollateralSubList()){
-                                    List<NewCollateralSubRelated> newCollSub = newCollateralSubRelatedDAO.findByMainCollSubId(ncs.getId(),ProposeType.P);
-                                    newCollateralSubRelatedDAO.delete(newCollSub);
+                                    if(!Util.isZero(ncs.getId())){
+                                        List<NewCollateralSubRelated> newCollSub = newCollateralSubRelatedDAO.findByMainCollSubId(ncs.getId(),ProposeType.P);
+                                        newCollateralSubRelatedDAO.delete(newCollSub);
+                                    }
                                 }
                             }
                         }
@@ -1439,7 +1473,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteGuarantorIdList != null && deleteGuarantorIdList.size() > 0) {
             List<NewGuarantorDetail> deleteGuarantorList = new ArrayList<NewGuarantorDetail>();
             for (Long id : deleteGuarantorIdList) {
-                deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id, ProposeType.P));
+                if(!Util.isZero(id)){
+                    deleteGuarantorList.add(newGuarantorDetailDAO.findGuarantorById(id, ProposeType.P));
+                }
             }
             newGuarantorDetailDAO.delete(deleteGuarantorList);
         }
@@ -1447,7 +1483,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteConditionIdList != null && deleteConditionIdList.size() > 0) {
             List<NewConditionDetail> deleteConditionList = new ArrayList<NewConditionDetail>();
             for (Long id : deleteConditionIdList) {
-                deleteConditionList.add(newConditionDetailDAO.findById(id));
+                if(!Util.isZero(id)){
+                    deleteConditionList.add(newConditionDetailDAO.findById(id));
+                }
             }
             newConditionDetailDAO.delete(deleteConditionList);
         }
@@ -1455,13 +1493,8 @@ public class CreditFacProposeControl extends BusinessControl {
         if (deleteCreditIdList != null && deleteCreditIdList.size() > 0) {
             List<NewCreditDetail> deleteCreditDetailList = new ArrayList<NewCreditDetail>();
             for (Long id : deleteCreditIdList) {
-                deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
-            }
-            //for remove fee detail
-            if(deleteCreditDetailList != null && deleteCreditDetailList.size() > 0){
-                for(NewCreditDetail ncd : deleteCreditDetailList){
-                    List<FeeDetail> feeDetail = feeDetailDAO.findByCreditDetail(ncd);
-                    feeDetailDAO.delete(feeDetail);
+                if(!Util.isZero(id)){
+                    deleteCreditDetailList.add(newCreditDetailDAO.findById(id));
                 }
             }
             newCreditDetailDAO.delete(deleteCreditDetailList);
