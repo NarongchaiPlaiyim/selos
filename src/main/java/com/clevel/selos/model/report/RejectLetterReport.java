@@ -15,6 +15,8 @@ public class RejectLetterReport extends ReportModel{
     private int typePolicy;
     private int typeIncome;
 
+    private String team_phone;
+
     public RejectLetterReport() {
         typeNCB = getDefaultInteger();
         typePolicy = getDefaultInteger();
@@ -77,6 +79,14 @@ public class RejectLetterReport extends ReportModel{
         this.typeIncome = typeIncome;
     }
 
+    public String getTeam_phone() {
+        return team_phone;
+    }
+
+    public void setTeam_phone(String team_phone) {
+        this.team_phone = team_phone;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -87,6 +97,7 @@ public class RejectLetterReport extends ReportModel{
                 .append("typeNCB", typeNCB)
                 .append("typePolicy", typePolicy)
                 .append("typeIncome", typeIncome)
+                .append("team_phone", team_phone)
                 .toString();
     }
 }

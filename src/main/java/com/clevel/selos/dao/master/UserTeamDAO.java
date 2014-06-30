@@ -827,4 +827,8 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
         return popUpMatchUserNames;
 
     }
+
+    public UserTeam findByID(final int teamid) {
+        return findById(teamid);
+    }
 }

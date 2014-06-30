@@ -24,7 +24,7 @@ public class ReportService implements Serializable {
     public void init(){
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
         log.debug("generate pdf.");
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
 
@@ -32,8 +32,13 @@ public class ReportService implements Serializable {
 
         log.info("parameters: {}",parameters);
 
-
-        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
+        if(dataSource != null && reportList != null && reportList.size() > 0){
+            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+//            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        } else {
+             print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        }
         log.debug("--Pring report.");
 
         try {
@@ -49,15 +54,17 @@ public class ReportService implements Serializable {
         }
     }
 
-    public void exportPDF(HttpServletRequest request, HttpServletResponse response, Map map, Collection reportList, String jasperName)
-            throws Exception {
-
-        ServletOutputStream servletOutputStream = response.getOutputStream();
-        InputStream reportStream = request.getSession().getServletContext().getResourceAsStream("/reports/" + jasperName + ".jasper");
-        response.setContentType("application/pdf");
+    public void exportPDF(Map map, Collection reportList, String jasperName)
+        throws Exception {
+        log.debug("on exportPDF.");
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            ServletOutputStream servletOutputStream = response.getOutputStream();
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            InputStream reportStream = request.getSession().getServletContext().getResourceAsStream(jasperName + ".jasper");
+            log.debug("reportStream in exportPDF. {}",reportStream);
+            response.setContentType("application/pdf");
         try {
-            JRDataSource dataSource = null;
-            dataSource = new JRBeanCollectionDataSource(reportList);
+            JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
             if(dataSource != null && reportList != null && reportList.size() > 0)
                 JasperRunManager.runReportToPdfStream(reportStream, servletOutputStream, map, dataSource);
             else
