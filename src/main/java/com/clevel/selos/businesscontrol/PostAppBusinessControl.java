@@ -3,10 +3,12 @@ package com.clevel.selos.businesscontrol;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,9 +22,11 @@ import com.clevel.selos.dao.working.AgreementInfoDAO;
 import com.clevel.selos.dao.working.DisbursementDAO;
 import com.clevel.selos.dao.working.FeeDetailDAO;
 import com.clevel.selos.dao.working.MortgageInfoDAO;
+import com.clevel.selos.dao.working.OpenAccountDAO;
 import com.clevel.selos.dao.working.PerfectionReviewDAO;
 import com.clevel.selos.dao.working.PledgeInfoDAO;
 import com.clevel.selos.dao.working.ReturnInfoDAO;
+import com.clevel.selos.dao.working.TCGInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -34,12 +38,20 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AgreementInfo;
 import com.clevel.selos.model.db.working.FeeDetail;
+import com.clevel.selos.model.db.working.MortgageInfo;
+import com.clevel.selos.model.db.working.OpenAccount;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.PerfectionReview;
+import com.clevel.selos.model.db.working.PledgeInfo;
 import com.clevel.selos.model.db.working.ReturnInfo;
+import com.clevel.selos.model.db.working.TCGInfo;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.model.view.StepView;
 import com.clevel.selos.model.view.UserView;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
@@ -53,6 +65,8 @@ public class PostAppBusinessControl extends BusinessControl {
 	@Inject
     @SELOS
     private Logger log;
+	@Inject @NormalMessage
+	private Message message;
 	@Inject
     private BPMExecutor bpmExecutor;
 	@Inject
@@ -83,7 +97,14 @@ public class PostAppBusinessControl extends BusinessControl {
 	private PledgeInfoDAO pledgeInfoDAO;
 	@Inject
 	private DisbursementDAO disbursementDAO;
-
+	@Inject
+	private FeeCalculationControl feeCalculationControl;
+	@Inject
+	private OpenAccountDAO openAccountDAO;
+	@Inject
+	private TCGInfoDAO tcgInfoDAO;
+	@Inject
+	private MortgageSummaryControl mortgageSummaryControl;
 	
 	
 	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark) throws Exception {
@@ -193,6 +214,8 @@ public class PostAppBusinessControl extends BusinessControl {
     		_Before_3036_RegenAgree(workCase, actionId, fields);
     	} else if ("3038".equals(stepCode)) { //review signed agreement
     		_Before_3038_ReviewSign(workCase, actionId, fields);
+    	} else if ("3045".equals(stepCode)) {
+    		_Before_3045_ReviewPerfection(workCase, actionId, fields);
     	} else if ("3046".equals(stepCode)) {
     		_Before_3046_RegenAgree_PerfectReview(workCase, actionId, fields);
     	} else if ("3049".equals(stepCode)) { //setup limit
@@ -204,6 +227,8 @@ public class PostAppBusinessControl extends BusinessControl {
         //After success
         if ("3002".equals(stepCode)) {
         	_3002_InsurancePremiumQuote(workCase, actionId);
+        } else if ("3009".equals(stepCode)) {
+        	_3009_FixDataInDecision(workCase, actionId);
         } else if ("3023".equals(stepCode)) {
         	_3023_CreateCustProfile(workCase, actionId);
         } else if ("3026".equals(stepCode)) {
@@ -249,7 +274,7 @@ public class PostAppBusinessControl extends BusinessControl {
 				mortgageRequired = "Y";
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
 				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
 			}
 		}
@@ -262,7 +287,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId == ACTION_SUBMIT) {
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
 				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
 			}
 		}
@@ -271,7 +296,47 @@ public class PostAppBusinessControl extends BusinessControl {
 	private void _Before_3035_ConfirmSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		String collectFee = "N";
 		if (actionId == ACTION_SUBMIT) {
-			//TODO
+			//Checking from collect fee and is od or tcg ?
+			BigDecimal grandTotalAgreement = BigDecimal.ZERO;
+			List<List<FeeCollectionDetailView>> details = feeCalculationControl.getFeeCollectionDetails(workCase.getId());
+			for (List<FeeCollectionDetailView> detailList : details) {
+				if (detailList.isEmpty())
+					continue;
+				FeeCollectionDetailView firstView = detailList.get(0);
+				if (!firstView.isAgreementSign()) {
+					continue;
+				}
+				for (int i=0;i<detailList.size();i++) {
+					FeeCollectionDetailView view = detailList.get(i);
+					if (view.getAmount() != null)
+						grandTotalAgreement = grandTotalAgreement.add(view.getAmount());
+				}
+			}
+			if (grandTotalAgreement.compareTo(BigDecimal.ZERO) > 0) {
+				//Checking from open account
+				collectFee = "Y";
+				List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
+				if (accounts != null && !accounts.isEmpty()) {
+					for (OpenAccount account : accounts) {
+						List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
+						if (purposes != null && !purposes.isEmpty()) {
+							boolean isOD = false;
+							boolean isTCG = false;
+							for (OpenAccountPurpose purpose : purposes) {
+								if (purpose.getAccountPurpose().isForOD())
+									isOD = true;
+								if (purpose.getAccountPurpose().isForTCG())
+									isTCG = true;
+							}
+							if (isOD && isTCG) {
+								collectFee = "N";
+								break;
+							}
+						}
+					}
+				}
+			}
+			
 		}
 		fields.put("CollecFeeRequired", collectFee);
 	}
@@ -281,7 +346,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId == ACTION_SUBMIT) {
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
 				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
 			}
 		}
@@ -295,12 +360,57 @@ public class PostAppBusinessControl extends BusinessControl {
 		}
 		fields.put("PledgeRequired", pledgeRequired);
 	}
+	private void _Before_3045_ReviewPerfection(WorkCase workCase,long actionId,HashMap<String,String> fields) throws Exception {
+		//validate that can be submitted or not
+		if (actionId != ACTION_SUBMIT)
+			return;
+		AgreementInfo agree = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agree == null) {
+			//ERROR
+			String msg = message.get("exception.submit.postapp.reviewperfection.agreedate");
+			throw new Exception(msg);
+		}
+		
+		PerfectionReview review = perfectionReviewDAO.getPerfectionReviewByType(workCase.getId(), PerfectReviewType.FEE_COLLECTION);
+		boolean hasCollect = review != null && PerfectReviewStatus.COMPLETE.equals(review.getStatus());
+		Date agreeDate = _calculateSignDate(agree.getLoanContractDate());
+		Date checkDate = null;
+		if (hasCollect) {
+			checkDate = _calculateSignDate(review.getCompletedDate());
+		} else {
+			checkDate = new Date(0);
+			List<PledgeInfo> pledges = pledgeInfoDAO.findAllByWorkCaseId(workCase.getId());
+			List<MortgageInfo> mortgages = mortgageInfoDAO.findAllByWorkCaseId(workCase.getId());
+			TCGInfo tcg = tcgInfoDAO.findByWorkCaseId(workCase.getId());
+			
+			checkDate = _getMaxDate(checkDate, tcg.getApproveDate());
+			if (pledges != null && !pledges.isEmpty()) {
+				for (PledgeInfo pledge : pledges) {
+					checkDate = _getMaxDate(checkDate, pledge.getPledgeSigningDate());
+				}
+			}
+			if (mortgages != null && !mortgages.isEmpty()) {
+				for (MortgageInfo mortgage : mortgages) {
+					checkDate = _getMaxDate(checkDate, mortgage.getMortgageSigningDate());
+				}
+			}
+			checkDate = _calculateSignDate(checkDate);
+		}
+		
+		if (agreeDate != null && checkDate != null) {
+			if (agreeDate.compareTo(checkDate) >= 0)
+				return;
+		}
+		//ERROR
+		String msg = message.get("exception.submit.postapp.reviewperfection.agreedate");
+		throw new Exception(msg);
+	}
 	private void _Before_3046_RegenAgree_PerfectReview(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		String appointDateStr = "";
 		if (actionId == ACTION_SUBMIT) {
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
 				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
 			}
 		}
@@ -345,6 +455,11 @@ public class PostAppBusinessControl extends BusinessControl {
 		model.setWorkCase(workCase);
 		feeDetailDAO.save(model);
 		*/
+	}
+	private void _3009_FixDataInDecision(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		mortgageSummaryControl.calculateMortgageSummary(workCase.getId());
 	}
 	private void _3023_CreateCustProfile(WorkCase workCase,long actionId) {
 		if (actionId != ACTION_SUBMIT)
@@ -428,10 +543,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		model.setRemark("Agreement Sign Complete");
 		persist(model);
 	}
-	
-
-	
-	
+		
 	private void persist(PerfectionReview model) {
 		if (model.getId() <= 0)
 			perfectionReviewDAO.save(model);
@@ -458,5 +570,33 @@ public class PostAppBusinessControl extends BusinessControl {
 		model.setModifyDate(currDate);
 		model.setModifyBy(user);
 		return model;
+	}
+	private Date _calculateSignDate(Date input) {
+		if (input == null)
+			return null;
+		Calendar calendar = Calendar.getInstance(Locale.US);
+		calendar.setTime(input);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE,0);
+		calendar.set(Calendar.SECOND, 1);
+		calendar.set(Calendar.MILLISECOND,0);
+		
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		
+		if (day <= 15) {
+			calendar.set(Calendar.DAY_OF_MONTH, 15);
+		} else {
+			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		}
+		return calendar.getTime();
+	}
+	
+	private Date _getMaxDate(Date date1,Date date2) {
+		if (date2 == null)
+			return date1;
+		if (date1.compareTo(date2) < 0)
+			return date2;
+		else
+			return date1;
 	}
 }

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.ActionValidationControl;
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
 import com.clevel.selos.businesscontrol.PostAppBusinessControl;
 import com.clevel.selos.businesscontrol.ReturnControl;
@@ -52,6 +53,8 @@ public class PostAppGeneral implements Serializable  {
 	private ReturnControl returnControl;
 	@Inject
 	private ReasonDAO reasonDAO;
+	@Inject
+	private ActionValidationControl actionValidationControl;
 	
 	private long workCaseId = -1;
 	private long stepId = -1;
@@ -148,6 +151,8 @@ public class PostAppGeneral implements Serializable  {
 		}
 		returnReasonList = generalPeopleInfoControl.listReturnReasons();
 		cancelReasonList = generalPeopleInfoControl.listCancelReasons();
+		
+		
 	}
 	
 	public void onOpenReturnDialog() {
