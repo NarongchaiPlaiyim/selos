@@ -38,6 +38,9 @@ public class UserTeam implements Serializable
     @Column(name = "active")
     private int active;
 
+    @Column(name = "team_phone")
+    private String team_phone;
+
     public UserTeam() {
     }
 
@@ -113,19 +116,26 @@ public class UserTeam implements Serializable
         this.roleId = roleId;
     }
 
+    public String getTeam_phone() {
+        return team_phone;
+    }
+
+    public void setTeam_phone(String team_phone) {
+        this.team_phone = team_phone;
+    }
+
     @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("active", active).
-                append("team_name", team_name).
-                append("team_type", team_type).
-                append("team_code", team_code).
-                //append("role", role).
-                append("roleId",roleId).
-                toString();
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("description", description)
+                .append("team_name", team_name)
+                .append("team_code", team_code)
+                .append("team_type", team_type)
+                .append("roleId", roleId)
+                .append("active", active)
+                .append("team_phone", team_phone)
+                .toString();
     }
 }

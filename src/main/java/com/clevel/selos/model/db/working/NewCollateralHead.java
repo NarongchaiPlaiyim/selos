@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -98,8 +99,12 @@ public class NewCollateralHead implements Serializable {
     @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
     private int appraisalRequest;
 
+//    @Column(name = "propose_type")   //Edited by Chai
+//    private String proposeType;
+
     @Column(name = "propose_type")
-    private String proposeType;
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
 
 
     /*** For Post - Insurance Premium Quote Process ***/
@@ -121,11 +126,20 @@ public class NewCollateralHead implements Serializable {
         this.appraisalRequest = appraisalRequest;
     }
 
-    public String getProposeType() {
+//    public String getProposeType() {
+//        return proposeType;
+//    }
+//
+//    public void setProposeType(String proposeType) {
+//        this.proposeType = proposeType;
+//    }
+
+
+    public ProposeType getProposeType() {
         return proposeType;
     }
 
-    public void setProposeType(String proposeType) {
+    public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
     }
 

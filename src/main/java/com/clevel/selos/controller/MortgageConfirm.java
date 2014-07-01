@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.MortgageConfirmControl;
+import com.clevel.selos.businesscontrol.PerfectionReviewControl;
 import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
@@ -11,6 +12,7 @@ import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.MortgageInfoView;
 import com.clevel.selos.model.view.MortgageSummaryView;
+import com.clevel.selos.model.view.PerfectionReviewView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -43,6 +45,8 @@ public class MortgageConfirm implements Serializable {
 	@Inject
 	private MortgageConfirmControl mortgageConfirmControl;
 	@Inject
+	private PerfectionReviewControl perfectionReviewControl;
+	@Inject
 	private UserAccessControl userAccessControl;
 	
 	//Private variable
@@ -54,6 +58,7 @@ public class MortgageConfirm implements Serializable {
 	//Property
 	private MortgageSummaryView summary;
 	private List<MortgageInfoView> mortgages;
+	private List<PerfectionReviewView> perfectionReviews;
 	
 	public MortgageConfirm() {
 		
@@ -81,6 +86,9 @@ public class MortgageConfirm implements Serializable {
 	}
 	public MortgageSummaryView getSummary() {
 		return summary;
+	}
+	public List<PerfectionReviewView> getPerfectionReviews() {
+		return perfectionReviews;
 	}
 	
 	/*
@@ -139,6 +147,7 @@ public class MortgageConfirm implements Serializable {
 		preRenderCheck = false;
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+			perfectionReviews = perfectionReviewControl.getPerfectionReviews(workCaseId);
 		}
 		summary = mortgageConfirmControl.getMortgageSummaryView(workCaseId);
 		mortgages = mortgageConfirmControl.getMortgageInfoList(workCaseId);

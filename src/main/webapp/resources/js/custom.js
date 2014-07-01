@@ -1000,6 +1000,16 @@ function handlePostAppOnCompleteSending(args,dialog) {
 			p_postapp_result_dialog.show();
 	}
 }
+function handlePostAppOnAddReturnCode(args,dialog) {
+	if (is_defined('p_postapp_loading_dialog'))
+		p_postapp_loading_dialog.hide();
+	if (!isValidateComplete(args))
+		return;
+	if (args && args.functionComplete) {
+		if (dialog)
+			dialog.hide();	
+	}
+}
 
 function handleOnStartOpenCfmDlg() {
 	if (is_defined('p_loading_dialog'))
@@ -1032,4 +1042,30 @@ function collapseDetail() {
         $("#header_collapse").attr("class", "close");
         $("#header_information").fadeIn();
     }
+}
+
+function wireUpEvents() {
+    var out = false;
+    var refresh = false;
+    $("body").mouseover(function(){
+        out=false;
+    }).mouseout(function(){
+        out=true;
+    });
+
+    $(document).keydown(function(e) {
+        if((e.which == 82 && e.ctrlKey)   //Ctrl+R, F5, Enter, backspace
+            || e.which == 116
+            || e.which == 13
+            || e.which == 8) {
+            refresh = true;
+        }
+    });
+
+    $(window).bind('beforeunload', function(e){
+        if(out && !refresh)
+        {
+            return "WARNING!!! You are attempting to exit without log out.\nPlease stay on this page and log out first."
+        }
+    });
 }

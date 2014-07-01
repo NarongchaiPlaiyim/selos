@@ -547,14 +547,18 @@ public class FullApplicationControl extends BusinessControl {
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 
-    public void submitCA(String queueName, long workCaseId) throws Exception {
+    public void submitCA(String wobNumber, String queueName, long workCaseId) throws Exception {
         String decisionFlag = "A";
         String haveRG001 = "N"; //TODO
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorseCA = null;
 
+        String insuranceRequired = "N";
+        String approvalFlag = "N";
+        String tcgRequired = "N";
+
         if(Long.toString(workCaseId) != null && workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
 
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
@@ -563,9 +567,20 @@ public class FullApplicationControl extends BusinessControl {
                 approvalHistoryEndorseCA.setSubmit(1);
                 approvalHistoryEndorseCA.setSubmitDate(new Date());
             }
+
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            if(!Util.isNull(basicInfo)){
+                approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
+                tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
+            }
+
+            workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                insuranceRequired = workCase.getInsuranceFlag() == 1 ? "Y" : "N";
+            }
         }
 
-        bpmExecutor.submitCA(workCaseId, queueName, decisionFlag, haveRG001, ActionCode.SUBMIT_CA.getVal());
+//        bpmExecutor.submitCA(workCaseId, queueName, decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 
@@ -888,10 +903,12 @@ public class FullApplicationControl extends BusinessControl {
 
     public void calculateApprovedPricingDOA(long workCaseId){
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        calculatePricingDOA(workCaseId, newCreditFacility);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        workCase = calculatePricingDOA(workCase, newCreditFacility);
+        workCaseDAO.persist(workCase);
     }
 
-    public void calculatePricingDOA(long workCaseId, NewCreditFacility newCreditFacility){
+    public WorkCase calculatePricingDOA(WorkCase workCase, NewCreditFacility newCreditFacility){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
 
@@ -1012,12 +1029,41 @@ public class FullApplicationControl extends BusinessControl {
             int appraisalRequire = calculateAppraisalRequest(newCreditFacility);
 
             log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            //WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setRequestPricing(requestPricing);
             workCase.setPricingDoaLevel(pricingDOALevel.value());
             workCase.setRequestAppraisalRequire(appraisalRequire);
-            workCaseDAO.persist(workCase);
+            //workCaseDAO.persist(workCase);
         }
+        return workCase;
+    }
+
+    public int calculateInsuranceRequired(NewCreditFacility newCreditFacility){
+        int insuranceRequire = 0;
+        int insuranceRequireCount = 0;
+        if(!Util.isNull(newCreditFacility)){
+            if(!Util.isNull(newCreditFacility.getNewCollateralDetailList()) && newCreditFacility.getNewCollateralDetailList().size() > 0){
+                for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                    if(!Util.isNull(newCollateral.getNewCollateralHeadList()) && newCollateral.getNewCollateralHeadList().size() > 0){
+                        for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+                            if(!Util.isNull(newCollateralHead.getNewCollateralSubList()) && newCollateralHead.getNewCollateralSubList().size() > 0){
+                                for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
+                                    if(!Util.isNull(newCollateralSub.getSubCollateralType()) && newCollateralSub.getSubCollateralType().getId() != 0){
+                                        if(!Util.isZero(newCollateralSub.getSubCollateralType().getInsuranceFlag())){
+                                            insuranceRequireCount = insuranceRequireCount + 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(insuranceRequireCount > 0){
+            insuranceRequire = 1;
+        }
+        return insuranceRequire;
     }
 
     public int calculateAppraisalRequest(NewCreditFacility newCreditFacility){

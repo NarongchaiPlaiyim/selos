@@ -1,14 +1,10 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.PerfectionReviewControl;
-import com.clevel.selos.businesscontrol.UserAccessControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.PerfectionReviewView;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
-
-import org.slf4j.Logger;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -18,10 +14,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import org.slf4j.Logger;
+
+import com.clevel.selos.businesscontrol.PerfectionReviewControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.PerfectionReviewView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 @ViewScoped
 @ManagedBean(name="perfectionReview")
@@ -101,10 +102,11 @@ public class PerfectionReview implements Serializable {
 	private void _loadInitData() {
 		preRenderCheck = false;
 		if (workCaseId > 0) {
-			
+			perfectionReviews = perfectionReviewControl.getPerfectionReviews(workCaseId);
+		} else {
+			perfectionReviews = new ArrayList<PerfectionReviewView>();
 		}
 		
-		perfectionReviews = perfectionReviewControl.getPerfectionReviews(workCaseId);
 		lastUpdateDateTime = new Date(0);
 		lastUpdateBy = null;
 		for (PerfectionReviewView view : perfectionReviews) {

@@ -59,6 +59,23 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
+    //Added by Chai.
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
+
     public User() {
     }
 
@@ -207,26 +224,64 @@ public class User implements Serializable {
 //		return builder.toString();
     	return userName;
     }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("userName", userName).
-                append("role", role).
-                append("buCode", buCode).
-                append("emailAddress", emailAddress).
-                append("lastLogon", lastLogon).
-                append("lastIP", lastIP).
-                append("team", team).
-                append("zone", zone).
-                append("region", region).
-                append("title", title).
-                append("phoneNumber", phoneNumber).
-                append("phoneExt", phoneExt).
-                append("department", department).
-                append("division", division).
-                append("active", active).
-                append("userStatus", userStatus).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("userName", userName)
+                .append("role", role)
+                .append("buCode", buCode)
+                .append("emailAddress", emailAddress)
+                .append("lastLogon", lastLogon)
+                .append("lastIP", lastIP)
+                .append("team", team)
+                .append("zone", zone)
+                .append("region", region)
+                .append("title", title)
+                .append("phoneNumber", phoneNumber)
+                .append("phoneExt", phoneExt)
+                .append("department", department)
+                .append("division", division)
+                .append("position", position)
+                .append("active", active)
+                .append("userStatus", userStatus)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

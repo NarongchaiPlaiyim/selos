@@ -1100,11 +1100,12 @@ public class CreditFacPropose extends BaseController {
         modeForButton = ModeForButton.ADD;
         newCollateralView = new NewCollateralView();
         newCollateralView.getNewCollateralHeadViewList().add(new NewCollateralHeadView());
-        if(proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0){
+        /*if(proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0){
             for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList){
                 proposeCreditDetailView.setNoFlag(false);
             }
-        }
+        }*/
+        proposeCreditDetailViewList = creditFacProposeControl.getProposeCreditFromCreditAndExisting(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
         newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
         flagButtonCollateral = true;
         flagComs = false;
@@ -1139,6 +1140,7 @@ public class CreditFacPropose extends BaseController {
         }
 
         flagComs = false;
+        proposeCreditDetailViewList = creditFacProposeControl.getProposeCreditFromCreditAndExisting(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
         proposeCreditDetailViewList = creditFacProposeControl.setNoFlagForCollateralRelateCredit(selectCollateralDetailView,proposeCreditDetailViewList,newCreditFacilityView.getId());
         newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 
@@ -1674,12 +1676,7 @@ public class CreditFacPropose extends BaseController {
         modeForButton = ModeForButton.ADD;
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
         newGuarantorDetailView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
-        if(proposeCreditDetailViewList != null && proposeCreditDetailViewList.size() > 0){
-            for(ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList){
-                proposeCreditDetailView.setNoFlag(false);
-            }
-        }
-        newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
+        proposeCreditDetailViewList = creditFacProposeControl.getProposeCreditFromCreditAndExisting(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
         newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
     }
 
@@ -1692,6 +1689,7 @@ public class CreditFacPropose extends BaseController {
         newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
         newGuarantorDetailView.setGuarantorCategory(newGuarantorDetailViewItem.getGuarantorCategory());
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
+        proposeCreditDetailViewList = creditFacProposeControl.getProposeCreditFromCreditAndExisting(newCreditFacilityView.getNewCreditDetailViewList(), existingCreditDetailViewList, workCaseId);
         proposeCreditDetailViewList = creditFacProposeControl.setNoFlagForGuarantorRelateCredit(newGuarantorDetailViewItem,proposeCreditDetailViewList,newCreditFacilityView.getId());
         newGuarantorDetailView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
 

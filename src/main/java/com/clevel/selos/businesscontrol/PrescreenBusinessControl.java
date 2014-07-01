@@ -1181,6 +1181,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(customerModifyFlag > 0){
             prescreenView.setModifyFlag(1);
             modifyFlag = true;
+
+            //Remove PreScreen Result Data
+            log.debug("savePreScreen ::: remove UWResultSummary data...");
+            uwRuleResultControl.deleteUWRuleResult(workCasePreScreenId, 0);
         }else{
             prescreenView.setModifyFlag(0);
             modifyFlag = false;

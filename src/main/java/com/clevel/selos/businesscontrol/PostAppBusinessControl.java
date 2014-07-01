@@ -1,6 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -10,16 +16,40 @@ import org.slf4j.Logger;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.working.AgreementInfoDAO;
+import com.clevel.selos.dao.working.DisbursementDAO;
+import com.clevel.selos.dao.working.FeeDetailDAO;
+import com.clevel.selos.dao.working.MortgageInfoDAO;
+import com.clevel.selos.dao.working.PerfectionReviewDAO;
+import com.clevel.selos.dao.working.PledgeInfoDAO;
+import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.FeeLevel;
+import com.clevel.selos.model.PerfectReviewStatus;
+import com.clevel.selos.model.PerfectReviewType;
 import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.AgreementInfo;
+import com.clevel.selos.model.db.working.FeeDetail;
+import com.clevel.selos.model.db.working.PerfectionReview;
+import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.ReturnInfoView;
+import com.clevel.selos.model.view.StepView;
+import com.clevel.selos.model.view.UserView;
+import com.clevel.selos.transform.ReturnInfoTransform;
+import com.clevel.selos.transform.StepTransform;
+import com.clevel.selos.transform.UserTransform;
 import com.clevel.selos.util.Util;
 
 @Stateless
 public class PostAppBusinessControl extends BusinessControl {
 	private static final long serialVersionUID = 1881119889067519324L;
+	private static final String DATE_FORMAT = "yyyyMMdd";
+	private static final long ACTION_SUBMIT = 1015;
 	@Inject
     @SELOS
     private Logger log;
@@ -31,24 +61,48 @@ public class PostAppBusinessControl extends BusinessControl {
 	private ReasonDAO reasonDAO;
 	@Inject
 	private WorkCaseDAO workCaseDAO;
+	@Inject
+	private UserTransform userTransform;
+	@Inject
+	private StepTransform stepTransform;
+	@Inject
+	private ReturnInfoTransform returnInfoTransform;
+	@Inject
+	private ReturnInfoDAO returnInfoDAO;
+	@Inject
+	private FeeDetailDAO feeDetailDAO;
+	@Inject
+	private PerfectionReviewDAO perfectionReviewDAO;
+	@Inject
+	private COMSInterface comsInterface;
+	@Inject
+	private MortgageInfoDAO mortgageInfoDAO;
+	@Inject
+	private AgreementInfoDAO agreementInfoDAO;
+	@Inject
+	private PledgeInfoDAO pledgeInfoDAO;
+	@Inject
+	private DisbursementDAO disbursementDAO;
+
+	
 	
 	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark) throws Exception {
 		_executeBPM(workCaseId, queueName,wobNumber, 1015, -1, remark);
 	}
-	public void returnToBDM(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1005, reasonId, remark);
+	public void returnToBDM(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1005, returnInfos);
 	}
-	public void returnToUW2(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1033, reasonId, remark);
+	public void returnToUW2(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1033, returnInfos);
 	}
-	public void returnToDataEntry(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1034, reasonId, remark);
+	public void returnToDataEntry(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1034, returnInfos);
 	}
-	public void returnToContactCenter(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1037, reasonId, remark);
+	public void returnToContactCenter(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1037, returnInfos);
 	}
-	public void returnToLARBC(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1038, reasonId, remark);
+	public void returnToLARBC(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1038, returnInfos);
 	}
 	public void cancelCA(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
 		_executeBPM(workCaseId, queueName,wobNumber, 1003, reasonId, remark);
@@ -69,82 +123,340 @@ public class PostAppBusinessControl extends BusinessControl {
 		_executeBPM(workCaseId, queueName,wobNumber, 1035, -1, remark);
 	}
 	
+	/**
+	 * @return true if it has return code RG001
+	 */
+	private void _returnBPM(long workCaseId,String queueName,String wobNumber,long actionId,List<ReturnInfoView> returnInfos) throws Exception {
+		WorkCase workCase = workCaseDAO.findById(workCaseId);
+		Action action = actionDAO.findById(actionId);
+		
+		UserView userView = userTransform.transformToView(getCurrentUser());
+		StepView stepView = stepTransform.transformToView(workCase.getStep());
+		
+		HashSet<String> returnCodeSet = new HashSet<String>(); 
+		List<ReturnInfo> models = new ArrayList<ReturnInfo>();
+		Date returnDate = new Date();
+		for (ReturnInfoView view : returnInfos) {
+			view.setReturnFromUser(userView);
+			view.setReturnFromStep(stepView);
+			view.setDateOfReturn(returnDate);
+			view.setChallenge(0);
+			view.setAcceptChallenge(0);
+			if (view.getReturnCode() != null) {
+				returnCodeSet.add(view.getReturnCode());
+			}
+			models.add(returnInfoTransform.transformToModel(view, workCase, getCurrentUser()));
+		}
+		returnInfoDAO.persist(models);
+		
+		_callBPM(workCase, action,queueName,wobNumber, -1, null, new HashSet<String>());
+	}
+	
 	private void _executeBPM(long workCaseId,String queueName,String wobNumber,long actionId,int reasonId,String remark) throws Exception {
 		WorkCase workCase = workCaseDAO.findById(workCaseId);
 		Action action = actionDAO.findById(actionId);
 		
+		_callBPM(workCase, action,queueName,wobNumber, reasonId, remark, new HashSet<String>());
+	}
+	
+	private void _callBPM(WorkCase workCase,Action action,String queueName,String wobNumber,int reasonId,String remark,HashSet<String> returnCodeSet) throws Exception{
 		HashMap<String, String> fields = new HashMap<String, String>();
 		fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getDescription());
         if (reasonId > 0) {
         	Reason reason = reasonDAO.findById(reasonId);
-        	String reasonStr = reason.getCode() != null ? reason.getCode() : "";
-        	reasonStr = reason.getDescription() != null ? reasonStr + " - " + reason.getDescription() : reasonStr;
-        	fields.put("Reason", reasonStr);
+        	if (reason != null) {
+	        	String reasonStr = reason.getCode() != null ? reason.getCode() : "";
+	        	reasonStr = reason.getDescription() != null ? reasonStr + " - " + reason.getDescription() : reasonStr;
+	        	fields.put("Reason", reasonStr);
+	        	
+	        	returnCodeSet.add(reason.getCode());
+        	}
         }
         if (!Util.isEmpty(remark))
         	fields.put("Remarks", remark);
         
         String stepCode = workCase.getStep().getCode();
+        long actionId = action.getId();
         //Add additional field
-        if (!Util.isEmpty(stepCode)) {
-        	if ("3008".equals(stepCode)) { //Check Doc
-        		_checkDoc(workCase, fields);
-        	} else if ("3029".equals(stepCode)) { //Generate Agreement
-        		_generateAgreement(workCase, fields);
-        	} else if ("3033".equals(stepCode)) { //Confirm mortgage registration
-        		_confirmMortgage(workCase, fields);
-        	} else if ("3035".equals(stepCode)) { //Confirm agreement sign fee
-        		_confirmAgreement(workCase, fields);
-        	} else if ("3037".equals(stepCode) || "3038".equals(stepCode)) { //review signed agreement
-        		_reviewSign(workCase, fields);
-        	} else if ("3046".equals(stepCode)) { //regenerate agreement
-        		_regenAgreement(workCase, fields);
-        	} else if ("3023".equals(stepCode)) { // create update customer profile
-        		_createCustProfile(workCase, fields);
-        	} else if ("3049".equals(stepCode)) { //setup limit
-        		_setupLimit(workCase, fields);
-        	}
-        }
+    	if ("3008".equals(stepCode)) { //Check Doc
+    		_Before_3008_CheckDoc(workCase, actionId, fields, returnCodeSet);
+    	} else if ("3023".equals(stepCode)) { // create update customer profile
+    		_Before_3023_CreateCustProfile(workCase, actionId, fields);
+    	} else if ("3029".equals(stepCode)) { //Generate Agreement
+    		_Before_3029_GenerateAgreement(workCase, actionId, fields);
+    	} else if ("3033".equals(stepCode)) { //Confirm mortgage registration
+    		_Before_3033_ConfirmMortgage(workCase, actionId, fields);
+    	} else if ("3035".equals(stepCode)) { //Confirm agreement sign fee
+    		_Before_3035_ConfirmSign(workCase, actionId, fields);
+    	} else if ("3036".equals(stepCode)) { //regenerate agreement
+    		_Before_3036_RegenAgree(workCase, actionId, fields);
+    	} else if ("3038".equals(stepCode)) { //review signed agreement
+    		_Before_3038_ReviewSign(workCase, actionId, fields);
+    	} else if ("3046".equals(stepCode)) {
+    		_Before_3046_RegenAgree_PerfectReview(workCase, actionId, fields);
+    	} else if ("3049".equals(stepCode)) { //setup limit
+    		_Before_3049_SetupLimit(workCase, actionId, fields);
+    	}
+        
         bpmExecutor.execute(queueName, wobNumber, fields);
-	}
+        
+        //After success
+        if ("3002".equals(stepCode)) {
+        	_3002_InsurancePremiumQuote(workCase, actionId);
+        } else if ("3023".equals(stepCode)) {
+        	_3023_CreateCustProfile(workCase, actionId);
+        } else if ("3026".equals(stepCode)) {
+        	_3026_OpenAccount(workCase, actionId);
+        } else if ("3029".equals(stepCode)) {
+        	_3029_GenerateAgree(workCase, actionId);
+        } else if ("3034".equals(stepCode)) {
+        	_3034_ResignAgree(workCase, actionId);
+        } else if ("3035".equals(stepCode)) {
+        	_3035_ConfirmSign(workCase, actionId);
+        } else if ("3036".equals(stepCode)) {
+        	_3036_RegenAgree(workCase, actionId);
+        } else if ("3038".equals(stepCode)) {
+        	_3038_ReviewSign(workCase, actionId);
+        } else if ("3040".equals(stepCode)) {
+        	_3040_PledgeCash(workCase, actionId);
+        } else if ("3042".equals(stepCode)) {
+        	_3042_CollectFee(workCase, actionId);
+        } else if ("3046".equals(stepCode)) {
+        	_3046_RegenAgree_PerfectReview(workCase, actionId);
+        } else if ("3047".equals(stepCode)) {
+        	_3047_ReviewPerfection_Resign(workCase, actionId);
+        }
+ 	}
 	
-	private void _checkDoc(WorkCase workCase, HashMap<String,String> fields) {
-		String formCFlag = "N";
+	/*
+	 * Before Case
+	 */
+	private void _Before_3008_CheckDoc(WorkCase workCase,long actionId, HashMap<String,String> fields,HashSet<String> returnCodeSet) {
+		boolean formC = returnCodeSet.contains("10100") && actionId == 1005;
+		String formCFlag = formC ? "Y" : "N" ;
 		fields.put("FormCFlag", formCFlag);
 	}
-	private void _generateAgreement(WorkCase workCase, HashMap<String,String> fields) {
+	private void _Before_3023_CreateCustProfile(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		String accOpenRequired = "N";
+		fields.put("AccOpenRequired", accOpenRequired);
+	}
+	private void _Before_3029_GenerateAgreement(WorkCase workCase, long actionId,HashMap<String,String> fields) {
 		String appointDateStr = "";
 		String mortgageRequired = "N";
+		if (actionId == ACTION_SUBMIT) {
+			if (mortgageInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
+				mortgageRequired = "Y";
+			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+			}
+		}
 		
 		fields.put("AppointmentDate",appointDateStr);
 		fields.put("MortgageRequired", mortgageRequired);
 	}
-	private void _confirmMortgage(WorkCase workCase, HashMap<String, String> fields) {
+	private void _Before_3033_ConfirmMortgage(WorkCase workCase,long actionId, HashMap<String, String> fields) {
 		String appointDateStr = "";
+		if (actionId == ACTION_SUBMIT) {
+			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+			}
+		}
 		fields.put("AppointmentDate",appointDateStr);
 	}
-	private void _confirmAgreement(WorkCase workCase, HashMap<String, String> fields) {
+	private void _Before_3035_ConfirmSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		String collectFee = "N";
+		if (actionId == ACTION_SUBMIT) {
+			//TODO
+		}
 		fields.put("CollecFeeRequired", collectFee);
 	}
-	private void _reviewSign(WorkCase workCase, HashMap<String, String> fields) {
-		String pledgeRequired = "N";
-		fields.put("PledgeRequired", pledgeRequired);
-	}
-	private void _regenAgreement(WorkCase workCase, HashMap<String, String> fields) {
+	
+	private void _Before_3036_RegenAgree(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		String appointDateStr = "";
+		if (actionId == ACTION_SUBMIT) {
+			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+			}
+		}
 		fields.put("AppointmentDate", appointDateStr);
 	}
-	private void _createCustProfile(WorkCase workCase, HashMap<String, String> fields) {
-		String accOpenRequired = "N";
-		fields.put("AccOpenRequired", accOpenRequired);
+	private void _Before_3038_ReviewSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		String pledgeRequired = "N";
+		if (actionId == ACTION_SUBMIT) {
+			if (pledgeInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
+				pledgeRequired = "Y";
+		}
+		fields.put("PledgeRequired", pledgeRequired);
 	}
-	private void _setupLimit(WorkCase workCase, HashMap<String, String> fields) {
+	private void _Before_3046_RegenAgree_PerfectReview(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		String appointDateStr = "";
+		if (actionId == ACTION_SUBMIT) {
+			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT);
+				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+			}
+		}
+		fields.put("AppointmentDate", appointDateStr);
+	}
+	
+	private void _Before_3049_SetupLimit(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		String disbursementRequired = "N";
 		String basicCheckRequired = "N";
+		if (actionId == ACTION_SUBMIT) {
+			BigDecimal disbursementAmt = disbursementDAO.getTotalDisbursementAmount(workCase.getId());
+			if (disbursementAmt != null && disbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
+				disbursementRequired = "Y";
+			}	
+		}
+		
+		//TODO -	BasicConditionCheckRequired
+		
 		fields.put("DisbursementRequired", disbursementRequired);
 		fields.put("BasicConditionCheckRequired", basicCheckRequired);
 	}
 	
+	/*
+	 * After success case
+	 */
+	private void _3002_InsurancePremiumQuote(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Insurance Premium Quote (3002) , Action Submit CA (1015)
+		//TODO
+		/*
+		FeeDetail model = new FeeDetail();
+		model.setPaymentMethod(null);
+		model.setFeeType(null);
+		model.setPercentFee(BigDecimal.ZERO);
+		model.setPercentFeeAfter(BigDecimal.ZERO);
+		model.setFeeYear(BigDecimal.ZERO);
+		model.setAmount(BigDecimal.ZERO);
+		model.setFeeLevel(FeeLevel.NA);
+		model.setDescription(null);
+		model.setNewCreditDetail(null);
+		model.setWorkCase(workCase);
+		feeDetailDAO.save(model);
+		*/
+	}
+	private void _3023_CreateCustProfile(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Create/Update Customer Profile(3023), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.CUSTOMER,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Create Customer Profile Complete");
+		persist(model);
+	}
+	private void _3026_OpenAccount(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Open Account(3026), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.ACCOUNT,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Open Account Complete");
+		persist(model);
+	}
+	private void _3029_GenerateAgree(WorkCase workCase,long actionId) {
+		if (actionId != 1036) //Gen agreement
+			return;
+		//Step Generate Agreement(3029), Action Generate Agreement (1036)
+		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
+	}
+	private void _3034_ResignAgree(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Re-Sign Agreement(3034), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.CONTRACT,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Agreement Sign Complete");
+		persist(model);
+	}
+	private void _3035_ConfirmSign(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Confirm Agreement Sign & Collect Fee(3035), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.CONTRACT,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Agreement Sign Complete");
+		persist(model);
+	}
+	private void _3036_RegenAgree(WorkCase workCase,long actionId) {
+		if (actionId != 1036) //Gen agreement
+			return;
+		//Step Regenerate Agreement(3036), Action Generate Agreement (1036)
+		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
+	}
+	private void _3038_ReviewSign(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Reviewed Signed Agreement(Re-sign agreement)(3038), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.CONTRACT,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Agreement Sign Complete");
+		persist(model);
+	}
+	private void _3040_PledgeCash(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Pledge Cash Collateral(3040), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.PLEDGE,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Pledge Complete");
+		persist(model);
+	}
+	private void _3042_CollectFee(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step Collect Fee (3042), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.FEE_COLLECTION,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Collect Fee Complete");
+		persist(model);
+	}
+	private void _3046_RegenAgree_PerfectReview(WorkCase workCase,long actionId) {
+		if (actionId != 1036) //Gen agreement
+			return;
+		//Step Regenerate Agreement(3036), Action Generate Agreement (1036)
+		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
+	}
+	private void _3047_ReviewPerfection_Resign(WorkCase workCase,long actionId) {
+		if (actionId != ACTION_SUBMIT)
+			return;
+		//Step 3047	Review Perfection (Re - Sign Agreement), Action Submit CA (1015)
+		PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.CONTRACT,PerfectReviewStatus.COMPLETE);
+		model.setRemark("Agreement Sign Complete");
+		persist(model);
+	}
+	
+
+	
+	
+	private void persist(PerfectionReview model) {
+		if (model.getId() <= 0)
+			perfectionReviewDAO.save(model);
+		else
+			perfectionReviewDAO.update(model);
+	}
+	private PerfectionReview createPerfectionReview(WorkCase workCase,PerfectReviewType type,PerfectReviewStatus status) {
+		Date currDate = new Date();
+		User user = getCurrentUser();
+		PerfectionReview model = perfectionReviewDAO.getPerfectionReviewByType(workCase.getId(), type);
+		if (model == null) {
+			model = new PerfectionReview();
+			model.setCreateBy(user);
+			model.setCreateDate(currDate);
+			model.setWorkCase(workCase);
+		} 
+		
+		model.setStatus(status);
+		model.setDate(currDate);
+		if (PerfectReviewStatus.COMPLETE.equals(status))
+			model.setCompletedDate(currDate);
+		else
+			model.setCompletedDate(null);
+		model.setModifyDate(currDate);
+		model.setModifyBy(user);
+		return model;
+	}
 }
