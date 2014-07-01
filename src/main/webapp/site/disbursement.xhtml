@@ -14,6 +14,8 @@
 		<script type="text/javascript" src="../resources/js/superfish.js"></script>
 	</h:head>
 	<h:body>
+	<f:event type="preRenderView"
+			listener="#{disbursementInfo.preRender()}" />
 		<p:panel id="pnl_maincontainer" styleClass="panel">
 			<h:form id="frmMain">
 				<div id="main_container">
