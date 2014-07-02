@@ -480,7 +480,7 @@
         <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
     <!-- Check Mandate Doc [ For STEP CHECK DOC ]-->
-    <p:commandButton id="btnCheckMandate_AADC" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+    <p:commandButton id="btnCheckMandate_CheckDoc" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 3008}"
                      actionListener="#{headerController.onCheckMandateForStepCheckDoc()}"
                      oncomplete="checkMandateDlg.show()"
