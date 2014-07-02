@@ -279,4 +279,14 @@ public class HeaderControl extends BusinessControl {
         }
         return true;
     }
+
+    public void updateNCBRejectFlag(long workCasePreScreenId, boolean canCheckPreScreen){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        if(canCheckPreScreen){
+            workCasePrescreen.setNcbRejectFlag(0);
+        } else {
+            workCasePrescreen.setNcbRejectFlag(1);
+        }
+        workCasePrescreenDAO.persist(workCasePrescreen);
+    }
 }
