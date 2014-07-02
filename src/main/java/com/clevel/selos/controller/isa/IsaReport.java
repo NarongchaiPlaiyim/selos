@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.report.GenPDF;
 import com.clevel.selos.util.CsvExport;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -35,6 +36,9 @@ public class IsaReport implements Serializable {
 
     @Inject
     CsvExport csvExport;
+
+    @Inject
+    private GenPDF genPDF;
 
     @Inject
     public IsaReport(){
@@ -257,6 +261,11 @@ public class IsaReport implements Serializable {
 
         csvExport.exportCSV("userMaintenanceReport_"+dateFormatFile.format(new Date()),builder.toString());
 
+    }
+
+    public void onSubmitReport(){
+        log.debug("--On onSubmitReport. fromdate. {}, and todate.{}",dateFrom,dateTo);
+        genPDF.onPrintViolation(dateFrom,dateTo);
     }
 
     public Date getDateFrom() {
