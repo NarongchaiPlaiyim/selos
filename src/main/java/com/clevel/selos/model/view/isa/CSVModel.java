@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view.isa;
 
-import com.clevel.selos.businesscontrol.isa.csv.validation.ValidationImp;
+import com.clevel.selos.businesscontrol.isa.ValidationImp;
 import com.clevel.selos.model.CommandType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -29,18 +29,9 @@ public class CSVModel extends ValidationImp implements Serializable {
         return commandType;
     }
 
-    public void set﻿commandType(String commandType) {
+    public void setCommandType(String commandType) {
         this.commandType = commandType;
     }
-
-
-//    public String getCommandType() {
-//        return commandType;
-//    }
-//
-//    public void setCommandType(String commandType) {
-//        this.commandType = commandType;
-//    }
 
     public String getUserId() {
         return userId;

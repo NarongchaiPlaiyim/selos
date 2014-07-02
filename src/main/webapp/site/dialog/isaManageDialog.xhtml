@@ -19,7 +19,10 @@
                 <td>
                     <p:inputText value="#{isa.isaManageUserView.id}" style="width: 250px; min-width: 250px; max-width: 250px;"
                                  required="true" readonly="#{isa.isaManageUserView.readOnlyUserId}"
+                                 maxlength="10"
                             />
+                    <!--onkeypress="return onKeyPressName(event);" -->
+                    <!--onkeydown="return onKeyDownName(event);"-->
                 </td>
             </tr>
             <tr>
@@ -27,7 +30,9 @@
                     <p:outputLabel value="User Name"/>
                 </td>
                 <td>
-                    <p:inputText value="#{isa.isaManageUserView.username}" required="true" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                    <p:inputText value="#{isa.isaManageUserView.username}" required="true" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="50"
+                            />
                 </td>
             </tr>
 
@@ -46,7 +51,9 @@
                     <p:outputLabel value="BU Code"/>
                 </td>
                 <td>
-                    <p:inputText value="#{isa.isaManageUserView.buCode}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                    <p:inputText value="#{isa.isaManageUserView.buCode}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="20"
+                            />
                 </td>
             </tr>
 
@@ -55,7 +62,9 @@
                     <p:outputLabel value="Tel No."/>
                 </td>
                 <td>
-                    <p:inputText value="#{isa.isaManageUserView.phoneExt}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                    <p:inputText value="#{isa.isaManageUserView.phoneExt}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="20"
+                            />
                 </td>
             </tr>
 
@@ -64,7 +73,9 @@
                     <p:outputLabel value="Phone No."/>
                 </td>
                 <td>
-                    <p:inputText value="#{isa.isaManageUserView.phoneNumber}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                    <p:inputText value="#{isa.isaManageUserView.phoneNumber}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="20"
+                            />
                 </td>
             </tr>
 
