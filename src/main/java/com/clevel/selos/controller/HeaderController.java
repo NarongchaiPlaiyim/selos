@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
@@ -12,6 +13,7 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -54,6 +56,8 @@ public class HeaderController extends BaseController {
     ReasonDAO reasonDAO;
     @Inject
     UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
 
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -239,6 +243,17 @@ public class HeaderController extends BaseController {
                 qualitativeType = basicInfo.getQualitativeType();
             }
             log.debug("Qualitative type : {}", qualitativeType);
+        }
+
+        if(workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(workCasePrescreen!=null && workCasePrescreen.getId()>0){
+                if(workCasePrescreen.getNcbRejectFlag()==0){
+                    canCheckPreScreen = true;
+                } else {
+                    canCheckPreScreen = false;
+                }
+            }
         }
 
         user = (User) session.getAttribute("user");
@@ -1112,11 +1127,12 @@ public class HeaderController extends BaseController {
                             uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
                             //TODO: wait to confirm spec
-                            /*if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,user)){
+                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,user)){
                                 canCheckPreScreen = false;
                             } else {
                                 canCheckPreScreen = true;
-                            }*/
+                            }
+                            headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
