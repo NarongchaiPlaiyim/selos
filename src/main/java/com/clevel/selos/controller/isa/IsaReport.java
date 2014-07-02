@@ -55,11 +55,6 @@ public class IsaReport implements Serializable {
         dateTo = DateTime.now().toDate();
     }
 
-
-
-
-
-
     public void notLogonOver() {
         log.debug("notLogonOver()");
 
