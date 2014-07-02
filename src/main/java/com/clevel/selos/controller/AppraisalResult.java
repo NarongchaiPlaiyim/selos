@@ -4,7 +4,6 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
@@ -175,7 +174,7 @@ public class AppraisalResult implements Serializable {
 
     public void preRender(){
         log.info("preRender...");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
 
@@ -195,7 +194,7 @@ public class AppraisalResult implements Serializable {
     public void onCreation() {
         log.info("onCreation...");
         init();
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
                 workCaseId = (Long)session.getAttribute("workCaseId");
@@ -289,11 +288,11 @@ public class AppraisalResult implements Serializable {
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
                 }
-            } catch (COMSInterfaceException e){
-                log.error("COMSInterfaceException ::: {}",e);
-                messageHeader = "Exception";
-                message = e.getMessage();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            } catch (COMSInterfaceException e){
+//                log.error("COMSInterfaceException ::: {}",e);
+//                messageHeader = "Exception";
+//                message = e.getMessage();
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } catch (Exception e){
                 log.error("Exception ::: {}",e);
                 messageHeader = "Exception";

@@ -276,7 +276,7 @@ public class Decision extends BaseController {
 
     private void initial(){
         //Initial value for onCreation
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         workCaseId = getCurrentWorkCaseId(session);
         stepId = getCurrentStep(session);
 
@@ -337,7 +337,7 @@ public class Decision extends BaseController {
 
     public void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)) {
             //Check valid Step
             log.debug("check valid step.");
@@ -1470,7 +1470,7 @@ public class Decision extends BaseController {
             }
 
             //Check valid step to Save Approval
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
             long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 

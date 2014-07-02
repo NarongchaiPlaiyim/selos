@@ -204,6 +204,9 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setCreateBy(basicInfo.getCreateBy());
         basicInfoView.setModifyDate(basicInfo.getModifyDate());
         basicInfoView.setModifyBy(basicInfo.getModifyBy());
+        
+        basicInfoView.setApproveType(basicInfo.getApproveType());
+        basicInfoView.setApproveResult(basicInfo.getApproveResult());
 
         log.info("End - transformToView ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;

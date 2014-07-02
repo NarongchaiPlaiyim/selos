@@ -73,7 +73,7 @@ public class Qualitative implements Serializable {
 
     public void preRender(){
         log.info("preRender.");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ", page);
@@ -115,7 +115,7 @@ public class Qualitative implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ", page);
