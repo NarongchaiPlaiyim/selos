@@ -10,6 +10,9 @@ public class ReportView implements Serializable {
     private String nameReportRejectLetter;
     private String nameReportAppralsal;
     private String nameReportOfferLetter;
+    private String nameISAReportViolation;
+    private String nameISAReportUserProfile;
+    private String nameISAReportLogonOver90;
 
 
     public ReportView() {
@@ -53,5 +56,29 @@ public class ReportView implements Serializable {
 
     public void setNameReportOfferLetter(String nameReportOfferLetter) {
         this.nameReportOfferLetter = nameReportOfferLetter;
+    }
+
+    public String getNameISAReportViolation() {
+        return nameISAReportViolation;
+    }
+
+    public void setNameISAReportViolation(String nameISAReportViolation) {
+        this.nameISAReportViolation = nameISAReportViolation;
+    }
+
+    public String getNameISAReportUserProfile() {
+        return nameISAReportUserProfile;
+    }
+
+    public void setNameISAReportUserProfile(String nameISAReportUserProfile) {
+        this.nameISAReportUserProfile = nameISAReportUserProfile;
+    }
+
+    public String getNameISAReportLogonOver90() {
+        return nameISAReportLogonOver90;
+    }
+
+    public void setNameISAReportLogonOver90(String nameISAReportLogonOver90) {
+        this.nameISAReportLogonOver90 = nameISAReportLogonOver90;
     }
 }

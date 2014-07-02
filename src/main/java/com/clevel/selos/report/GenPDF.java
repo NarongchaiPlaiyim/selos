@@ -7,6 +7,7 @@ import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.*;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -66,6 +67,17 @@ public class GenPDF extends ReportService implements Serializable {
     @Config(name = "report.offerletter")
     String pathOfferLetter;
 
+    @Inject
+    @Config(name = "reportisa.violation")
+    String pathISAViolation;
+
+    @Inject
+    @Config(name = "reportisa.userprofile")
+    String pathISAUserProfile;
+
+    @Inject
+    @Config(name = "reportisa.logonover90")
+    String pathISALogonOver90;
 
     @Inject
     private WorkCaseDAO workCaseDAO;
@@ -116,24 +128,19 @@ public class GenPDF extends ReportService implements Serializable {
     @PostConstruct
     private void onCreation(){
         init();
-        log.debug("GenPDF onCreation ");
+        reportView = new ReportView();
+        log.debug("GenPDF onCreation and New ReportView");
     }
-
-    String pdfName;
 
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
         String date = Util.createDateTime(new Date());
-        String[] month = date.split("");
-        log.debug("--month. {}",month);
-
         type = false;
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
             String appNumber = workCase.getAppNumber();
-            reportView = new ReportView();
 
             StringBuilder nameOpShect =new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
@@ -152,11 +159,20 @@ public class GenPDF extends ReportService implements Serializable {
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
-
-            pdfReject_letter.init();
-            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
+
+            pdfReject_letter.init();
+            if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                reportView.setNameReportRejectLetter("-");
+                type = true;
+            } else {
+                reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+            }
+
+            //ISAReport
+
         }
     }
 
@@ -317,26 +333,28 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void onPrintLogonOver90(){
         log.debug("--on onPrintLogonOver90.");
-        HashMap map = new HashMap<String, Object>();
-        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-
-        ResultSet rs = stpExecutor.getLogonOver90();
-        int i = 1;
-        String jasper = "LogonOver90";
+//        reportView.setNameISAReportLogonOver90(nameLogonOver90.toString());
 
         try {
+            HashMap map = new HashMap<String, Object>();
+            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+            ResultSet rs = stpExecutor.getLogonOver90();
+            StringBuilder nameLogonOver90 = new StringBuilder();
+            nameLogonOver90 = nameLogonOver90.append("NotLogonOver_90_").append(Util.getFileNameForISA());
+            int i = 1;
+
             while (rs.next()){
                 ISAViewReport viewReport = new ISAViewReport();
                 viewReport.setRow(i++);
                 viewReport.setUserId(rs.getString("USER_ID"));
                 viewReport.setUserName(rs.getString("USER_NAME"));
                 viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
-                viewReport.setLogin(rs.getTimestamp("LAST_LOGIN_DATE"));
+                viewReport.setLogin(rs.getTimestamp("LAST_LOGIN"));
                 viewReport.setStatus(rs.getString("STATUS"));
                 viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
                 viewReportList.add(viewReport);
             }
-            exportPDF(map,viewReportList,jasper);
+            generatePDF(pathISALogonOver90, map, nameLogonOver90.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("on getLogonOver90. {}",e);
         } catch (Exception e) {
@@ -344,39 +362,25 @@ public class GenPDF extends ReportService implements Serializable {
         }
     }
 
-    public void onPrintViolation(){
+    public void onPrintViolation(final Date form, final Date to){
         log.debug("--on onPrintViolation.");
-        HashMap map = new HashMap<String, Object>();
-        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-//        String jasper = "C:/Users/pakorn/Desktop/ISAREPORT/Violation";
+//        reportView.setNameISAReportViolation(nameISAViolation.toString());
+        StringBuilder nameISAUserProfile = new StringBuilder();
+        nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
+        reportView.setNameISAReportUserProfile(nameISAUserProfile.toString());
 
         try {
-            String jasper = "C:/Users/pakorn/Desktop/ISAREPORT/Violation.jrxml";
-            ResultSet rs = stpExecutor.getViolation("30/05/2014","24/06/2014");
+            StringBuilder nameISAViolation = new StringBuilder();
+            nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());
+            HashMap map = new HashMap<String, Object>();
+            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(form));
+            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(to));
+            ResultSet rs = stpExecutor.getViolation(map);
             log.debug("--rs in onPrintViolation. {}",rs);
-            ISAViewReport viewReport = null;
-            int round = 0 ;
 
-            while (rs.next());{
-                log.debug("round {}", round++);
-                round++;
-//                viewReport = new ISAViewReport();
-////                viewReport.setUserId(rs.getString("USER_ID"));
-////                log.debug("getUserId. {}",viewReport.getUserId());
-////                rs.getObject("USER_ID");
-////                rs.getObject("IP_ADDRESS");
-////                rs.getObject("LOGIN_DATE");
-////                rs.getObject("STATUS");
-////                rs.getObject("DESCRIPTI");
-//
-//                viewReport.setUserId("test");
-//                viewReport.setIpAddress("11111");
-//                viewReport.setLogin(new Date());
-//                viewReport.setStatus("22222");
-//                viewReport.setDescrition("33333");
-//                viewReportList.add(viewReport);
-//                log.debug("---------------------333333. {}",viewReportList.size());
-
+            while (rs.next()){
+                ISAViewReport viewReport = new ISAViewReport();
                 viewReport.setUserId(rs.getString("USER_ID"));
                 viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
                 viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
@@ -384,9 +388,8 @@ public class GenPDF extends ReportService implements Serializable {
                 viewReport.setDescrition(rs.getString("DESCRIPTION"));
                 viewReportList.add(viewReport);
             }
-            log.debug("--Path Report. {}",jasper);
-            generatePDF(jasper, map, "1111111111111",viewReportList);
-//            exportPDF(map,viewReportList,jasper);
+            log.debug("--Path Report. {},--NameReport. {}",pathISAViolation,reportView.getNameISAReportViolation());
+            generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("----on getViolation. {}",e);
         } catch (Exception e) {
