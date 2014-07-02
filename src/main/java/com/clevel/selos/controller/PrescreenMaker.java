@@ -2013,6 +2013,7 @@ public class PrescreenMaker extends BaseController {
                                     tmpSearchSpouseInfo.setSearchBy(1);
                                     searchSpouse = true;
                                 }
+                                log.debug("onSearchCustomerIfo ::: Search Spouse : {}", searchSpouse);
                                 if(searchSpouse) {
                                     tmpSearchSpouseInfo.setDocumentType(documentTypeDAO.findById(1));
                                     CustomerInfoResultView spouseCustomerResultView = prescreenBusinessControl.getCustomerInfoFromRM(tmpSearchSpouseInfo, user);

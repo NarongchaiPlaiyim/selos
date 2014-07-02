@@ -29,18 +29,18 @@ public class CSVModel extends ValidationImp implements Serializable {
         return commandType;
     }
 
-    public void set﻿commandType(String commandType) {
-        this.commandType = commandType;
-    }
+    //public void set﻿commandType(String commandType) {
+    //    this.commandType = commandType;
+    //}
 
 
 //    public String getCommandType() {
 //        return commandType;
 //    }
 //
-//    public void setCommandType(String commandType) {
-//        this.commandType = commandType;
-//    }
+    public void setCommandType(String commandType) {
+        this.commandType = commandType;
+    }
 
     public String getUserId() {
         return userId;
