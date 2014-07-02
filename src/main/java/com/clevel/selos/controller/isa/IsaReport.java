@@ -384,7 +384,7 @@ public class IsaReport implements Serializable {
                 viewReport.setModifyBy(rs.getString("MODIFY_BY"));
                 viewReportList.add(viewReport);
             }
-            generatePDF(pathISAViolation, map, nameISAUserProfile.toString(), viewReportList);
+            generatePDF(pathISAUserProfile, map, nameISAUserProfile.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("----on getViolation. {}",e);
         } catch (Exception e) {
