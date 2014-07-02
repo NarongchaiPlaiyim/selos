@@ -7,6 +7,7 @@ import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.*;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -361,7 +362,7 @@ public class GenPDF extends ReportService implements Serializable {
         }
     }
 
-    public void onPrintViolation(){
+    public void onPrintViolation(final Date form, final Date to){
         log.debug("--on onPrintViolation.");
 //        reportView.setNameISAReportViolation(nameISAViolation.toString());
         StringBuilder nameISAUserProfile = new StringBuilder();
@@ -373,8 +374,8 @@ public class GenPDF extends ReportService implements Serializable {
             nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());
             HashMap map = new HashMap<String, Object>();
             List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            map.put("fromDate","30/05/2014");
-            map.put("toDate","24/06/2014");
+            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(form));
+            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(to));
             ResultSet rs = stpExecutor.getViolation(map);
             log.debug("--rs in onPrintViolation. {}",rs);
 

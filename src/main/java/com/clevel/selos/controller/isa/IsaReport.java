@@ -36,6 +36,9 @@ public class IsaReport implements Serializable {
     @Inject
     CsvExport csvExport;
 
+//    @Inject
+//    private GenPDF genPDF;
+
     @Inject
     public IsaReport(){
 
@@ -43,7 +46,7 @@ public class IsaReport implements Serializable {
 
     @PostConstruct
     public void onCreate(){
-
+        init();
     }
 
     private void init(){
@@ -257,6 +260,11 @@ public class IsaReport implements Serializable {
 
         csvExport.exportCSV("userMaintenanceReport_"+dateFormatFile.format(new Date()),builder.toString());
 
+    }
+
+    public void onSubmitReport(){
+//        log.debug("--On onSubmitReport. fromdate. {}, and todate.{}",dateFrom,dateTo);
+//        genPDF.onPrintViolation(dateFrom,dateTo);
     }
 
     public Date getDateFrom() {

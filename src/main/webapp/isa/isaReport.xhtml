@@ -30,7 +30,7 @@
 
                         <div class="body_rpane">
                             <label class="subject">Report</label>
-                            <table border="1">
+                            <table border="0">
                                 <tr>
                                     <td style="width: 100px; min-width: 100px; max-width: 100px;" />
                                     <td style="width: 300px; min-width: 300px; max-width: 300px;" />
@@ -74,7 +74,7 @@
                                         <p:commandButton value="Download" styleClass="medium"
                                                          update="@form"
                                                          ajax="false"
-                                                         actionListener="#{report.onPrintViolation()}" >
+                                                         actionListener="#{isaReport.onSubmitReport()}" >
                                         </p:commandButton>
                                     </td >
                                 </tr>
