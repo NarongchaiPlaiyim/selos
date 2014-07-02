@@ -9,6 +9,7 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.UserZone;
 import com.clevel.selos.model.db.report.RejectedLetter;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -81,8 +82,10 @@ public class RejectLetterService implements Serializable {
 
                 rejectedLetter.setWorkCasePrescreen(workCasePrescreen);
                 rejectedLetter.setAppNumber(workCasePrescreen.getAppNumber());
-                rejectedLetter.setHubCode(user.getBuCode()); //TODO: verify data
-                rejectedLetter.setZoneOfficePhone(user.getPhoneNumber()); //TODO: verify data
+                rejectedLetter.setHubCode(""); //TODO: verify data
+                UserZone userZone = user.getZone();
+                rejectedLetter.setZoneOfficePhone(Util.getStringNotNull(userZone.getPhoneNumber()));
+                rejectedLetter.setZoneName(Util.getStringNotNull(userZone.getName()));
                 for(Customer customer: customerBorrowerList) {
                     if(customer.getTitle()!=null && customer.getTitle().getTitleTh()!=null)
                         title = customer.getTitle().getTitleTh();

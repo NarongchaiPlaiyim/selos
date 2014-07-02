@@ -79,6 +79,9 @@ public class RejectedLetter implements Serializable{
     @Column(name = "zone_office_phone", length = 50)
     protected String zoneOfficePhone;
 
+    @Column(name = "zone_name", length = 50)
+    protected String zoneName;
+
     public WorkCasePrescreen getWorkCasePrescreen() {
         return workCasePrescreen;
     }
@@ -247,6 +250,14 @@ public class RejectedLetter implements Serializable{
         this.zoneOfficePhone = zoneOfficePhone;
     }
 
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -271,6 +282,7 @@ public class RejectedLetter implements Serializable{
                 .append("province", province)
                 .append("zipcode", zipcode)
                 .append("zoneOfficePhone", zoneOfficePhone)
+                .append("zoneName", zoneName)
                 .toString();
     }
 }
