@@ -7,20 +7,24 @@
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
 		appendTo="@(body)" styleClass="dialog_noheader"
 		>
-		<div class="center">
-			LOADING<br />
-		 	<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-	 	</div>
+		<p:panel styleClass="panel-dialog">
+			<div class="center">
+				LOADING<br />
+			 	<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+		 	</div>
+		 </p:panel>
 	</p:dialog>
 	<p:dialog widgetVar='p_result_dialog' id='result_dialog' modal='true'
 		resizable='false' draggable="false" closeOnEscape="true" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
 		appendTo="@(body)" header='ผลลัพธ์การทำงาน'
 		>
-		<p:messages />
-		<p:commandButton style="clear: both;float: right;"
-			type='button' onclick="p_result_dialog.hide()"
-			widgetVar="p_result_dialog_btn"
-			value="OK"/>
+		<p:panel styleClass="panel-dialog right">
+			<p:messages />
+			<p:commandButton 
+				type='button' onclick="p_result_dialog.hide()"
+				widgetVar="p_result_dialog_btn"
+				value="OK"/>
+		</p:panel>
 	</p:dialog>  
 </ui:composition>        

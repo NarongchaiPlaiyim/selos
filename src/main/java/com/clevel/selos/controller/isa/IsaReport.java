@@ -21,13 +21,17 @@ import java.util.List;
 @ViewScoped
 @ManagedBean(name = "isaReport")
 public class IsaReport implements Serializable {
-
     @Inject
     @SELOS
-    Logger log;
-
+    private Logger log;
     @Inject
-    IsaBusinessControl isaBusinessControl;
+    private IsaBusinessControl isaBusinessControl;
+    private int notLogonOverDay;
+    private Date dateFrom;
+    private Date dateTo;
+    private Date currentDate;
+    private final String  COMMA_DELIMITED = ",";
+    private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("dd_mm_yyyy");
 
     @Inject
     CsvExport csvExport;
@@ -39,19 +43,19 @@ public class IsaReport implements Serializable {
 
     @PostConstruct
     public void onCreate(){
-        dateFrom = new Date();
-        dateTo = new Date();
 
     }
 
-    private int notLogonOverDay;
-    private Date dateFrom;
-    private Date dateTo;
-    private Date currentDate;
+    private void init(){
+        log.debug("-- init()");
+        dateFrom = DateTime.now().toDate();
+        dateTo = DateTime.now().toDate();
+    }
 
 
-    private static char COMMA_DELIMITED = ',';
-    private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("dd_mm_yyyy");
+
+
+
 
     public void notLogonOver() {
         log.debug("notLogonOver()");
@@ -255,22 +259,6 @@ public class IsaReport implements Serializable {
 
     }
 
-    public int getNotLogonOverDay() {
-        return notLogonOverDay;
-    }
-
-    public void setNotLogonOverDay(int notLogonOverDay) {
-        this.notLogonOverDay = notLogonOverDay;
-    }
-
-    public Date getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(Date dateTo) {
-        this.dateTo = dateTo;
-    }
-
     public Date getDateFrom() {
         return dateFrom;
     }
@@ -279,11 +267,11 @@ public class IsaReport implements Serializable {
         this.dateFrom = dateFrom;
     }
 
-    public Date getCurrentDate() {
-        return DateTime.now().toDate();
+    public Date getDateTo() {
+        return dateTo;
     }
 
-    public void setCurrentDate(Date currentDate) {
-        this.currentDate = currentDate;
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
     }
 }

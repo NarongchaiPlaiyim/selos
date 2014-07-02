@@ -1,4 +1,4 @@
-package com.clevel.selos.businesscontrol.isa.csv.validation;
+package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.model.CommandType;
 import com.clevel.selos.model.UserStatus;

@@ -434,19 +434,17 @@ public class RMService implements Serializable {
                     workContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCtry());
                     workContactDetails.setCountryCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusIsoCtryCode());
                     individualModel.setWorkAddress(workContactDetails);
-
-
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")) { //Host Parameter is null
 //                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
                     throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
-
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
-
                     log.debug("Data Not Found!");
 //                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
                     throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
 //                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
+                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("2500")) { //HTTP/1.1 404 Not Found (3691)
                     throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
                 }
                 //check null
@@ -654,7 +652,9 @@ public class RMService implements Serializable {
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
 //                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
                     throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
-                }  //check null
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("2500")) { //HTTP/1.1 404 Not Found (3691)
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
+                }
             } else {
                 log.warn(" resSearchCorporateCustomer : Null");
                 //Audit Data

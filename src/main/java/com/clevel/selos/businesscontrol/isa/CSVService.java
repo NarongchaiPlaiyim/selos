@@ -1,4 +1,4 @@
-package com.clevel.selos.businesscontrol.isa.csv.service;
+package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
@@ -39,7 +39,7 @@ public class CSVService {
             beanReader = new CsvBeanReader(new InputStreamReader(inputStream, UTF_8), CsvPreference.STANDARD_PREFERENCE);
             final String[] header = beanReader.getHeader(true);
             csvModelList = new ArrayList<CSVModel>();
-            while( (csvModel = beanReader.read(CSVModel.class, header, getProcessorsss())) != null ) {
+            while( (csvModel = beanReader.read(CSVModel.class, header)) != null ) {
                 csvModelList.add(csvModel);
             }
             return csvModelList;

@@ -9,6 +9,115 @@
 		appendTo="@(body)"
 		>
 		<h:form id="#{formId}">
+			<p:panel styleClass="panel-dialog" style='width:650px;height:450px'>
+				<p:messages id="errMsg"/>
+				<table class="content_form" style='width:100%'>
+					<tr>
+						<td style="vertical-align:middle">
+							<p:commandButton value="Add Return Code" 
+										title="Add Return Code"
+										styleClass="larger" 
+                                    	action="#{postAppGeneral.onOpenReturnAddCodeDialog(true)}"
+                                    	oncomplete="addcode_#{name}.show()"
+                                     	update=":addcode_#{formId}">
+                        			<p:resetInput target=":addcode_#{formId}"/>
+                   			 </p:commandButton>								
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p:dataTable id="returnlist_tbl" 
+									var="returnInfo"
+                                 	value="#{postAppGeneral.returnList}"
+                                 	rowKey="#{returnInfo.id}" rowIndexVar="rowIndex" 
+                                 	style="width: 100%"
+                                 	emptyMessage="No Return Reason found">
+		                        <p:columnGroup type="header">
+		                            <p:row>
+		                                <p:column style="width:15%;"
+		                                          headerText="Return Code"/>
+		                                <p:column style="width:25%;"
+		                                          headerText="Description"/>
+		                                <p:column style="width:25%;"
+		                                          headerText="Reason"/>
+		                                <p:column style="width:30%;"
+		                                          headerText="Remark"/>
+		                                <p:column style="width:5%"/>
+		                            </p:row>
+		                        </p:columnGroup>
+		
+		                        <p:column styleClass="center">
+		                            <h:outputText value="#{returnInfo.returnCode}"/>
+		                        </p:column>
+		                        <p:column styleClass="left">
+		                            <h:outputText value="#{returnInfo.description}"/>
+		                        </p:column>
+		                        <p:column styleClass="left">
+		                            <h:outputText value="#{returnInfo.reason}"/>
+		                        </p:column>
+		                        <p:column styleClass="left">
+		                            <h:outputText value="#{returnInfo.reasonDetail}"/>
+		                        </p:column>
+		                        <p:column styleClass="center">
+		                            <p:commandButton title="Edit" process="@form"
+                                             icon="ui-icon-pencil"
+                                             rendered="#{returnInfo.canEdit}"
+                                             action="#{postAppGeneral.onOpenReturnAddCodeDialog(false)}"
+                                             oncomplete="addcode_#{name}.show();hideWindowsScrollBar();"
+                                             update=":addcode_#{formId}">
+                                            <p:resetInput target=":addcode_#{formId}" />
+		                                    <f:setPropertyActionListener 
+		                                    	target="#{postAppGeneral.selectedReturnInfo}"
+	                           					value="#{returnInfo}" />
+		                            </p:commandButton>
+		                            <p:commandButton title="Remove" process="@form"
+											icon="ui-icon-trash"
+		                                    rendered="#{returnInfo.canEdit}"
+		                                    action="#{postAppGeneral.onDeleteReturnReason()}"
+		                                    update="returnlist_tbl ,:#{formId}:submitBtn"
+		                                    oncomplete="hideWindowsScrollBar();">
+		                                    <f:setPropertyActionListener 
+		                                    	target="#{postAppGeneral.selectedReturnInfo}"
+	                           					value="#{returnInfo}" />
+		                            </p:commandButton>
+		                        </p:column>
+		                    </p:dataTable>
+						</td>
+					</tr>
+					<tr>
+						<td class="center" style='padding-top:10px;'>
+							 <p:commandButton
+							 		id="submitBtn"
+							 		process="@form"
+			                        value="#{msg.get('app.button.submit')}"
+			                        actionListener="#{controller[action]}"
+			                        update="#{formId}:errMsg,:postapp_result_dialog"
+			                        onstart="handlePostAppOnSending();"
+			                        partialSubmit="false"
+			                        immediate="false"
+			                        oncomplete="handlePostAppOnCompleteSending(args,#{name});hideWindowsScrollBar();"
+			                        styleClass="small"
+			                        disabled="#{empty postAppGeneral.returnList}"
+		                         />
+							<p:commandButton
+								type="button"
+								value="#{msg.get('app.button.cancel')}"
+		                    	styleClass="small"
+		                    	onclick="#{name}.hide()"/>
+						</td>
+					</tr>
+				</table>
+			</p:panel>
+		</h:form> 
+	</p:dialog>
+	
+	<p:dialog id="addcode_#{id}" widgetVar="addcode_#{name}"
+		header="#{msg.get('app.postApp.dlg.return01.title')} #{returnto}"
+		modal='true' resizable='false' draggable="false" closeOnEscape="true"
+		onShow='hideWindowsScrollBar()'
+		appendTo="@(body)"
+		>
+		<h:form id="addcode_#{formId}">
 			<p:panel styleClass="panel-dialog">
 				<p:messages id="errMsg"/>
 				<table class="content_form">
@@ -51,19 +160,19 @@
 							 <p:commandButton
 							 		process="@form"
 			                        value="#{msg.get('app.button.submit')}"
-			                        actionListener="#{controller[action]}"
-			                        update="#{formId}:errMsg,:postapp_result_dialog"
+			                        actionListener="#{postAppGeneral.onSaveReturnReason()}"
+			                        update="addcode_#{formId}:errMsg,:#{formId}:returnlist_tbl,:#{formId}:submitBtn"
 			                        onstart="handlePostAppOnSending();"
 			                        partialSubmit="false"
 			                        immediate="false"
-			                        oncomplete="handlePostAppOnCompleteSending(args,#{name})"
+			                        oncomplete="handlePostAppOnAddReturnCode(args,addcode_#{name});hideWindowsScrollBar();"
 			                        styleClass="small"
 		                         />
 							<p:commandButton
 								type="button"
 								value="#{msg.get('app.button.cancel')}"
 		                    	styleClass="small"
-		                    	onclick="#{name}.hide()"/>
+		                    	onclick="addcode_#{name}.hide()"/>
 						</td>
 					</tr>
 				</table>

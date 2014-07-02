@@ -379,8 +379,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitCA(long workCaseId, String queueName, String decisionFlag, String haveRG001, long actionCode) throws Exception{
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+    public void submitCA(String wobNumber, String queueName, String decisionFlag, String haveRG001, String insuranceRequired, String approvalFlag, String tcgRequired, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
@@ -388,14 +387,13 @@ public class BPMExecutor implements Serializable {
             fields.put("Action_Name", action.getDescription());
             fields.put("UW2DecisionFlag", decisionFlag);
             fields.put("UWRG001Flag", haveRG001);
+            fields.put("InsuranceRequired", insuranceRequired);
+            fields.put("ApprovalFlag", approvalFlag);
+            fields.put("TCGRequired", tcgRequired);
 
             log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
-            if (workCase != null) {
-                execute(queueName, workCase.getWobNumber(), fields);
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
-            }
+            execute(queueName, wobNumber, fields);
         }
     }
 
