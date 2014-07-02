@@ -225,7 +225,7 @@ public class FullApplicationConverter extends Converter{
                     cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, brmsTMBAccountInfo.getDataSource()));
                     cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, brmsTMBAccountInfo.getAccountRef()));
                     cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, brmsTMBAccountInfo.getCustToAccountRelationCD()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, brmsTMBAccountInfo.isTmbTDRFlag()));
+                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, brmsTMBAccountInfo.getTmbTDRFlag()));
                     cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, brmsTMBAccountInfo.getNumMonthIntPastDue()));
                     cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, brmsTMBAccountInfo.getNumMonthIntPastDueTDRAcc()));
                     cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, brmsTMBAccountInfo.getTmbDelPriDay()));
