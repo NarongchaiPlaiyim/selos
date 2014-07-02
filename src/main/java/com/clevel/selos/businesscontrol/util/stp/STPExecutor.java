@@ -22,6 +22,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -186,32 +187,39 @@ public class STPExecutor implements Serializable {
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt=connection.prepareCall("call SLOS.logonover90 ( ? )");
-                callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
-                callStmt.execute();
-
-                rs[0] = (ResultSet) callStmt.getObject("cursor_out");
-
+                try{
+                    CallableStatement callStmt=connection.prepareCall("call SLOS.logonover90 ( ? )");
+                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.execute();
+                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
             }
         });
         return rs[0];
     }
 
-    public ResultSet getViolation(final String fromdate,final String todate){
+    public ResultSet getViolation(final Map<String, Object> map){
+        log.debug("on getViolation.");
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt=connection.prepareCall("call SLOS.violation ( ?,?,? )");
-                callStmt.setString("fromdate",fromdate);
-                callStmt.setString("todate",todate);
-                callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
-                callStmt.execute();
-
-                rs[0] = (ResultSet) callStmt.getObject("cursor_out");
-
+                try{
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.violation (?, ?, ?)");
+                    for (String key : map.keySet()){
+                        callStmt.setObject(key, map.get(key).toString());
+                    }
+                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.executeUpdate();
+                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
             }
         });
+        log.debug("--rs. {}",rs[0]);
         return rs[0];
     }
 }

@@ -786,7 +786,7 @@ public class HeaderController extends BaseController {
                     message = "Submit case fail. Please check return information before submit again.";
                 } else {
                     returnControl.saveReturnHistory(workCaseId,user);
-                    fullApplicationControl.submitCA(queueName, wobNumber, workCaseId);
+                    fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
 
                     messageHeader = "Information.";
                     message = "Submit case success";
