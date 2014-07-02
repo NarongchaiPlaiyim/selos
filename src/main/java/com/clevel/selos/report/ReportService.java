@@ -21,7 +21,13 @@ public class ReportService implements Serializable {
     @SELOS
     Logger log;
 
+    @Inject
+    public ReportService() {
+
+    }
+
     public void init(){
+
     }
 
     public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {

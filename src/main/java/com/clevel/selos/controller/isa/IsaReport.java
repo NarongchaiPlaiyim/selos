@@ -12,21 +12,24 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.util.CsvExport;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "isaReport")
@@ -42,7 +45,6 @@ public class IsaReport implements Serializable {
     private Date currentDate;
     private final String  COMMA_DELIMITED = ",";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("dd_mm_yyyy");
-    private ReportView reportView;
 
     @Inject
     CsvExport csvExport;
@@ -50,7 +52,8 @@ public class IsaReport implements Serializable {
     @Inject
     private STPExecutor stpExecutor;
 
-    private ReportService reportService;
+//    @Inject
+//    private ReportService reportService;
 
     @Inject
     @Config(name = "reportisa.violation")
@@ -287,10 +290,10 @@ public class IsaReport implements Serializable {
 
     }
 
-    public void onSubmitReport(){
-        log.debug("--On onSubmitReport. fromdate. {}, and todate.{}",dateFrom,dateTo);
-        onPrintViolation(dateFrom, dateTo);
-    }
+//    public void onSubmitReport(){
+//        log.debug("--On onSubmitReport. fromdate. {}, and todate.{}",dateFrom,dateTo);
+//        onPrintViolation(dateFrom, dateTo);
+//    }
 
     public void onPrintLogonOver90(){
         log.debug("--on onPrintLogonOver90.");
@@ -315,7 +318,7 @@ public class IsaReport implements Serializable {
                 viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
                 viewReportList.add(viewReport);
             }
-            reportService.generatePDF(pathISALogonOver90, map, nameLogonOver90.toString(), viewReportList);
+            generatePDF(pathISALogonOver90, map, nameLogonOver90.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("on getLogonOver90. {}",e);
         } catch (Exception e) {
@@ -323,11 +326,10 @@ public class IsaReport implements Serializable {
         }
     }
 
-    public void onPrintViolation(final Date form, final Date to){
+    public void onPrintViolation(){
         log.debug("--on onPrintViolation.");
 //        reportView.setNameISAReportViolation(nameISAViolation.toString());
-//        StringBuilder nameISAUserProfile = new StringBuilder();
-//        nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
+//
 //        reportView.setNameISAReportUserProfile(nameISAUserProfile.toString());
 
         try {
@@ -335,10 +337,9 @@ public class IsaReport implements Serializable {
             nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());
             HashMap map = new HashMap<String, Object>();
             List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(form));
-            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(to));
+            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom));
+            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo));
             ResultSet rs = stpExecutor.getViolation(map);
-            log.debug("--rs in onPrintViolation. {}",rs);
 
             while (rs.next()){
                 ISAViewReport viewReport = new ISAViewReport();
@@ -349,12 +350,74 @@ public class IsaReport implements Serializable {
                 viewReport.setDescrition(rs.getString("DESCRIPTION"));
                 viewReportList.add(viewReport);
             }
-            log.debug("--Path Report. {},--NameReport. {}",pathISAViolation,reportView.getNameISAReportViolation());
-            reportService.generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
+            generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("----on getViolation. {}",e);
         } catch (Exception e) {
             log.debug("onPrintLogonOver90. {}",e);
+        }
+    }
+
+    public void onPrintUserProfile(){
+
+        try {
+            StringBuilder nameISAUserProfile = new StringBuilder();
+            nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
+            HashMap map = new HashMap<String, Object>();
+            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+            ResultSet rs = stpExecutor.getuserProfile(map);
+            int i = 1;
+
+            while (rs.next()){
+                ISAViewReport viewReport = new ISAViewReport();
+                viewReport.setRow(i++);
+                viewReport.setUserId(rs.getString("USER_ID"));
+                viewReport.setUserName(rs.getString("USER_NAME"));
+                viewReport.setBuCode(rs.getString("BU_CODE"));
+                viewReport.setTeam(rs.getString("TEAM"));
+                viewReport.setRole(rs.getString("ROLE_NAME"));
+                viewReport.setStatus(rs.getString("STATUS"));
+                viewReport.setLogin(rs.getTimestamp("LAST_DATE"));
+                viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                viewReport.setCreateBy(rs.getString("CREATE_BY"));
+                viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
+                viewReport.setModifyBy(rs.getString("MODIFY_BY"));
+                viewReportList.add(viewReport);
+            }
+            generatePDF(pathISAViolation, map, nameISAUserProfile.toString(), viewReportList);
+        } catch (SQLException e) {
+            log.debug("----on getViolation. {}",e);
+        } catch (Exception e) {
+            log.debug("onPrintLogonOver90. {}",e);
+        }
+    }
+
+    private void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
+        log.debug("generate pdf.");
+        JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
+
+        JasperPrint print ;
+
+        log.info("parameters: {}",parameters);
+
+        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
+        if(dataSource != null && reportList != null && reportList.size() > 0){
+            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        } else {
+            print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        }
+        log.debug("--Pring report.");
+
+        try {
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+            ServletOutputStream servletOutputStream=response.getOutputStream();
+            JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
+            FacesContext.getCurrentInstance().responseComplete();
+            log.debug("generatePDF completed.");
+
+        } catch (JRException e) {
+            log.error("Error generating pdf report!", e);
         }
     }
 
