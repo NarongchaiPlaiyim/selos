@@ -71,7 +71,7 @@ public class IsaReport implements Serializable {
 
     @PostConstruct
     public void onCreate(){
-
+        init();
     }
 
     private void init(){
