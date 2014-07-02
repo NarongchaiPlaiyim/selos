@@ -7,9 +7,7 @@ import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.master.UserZone;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.report.RejectedLetter;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -83,9 +81,9 @@ public class RejectLetterService implements Serializable {
                 rejectedLetter.setWorkCasePrescreen(workCasePrescreen);
                 rejectedLetter.setAppNumber(workCasePrescreen.getAppNumber());
                 rejectedLetter.setHubCode(""); //TODO: verify data
-                UserZone userZone = user.getZone();
-                rejectedLetter.setZoneOfficePhone(Util.getStringNotNull(userZone.getPhoneNumber()));
-                rejectedLetter.setZoneName(Util.getStringNotNull(userZone.getName()));
+                UserTeam userTeam = user.getTeam();
+                rejectedLetter.setZoneOfficePhone(Util.getStringNotNull(userTeam.getTeam_phone()));
+                rejectedLetter.setZoneName(Util.getStringNotNull(userTeam.getTeam_name()));
                 for(Customer customer: customerBorrowerList) {
                     if(customer.getTitle()!=null && customer.getTitle().getTitleTh()!=null)
                         title = customer.getTitle().getTitleTh();
@@ -115,8 +113,13 @@ public class RejectLetterService implements Serializable {
                             rejectedLetter.setCitizenId1(citizenId);
 
                             List<Address> addressesList = customer.getAddressesList();
+                            AddressType addressType = customer.getMailingAddressType();
+                            if((addressType!=null && addressType.getId()==0) || addressType==null) {
+                                addressType = new AddressType();
+                                addressType.setId(1);
+                            }
                             for(Address address: addressesList){
-                                if(address.getAddressType() == customer.getMailingAddressType()){
+                                if(address.getAddressType().getId() == addressType.getId()){
                                     String addrNo = Util.getStringNotNull(address.getAddressNo());
                                     String building = Util.getStringNotNull(address.getBuilding());
                                     String road = Util.getStringNotNull(address.getRoad());
