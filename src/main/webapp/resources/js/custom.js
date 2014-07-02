@@ -1000,6 +1000,16 @@ function handlePostAppOnCompleteSending(args,dialog) {
 			p_postapp_result_dialog.show();
 	}
 }
+function handlePostAppOnAddReturnCode(args,dialog) {
+	if (is_defined('p_postapp_loading_dialog'))
+		p_postapp_loading_dialog.hide();
+	if (!isValidateComplete(args))
+		return;
+	if (args && args.functionComplete) {
+		if (dialog)
+			dialog.hide();	
+	}
+}
 
 function handleOnStartOpenCfmDlg() {
 	if (is_defined('p_loading_dialog'))

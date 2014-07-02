@@ -15,93 +15,100 @@ import com.clevel.selos.model.view.insurance.InsuranceInfoSummaryView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
 import com.clevel.selos.transform.InsuranceInfoTransform;
 import com.clevel.selos.transform.NewCollateralTransform;
+
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Stateless
 public class InsuranceInfoControl extends BusinessControl {
-    @Inject
-    @SELOS
-    private Logger log;
+	@Inject
+	@SELOS
+	private Logger log;
 
-    @Inject
-    BPMInterface bpmInterface;
+	@Inject
+	BPMInterface bpmInterface;
 
-    @Inject
-    NewCollateralDAO newCollateralDAO;
-    
-    @Inject
-    NewCollateralHeadDAO newCollateralHeadDAO;
-    
-    @Inject
-    InsuranceInfoDAO insuranceInfoDAO;
-    
-    @Inject
-    WorkCaseDAO workCaseDAO;
+	@Inject
+	NewCollateralDAO newCollateralDAO;
 
-    @Inject
-    NewCollateralTransform newCollateralTransform;
-    
-    @Inject
-    InsuranceInfoTransform insuranceInfoTransform;
-    
-    @Inject
-    public InsuranceInfoControl(){
+	@Inject
+	NewCollateralHeadDAO newCollateralHeadDAO;
 
-    }
-    
-    public InsuranceInfoSummaryView getInsuranceInforSummaryView(long workCaseId){
-    	InsuranceInfo insuranceInfo = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
-    	InsuranceInfoSummaryView insuranceInfoSummaryView = new InsuranceInfoSummaryView();
-    	if (insuranceInfo != null ){
-    		insuranceInfoSummaryView = insuranceInfoTransform.transformsInsuranceInfoToView(insuranceInfo);
-    	}
-    	return insuranceInfoSummaryView;
-    }
-    
-    
-    public List<InsuranceInfoView> getInsuranceInfo(long workCaseId){
-    	List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateralByTypeA(workCaseId);
-    	return insuranceInfoTransform.transformsNewCollateralToView(newCollateralList);
-    }    
-    
-    public void saveInsuranceInfo(List<InsuranceInfoView> insuranceInfoViewList, BigDecimal totalPremiumAmount, long workCaseId){
-    	User user = getCurrentUser();
-    	for (InsuranceInfoView insuranceInfoView : insuranceInfoViewList){
-    		NewCollateral newCollateral = newCollateralDAO.findById(insuranceInfoView.getNewCollateralView().getId());
-    		newCollateral.setPremiumAmount(insuranceInfoView.getPremium());
-    		newCollateral.setModifyBy(user);
-    		newCollateral.setModifyDate(new Date());
-    		newCollateralDAO.persist(newCollateral);
-    		List<InsuranceInfoSectionView> insuranceInfoSectionViewList = insuranceInfoView.getSectionList();
-    		for (InsuranceInfoSectionView infoSectionView : insuranceInfoSectionViewList){
-    			NewCollateralHead newCollateralHead = newCollateralHeadDAO.findById(infoSectionView.getNewCollateralHeadView().getId());
-    			newCollateralHead.setInsuranceCompany(infoSectionView.getCompany());
-    			newCollateralHead.setExistingCredit(infoSectionView.getExistingCredit());
-    			newCollateralHead.setModifyBy(user);
-    			newCollateralHead.setModifyDate(new Date());
-    			newCollateralHeadDAO.persist(newCollateralHead);
-    		}
-    	}
-    	InsuranceInfo insuranceInfo = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
-    	if (insuranceInfo != null){
-    		insuranceInfo.setTotalPremiumAmount(totalPremiumAmount);
-    		insuranceInfo.setModifyBy(user);
-    		insuranceInfo.setModifyDate(new Date());
-    		insuranceInfoDAO.persist(insuranceInfo);
-    	}else{ // New
-    		insuranceInfo = new InsuranceInfo();
-    		insuranceInfo.setCreateBy(user);
-    		insuranceInfo.setCreateDate(new Date());
-    		insuranceInfo.setTotalPremiumAmount(totalPremiumAmount);
-    		insuranceInfo.setWorkCase(workCaseDAO.findById(workCaseId));
-    		insuranceInfoDAO.persist(insuranceInfo);
-    	}
-    }
- 
+	@Inject
+	InsuranceInfoDAO insuranceInfoDAO;
+
+	@Inject
+	WorkCaseDAO workCaseDAO;
+
+	@Inject
+	NewCollateralTransform newCollateralTransform;
+
+	@Inject
+	InsuranceInfoTransform insuranceInfoTransform;
+
+	@Inject
+	public InsuranceInfoControl() {
+
+	}
+
+	public InsuranceInfoSummaryView getInsuranceInforSummaryView(long workCaseId) {
+		InsuranceInfoSummaryView insuranceInfoSummaryView = new InsuranceInfoSummaryView();
+		if (workCaseId > 0) {
+			InsuranceInfo insuranceInfo = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
+			if (insuranceInfo != null) {
+				insuranceInfoSummaryView = insuranceInfoTransform.transformsInsuranceInfoToView(insuranceInfo);
+			}
+		}
+		return insuranceInfoSummaryView;
+	}
+
+	public List<InsuranceInfoView> getInsuranceInfo(long workCaseId) {
+		List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
+		if (workCaseId > 0) {
+			newCollateralList = newCollateralDAO.findNewCollateralByTypeA(workCaseId);
+		}
+		return insuranceInfoTransform.transformsNewCollateralToView(newCollateralList);
+	}
+
+	public void saveInsuranceInfo(List<InsuranceInfoView> insuranceInfoViewList, BigDecimal totalPremiumAmount, long workCaseId) {
+		User user = getCurrentUser();
+		for (InsuranceInfoView insuranceInfoView : insuranceInfoViewList) {
+			NewCollateral newCollateral = newCollateralDAO.findById(insuranceInfoView.getNewCollateralView().getId());
+			newCollateral.setPremiumAmount(insuranceInfoView.getPremium());
+			newCollateral.setModifyBy(user);
+			newCollateral.setModifyDate(new Date());
+			newCollateralDAO.persist(newCollateral);
+			List<InsuranceInfoSectionView> insuranceInfoSectionViewList = insuranceInfoView.getSectionList();
+			for (InsuranceInfoSectionView infoSectionView : insuranceInfoSectionViewList) {
+				NewCollateralHead newCollateralHead = newCollateralHeadDAO.findById(infoSectionView.getNewCollateralHeadView().getId());
+				newCollateralHead.setInsuranceCompany(infoSectionView.getCompany());
+				newCollateralHead.setExistingCredit(infoSectionView.getExistingCredit());
+				newCollateralHead.setModifyBy(user);
+				newCollateralHead.setModifyDate(new Date());
+				newCollateralHeadDAO.persist(newCollateralHead);
+			}
+		}
+		InsuranceInfo insuranceInfo = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCaseId);
+		if (insuranceInfo != null) {
+			insuranceInfo.setTotalPremiumAmount(totalPremiumAmount);
+			insuranceInfo.setModifyBy(user);
+			insuranceInfo.setModifyDate(new Date());
+			insuranceInfoDAO.persist(insuranceInfo);
+		} else { // New
+			insuranceInfo = new InsuranceInfo();
+			insuranceInfo.setCreateBy(user);
+			insuranceInfo.setCreateDate(new Date());
+			insuranceInfo.setTotalPremiumAmount(totalPremiumAmount);
+			insuranceInfo.setWorkCase(workCaseDAO.findById(workCaseId));
+			insuranceInfoDAO.persist(insuranceInfo);
+		}
+	}
+
 }
