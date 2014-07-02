@@ -81,6 +81,7 @@ public class RejectLetterService implements Serializable {
                 rejectedLetter.setWorkCasePrescreen(workCasePrescreen);
                 rejectedLetter.setAppNumber(workCasePrescreen.getAppNumber());
                 rejectedLetter.setHubCode(""); //TODO: verify data
+                rejectedLetter.setRejectedDate(new Date());
                 UserTeam userTeam = user.getTeam();
                 rejectedLetter.setZoneOfficePhone(Util.getStringNotNull(userTeam.getTeam_phone()));
                 rejectedLetter.setZoneName(Util.getStringNotNull(userTeam.getTeam_name()));
