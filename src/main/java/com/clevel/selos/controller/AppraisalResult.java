@@ -174,7 +174,7 @@ public class AppraisalResult implements Serializable {
 
     public void preRender(){
         log.info("preRender...");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
 
@@ -194,7 +194,7 @@ public class AppraisalResult implements Serializable {
     public void onCreation() {
         log.info("onCreation...");
         init();
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
                 workCaseId = (Long)session.getAttribute("workCaseId");

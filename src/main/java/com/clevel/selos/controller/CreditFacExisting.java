@@ -178,7 +178,7 @@ public class CreditFacExisting extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid step
@@ -193,7 +193,7 @@ public class CreditFacExisting extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation begin");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             try{

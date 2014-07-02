@@ -189,7 +189,7 @@ public class FullApplicationControl extends BusinessControl {
 
                 //TODO: get total com and retail
 
-                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
                 if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                     if(uwRuleResultSummary.getUwResultColor()!=null){
                         resultCode = uwRuleResultSummary.getUwResultColor().code();
@@ -292,7 +292,7 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
 
-                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
                 if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                     if(uwRuleResultSummary.getUwResultColor()!=null){
                         resultCode = uwRuleResultSummary.getUwResultColor().code();

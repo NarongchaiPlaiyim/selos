@@ -129,7 +129,7 @@ public class PDFRejectLetter implements Serializable {
         log.debug("--On typeReport.");
         uwRuleResultSummary = new UWRuleResultSummary();
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         } else if (!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
         }
@@ -161,7 +161,7 @@ public class PDFRejectLetter implements Serializable {
     public List<RejectLetterReport> fillAllNameReject (){
         log.debug("fillAllNameReject. {}");
         List<RejectLetterReport> reportList = new ArrayList<RejectLetterReport>();
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
         if(Util.safetyList(appHeaderView.getBorrowerHeaderViewList()).size() > 0){

@@ -20,7 +20,7 @@
     </p:commandButton>
     <!-- Check Mandate Doc for Checker -->
     <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and ( headerController.stepId == 1002 || headerController.stepId == 1001 )}"
                      actionListener="#{headerController.onCheckMandateForChecker()}"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">

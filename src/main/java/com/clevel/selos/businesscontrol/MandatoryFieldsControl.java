@@ -42,7 +42,7 @@ public class MandatoryFieldsControl extends BusinessControl {
 
     protected List<FieldsControlView> initialCreation(Screen screen) {
         log.debug("initialCreation - Screen : {}",screen);
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (session.getAttribute("workCaseId") != null){
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());

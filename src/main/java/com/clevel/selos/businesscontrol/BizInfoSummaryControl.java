@@ -136,16 +136,8 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bankStmtSummaryView;
     }
 
-    public void calByBankStatement(long workCaseId){
+    public void calByBankStatement(long workCaseId, long stepId){
         log.info("calGrdTotalIncomeByBankStatement :: workCaseId : {}",workCaseId);
-        long stepId = 0;
-
-        HttpSession session = FacesUtil.getSession(true);
-
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            log.debug("stepId : {}",stepId);
-        }
 
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
         if(bizInfoSummary == null){

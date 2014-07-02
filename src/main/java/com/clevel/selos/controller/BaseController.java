@@ -83,8 +83,8 @@ public class BaseController implements Serializable {
 
     public boolean checkSession(HttpSession session){
         boolean checkSession = false;
-        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
-                (Long)session.getAttribute("stepId") != 0){
+        if(( Util.parseLong(session.getAttribute("workCaseId"), 0) != 0 || Util.parseLong(session.getAttribute("workCasePreScreenId"), 0) != 0 ) &&
+                Util.parseLong(session.getAttribute("stepId"), 0) != 0){
             checkSession = true;
         }
 
@@ -92,35 +92,23 @@ public class BaseController implements Serializable {
     }
 
     protected long getCurrentStep(HttpSession session){
-        long stepId = 0;
-        if(!Util.isNull(session.getAttribute("stepId"))){
-            stepId = (Long)session.getAttribute("stepId");
-        }
-
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         return stepId;
     }
 
     protected long getCurrentStatus(HttpSession session){
-        long statusId = 0;
-        if(!Util.isNull(session.getAttribute("statusId"))){
-            statusId = (Long)session.getAttribute("statusId");
-        }
-
+        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         return statusId;
     }
 
     protected long getCurrentWorkCaseId(HttpSession session){
-        long workCaseId = 0;
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = (Long)session.getAttribute("workCaseId");
-        }
-
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         return workCaseId;
     }
 
     //Function for User Access Matrix
     protected void loadUserAccessMatrix(Screen screen){
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         List<UserAccessView> userAccessViewList = userAccessControl.getUserAccessList(stepId, screen.value());
         userAccessMap.clear();

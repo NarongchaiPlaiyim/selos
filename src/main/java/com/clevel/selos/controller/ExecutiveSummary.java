@@ -21,6 +21,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -54,6 +55,8 @@ public class ExecutiveSummary extends BaseController {
     Message exceptionMsg;
 
     private Long workCaseId;
+    private Long stepId;
+    private Long statusId;
 
     private String messageHeader;
     private String message;
@@ -105,7 +108,7 @@ public class ExecutiveSummary extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid step
@@ -121,10 +124,12 @@ public class ExecutiveSummary extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
-            workCaseId = (Long)session.getAttribute("workCaseId");
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
             reasonList = new ArrayList<Reason>();
             authorizationDOAList = authorizationDOADAO.findAll();
@@ -139,7 +144,7 @@ public class ExecutiveSummary extends BaseController {
 
             exSummaryView = new ExSummaryView();
             exSummaryView.reset();
-            exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
+            exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId, statusId);
 
             if(exSummaryView == null){
                 exSummaryView = new ExSummaryView();

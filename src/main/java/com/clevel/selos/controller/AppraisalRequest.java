@@ -104,7 +104,7 @@ public class AppraisalRequest extends BaseController {
 
     public void preRender(){
         log.debug("preRender...");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             /*stepId = getCurrentStep(session);
             if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
@@ -123,7 +123,7 @@ public class AppraisalRequest extends BaseController {
     public void onCreation() {
         log.info("onCreation...");
         init();
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
             workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);

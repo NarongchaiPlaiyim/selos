@@ -88,6 +88,8 @@ public class BankStatementSummary extends BaseController {
 
     // Variables for control
     private long workCaseId;
+    private long stepId;
+
     private boolean isABDM_BDM;
     private boolean isTMB;
     private boolean isRetrieveSuccess;
@@ -110,7 +112,7 @@ public class BankStatementSummary extends BaseController {
 
     public void preRender() {
         log.info("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (checkSession(session)) {
             log.debug("preRender ::: Found session for case.");
@@ -124,12 +126,13 @@ public class BankStatementSummary extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             log.debug("Init default value and load necessary data.");
 
-            workCaseId = (Long)session.getAttribute("workCaseId");
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             loadFieldControl(workCaseId, Screen.BANK_STATEMENT_SUMMARY);
 
@@ -439,8 +442,8 @@ public class BankStatementSummary extends BaseController {
                     summaryView = bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
                     // update related parts
                     dbrControl.updateValueOfDBR(workCaseId);
-                    exSummaryControl.calForBankStmtSummary(workCaseId);
-                    bizInfoSummaryControl.calByBankStatement(workCaseId);
+                    exSummaryControl.calForBankStmtSummary(workCaseId, stepId);
+                    bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
                     onCreation();
 
@@ -529,8 +532,8 @@ public class BankStatementSummary extends BaseController {
 
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
-            exSummaryControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calByBankStatement(workCaseId);
+            exSummaryControl.calForBankStmtSummary(workCaseId, stepId);
+            bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
             onCreation();
 
@@ -542,7 +545,7 @@ public class BankStatementSummary extends BaseController {
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
             message = "Save Bank statement summary data failed!, Cause : ";
-            message += e.getCause() != null ? e.getCause().toString() : e.getMessage();
+            message += Util.getMessageException(e);
         }
 
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
