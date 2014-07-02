@@ -52,6 +52,7 @@
     <!-- Check PreScreen (BRMS)-->
     <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
+                     disabled="#{not headerController.canCheckPreScreen}"
                      rendered="#{headerController.checkButton('Check Prescreen')}"
                      actionListener="#{headerController.onCheckPreScreen}"
                      oncomplete="blockUI.hide()"
@@ -104,7 +105,7 @@
     <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
-                     disabled="#{not headerController.canCloseSale}"
+                     disabled="#{not headerController.canCloseSale and not headerController.canCheckPreScreen}"
                      type="button"
                      onclick="confrmCloseSaleCA.show()"/>
     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
