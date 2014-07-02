@@ -1128,9 +1128,11 @@ public class BRMSControl extends BusinessControl {
             BRMSTMBAccountInfo tmbAccountInfo = new BRMSTMBAccountInfo();
             tmbAccountInfo.setActiveFlag(customerOblAccountInfo.isAccountActiveFlag());
             tmbAccountInfo.setDataSource(customerOblAccountInfo.getDataSource());
-            tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef());
+            if(customerOblAccountInfo.getAccountRef() != null && customerOblAccountInfo.getAccountRef().length() >= 2){
+                tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef().substring(customerOblAccountInfo.getAccountRef().length() - 2));
+            }
             tmbAccountInfo.setCustToAccountRelationCD(customerOblAccountInfo.getCusRelAccount());
-            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().isTdrFlag());
+            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().value());
             tmbAccountInfo.setNumMonthIntPastDue(customerOblAccountInfo.getNumMonthIntPastDue());
             tmbAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfo.getNumMonthIntPastDueTDRAcc());
             tmbAccountInfo.setTmbDelPriDay(customerOblAccountInfo.getTmbDelPriDay());
