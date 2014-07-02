@@ -2,6 +2,7 @@ package com.clevel.selos.model.db.report;
 
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,8 +15,8 @@ import java.util.Date;
 public class RejectedLetter implements Serializable{
     @Id
     @OneToOne
-    @JoinColumn(name = "workcase_id")
-    private WorkCase workCase;
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
 
     @Column(name = "app_number", length = 30,nullable = false)
     protected String appNumber;
@@ -78,12 +79,12 @@ public class RejectedLetter implements Serializable{
     @Column(name = "zone_office_phone", length = 50)
     protected String zoneOfficePhone;
 
-    public WorkCase getWorkCase() {
-        return workCase;
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
     }
 
-    public void setWorkCase(WorkCase workCase) {
-        this.workCase = workCase;
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
     }
 
     public String getAppNumber() {
@@ -249,7 +250,7 @@ public class RejectedLetter implements Serializable{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("appNumber", appNumber)
                 .append("rejectedDate", rejectedDate)
                 .append("hubCode", hubCode)

@@ -2,14 +2,18 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.StatusDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
+import com.clevel.selos.model.view.UWRuleResultDetailView;
+import com.clevel.selos.model.view.UWRuleResultSummaryView;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -17,6 +21,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class HeaderControl extends BusinessControl {
@@ -40,6 +45,8 @@ public class HeaderControl extends BusinessControl {
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
+    NCBInterface ncbInterface;
 
     @Inject
     public HeaderControl(){
@@ -247,5 +254,29 @@ public class HeaderControl extends BusinessControl {
         }
 
         return requestAppraisal;
+    }
+
+    public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, User user) throws Exception{
+        log.debug("ncbResultValidation()");
+        if(uwRuleResultSummaryView!=null){
+            Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+            if(uwResultDetailMap!=null){
+                for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet())
+                {
+                    UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
+                    if(uwRuleResultDetailView.getUwRuleNameView()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")){
+                        if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
+                            log.debug("NCB Result is RED, auto reject case!");
+                            ncbInterface.generateRejectedLetter(user.getId(),workCasePreScreenId);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

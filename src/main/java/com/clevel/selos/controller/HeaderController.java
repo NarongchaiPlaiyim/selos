@@ -1117,7 +1117,12 @@ public class HeaderController extends BaseController {
                             uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                             uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
-                            ncbResultValidation(uwRuleResultSummaryView);
+                            //TODO: wait to confirm spec
+                            /*if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,user)){
+                                canCheckPreScreen = false;
+                            } else {
+                                canCheckPreScreen = true;
+                            }*/
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
@@ -1149,30 +1154,6 @@ public class HeaderController extends BaseController {
                     showMessageBox();
             else
                 showMessageMandate();
-        }
-    }
-
-    public void ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView){
-        log.debug("ncbResultValidation()");
-        if(uwRuleResultSummaryView!=null){
-            Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
-            if(uwResultDetailMap!=null){
-                canCheckPreScreen = true;
-                for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet())
-                {
-                    UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
-                    if(uwRuleResultDetailView.getUwRuleNameView()!=null
-                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView()!=null
-                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName()!=null
-                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")){
-                        if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
-                            log.debug("NCB Result is RED, auto reject case!");
-                            canCheckPreScreen = false;
-                            break;
-                        }
-                    }
-                }
-            }
         }
     }
 
