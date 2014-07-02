@@ -179,9 +179,7 @@ public class PrescreenConverter extends Converter{
             //Convert Warning Code into Customer.
             List<WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
             List<String> csiFullyMatchList = customerInfo.getCsiFullyMatchCode();
-            int csiFullyMatchSize = 0;
             if(csiFullyMatchList != null && csiFullyMatchList.size() > 0) {
-                csiFullyMatchSize = csiFullyMatchList.size();
                 for (String csiFullyMatchCode : csiFullyMatchList) {
                     WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
                     warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
@@ -195,7 +193,7 @@ public class PrescreenConverter extends Converter{
 
             List<WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
             List<String> csiSomeMatchList = customerInfo.getCsiSomeMatchCode();
-            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0 && csiFullyMatchSize == 0) {
+            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0) {
                 for (String csiSomeMatchCode : csiSomeMatchList) {
                     WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
                     warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
