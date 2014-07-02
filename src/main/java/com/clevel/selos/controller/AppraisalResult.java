@@ -268,8 +268,8 @@ public class AppraisalResult implements Serializable {
                             saveAndEditFlag = true;
                         } else {
                             saveAndEditFlag = false;
-                            messageHeader = ""+appraisalDataResult.getActionResult();
-                            message = appraisalDataResult.getReason();
+                            messageHeader = "Result "+appraisalDataResult.getActionResult();
+                            message = "Result" +  appraisalDataResult.getReason();
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     } else {
