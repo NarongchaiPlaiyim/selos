@@ -34,6 +34,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "headerController")
@@ -198,6 +199,9 @@ public class HeaderController extends BaseController {
 
     //Check Time of Criteria Check
     private boolean canCheckCriteria;
+
+    //Check NCB result (if red , cannot submit CA and cannot check prescreen again)
+    private boolean canCheckPreScreen;
 
     private int timesOfCriteriaCheck;
 
@@ -1113,6 +1117,7 @@ public class HeaderController extends BaseController {
                             uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                             uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                            ncbResultValidation(uwRuleResultSummaryView);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
@@ -1144,6 +1149,30 @@ public class HeaderController extends BaseController {
                     showMessageBox();
             else
                 showMessageMandate();
+        }
+    }
+
+    public void ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView){
+        log.debug("ncbResultValidation()");
+        if(uwRuleResultSummaryView!=null){
+            Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+            if(uwResultDetailMap!=null){
+                canCheckPreScreen = true;
+                for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet())
+                {
+                    UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
+                    if(uwRuleResultDetailView.getUwRuleNameView()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")){
+                        if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
+                            log.debug("NCB Result is RED, auto reject case!");
+                            canCheckPreScreen = false;
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -2460,6 +2489,14 @@ public class HeaderController extends BaseController {
 
     public void setTimesOfCriteriaCheck(int timesOfCriteriaCheck) {
         this.timesOfCriteriaCheck = timesOfCriteriaCheck;
+    }
+
+    public boolean isCanCheckPreScreen() {
+        return canCheckPreScreen;
+    }
+
+    public void setCanCheckPreScreen(boolean canCheckPreScreen) {
+        this.canCheckPreScreen = canCheckPreScreen;
     }
 
     public int getRequestAppraisalRequire() {
