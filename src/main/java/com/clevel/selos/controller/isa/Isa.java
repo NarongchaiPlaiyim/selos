@@ -1,8 +1,6 @@
 package com.clevel.selos.controller.isa;
 
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
-import com.clevel.selos.dao.master.RoleDAO;
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
@@ -32,10 +30,6 @@ public class Isa implements Serializable {
     @Inject
     @SELOS
     private Logger log;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    private RoleDAO roleDAO;
     @Inject
     private IsaBusinessControl isaBusinessControl;
     @Inject
