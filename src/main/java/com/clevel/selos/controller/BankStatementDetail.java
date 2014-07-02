@@ -20,6 +20,7 @@ import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.transform.BankTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -105,6 +106,7 @@ public class BankStatementDetail extends BaseController {
 
     //Session
     private long workCaseId;
+    private long stepId;
 
     private boolean bankAccTypeSelectRequired;
     private boolean clickSaveSuccess;
@@ -114,7 +116,7 @@ public class BankStatementDetail extends BaseController {
 
     public void preRender() {
         log.info("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (checkSession(session)) {
             log.debug("preRender ::: Found session for case.");
@@ -142,10 +144,11 @@ public class BankStatementDetail extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (checkSession(session)) {
-            workCaseId = (Long)session.getAttribute("workCaseId");
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL);
 
@@ -283,8 +286,8 @@ public class BankStatementDetail extends BaseController {
 
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
-            exSummaryControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calByBankStatement(workCaseId);
+            exSummaryControl.calForBankStmtSummary(workCaseId, stepId);
+            bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Detail data success.";

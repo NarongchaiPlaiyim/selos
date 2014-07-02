@@ -84,7 +84,7 @@ public class CustomerAcceptancePre extends BaseController {
 
     public void preRender() {
         log.debug("preRender workCase Id = {}", workCaseId);
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             //Check valid step
             stepId = getCurrentStep(session);

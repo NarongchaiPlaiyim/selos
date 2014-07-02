@@ -167,7 +167,7 @@ public class PESQLInbox implements Serializable
         log.info("onCreation userDetail PESQLInbox.java : {}", userDetail);
 
         //Clear all session before selectInbox
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         try {
 

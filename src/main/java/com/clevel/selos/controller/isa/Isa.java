@@ -96,7 +96,7 @@ public class Isa implements Serializable {
 
     private void onLoadUser(){
         log.debug("-- onLoadUser()");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         user = (User) session.getAttribute("user");
         if(!Util.isNull(user)){
             onLoadUserId(user);

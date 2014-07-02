@@ -93,7 +93,7 @@ public class InsuranceInformation implements Serializable {
 	@PostConstruct
 	private void init() {
 
-		HttpSession session = FacesUtil.getSession(true);
+		HttpSession session = FacesUtil.getSession(false);
 
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
