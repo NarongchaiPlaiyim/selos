@@ -35,7 +35,6 @@ public class ReportService implements Serializable {
         JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
         if(dataSource != null && reportList != null && reportList.size() > 0){
             print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-//            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
         } else {
              print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
         }
@@ -51,32 +50,6 @@ public class ReportService implements Serializable {
 
         } catch (JRException e) {
             log.error("Error generating pdf report!", e);
-        }
-    }
-
-    public void exportPDF(Map map, Collection reportList, String jasperName)
-        throws Exception {
-        log.debug("on exportPDF.");
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            ServletOutputStream servletOutputStream = response.getOutputStream();
-            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            InputStream reportStream = request.getSession().getServletContext().getResourceAsStream(jasperName + ".jasper");
-            log.debug("reportStream in exportPDF. {}",reportStream);
-            response.setContentType("application/pdf");
-        try {
-            JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
-            if(dataSource != null && reportList != null && reportList.size() > 0)
-                JasperRunManager.runReportToPdfStream(reportStream, servletOutputStream, map, dataSource);
-            else
-                JasperRunManager.runReportToPdfStream(reportStream, servletOutputStream, map, new JREmptyDataSource());
-
-        } catch (Exception e) {
-            log.debug(e.getMessage());
-        } finally {
-            reportStream.close();
-            servletOutputStream.flush();
-            servletOutputStream.close();
-
         }
     }
 }

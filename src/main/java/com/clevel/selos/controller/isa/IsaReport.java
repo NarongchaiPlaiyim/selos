@@ -1,11 +1,17 @@
 package com.clevel.selos.controller.isa;
 
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.report.ISAViewReport;
+import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
-import com.clevel.selos.report.GenPDF;
+import com.clevel.selos.report.ReportService;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.util.CsvExport;
+import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -14,9 +20,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -33,12 +42,27 @@ public class IsaReport implements Serializable {
     private Date currentDate;
     private final String  COMMA_DELIMITED = ",";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("dd_mm_yyyy");
+    private ReportView reportView;
 
     @Inject
     CsvExport csvExport;
 
     @Inject
-    private GenPDF genPDF;
+    private STPExecutor stpExecutor;
+
+    private ReportService reportService;
+
+    @Inject
+    @Config(name = "reportisa.violation")
+    String pathISAViolation;
+
+    @Inject
+    @Config(name = "reportisa.userprofile")
+    String pathISAUserProfile;
+
+    @Inject
+    @Config(name = "reportisa.logonover90")
+    String pathISALogonOver90;
 
     @Inject
     public IsaReport(){
@@ -265,7 +289,73 @@ public class IsaReport implements Serializable {
 
     public void onSubmitReport(){
         log.debug("--On onSubmitReport. fromdate. {}, and todate.{}",dateFrom,dateTo);
-        genPDF.onPrintViolation(dateFrom,dateTo);
+        onPrintViolation(dateFrom, dateTo);
+    }
+
+    public void onPrintLogonOver90(){
+        log.debug("--on onPrintLogonOver90.");
+//        reportView.setNameISAReportLogonOver90(nameLogonOver90.toString());
+
+        try {
+            HashMap map = new HashMap<String, Object>();
+            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+            ResultSet rs = stpExecutor.getLogonOver90();
+            StringBuilder nameLogonOver90 = new StringBuilder();
+            nameLogonOver90 = nameLogonOver90.append("NotLogonOver_90_").append(Util.getFileNameForISA());
+            int i = 1;
+
+            while (rs.next()){
+                ISAViewReport viewReport = new ISAViewReport();
+                viewReport.setRow(i++);
+                viewReport.setUserId(rs.getString("USER_ID"));
+                viewReport.setUserName(rs.getString("USER_NAME"));
+                viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                viewReport.setLogin(rs.getTimestamp("LAST_LOGIN"));
+                viewReport.setStatus(rs.getString("STATUS"));
+                viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
+                viewReportList.add(viewReport);
+            }
+            reportService.generatePDF(pathISALogonOver90, map, nameLogonOver90.toString(), viewReportList);
+        } catch (SQLException e) {
+            log.debug("on getLogonOver90. {}",e);
+        } catch (Exception e) {
+            log.debug("onPrintLogonOver90. {}",e);
+        }
+    }
+
+    public void onPrintViolation(final Date form, final Date to){
+        log.debug("--on onPrintViolation.");
+//        reportView.setNameISAReportViolation(nameISAViolation.toString());
+//        StringBuilder nameISAUserProfile = new StringBuilder();
+//        nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
+//        reportView.setNameISAReportUserProfile(nameISAUserProfile.toString());
+
+        try {
+            StringBuilder nameISAViolation = new StringBuilder();
+            nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());
+            HashMap map = new HashMap<String, Object>();
+            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(form));
+            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(to));
+            ResultSet rs = stpExecutor.getViolation(map);
+            log.debug("--rs in onPrintViolation. {}",rs);
+
+            while (rs.next()){
+                ISAViewReport viewReport = new ISAViewReport();
+                viewReport.setUserId(rs.getString("USER_ID"));
+                viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
+                viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
+                viewReport.setStatus(rs.getString("STATUS"));
+                viewReport.setDescrition(rs.getString("DESCRIPTION"));
+                viewReportList.add(viewReport);
+            }
+            log.debug("--Path Report. {},--NameReport. {}",pathISAViolation,reportView.getNameISAReportViolation());
+            reportService.generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
+        } catch (SQLException e) {
+            log.debug("----on getViolation. {}",e);
+        } catch (Exception e) {
+            log.debug("onPrintLogonOver90. {}",e);
+        }
     }
 
     public Date getDateFrom() {
