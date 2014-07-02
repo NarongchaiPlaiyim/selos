@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.UWRuleResultControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.ext.map.RMTitleDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
@@ -23,6 +24,8 @@ import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.view.NewCollateralView;
+import com.clevel.selos.model.view.UWRuleResultDetailView;
+import com.clevel.selos.model.view.UWRuleResultSummaryView;
 import com.clevel.selos.report.ReportService;
 import com.clevel.selos.report.SimpleReport;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -45,10 +48,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "welcomePage")
@@ -126,6 +126,9 @@ public class WelcomePage implements Serializable {
 
     @Inject
     CollateralBizTransform callateralBizTransform;
+
+    @Inject
+    private UWRuleResultControl uwRuleResultControl;
 
 //    @Inject
 //    @Config(name = "system.name")
@@ -467,7 +470,7 @@ public class WelcomePage implements Serializable {
     public void testRejectLetter() {
         try {
             log.debug("testRejectLetter.");
-            ncbInterface.generateRejectedLetter("10001",2020);
+            ncbInterface.generateRejectedLetter("10001",2);
         } catch (Exception e) {
             log.error("", e);
         }
@@ -507,6 +510,40 @@ public class WelcomePage implements Serializable {
         endOfMonthEn = DateTimeUtil.getLastDayOfMonth(dateEn);
         System.out.println("endOfMonthTh : "+endOfMonthTh);
         System.out.println("endOfMonthEn : "+endOfMonthEn);
+    }
+
+    public void testNCBResult(){
+        UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultControl.getUWRuleResultByWorkCasePrescreenId(3);
+        ncbResultValidation(uwRuleResultSummaryView);
+    }
+
+    public void ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView){
+        log.debug("ncbResultValidation()");
+        if(uwRuleResultSummaryView!=null){
+            Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+            if(uwResultDetailMap!=null){
+               // canCheckPreScreen = true;
+                for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet())
+                {
+                    UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
+                    if(uwRuleResultDetailView.getUwRuleNameView()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName()!=null
+                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")){
+                        if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
+                            log.debug("NCB Result is RED, auto reject case!");
+                            try {
+                                ncbInterface.generateRejectedLetter("10001",2);
+                                //canCheckPreScreen = false;
+                            } catch (Exception e) {
+                                log.error("", e);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Inject

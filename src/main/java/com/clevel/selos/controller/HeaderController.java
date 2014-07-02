@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "headerController")
@@ -197,6 +198,9 @@ public class HeaderController extends BaseController {
 
     //Check Time of Criteria Check
     private boolean canCheckCriteria;
+
+    //Check NCB result (if red , cannot submit CA and cannot check prescreen again)
+    private boolean canCheckPreScreen;
 
     private int timesOfCriteriaCheck;
 
@@ -1113,6 +1117,12 @@ public class HeaderController extends BaseController {
                             uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                             uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                            //TODO: wait to confirm spec
+                            /*if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,user)){
+                                canCheckPreScreen = false;
+                            } else {
+                                canCheckPreScreen = true;
+                            }*/
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
@@ -2472,6 +2482,14 @@ public class HeaderController extends BaseController {
 
     public void setTimesOfCriteriaCheck(int timesOfCriteriaCheck) {
         this.timesOfCriteriaCheck = timesOfCriteriaCheck;
+    }
+
+    public boolean isCanCheckPreScreen() {
+        return canCheckPreScreen;
+    }
+
+    public void setCanCheckPreScreen(boolean canCheckPreScreen) {
+        this.canCheckPreScreen = canCheckPreScreen;
     }
 
     public int getRequestAppraisalRequire() {
