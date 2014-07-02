@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
@@ -305,7 +306,7 @@ public class AppraisalResultControl extends BusinessControl {
         }
     }
 
-    public AppraisalDataResult retrieveDataFromCOMS(final String jobID){
+    public AppraisalDataResult retrieveDataFromCOMS(final String jobID) throws COMSInterfaceException {
         log.debug("-- retrieveDataFromCOMS ::: jobID : {}", jobID);
         AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobID);
         return appraisalDataResult;

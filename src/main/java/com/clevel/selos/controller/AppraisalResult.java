@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
@@ -288,11 +289,12 @@ public class AppraisalResult implements Serializable {
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
                 }
-//            } catch (COMSInterfaceException e){
-//                log.error("COMSInterfaceException ::: {}",e);
-//                messageHeader = "Exception";
+            } catch (COMSInterfaceException e){
+                log.error("COMSInterfaceException ::: {}",e);
+                messageHeader = "COM-S Exception";
+                message = "Data not found.";
 //                message = e.getMessage();
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } catch (Exception e){
                 log.error("Exception ::: {}",e);
                 messageHeader = "Exception";
@@ -314,7 +316,7 @@ public class AppraisalResult implements Serializable {
         }
         return true;
     }
-    private AppraisalDataResult callCOM_S(final String jobID){
+    private AppraisalDataResult callCOM_S(final String jobID) throws COMSInterfaceException{
         AppraisalDataResult appraisalDataResult = appraisalResultControl.retrieveDataFromCOMS(jobID);
         return appraisalDataResult;
     }
