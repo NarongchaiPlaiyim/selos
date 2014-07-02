@@ -154,7 +154,13 @@ public class GenPDF extends ReportService implements Serializable {
             reportView.setNameReportExSum(nameExSum.toString());
 
             pdfReject_letter.init();
-            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+            if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                reportView.setNameReportRejectLetter("-");
+                type = true;
+            } else {
+                reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+            }
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
         }
