@@ -92,7 +92,7 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void init(){
         log.debug("init() {[]}");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());

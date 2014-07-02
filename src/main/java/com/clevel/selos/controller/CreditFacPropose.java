@@ -259,7 +259,7 @@ public class CreditFacPropose extends BaseController {
 
     public void preRender() {
         log.debug("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (!Util.isNull(session.getAttribute("workCaseId"))) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());

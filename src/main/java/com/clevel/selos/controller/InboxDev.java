@@ -81,7 +81,7 @@ public class InboxDev implements Serializable {
             } else {
                 renderedPool = false;
             }
-            HttpSession httpSession = FacesUtil.getSession(true);
+            HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("workCaseId", null);
             httpSession.setAttribute("workCasePreScreenId", null);
             httpSession.setAttribute("stepId", null);

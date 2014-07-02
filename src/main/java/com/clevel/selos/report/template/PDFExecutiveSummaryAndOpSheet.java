@@ -76,9 +76,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     @NormalMessage
     Message msg;
 
-    long workCaseId;
+    private long workCaseId;
+    private long statusId;
     private final String SPACE = " ";
-    WorkCase workCase;
+    private WorkCase workCase;
 
     @Inject
     DecisionControl decisionControl;
@@ -90,29 +91,18 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     }
 
     public void init(){
-        HttpSession session = FacesUtil.getSession(true);
-
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        }else{
-            log.debug("onCreation ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-            }catch (Exception ex){
-                log.error("Exception :: {}",ex);
-            }
-        }
-
+        HttpSession session = FacesUtil.getSession(false);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         exSummaryView = new ExSummaryView();
-
-        if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
+        if(workCaseId != 0){
             exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
             decisionView = decisionControl.getDecisionView(workCaseId);
-            exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
+            exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId, statusId);
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
             log.debug("exSummary: {},exSummaryView: {}, decision: {},bizInfoSummaryView: {}",exSummary,exSummaryView,decisionView,bizInfoSummaryView);
-        } else {
-            log.debug("workCaseId is Null. {}",workCaseId);
+        }else{
+            log.debug("workCaseId is Null. {}", workCaseId);
         }
     }
 
@@ -441,7 +431,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public HeaderAndFooterReport fillHeader(){
         HeaderAndFooterReport report = new HeaderAndFooterReport();
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         workCase = workCaseDAO.findById(workCaseId);
         //Detail 1

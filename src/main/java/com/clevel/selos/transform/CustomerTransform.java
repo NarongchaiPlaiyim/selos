@@ -357,7 +357,9 @@ public class CustomerTransform extends Transform {
             if(juristic != null){
                 customerInfoView.setCapital(juristic.getCapital());
                 customerInfoView.setPaidCapital(juristic.getPaidCapital());
-                customerInfoView.setFinancialYear(juristic.getFinancialYear());
+                if(!Util.isZero(customerInfoView.getFinancialYear()))
+                customerInfoView.setFinancialYear(juristic.getFinancialYear() + 543);
+
                 customerInfoView.setDateOfRegister(juristic.getRegisterDate());
                 customerInfoView.setSignCondition(juristic.getSignCondition());
                 customerInfoView.setRegistrationId(juristic.getRegistrationId());
@@ -807,7 +809,9 @@ public class CustomerTransform extends Transform {
             juristic.setCustomer(customer);
             juristic.setCapital(customerInfoView.getCapital());
             juristic.setPaidCapital(customerInfoView.getPaidCapital());
-            juristic.setFinancialYear(customerInfoView.getFinancialYear());
+            if(!Util.isZero(customerInfoView.getFinancialYear()))
+            juristic.setFinancialYear(customerInfoView.getFinancialYear() - 543);
+
             juristic.setRegisterDate(customerInfoView.getDateOfRegister());
             juristic.setRegistrationId(customerInfoView.getRegistrationId());
             juristic.setSignCondition(customerInfoView.getSignCondition());

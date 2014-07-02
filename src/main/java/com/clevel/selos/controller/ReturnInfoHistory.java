@@ -59,7 +59,7 @@ public class ReturnInfoHistory implements Serializable {
     }
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         log.info("preRender ::: setSession ");
 
         if (session.getAttribute("workCaseId") != null) {
@@ -80,7 +80,7 @@ public class ReturnInfoHistory implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("ReturnInfoBDM ::: onCreation");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         modifyBy = new User();
 
         if (session.getAttribute("workCaseId") != null) {

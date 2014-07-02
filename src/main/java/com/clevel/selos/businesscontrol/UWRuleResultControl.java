@@ -45,7 +45,7 @@ public class UWRuleResultControl extends BusinessControl{
         if(uwRuleResultSummaryView.getWorkCasePrescreenId() > 0)
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(uwRuleResultSummaryView.getWorkCasePrescreenId());
         else
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(uwRuleResultSummaryView.getWorkCaseId());
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(uwRuleResultSummaryView.getWorkCaseId());
         if(!Util.isNull(uwRuleResultSummary)){
             logger.debug("uwRuleResultSummary : {}", uwRuleResultSummary);
             uwRuleResultDetailDAO.delete(uwRuleResultSummary.getUwRuleResultDetailList());
@@ -60,7 +60,7 @@ public class UWRuleResultControl extends BusinessControl{
         if(workCasePreScreenId != 0)
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
         else
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         if(!Util.isNull(uwRuleResultSummary)){
             logger.debug("uwRuleResultSummary : {}", uwRuleResultSummary);
             uwRuleResultDetailDAO.delete(uwRuleResultSummary.getUwRuleResultDetailList());
@@ -79,7 +79,7 @@ public class UWRuleResultControl extends BusinessControl{
 
     public UWRuleResultSummaryView getUWRuleResultByWorkCaseId(long workCaseId){
         logger.debug("-- begin getUWRuleResultByWorkCaseId {}", workCaseId);
-        UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+        UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         UWRuleResultSummaryView uwRuleResultSummaryView = uwRuleResultTransform.transformToView(uwRuleResultSummary);
         logger.info("-- end getUWRuleResultByWorkCaseId return{}", uwRuleResultSummaryView);
         return uwRuleResultSummaryView;
