@@ -13,7 +13,7 @@ public class Reason implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "reasontype_id")
     private ReasonType reasonType;
 

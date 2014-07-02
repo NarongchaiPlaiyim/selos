@@ -1,8 +1,13 @@
 package com.clevel.selos.dao.working;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.Disbursement;
+import com.clevel.selos.model.db.working.DisbursementCredit;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -27,5 +32,21 @@ public class DisbursementDAO extends GenericDAO<Disbursement, Long> {
         Disbursement disbursement = (Disbursement) criteria.uniqueResult();
 
         return disbursement;
+    }
+    
+    public BigDecimal getTotalDisbursementAmount(long workCaseId) {
+    	Disbursement model = findByWorkCaseId(workCaseId);
+    	if (model == null)
+    		return BigDecimal.ZERO;
+    	List<DisbursementCredit> summaryList = model.getDisbursementSummaryList();
+    	if (summaryList == null || summaryList.isEmpty())
+    		return BigDecimal.ZERO;
+    	BigDecimal total = BigDecimal.ZERO;
+    	for(DisbursementCredit summ : summaryList) {
+    		if (summ.getDisburseAmount() == null)
+    			continue;
+    		total = total.add(summ.getDisburseAmount());
+    	}
+    	return total;
     }
 }

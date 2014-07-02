@@ -19,9 +19,9 @@
 	</h:head>
 
 	<h:body>
-		<!--<f:event type="preRenderView" listener="{basicInfo.preRender()}"/>-->
-		<p:panel id="pnl_maincontainer"
-			style="border:0; margin:0; padding: 0;">
+		<f:event type="preRenderView"
+			listener="#{preDisbursement.preRender()}" />
+		<p:panel id="pnl_maincontainer" styleClass="panel">
 			<h:form id="frmMain">
 				<div id="main_container">
 					<!-- Start Header Logo -->

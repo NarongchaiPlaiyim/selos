@@ -28,6 +28,7 @@
                         <label class="subject">Manage User</label>
                             <a class="step_border_select" href="manageUser.xhtml">User Profile</a>
                             <a class="step_border" href="userProfileUpload.xhtml">Upload User Profile</a>
+                            <a class="step_border" href="isaReport.xhtml">Report</a>
                     </div>
                     <!--R pane-->
                     <div class="body_rpane">
@@ -42,7 +43,9 @@
                                 <p:outputLabel value="User ID" />
                             </td>
                             <td>
-                                <p:inputText value="#{isa.isaSearchView.id}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                                <p:inputText value="#{isa.isaSearchView.id}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                             maxlength="10"
+                                        />
                             </td>
                         </tr>
                         <tr>
@@ -50,7 +53,9 @@
                                 <p:outputLabel value="User Name"/>
                             </td>
                             <td>
-                                <p:inputText value="#{isa.isaSearchView.username}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                                <p:inputText value="#{isa.isaSearchView.username}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                             maxlength="50"
+                                        />
                             </td>
                         </tr>
                         <tr>
@@ -186,9 +191,10 @@
 
                             </div>
 
-                        <p:dataTable id="dataTable" var="user" value="#{isa.userList}" styleClass="center"
+                        <p:dataTable id="dataTable" var="user" value="#{isa.userList}"
                                      selection="#{isa.selectUserDetail}" rowKey="#{user.id}"
-                                     rowIndexVar="rowIndex" rows="40" paginator="true" >
+                                     rowIndexVar="rowIndex" rows="15" paginator="true"
+                                >
 
                             <p:column selectionMode="multiple"/>
 

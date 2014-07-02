@@ -58,7 +58,6 @@ public enum Screen {
     AddBahtNetDisburseInfoDialog(9000) ,
     Disbursement(9300) ,
     
-    PostDecision(9500) , //???
     UpdateCollateralInfo(9600) ,
     PerfectionReview(10100) ,
     ConfirmLimitSetUp(10200)
