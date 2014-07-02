@@ -1,6 +1,9 @@
 package com.clevel.selos.businesscontrol.util.stp;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.isa.CSVModel;
+import com.clevel.selos.util.Util;
 import oracle.jdbc.OracleTypes;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
@@ -19,6 +22,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -28,7 +32,7 @@ public class STPExecutor implements Serializable {
     Logger log;
     @PersistenceContext
     protected EntityManager em;
-
+    private final String EMPTY = "";
     @Inject
     public STPExecutor() {
     }
@@ -45,6 +49,102 @@ public class STPExecutor implements Serializable {
             log.error("Exception getApplicationNumber! (message: {})", e.getMessage());
         }
         return applicationNumber;
+    }
+
+    public String createFromCSV(final CSVModel csv, final User user) throws Exception {
+        log.debug("-- createFromCSV(CSVModel : {})", csv.toString());
+        final String[] result = {""};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                CallableStatement callStmt = connection.prepareCall("{call SLOS.INSERTUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                callStmt.setString("IN_USER_ID", Util.parseString(csv.getUserId(), EMPTY));
+                log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString("IN_USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
+                log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
+                callStmt.setInt(   "IN_ACTIVE", Util.parseInt(csv.getActive(), 0));
+                log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                callStmt.setString("IN_ROLE_NAME", Util.parseString(csv.getRole(), EMPTY));
+                log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
+                callStmt.setString("IN_TEAM_NAME", Util.parseString(csv.getTeam(), EMPTY));
+                log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
+                callStmt.setString("IN_DEPARTMENT_NAME", Util.parseString(csv.getDepartment(), EMPTY));
+                log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString("IN_DIVISION_NAME", Util.parseString(csv.getDivision(), EMPTY));
+                log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString("IN_REGION_NAME", Util.parseString(csv.getRegion(), EMPTY));
+                log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString("IN_TITLE_NAME", Util.parseString(csv.getTitle(), EMPTY));
+                log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString("IN_STATUS", Util.parseString(csv.getStatus(), EMPTY));
+                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+                callStmt.setString("IN_CREATE_BY", user.getId());
+                log.debug("-- IN_CREATE_BY :  {}", user.getId());
+                callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
+                callStmt.executeUpdate();
+                result[0] =callStmt.getString("OUT_RESULT");
+            }
+        });
+        log.debug("-- result : {}", result[0]);
+        return result[0];
+    }
+
+    public String updateFromCSV(final CSVModel csv, final User user) throws Exception {
+        log.debug("-- updateFromCSV(CSVModel : {})", csv.toString());
+        final String[] result = {""};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                CallableStatement callStmt = connection.prepareCall("{call SLOS.UPDATEUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                callStmt.setString("IN_USER_ID", Util.parseString(csv.getUserId(), EMPTY));
+                log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString("IN_USER_NAME", Util.parseString(csv.getUserName(), EMPTY));
+                log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
+                callStmt.setInt(   "IN_ACTIVE", Util.parseInt(csv.getActive(), 0));
+                log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                callStmt.setString("IN_ROLE_NAME", Util.parseString(csv.getRole(), EMPTY));
+                log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
+                callStmt.setString("IN_TEAM_NAME", Util.parseString(csv.getTeam(), EMPTY));
+                log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
+                callStmt.setString("IN_DEPARTMENT_NAME", Util.parseString(csv.getDepartment(), EMPTY));
+                log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString("IN_DIVISION_NAME", Util.parseString(csv.getDivision(), EMPTY));
+                log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString("IN_REGION_NAME", Util.parseString(csv.getRegion(), EMPTY));
+                log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString("IN_TITLE_NAME", Util.parseString(csv.getTitle(), EMPTY));
+                log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString("IN_STATUS", Util.parseString(csv.getStatus(), EMPTY));
+                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+                callStmt.setString("IN_CREATE_BY", user.getId());
+                log.debug("-- IN_CREATE_BY :  {}", user.getId());
+                callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
+                callStmt.executeUpdate();
+                result[0] =callStmt.getString("OUT_RESULT");
+            }
+        });
+        log.debug("-- result : {}", result[0]);
+        return result[0];
+    }
+
+    public String deleteFromCSV(final CSVModel csv, final User user) throws Exception {
+        log.debug("-- deleteFromCSV(UserId : {})", csv.getUserId());
+        final String[] result = {""};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                CallableStatement callStmt = connection.prepareCall("{call SLOS.DELETEUSERBYISA(?, ?, ?)}");
+                callStmt.setString("IN_USER_ID", csv.getUserId());
+                log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString("IN_CREATE_BY", user.getId());
+                log.debug("-- IN_CREATE_BY :  {}", user.getId());
+                callStmt.registerOutParameter("OUT_RESULT", OracleTypes.VARCHAR);
+                callStmt.executeUpdate();
+                result[0] =callStmt.getString("OUT_RESULT");
+            }
+        });
+        log.debug("-- result : {}", result[0]);
+        return result[0];
     }
 
     public String addUserFromFile( final Object... params)throws ServiceException { //todo : change this , AS ( To use Hibernate )
@@ -87,32 +187,62 @@ public class STPExecutor implements Serializable {
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt=connection.prepareCall("call SLOS.logonover90 ( ? )");
-                callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
-                callStmt.execute();
-
-                rs[0] = (ResultSet) callStmt.getObject("cursor_out");
-
+                try{
+                    CallableStatement callStmt=connection.prepareCall("call SLOS.logonover90 ( ? )");
+                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.execute();
+                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
             }
         });
         return rs[0];
     }
 
-    public ResultSet getViolation(final String fromdate,final String todate){
+    public ResultSet getViolation(final Map<String, Object> map){
+        log.debug("on getViolation.");
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                CallableStatement callStmt=connection.prepareCall("call SLOS.violation ( ?,?,? )");
-                callStmt.setString("fromdate",fromdate);
-                callStmt.setString("todate",todate);
-                callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
-                callStmt.execute();
-
-                rs[0] = (ResultSet) callStmt.getObject("cursor_out");
-
+                try{
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.violation (?, ?, ?)");
+                    for (String key : map.keySet()){
+                        callStmt.setObject(key, map.get(key).toString());
+                    }
+                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.executeUpdate();
+                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
             }
         });
+        log.debug("--rs. {}",rs[0]);
+        return rs[0];
+    }
+
+    public ResultSet getuserProfile(final Map<String, Object> map){
+        log.debug("on getViolation.");
+        final ResultSet[] rs = {null};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                try{
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.userprofile (?)");
+                    for (String key : map.keySet()){
+                        callStmt.setObject(key, map.get(key).toString());
+                    }
+                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.executeUpdate();
+                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
+            }
+        });
+        log.debug("--rs. {}",rs[0]);
         return rs[0];
     }
 }

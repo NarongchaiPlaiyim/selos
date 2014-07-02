@@ -1,28 +1,36 @@
 package com.clevel.selos.model.view.isa;
 
+import com.clevel.selos.businesscontrol.isa.ValidationImp;
+import com.clevel.selos.model.CommandType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class IsaUserDetailView implements Serializable {
+public class CSVModel extends ValidationImp implements Serializable {
+    private String commandType;
     private String userId;
     private String userName;
-    private String emailAddress;
-    private String buCode;
-    private String phoneExt;
-    private String phoneNumber;
+    private String active;
     private String role;
     private String department;
     private String division;
     private String region;
     private String team;
     private String title;
-    private int active;
-    private String userStatus;
+    private String status;
 
-    public IsaUserDetailView() {
 
+    public CSVModel() {
+
+    }
+
+    public String getCommandType() {
+        return commandType;
+    }
+
+    public void setCommandType(String commandType) {
+        this.commandType = commandType;
     }
 
     public String getUserId() {
@@ -41,36 +49,12 @@ public class IsaUserDetailView implements Serializable {
         this.userName = userName;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getActive() {
+        return active;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getBuCode() {
-        return buCode;
-    }
-
-    public void setBuCode(String buCode) {
-        this.buCode = buCode;
-    }
-
-    public String getPhoneExt() {
-        return phoneExt;
-    }
-
-    public void setPhoneExt(String phoneExt) {
-        this.phoneExt = phoneExt;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setActive(String active) {
+        this.active = active;
     }
 
     public String getRole() {
@@ -121,39 +105,32 @@ public class IsaUserDetailView implements Serializable {
         this.title = title;
     }
 
-    public int getActive() {
-        return active;
+    public String getStatus() {
+        return status;
     }
 
-    public void setActive(int active) {
-        this.active = active;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
+    public String valid(CommandType commandType) {
+        return super.valid(this, commandType);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("commandType", commandType)
                 .append("userId", userId)
                 .append("userName", userName)
-                .append("emailAddress", emailAddress)
-                .append("buCode", buCode)
-                .append("phoneExt", phoneExt)
-                .append("phoneNumber", phoneNumber)
+                .append("active", active)
                 .append("role", role)
                 .append("department", department)
                 .append("division", division)
                 .append("region", region)
                 .append("team", team)
                 .append("title", title)
-                .append("active", active)
-                .append("userStatus", userStatus)
+                .append("status", status)
                 .toString();
     }
 }

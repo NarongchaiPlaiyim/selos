@@ -1,8 +1,10 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.TCGInfoControl;
+import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.Screen;
@@ -18,8 +20,12 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,9 +40,11 @@ public class TCGApprovalInfo implements Serializable {
     @SELOS
     Logger log;
     
-    private long workCaseId = -1;
-	private long stepId = -1;
-	private User user;
+    // session
+ 	private boolean preRenderCheck = false;
+ 	private long workCaseId = -1;
+ 	private long stepId = -1;
+ 	private User user;
    
     private BasicInfoView basicInfoView;
     
@@ -47,12 +55,45 @@ public class TCGApprovalInfo implements Serializable {
     private boolean isEnableApprove = true;
 
     @Inject
-    TCGInfoControl tcgInfoControl;
+    private TCGInfoControl tcgInfoControl;
+    
+    @Inject
+	private BasicInfoControl basicInfoControl;
+    
+    @Inject
+	private UserAccessControl userAccessControl;
 //    @Inject
 //    UserDAO userDAO;
 
     public TCGApprovalInfo() {
     }
+    
+    public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
+
+		String redirectPage = null;
+		log.info("preRender workCase Id = " + workCaseId);
+		if (workCaseId > 0) {
+			if (!userAccessControl.canUserAccess(Screen.TCGInfo, stepId)) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		_loadInitData();
+		try {
+			log.info("preRender " + redirectPage);
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath() + redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to " + redirectPage, e);
+		}
+	}
 
     @PostConstruct
     public void onCreation() {
@@ -64,6 +105,7 @@ public class TCGApprovalInfo implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
 		}
+		_loadInitData();
 		this.setTcgInfoView(this.tcgInfoControl.getTCGInfoView(workCaseId));
 		
 		//Disable Button
@@ -132,6 +174,14 @@ public class TCGApprovalInfo implements Serializable {
 
 	public boolean getIsEnableApprove() {
 		return isEnableApprove;
+	}
+	
+	private void _loadInitData() {
+		preRenderCheck = false;
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+
 	}
 	
 	/*

@@ -46,7 +46,7 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public void init(){
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if((Long)session.getAttribute("workCaseId") != 0){
             workCaseId = Long.valueOf("" + session.getAttribute("workCaseId"));

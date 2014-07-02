@@ -2,16 +2,12 @@ package com.clevel.selos.integration.ncb.letter;
 
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.report.RejectedLetterDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.IndividualDAO;
-import com.clevel.selos.dao.working.JuristicDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.report.RejectedLetter;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -33,7 +29,7 @@ public class RejectLetterService implements Serializable {
     Logger log;
 
     @Inject
-    WorkCaseDAO workCaseDAO;
+    WorkCasePrescreenDAO workCasePrescreenDAO;
 
     @Inject
     UserDAO userDAO;
@@ -61,12 +57,13 @@ public class RejectLetterService implements Serializable {
 
     }
 
-    public boolean extractRejectedLetterData(String userId, long workCaseId) throws Exception{
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        if(workCase!=null && workCase.getId()>0){
+    public boolean extractRejectedLetterData(String userId, long workCasePreScreenId) throws Exception{
+        log.debug("extractRejectedLetterData() : (userId:{}, workCasePreScreenId: {})",userId,workCasePreScreenId);
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        if(workCasePrescreen!=null && workCasePrescreen.getId()>0){
             RejectedLetter rejectedLetter = new RejectedLetter();
             User user = userDAO.findUserByID(userId);
-            List<Customer> customerBorrowerList = customerDAO.findBorrowerByWorkCaseId(workCaseId);
+            List<Customer> customerBorrowerList = customerDAO.findBorrowerByWorkCasePreScreenId(workCasePreScreenId);
             if(customerBorrowerList!=null && customerBorrowerList.size()>0){
                 int numberOfBr = 0;
                 String citizenId = "";
@@ -81,10 +78,13 @@ public class RejectLetterService implements Serializable {
                 String province = "";
                 String zipCode = "";
 
-                rejectedLetter.setWorkCase(workCase);
-                rejectedLetter.setAppNumber(workCase.getAppNumber());
-                rejectedLetter.setHubCode(user.getBuCode()); //TODO: verify data
-                rejectedLetter.setZoneOfficePhone(user.getPhoneNumber()); //TODO: verify data
+                rejectedLetter.setWorkCasePrescreen(workCasePrescreen);
+                rejectedLetter.setAppNumber(workCasePrescreen.getAppNumber());
+                rejectedLetter.setHubCode(""); //TODO: verify data
+                rejectedLetter.setRejectedDate(new Date());
+                UserTeam userTeam = user.getTeam();
+                rejectedLetter.setZoneOfficePhone(Util.getStringNotNull(userTeam.getTeam_phone()));
+                rejectedLetter.setZoneName(Util.getStringNotNull(userTeam.getTeam_name()));
                 for(Customer customer: customerBorrowerList) {
                     if(customer.getTitle()!=null && customer.getTitle().getTitleTh()!=null)
                         title = customer.getTitle().getTitleTh();
@@ -114,8 +114,13 @@ public class RejectLetterService implements Serializable {
                             rejectedLetter.setCitizenId1(citizenId);
 
                             List<Address> addressesList = customer.getAddressesList();
+                            AddressType addressType = customer.getMailingAddressType();
+                            if((addressType!=null && addressType.getId()==0) || addressType==null) {
+                                addressType = new AddressType();
+                                addressType.setId(1);
+                            }
                             for(Address address: addressesList){
-                                if(address.getAddressType() == customer.getMailingAddressType()){
+                                if(address.getAddressType().getId() == addressType.getId()){
                                     String addrNo = Util.getStringNotNull(address.getAddressNo());
                                     String building = Util.getStringNotNull(address.getBuilding());
                                     String road = Util.getStringNotNull(address.getRoad());
@@ -197,7 +202,7 @@ public class RejectLetterService implements Serializable {
             rejectedLetterDAO.save(rejectedLetter);
             return true;
         } else {
-            throw new NCBInterfaceException(new Exception(msg.get(ExceptionMapping.NCB_WORKCASE_NOT_FOUND, workCaseId+"")),ExceptionMapping.NCB_WORKCASE_NOT_FOUND, msg.get(ExceptionMapping.NCB_WORKCASE_NOT_FOUND, workCaseId+""));
+            throw new NCBInterfaceException(new Exception(msg.get(ExceptionMapping.NCB_WORKCASE_NOT_FOUND, workCasePreScreenId+"")),ExceptionMapping.NCB_WORKCASE_NOT_FOUND, msg.get(ExceptionMapping.NCB_WORKCASE_NOT_FOUND, workCasePreScreenId+""));
         }
     }
 }

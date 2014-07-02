@@ -60,10 +60,11 @@ public class NCBInterfaceImpl implements NCBInterface, Serializable {
         return nccrsService.process(inputModel);
     }
 
-    public void generateRejectedLetter(String userId, long workCaseId){
+    public void generateRejectedLetter(String userId, long workCasePreeScreenId){
+        log.debug("generateRejectedLetter ()");
         //TODO: add audit log
         try{
-            rejectLetterService.extractRejectedLetterData(userId, workCaseId);
+            rejectLetterService.extractRejectedLetterData(userId, workCasePreeScreenId);
         } catch (NCBInterfaceException e){
             log.error("Exception while generate rejected letter data!", e);
             throw e;

@@ -76,7 +76,7 @@ public class NCBSummary extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid stepId
@@ -90,7 +90,7 @@ public class NCBSummary extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");

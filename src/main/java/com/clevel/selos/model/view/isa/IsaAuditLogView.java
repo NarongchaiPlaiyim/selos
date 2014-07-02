@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class IsaAuditLogView implements Serializable {
-
     private String sourceType;
     private String sourceModule;
     private String action;

@@ -78,7 +78,7 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private UWRuleResultControl uwRuleResultControl;
 
-    public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
+    public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId, long statusId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
 
@@ -102,12 +102,6 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         ExSummaryView exSummaryView = exSummaryTransform.transformToView(exSummary);
-
-        Long statusId = 0L;
-        HttpSession session = FacesUtil.getSession(true);
-        if(session.getAttribute("statusId") != null){
-            statusId = Long.parseLong(session.getAttribute("statusId").toString());
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -586,9 +580,9 @@ public class ExSummaryControl extends BusinessControl {
         calGroupExposureBorrowerCharacteristic(workCaseId);
     }
 
-    public void calForBankStmtSummary(long workCaseId){
+    public void calForBankStmtSummary(long workCaseId, long stepId){
         calSalePerYearBorrowerCharacteristic(workCaseId);
-        calGroupSaleBorrowerCharacteristic(workCaseId);
+        calGroupSaleBorrowerCharacteristic(workCaseId, stepId);
     }
 
     public void calForDBR(long workCaseId){
@@ -600,8 +594,8 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeFactor(workCaseId);
     }
 
-    public void calForCustomerInfoJuristic(long workCaseId){
-        calGroupSaleBorrowerCharacteristic(workCaseId);
+    public void calForCustomerInfoJuristic(long workCaseId, long stepId){
+        calGroupSaleBorrowerCharacteristic(workCaseId, stepId);
     }
 
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -775,7 +769,7 @@ public class ExSummaryControl extends BusinessControl {
 //    Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
 //    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
 //    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-    public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
+    public void calGroupSaleBorrowerCharacteristic(long workCaseId, long stepId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
         log.debug("calGroupSaleBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
@@ -787,14 +781,7 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal groupSaleUW = BigDecimal.ZERO;
         BigDecimal twelve = BigDecimal.valueOf(12);
 
-        long stepId = 0;
-
-        HttpSession session = FacesUtil.getSession(true);
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }
-
-        log.debug("stepId : {}",stepId);
+        log.debug("calGroupSaleBorrowerCharacteristic ::: stepId : {}", stepId);
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){

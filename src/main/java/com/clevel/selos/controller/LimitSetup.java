@@ -119,8 +119,12 @@ public class LimitSetup implements Serializable {
 	 */
 	private void _loadInitData() {
 		preRenderCheck = false;
-		
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+
 	}
+	
 	public LimitSetupView getLimitSetupView() {
 		return limitSetupView;
 	}

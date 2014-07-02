@@ -44,6 +44,8 @@ public class BizInfoDetail extends BaseController {
     Message msg;
 
     private long workCaseId;
+    private long stepId;
+    private long statusId;
 
     private String stakeType;
 
@@ -118,18 +120,9 @@ public class BizInfoDetail extends BaseController {
 
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid step
@@ -145,11 +138,13 @@ public class BizInfoDetail extends BaseController {
     public void onCreation(){
         log.debug("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             try{
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+                stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+                statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
                 bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
@@ -195,7 +190,7 @@ public class BizInfoDetail extends BaseController {
                     bizStakeHolderDetailView = new BizStakeHolderDetailView();
                     bizProductDetailView = new BizProductDetailView();
                 } else {
-                    bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
+                    bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId, statusId);
 
                     if(!Util.isNull(bizInfoDetailView.getBizProductDetailViewList()) && bizInfoDetailView.getBizProductDetailViewList().size() > 0) {
                         bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
@@ -671,7 +666,7 @@ public class BizInfoDetail extends BaseController {
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-                bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
+                bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId, stepId);
                 dbrControl.updateValueOfDBR(workCaseId);
                 exSummaryControl.calForBizInfoSummary(workCaseId);
                 messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
@@ -679,9 +674,11 @@ public class BizInfoDetail extends BaseController {
 
                 log.debug(" after save to DB BizInfoDetail is {}",bizInfoDetailView.getId());
                 bizInfoDetailViewId =  bizInfoDetailView.getId();
+
                 HttpSession session = FacesUtil.getSession(true);
                 session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
-                log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
+
+                log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}", session.getAttribute("bizInfoDetailViewId"));
                 creditFacProposeControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

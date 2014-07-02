@@ -145,7 +145,7 @@ public class NewCollateralTransform extends Transform {
         collateralHeaderDetail.setModifyBy(newCollateralHeadView.getModifyBy());
         collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
         collateralHeaderDetail.setHeadTcgCollType(newCollateralHeadView.getTcgCollateralType());
-        collateralHeaderDetail.setProposeType(String.valueOf(proposeType.value()));
+        collateralHeaderDetail.setProposeType(proposeType);
 
         if (newCollateralHeadView.getNewCollateralSubViewList().size() > 0) {
             if (newCollateralHeadView.getNewCollateralSubDeleteList().size() > 0) {

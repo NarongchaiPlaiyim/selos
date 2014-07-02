@@ -12,5 +12,5 @@ public interface NCBInterface {
 
     public ArrayList<NCCRSOutputModel> request(NCCRSInputModel inputModel) throws Exception;
 
-    public void generateRejectedLetter(String userId, long workCaseId) throws Exception;
+    public void generateRejectedLetter(String userId, long workCasePreeScreenId) throws Exception;
 }

@@ -40,7 +40,7 @@ public class WorkCaseAppraisalDAO extends GenericDAO<WorkCaseAppraisal, Long> {
     }
 
     public WorkCaseAppraisal findByWorkcaseId(long workCaseId){
-        log.info("findByWorkcaseId : {}", workCaseId);
+        log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         WorkCaseAppraisal workCaseAppraisal = (WorkCaseAppraisal) criteria.uniqueResult();

@@ -16,6 +16,13 @@ public class ISAViewReport {
     private String numberOfDay;
     private String ipAddress;
     private String descrition;
+    private String buCode;
+    private String team;
+    private String role;
+    private Date modifyDate;
+    private String createBy;
+    private String modifyBy;
+
 
     public ISAViewReport() {
     }
@@ -92,6 +99,54 @@ public class ISAViewReport {
         this.descrition = descrition;
     }
 
+    public String getBuCode() {
+        return buCode;
+    }
+
+    public void setBuCode(String buCode) {
+        this.buCode = buCode;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -104,6 +159,12 @@ public class ISAViewReport {
                 .append("numberOfDay", numberOfDay)
                 .append("ipAddress", ipAddress)
                 .append("descrition", descrition)
+                .append("buCode", buCode)
+                .append("team", team)
+                .append("role", role)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

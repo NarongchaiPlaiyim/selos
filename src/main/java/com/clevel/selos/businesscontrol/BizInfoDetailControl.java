@@ -60,7 +60,7 @@ public class BizInfoDetailControl extends BusinessControl {
 
     }
 
-    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId , long workCaseId) {
+    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId , long workCaseId, long stepId) {
 
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
@@ -123,7 +123,7 @@ public class BizInfoDetailControl extends BusinessControl {
 
             bizStakeHolderDetailDAO.persist(bizBuyerList);
             bizInfoDetailView.setId(bizInfoDetail.getId());
-            onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
+            onSaveSumOnSummary(bizInfoSummaryId, workCaseId, stepId);
 
             //--Update flag in WorkCase ( for check before submit )
             WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -140,11 +140,10 @@ public class BizInfoDetailControl extends BusinessControl {
     }
 
 
-    public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId){
+    public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId, long stepId){
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
         BigDecimal bankStatementAvg = BigDecimal.ZERO;
-        long stepId = 0;
         BigDecimal inComeTotalNet = BigDecimal.ZERO;
 
         BigDecimal twenty = BigDecimal.valueOf(12);
@@ -152,10 +151,6 @@ public class BizInfoDetailControl extends BusinessControl {
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
         log.debug("bizInfoDetailList : {}",bizInfoDetailList);
-
-        HttpSession session = FacesUtil.getSession(true);
-        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-
         log.debug("stepId : {}",stepId);
 
         if (bizInfoDetailList.size() != 0) {
@@ -305,7 +300,7 @@ public class BizInfoDetailControl extends BusinessControl {
         }
     }
 
-    public BizInfoDetailView onFindByID(long bizInfoDetailId) {
+    public BizInfoDetailView onFindByID(long bizInfoDetailId, long statusId) {
 
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
@@ -369,12 +364,6 @@ public class BizInfoDetailControl extends BusinessControl {
             log.info("buyer size {}",bizInfoDetailView.getBuyerDetailList().size());
 
             //for hidden field on status below UW
-            Long statusId = 0L;
-            HttpSession session = FacesUtil.getSession(true);
-            if(session.getAttribute("statusId") != null){
-                statusId = Long.parseLong(session.getAttribute("statusId").toString());
-            }
-
             if(statusId >= StatusValue.REVIEW_CA.value()){
                 bizInfoDetailView.setSupplierUWAdjustPercentCredit(null);
                 bizInfoDetailView.setSupplierUWAdjustCreditTerm(null);

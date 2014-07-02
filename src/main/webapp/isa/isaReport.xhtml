@@ -20,44 +20,65 @@
 
                 <div id="content_container">
                     <h:form id="reportForm">
+                        <!-- L pane-->
                         <div class="body_lpane">
-                            <label class="subject">Report</label>
-                            <a class="step_border_select">ISA Reports</a>
+                            <label class="subject">Manage User</label>
+                            <a class="step_border" href="manageUser.xhtml">User Profile</a>
+                            <a class="step_border" href="userProfileUpload.xhtml">Upload User Profile</a>
+                            <a class="step_border_select" href="isaReport.xhtml">Report</a>
                         </div>
+
                         <div class="body_rpane">
-                            <label class="subject">ISA Reports</label>
-                            <p:fieldset legend="User Maintenance - Audit Log">
-                                <p:panelGrid columns="5">
-                                    <h:outputText value="จากวันที่:"/>
-                                    <clv:BECalendar value="#{isaReport.dateFrom}" id="popupButtonCalTh1" showOn="button" pattern="dd/MM/yyyy"
-                                                    navigator="true" locale="th_TH" showButtonPanel="true" />
+                            <label class="subject">Report</label>
+                            <table border="0">
+                                <tr>
+                                    <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+                                    <td style="width: 100px; min-width: 100px; max-width: 100px;" />
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+                                    <td style="width: 120px; min-width: 120px; max-width: 120px;" />
 
-                                    <h:outputText value="ถึงวันที่:"/>
-                                    <clv:BECalendar value="#{isaReport.dateTo}" id="popupButtonCalTh2" showOn="button" pattern="dd/MM/yyyy"
-                                                    navigator="true" locale="th_TH" showButtonPanel="true" />
-
-                                    <p:commandButton value="ส่งออกรายงาน"
-                                                     action="#{isaReport.userMaintenanceReport}"
-                                                     ajax="false"/>
-                                </p:panelGrid>
-                            </p:fieldset>
-                            <p:panelGrid columns="2">
-                                <h:outputText value="รายงานผู้ใช้งานที่ไม่เข้าสู่ระบบมากกว่า 90 วัน:"/>
-                                <p:commandButton value="ส่งออกรายงาน"
-                                                 ajax="false"
-                                                 action="#{isaReport.notLogonOver}">
-                                         <f:setPropertyActionListener value="3" target="#{isaReport.notLogonOverDay}"/>
+                                </tr>
+                                <tr>
+                                    <td class="title" >
+                                        <p:outputLabel value="From" />
+                                    </td>
+                                    <td >
+                                        <clv:BECalendar value="#{isaReport.dateFrom}"
+                                                        id="dateOfFrom"
+                                                        showOn="button"
+                                                        pattern="dd/MM/yyyy"
+                                                        yearRange="1950:2100"
+                                                        mindate="01/01/1950"
+                                                        navigator="true"
+                                                        locale="th_TH"
+                                                        showButtonPanel="true">
+                                        </clv:BECalendar>
+                                    </td>
+                                    <td class="title" >
+                                        <p:outputLabel value="To" />
+                                    </td>
+                                    <td >
+                                        <clv:BECalendar value="#{isaReport.dateTo}"
+                                                        id="dateOfTo"
+                                                        showOn="button"
+                                                        pattern="dd/MM/yyyy"
+                                                        yearRange="1950:2100"
+                                                        mindate="01/01/1950"
+                                                        navigator="true"
+                                                        locale="th_TH"
+                                                        showButtonPanel="true">
+                                        </clv:BECalendar>
+                                    </td>
+                                    <td>
+                                        <p:commandButton value="Download" styleClass="medium"
+                                                         update="@form"
+                                                         ajax="false"
+                                                         actionListener="#{isaReport.onSubmitReport()}" >
                                         </p:commandButton>
-                                <h:outputText value="รายงานการละเมิดหรือการเข้าสู่ระบบล้มเหลวของผู้ใช้ระบบ:"/>
-                                <p:commandButton value="ส่งออกรายงาน"
-                                                 action="#{isaReport.violationReport}"
-                                                 ajax="false"/>
-                                <h:outputText value="รายงานข้อมูลผู้ใช้:"/>
-                                <p:commandButton value="ส่งออกรายงาน"
-                                                 ajax="false"
-                                                 action="#{isaReport.userReport}"/>
-
-                            </p:panelGrid>
+                                    </td >
+                                </tr>
+                            </table>
                         </div>
                     </h:form>
                 </div>

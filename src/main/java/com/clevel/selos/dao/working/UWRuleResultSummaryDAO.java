@@ -18,7 +18,7 @@ public class UWRuleResultSummaryDAO extends GenericDAO<UWRuleResultSummary, Long
     public UWRuleResultSummaryDAO() {
     }
 
-    public UWRuleResultSummary findByWorkcaseId(long workCaseId){
+    public UWRuleResultSummary findByWorkCaseId(long workCaseId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         UWRuleResultSummary uwRuleResultSummary = (UWRuleResultSummary) criteria.uniqueResult();

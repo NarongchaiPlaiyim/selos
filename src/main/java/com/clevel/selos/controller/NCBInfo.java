@@ -129,7 +129,7 @@ public class NCBInfo extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid stepId
@@ -198,7 +198,7 @@ public class NCBInfo extends BaseController {
 
         initial();
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");

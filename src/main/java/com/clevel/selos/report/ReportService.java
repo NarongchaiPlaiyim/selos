@@ -21,10 +21,16 @@ public class ReportService implements Serializable {
     @SELOS
     Logger log;
 
-    public void init(){
+    @Inject
+    public ReportService() {
+
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
+    public void init(){
+
+    }
+
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
         log.debug("generate pdf.");
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
 
@@ -32,8 +38,12 @@ public class ReportService implements Serializable {
 
         log.info("parameters: {}",parameters);
 
-
-        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
+        if(dataSource != null && reportList != null && reportList.size() > 0){
+            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        } else {
+             print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        }
         log.debug("--Pring report.");
 
         try {
@@ -46,30 +56,6 @@ public class ReportService implements Serializable {
 
         } catch (JRException e) {
             log.error("Error generating pdf report!", e);
-        }
-    }
-
-    public void exportPDF(HttpServletRequest request, HttpServletResponse response, Map map, Collection reportList, String jasperName)
-            throws Exception {
-
-        ServletOutputStream servletOutputStream = response.getOutputStream();
-        InputStream reportStream = request.getSession().getServletContext().getResourceAsStream("/reports/" + jasperName + ".jasper");
-        response.setContentType("application/pdf");
-        try {
-            JRDataSource dataSource = null;
-            dataSource = new JRBeanCollectionDataSource(reportList);
-            if(dataSource != null && reportList != null && reportList.size() > 0)
-                JasperRunManager.runReportToPdfStream(reportStream, servletOutputStream, map, dataSource);
-            else
-                JasperRunManager.runReportToPdfStream(reportStream, servletOutputStream, map, new JREmptyDataSource());
-
-        } catch (Exception e) {
-            log.debug(e.getMessage());
-        } finally {
-            reportStream.close();
-            servletOutputStream.flush();
-            servletOutputStream.close();
-
         }
     }
 }

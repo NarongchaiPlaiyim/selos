@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
@@ -223,7 +224,7 @@ public class AppraisalResultControl extends BusinessControl {
             List<NewCollateralHead> newCollateralHeadList = Util.safetyList(newCollateral.getNewCollateralHeadList());
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                 newCollateralHead.setNewCollateral(newCollateral);
-                newCollateralHead.setProposeType("P");
+                newCollateralHead.setProposeType(ProposeType.P);
                 newCollateralHead.setAppraisalRequest(2);
                 List<NewCollateralSub> newCollateralSubList = Util.safetyList(newCollateralHead.getNewCollateralSubList());
                 for(NewCollateralSub newCollateralSub : newCollateralSubList){
@@ -305,7 +306,7 @@ public class AppraisalResultControl extends BusinessControl {
         }
     }
 
-    public AppraisalDataResult retrieveDataFromCOMS(final String jobID){
+    public AppraisalDataResult retrieveDataFromCOMS(final String jobID) throws COMSInterfaceException {
         log.debug("-- retrieveDataFromCOMS ::: jobID : {}", jobID);
         AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobID);
         return appraisalDataResult;

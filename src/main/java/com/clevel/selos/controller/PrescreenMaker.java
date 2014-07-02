@@ -245,7 +245,7 @@ public class PrescreenMaker extends BaseController {
     }
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         log.debug("preRender ::: setSession ");
 
         if (checkSession(session)) {
@@ -282,7 +282,7 @@ public class PrescreenMaker extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation :::");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (session.getAttribute("workCasePreScreenId") != null) {
             log.debug("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
@@ -2013,6 +2013,7 @@ public class PrescreenMaker extends BaseController {
                                     tmpSearchSpouseInfo.setSearchBy(1);
                                     searchSpouse = true;
                                 }
+                                log.debug("onSearchCustomerIfo ::: Search Spouse : {}", searchSpouse);
                                 if(searchSpouse) {
                                     tmpSearchSpouseInfo.setDocumentType(documentTypeDAO.findById(1));
                                     CustomerInfoResultView spouseCustomerResultView = prescreenBusinessControl.getCustomerInfoFromRM(tmpSearchSpouseInfo, user);
@@ -2516,7 +2517,7 @@ public class PrescreenMaker extends BaseController {
         boolean complete = false;
         try {
             if (prescreenView.getCheckerId() != null && !prescreenView.getCheckerId().equals("")) {
-                HttpSession session = FacesUtil.getSession(true);
+                HttpSession session = FacesUtil.getSession(false);
                 prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, Util.parseString(session.getAttribute("wobNumber"), ""), prescreenView.getCheckerId(), ActionCode.ASSIGN_TO_CHECKER.getVal());
                 complete = true;
                 messageHeader = "Information.";
