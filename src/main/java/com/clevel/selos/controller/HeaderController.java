@@ -12,7 +12,6 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -771,8 +770,9 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             User user = (User) session.getAttribute("user");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
             List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
 
@@ -790,7 +790,7 @@ public class HeaderController extends BaseController {
                     message = "Submit case fail. Please check return information before submit again.";
                 } else {
                     returnControl.saveReturnHistory(workCaseId,user);
-                    fullApplicationControl.submitCA(queueName, workCaseId);
+                    fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
 
                     messageHeader = "Information.";
                     message = "Submit case success";
@@ -1357,6 +1357,18 @@ public class HeaderController extends BaseController {
             log.error("-- Exception : ", e);
         }
         log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+
+    //AAD Committee
+    public void onCheckMandateForStepCheckDoc(){
+        log.debug("onCheckMandateForStepCheckDoc ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForStepCheckDoc ::: stop...");
     }
 
     private void callFullApp() throws Exception{

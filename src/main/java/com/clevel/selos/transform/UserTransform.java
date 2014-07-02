@@ -73,7 +73,7 @@ public class UserTransform extends Transform {
     }
 
     public User transformToNewModel(final IsaManageUserView view, final User user){
-        log.debug("-- transformToModel()");
+        log.debug("-- transformToNewModel(View : {})", view.toString());
         User model = null;
         if(!Util.isNull(view)){
             model = new User();
@@ -101,6 +101,7 @@ public class UserTransform extends Transform {
             if(!Util.isNull(view.getUserTitle())){
                 model.setTitle(view.getUserTitle());
             }
+            model.setActive(view.getActive());
             model.setUserStatus(view.getUserStatus());
             model.setCreateBy(user);
             model.setCreateDate(DateTime.now().toDate());
@@ -113,7 +114,7 @@ public class UserTransform extends Transform {
     public IsaManageUserView transformToISAView(final User model){
         log.debug("-- transformToISAView()");
         IsaManageUserView view = null;
-        log.debug("-- {}", model.toString());
+        log.debug("-- Model : {}", model.toString());
         if(!Util.isNull(model)){
             view = new IsaManageUserView();
             view.setId(model.getId());
@@ -159,7 +160,7 @@ public class UserTransform extends Transform {
             } else {
                 view.setUserZone(new UserZone());
             }
-            log.debug("-- View {}", view.toString());
+            log.debug("-- IsaManageUserView : {}", view.toString());
         }
         return view;
     }

@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -16,11 +17,16 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.ActionValidationControl;
 import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
 import com.clevel.selos.businesscontrol.PostAppBusinessControl;
+import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.model.view.UserAccessView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -43,6 +49,12 @@ public class PostAppGeneral implements Serializable  {
 	private PostAppBusinessControl postAppBusinessControl;
 	@Inject
 	private UserAccessControl userAccessControl;
+	@Inject
+	private ReturnControl returnControl;
+	@Inject
+	private ReasonDAO reasonDAO;
+	@Inject
+	private ActionValidationControl actionValidationControl;
 	
 	private long workCaseId = -1;
 	private long stepId = -1;
@@ -54,6 +66,8 @@ public class PostAppGeneral implements Serializable  {
 	private String submit02_Remark;
 	
 	//Return 01 Dialog
+	private List<ReturnInfoView> returnList;
+	private ReturnInfoView selectedReturnInfo;
 	private String return01_Remark;
 	private int return01_SelectedReasonId;
 	
@@ -104,6 +118,18 @@ public class PostAppGeneral implements Serializable  {
 	public List<SelectItem> getReturnReasonList() {
 		return returnReasonList;
 	}
+	public List<ReturnInfoView> getReturnList() {
+		return returnList;
+	}
+	public void setReturnList(List<ReturnInfoView> returnList) {
+		this.returnList = returnList;
+	}
+	public ReturnInfoView getSelectedReturnInfo() {
+		return selectedReturnInfo;
+	}
+	public void setSelectedReturnInfo(ReturnInfoView selectedReturnInfo) {
+		this.selectedReturnInfo = selectedReturnInfo;
+	}
 	/*
 	 * Action
 	 */
@@ -125,6 +151,60 @@ public class PostAppGeneral implements Serializable  {
 		}
 		returnReasonList = generalPeopleInfoControl.listReturnReasons();
 		cancelReasonList = generalPeopleInfoControl.listCancelReasons();
+		
+		
+	}
+	
+	public void onOpenReturnDialog() {
+		//loading prelist
+		returnList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+		if (returnList == null)
+			returnList = new ArrayList<ReturnInfoView>();
+		return01_Remark = "";
+		return01_SelectedReasonId = -1;
+		selectedReturnInfo = null;
+	}
+	public void onOpenReturnAddCodeDialog(boolean isNew) {
+		if (!isNew && selectedReturnInfo != null) {
+			return01_Remark = selectedReturnInfo.getReasonDetail();
+			return01_SelectedReasonId = selectedReturnInfo.getReasonId();
+		} else {
+			return01_Remark = "";
+			return01_SelectedReasonId = -1;
+		}
+	}
+	public void onSaveReturnReason() {
+		Reason reason = reasonDAO.findById(return01_SelectedReasonId);
+		if (reason == null) {
+			String msgStr = "Error : Cannot found return reason";
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,msgStr,msgStr);
+			FacesContext.getCurrentInstance().addMessage(null,msg); 
+			return;
+		}
+		if (selectedReturnInfo == null) {
+			selectedReturnInfo = new ReturnInfoView();
+			returnList.add(selectedReturnInfo);
+		}
+		
+		selectedReturnInfo.setReturnCode(reason.getCode());
+		selectedReturnInfo.setDescription(reason.getDescription());
+		selectedReturnInfo.setReasonDetail(return01_Remark);
+		selectedReturnInfo.setReasonId(reason.getId());
+		selectedReturnInfo.setCanEdit(true);
+		
+		return01_Remark = "";
+		return01_SelectedReasonId = -1;
+		selectedReturnInfo = null;
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeleteReturnReason() {
+		if (selectedReturnInfo == null)
+			return;
+		returnList.remove(selectedReturnInfo);
+		return01_Remark = "";
+		return01_SelectedReasonId = -1;
+		selectedReturnInfo = null;
 	}
 	
 	/*
@@ -165,7 +245,13 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onReturnToBDM() {
 		try {
-			postAppBusinessControl.returnToBDM(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
+			if (returnList == null || returnList.isEmpty()) {
+				String message = "Please select at least one return reason";
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,message,message);
+				FacesContext.getCurrentInstance().addMessage(null,msg);
+				return;
+			}
+			postAppBusinessControl.returnToBDM(workCaseId, queueName,wobNumber, returnList);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -175,7 +261,13 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onReturnUW2() {
 		try {
-			postAppBusinessControl.returnToUW2(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
+			if (returnList == null || returnList.isEmpty()) {
+				String message = "Please select at least one return reason";
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,message,message);
+				FacesContext.getCurrentInstance().addMessage(null,msg);
+				return;
+			}
+			postAppBusinessControl.returnToUW2(workCaseId, queueName,wobNumber,returnList);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -184,7 +276,13 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnDataEntry() {
 		try {
-			postAppBusinessControl.returnToDataEntry(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
+			if (returnList == null || returnList.isEmpty()) {
+				String message = "Please select at least one return reason";
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,message,message);
+				FacesContext.getCurrentInstance().addMessage(null,msg);
+				return;
+			}
+			postAppBusinessControl.returnToDataEntry(workCaseId, queueName,wobNumber, returnList);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -193,7 +291,13 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnToContactCenter() {
 		try {
-			postAppBusinessControl.returnToContactCenter(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
+			if (returnList == null || returnList.isEmpty()) {
+				String message = "Please select at least one return reason";
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,message,message);
+				FacesContext.getCurrentInstance().addMessage(null,msg);
+				return;
+			}
+			postAppBusinessControl.returnToContactCenter(workCaseId, queueName,wobNumber, returnList);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -202,7 +306,13 @@ public class PostAppGeneral implements Serializable  {
 	}
 	public void onReturnToLARBC() {
 		try {
-			postAppBusinessControl.returnToLARBC(workCaseId, queueName,wobNumber, return01_SelectedReasonId, return01_Remark);
+			if (returnList == null || returnList.isEmpty()) {
+				String message = "Please select at least one return reason";
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,message,message);
+				FacesContext.getCurrentInstance().addMessage(null,msg);
+				return;
+			}
+			postAppBusinessControl.returnToLARBC(workCaseId, queueName,wobNumber, returnList);
 			
 			_manageComplete();
 		} catch (Exception e) {
@@ -392,5 +502,6 @@ public class PostAppGeneral implements Serializable  {
 		return01_SelectedReasonId = -1;
 		cancel01_Remark = null;
 		cancel01_SelectedReasonId = -1;
+		selectedReturnInfo = null;
 	}
 }

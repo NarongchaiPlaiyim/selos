@@ -23,6 +23,7 @@
                             <label class="subject">Manage User</label>
                             <a class="step_border" href="manageUser.xhtml">User Profile</a>
                             <a class="step_border_select" href="userProfileUpload.xhtml">Upload User Profile</a>
+                            <a class="step_border" href="isaReport.xhtml">Report</a>
                         </div>
                         <div class="body_rpane">
                             <label class="subject">Upload User Profile</label>
@@ -76,7 +77,7 @@
                                 </tr>
                             </table>
                             <table>
-                                <ui:repeat value="#{isaUpload.downloadModelList}" var="downloadModel" varStatus="rowDownloadIndex">
+                                <ui:repeat value="#{isaUpload.downloadViewList}" var="downloadView" varStatus="rowDownloadIndex">
                                     <tr>
                                         <td style="width: 150px; min-width: 150px; max-width: 150px;" />
                                         <td style="width: 300px; min-width: 300px; max-width: 300px;" />
@@ -85,18 +86,18 @@
                                     </tr>
                                     <tr>
                                         <td class="title" >
-                                            <p:outputLabel value="#{downloadModel.date}">
+                                            <p:outputLabel value="#{downloadView.date}">
                                                 <f:convertDateTime pattern="dd-MM-yyyy HH:mm " />
                                             </p:outputLabel>
                                         </td>
                                         <td >
-                                            <p:outputLabel value="#{downloadModel.fileName}" />
+                                            <p:outputLabel value="#{downloadView.fileName}" />
                                         </td>
                                         <td class="title" >
                                             <p:commandButton value="Download" styleClass="medium"
                                                              update=":msgBoxSystemMessagePanel, @form"
                                                              ajax="false"
-                                                             actionListener="#{isaUpload.onSubmitDownloadResultFile(downloadModel.fullPath)}" >
+                                                             actionListener="#{isaUpload.onSubmitDownloadResultFile(downloadView.fullPath)}" >
                                                 <p:fileDownload value="#{isaUpload.streamedContent}" />
                                             </p:commandButton>
                                         </td>

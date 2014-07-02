@@ -1,8 +1,8 @@
-package com.clevel.selos.businesscontrol.isa.csv.validation;
+package com.clevel.selos.businesscontrol.isa;
 
-import com.clevel.selos.businesscontrol.isa.csv.command.CommandType;
-import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
+import com.clevel.selos.model.CommandType;
 import com.clevel.selos.model.UserStatus;
+import com.clevel.selos.model.view.isa.CSVModel;
 import com.clevel.selos.util.Util;
 
 public class ValidationImp{

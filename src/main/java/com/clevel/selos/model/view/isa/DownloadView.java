@@ -1,4 +1,4 @@
-package com.clevel.selos.controller.isa.download.model;
+package com.clevel.selos.model.view.isa;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -6,12 +6,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.util.Date;
 
-public class DownloadModel implements Serializable{
+public class DownloadView implements Serializable{
     private Date date;
     private String fullPath;
     private String fileName;
 
-    public DownloadModel(Date date, String fullPath, String fileName) {
+    public DownloadView(Date date, String fullPath, String fileName) {
         this.date = date;
         this.fullPath = fullPath;
         this.fileName = fileName;

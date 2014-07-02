@@ -1,25 +1,18 @@
 package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
-import com.clevel.selos.businesscontrol.isa.csv.command.CommandType;
-import com.clevel.selos.businesscontrol.isa.csv.model.CSVModel;
-import com.clevel.selos.businesscontrol.isa.csv.model.ResultModel;
-import com.clevel.selos.businesscontrol.isa.csv.service.CSVService;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
-import com.clevel.selos.controller.isa.download.model.DownloadModel;
 import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.CommandType;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.db.audit.IsaActivity;
 import com.clevel.selos.model.db.audit.SecurityActivity;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.isa.IsaAuditLogView;
-import com.clevel.selos.model.view.isa.IsaManageUserView;
-import com.clevel.selos.model.view.isa.IsaSearchView;
-import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.model.view.isa.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.IsaAuditor;
 import com.clevel.selos.transform.UserTransform;
@@ -165,13 +158,13 @@ public class IsaBusinessControl extends BusinessControl {
         return fullPath;
     }
 
-    public DownloadModel importProcess(final InputStream inputStream) throws Exception {
+    public DownloadView importProcess(final InputStream inputStream) throws Exception {
         log.debug("-- importProcess()");
         List<CSVModel> csvModelList = Util.safetyList(csvService.CSVImport(inputStream));
         List<ResultModel> resultModelList = null;
         ResultModel resultModel = null;
         StringBuilder stringBuilder = null;
-        DownloadModel downloadModel = null;
+        DownloadView downloadModel = null;
         if(!Util.isZero(csvModelList.size())){
             resultModelList = new ArrayList<ResultModel>();
 
@@ -198,7 +191,7 @@ public class IsaBusinessControl extends BusinessControl {
                 stringBuilder = new StringBuilder().append(path).append(fileName);
                 final String fullPath = stringBuilder.toString();
                 csvService.CSVExport(fullPath, resultModelList, null);
-                downloadModel = new DownloadModel(DateTime.now().toDate(), fullPath, fileName);
+                downloadModel = new DownloadView(DateTime.now().toDate(), fullPath, fileName);
             }
         }
         return downloadModel;
