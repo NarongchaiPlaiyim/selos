@@ -2,7 +2,6 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalDetailView;
@@ -117,7 +116,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
                 for(NewCollateral newCollateral : newCollateralList){
                     //newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
-                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
