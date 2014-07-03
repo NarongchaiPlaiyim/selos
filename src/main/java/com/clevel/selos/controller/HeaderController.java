@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
@@ -13,6 +14,7 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
@@ -58,6 +60,8 @@ public class HeaderController extends BaseController {
     UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -205,6 +209,7 @@ public class HeaderController extends BaseController {
 
     //Check NCB result (if red , cannot submit CA and cannot check prescreen again)
     private boolean canCheckPreScreen;
+    private boolean canCheckFullApp;
 
     private int timesOfCriteriaCheck;
 
@@ -252,6 +257,17 @@ public class HeaderController extends BaseController {
                     canCheckPreScreen = true;
                 } else {
                     canCheckPreScreen = false;
+                }
+            }
+        }
+
+        if(workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(workCase!=null && workCase.getId()>0){
+                if(workCase.getNcbRejectFlag()==0){
+                    canCheckFullApp = true;
+                } else {
+                    canCheckFullApp = false;
                 }
             }
         }
@@ -1127,7 +1143,7 @@ public class HeaderController extends BaseController {
                             uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
                             //TODO: wait to confirm spec
-                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,user)){
+                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
                                 canCheckPreScreen = false;
                             } else {
                                 canCheckPreScreen = true;
@@ -1826,6 +1842,13 @@ public class HeaderController extends BaseController {
                             //----Update Times of Check Criteria----//
                             fullApplicationControl.updateTimeOfCheckCriteria(workCaseId, stepId);
                             fullApplicationControl.clearCaseUpdateFlag(workCaseId);
+
+                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,0,workCaseId,user)){
+                                canCheckFullApp = false;
+                            } else {
+                                canCheckFullApp = true;
+                            }
+                            headerControl.updateNCBRejectFlagFullApp(workCaseId, canCheckFullApp);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
@@ -2473,6 +2496,14 @@ public class HeaderController extends BaseController {
 
     public void setCanCheckPreScreen(boolean canCheckPreScreen) {
         this.canCheckPreScreen = canCheckPreScreen;
+    }
+
+    public boolean isCanCheckFullApp() {
+        return canCheckFullApp;
+    }
+
+    public void setCanCheckFullApp(boolean canCheckFullApp) {
+        this.canCheckFullApp = canCheckFullApp;
     }
 
     public int getRequestAppraisalRequire() {

@@ -14,10 +14,6 @@ import java.util.Date;
 @Table(name = "rpt_reject_letter")
 public class RejectedLetter implements Serializable{
     @Id
-    @OneToOne
-    @JoinColumn(name = "workcase_prescreen_id")
-    private WorkCasePrescreen workCasePrescreen;
-
     @Column(name = "app_number", length = 30,nullable = false)
     protected String appNumber;
 
@@ -81,14 +77,6 @@ public class RejectedLetter implements Serializable{
 
     @Column(name = "zone_name", length = 50)
     protected String zoneName;
-
-    public WorkCasePrescreen getWorkCasePrescreen() {
-        return workCasePrescreen;
-    }
-
-    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
-        this.workCasePrescreen = workCasePrescreen;
-    }
 
     public String getAppNumber() {
         return appNumber;
@@ -261,7 +249,6 @@ public class RejectedLetter implements Serializable{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("workCasePrescreen", workCasePrescreen)
                 .append("appNumber", appNumber)
                 .append("rejectedDate", rejectedDate)
                 .append("hubCode", hubCode)
