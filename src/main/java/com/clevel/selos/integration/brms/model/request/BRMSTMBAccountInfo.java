@@ -12,7 +12,7 @@ public class BRMSTMBAccountInfo implements Serializable{
     private String dataSource;
     private String accountRef;
     private String custToAccountRelationCD;
-    private boolean tmbTDRFlag;
+    private String tmbTDRFlag;
     private BigDecimal numMonthIntPastDue;
     private BigDecimal numMonthIntPastDueTDRAcc;
     private BigDecimal tmbDelPriDay;
@@ -51,11 +51,11 @@ public class BRMSTMBAccountInfo implements Serializable{
         this.custToAccountRelationCD = custToAccountRelationCD;
     }
 
-    public boolean isTmbTDRFlag() {
+    public String getTmbTDRFlag() {
         return tmbTDRFlag;
     }
 
-    public void setTmbTDRFlag(boolean tmbTDRFlag) {
+    public void setTmbTDRFlag(String tmbTDRFlag) {
         this.tmbTDRFlag = tmbTDRFlag;
     }
 
