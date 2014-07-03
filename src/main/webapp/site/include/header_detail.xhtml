@@ -105,7 +105,7 @@
     <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
-                     disabled="#{not headerController.canCloseSale and not headerController.canCheckPreScreen}"
+                     disabled="#{not headerController.canCloseSale or not headerController.canCheckPreScreen}"
                      type="button"
                      onclick="confrmCloseSaleCA.show()"/>
     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
