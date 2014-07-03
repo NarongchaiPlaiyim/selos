@@ -256,7 +256,7 @@ public class HeaderControl extends BusinessControl {
         return requestAppraisal;
     }
 
-    public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, User user) throws Exception{
+    public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
         log.debug("ncbResultValidation()");
         if(uwRuleResultSummaryView!=null){
             Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
@@ -270,7 +270,7 @@ public class HeaderControl extends BusinessControl {
                             && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")){
                         if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
                             log.debug("NCB Result is RED, auto reject case!");
-                            ncbInterface.generateRejectedLetter(user.getId(),workCasePreScreenId);
+                            ncbInterface.generateRejectedLetter(user.getId(),workCasePreScreenId,workCaseId);
                             return false;
                         }
                     }
@@ -288,5 +288,15 @@ public class HeaderControl extends BusinessControl {
             workCasePrescreen.setNcbRejectFlag(1);
         }
         workCasePrescreenDAO.persist(workCasePrescreen);
+    }
+
+    public void updateNCBRejectFlagFullApp(long workCaseId, boolean canCheckFullApp){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(canCheckFullApp){
+            workCase.setNcbRejectFlag(0);
+        } else {
+            workCase.setNcbRejectFlag(1);
+        }
+        workCaseDAO.persist(workCase);
     }
 }

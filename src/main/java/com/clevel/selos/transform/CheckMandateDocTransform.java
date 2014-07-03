@@ -149,6 +149,7 @@ public class CheckMandateDocTransform extends Transform {
             model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(model,  Util.safetyList(view.getBRMSDocumentTypeList())));
             model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(model, Util.safetyList(view.getOwnewList())));
             model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(model, Util.safetyList(view.getFileNameViewList())));
+            log.debug("-- CheckMandatoryDocView[{}]", model.toString());
             mandateDocList.add(model);
         }
 
@@ -170,6 +171,7 @@ public class CheckMandateDocTransform extends Transform {
             model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(model, Util.safetyList(view.getBRMSDocumentTypeList())));
             model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(model, Util.safetyList(view.getOwnewList())));
             model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(model, Util.safetyList(view.getFileNameViewList())));
+            log.debug("-- CheckOptionalDocView[{}]", model.toString());
             mandateDocList.add(model);
         }
 
@@ -191,6 +193,7 @@ public class CheckMandateDocTransform extends Transform {
             model.setMandateDocBRMSList(checkMandateDocBRMSTransform.transformToModel(model, Util.safetyList(view.getBRMSDocumentTypeList())));
             model.setMandateDocCustList(checkMandateDocCustTransform.transformToModel(model, Util.safetyList(view.getOwnewList())));
             model.setMandateDocFileNameList(checkMandateDocFileNameTransform.transformToModel(model, Util.safetyList(view.getFileNameViewList())));
+            log.debug("-- CheckOtherDocView[{}]", model.toString());
             mandateDocList.add(model);
         }
         return mandateDocList;

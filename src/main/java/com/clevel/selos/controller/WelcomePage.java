@@ -470,7 +470,7 @@ public class WelcomePage implements Serializable {
     public void testRejectLetter() {
         try {
             log.debug("testRejectLetter.");
-            ncbInterface.generateRejectedLetter("10001",2);
+            ncbInterface.generateRejectedLetter("10001",2,0);
         } catch (Exception e) {
             log.error("", e);
         }
@@ -533,7 +533,7 @@ public class WelcomePage implements Serializable {
                         if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
                             log.debug("NCB Result is RED, auto reject case!");
                             try {
-                                ncbInterface.generateRejectedLetter("10001",2);
+                                ncbInterface.generateRejectedLetter("10001",2,0);
                                 //canCheckPreScreen = false;
                             } catch (Exception e) {
                                 log.error("", e);

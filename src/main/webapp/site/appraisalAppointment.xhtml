@@ -351,7 +351,9 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>
                                 </td>
                                 <td >
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}" maxlength="50" />
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"
+                                                 required="true"
+                                                 maxlength="50" />
                                 </td>
                             </tr>
                             <tr>

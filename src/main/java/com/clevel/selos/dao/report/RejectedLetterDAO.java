@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class RejectedLetterDAO extends GenericDAO<RejectedLetter, Long> {
+public class RejectedLetterDAO extends GenericDAO<RejectedLetter, String> {
     @Inject
     @SELOS
     Logger log;
@@ -18,10 +18,4 @@ public class RejectedLetterDAO extends GenericDAO<RejectedLetter, Long> {
     public RejectedLetterDAO() {
     }
 
-    public RejectedLetter findByWorkCaseId(long workCaseId) {
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        RejectedLetter rejectedLetter = (RejectedLetter) criteria.uniqueResult();
-        return rejectedLetter;
-    }
 }
