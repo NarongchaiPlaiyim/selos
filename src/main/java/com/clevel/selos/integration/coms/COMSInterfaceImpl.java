@@ -32,7 +32,7 @@ public class COMSInterfaceImpl implements COMSInterface, Serializable {
 
     }
 
-    public AppraisalDataResult getAppraisalData(String userId, String jobNo){
+    public AppraisalDataResult getAppraisalData(String userId, String jobNo) throws COMSInterfaceException{
         AppraisalDataResult appraisalDataResult = new AppraisalDataResult();
         //TODO: add audit log
         try{

@@ -298,7 +298,19 @@ public class AppraisalResult implements Serializable {
             } catch (Exception e){
                 log.error("Exception ::: {}",e);
                 messageHeader = "Exception";
-                message = e.getMessage();
+
+                if(!Util.isNull(e.getMessage())){
+                    if(e.getMessage().indexOf("Data Not Found!") > -1){
+                        message = "Data Not Found!";
+                    }
+                } else {
+                    message = e.getMessage();
+                }
+                if("See nested exception; nested exception is: COMSInterfaceException[code=053,message=Data Not Found!]".equalsIgnoreCase(e.getMessage())){
+                    message = "Data Not Found!";
+                } else {
+                    message = e.getMessage();
+                }
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
