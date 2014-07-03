@@ -254,16 +254,15 @@ public class CheckMandateDocControl extends BusinessControl{
             workCase = workCaseDAO.findById(workCaseId);
         } else {
             log.info("-- onSaveMandateDoc ::: workCasePreScreenId : {}", workCasePreScreenId);
-            mandateDocList = Util.safetyList(mandateDocDAO.findByWorkCasePreScreenIdAndRole(workCasePreScreenId, user.getRole().getId()));
-            workCasePrescreen = workCasePrescreenDAO.findById(workCaseId);
+            mandateDocList = mandateDocDAO.findByWorkCasePreScreenIdAndRole(workCasePreScreenId, user.getRole().getId());
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         }
 
-        if(!Util.isZero(mandateDocList.size())){
+        if(!Util.isNull(mandateDocList) && !Util.isZero(mandateDocList.size())){
             delete(mandateDocList);
         }
-        mandateDocList = null;
-        mandateDocList = Util.safetyList(checkMandateDocTransform.transformToModel(checkMandateDocView, workCase, workCasePrescreen, user.getRole()));
-        if(!Util.isZero(mandateDocList.size())){
+        mandateDocList = checkMandateDocTransform.transformToModel(checkMandateDocView, workCase, workCasePrescreen, user.getRole());
+        if(!Util.isNull(mandateDocList) && !Util.isZero(mandateDocList.size())){
             save(mandateDocList);
         }
     }
@@ -875,9 +874,9 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- save start");
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
         try {
-            for(MandateDoc mandateDoc : mandateDocList){
+            for(final MandateDoc mandateDoc : mandateDocList){
                 mandateDocDAO.persist(mandateDoc);
-                log.debug("-- MandateDoc[{}]", mandateDoc);
+                log.debug("-- MandateDoc[{}]", mandateDoc.toString());
             }
             log.debug("-- save stop");
         } catch (Exception e) {
@@ -888,7 +887,7 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- delete start");
         log.debug("-- MandateDocList.size()[{}]", mandateDocList.size());
         try {
-            for(MandateDoc mandateDoc : mandateDocList){
+            for(final MandateDoc mandateDoc : mandateDocList){
                 mandateDocDAO.delete(mandateDoc);
                 log.debug("-- MandateDoc.id[{}] deleted", mandateDoc.getId());
             }

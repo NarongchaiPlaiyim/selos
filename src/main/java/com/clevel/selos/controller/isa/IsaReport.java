@@ -4,10 +4,8 @@ import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.report.ISAViewReport;
-import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
-import com.clevel.selos.report.ReportService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.CsvExport;
 import com.clevel.selos.util.DateTimeUtil;
@@ -51,9 +49,6 @@ public class IsaReport implements Serializable {
 
     @Inject
     private STPExecutor stpExecutor;
-
-//    @Inject
-//    private ReportService reportService;
 
     @Inject
     @Config(name = "reportisa.violation")
@@ -323,10 +318,6 @@ public class IsaReport implements Serializable {
 
     public void onPrintViolation(){
         log.debug("--on onPrintViolation.");
-//        reportView.setNameISAReportViolation(nameISAViolation.toString());
-//
-//        reportView.setNameISAReportUserProfile(nameISAUserProfile.toString());
-
         try {
             StringBuilder nameISAViolation = new StringBuilder();
             nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());

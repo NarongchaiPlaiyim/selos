@@ -7,7 +7,10 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.MandateDocument;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
@@ -847,9 +850,9 @@ public class BRMSControl extends BusinessControl {
             if(!Util.isNull(applicationInfo)){
                 docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
                 if(!Util.isNull(docCustomerResponse)){
+                    mandateDocResponseView = new MandateDocResponseView();
                     logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
                     if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                        mandateDocResponseView = new MandateDocResponseView();
                         Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
                         mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                         mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
