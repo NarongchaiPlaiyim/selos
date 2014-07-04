@@ -22,46 +22,20 @@
                         <div class="body_lpane">
                             <label class="subject">Manage User</label>
                             <a class="step_border" href="manageUser.xhtml">User Profile</a>
-                            <a class="step_border_select" href="userProfileUpload.xhtml">Upload User Profile</a>
-                            <a class="step_border" href="isaReport.xhtml">Report</a>
+                            <a class="step_border_select" >Upload User Profile</a>
+                            <label class="subject">Report</label>
+                            <a class="step_border" href="isaReport.xhtml">ISA Reports</a>
                         </div>
                         <div class="body_rpane">
                             <label class="subject">Upload User Profile</label>
                             <table border="0">
                                 <tr>
-                                    <td style="width: 120px; min-width: 120px; max-width: 120px;" />
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px;" />
                                     <td style="width: 300px; min-width: 300px; max-width: 300px;" />
                                 </tr>
                                 <tr>
                                     <td class="title" >
-                                        <p:outputLabel value="Export :"/>
-                                    </td>
-                                    <td>
-                                        <p:commandButton value="Download"
-                                                         styleClass="medium"
-                                                         actionListener="#{isaUpload.onSubmitExportCSV()}"
-                                                         update=":msgBoxSystemMessagePanel, @form"
-                                                         allowTypes="/(\.|\/)(csv)$/"
-                                                         ajax="false">
-                                            <p:fileDownload value="#{isaUpload.streamedContent}" />
-                                        </p:commandButton>
-
-                                    </td>
-                                </tr>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr/>
-                                <tr>
-                                    <td class="title" >
-                                        <p:outputLabel value="Import :"/>
+                                        <p:outputLabel value="เลือก File ข้อมูลผู้ใช้ระบบ (*.csv) :"/>
                                     </td>
                                     <td colspan="2">
                                         <p:fileUpload fileUploadListener="#{isaUpload.onSubmitImportCSV}"
@@ -76,15 +50,18 @@
                                     </td>
                                 </tr>
                             </table>
-                            <table>
+                            <table border="0" >
                                 <ui:repeat value="#{isaUpload.downloadViewList}" var="downloadView" varStatus="rowDownloadIndex">
                                     <tr>
+                                        <td style="width: 100px; min-width: 100px; max-width: 100px;" />
                                         <td style="width: 150px; min-width: 150px; max-width: 150px;" />
                                         <td style="width: 300px; min-width: 300px; max-width: 300px;" />
-                                        <td style="width: 120px; min-width: 120px; max-width: 120px;" />
-
+                                        <td style="width: 150px; min-width: 150px; max-width: 150px;" />
                                     </tr>
                                     <tr>
+                                        <td class="title" >
+                                            <p:outputLabel value="Upload Time :"/>
+                                        </td>
                                         <td class="title" >
                                             <p:outputLabel value="#{downloadView.date}">
                                                 <f:convertDateTime pattern="dd-MM-yyyy HH:mm " />
