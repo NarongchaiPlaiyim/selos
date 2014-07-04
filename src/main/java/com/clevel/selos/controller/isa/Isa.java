@@ -234,7 +234,7 @@ public class Isa implements Serializable {
         try {
             isaBusinessControl.deleteUserById(id);
             stringBuilder=new StringBuilder();
-            isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
+            isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(id).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
             onLoadAllUser();
             message = Result.Success.toString();
             context.execute("msgBoxSystemMessageDlg.show()");
