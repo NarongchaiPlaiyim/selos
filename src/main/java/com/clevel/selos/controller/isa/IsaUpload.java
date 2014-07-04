@@ -50,28 +50,10 @@ public class IsaUpload implements Serializable {
 
     private void onLoadDownloadModel(){
         log.debug("-- onLoadDownloadModel()");
-        downloadViewList = new ArrayList<DownloadView>();
-    }
-
-    public void onSubmitExportCSV(){
-        log.debug("-- onSubmitExportCSV()");
-        RequestContext context = RequestContext.getCurrentInstance();
-        complete = true;
-        messageHeader = "Export to CSV";
-        try {
-            final String fullPath = isaBusinessControl.exportProcess();
-            if(!Util.isNull(fullPath)){
-                streamedContent = downloadService.process(fullPath);
-            }
-            message = Result.Success.toString();
-        } catch (Exception e){
-            if (e.getCause() != null) {
-                message = e.getCause().getMessage();
-            } else {
-                message = e.getMessage();
-            }
+        downloadViewList = isaBusinessControl.getFileUploaded();
+        if(Util.isNull(downloadViewList) || Util.isZero(downloadViewList.size())){
+            downloadViewList = new ArrayList<DownloadView>();
         }
-        context.execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onSubmitImportCSV(FileUploadEvent event){
