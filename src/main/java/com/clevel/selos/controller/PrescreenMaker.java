@@ -284,18 +284,17 @@ public class PrescreenMaker extends BaseController {
         log.debug("onCreation :::");
         HttpSession session = FacesUtil.getSession(false);
 
-        if (session.getAttribute("workCasePreScreenId") != null) {
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        queueName = Util.parseString(session.getAttribute("queueName"), "");
+        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+
+        if (workCasePreScreenId != 0) {
             log.debug("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.debug("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
 
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-            queueName = Util.parseString(session.getAttribute("queueName"), "");
-            wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             caseBorrowerTypeId = prescreenBusinessControl.getCaseBorrowerTypeId(workCasePreScreenId);
             log.debug("onCreation ::: caseBorrowerTYpeId : {}", caseBorrowerTypeId);
-
-
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
             log.debug("onCreation ::: stepId : {}", stepId);
             log.debug("onCreation ::: queueName : {}", queueName);
@@ -310,6 +309,11 @@ public class PrescreenMaker extends BaseController {
             onLoadSelectList();
             onClearObject();
             onCheckButton();
+        } else {
+            //--- Redirect to Inbox ---//
+            log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
@@ -2016,6 +2020,7 @@ public class PrescreenMaker extends BaseController {
                                 log.debug("onSearchCustomerIfo ::: Search Spouse : {}", searchSpouse);
                                 if(searchSpouse) {
                                     tmpSearchSpouseInfo.setDocumentType(documentTypeDAO.findById(1));
+                                    tmpSearchSpouseInfo.setSearchBy(1);
                                     CustomerInfoResultView spouseCustomerResultView = prescreenBusinessControl.getCustomerInfoFromRM(tmpSearchSpouseInfo, user);
 
                                     if(spouseCustomerResultView.getActionResult() == ActionResult.SUCCESS) {
@@ -2102,10 +2107,12 @@ public class PrescreenMaker extends BaseController {
             } else {
                 //enableDocumentType = false;
                 if (borrowerInfo.getDocumentType() != null) {
-                    if (borrowerInfo.getDocumentType().getId() == 1 || borrowerInfo.getDocumentType().getId() == 2) {
+                    if (borrowerInfo.getDocumentType().getId() == 1 ) {
                         if (borrowerInfo.getSearchId().length() > 12) {
                             borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0, 13));
                         }
+                    } else if(borrowerInfo.getDocumentType().getId() == 2){
+                        borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
                     } else if (borrowerInfo.getDocumentType().getId() == 3) {
                         if (borrowerInfo.getSearchId().length() > 12) {
                             borrowerInfo.setRegistrationId(borrowerInfo.getSearchId().substring(0, 13));

@@ -128,7 +128,10 @@
                                 <p:outputLabel  value="#{creditTypeRelated.creditFacility}" />
                             </p:column>
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeRelated.limit}" />
+                                <p:outputLabel  value="#{creditTypeRelated.limit}">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="19"/>
+                                </p:outputLabel>
                             </p:column>
                         </p:dataTable>
                     </td>

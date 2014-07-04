@@ -263,7 +263,16 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getBusinessLocation() != null)
             applicationInfo.setBizLocation(String.valueOf(prescreen.getBusinessLocation().getCode()));
 
-        applicationInfo.setYearInBusinessMonth(new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now)));
+        //---- Check register date is older than reference date : use older date to send BRMS ----
+        BigDecimal registerDateMonth = new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now));
+        BigDecimal referenceDateMonth = new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getReferredDate(), now));
+        BigDecimal yearInBusinessMonth;
+        if(registerDateMonth.compareTo(referenceDateMonth) > 0)
+            yearInBusinessMonth = registerDateMonth;
+        else
+            yearInBusinessMonth = referenceDateMonth;
+
+        applicationInfo.setYearInBusinessMonth(yearInBusinessMonth);
         if(prescreen.getCountryOfRegister() != null)
             applicationInfo.setCountryOfRegistration(prescreen.getCountryOfRegister().getCode2());
 

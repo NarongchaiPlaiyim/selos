@@ -213,7 +213,7 @@ public class PESQLInbox implements Serializable
         }
 
         //Clear all session
-        session = FacesUtil.getSession(false);
+        session = FacesUtil.getSession(true);
 
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseAppraisalId", 0L);

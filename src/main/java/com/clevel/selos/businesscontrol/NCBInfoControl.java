@@ -235,7 +235,16 @@ public class NCBInfoControl extends BusinessControl {
 
             ncbInfoView.setTdrFlag(0);
             if(isTDRTMB || isTDROther){
+                Calendar calTmp = Calendar.getInstance();
+                calTmp.setTime(new Date());
                 ncbInfoView.setTdrFlag(2);
+                ncbInfoView.setTdrTMBFlag(false);
+                ncbInfoView.setTdrTMBMonth(calTmp.get(Calendar.MONTH) + 1);
+                ncbInfoView.setTdrTMBYear(calTmp.get(Calendar.YEAR));
+                ncbInfoView.setTdrOtherFlag(false);
+                calTmp.setTime(lastTDRDateOther);
+                ncbInfoView.setTdrOtherMonth(calTmp.get(Calendar.MONTH) + 1);
+                ncbInfoView.setTdrOtherYear(calTmp.get(Calendar.YEAR));
                 if(isTDRTMB){
                     ncbInfoView.setTdrTMBFlag(true);
                     Calendar cal = Calendar.getInstance();
@@ -256,7 +265,15 @@ public class NCBInfoControl extends BusinessControl {
 
             ncbInfoView.setNplFlag(0);
             if(isNPLTMB || isNPLOther){
+                Calendar calTmp = Calendar.getInstance();
+                calTmp.setTime(new Date());
                 ncbInfoView.setNplFlag(2);
+                ncbInfoView.setNplTMBFlag(false);
+                ncbInfoView.setNplTMBMonth(calTmp.get(Calendar.MONTH) + 1);
+                ncbInfoView.setNplTMBYear(calTmp.get(Calendar.YEAR));
+                ncbInfoView.setNplOtherFlag(false);
+                ncbInfoView.setNplOtherMonth(calTmp.get(Calendar.MONTH) + 1);
+                ncbInfoView.setNplOtherYear(calTmp.get(Calendar.YEAR));
                 if(isNPLTMB){
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(lastNPLDateTMB);
@@ -272,7 +289,7 @@ public class NCBInfoControl extends BusinessControl {
                     ncbInfoView.setNplOtherYear(cal.get(Calendar.YEAR));
                 }
             } else {
-                ncbInfoView.setTdrFlag(1);
+                ncbInfoView.setNplFlag(1);
             }
         }
         return ncbInfoView;
