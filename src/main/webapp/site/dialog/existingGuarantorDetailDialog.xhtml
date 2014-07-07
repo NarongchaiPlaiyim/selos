@@ -21,7 +21,7 @@
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.guarantorList}"
                                            var="guarantorList"
-                                           itemLabel="#{guarantorList.firstNameTh}"
+                                           itemLabel="#{guarantorList.titleTh.titleTh}#{guarantorList.firstNameTh} #{guarantorList.lastNameTh}"
                                            itemValue="#{guarantorList.id}"/>
                             <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
