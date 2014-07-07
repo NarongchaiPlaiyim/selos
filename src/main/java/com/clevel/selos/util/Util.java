@@ -57,6 +57,9 @@ public class Util implements Serializable {
         return createDateStringTH(date, "dd/MM/yyyy HH:mm");
     }
 
+    public static<T> boolean isSafetyList(final List<T> list){
+        return !Util.isNull(list) && !Util.isZero(list.size());
+    }
 
     public static String getFileNameForISA() {
         return createDateString(DateTime.now().toDate(), "yyyyyMMddHHmmss");

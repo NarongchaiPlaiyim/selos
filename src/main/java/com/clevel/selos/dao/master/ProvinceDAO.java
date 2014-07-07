@@ -3,12 +3,14 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 
 public class ProvinceDAO extends GenericDAO<Province, Integer> {
@@ -27,6 +29,25 @@ public class ProvinceDAO extends GenericDAO<Province, Integer> {
         List<Province> provinces = criteria.list();
         log.debug("findAll. (result: {})",provinces.size());
         return provinces;
+    }
+
+    public List<Province> findAllASC(){
+        log.debug("-- findAllASC()");
+        List<Province> provinceList = null;
+        Criteria criteria = createCriteria();
+        criteria.addOrder(Order.asc("name"));
+        provinceList = Util.safetyList((List<Province>) criteria.list());
+        int round = 0;
+        if(Util.isSafetyList(provinceList)){
+            for(final Province province : provinceList){
+                if(province.getCode() == 10){
+                    Collections.swap(provinceList, 0, round);
+                }
+                round++;
+            }
+        }
+        log.debug("-- ProvinceList.size()[{}]", provinceList.size());
+        return provinceList;
     }
 
     public List<Province> getListOrderByParameter(String orderField) {

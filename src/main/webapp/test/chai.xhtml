@@ -19,6 +19,32 @@
             <p:panel header="ISATestHeader">
                 <h:panelGrid columns="2">
 
+                    <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                        <p:selectOneMenu id="locationOfPropertyId"
+                                         size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
+                                >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{TestNCRS.provinceList}"
+                                           var="locationProperty"
+                                           itemLabel="#{locationProperty.name}"
+                                           itemValue="#{locationProperty.code}"/>
+                        </p:selectOneMenu>
+                    </td>
+
+
+                    <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                        <p:selectOneMenu id="CompanyId"
+                                         size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
+                                >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{TestNCRS.appraisalCompanyList}"
+                                           var="com"
+                                           itemLabel="#{com.name}"
+                                           itemValue="#{com.code}"/>
+                        </p:selectOneMenu>
+                    </td>
+
+
                     <h:outputText value=""/>
                     <p:commandButton id="submitOnClickISATest" value="Update" update="@form"
                                      action="#{TestNCRS.onClickISA()}"/>

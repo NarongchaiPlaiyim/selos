@@ -1,8 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.AppraisalCompanyDAO;
+import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RequestAppraisalValue;
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
@@ -54,7 +58,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private ContactRecordDetailTransform contactRecordDetailTransform;
     @Inject
     private ContactRecordDetailDAO contactRecordDetailDAO;
-
+    @Inject
+    private AppraisalCompanyDAO appraisalCompanyDAO;
     private Appraisal appraisal;
     private AppraisalView appraisalView;
     private List<AppraisalContactDetail> appraisalContactDetailList;
@@ -69,10 +74,20 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private NewCreditFacility newCreditFacility;
     private CustomerAcceptance customerAcceptance;
     private ContactRecordDetail contactRecordDetail;
+    @Inject
+    private ProvinceDAO provinceDAO;
 
     @Inject
     public AppraisalAppointmentControl(){
 
+    }
+
+    public List<Province> getProvince(){
+        return provinceDAO.findAllASC();
+    }
+
+    public List<AppraisalCompany> getCompany(){
+        return appraisalCompanyDAO.findAllASC();
     }
 	
 	public AppraisalView getAppraisalAppointment(final long workCaseId, final long workCasePreScreenId){
