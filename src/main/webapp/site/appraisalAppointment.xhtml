@@ -155,7 +155,7 @@
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                        <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appointmentDate" />
+                                        <!--<p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appointmentDate" />-->
                                     </clv:BECalendar>
                                 </td>
                                 <td class="title">
@@ -345,6 +345,7 @@
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                        <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appraisalDate" />
                                     </clv:BECalendar>
                                 </td>
                                 <td class="title">

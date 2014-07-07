@@ -606,7 +606,8 @@ public class AppraisalAppointment implements Serializable {
 
         dueDate = addedDate.toDate();
         appraisalView.setDueDate(dueDate);
-        appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());
+//        appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());  //Edited by Chai for fixed issue
+        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
     }
 
     public void onOpenAddContactRecordDialog() {
