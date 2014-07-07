@@ -18,6 +18,7 @@ import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.transform.SettlementStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -36,6 +37,8 @@ public class NCBBizTransform extends BusinessTransform {
     AccountStatusDAO accountStatusDAO;
     @Inject
     SettlementStatusDAO settlementStatusDAO;
+    @Inject
+    SettlementStatusTransform settlementStatusTransform;
 
     private final int SIX_MONTH = 6;
     private final int TWELVE_MONTH = 12;
@@ -258,7 +261,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             if (!Util.isEmpty(subjectAccountModel.getPaymt01())) {
                                                 settlementStatus = settlementStatusDAO.getIndividualByCode(subjectAccountModel.getPaymt01());
                                             }
-                                            ncbDetailView.setCurrentPayment(settlementStatus);
+                                            ncbDetailView.setCurrentPayment(settlementStatusTransform.transformToView(settlementStatus));
                                             if (!Util.isEmpty(currentWorstPaymentStatus)) {
                                                 currentWorstPaymentStatus = getWorstCode(subjectAccountModel.getPaymt01(), currentWorstPaymentStatus);
                                             } else {
@@ -267,7 +270,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             }
 
                                             //set history payment
-                                            ncbDetailView.setHistoryPayment(settlementStatus);
+                                            ncbDetailView.setHistoryPayment(settlementStatusTransform.transformToView(settlementStatus));
 
                                             //check for last 6,12 months for get worst payment, calculate number of outstanding and number of over limit
                                             String worstCode = null;
@@ -1069,7 +1072,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             if (!Util.isEmpty(worstCode)) {
                                                 historySettlementStatus = settlementStatusDAO.getIndividualByCode(worstCode);
                                             }
-                                            ncbDetailView.setHistoryPayment(historySettlementStatus);
+                                            ncbDetailView.setHistoryPayment(settlementStatusTransform.transformToView(historySettlementStatus));
                                             if (!Util.isEmpty(worstPaymentStatus)) {
                                                 worstPaymentStatus = getWorstCode(subjectAccountModel.getPaymt01(), worstPaymentStatus);
                                             } else {
@@ -1401,7 +1404,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     }
                                                     settlementStatus = settlementStatusDAO.getJuristicByCode(creditHistModelList.get(0).getDaypastdue());
                                                 }
-                                                ncbDetailView.setCurrentPayment(settlementStatus);
+                                                ncbDetailView.setCurrentPayment(settlementStatusTransform.transformToView(settlementStatus));
                                                 if (!Util.isEmpty(currentWorstPaymentStatus)) {
                                                     currentWorstPaymentStatus = getWorstCode(creditHistModelList.get(0).getDaypastdue(), currentWorstPaymentStatus);
                                                 } else {
@@ -1518,7 +1521,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if (!Util.isEmpty(worstCode)) {
                                                     historySettlementStatus = settlementStatusDAO.getJuristicByCode(worstCode);
                                                 }
-                                                ncbDetailView.setHistoryPayment(historySettlementStatus);
+                                                ncbDetailView.setHistoryPayment(settlementStatusTransform.transformToView(historySettlementStatus));
                                                 if (!Util.isEmpty(worstPaymentStatus)) {
                                                     worstPaymentStatus = getWorstCode(creditHistModelList.get(0).getDaypastdue(), worstPaymentStatus);
                                                 } else {
@@ -1615,7 +1618,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     }
                                                     settlementStatus = settlementStatusDAO.getJuristicByCode(creditHistModelList.get(0).getDaypastdue());
                                                 }
-                                                ncbDetailView.setCurrentPayment(settlementStatus);
+                                                ncbDetailView.setCurrentPayment(settlementStatusTransform.transformToView(settlementStatus));
                                                 if (!Util.isEmpty(currentWorstPaymentStatus)) {
                                                     currentWorstPaymentStatus = getWorstCode(creditHistModelList.get(0).getDaypastdue(), currentWorstPaymentStatus);
                                                 } else {
@@ -1730,7 +1733,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if (!Util.isEmpty(worstCode)) {
                                                     historySettlementStatus = settlementStatusDAO.getJuristicByCode(worstCode);
                                                 }
-                                                ncbDetailView.setHistoryPayment(historySettlementStatus);
+                                                ncbDetailView.setHistoryPayment(settlementStatusTransform.transformToView(historySettlementStatus));
                                                 if (!Util.isEmpty(worstPaymentStatus)) {
                                                     worstPaymentStatus = getWorstCode(creditHistModelList.get(0).getDaypastdue(), worstPaymentStatus);
                                                 } else {

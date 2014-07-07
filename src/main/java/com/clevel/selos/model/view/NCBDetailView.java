@@ -26,8 +26,8 @@ public class NCBDetailView implements Serializable {
     private AccountType accountType;
     private AccountStatus accountStatus;
     //private TDRCondition tdrCondition;
-    private SettlementStatus currentPayment;
-    private SettlementStatus historyPayment;
+    private SettlementStatusView currentPayment;
+    private SettlementStatusView historyPayment;
     private boolean canToEdit;
     private boolean monthFlagPage;
 
@@ -65,8 +65,8 @@ public class NCBDetailView implements Serializable {
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
         //this.tdrCondition = new TDRCondition();
-        this.currentPayment = new SettlementStatus();
-        this.historyPayment = new SettlementStatus();
+        this.currentPayment = new SettlementStatusView();
+        this.historyPayment = new SettlementStatusView();
         this.canToEdit = false;
         this.monthFlagPage = false;
         this.loanAccountTypeView = new LoanAccountTypeView();
@@ -199,19 +199,19 @@ public class NCBDetailView implements Serializable {
         this.tdrCondition = tdrCondition;
     }*/
 
-    public SettlementStatus getCurrentPayment() {
+    public SettlementStatusView getCurrentPayment() {
         return currentPayment;
     }
 
-    public void setCurrentPayment(SettlementStatus currentPayment) {
+    public void setCurrentPayment(SettlementStatusView currentPayment) {
         this.currentPayment = currentPayment;
     }
 
-    public SettlementStatus getHistoryPayment() {
+    public SettlementStatusView getHistoryPayment() {
         return historyPayment;
     }
 
-    public void setHistoryPayment(SettlementStatus historyPayment) {
+    public void setHistoryPayment(SettlementStatusView historyPayment) {
         this.historyPayment = historyPayment;
     }
 
