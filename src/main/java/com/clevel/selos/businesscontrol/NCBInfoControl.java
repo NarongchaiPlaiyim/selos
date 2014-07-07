@@ -242,7 +242,6 @@ public class NCBInfoControl extends BusinessControl {
                 ncbInfoView.setTdrTMBMonth(calTmp.get(Calendar.MONTH) + 1);
                 ncbInfoView.setTdrTMBYear(calTmp.get(Calendar.YEAR));
                 ncbInfoView.setTdrOtherFlag(false);
-                calTmp.setTime(lastTDRDateOther);
                 ncbInfoView.setTdrOtherMonth(calTmp.get(Calendar.MONTH) + 1);
                 ncbInfoView.setTdrOtherYear(calTmp.get(Calendar.YEAR));
                 if(isTDRTMB){
@@ -291,6 +290,27 @@ public class NCBInfoControl extends BusinessControl {
             } else {
                 ncbInfoView.setNplFlag(1);
             }
+        } else {
+            Calendar calTmp = Calendar.getInstance();
+            calTmp.setTime(new Date());
+            ncbInfoView.setNplFlag(0);
+            ncbInfoView.setNplTMBFlag(false);
+            ncbInfoView.setNplTMBMonth(calTmp.get(Calendar.MONTH) + 1);
+            ncbInfoView.setNplTMBYear(calTmp.get(Calendar.YEAR));
+            ncbInfoView.setNplOtherFlag(false);
+            ncbInfoView.setNplOtherMonth(calTmp.get(Calendar.MONTH) + 1);
+            ncbInfoView.setNplOtherYear(calTmp.get(Calendar.YEAR));
+            ncbInfoView.setTdrFlag(0);
+            ncbInfoView.setTdrTMBFlag(false);
+            ncbInfoView.setTdrTMBMonth(calTmp.get(Calendar.MONTH) + 1);
+            ncbInfoView.setTdrTMBYear(calTmp.get(Calendar.YEAR));
+            ncbInfoView.setTdrOtherFlag(false);
+            ncbInfoView.setTdrOtherMonth(calTmp.get(Calendar.MONTH) + 1);
+            ncbInfoView.setTdrOtherYear(calTmp.get(Calendar.YEAR));
+
+            ncbInfoView.setCurrentPaymentType(null);
+            ncbInfoView.setHistoryPaymentType(null);
+            ncbInfoView.setNcbLastInfoAsOfDate(null);
         }
         return ncbInfoView;
     }
