@@ -149,8 +149,6 @@ public class BizInfoDetailControl extends BusinessControl {
         BigDecimal oneHundred = BigDecimal.valueOf(100);
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
-        log.debug("bizInfoDetailList : {}",bizInfoDetailList);
-        log.debug("stepId : {}",stepId);
 
         if (bizInfoDetailList.size() != 0) {
 

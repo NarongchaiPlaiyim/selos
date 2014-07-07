@@ -310,7 +310,7 @@ public class BizInfoDetail extends BaseController {
         } else {
             bizInfoDetailView.setBizPermission("N");
         }
-
+        log.debug("--AP. {}, --AR. {}",businessDesc.getAp(),businessDesc.getAr());
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAp());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAr());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
@@ -676,10 +676,8 @@ public class BizInfoDetail extends BaseController {
             }
 
             if(onCheckPermission()){
-//                log.debug("--bizInfoSummaryView.getId(). {}",bizInfoSummaryView.getId());
                 if (Util.isNull(bizInfoSummaryView)){
                     bizInfoSummaryId = bizInfoDetailControl.onSaveSummaryByDetail(workCaseId);
-                    log.debug("--bizInfoSummaryId. {}",bizInfoSummaryId);
                 }
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);

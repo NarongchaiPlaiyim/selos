@@ -106,6 +106,7 @@ public class BizInfoSummary extends BaseController {
     private Util util;
 
     private long workCaseId;
+    private long stepId;
 
     public BizInfoSummary() {
     }
@@ -142,6 +143,7 @@ public class BizInfoSummary extends BaseController {
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY);
 
@@ -345,7 +347,7 @@ public class BizInfoSummary extends BaseController {
             session.setAttribute("bizInfoDetailViewId", -1);
 
             if (!Util.isNull(redirect)&& redirect.equals("viewDetail")) {
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 log.info("view Detail ");
                 onViewDetail();
             }
