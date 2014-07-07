@@ -25,11 +25,12 @@
                             <label class="subject">Manage User</label>
                             <a class="step_border" href="manageUser.xhtml">User Profile</a>
                             <a class="step_border" href="userProfileUpload.xhtml">Upload User Profile</a>
-                            <a class="step_border_select" href="isaReport.xhtml">Report</a>
+                            <label class="subject">Report</label>
+                            <a class="step_border_select" >ISA Reports</a>
                         </div>
 
                         <div class="body_rpane">
-                            <label class="subject">Report</label>
+                            <label class="subject">ISA Reports</label>
                             <table border="0">
                                 <tr>
                                     <td style="width: 100px; min-width: 100px; max-width: 100px;" />
@@ -41,7 +42,7 @@
                                 </tr>
                                 <tr>
                                     <td class="title" >
-                                        <p:outputLabel value="From" />
+                                        <p:outputLabel value="จากวันที่ : " />
                                     </td>
                                     <td >
                                         <clv:BECalendar value="#{isaReport.dateFrom}"
@@ -56,7 +57,7 @@
                                         </clv:BECalendar>
                                     </td>
                                     <td class="title" >
-                                        <p:outputLabel value="To" />
+                                        <p:outputLabel value="ถึงวันที่ : " />
                                     </td>
                                     <td >
                                         <clv:BECalendar value="#{isaReport.dateTo}"
@@ -71,18 +72,77 @@
                                         </clv:BECalendar>
                                     </td>
                                     <td>
-                                        <p:commandButton value="Download" styleClass="medium"
+                                        <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
                                                          update="@form"
                                                          ajax="false"
                                                          actionListener="#{isaReport.onPrintViolation()}" >
                                         </p:commandButton>
                                     </td >
                                 </tr>
+                                <tr>
+                                    <td class="title" colspan="2" >
+                                        <p:outputLabel value="รายงานผู้ใช้งานที่ไม่เข้าสู่ระบบมากกว่า 90 วัน : " />
+                                    </td>
+                                    <td>
+                                        <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
+                                                         update="@form"
+                                                         ajax="false"
+                                                         actionListener="#{isaReport.onPrintLogonOver90()}" >
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" colspan="2" >
+                                        <p:outputLabel value="รายงานการละเมิดหรือการเข้าสู่ระบบล้มเหลวของผู้ใช้งาน : " />
+                                    </td>
+                                    <td>
+                                        <!--<p:commandButton value="ส่งออกรายงาน" styleClass="medium"-->
+                                                         <!--update="@form"-->
+                                                         <!--ajax="false"-->
+                                                         <!--actionListener="#{isaReport.onPrintViolation()}" >-->
+                                        <!--</p:commandButton>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" colspan="2" >
+                                        <p:outputLabel value="รายงานสิทธิของกลุ่มผู้ใช้งาน : " />
+                                    </td>
+                                    <td>
+                                        <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
+                                                         update="@form"
+                                                         ajax="false"
+                                                         actionListener="#{isaReport.onPrintUserProfile()}" >
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" colspan="2" >
+                                        <p:outputLabel value="รายงานข้อมูลผู้ใช้ : " />
+                                    </td>
+                                    <td>
+                                        <p:commandButton value="ส่งออกรายงาน"
+                                                         styleClass="medium"
+                                                         actionListener="#{isaReport.onSubmitExportCSV()}"
+                                                         update=":msgBoxSystemMessagePanel, @form"
+                                                         allowTypes="/(\.|\/)(csv)$/"
+                                                         ajax="false">
+                                            <p:fileDownload value="#{isaReport.streamedContent}" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </h:form>
                 </div>
             </div>
+        </p:panel>
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{isaReport.messageHeader}" message="#{isaReport.message}" >
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
         </p:panel>
     </h:body>
 </f:view>

@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 
@@ -156,6 +157,25 @@ public class IsaBusinessControl extends BusinessControl {
             csvService.CSVExport(fullPath, userList);
         }
         return fullPath;
+    }
+
+    public List<DownloadView> getFileUploaded(){
+        List<DownloadView> downloadViewList = null;
+        File file = null;
+        File[] fileList = null;
+        try {
+            file = new File(path);
+            fileList = file.listFiles();
+            downloadViewList = new ArrayList<DownloadView>();
+            for(final File fileFromList : fileList){
+                if(fileFromList.getName().indexOf(resultFileName) > -1){
+                    downloadViewList.add(new DownloadView(DateTimeUtil.convertStringToDate(fileFromList.getName().substring(fileFromList.getName().indexOf(resultFileName) + resultFileName.length(), fileFromList.getName().indexOf(CSV))), fileFromList.getAbsolutePath(), fileFromList.getName()));
+                }
+            }
+        } catch (Exception e) {
+            log.debug("-- ex. {}", e);
+        }
+        return downloadViewList;
     }
 
     public DownloadView importProcess(final InputStream inputStream) throws Exception {

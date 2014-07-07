@@ -2,6 +2,8 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.businesscontrol.BRMSControl;
+import com.clevel.selos.dao.master.AppraisalCompanyDAO;
+import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.exception.ECMInterfaceException;
@@ -24,6 +26,8 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.MandateDocResponseView;
 import com.clevel.selos.model.view.MandateDocView;
@@ -123,6 +127,13 @@ public class TestNCRS implements Serializable {
     private UserTeamDAO userTeamDAO;
     private int roleId;
 
+    private List<Province> provinceList;
+    @Inject
+    private ProvinceDAO provinceDAO;
+    private List<AppraisalCompany> appraisalCompanyList;
+    @Inject
+    private AppraisalCompanyDAO appraisalCompanyDAO;
+
     @Inject
     public TestNCRS() {
 
@@ -130,7 +141,40 @@ public class TestNCRS implements Serializable {
 
     @PostConstruct
     public void init(){
+        onLoadProvince();
+        onLoadCompany();
+    }
 
+    private void onLoadProvince(){
+        log.debug("-- onLoadProvince()");
+        provinceList =  provinceDAO.findAllASC();
+        if(!Util.isSafetyList(provinceList)){
+            provinceList = new ArrayList<Province>();
+        }
+    }
+
+    public List<Province> getProvinceList() {
+        return provinceList;
+    }
+
+    public void setProvinceList(List<Province> provinceList) {
+        this.provinceList = provinceList;
+    }
+
+    private void onLoadCompany(){
+        log.debug("-- onLoadCompany()");
+        appraisalCompanyList =  appraisalCompanyDAO.findAllASC();
+        if(!Util.isSafetyList(appraisalCompanyList)){
+            appraisalCompanyList = new ArrayList<AppraisalCompany>();
+        }
+    }
+
+    public List<AppraisalCompany> getAppraisalCompanyList() {
+        return appraisalCompanyList;
+    }
+
+    public void setAppraisalCompanyList(List<AppraisalCompany> appraisalCompanyList) {
+        this.appraisalCompanyList = appraisalCompanyList;
     }
 
     public void onClickNCRS() {

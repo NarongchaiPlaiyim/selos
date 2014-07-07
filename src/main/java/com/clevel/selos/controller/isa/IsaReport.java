@@ -1,5 +1,6 @@
 package com.clevel.selos.controller.isa;
 
+import com.clevel.selos.businesscontrol.isa.DownloadService;
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.integration.SELOS;
@@ -13,6 +14,8 @@ import com.clevel.selos.util.Util;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.joda.time.DateTime;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -43,10 +46,15 @@ public class IsaReport implements Serializable {
     private Date currentDate;
     private final String  COMMA_DELIMITED = ",";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("dd_mm_yyyy");
-
+    private StreamedContent streamedContent;
+    //dialogMessage
+    private String messageHeader;
+    private String message;
     @Inject
     CsvExport csvExport;
-
+    private enum Result{Success};
+    @Inject
+    private DownloadService downloadService;
     @Inject
     private STPExecutor stpExecutor;
 
@@ -407,6 +415,31 @@ public class IsaReport implements Serializable {
         }
     }
 
+
+
+    public void onSubmitExportCSV(){
+        log.debug("-- onSubmitExportCSV()");
+        RequestContext context = RequestContext.getCurrentInstance();
+        messageHeader = "Export to CSV";
+        try {
+            final String fullPath = isaBusinessControl.exportProcess();
+            if(!Util.isNull(fullPath)){
+                streamedContent = downloadService.process(fullPath);
+            }
+            message = Result.Success.toString();
+        } catch (Exception e){
+            if (e.getCause() != null) {
+                message = e.getCause().getMessage();
+            } else {
+                message = e.getMessage();
+            }
+        }
+        context.execute("msgBoxSystemMessageDlg.show()");
+    }
+
+
+
+
     public Date getDateFrom() {
         return dateFrom;
     }
@@ -421,5 +454,29 @@ public class IsaReport implements Serializable {
 
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
+    }
+
+    public StreamedContent getStreamedContent() {
+        return streamedContent;
+    }
+
+    public void setStreamedContent(StreamedContent streamedContent) {
+        this.streamedContent = streamedContent;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

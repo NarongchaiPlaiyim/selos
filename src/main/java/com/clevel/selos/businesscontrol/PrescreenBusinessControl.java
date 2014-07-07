@@ -124,6 +124,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     ProductGroupDAO productGroupDAO;
     @Inject
     CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
+    @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -1683,5 +1685,21 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
             }
         }
+    }
+
+    public int getTimesOfPreScreenCheck(long workCasePreScreenId, long stepId){
+        int timesOfPreScreenCheck = 0;
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerPreScreen(workCasePreScreenId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
+            if(!Util.isNull(workCaseOwner)){
+                log.debug("getTimesOfPreScreenCheck ::: workCaseOwner : {}", workCaseOwner);
+                timesOfPreScreenCheck = workCaseOwner.getTimesOfCriteriaChecked();
+            }
+            log.debug("getTimesOfPreScreenCheck ::: timesOfCriteriaCheck : {}", timesOfPreScreenCheck);
+        }catch(Exception ex){
+            log.error("Exception while get time of check criteria : ", ex);
+        }
+
+        return timesOfPreScreenCheck;
     }
 }

@@ -3,7 +3,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
-import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.AppraisalDivisionDAO;
+import com.clevel.selos.dao.master.LocationPropertyDAO;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
@@ -55,14 +57,11 @@ public class AppraisalAppointment implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
-    @Inject
-    private AppraisalCompanyDAO appraisalCompanyDAO;
+
     @Inject
     private AppraisalDivisionDAO appraisalDivisionDAO;
     @Inject
     private LocationPropertyDAO locationPropertyDAO;
-    @Inject
-    private ProvinceDAO provinceDAO;
     @Inject
     private ReasonDAO reasonDAO;
 
@@ -142,10 +141,8 @@ public class AppraisalAppointment implements Serializable {
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         customerAcceptanceView = new CustomerAcceptanceView();
         modeForButton = ModeForButton.ADD;
-        appraisalCompanyList = appraisalCompanyDAO.findAll();
         appraisalDivisionList= appraisalDivisionDAO.findAll();
         locationPropertyList= locationPropertyDAO.findAll();
-        provinceList= provinceDAO.findAll();
         titleDeedFlag = false;
         purposeFlag = false;
         numberOfDocumentsFlag = false;
@@ -153,6 +150,24 @@ public class AppraisalAppointment implements Serializable {
         contactFlag3 = false;
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
+        onLoadCompany();
+        onLoadProvince();
+    }
+
+    private void onLoadProvince(){
+        log.debug("-- onLoadProvince()");
+        provinceList =  appraisalAppointmentControl.getProvince();
+        if(!Util.isSafetyList(provinceList)){
+            provinceList = new ArrayList<Province>();
+        }
+    }
+
+    private void onLoadCompany(){
+        log.debug("-- onLoadCompany()");
+        appraisalCompanyList =  appraisalAppointmentControl.getCompany();
+        if(!Util.isSafetyList(appraisalCompanyList)){
+            appraisalCompanyList = new ArrayList<AppraisalCompany>();
+        }
     }
 
     public boolean checkSession(HttpSession session){
