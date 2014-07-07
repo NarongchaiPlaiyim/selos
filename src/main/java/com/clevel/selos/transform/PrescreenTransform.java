@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -92,6 +93,16 @@ public class PrescreenTransform extends Transform {
         } else {
             prescreen.setCountryOfRegister(null);
         }
+
+        if(!Util.isNull(prescreenView.getGroupExposure())){
+            prescreen.setGroupExposure(prescreenView.getGroupExposure());
+        }
+
+        if(!Util.isNull(prescreenView.getGroupIncome())){
+            prescreen.setGroupIncome(prescreenView.getGroupIncome());
+        }
+
+
         return prescreen;
     }
 

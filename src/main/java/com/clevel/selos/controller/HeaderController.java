@@ -211,7 +211,11 @@ public class HeaderController extends BaseController {
     private boolean canCheckPreScreen;
     private boolean canCheckFullApp;
 
+    //Check Can Request Appraisal
+    private boolean canRequestAppraisal;
+
     private int timesOfCriteriaCheck;
+    private int timesOfPreScreenCheck;
 
     private int requestAppraisalRequire;
 
@@ -282,30 +286,47 @@ public class HeaderController extends BaseController {
 
         //check pre-screen result
         canCloseSale = false;
-        if(workCasePreScreenId!=0){
+        if(workCasePreScreenId != 0){
             UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
-            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+            if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canCloseSale = true;
+                    canRequestAppraisal = true;
                 }
+            } else {
+                canRequestAppraisal = false;
+            }
+
+            timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
+            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+            int limitTimeOfPreScreenCheck = 3;
+            if(!Util.isNull(userSysParameterView)){
+                limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+            }
+            if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck){
+                canCheckPreScreen = true;
             }
         }
 
         //check criteria result
         canSubmitCA = false;
         canCheckCriteria = false;
-        if(workCaseId!=0){
+        if(workCaseId != 0){
             UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
             if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canSubmitCA = true;
+                    canRequestAppraisal = true;
                 } else {
                     if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
                         if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
                             canSubmitCA = true;
+                            canRequestAppraisal = true;
                         }
                     }
                 }
+            } else {
+                canRequestAppraisal = false;
             }
 
             timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
@@ -2512,5 +2533,21 @@ public class HeaderController extends BaseController {
 
     public void setRequestAppraisalRequire(int requestAppraisalRequire) {
         this.requestAppraisalRequire = requestAppraisalRequire;
+    }
+
+    public boolean isCanRequestAppraisal() {
+        return canRequestAppraisal;
+    }
+
+    public void setCanRequestAppraisal(boolean canRequestAppraisal) {
+        this.canRequestAppraisal = canRequestAppraisal;
+    }
+
+    public int getTimesOfPreScreenCheck() {
+        return timesOfPreScreenCheck;
+    }
+
+    public void setTimesOfPreScreenCheck(int timesOfPreScreenCheck) {
+        this.timesOfPreScreenCheck = timesOfPreScreenCheck;
     }
 }

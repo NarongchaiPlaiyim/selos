@@ -341,6 +341,8 @@ public class ExistingCreditControl extends BusinessControl {
                 for (AppInProcess appInProcess : appInProcessList) {
                     log.debug("Staus : {}", appInProcess.getStatus());
 
+                    String appInStatus = appInProcess.getStatus() != null ? appInProcess.getStatus().trim() : "";
+
                     //Check for STAUS = STPCP, PDSTP
                     if(appInProcess.getStatus()!=null && (appInProcess.getStatus().trim().equalsIgnoreCase("PDSTP") || appInProcess.getStatus().trim().equalsIgnoreCase("STPCP"))){
                         //check date T+2
@@ -378,7 +380,7 @@ public class ExistingCreditControl extends BusinessControl {
                             existingCreditDetailView.setNo(borrowerId);
                             borrowerRLOSApp.add(existingCreditDetailView);
 
-                            log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
+                            log.info("RLOS Existing Credit : {} ", existingCreditDetailView.getLimit());
                             totalBorrowerRLOSApp = totalBorrowerRLOSApp.add(existingCreditDetailView.getLimit());
 
                             log.info("total borrower RLOS Limit {}", totalBorrowerRLOSApp);
@@ -405,6 +407,12 @@ public class ExistingCreditControl extends BusinessControl {
             //TODO: Update Retrieving Status.
         }
         return existingCreditFacilityView;
+    }
+
+    private boolean checkAppInRLOSStatus(String appInStatus){
+        boolean checkStatus = false;
+
+        return checkStatus;
     }
 
     /**
