@@ -338,38 +338,68 @@ public class BizInfoSummary extends BaseController {
         }
     }
 
-    public void onSaveBizInfoSummary() {
+    private void onDetail(){
         try {
-            log.info("onSaveBizInfoSummary begin");
+            log.debug("onDetail");
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
 
-            if (!Util.isNull(redirect)&& !redirect.equals("")) {
+            if (!Util.isNull(redirect)&& redirect.equals("viewDetail")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                log.info("view Detail ");
+                onViewDetail();
             }
+
+//            if (redirect != null && !redirect.equals("")) {
+//                if (redirect.equals("viewDetail")) {
+//                    log.info("view Detail ");
+//                    onViewDetail();
+//                }
+//            }
+
+            log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
+            String url = "bizInfoDetail.jsf";
+            FacesUtil.redirect("/site/bizInfoDetail.jsf");
+            log.info("redirect to new page goooo!! 1");
+            return;
+        } catch (Exception e) {
+            log.debug("Exception e. {}",e);
+        }
+
+    }
+
+    public void onSaveBizInfoSummary() {
+        try {
+            log.info("onSaveBizInfoSummary begin");
+//            HttpSession session = FacesUtil.getSession(true);
+//            session.setAttribute("bizInfoDetailViewId", -1);
+
+//            if (!Util.isNull(redirect)&& !redirect.equals("")) {
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
 
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);
-            if (redirect != null && !redirect.equals("")) {
-                if (redirect.equals("viewDetail")) {
-                    log.info("view Detail ");
-                    onViewDetail();
-                }
+//            if (redirect != null && !redirect.equals("")) {
+//                if (redirect.equals("viewDetail")) {
+//                    log.info("view Detail ");
+//                    onViewDetail();
+//                }
 
-                log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
+//                log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
 
-                String url = "bizInfoDetail.jsf";
-                FacesUtil.redirect("/site/bizInfoDetail.jsf");
+//                String url = "bizInfoDetail.jsf";
+//                FacesUtil.redirect("/site/bizInfoDetail.jsf");
                 /*FacesContext fc = FacesContext.getCurrentInstance();
                 ExternalContext ec = fc.getExternalContext();
 
                 log.info("redirect to new page url is " + url);
                 ec.redirect(ec.getRequestContextPath() + "/site/bizInfoDetail.jsf");*/
                 //ec.redirect(url);
-                log.info("redirect to new page goooo!! 1");
-                return;
-            } else {
+//                log.info("redirect to new page goooo!! 1");
+//                return;
+//            } else {
                 log.info("after redirect method");
                 log.info("not have to redirect ");
                 onCreation();
@@ -378,7 +408,7 @@ public class BizInfoSummary extends BaseController {
                 message = msg.get("app.bizInfoSummary.message.body.save.success");
                 log.info("after set message");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
+//            }
         } catch (Exception ex) {
             log.info("onSaveBizInfoSummary Error : ", ex);
 
@@ -444,12 +474,14 @@ public class BizInfoSummary extends BaseController {
 
     public void onCheckAdd(){
         redirect = "addDetail";
-        onSaveBizInfoSummary();
+        onDetail();
+//        onSaveBizInfoSummary();
     }
 
     public void onCheckEdit(){
         redirect = "viewDetail";
-        onSaveBizInfoSummary();
+        onDetail();
+//        onSaveBizInfoSummary();
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {

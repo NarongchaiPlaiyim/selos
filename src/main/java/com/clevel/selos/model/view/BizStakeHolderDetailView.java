@@ -31,10 +31,10 @@ public class BizStakeHolderDetailView implements Serializable {
     }
 
     public void reset() {
-        this.percentSalesVolume = BigDecimal.ZERO;
-        this.percentCash = BigDecimal.ZERO;
-        this.percentCredit = BigDecimal.ZERO;
-        this.creditTerm = BigDecimal.ZERO;
+//        this.percentSalesVolume = BigDecimal.ZERO;
+//        this.percentCash = BigDecimal.ZERO;
+//        this.percentCredit = BigDecimal.ZERO;
+//        this.creditTerm = BigDecimal.ZERO;
     }
 
     public String getStakeHolderType() {
