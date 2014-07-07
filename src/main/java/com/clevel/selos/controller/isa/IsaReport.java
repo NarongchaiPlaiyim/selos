@@ -348,7 +348,7 @@ public class IsaReport implements Serializable {
         } catch (SQLException e) {
             log.debug("----on getViolation. {}",e);
         } catch (Exception e) {
-            log.debug("onPrintLogonOver90. {}",e);
+            log.debug("onPrintViolation. {}",e);
         }
     }
 
@@ -380,9 +380,9 @@ public class IsaReport implements Serializable {
             }
             generatePDF(pathISAUserProfile, map, nameISAUserProfile.toString(), viewReportList);
         } catch (SQLException e) {
-            log.debug("----on getViolation. {}",e);
+            log.debug("----on getuserProfile. {}",e);
         } catch (Exception e) {
-            log.debug("onPrintLogonOver90. {}",e);
+            log.debug("onPrintUserProfile. {}",e);
         }
     }
 

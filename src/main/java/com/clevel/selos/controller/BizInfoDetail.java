@@ -150,23 +150,34 @@ public class BizInfoDetail extends BaseController {
 
                 loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL);
 
-                if(bizInfoSummaryView.getId() != 0 ){
+                if(!Util.isNull(bizInfoSummaryView) && !Util.isZero(bizInfoSummaryView.getId())){
                     bizInfoSummaryId = bizInfoSummaryView.getId();
-                } else {
+//                    onChangeBusinessGroupInitial();
+                } /*else {
                     String url = "bizInfoSummary.jsf";
                     FacesContext fc = FacesContext.getCurrentInstance();
                     ExternalContext ec = fc.getExternalContext();
                     log.debug("redirect to new page");
                     ec.redirect(url);
+                } */
+
+                if (!Util.isNull(bizInfoSummaryView)){
+                    if(bizInfoSummaryView.getCirculationAmount() != null){
+                        circulationAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+                    }
+                    if(bizInfoSummaryView.getProductionCostsAmount() != null){
+                        productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
+                    }
+                } else {
+//                    if(bizInfoSummaryView.getCirculationAmount() == null){
+                        circulationAmount = 0;
+//                    }
+//                    if(bizInfoSummaryView.getProductionCostsAmount() == null){
+                        productionCostsAmount = 0;
+
+//                    }
                 }
 
-                if(bizInfoSummaryView.getCirculationAmount() != null){
-                    circulationAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
-                }
-
-                if(bizInfoSummaryView.getProductionCostsAmount() != null){
-                    productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
-                }
                 double x = (circulationAmount/365)*30;
                 double y = (productionCostsAmount/365)*30;
 
@@ -225,6 +236,8 @@ public class BizInfoDetail extends BaseController {
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 if(supplierDetailList.size() > 0){
                     calSumBizStakeHolderDetailView(supplierDetailList,"1");
+                } else {
+
                 }
 
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
@@ -298,8 +311,8 @@ public class BizInfoDetail extends BaseController {
             bizInfoDetailView.setBizPermission("N");
         }
 
-        bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
-        bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());
+        bizInfoDetailView.setStandardAccountPayable(businessDesc.getAp());
+        bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAr());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
     }
 
@@ -663,6 +676,11 @@ public class BizInfoDetail extends BaseController {
             }
 
             if(onCheckPermission()){
+//                log.debug("--bizInfoSummaryView.getId(). {}",bizInfoSummaryView.getId());
+                if (Util.isNull(bizInfoSummaryView)){
+                    bizInfoSummaryId = bizInfoDetailControl.onSaveSummaryByDetail(workCaseId);
+                    log.debug("--bizInfoSummaryId. {}",bizInfoSummaryId);
+                }
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);

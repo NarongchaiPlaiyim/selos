@@ -8,10 +8,7 @@ import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.BankStmtSummaryView;
-import com.clevel.selos.model.view.BizInfoDetailView;
-import com.clevel.selos.model.view.BizProductDetailView;
-import com.clevel.selos.model.view.BizStakeHolderDetailView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
@@ -82,8 +79,10 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
 
             bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView, user);
+            log.debug("--bizInfoDetailView. {}",bizInfoDetailView);
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
             bizInfoDetailDAO.persist(bizInfoDetail);
+            log.debug("--persist BizInfoDetail is complete");
 
             supplierDetailList = bizInfoDetailView.getSupplierDetailList();
             buyerDetailList = bizInfoDetailView.getBuyerDetailList();
@@ -324,10 +323,10 @@ public class BizInfoDetailControl extends BusinessControl {
 
             bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailId);
 
-            log.info("bizInfoDetail bizCode after findById {}",bizInfoDetail.getBizCode());
+            log.info("bizInfoDetail bizCode after findById {}",bizInfoDetail.toString());
 
             bizInfoDetailView = bizInfoDetailTransform.transformToView(bizInfoDetail);
-            log.info("bizInfoDetailView bizCode after transform {}",bizInfoDetail.getBizCode());
+//            log.info("bizInfoDetailView bizCode after transform {}",bizInfoDetail.getBizCode());
 
             bizProductDetailViewList = new ArrayList<BizProductDetailView>();
             bizProductDetailList = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
@@ -415,4 +414,16 @@ public class BizInfoDetailControl extends BusinessControl {
         return 0;
     }
 
+    public long onSaveSummaryByDetail(long workCaseId){
+        BizInfoSummaryView bizInfoSummaryView = new BizInfoSummaryView();
+        try {
+                log.debug("--workcase. {}",workCaseId);
+                log.debug("--New BizInfoSummary View. {}",bizInfoSummaryView.toString());
+                bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+                bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        } catch (Exception e){
+            log.debug("--Exception Error. {}",e);
+        }
+        return bizInfoSummaryView.getId();
+    }
 }
