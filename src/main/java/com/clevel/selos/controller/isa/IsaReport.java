@@ -369,7 +369,7 @@ public class IsaReport implements Serializable {
             nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
 //            HashMap map = new HashMap<String, Object>();
             List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            ResultSet rs = stpExecutor.getuserProfile();
+            ResultSet rs = stpExecutor.getUserProfile();
             int i = 1;
 
             if (!Util.isNull(rs)){
