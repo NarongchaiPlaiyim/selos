@@ -308,7 +308,6 @@ public class BizInfoDetail extends BaseController {
         } else {
             bizInfoDetailView.setBizPermission("N");
         }
-        log.debug("--AP. {}, --AR. {}",businessDesc.getAp(),businessDesc.getAr());
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAp());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAr());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
@@ -318,8 +317,8 @@ public class BizInfoDetail extends BaseController {
         log.debug("onChangeBizPermission ");
         if(bizInfoDetailView.getBizPermission() != null ){
             if(bizInfoDetailView.getBizPermission().equals("Y")){
-                bizInfoDetailView.setBizDocPermission("");
-                bizInfoDetailView.setBizDocExpiryDate(null);
+                bizInfoDetailView.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
+                bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
                 setMandateValue("bizDocPermission",true);
                 setDisabledValue("bizDocPermission",false);
                 setMandateValue("bizDocExpiryDate",true);
