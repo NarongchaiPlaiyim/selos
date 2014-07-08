@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class ExistingSplitLineDetailDAO extends GenericDAO<ExistingSplitLineDetail, Integer> {
+public class ExistingSplitLineDetailDAO extends GenericDAO<ExistingSplitLineDetail, Long> {
     @Inject
     @SELOS
     Logger log;

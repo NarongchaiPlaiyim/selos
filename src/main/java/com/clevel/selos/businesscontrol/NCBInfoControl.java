@@ -293,14 +293,14 @@ public class NCBInfoControl extends BusinessControl {
         } else {
             Calendar calTmp = Calendar.getInstance();
             calTmp.setTime(new Date());
-            ncbInfoView.setNplFlag(0);
+            ncbInfoView.setNplFlag(1);
             ncbInfoView.setNplTMBFlag(false);
             ncbInfoView.setNplTMBMonth(calTmp.get(Calendar.MONTH) + 1);
             ncbInfoView.setNplTMBYear(calTmp.get(Calendar.YEAR));
             ncbInfoView.setNplOtherFlag(false);
             ncbInfoView.setNplOtherMonth(calTmp.get(Calendar.MONTH) + 1);
             ncbInfoView.setNplOtherYear(calTmp.get(Calendar.YEAR));
-            ncbInfoView.setTdrFlag(0);
+            ncbInfoView.setTdrFlag(1);
             ncbInfoView.setTdrTMBFlag(false);
             ncbInfoView.setTdrTMBMonth(calTmp.get(Calendar.MONTH) + 1);
             ncbInfoView.setTdrTMBYear(calTmp.get(Calendar.YEAR));

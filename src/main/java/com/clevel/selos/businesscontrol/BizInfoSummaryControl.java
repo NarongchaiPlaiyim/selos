@@ -16,7 +16,6 @@ import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizInfoSummaryTransform;
-import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

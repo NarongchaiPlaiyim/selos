@@ -4,9 +4,11 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
+import com.clevel.selos.model.view.SettlementStatusView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class NCBDetailTransform extends Transform {
     AccountStatusDAO accountStatusDAO;
     @Inject
     AccountTypeDAO accountTypeDAO;
+    @Inject
+    SettlementStatusTransform settlementStatusTransform;
 
     public List<NCBDetail> transformToModel(List<NCBDetailView> ncbDetailViewList, NCB ncb) {
         List<NCBDetail> ncbDetailList = new ArrayList<NCBDetail>();
@@ -87,8 +91,8 @@ public class NCBDetailTransform extends Transform {
         ncbDetailView.setAccountType(ncbDetail.getAccountType());
         ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
         ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
-        ncbDetailView.setCurrentPayment(ncbDetail.getCurrentPayment());
-        ncbDetailView.setHistoryPayment(ncbDetail.getHistorySixPayment());
+        ncbDetailView.setCurrentPayment(settlementStatusTransform.transformToView(ncbDetail.getCurrentPayment()));
+        ncbDetailView.setHistoryPayment(settlementStatusTransform.transformToView(ncbDetail.getHistorySixPayment()));
         ncbDetailView.setDateOfInfo(ncbDetail.getAsOfDate());
         ncbDetailView.setDateOfDebtRestructuring(ncbDetail.getLastReStructureDate());
         ncbDetailView.setInstallment(ncbDetail.getInstallment());

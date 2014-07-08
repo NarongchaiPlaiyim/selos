@@ -189,9 +189,9 @@ public class STPExecutor implements Serializable {
             public void execute(Connection connection) throws SQLException {
                 try{
                     CallableStatement callStmt=connection.prepareCall("call SLOS.logonover90 ( ? )");
-                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
                     callStmt.execute();
-                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                    rs[0] = (ResultSet) callStmt.getObject(1);
                 } catch (Exception e){
                     log.debug("Exception Error. {}",e);
                 }
@@ -208,12 +208,14 @@ public class STPExecutor implements Serializable {
             public void execute(Connection connection) throws SQLException {
                 try{
                     CallableStatement callStmt = connection.prepareCall("call SLOS.violation (?, ?, ?)");
+                    int round = 1;
                     for (String key : map.keySet()){
-                        callStmt.setObject(key, map.get(key).toString());
+                        callStmt.setObject(round, map.get(key).toString());
+                        round++;
                     }
-                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.registerOutParameter(3,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
-                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                    rs[0] = (ResultSet) callStmt.getObject(3);
                 } catch (Exception e){
                     log.debug("Exception Error. {}",e);
                 }
@@ -223,7 +225,7 @@ public class STPExecutor implements Serializable {
         return rs[0];
     }
 
-    public ResultSet getuserProfile(final Map<String, Object> map){
+    public ResultSet getUserProfile(){
         log.debug("on getViolation.");
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {
@@ -231,12 +233,9 @@ public class STPExecutor implements Serializable {
             public void execute(Connection connection) throws SQLException {
                 try{
                     CallableStatement callStmt = connection.prepareCall("call SLOS.userprofile (?)");
-                    for (String key : map.keySet()){
-                        callStmt.setObject(key, map.get(key).toString());
-                    }
-                    callStmt.registerOutParameter("cursor_out",OracleTypes.CURSOR);
+                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
-                    rs[0] = (ResultSet) callStmt.getObject("cursor_out");
+                    rs[0] = (ResultSet) callStmt.getObject(1);
                 } catch (Exception e){
                     log.debug("Exception Error. {}",e);
                 }

@@ -718,10 +718,10 @@
                                 <p:commandButton id="btnAddBizInfoDetail" styleClass="medium" binding="#{addBizInfoDetail}"
                                                  value="#{msg.get('app.button.add')}"
                                                  process="@form"
-                                                 oncomplete="confirmAddBizInfoDetailDlg.show()"
+                                                 action = "#{bizInfoSummary.onCheckAdd()}"
                                                  update=":frmMain"
                                                  disabled="#{bizInfoSummary.isDisabled('addBusinessInfoButton')}">
-                                    <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
+                                    <!--<f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>-->
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -790,7 +790,7 @@
 
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit" process="@this"
-                                                         oncomplete="confirmEditBizInfoDetailDlg.show()"
+                                                         action = "#{bizInfoSummary.onCheckEdit}"
                                                          disabled="#{bizInfoSummary.isDisabled('saveButton')}">
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                             <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
@@ -799,6 +799,7 @@
                                         <p:commandButton icon="ui-icon-trash" rendered="#{rowIndex!=0}"
                                                          title="Remove" process="@this"
                                                          oncomplete="confirmDeleteBizInfoDetailDlg.show();"
+                                                         update = ":frmMain"
                                                          disabled="#{bizInfoSummary.isDisabled('saveButton')}">
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                         </p:commandButton>
