@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.AppraisalDivisionDAO;
 import com.clevel.selos.dao.master.LocationPropertyDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DayOff;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
@@ -560,54 +561,58 @@ public class AppraisalAppointment implements Serializable {
         onCreation();
     }
 
+    //TODO edit this for fix due date
     public void onChangeAppraisalDate(){
-        log.info("onChangeAppraisalDate");
+        log.info("-- onChangeAppraisalDate()");
         int locate = appraisalView.getLocationOfProperty().getId();
-
-        log.info("locate is " + locate);
-
-        Date dueDate;
-        DateTime dueDateTime = new DateTime(appraisalView.getAppraisalDate());
-        DateTime addedDate  = new DateTime(appraisalView.getAppraisalDate());
-        int nowDay = dueDateTime.getDayOfWeek();
-
-        log.info ("dueDateTime dayOfWeek before plus is {}", dueDateTime.getDayOfWeek());
-
+        log.info("-- locate name is {}", appraisalView.getLocationOfProperty().getName());
+        /*
+        1 +3
+        2 +4
+        3 +6
+        * */
+        int locateDay = 0;
         if(locate == 1){
-            log.info("in locate 1 ");
-            if(nowDay==1||nowDay>5) {
-                addedDate = dueDateTime.plusDays(3);
-            }else if(nowDay==4){
-                addedDate = dueDateTime.plusDays(4);
-            }else{
-                addedDate = dueDateTime.plusDays(5);
-            }
+            log.info("in locate due date +3");
+            locateDay = 3;
+            appraisalView.setDueDate(updateDueDate(appraisalView.getAppraisalDate(), locateDay));
         }else if(locate == 2){
-            log.info("in locate 2");
-            if(nowDay>5) {
-                addedDate = dueDateTime.plusDays(4);
-            }else if(nowDay==5){
-                addedDate = dueDateTime.plusDays(5);
-            }else{
-                addedDate = dueDateTime.plusDays(6);
-            }
+            log.info("in locate due date +4");
+            locateDay = 4;
+            appraisalView.setDueDate(updateDueDate(appraisalView.getAppraisalDate(), locateDay));
         }else if(locate == 3){
-            log.info("in locate 3");
-            if(nowDay==5){
-                addedDate = dueDateTime.plusDays(9);
-            }else if(nowDay==4){
-                addedDate = dueDateTime.plusDays(10);
-            }else{
-                addedDate = dueDateTime.plusDays(8);
+            log.info("in locate due date +6");
+            locateDay = 6;
+            appraisalView.setDueDate(updateDueDate(appraisalView.getAppraisalDate(), locateDay));
+        }
+//        appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());  //Edited by Chai for fixed issue
+//        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
+    }
+
+    public void onChangeAppointmentDate(){
+        log.info("-- onChangeAppointmentDate()");
+        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
+        onChangeAppraisalDate();
+    }
+
+    public void onChangeLocationOfProperty(){
+        log.info("-- onChangeLocationOfProperty()");
+        onChangeAppraisalDate();
+    }
+
+    private Date updateDueDate(final Date appraisalDate, final int dayByLocate){
+        int addDayForDueDate = 0;
+        for (int i = 1; i <= dayByLocate; i++) {
+            if(DayOff.SATURDAY.equals(DateTimeUtil.getDayOfWeek(DateTimeUtil.addDayForDueDate(appraisalDate, i))) ||
+               DayOff.SUNDAY.equals(DateTimeUtil.getDayOfWeek(DateTimeUtil.addDayForDueDate(appraisalDate, i)))){
+                log.debug("-- {} is day off.", DateTimeUtil.addDayForDueDate(appraisalDate, i));
+                addDayForDueDate++;
+            }  else if(appraisalAppointmentControl.isHoliday(DateTimeUtil.addDayForDueDate(appraisalDate, i))){
+                log.debug("-- {} is holiday.", DateTimeUtil.addDayForDueDate(appraisalDate, i));
+                addDayForDueDate++;
             }
         }
-
-        log.info ("dueDateTime dayOfWeek after plus is {}", dueDateTime.getDayOfWeek());
-
-        dueDate = addedDate.toDate();
-        appraisalView.setDueDate(dueDate);
-//        appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());  //Edited by Chai for fixed issue
-        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
+        return DateTimeUtil.addDayForDueDate(appraisalDate, addDayForDueDate + dayByLocate);
     }
 
     public void onOpenAddContactRecordDialog() {
