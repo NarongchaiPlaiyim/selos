@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.AppraisalCompanyDAO;
+import com.clevel.selos.dao.master.HolidayDAO;
 import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -76,6 +78,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private ContactRecordDetail contactRecordDetail;
     @Inject
     private ProvinceDAO provinceDAO;
+    @Inject
+    private HolidayDAO holidayDAO;
 
     @Inject
     public AppraisalAppointmentControl(){
@@ -89,7 +93,16 @@ public class AppraisalAppointmentControl extends BusinessControl {
     public List<AppraisalCompany> getCompany(){
         return appraisalCompanyDAO.findAllASC();
     }
-	
+
+    public boolean isHoliday(final Date holiday){
+        try {
+            return holidayDAO.isHoliday(holiday);
+        } catch (Exception e){
+            log.debug("-- Exception while get holiday {}", e);
+            return false;
+        }
+    }
+
 	public AppraisalView getAppraisalAppointment(final long workCaseId, final long workCasePreScreenId){
         log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
