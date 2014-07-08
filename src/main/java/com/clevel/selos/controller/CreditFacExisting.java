@@ -1991,14 +1991,6 @@ public class CreditFacExisting extends BaseController {
             }
         }
 
-        if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
-            existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(cloner.deepClone(existingBrwCreditDetailViews));
-        }
-
-        if(existingRelCreditDetailViews!=null && existingRelCreditDetailViews.size()>0){
-            existingCreditFacilityView.setRelatedComExistingCreditDeleteList(cloner.deepClone(existingRelCreditDetailViews));
-        }
-
 
         List<CustomerInfoView> customerInfoViews = creditFacExistingControl.getCustomerListByWorkCaseId(workCaseId);
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
@@ -2019,6 +2011,14 @@ public class CreditFacExisting extends BaseController {
         existingCreditFacilityView.setRelatedRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
         existingCreditFacilityView.setRelatedAppInRLOSCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
         existingCreditFacilityView.setRelateExistingCreditPresScreenDeleteList(new ArrayList<ExistingCreditDetailView>());
+
+        if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
+            existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(cloner.deepClone(existingBrwCreditDetailViews));
+        }
+
+        if(existingRelCreditDetailViews!=null && existingRelCreditDetailViews.size()>0){
+            existingCreditFacilityView.setRelatedComExistingCreditDeleteList(cloner.deepClone(existingRelCreditDetailViews));
+        }
 
         if(existingCreditFacilityViewTmp!=null && existingCreditFacilityViewTmp.getId()!=0){
             existingCreditFacilityView.setId(existingCreditFacilityViewTmp.getId());
