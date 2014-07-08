@@ -140,6 +140,7 @@ public class BizInfoDetailControl extends BusinessControl {
 
 
     public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId, long stepId){
+        log.debug("--onSaveSumOnSummary.");
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
         BigDecimal bankStatementAvg = BigDecimal.ZERO;
@@ -149,8 +150,6 @@ public class BizInfoDetailControl extends BusinessControl {
         BigDecimal oneHundred = BigDecimal.valueOf(100);
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
-        log.debug("bizInfoDetailList : {}",bizInfoDetailList);
-        log.debug("stepId : {}",stepId);
 
         if (bizInfoDetailList.size() != 0) {
 
@@ -208,15 +207,15 @@ public class BizInfoDetailControl extends BusinessControl {
                 adjustIncomeCal = Util.divide(Util.multiply(adjustIncome,incomePercentD),oneHundred);
                 sumAdjust = Util.add(sumAdjust,adjustIncomeCal);
 
-                ar = bizInfoDetail.getBusinessDescription().getAr();
+                ar = bizInfoDetail.getStandardAccountReceivable();
                 arCal = Util.divide(Util.multiply(ar,incomePercentD),oneHundred);
                 sumAR = Util.add(sumAR,arCal);
 
-                ap = bizInfoDetail.getBusinessDescription().getAp();
+                ap = bizInfoDetail.getStandardAccountPayable();
                 apCal = Util.divide(Util.multiply(ap,incomePercentD),oneHundred);
                 sumAP = Util.add(sumAP,apCal);
 
-                inv = bizInfoDetail.getBusinessDescription().getInv();
+                inv = bizInfoDetail.getStandardStock();
                 invCal = Util.divide(Util.multiply(inv,incomePercentD),oneHundred);
                 sumINV = Util.add(sumINV,invCal);
 
@@ -226,9 +225,11 @@ public class BizInfoDetailControl extends BusinessControl {
 
 
                 bizInfoDetailDAO.persist(bizInfoDetail);
+                log.debug("--persist is Detail.");
             }
 
             BizInfoSummary  bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
+            log.debug("--findById Summary. {}",bizInfoSummary.toString());
 
             sumIncomeAmountD = Util.multiply(bankStatementAvg,twenty);
             BigDecimal sumIncomeAmount = null;
@@ -263,6 +264,7 @@ public class BizInfoDetailControl extends BusinessControl {
 //            bizInfoSummary.setCirculationAmount(sumIncomeAmount); //?????  BankStatementSummary.grandTotal
 //            bizInfoSummary.setCirculationPercentage(oneHundred); //?????
             bizInfoSummary.setSumIncomeAmount(sumIncomeAmount); //?????
+            bizInfoSummary.setCirculationAmount(sumIncomeAmount);
             bizInfoSummary.setSumIncomePercent(sumIncomePercent);
             bizInfoSummary.setSumWeightAR(sumWeightAR);
             bizInfoSummary.setSumWeightAP(sumWeightAP);
@@ -270,7 +272,7 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(sumWeightIntIncomeFactor);
             bizInfoSummary.setWeightIncomeFactor(sumWeightIncFactor);
 
-            System.out.println("SumWeightIncFactor {},"+sumWeightIncFactor);
+//            log.debug("--sumWeightAR. {},--sumWeightAP. {},--sumWeightINV. {}",sumWeightAR,sumWeightAP,sumWeightINV);
 
             log.debug("bizInfoSummary : {}",bizInfoSummary);
 
@@ -419,6 +421,7 @@ public class BizInfoDetailControl extends BusinessControl {
         try {
                 log.debug("--workcase. {}",workCaseId);
                 log.debug("--New BizInfoSummary View. {}",bizInfoSummaryView.toString());
+
                 bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
                 bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         } catch (Exception e){

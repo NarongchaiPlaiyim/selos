@@ -298,25 +298,30 @@ public class IsaReport implements Serializable {
 //        reportView.setNameISAReportLogonOver90(nameLogonOver90.toString());
 
         try {
-            HashMap map = new HashMap<String, Object>();
+//            HashMap map = new HashMap<String, Object>();
             List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
             ResultSet rs = stpExecutor.getLogonOver90();
             StringBuilder nameLogonOver90 = new StringBuilder();
             nameLogonOver90 = nameLogonOver90.append("NotLogonOver_90_").append(Util.getFileNameForISA());
             int i = 1;
 
-            while (rs.next()){
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setRow(i++);
+                    viewReport.setUserId(rs.getString("USER_ID"));
+                    viewReport.setUserName(rs.getString("USER_NAME"));
+                    viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                    viewReport.setLogin(rs.getTimestamp("LAST_LOGIN"));
+                    viewReport.setStatus(rs.getString("STATUS"));
+                    viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
+                    viewReportList.add(viewReport);
+                }
+                generatePDF(pathISALogonOver90, new HashMap<String, Object>(), nameLogonOver90.toString(), viewReportList);
+            } else {
                 ISAViewReport viewReport = new ISAViewReport();
-                viewReport.setRow(i++);
-                viewReport.setUserId(rs.getString("USER_ID"));
-                viewReport.setUserName(rs.getString("USER_NAME"));
-                viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
-                viewReport.setLogin(rs.getTimestamp("LAST_LOGIN"));
-                viewReport.setStatus(rs.getString("STATUS"));
-                viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
                 viewReportList.add(viewReport);
             }
-            generatePDF(pathISALogonOver90, map, nameLogonOver90.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("on getLogonOver90. {}",e);
         } catch (Exception e) {
@@ -335,16 +340,21 @@ public class IsaReport implements Serializable {
             map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo));
             ResultSet rs = stpExecutor.getViolation(map);
 
-            while (rs.next()){
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setUserId(rs.getString("USER_ID"));
+                    viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
+                    viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
+                    viewReport.setStatus(rs.getString("STATUS"));
+                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
+                    viewReportList.add(viewReport);
+                }
+                generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
+            } else {
                 ISAViewReport viewReport = new ISAViewReport();
-                viewReport.setUserId(rs.getString("USER_ID"));
-                viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
-                viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
-                viewReport.setStatus(rs.getString("STATUS"));
-                viewReport.setDescrition(rs.getString("DESCRIPTION"));
                 viewReportList.add(viewReport);
             }
-            generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("----on getViolation. {}",e);
         } catch (Exception e) {
@@ -357,28 +367,33 @@ public class IsaReport implements Serializable {
         try {
             StringBuilder nameISAUserProfile = new StringBuilder();
             nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
-            HashMap map = new HashMap<String, Object>();
+//            HashMap map = new HashMap<String, Object>();
             List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            ResultSet rs = stpExecutor.getuserProfile(map);
+            ResultSet rs = stpExecutor.getUserProfile();
             int i = 1;
 
-            while (rs.next()){
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setRow(i++);
+                    viewReport.setUserId(rs.getString("USER_ID"));
+                    viewReport.setUserName(rs.getString("USER_NAME"));
+                    viewReport.setBuCode(rs.getString("BU_CODE"));
+                    viewReport.setTeam(rs.getString("TEAM"));
+                    viewReport.setRole(rs.getString("ROLE_NAME"));
+                    viewReport.setStatus(rs.getString("STATUS"));
+                    viewReport.setLogin(rs.getTimestamp("LAST_DATE"));
+                    viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                    viewReport.setCreateBy(rs.getString("CREATE_BY"));
+                    viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
+                    viewReport.setModifyBy(rs.getString("MODIFY_BY"));
+                    viewReportList.add(viewReport);
+                }
+                generatePDF(pathISAUserProfile, new HashMap<String, Object>(), nameISAUserProfile.toString(), viewReportList);
+            } else {
                 ISAViewReport viewReport = new ISAViewReport();
-                viewReport.setRow(i++);
-                viewReport.setUserId(rs.getString("USER_ID"));
-                viewReport.setUserName(rs.getString("USER_NAME"));
-                viewReport.setBuCode(rs.getString("BU_CODE"));
-                viewReport.setTeam(rs.getString("TEAM"));
-                viewReport.setRole(rs.getString("ROLE_NAME"));
-                viewReport.setStatus(rs.getString("STATUS"));
-                viewReport.setLogin(rs.getTimestamp("LAST_DATE"));
-                viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
-                viewReport.setCreateBy(rs.getString("CREATE_BY"));
-                viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
-                viewReport.setModifyBy(rs.getString("MODIFY_BY"));
                 viewReportList.add(viewReport);
             }
-            generatePDF(pathISAUserProfile, map, nameISAUserProfile.toString(), viewReportList);
         } catch (SQLException e) {
             log.debug("----on getuserProfile. {}",e);
         } catch (Exception e) {

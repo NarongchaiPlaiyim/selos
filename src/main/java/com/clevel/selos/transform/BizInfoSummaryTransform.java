@@ -56,9 +56,6 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setOwnerName(bizInfoSummaryView.getOwnerName());
         bizInfoSummary.setExpiryDate(bizInfoSummaryView.getExpiryDate());
 
-        log.debug("transformToModel bizInfoSummaryView getAddressMoo is ---- {}",bizInfoSummaryView.getAddressMoo());
-        log.debug("transformToModel bizInfoSummaryView getAddressNo is ---- {}",bizInfoSummaryView.getAddressNo());
-
         bizInfoSummary.setAddressNo(bizInfoSummaryView.getAddressNo());
         bizInfoSummary.setAddressMoo(bizInfoSummaryView.getAddressMoo());
         bizInfoSummary.setAddressBuilding(bizInfoSummaryView.getAddressBuilding());
@@ -345,9 +342,13 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setSumIncomeAmount(bizInfoSummary.getSumIncomeAmount());
         bizInfoSummaryView.setSumIncomePercent(bizInfoSummary.getSumIncomePercent());
         bizInfoSummaryView.setSumWeightAR(bizInfoSummary.getSumWeightAR());
+//        log.debug("--SumWeightAR. {}",bizInfoSummaryView.getSumWeightAR());
         bizInfoSummaryView.setSumWeightAP(bizInfoSummary.getSumWeightAP());
+//        log.debug("--SumWeightAP. {}",bizInfoSummaryView.getSumWeightAP());
         bizInfoSummaryView.setSumWeightINV(bizInfoSummary.getSumWeightINV());
+//        log.debug("--SumWeightINV. {}",bizInfoSummaryView.getSumWeightINV());
         bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+        log.debug("--SumWeightInterviewedIncomeFactorPercent. {}",bizInfoSummaryView.getSumWeightInterviewedIncomeFactorPercent());
         bizInfoSummaryView.setWeightIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
 
         return bizInfoSummaryView;

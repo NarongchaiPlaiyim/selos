@@ -106,6 +106,7 @@ public class BizInfoSummary extends BaseController {
     private Util util;
 
     private long workCaseId;
+    private long stepId;
 
     public BizInfoSummary() {
     }
@@ -142,6 +143,7 @@ public class BizInfoSummary extends BaseController {
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY);
 
@@ -345,17 +347,10 @@ public class BizInfoSummary extends BaseController {
             session.setAttribute("bizInfoDetailViewId", -1);
 
             if (!Util.isNull(redirect)&& redirect.equals("viewDetail")) {
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 log.info("view Detail ");
                 onViewDetail();
             }
-
-//            if (redirect != null && !redirect.equals("")) {
-//                if (redirect.equals("viewDetail")) {
-//                    log.info("view Detail ");
-//                    onViewDetail();
-//                }
-//            }
 
             log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
             String url = "bizInfoDetail.jsf";
@@ -371,35 +366,9 @@ public class BizInfoSummary extends BaseController {
     public void onSaveBizInfoSummary() {
         try {
             log.info("onSaveBizInfoSummary begin");
-//            HttpSession session = FacesUtil.getSession(true);
-//            session.setAttribute("bizInfoDetailViewId", -1);
-
-//            if (!Util.isNull(redirect)&& !redirect.equals("")) {
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            }
-
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);
-//            if (redirect != null && !redirect.equals("")) {
-//                if (redirect.equals("viewDetail")) {
-//                    log.info("view Detail ");
-//                    onViewDetail();
-//                }
-
-//                log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
-
-//                String url = "bizInfoDetail.jsf";
-//                FacesUtil.redirect("/site/bizInfoDetail.jsf");
-                /*FacesContext fc = FacesContext.getCurrentInstance();
-                ExternalContext ec = fc.getExternalContext();
-
-                log.info("redirect to new page url is " + url);
-                ec.redirect(ec.getRequestContextPath() + "/site/bizInfoDetail.jsf");*/
-                //ec.redirect(url);
-//                log.info("redirect to new page goooo!! 1");
-//                return;
-//            } else {
                 log.info("after redirect method");
                 log.info("not have to redirect ");
                 onCreation();
@@ -437,7 +406,9 @@ public class BizInfoSummary extends BaseController {
         try {
             log.info("onDeleteBizInfoToDB Controller begin ");
             bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
-            getBusinessInfoListDB();
+            bizInfoDetailControl.onSaveSumOnSummary(bizInfoSummaryView.getId(),workCaseId,stepId);
+            onCreation();
+//            getBusinessInfoListDB();
         } catch (Exception e) {
 
         } finally {
