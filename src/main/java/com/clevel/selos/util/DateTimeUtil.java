@@ -421,8 +421,7 @@ public class DateTimeUtil implements Serializable {
 
     public static Date addDayForDueDate(final Date date, final int day){
         DateTime dtOrg = new DateTime(date);
-        DateTime dtPlusOne = dtOrg.plusDays(day);
-        return dtPlusOne.toDate();
+        return dtOrg.plusDays(day).toDate();
     }
 
     public static String getDayOfWeek(final Date date){
