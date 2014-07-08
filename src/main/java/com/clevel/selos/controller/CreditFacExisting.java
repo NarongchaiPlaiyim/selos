@@ -1966,6 +1966,7 @@ public class CreditFacExisting extends BaseController {
     public void onRefreshExistingCredit() {
         log.info("Start on Retrieve Interface Info");
 
+        Cloner cloner = new Cloner();
         List<ExistingCreditDetailView> existingBrwCreditDetailViews = existingCreditFacilityView.getBorrowerComExistingCredit();
         List<ExistingCreditDetailView> existingRelCreditDetailViews = existingCreditFacilityView.getRelatedComExistingCredit();
         if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
@@ -1990,8 +1991,13 @@ public class CreditFacExisting extends BaseController {
             }
         }
 
-        existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(existingBrwCreditDetailViews);
-        existingCreditFacilityView.setRelatedComExistingCreditDeleteList(existingRelCreditDetailViews);
+        if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
+            existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(cloner.deepClone(existingBrwCreditDetailViews));
+        }
+
+        if(existingRelCreditDetailViews!=null && existingRelCreditDetailViews.size()>0){
+            existingCreditFacilityView.setRelatedComExistingCreditDeleteList(cloner.deepClone(existingRelCreditDetailViews));
+        }
 
 
         List<CustomerInfoView> customerInfoViews = creditFacExistingControl.getCustomerListByWorkCaseId(workCaseId);
