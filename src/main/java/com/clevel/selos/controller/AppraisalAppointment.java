@@ -663,12 +663,17 @@ public class AppraisalAppointment implements Serializable {
     private Date checkDueDate(final Date dueDate){
         final String dayOfWeek = DateTimeUtil.getDayOfWeek(dueDate);
         Date date = dueDate;
-        if(DayOff.SATURDAY.equals(dayOfWeek)){
-            date = DateTimeUtil.addDayForDueDate(dueDate, 2);
-        } else if(DayOff.SUNDAY.equals(dayOfWeek)){
-            date = DateTimeUtil.addDayForDueDate(dueDate, 1);
-        } else if(appraisalAppointmentControl.isHoliday(dueDate)){
-            date = DateTimeUtil.addDayForDueDate(dueDate, 1);
+        boolean flag = true;
+        while (flag) {
+            if(DayOff.SATURDAY.equals(dayOfWeek)){
+                date = DateTimeUtil.addDayForDueDate(date, 2);
+                flag = !flag;
+            } else if(DayOff.SUNDAY.equals(dayOfWeek)){
+                date = DateTimeUtil.addDayForDueDate(date, 1);
+                flag = !flag;
+            } else if(appraisalAppointmentControl.isHoliday(dueDate)){
+                date = DateTimeUtil.addDayForDueDate(date, 1);
+            }
         }
         log.debug("-- DueDate : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
         return date;
