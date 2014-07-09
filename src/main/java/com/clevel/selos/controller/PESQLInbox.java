@@ -226,6 +226,7 @@ public class PESQLInbox implements Serializable
         session.setAttribute("wobNumber", "");
         session.setAttribute("caseOwner", "");
         session.setAttribute("fetchType",0);
+        session.setAttribute("slaStatus", "");
     }
 
     public void onSelectInbox() {
@@ -246,6 +247,7 @@ public class PESQLInbox implements Serializable
         String queueName = Util.parseString(inboxViewSelectItem.getQueuename(), "0");
         String wobNumber = Util.parseString(inboxViewSelectItem.getFwobnumber(), "");
         String caseOwner = Util.parseString(inboxViewSelectItem.getAtuser(), "");
+        String slaStatus = Util.parseString(inboxViewSelectItem.getSlastatus(), "");
 
         try {
 
@@ -291,6 +293,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("stageId", stageId);
             session.setAttribute("caseOwner", caseOwner);
             session.setAttribute("queueName", queueName);
+            session.setAttribute("slaStatus", slaStatus);
 
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);

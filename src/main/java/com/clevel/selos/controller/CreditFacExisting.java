@@ -1949,7 +1949,7 @@ public class CreditFacExisting extends BaseController {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageRefreshDlg.show()");
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.credit.facility.message.save.failed");

@@ -1485,4 +1485,14 @@ public class FullApplicationControl extends BusinessControl {
 
         return tcgFlag;
     }
+
+    public User getUserOwnerByRole(long workCaseId, int roleId){
+        WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getLatestWorkCaseOwnerByRole(workCaseId, roleId);
+        User user = null;
+        if(workCaseOwner != null){
+            user = workCaseOwner.getUser();
+        }
+
+        return user;
+    }
 }
