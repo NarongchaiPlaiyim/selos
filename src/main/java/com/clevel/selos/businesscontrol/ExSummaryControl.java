@@ -254,6 +254,8 @@ public class ExSummaryControl extends BusinessControl {
                         if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) < 0){
                             tmpHighestDate = currentDate;
                             tmpIndexHighestExpire = i;
+                        } else {
+                            tmpIndexHighestExpire = i;
                         }
                     }
                     bizInfoDetailViewList.get(i).getPercentBiz();
