@@ -576,6 +576,7 @@ public class ExSummaryControl extends BusinessControl {
     public void calForCreditFacility(long workCaseId){
         calIncomeBorrowerCharacteristic(workCaseId);
         calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+        calGroupExposureBorrowerCharacteristic(workCaseId);
     }
 
     public void calForDecision(long workCaseId){
