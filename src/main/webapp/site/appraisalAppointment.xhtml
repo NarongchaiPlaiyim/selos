@@ -125,7 +125,7 @@
                                                        var="locationProperty"
                                                        itemLabel="#{locationProperty.name}"
                                                        itemValue="#{locationProperty.id}"/>
-                                        <p:ajax process=":frmMain" listener="#{appraisalAppointment.onChangeLocationOfProperty()}" update=":frmMain:dueDate" />
+                                        <p:ajax process="@this" listener="#{appraisalAppointment.onChangeLocationOfProperty()}" update=":frmMain:dueDate" />
                                     </p:selectOneMenu>
                                 </td>
                                 <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">

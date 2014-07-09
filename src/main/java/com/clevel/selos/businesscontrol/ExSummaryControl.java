@@ -254,6 +254,8 @@ public class ExSummaryControl extends BusinessControl {
                         if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) < 0){
                             tmpHighestDate = currentDate;
                             tmpIndexHighestExpire = i;
+                        } else {
+                            tmpIndexHighestExpire = i;
                         }
                     }
                     bizInfoDetailViewList.get(i).getPercentBiz();
@@ -576,6 +578,7 @@ public class ExSummaryControl extends BusinessControl {
     public void calForCreditFacility(long workCaseId){
         calIncomeBorrowerCharacteristic(workCaseId);
         calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+        calGroupExposureBorrowerCharacteristic(workCaseId);
     }
 
     public void calForDecision(long workCaseId){
@@ -900,14 +903,12 @@ public class ExSummaryControl extends BusinessControl {
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        BigDecimal groupExposureBDM = BigDecimal.ZERO;
-        BigDecimal groupExposureUW = BigDecimal.ZERO;
-        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())
-            && !Util.isNull(existingCreditFacility) && !Util.isZero(existingCreditFacility.getId())){
-            groupExposureBDM = Util.add(existingCreditFacility.getTotalGroupExposure(), newCreditFacility.getTotalPropose());
+        BigDecimal groupExposureBDM = null;
+        BigDecimal groupExposureUW = null;
+        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
+            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
             if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
-                groupExposureUW = Util.add(existingCreditFacility.getTotalGroupExposure(), decision.getTotalApproveCredit());
+                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
             }
         }
 
@@ -919,12 +920,8 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
 
-        User user = getCurrentUser();
-        if(user.getRole().getId() == RoleValue.UW.id()){
-            exSummary.setGroupExposureUW(groupExposureUW);
-        } else {
-            exSummary.setGroupExposureBDM(groupExposureBDM);
-        }
+        exSummary.setGroupExposureUW(groupExposureUW);
+        exSummary.setGroupExposureBDM(groupExposureBDM);
 
         exSummaryDAO.persist(exSummary);
     }
