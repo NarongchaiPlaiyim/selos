@@ -165,11 +165,26 @@ public class PESearch implements Serializable
         return searchViewList;
     }
 
+    public void resetSearchFields()
+    {
+        applicationNumber = "";
+        step = "";
+        status= "";
+        date1 = null;
+        date2 = null;
+        date3 = null;
+        date4 = null;
+        firstname= "";
+        lastname= "";
+        userid= "";
+        citizendid= "";
+        searchViewList=null;
+    }
+
     public void onSelectInbox() {
 
         try
         {
-
 
             log.debug("onSelectInbox ::: setSession ");
             log.debug("onSelectInbox ::: searchViewSelectItem : {}", searchViewSelectItem);
