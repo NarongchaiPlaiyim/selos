@@ -213,9 +213,24 @@ public class PESearch implements Serializable
 
             log.debug("onSelectSearch ::: wrkCaseId : {}, wrkCasePreScreenId : {}, createBy : {}", wrkCaseId, wrkCasePreScreenId, createBy);
 
+            String currentUser = searchViewSelectItem.getAtuser();
+
+            log.debug("Current user : "+currentUser);
+
+            currentUser = currentUser!=null&&currentUser.contains("-")?currentUser.substring(0,currentUser.indexOf("-")).trim():currentUser;
+
+            log.debug("Current user : "+currentUser);
+
             if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id())) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
+
+            if(!accessAuthorize && currentUser!=null && currentUser.equalsIgnoreCase(user.getId()))
+            {
+                accessAuthorize = true;
+                log.debug("onSelectSearch ::: after check by current user, Current User :{}",currentUser);
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
             }
 
@@ -232,7 +247,7 @@ public class PESearch implements Serializable
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
             }
 
-            if(!accessAuthorize && checkAuthorizeWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, user.getId())) {
+            if(!accessAuthorize && checkAuthorizeWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, user.getId()) && user.getRole().getId()!=RoleValue.BDM.id()) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
