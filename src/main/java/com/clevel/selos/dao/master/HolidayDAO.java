@@ -3,6 +3,7 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Holiday;
+import com.clevel.selos.util.DateTimeUtil;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -18,8 +19,8 @@ public class HolidayDAO extends GenericDAO<Holiday, Long> {
 
     }
 
-    public boolean isHoliday(final Date holiday){
-        log.info("-- isHoliday() Date : {}", holiday);
-        return isRecordExist(Restrictions.eq("holidayDate", holiday));
+    public boolean isHoliday(final Date HOLIDAY){
+        log.info("-- isHoliday() Date : {}", DateTimeUtil.convertToStringDDMMYYYY(HOLIDAY));
+        return isRecordExist(Restrictions.eq("holidayDate", HOLIDAY));
     }
 }
