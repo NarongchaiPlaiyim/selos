@@ -457,14 +457,10 @@ public class BRMSControl extends BusinessControl {
             }
 
             customerInfoList.add(brmsCustomerInfo);
-
-            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
-                numberOfGuarantor = numberOfGuarantor + 1;
-
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
-        logger.debug("number of guarantor ({})",numberOfGuarantor);
+        logger.debug("number of guarantor ({})", numberOfGuarantor);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");

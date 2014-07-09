@@ -153,13 +153,17 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
+            List<ExSumAccountMovementView> exSumAccountMovementViewList = new ArrayList<ExSumAccountMovementView>();
             if(mainBank != null || otherBank != null) {
                 if(mainBank != null) {
-                    exSummaryView.getExSumAccMovementViewList().add(mainBank);
+                    exSumAccountMovementViewList.add(mainBank);
+                    //exSummaryView.getExSumAccMovementViewList().add(mainBank);
                 }
                 if(otherBank != null) {
-                    exSummaryView.getExSumAccMovementViewList().add(otherBank);
+                    exSumAccountMovementViewList.add(otherBank);
+                    //exSummaryView.getExSumAccMovementViewList().add(otherBank);
                 }
+                exSummaryView.setExSumAccMovementViewList(exSumAccountMovementViewList);
             } else {
                 exSummaryView.setExSumAccMovementViewList(null);
             }
