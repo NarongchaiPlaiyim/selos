@@ -1938,7 +1938,7 @@
 
         <p:panel id="msgBoxSystemMessageRefreshPanel" styleClass="panel">
             <p:confirmDialog id="msgBoxSystemMessageRefreshDialog" widgetVar="msgBoxSystemMessageRefreshDlg"
-                             header="#{creditFacExisting.messageHeader}" message="#{creditFacExisting.message}" >
+                             header="#{creditFacExisting.messageHeader}" message="#{creditFacExisting.message}"  closable="false" >
                 <p:commandButton value="OK"
                                  process="@this"
                                  update="frmMain"
