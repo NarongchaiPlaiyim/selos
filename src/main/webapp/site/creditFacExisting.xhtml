@@ -1836,11 +1836,11 @@
                                     </tr>
                                     <tr>
                                         <td class="center">
-                                            <p:commandButton id="btnSave"
+                                           <p:commandButton id="btnSave"
                                                              value="#{msg.get('app.button.save')}"
                                                              styleClass="smaller"
                                                              process="@form"
-                                                             update=":frmMain, :msgBoxSystemMessagePanel"
+                                                             update=":frmMain, :msgBoxSystemMessagePanel, :msgBoxSystemMessageRefreshPanel"
                                                              actionListener="#{creditFacExisting.onSaveCreditFacExisting()}"
                                                              disabled="#{creditFacExisting.isDisabled('saveButton')}"/>
                                             <p:commandButton value="#{msg.get('app.button.cancel')}"
@@ -1933,6 +1933,16 @@
                                  process="@this"
                                  update="frmMain"
                                  oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+
+        <p:panel id="msgBoxSystemMessageRefreshPanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageRefreshDialog" widgetVar="msgBoxSystemMessageRefreshDlg"
+                             header="#{creditFacExisting.messageHeader}" message="#{creditFacExisting.message}"  closable="false" >
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 onclick="reload();"/>
             </p:confirmDialog>
         </p:panel>
     </h:body>

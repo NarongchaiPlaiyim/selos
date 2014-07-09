@@ -16,236 +16,567 @@
 
 <p:panel id="pnl_maincontainer" styleClass="panel">
 <h:form id="frmMain">
-<div id="main_container">
-<!-- Start Header Logo -->
-<ui:include src="include/header_logo.xhtml"/>
-<!-- End Header Logo -->
-<!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml"/>
-<!-- End Header Detail -->
-<!-- Start Menu -->
-<ui:include src="include/menubar.xhtml"/>
-<!-- End Menu -->
-<div id="content_container">
-<div id="content_name">#{msg.get('app.qualitativeA.label.title')}</div>
-<div id="content">
-<div id="content_info">
-    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText value="#{qualitative.qualitativeView.modifyBy.userName}"/>,
-        <h:outputText value="#{qualitative.qualitativeView.modifyDate}"/></div>
-</div>
-<div id="content_form">
-<!-- start content -->
-<table class="table_information">
-<tr>
-    <td>
-        <table class="table_content" style="width:100%">
-            <tr>
-                <th style="width: 400px;text-align: center" class="title" colspan="2">
-                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.p')}"/>
-                </th>
-                <th style="width: 500px;text-align: center" class="title" colspan="2">
-                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.sm')}"/>
-                </th>
-            </tr>
-            <tr>
-                <td class="title" colspan="4"  style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p1')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}" />
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.p1')}"/>
-                </td>
-                <td colspan="2">
-                </td>
-            </tr>
-            <tr >
-                <td class="title" colspan="4"  style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p2')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p2}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.p2')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm1}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}" />
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm1')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm2}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm2')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm3}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm3')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm4}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm4')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm5}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm5')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm6}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm6')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm7}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm7')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm8}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm8')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm9}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm9')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm10}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm10')}"/>
-                </td>
-            </tr>
-            <tr >
-                <td class="title" colspan="4" style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p3')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p3}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.p3')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm11}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm11')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm12}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.sm12')}"/>
-                </td>
-            </tr>
+    <div id="main_container">
+        <!-- Start Header Logo -->
+        <ui:include src="include/header_logo.xhtml"/>
+        <!-- End Header Logo -->
+        <!-- Start Header Detail -->
+        <ui:include src="include/header_detail.xhtml"/>
+        <!-- End Header Detail -->
+        <!-- Start Menu -->
+        <ui:include src="include/menubar.xhtml"/>
+        <!-- End Menu -->
+    <div id="content_container">
+        <div id="content_name">#{msg.get('app.qualitativeA.label.title')}</div>
+        <div id="content">
+        <div id="content_info">
+            <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+            <div id="content_lastupdate">Last update by <h:outputText value="#{qualitative.qualitativeView.modifyBy.userName}"/>,
+                <h:outputText value="#{qualitative.qualitativeView.modifyDate}"/></div>
+        </div>
+        <div id="content_form">
+        <!-- start content -->
+        <table class="table_information">
+        <tr>
+            <td>
+                <table class="table_content" style="width:100%">
+                    <tr>
+                        <th style="width: 400px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.p')}"/>
+                        </th>
+                        <th style="width: 500px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.sm')}"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="title" colspan="4"  style="background-color: #868686">
+                            <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p1')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}" />
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.p1')}"/>
+                        </td>
+                        <td colspan="2">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="title" colspan="4"  style="background-color: #868686">
+                            <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p2')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p2}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.p2')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm1}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}" />
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm1')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm2}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm2')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm3}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm3')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm4}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm4')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm5}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm5')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm6}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm6')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm7}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm7')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm8}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm8')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm9}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm9')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm10}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm10')}"/>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="title" colspan="4" style="background-color: #868686">
+                            <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p3')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p3}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.p3')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm11}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm11')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm12}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.sm12')}"/>
+                        </td>
+                    </tr>
 
-        </table>
-    </td>
-</tr>
+                </table>
+            </td>
+        </tr>
 
-<tr>
-    <td>
-        <p style="float:left; padding-bottom:5px;">
-            <b>#{msg.get('app.qualitative.description.group1')}</b>
-        </p>
-    </td>
-</tr>
-<tr>
-    <td>
-        <table class="table_content">
+        <tr>
+            <td>
+                <p style="float:left; padding-bottom:5px;">
+                    <b>#{msg.get('app.qualitative.description.group1')}</b>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="table_content">
+
+                    <tr style="background-color: #3f3f3f">
+                        <th style="width: 330px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}"/>
+                        </th>
+                        <th style="width: 330px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}"/>
+                        </th>
+                        <th style="width: 330px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
+                        </th>
+                    </tr>
+                    <tr >
+                        <td class="title" colspan="6" style="background-color: #868686">
+                            <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s1')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss1}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss1')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d1}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d1')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl1}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.dl1')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d2}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d2')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d3}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d3')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d4}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d4')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d5}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d5')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d6}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d6')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d7}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d7')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d8}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d8')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="float:left; padding-bottom:5px;">
+                    <b>#{msg.get('app.qualitative.description.group2')}</b>
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <table class="table_content">
+
+                    <tr style="background-color: #3f3f3f">
+                        <th style="width: 330px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}" disabled="#{qualitative.isDisabled('classification.list')}"/>
+                        </th>
+                        <th style="width: 330px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}" disabled="#{qualitative.isDisabled('classification.list')}"/>
+                        </th>
+                        <th style="width: 330px;text-align: center" class="title" colspan="2">
+                            <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}" disabled="#{qualitative.isDisabled('classification.list')}"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="title" colspan="6"  style="background-color: #868686">
+                            <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s2')}" disabled="#{qualitative.isDisabled('classification.list')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss2}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss2')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d9}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d9')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl2}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.dl2')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss3}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss3')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d10}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d10')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl3}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.dl3')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss4}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss4')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d11}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d11')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl4}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.dl4')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss5}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss5')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d12}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.d12')}"/>
+                        </td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl5}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.dl5')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss6}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss6')}"/>
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl6}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.dl6')}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss7}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss7')}"/>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss8}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss8')}"/>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss9}" disabled="#{qualitative.isDisabled('classification.list')}">
+                                <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                            </h:selectBooleanCheckbox>
+                        </td>
+                        <td>
+                            <h:outputText value="#{msg.get('app.qualitative.label.ss9')}"/>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <p style="float:left; padding-bottom:5px;">
+                    <b>#{msg.get('app.qualitative.description.group3')}</b>
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+        <td>
+            <table class="table_content">
 
             <tr style="background-color: #3f3f3f">
                 <th style="width: 330px;text-align: center" class="title" colspan="2">
@@ -257,743 +588,411 @@
                 <th style="width: 330px;text-align: center" class="title" colspan="2">
                     <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
                 </th>
+            </tr>
+            <tr>
+                <td class="title" colspan="6" style="background-color: #868686">
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s3')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss10}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss10')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d13}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d13')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl7}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl7')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss11}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss11')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d14}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d14')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl8}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl8')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss12}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss12')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d15}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d15')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl9}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl9')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss13}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss13')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d16}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d16')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl10}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl10')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss14}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss14')}"/>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss15}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss15')}"/>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss16}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss16')}"/>
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss17}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.s17')}"/>
+                </td>
+                <td colspan="4"></td>
             </tr>
             <tr >
                 <td class="title" colspan="6" style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s1')}"/>
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s4')}"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss1}" >
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss18}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss1')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss18')}"/>
                 </td>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d1}">
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d17}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d1')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d17')}"/>
                 </td>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl1}">
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl11}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.dl1')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl11')}"/>
                 </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d2}">
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss19}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d2')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss19')}"/>
                 </td>
-                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d18}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d18')}"/>
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl12}" disabled="#{qualitative.isDisabled('classification.list')}">
+                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                    </h:selectBooleanCheckbox>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl12')}"/>
+                </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d3}">
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss20}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d3')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.ss20')}"/>
                 </td>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d4}">
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d19}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d4')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d19')}"/>
                 </td>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d5}">
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl13}" disabled="#{qualitative.isDisabled('classification.list')}">
                         <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d5')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.dl13')}"/>
                 </td>
-                <td colspan="2"></td>
             </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d6}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d6')}"/>
-                </td>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d7}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d7')}"/>
-                </td>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d8}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d8')}"/>
-                </td>
-                <td colspan="2"></td>
-            </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d20}" disabled="#{qualitative.isDisabled('classification.list')}">
+                            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
+                        </h:selectBooleanCheckbox>
+                    </td>
+                    <td>
+                        <h:outputText value="#{msg.get('app.qualitative.label.d20')}"/>
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
 
-
-        </table>
-    </td>
-</tr>
-<tr>
-    <td>
-        <p style="float:left; padding-bottom:5px;">
-            <b>#{msg.get('app.qualitative.description.group2')}</b>
-        </p>
-    </td>
-</tr>
-
-<tr>
-    <td>
-        <table class="table_content">
-
-            <tr style="background-color: #3f3f3f">
-                <th style="width: 330px;text-align: center" class="title" colspan="2">
-                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}"/>
-                </th>
-                <th style="width: 330px;text-align: center" class="title" colspan="2">
-                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}"/>
-                </th>
-                <th style="width: 330px;text-align: center" class="title" colspan="2">
-                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
-                </th>
+                </table>
+            </td>
             </tr>
             <tr>
-                <td class="title" colspan="6"  style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s2')}"/>
+                <td>
+                    <div>
+                        <p><b>#{msg.get('app.qualitative.label.section.classificationResult')}</b></p>
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss2}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss2')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d9}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d9')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl2}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.dl2')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss3}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss3')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d10}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d10')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl3}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.dl3')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss4}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss4')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d11}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d11')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl4}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.dl4')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss5}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss5')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d12}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.d12')}"/>
-                </td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl5}"  >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.dl5')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss6}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss6')}"/>
-                </td>
-                <td colspan="2"></td>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl6}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.dl6')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss7}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss7')}"/>
-                </td>
-                <td colspan="4"></td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss8}" >
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss8')}"/>
-                </td>
-                <td colspan="4"></td>
-            </tr>
-            <tr>
-                <td>
-                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss9}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-                    </h:selectBooleanCheckbox>
-                </td>
-                <td>
-                    <h:outputText value="#{msg.get('app.qualitative.label.ss9')}"/>
-                </td>
-                <td colspan="4"></td>
-            </tr>
-        </table>
-    </td>
-</tr>
-
-<tr>
-    <td>
-        <p style="float:left; padding-bottom:5px;">
-            <b>#{msg.get('app.qualitative.description.group3')}</b>
-        </p>
-    </td>
-</tr>
-
-<tr>
-<td>
-<table class="table_content">
-
-<tr style="background-color: #3f3f3f">
-    <th style="width: 330px;text-align: center" class="title" colspan="2">
-        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}"/>
-    </th>
-    <th style="width: 330px;text-align: center" class="title" colspan="2">
-        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}"/>
-    </th>
-    <th style="width: 330px;text-align: center" class="title" colspan="2">
-        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
-    </th>
-</tr>
-<tr>
-    <td class="title" colspan="6" style="background-color: #868686">
-        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s3')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss10}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss10')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d13}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d13')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl7}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl7')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss11}" >
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss11')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d14}" >
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d14')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl8}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl8')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss12}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss12')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d15}" >
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d15')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl9}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl9')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss13}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss13')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d16}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d16')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl10}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl10')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss14}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss14')}"/>
-    </td>
-    <td colspan="4"></td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss15}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss15')}"/>
-    </td>
-    <td colspan="4"></td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss16}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss16')}"/>
-    </td>
-    <td colspan="4"></td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss17}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.s17')}"/>
-    </td>
-    <td colspan="4"></td>
-</tr>
-<tr >
-    <td class="title" colspan="6" style="background-color: #868686">
-        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s4')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss18}" >
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss18')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d17}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d17')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl11}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl11')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss19}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss19')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d18}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d18')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl12}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl12')}"/>
-    </td>
-</tr>
-<tr>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss20}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.ss20')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d19}">
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d19')}"/>
-    </td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl13}" >
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.dl13')}"/>
-    </td>
-</tr>
-<tr>
-    <td colspan="2"></td>
-    <td>
-        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d20}" >
-            <f:ajax event="click" listener="#{qualitative.onClickQuality()}"/>
-        </h:selectBooleanCheckbox>
-    </td>
-    <td>
-        <h:outputText value="#{msg.get('app.qualitative.label.d20')}"/>
-    </td>
-    <td colspan="2"></td>
-</tr>
-
-</table>
-</td>
-</tr>
-
-<tr>
-    <td>
-        <div>
-            <p><b>#{msg.get('app.qualitative.label.section.classificationResult')}</b></p>
-        </div>
-    </td>
-</tr>
-
-<tr>
-    <td>
-        <table class="table_content">
-            <tr>
-                <td style="width: 30%;text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationResult')}   "/>
-                    <h:outputText class="title"  id="QualityResult" value="#{qualitative.qualitativeView.qualityResult}"/>
-                </td>
-                <td style="width: 70%;text-align: left">
-                    <table class="table_noborder">
+                    <table class="table_content">
                         <tr>
-                            <td class="title" style="width: 25%;text-align: left">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}"/>
+                            <td style="width: 30%;text-align: left">
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationResult')}   "/>
+                                <h:outputText class="title"  id="QualityResult" value="#{qualitative.qualitativeView.qualityResult}"/>
                             </td>
-                            <td>
-                                <p:selectOneMenu id="dlgQualityLevelA"
-                                                 value="#{qualitative.qualitativeView.qualityLevel.id}"
-                                                 styleClass="largest"
-                                                 size="1"
-                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                    <f:selectItems value="#{qualitative.qualityLevelList}"
-                                                   var="qualityItemsA"
-                                                   itemLabel="#{qualityItemsA.description}"
-                                                   itemValue="#{qualityItemsA.id}"/>
-                                    <p:ajax event="change" listener="#{qualitative.onSelectQualityReason}" process="@this" update=":frmMain:qualitativeReason"/>
-                                </p:selectOneMenu>
+                            <td style="width: 70%;text-align: left">
+                                <table class="table_noborder">
+                                    <tr>
+                                        <td class="title" style="width: 25%;text-align: left">
+                                            <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}"/>
+                                        </td>
+                                        <td>
+                                            <p:selectOneMenu id="dlgQualityLevelA"
+                                                             value="#{qualitative.qualitativeView.qualityLevel.id}"
+                                                             styleClass="largest"
+                                                             size="1"
+                                                             disabled="#{qualitative.isDisabled('classificationQuality')}"
+                                                             required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                                <f:selectItems value="#{qualitative.qualityLevelList}"
+                                                               var="qualityItemsA"
+                                                               itemLabel="#{qualityItemsA.description}"
+                                                               itemValue="#{qualityItemsA.id}"/>
+                                                <p:ajax event="change" listener="#{qualitative.onSelectQualityReason}" process="@this" update=":frmMain:qualitativeReason"/>
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}"/>
+                                        </td>
+                                        <td>
+                                            <p:inputTextarea id="qualitativeReason" cols="70" rows="3" name="remark"
+                                                             disabled="#{qualitative.isDisabled('classificationRemark')}"
+                                                             required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}"
+                                                             value="#{qualitative.qualitativeView.reason}"/>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
                             <td class="title">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}"/>
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationDate')}"/>
+                                <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                </h:outputText>
                             </td>
-                            <td>
-                                <p:inputTextarea id="qualitativeReason" cols="70" rows="3" name="remark"
-                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}"
-                                                 value="#{qualitative.qualitativeView.reason}"/>
+                            <td class="title">
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemarkNote')}"/>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationDate')}"/>
-                    <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
-                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                    </h:outputText>
-                </td>
-                <td class="title">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemarkNote')}"/>
+                <td>
+                    <div>
+                        <p><b>#{msg.get('app.qualitative.label.section.classificationDesc')}</b></p>
+                    </div>
                 </td>
             </tr>
-        </table>
-    </td>
-</tr>
+            <tr>
+                <td>
+                    <table class="table_content">
+                        <tr>
+                            <td style="width: 50px;text-align: left">
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.Pass')}"/>
+                            </td>
+                            <td style="text-align: left">
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.description.pass')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SM')}"/>
+                            </td>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.description.sm')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SS')}"/>
+                            </td>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.description.ss')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.D')}"/>
+                            </td>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.description.d')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.DL')}"/>
+                            </td>
+                            <td>
+                                <h:outputLabel value="#{msg.get('app.qualitative.level.description.dl')}"/>
+                            </td>
+                        </tr>
 
-<tr>
-    <td>
-        <div>
-            <p><b>#{msg.get('app.qualitative.label.section.classificationDesc')}</b></p>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="table_noborder" style="width:100%">
+                        <tr>
+                            <td colspan="2" class="center">
+                                <p:commandButton value="#{msg.get('app.qualitative.button.saveButton')}"
+                                                 id="btnSave"
+                                                 binding="#{addQualitativeButton}"
+                                                 styleClass="medium"
+                                                 disabled="#{qualitative.isDisabled('saveButton')}"
+                                                 process=":frmMain"
+                                                 action="#{qualitative.onSaveQualitativeA}"
+                                                 update=":frmMain,:msgBoxSystemMessagePanel"/>
+                                <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
+                                                 id="btnCancel"
+                                                 binding="#{cancelButton}"
+                                                 styleClass="medium"
+                                                 disabled="#{qualitative.isDisabled('saveButton')}"
+                                                 process=":frmMain"
+                                                 action="#{qualitative.onCancelQualitativeA}"
+                                                 update=":frmMain"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+        <!-- end content -->
         </div>
-    </td>
-</tr>
-
-<tr>
-    <td>
-        <table class="table_content">
-            <tr>
-                <td style="width: 50px;text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.Pass')}"/>
-                </td>
-                <td style="text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.pass')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SM')}"/>
-                </td>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.sm')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SS')}"/>
-                </td>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.ss')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.D')}"/>
-                </td>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.d')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.DL')}"/>
-                </td>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.dl')}"/>
-                </td>
-            </tr>
-
-        </table>
-    </td>
-</tr>
-
-<tr>
-    <td>
-        <table class="table_noborder" style="width:100%">
-            <tr>
-                <td colspan="2" class="center">
-                    <p:commandButton value="#{msg.get('app.qualitative.button.saveButton')}"
-                                     id="btnSave"
-                                     binding="#{addQualitativeButton}"
-                                     styleClass="medium"
-                                     process=":frmMain"
-                                     action="#{qualitative.onSaveQualitativeA}"
-                                     update=":frmMain,:msgBoxSystemMessagePanel"/>
-                    <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
-                                     id="btnCancel"
-                                     binding="#{cancelButton}"
-                                     styleClass="medium"
-                                     process=":frmMain"
-                                     action="#{qualitative.onCancelQualitativeA}"
-                                     update=":frmMain"/>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-
-</table>
-<!-- end content -->
-</div>
-</div>
-<div id="bottom_line"><!-- --></div>
-</div>
+        </div>
+        <div id="bottom_line"><!-- --></div>
+    </div>
 <div class="clear"></div>
 <!-- Start Footer -->
 <h:inputHidden id="pagename" value="mnuborrowerinfo"/>
