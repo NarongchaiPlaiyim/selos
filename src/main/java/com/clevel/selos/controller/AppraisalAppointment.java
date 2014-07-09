@@ -236,18 +236,18 @@ public class AppraisalAppointment implements Serializable {
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
                 updateContractFlag(appraisalContactDetailView);
-                if(Util.isNull(appraisalView.getAppraisalDate())){
-                    appraisalView.setAppraisalDate(DateTime.now().toDate());
-                    log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
-                }
-                if(Util.isNull(appraisalView.getDueDate())){
-                    appraisalView.setDueDate(DateTime.now().toDate());
-                    log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
-                }
-                if(Util.isNull(appraisalView.getAppointmentDate())){
-                    appraisalView.setAppointmentDate(DateTime.now().toDate());
-                    log.debug("--[NEW] AppointmentDate : {}", dateString(appraisalView.getAppointmentDate()));
-                }
+//                if(Util.isNull(appraisalView.getAppraisalDate())){
+//                    appraisalView.setAppraisalDate(DateTime.now().toDate());
+//                    log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
+//                }
+//                if(Util.isNull(appraisalView.getDueDate())){
+//                    appraisalView.setDueDate(DateTime.now().toDate());
+//                    log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
+//                }
+//                if(Util.isNull(appraisalView.getAppointmentDate())){
+//                    appraisalView.setAppointmentDate(DateTime.now().toDate());
+//                    log.debug("--[NEW] AppointmentDate : {}", dateString(appraisalView.getAppointmentDate()));
+//                }
             } else {
                 appraisalView = new AppraisalView();
             }

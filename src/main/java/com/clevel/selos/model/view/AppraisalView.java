@@ -4,7 +4,6 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -65,9 +64,9 @@ public class AppraisalView implements Serializable {
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         appraisalContactDetailView = new AppraisalContactDetailView();
         removeCollListId = new ArrayList<Long>();
-        appraisalDate = DateTime.now().toDate();
-        dueDate = DateTime.now().toDate();
-        appointmentDate = DateTime.now().toDate();
+//        appraisalDate = DateTime.now().toDate();
+//        dueDate = DateTime.now().toDate();
+//        appointmentDate = DateTime.now().toDate();
     }
 
     public long getId() {
