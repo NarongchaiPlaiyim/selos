@@ -252,9 +252,12 @@ public class BizInfoSummary extends BaseController {
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
         log.debug("getBusinessInfoListDB ::: bizInfoDetailViewList : {}", bizInfoDetailViewList);
 
-        if(bizInfoDetailViewList.size() > 0
-                && bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
-            onCalSummaryTable();
+        if(Util.isSafetyList(bizInfoDetailViewList)){
+            if(!Util.isNull( bizInfoSummaryView.getCirculationAmount())){
+                if (bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
+                    onCalSummaryTable();
+                }
+            }
         }
 
     }
@@ -262,7 +265,7 @@ public class BizInfoSummary extends BaseController {
     private void onCheckInterview(){
         readonlyInterview = true;
         if(!Util.isNull(bizInfoSummaryView.getCirculationAmount())){
-             if( bizInfoSummaryView.getCirculationAmount().doubleValue() > 0){
+            if (bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
                  readonlyInterview = false;
             }
         }
@@ -280,19 +283,19 @@ public class BizInfoSummary extends BaseController {
         BigDecimal earningsBeforeTaxAmount;
         BigDecimal reduceTaxAmount = BigDecimal.ZERO;
 
-        if(bizInfoSummaryView.getOperatingExpenseAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getOperatingExpenseAmount())){
             operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
         }
 
-        if(bizInfoSummaryView.getProfitMarginAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getProfitMarginAmount())){
             profitMarginAmount = bizInfoSummaryView.getProfitMarginAmount();
         }
 
-        if(bizInfoSummaryView.getReduceInterestAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getReduceInterestAmount())){
             reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
         }
 
-        if(bizInfoSummaryView.getReduceTaxAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getReduceTaxAmount())){
             reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
         }
 
@@ -335,7 +338,7 @@ public class BizInfoSummary extends BaseController {
 
     public void onCheckSave(){
         log.info("have to redirect is " + redirect );
-        if (redirect != null && !redirect.equals("")) {
+        if (!Util.isNull(redirect) && !(("")).equals(redirect)) {
             RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
         }
     }
