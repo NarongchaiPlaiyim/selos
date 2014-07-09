@@ -4,6 +4,7 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui"
         >
 
     <h:head>
@@ -14,6 +15,32 @@
 
 
     <h:body>
+        <h:form id="AppraisalTest">
+            <p:panel header="AppraisalTestHeader">
+                <h:panelGrid columns="2">
+                    <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                    value="#{TestNCRS.appraisalDate}"
+                                    readonlyInput="true"
+                                    pattern="dd/MM/yyyy"
+                                    defaultdate="#{TestNCRS.currentDateDDMMYY}"
+                                    mindate="#{TestNCRS.currentDateDDMMYY}"
+                                    yearRange="1950:2100">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        <p:ajax event="dateSelect" process=":AppraisalTest" listener="#{TestNCRS.onChangeAppraisalDate()}" update=":AppraisalTest:appraisalDate2" />
+                    </clv:BECalendar>
+                    <clv:BECalendar id="appraisalDate2" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                    value="#{TestNCRS.appraisalDate2}"
+                                    readonlyInput="true"
+                                    pattern="dd/MM/yyyy"
+                                    defaultdate="#{TestNCRS.currentDateDDMMYY}"
+                                    mindate="#{TestNCRS.currentDateDDMMYY}"
+                                    yearRange="1950:2100">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                    </clv:BECalendar>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
 
         <h:form id="ISATest">
             <p:panel header="ISATestHeader">

@@ -418,4 +418,16 @@ public class DateTimeUtil implements Serializable {
         cal.add(Calendar.DATE, days); //minus number would decrement the days
         return cal.getTime();
     }
+
+    public static Date addDayForDueDate(final Date date, final int day){
+        DateTime dtOrg = new DateTime(date);
+        return dtOrg.plusDays(day).toDate();
+    }
+
+    public static String getDayOfWeek(final Date date){
+        //EEE gives short day names
+        //EEEE would be full length.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.US);
+        return dateFormat.format(date);
+    }
 }

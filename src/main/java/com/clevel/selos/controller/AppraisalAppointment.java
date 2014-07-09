@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.AppraisalDivisionDAO;
 import com.clevel.selos.dao.master.LocationPropertyDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DayOff;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
@@ -560,54 +561,158 @@ public class AppraisalAppointment implements Serializable {
         onCreation();
     }
 
+    //TODO edit this for fix due date
     public void onChangeAppraisalDate(){
-        log.info("onChangeAppraisalDate");
-        int locate = appraisalView.getLocationOfProperty().getId();
+        log.info("-- onChangeAppraisalDate()");
+        final Date NOW = DateTime.now().toDate();
+        if(!Util.isNull(appraisalView.getLocationOfProperty())){
+            log.debug("-- AppraisalView[{}]", appraisalView.toString());
+            final int LOCATE = appraisalView.getLocationOfProperty().getId();
+            log.info("-- locate id is {}", appraisalView.getLocationOfProperty().getId());
 
-        log.info("locate is " + locate);
-
-        Date dueDate;
-        DateTime dueDateTime = new DateTime(appraisalView.getAppraisalDate());
-        DateTime addedDate  = new DateTime(appraisalView.getAppraisalDate());
-        int nowDay = dueDateTime.getDayOfWeek();
-
-        log.info ("dueDateTime dayOfWeek before plus is {}", dueDateTime.getDayOfWeek());
-
-        if(locate == 1){
-            log.info("in locate 1 ");
-            if(nowDay==1||nowDay>5) {
-                addedDate = dueDateTime.plusDays(3);
-            }else if(nowDay==4){
-                addedDate = dueDateTime.plusDays(4);
-            }else{
-                addedDate = dueDateTime.plusDays(5);
+            if(Util.isNull(appraisalView.getAppraisalDate())){
+                appraisalView.setAppraisalDate(NOW);
+                log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
             }
-        }else if(locate == 2){
-            log.info("in locate 2");
-            if(nowDay>5) {
-                addedDate = dueDateTime.plusDays(4);
-            }else if(nowDay==5){
-                addedDate = dueDateTime.plusDays(5);
-            }else{
-                addedDate = dueDateTime.plusDays(6);
+
+            if(Util.isNull(appraisalView.getDueDate())){
+                appraisalView.setDueDate(NOW);
+                log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
             }
-        }else if(locate == 3){
-            log.info("in locate 3");
-            if(nowDay==5){
-                addedDate = dueDateTime.plusDays(9);
-            }else if(nowDay==4){
-                addedDate = dueDateTime.plusDays(10);
-            }else{
-                addedDate = dueDateTime.plusDays(8);
+
+            final int BANGKOK_AND_PERIMETER = 3;
+            final int COUNTRY = 4;
+            final int OTHER_CASE = 6;
+            final Date APPRAISAL_DATE = appraisalView.getAppraisalDate();
+            log.debug("-- APPRAISAL_DATE : {}", dateString(APPRAISAL_DATE));
+            if(LOCATE == 1){
+                log.info("-- In locate due date +{}.", BANGKOK_AND_PERIMETER);
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
+            }else if(LOCATE == 2){
+                log.info("-- In locate due date +{}.", COUNTRY);
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, COUNTRY));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
+            }else if(LOCATE == 3){
+                log.info("-- In locate due date +{}.", OTHER_CASE);
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, OTHER_CASE));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
+            } else {
+                log.info("-- Other locate");
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
+            }
+        } else {
+            log.debug("-- AppraisalView.getLocationOfProperty() is null");
+            appraisalView.setAppraisalDate(NOW);
+            log.debug("--[NEW] AppraisalDate");
+            appraisalView.setDueDate(NOW);
+            log.debug("--[NEW] DueDate");
+        }
+    }
+
+    public void onChangeAppointmentDate(){
+        log.info("-- onChangeAppointmentDate()");
+        if(Util.isNull(appraisalView.getAppointmentDate())){
+            appraisalView.setAppointmentDate(DateTime.now().toDate());
+            log.debug("--[NEW] AppointmentDate");
+        }
+        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
+        onChangeAppraisalDate();
+    }
+
+    public void onChangeLocationOfProperty(){
+        log.info("-- onChangeLocationOfProperty()");
+        if(!Util.isNull(appraisalView.getAppraisalDate()) && !Util.isNull(appraisalView.getDueDate())){
+            log.debug("-- AppraisalDate and DuaDate is not null");
+            onChangeAppraisalDate();
+        }
+    }
+
+    private Date updateDueDate(final Date APPRAISAL_DATE, final int DAY_FOR_DUE_DATE){
+        int addDayForDueDate = 0;
+        log.debug("-- AppraisalDate : {}", dateString(APPRAISAL_DATE));
+        for (int i = 1; i <= DAY_FOR_DUE_DATE; i++) {
+            final Date date = addDate(APPRAISAL_DATE, i);
+            log.debug("-- Check DATE : {}", dateString(date));
+            if(isDayOff(date)){
+                log.debug("-- {} is day off.", dateString(date));
+                addDayForDueDate++;
+                log.debug("-- addDayForDueDate : {}", addDayForDueDate);
+            }  else if(isHoliday(date)){
+                log.debug("-- {} is holiday.", dateString(date));
+                addDayForDueDate++;
+                log.debug("-- addDayForDueDate : {}", addDayForDueDate);
             }
         }
+        final int TOTAL_DAY = addDayForDueDate + DAY_FOR_DUE_DATE;
+        log.debug("-- addDayForDueDate[{}] + dayByLocate[{}] = Total Day[{}]",addDayForDueDate, DAY_FOR_DUE_DATE, TOTAL_DAY);
 
-        log.info ("dueDateTime dayOfWeek after plus is {}", dueDateTime.getDayOfWeek());
+        final Date DATE = addDate(APPRAISAL_DATE, TOTAL_DAY);
+        log.debug("-- AppraisalDate : {}", dateString(APPRAISAL_DATE));
+        log.debug("-- DueDate : {}", dateString(DATE));
+        return checkDueDate(DATE);
+    }
 
-        dueDate = addedDate.toDate();
-        appraisalView.setDueDate(dueDate);
-//        appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());  //Edited by Chai for fixed issue
-        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
+    private Date checkDueDate(final Date DUE_DATE){
+        log.debug("-- checkDueDate(DueDate : {})", dateString(DUE_DATE));
+        final int TWO_DAYS = 2;
+        final int ONE_DAY = 1;
+        Date date = DUE_DATE;
+        while (isDayOff(date) || isHoliday(date)) {
+            if(isSaturday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, TWO_DAYS);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            } else if(isSunday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, ONE_DAY);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            } else if(isHoliday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, ONE_DAY);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            }
+        }
+        log.debug("--[RETURN] DueDate : {}", dateString(date));
+        return date;
+    }
+
+    private boolean isDayOff(final Date DATE){
+        log.debug("-- isDayOff(Date : {})", dateString(DATE));
+        return isSaturday(DATE)|| isSunday(DATE);
+    }
+
+    private boolean isSaturday(final Date DATE){
+        log.debug("-- isSaturday(Date : {})", dateString(DATE));
+        return DayOff.SATURDAY.equals(getDayOfWeek(DATE));
+    }
+
+    private boolean isSunday(final Date DATE){
+        log.debug("-- isSunday(Date : {})", dateString(DATE));
+        return DayOff.SUNDAY.equals(getDayOfWeek(DATE));
+    }
+
+    private String getDayOfWeek(final Date DATE){
+        final String DAY_OF_WEEK = DateTimeUtil.getDayOfWeek(DATE);
+        log.debug("-- {} is {}.", dateString(DATE), DAY_OF_WEEK);
+        return DAY_OF_WEEK;
+    }
+
+    private boolean isHoliday(final Date DATE){
+        return appraisalAppointmentControl.isHoliday(DATE);
+    }
+
+    private Date addDate(final Date DATE, final int DAY){
+        return DateTimeUtil.addDayForDueDate(DATE, DAY);
+    }
+
+    private String dateString(final Date DATE){
+        return DateTimeUtil.convertToStringDDMMYYYY(DATE);
     }
 
     public void onOpenAddContactRecordDialog() {

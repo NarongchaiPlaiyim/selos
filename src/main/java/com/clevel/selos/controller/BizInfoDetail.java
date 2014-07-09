@@ -236,8 +236,6 @@ public class BizInfoDetail extends BaseController {
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 if(supplierDetailList.size() > 0){
                     calSumBizStakeHolderDetailView(supplierDetailList,"1");
-                } else {
-
                 }
 
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
@@ -310,7 +308,6 @@ public class BizInfoDetail extends BaseController {
         } else {
             bizInfoDetailView.setBizPermission("N");
         }
-        log.debug("--AP. {}, --AR. {}",businessDesc.getAp(),businessDesc.getAr());
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAp());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAr());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
@@ -320,8 +317,8 @@ public class BizInfoDetail extends BaseController {
         log.debug("onChangeBizPermission ");
         if(bizInfoDetailView.getBizPermission() != null ){
             if(bizInfoDetailView.getBizPermission().equals("Y")){
-                bizInfoDetailView.setBizDocPermission("");
-                bizInfoDetailView.setBizDocExpiryDate(null);
+                bizInfoDetailView.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
+                bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
                 setMandateValue("bizDocPermission",true);
                 setDisabledValue("bizDocPermission",false);
                 setMandateValue("bizDocExpiryDate",true);
@@ -659,6 +656,7 @@ public class BizInfoDetail extends BaseController {
 
     public void onSaveBizInfoView(){
         try{
+
             if(Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()) != null){
                 sumBizPercent = Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()).doubleValue();
             }
@@ -670,15 +668,18 @@ public class BizInfoDetail extends BaseController {
                 return;
             }
 
+            if (Util.isNull(bizInfoSummaryView)){
+                bizInfoSummaryId = bizInfoDetailControl.onSaveSummaryByDetail(workCaseId);
+                log.debug("--Creation BizInfoSummary.");
+            }
+
             if(bizInfoDetailView.getId() == 0){
                 bizInfoDetailView.setCreateBy(user);
                 bizInfoDetailView.setCreateDate(DateTime.now().toDate());
             }
 
             if(onCheckPermission()){
-                if (Util.isNull(bizInfoSummaryView)){
-                    bizInfoSummaryId = bizInfoDetailControl.onSaveSummaryByDetail(workCaseId);
-                }
+
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);

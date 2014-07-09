@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.businesscontrol.BRMSControl;
 import com.clevel.selos.dao.master.AppraisalCompanyDAO;
@@ -26,6 +27,7 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.DayOff;
 import com.clevel.selos.model.db.master.AppraisalCompany;
 import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
@@ -33,7 +35,9 @@ import com.clevel.selos.model.view.MandateDocResponseView;
 import com.clevel.selos.model.view.MandateDocView;
 import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.transform.business.CollateralBizTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
@@ -44,6 +48,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +79,7 @@ public class TestNCRS implements Serializable {
     @Inject
     private BRMSInterface brmsInterface;
     private long workCaseId = 481;
-
+    private String currentDateDDMMYY;
     @Inject
     private BRMSControl brmsControl;
 
@@ -133,7 +138,12 @@ public class TestNCRS implements Serializable {
     private List<AppraisalCompany> appraisalCompanyList;
     @Inject
     private AppraisalCompanyDAO appraisalCompanyDAO;
+    @Inject
+    private AppraisalAppointmentControl appraisalAppointmentControl;
 
+    //Appraisal Date
+    private Date appraisalDate;
+    private Date appraisalDate2;
     @Inject
     public TestNCRS() {
 
@@ -143,6 +153,8 @@ public class TestNCRS implements Serializable {
     public void init(){
         onLoadProvince();
         onLoadCompany();
+        appraisalDate = DateTime.now().toDate();
+        appraisalDate2 = DateTime.now().toDate();
     }
 
     private void onLoadProvince(){
@@ -161,6 +173,8 @@ public class TestNCRS implements Serializable {
         this.provinceList = provinceList;
     }
 
+
+
     private void onLoadCompany(){
         log.debug("-- onLoadCompany()");
         appraisalCompanyList =  appraisalCompanyDAO.findAllASC();
@@ -175,6 +189,116 @@ public class TestNCRS implements Serializable {
 
     public void setAppraisalCompanyList(List<AppraisalCompany> appraisalCompanyList) {
         this.appraisalCompanyList = appraisalCompanyList;
+    }
+
+
+    //TODO edit this for fix due date
+    public void onChangeAppraisalDate(){
+        log.info("-- onChangeAppraisalDate()");
+        final Date NOW = DateTime.now().toDate();
+        final int LOCATE = 1;
+        final int BANGKOK_AND_PERIMETER = 3;
+        final int COUNTRY = 4;
+        final int OTHER_CASE = 6;
+        final Date APPRAISAL_DATE = appraisalDate;
+        if(LOCATE == 1){
+            log.info("-- In locate due date +{}.", BANGKOK_AND_PERIMETER);
+            appraisalDate2 = updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER);
+        }else if(LOCATE == 2){
+            log.info("-- In locate due date +{}.", COUNTRY);
+            appraisalDate2 = updateDueDate(APPRAISAL_DATE, COUNTRY);
+        }else if(LOCATE == 3){
+            log.info("-- In locate due date +{}.", OTHER_CASE);
+            appraisalDate2 = updateDueDate(APPRAISAL_DATE, OTHER_CASE);
+        }
+    }
+
+    private Date updateDueDate(final Date APPRAISAL_DATE, final int DAY_FOR_DUE_DATE){
+        int addDayForDueDate = 0;
+        log.debug("-- AppraisalDate : {}", dateString(APPRAISAL_DATE));
+        for (int i = 1; i <= DAY_FOR_DUE_DATE; i++) {
+            final Date date = addDate(APPRAISAL_DATE, i);
+            log.debug("-- Check DATE : {}", dateString(date));
+            if(isDayOff(date)){
+                log.debug("-- {} is day off.", dateString(date));
+                addDayForDueDate++;
+                log.debug("-- addDayForDueDate : {}", addDayForDueDate);
+            }  else if(isHoliday(date)){
+                log.debug("-- {} is holiday.", dateString(date));
+                addDayForDueDate++;
+                log.debug("-- addDayForDueDate : {}", addDayForDueDate);
+            }
+        }
+        final int TOTAL_DAY = addDayForDueDate + DAY_FOR_DUE_DATE;
+        log.debug("-- addDayForDueDate[{}] + dayByLocate[{}] = Total Day[{}]",addDayForDueDate, DAY_FOR_DUE_DATE, TOTAL_DAY);
+
+        final Date DATE = addDate(APPRAISAL_DATE, TOTAL_DAY);
+        log.debug("-- AppraisalDate : {}", dateString(APPRAISAL_DATE));
+        log.debug("-- DueDate : {}", dateString(DATE));
+        return checkDueDate(DATE);
+    }
+
+    private Date checkDueDate(final Date DUE_DATE){
+        log.debug("-- checkDueDate(DueDate : {})", dateString(DUE_DATE));
+        final int TWO_DAYS = 2;
+        final int ONE_DAY = 1;
+        Date date = DUE_DATE;
+        while (isDayOff(date) || isHoliday(date)) {
+            if(isSaturday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, TWO_DAYS);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            } else if(isSunday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, ONE_DAY);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            } else if(isHoliday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, ONE_DAY);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            }
+        }
+        log.debug("--[RETURN] DueDate : {}", dateString(date));
+        return date;
+    }
+
+    private boolean isDayOff(final Date DATE){
+        log.debug("-- isDayOff(Date : {})", dateString(DATE));
+        return isSaturday(DATE)|| isSunday(DATE);
+    }
+
+    private boolean isSaturday(final Date DATE){
+        log.debug("-- isSaturday(Date : {})", dateString(DATE));
+        return DayOff.SATURDAY.equals(getDayOfWeek(DATE));
+    }
+
+    private boolean isSunday(final Date DATE){
+        log.debug("-- isSunday(Date : {})", dateString(DATE));
+        return DayOff.SUNDAY.equals(getDayOfWeek(DATE));
+    }
+
+    private String getDayOfWeek(final Date DATE){
+        log.debug("-- getDayOfWeek(Date : {})", dateString(DATE));
+        final String DAY_OF_WEEK = DateTimeUtil.getDayOfWeek(DATE);
+        log.debug("-- {} is {}.", dateString(DATE), DAY_OF_WEEK);
+        return DAY_OF_WEEK;
+    }
+
+    private boolean isHoliday(final Date DATE){
+        return appraisalAppointmentControl.isHoliday(DATE);
+    }
+
+    private Date addDate(final Date DATE, final int DAY){
+        return DateTimeUtil.addDayForDueDate(DATE, DAY);
+    }
+
+    private String dateString(final Date DATE){
+        return DateTimeUtil.convertToStringDDMMYYYY(DATE);
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", DateTime.now().toDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(DateTime.now().toDate());
     }
 
     public void onClickNCRS() {
@@ -555,6 +679,22 @@ public class TestNCRS implements Serializable {
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
+    }
+
+    public Date getAppraisalDate() {
+        return appraisalDate;
+    }
+
+    public void setAppraisalDate(Date appraisalDate) {
+        this.appraisalDate = appraisalDate;
+    }
+
+    public Date getAppraisalDate2() {
+        return appraisalDate2;
+    }
+
+    public void setAppraisalDate2(Date appraisalDate2) {
+        this.appraisalDate2 = appraisalDate2;
     }
 
     public String getUserId() {

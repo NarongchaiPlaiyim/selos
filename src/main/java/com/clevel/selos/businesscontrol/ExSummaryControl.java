@@ -57,6 +57,8 @@ public class ExSummaryControl extends BusinessControl {
     private DecisionDAO decisionDAO;
     @Inject
     UWRuleResultDetailDAO uwRuleResultDetailDAO;
+    @Inject
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
@@ -363,14 +365,12 @@ public class ExSummaryControl extends BusinessControl {
         exSumCollateralView.setNoneCoreAssetValue(tmpNonCore);
 
 //        Sum of (Propose/PreApprove/Approve Limit)
-        if(decisionView != null && newCreditFacilityView != null){
-            exSumCollateralView.setLimitApprove(Util.add(decisionView.getApproveTotalCreditLimit(),newCreditFacilityView.getTotalPropose()));
-        }else if(decisionView != null){
+        if(decisionView != null && decisionView.getApproveTotalCreditLimit()!=null){
             exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
-        }else if(newCreditFacilityView != null){
+        } else if(newCreditFacilityView!=null && newCreditFacilityView.getTotalPropose()!=null) {
             exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
-        }else{
-            exSumCollateralView.setLimitApprove(null);
+        } else {
+            exSumCollateralView.setLimitApprove(BigDecimal.ZERO);
         }
 
         //Todo: Percent LTV
@@ -900,14 +900,14 @@ public class ExSummaryControl extends BusinessControl {
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = BigDecimal.ZERO;
         BigDecimal groupExposureUW = BigDecimal.ZERO;
-        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
-            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
+        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())
+            && !Util.isNull(existingCreditFacility) && !Util.isZero(existingCreditFacility.getId())){
+            groupExposureBDM = Util.add(existingCreditFacility.getTotalGroupExposure(), newCreditFacility.getTotalPropose());
             if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
-                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
-            } else {
-                groupExposureUW = newCreditFacility.getTotalExposure();
+                groupExposureUW = Util.add(existingCreditFacility.getTotalGroupExposure(), decision.getTotalApproveCredit());
             }
         }
 

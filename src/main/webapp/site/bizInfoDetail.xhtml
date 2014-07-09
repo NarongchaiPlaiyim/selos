@@ -45,7 +45,8 @@
                             <td colspan="3">
                                 <p:inputText style="min-width: 381px; width: 381px; max-width: 381px;"
                                              value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"
-                                             readonly="#{bizInfoDetail.isDisabled('businessInfoDetail')}"/>
+                                             readonly="#{bizInfoDetail.isDisabled('businessInfoDetail')}"
+                                             required="#{not empty param[saveButton.clientId]}"/>
                                 <h:inputHidden value="#{bizInfoDetail.bizInfoDetailView.id}"/>
                             </td>
                         </tr>

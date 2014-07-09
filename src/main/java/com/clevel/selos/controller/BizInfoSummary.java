@@ -252,9 +252,12 @@ public class BizInfoSummary extends BaseController {
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
         log.debug("getBusinessInfoListDB ::: bizInfoDetailViewList : {}", bizInfoDetailViewList);
 
-        if(bizInfoDetailViewList.size() > 0
-                && bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
-            onCalSummaryTable();
+        if(Util.isSafetyList(bizInfoDetailViewList)){
+            if(!Util.isNull( bizInfoSummaryView.getCirculationAmount())){
+                if (bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
+                    onCalSummaryTable();
+                }
+            }
         }
 
     }
@@ -262,7 +265,7 @@ public class BizInfoSummary extends BaseController {
     private void onCheckInterview(){
         readonlyInterview = true;
         if(!Util.isNull(bizInfoSummaryView.getCirculationAmount())){
-             if( bizInfoSummaryView.getCirculationAmount().doubleValue() > 0){
+            if (bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
                  readonlyInterview = false;
             }
         }
@@ -280,19 +283,19 @@ public class BizInfoSummary extends BaseController {
         BigDecimal earningsBeforeTaxAmount;
         BigDecimal reduceTaxAmount = BigDecimal.ZERO;
 
-        if(bizInfoSummaryView.getOperatingExpenseAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getOperatingExpenseAmount())){
             operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
         }
 
-        if(bizInfoSummaryView.getProfitMarginAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getProfitMarginAmount())){
             profitMarginAmount = bizInfoSummaryView.getProfitMarginAmount();
         }
 
-        if(bizInfoSummaryView.getReduceInterestAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getReduceInterestAmount())){
             reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
         }
 
-        if(bizInfoSummaryView.getReduceTaxAmount() != null){
+        if(!Util.isNull(bizInfoSummaryView.getReduceTaxAmount())){
             reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
         }
 
@@ -335,7 +338,7 @@ public class BizInfoSummary extends BaseController {
 
     public void onCheckSave(){
         log.info("have to redirect is " + redirect );
-        if (redirect != null && !redirect.equals("")) {
+        if (!Util.isNull(redirect) && !(("")).equals(redirect)) {
             RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
         }
     }
@@ -352,13 +355,6 @@ public class BizInfoSummary extends BaseController {
                 onViewDetail();
             }
 
-//            if (redirect != null && !redirect.equals("")) {
-//                if (redirect.equals("viewDetail")) {
-//                    log.info("view Detail ");
-//                    onViewDetail();
-//                }
-//            }
-
             log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
             String url = "bizInfoDetail.jsf";
             FacesUtil.redirect("/site/bizInfoDetail.jsf");
@@ -373,35 +369,9 @@ public class BizInfoSummary extends BaseController {
     public void onSaveBizInfoSummary() {
         try {
             log.info("onSaveBizInfoSummary begin");
-//            HttpSession session = FacesUtil.getSession(true);
-//            session.setAttribute("bizInfoDetailViewId", -1);
-
-//            if (!Util.isNull(redirect)&& !redirect.equals("")) {
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            }
-
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);
-//            if (redirect != null && !redirect.equals("")) {
-//                if (redirect.equals("viewDetail")) {
-//                    log.info("view Detail ");
-//                    onViewDetail();
-//                }
-
-//                log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
-
-//                String url = "bizInfoDetail.jsf";
-//                FacesUtil.redirect("/site/bizInfoDetail.jsf");
-                /*FacesContext fc = FacesContext.getCurrentInstance();
-                ExternalContext ec = fc.getExternalContext();
-
-                log.info("redirect to new page url is " + url);
-                ec.redirect(ec.getRequestContextPath() + "/site/bizInfoDetail.jsf");*/
-                //ec.redirect(url);
-//                log.info("redirect to new page goooo!! 1");
-//                return;
-//            } else {
                 log.info("after redirect method");
                 log.info("not have to redirect ");
                 onCreation();
@@ -439,7 +409,9 @@ public class BizInfoSummary extends BaseController {
         try {
             log.info("onDeleteBizInfoToDB Controller begin ");
             bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
-            getBusinessInfoListDB();
+            bizInfoDetailControl.onSaveSumOnSummary(bizInfoSummaryView.getId(),workCaseId,stepId);
+            onCreation();
+//            getBusinessInfoListDB();
         } catch (Exception e) {
 
         } finally {
