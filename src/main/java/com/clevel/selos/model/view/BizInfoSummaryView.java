@@ -65,9 +65,6 @@ public class BizInfoSummaryView implements Serializable {
     private List<BizInfoDetailView> bizInfoDetailViewList;
 
     public BizInfoSummaryView() {
-        expiryDate = new Date();
-        registrationDate = new Date();
-        establishDate = new Date();
         circulationAmount = BigDecimal.ZERO;
         circulationPercentage = BigDecimal.ZERO;
         productionCostsAmount = BigDecimal.ZERO;
