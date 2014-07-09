@@ -247,7 +247,7 @@ function resetter()
                             <tr>
                                 <td class="title" ></td> <td class="title" style="width: 350px;"></td>
                                 <td class="title">
-                                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this"  >
+                                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this" ajax="false" action="#{peSearch.resetSearchFields()}" >
                                         <p:resetInput target="pnl_maincontainer" />
                                     </p:commandButton>
                                 </td>

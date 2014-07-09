@@ -618,6 +618,8 @@ public class ChangeOwner implements Serializable {
             checked.clear();
             setChecked(checked);
 
+            log.debug("Checked size : {}, values : {}",checked.size(),checked);
+
             selectTeamNameChangeOwner = "";
 
             setSelectTeamNameChangeOwner("");
