@@ -903,7 +903,6 @@ public class ExSummaryControl extends BusinessControl {
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = null;
         BigDecimal groupExposureUW = null;
         if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
@@ -923,13 +922,6 @@ public class ExSummaryControl extends BusinessControl {
 
         exSummary.setGroupExposureUW(groupExposureUW);
         exSummary.setGroupExposureBDM(groupExposureBDM);
-
-        /*User user = getCurrentUser();
-        if(user.getRole().getId() == RoleValue.UW.id()){
-            exSummary.setGroupExposureUW(groupExposureUW);
-        } else {
-            exSummary.setGroupExposureBDM(groupExposureBDM);
-        }*/
 
         exSummaryDAO.persist(exSummary);
     }
