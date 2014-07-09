@@ -564,50 +564,46 @@ public class AppraisalAppointment implements Serializable {
     //TODO edit this for fix due date
     public void onChangeAppraisalDate(){
         log.info("-- onChangeAppraisalDate()");
+        final Date NOW = DateTime.now().toDate();
         if(!Util.isNull(appraisalView.getLocationOfProperty())){
-            int locate = appraisalView.getLocationOfProperty().getId();
-            log.info("-- locate name is {}", appraisalView.getLocationOfProperty().getName());
-
+            final int LOCATE = appraisalView.getLocationOfProperty().getId();
+            log.info("-- locate code is {}", appraisalView.getLocationOfProperty().getCode());
 
             if(Util.isNull(appraisalView.getAppraisalDate())){
-                appraisalView.setAppraisalDate(DateTime.now().toDate());
+                appraisalView.setAppraisalDate(NOW);
                 log.debug("--[NEW] AppraisalDate");
             }
 
             if(Util.isNull(appraisalView.getDueDate())){
-                appraisalView.setDueDate(DateTime.now().toDate());
+                appraisalView.setDueDate(NOW);
                 log.debug("--[NEW] DueDate");
             }
 
-            /*
-            1 +3
-            2 +4
-            3 +6
-            * */
-            int locateDay = 0;
-            if(locate == 1){
-                locateDay = 3;
-                log.info("-- in locate due date +{}", locateDay);
-                appraisalView.setDueDate(updateDueDate(appraisalView.getAppraisalDate(), locateDay));
-            }else if(locate == 2){
-                locateDay = 4;
-                log.info("-- in locate due date +{}", locateDay);
-                appraisalView.setDueDate(updateDueDate(appraisalView.getAppraisalDate(), locateDay));
-            }else if(locate == 3){
-                locateDay = 6;
-                log.info("-- in locate due date +{}", locateDay);
-                appraisalView.setDueDate(updateDueDate(appraisalView.getAppraisalDate(), locateDay));
+            final int BANGKOK_AND_PERIMETER = 3;
+            final int COUNTRY = 4;
+            final int OTHER_CASE = 6;
+            final Date APPRAISAL_DATE = appraisalView.getAppraisalDate();
+            if(LOCATE == 1){
+                log.info("-- In locate due date +{}.", BANGKOK_AND_PERIMETER);
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
+            }else if(LOCATE == 2){
+                log.info("-- In locate due date +{}.", COUNTRY);
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, COUNTRY));
+            }else if(LOCATE == 3){
+                log.info("-- In locate due date +{}.", OTHER_CASE);
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, OTHER_CASE));
             } else {
-                appraisalView.setAppraisalDate(DateTime.now().toDate());
+                log.info("-- Other locate");
+                appraisalView.setAppraisalDate(NOW);
                 log.debug("--[NEW] AppraisalDate");
-                appraisalView.setDueDate(DateTime.now().toDate());
+                appraisalView.setDueDate(NOW);
                 log.debug("--[NEW] DueDate");
             }
         } else {
             log.debug("-- AppraisalView.getLocationOfProperty() is null");
-            appraisalView.setAppraisalDate(DateTime.now().toDate());
+            appraisalView.setAppraisalDate(NOW);
             log.debug("--[NEW] AppraisalDate");
-            appraisalView.setDueDate(DateTime.now().toDate());
+            appraisalView.setDueDate(NOW);
             log.debug("--[NEW] DueDate");
         }
 
@@ -630,56 +626,81 @@ public class AppraisalAppointment implements Serializable {
         onChangeAppraisalDate();
     }
 
-    private Date updateDueDate(final Date appraisalDate, final int dayByLocate){
+    private Date updateDueDate(final Date APPRAISAL_DATE, final int DAY_FOR_DUE_DATE){
         int addDayForDueDate = 0;
-        log.debug("-- AppraisalDate : {}", DateTimeUtil.convertToStringDDMMYYYY(appraisalDate));
-        for (int i = 1; i <= dayByLocate; i++) {
-            final Date date = DateTimeUtil.addDayForDueDate(appraisalDate, i);
-            final String dayOfWeek = DateTimeUtil.getDayOfWeek(date);
-            log.debug("-- Check DATE : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
-            log.debug("-- Check Day of week : {}", dayOfWeek);
-            if(DayOff.SATURDAY.equals(dayOfWeek) ||
-               DayOff.SUNDAY.equals(dayOfWeek)){
-                log.debug("-- {} is day off.", DateTimeUtil.convertToStringDDMMYYYY(date));
+        log.debug("-- AppraisalDate : {}", dateString(APPRAISAL_DATE));
+        for (int i = 1; i <= DAY_FOR_DUE_DATE; i++) {
+            final Date date = addDate(APPRAISAL_DATE, i);
+            log.debug("-- Check DATE : {}", dateString(date));
+            if(isDayOff(date)){
+                log.debug("-- {} is day off.", dateString(date));
                 addDayForDueDate++;
                 log.debug("-- addDayForDueDate : {}", addDayForDueDate);
-            }  else if(appraisalAppointmentControl.isHoliday(date)){
-                log.debug("-- {} is holiday.", DateTimeUtil.convertToStringDDMMYYYY(date));
+            }  else if(isHoliday(date)){
+                log.debug("-- {} is holiday.", dateString(date));
                 addDayForDueDate++;
                 log.debug("-- addDayForDueDate : {}", addDayForDueDate);
             }
         }
-        final int totalDate = addDayForDueDate + dayByLocate;
-        log.debug("-- addDayForDueDate : {}", addDayForDueDate);
-        log.debug("-- dayByLocate : {}", dayByLocate);
-        log.debug("-- Total Date : {}", totalDate);
+        final int TOTAL_DAY = addDayForDueDate + DAY_FOR_DUE_DATE;
+        log.debug("-- addDayForDueDate[{}] + dayByLocate[{}] = Total Day[{}]",addDayForDueDate, DAY_FOR_DUE_DATE, TOTAL_DAY);
 
-        final Date date = DateTimeUtil.addDayForDueDate(appraisalDate, totalDate);
-        log.debug("-- AppraisalDate : {}", DateTimeUtil.convertToStringDDMMYYYY(appraisalDate));
-        log.debug("-- DueDate : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
-        return checkDueDate(date);
+        final Date DATE = addDate(APPRAISAL_DATE, TOTAL_DAY);
+        log.debug("-- AppraisalDate : {}", dateString(APPRAISAL_DATE));
+        log.debug("-- DueDate : {}", dateString(DATE));
+        return checkDueDate(DATE);
     }
 
-    private Date checkDueDate(final Date dueDate){
-        final String dayOfWeek = DateTimeUtil.getDayOfWeek(dueDate);
-        Date date = dueDate;
-        boolean flag = true;
-        while (flag) {
-            if(DayOff.SATURDAY.equals(dayOfWeek)){
-                date = DateTimeUtil.addDayForDueDate(date, 2);
-                log.debug("-- DueDate[+SATURDAY[2]] : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
-                flag = false;
-            } else if(DayOff.SUNDAY.equals(dayOfWeek)){
-                date = DateTimeUtil.addDayForDueDate(date, 1);
-                log.debug("-- DueDate[+SUNDAY[1]] : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
-                flag = false;
-            } else if(appraisalAppointmentControl.isHoliday(date)){
-                date = DateTimeUtil.addDayForDueDate(date, 1);
-                log.debug("-- DueDate[+Holiday[1]] : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
+    private Date checkDueDate(final Date DUE_DATE){
+        log.debug("-- checkDueDate(DueDate : {})", dateString(DUE_DATE));
+        final int TWO_DAYS = 2;
+        final int ONE_DAY = 1;
+        Date date = DUE_DATE;
+        while (isDayOff(date) || isHoliday(date)) {
+            if(isSaturday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, TWO_DAYS);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            } else if(isSunday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, ONE_DAY);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
+            } else if(isHoliday(date)){
+                log.debug("--[BEFORE] DueDate : {}", dateString(date));
+                date = addDate(date, ONE_DAY);
+                log.debug("--[AFTER] DueDate : {}", dateString(date));
             }
         }
-        log.debug("-- DueDate : {}", DateTimeUtil.convertToStringDDMMYYYY(date));
+        log.debug("--[RETURN] DueDate : {}", dateString(date));
         return date;
+    }
+
+    private boolean isDayOff(final Date DATE){
+        return isSunday(DATE)|| isSunday(DATE);
+    }
+
+    private boolean isSaturday(final Date DATE){
+        return DayOff.SATURDAY.equals(getDayOfWeek(DATE));
+    }
+
+    private boolean isSunday(final Date DATE){
+        return DayOff.SUNDAY.equals(getDayOfWeek(DATE));
+    }
+
+    private String getDayOfWeek(final Date DATE){
+        return DateTimeUtil.getDayOfWeek(DATE);
+    }
+
+    private boolean isHoliday(final Date DATE){
+        return appraisalAppointmentControl.isHoliday(DATE);
+    }
+
+    private Date addDate(final Date DATE, final int DAY){
+        return DateTimeUtil.addDayForDueDate(DATE, DAY);
+    }
+
+    private String dateString(final Date DATE){
+        return DateTimeUtil.convertToStringDDMMYYYY(DATE);
     }
 
     public void onOpenAddContactRecordDialog() {
