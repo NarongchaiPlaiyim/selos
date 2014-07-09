@@ -252,7 +252,7 @@ public class BizInfoSummary extends BaseController {
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
         log.debug("getBusinessInfoListDB ::: bizInfoDetailViewList : {}", bizInfoDetailViewList);
 
-        if(bizInfoDetailViewList.size() > 0
+        if(Util.isSafetyList(bizInfoDetailViewList)
                 && bizInfoSummaryView.getCirculationAmount().compareTo(BigDecimal.ZERO) > 0){
             onCalSummaryTable();
         }
