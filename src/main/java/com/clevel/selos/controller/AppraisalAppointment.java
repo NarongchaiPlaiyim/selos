@@ -676,19 +676,25 @@ public class AppraisalAppointment implements Serializable {
     }
 
     private boolean isDayOff(final Date DATE){
-        return isSunday(DATE)|| isSunday(DATE);
+        log.debug("-- isDayOff(Date : {})", dateString(DATE));
+        return isSaturday(DATE)|| isSunday(DATE);
     }
 
     private boolean isSaturday(final Date DATE){
+        log.debug("-- isSaturday(Date : {})", dateString(DATE));
         return DayOff.SATURDAY.equals(getDayOfWeek(DATE));
     }
 
     private boolean isSunday(final Date DATE){
+        log.debug("-- isSunday(Date : {})", dateString(DATE));
         return DayOff.SUNDAY.equals(getDayOfWeek(DATE));
     }
 
     private String getDayOfWeek(final Date DATE){
-        return DateTimeUtil.getDayOfWeek(DATE);
+        log.debug("-- getDayOfWeek(Date : {})", dateString(DATE));
+        final String DAY_OF_WEEK = DateTimeUtil.getDayOfWeek(DATE);
+        log.debug("-- {} is {}.", dateString(DATE), DAY_OF_WEEK);
+        return DAY_OF_WEEK;
     }
 
     private boolean isHoliday(final Date DATE){
