@@ -236,6 +236,18 @@ public class AppraisalAppointment implements Serializable {
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
                 updateContractFlag(appraisalContactDetailView);
+                if(Util.isNull(appraisalView.getAppraisalDate())){
+                    appraisalView.setAppraisalDate(DateTime.now().toDate());
+                    log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
+                }
+                if(Util.isNull(appraisalView.getDueDate())){
+                    appraisalView.setDueDate(DateTime.now().toDate());
+                    log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
+                }
+                if(Util.isNull(appraisalView.getAppointmentDate())){
+                    appraisalView.setAppointmentDate(DateTime.now().toDate());
+                    log.debug("--[NEW] AppointmentDate : {}", dateString(appraisalView.getAppointmentDate()));
+                }
             } else {
                 appraisalView = new AppraisalView();
             }
@@ -565,21 +577,20 @@ public class AppraisalAppointment implements Serializable {
     public void onChangeAppraisalDate(){
         log.info("-- onChangeAppraisalDate()");
         final Date NOW = DateTime.now().toDate();
+        if(Util.isNull(appraisalView.getAppraisalDate())){
+            appraisalView.setAppraisalDate(NOW);
+            log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
+        }
+
+        if(Util.isNull(appraisalView.getDueDate())){
+            appraisalView.setDueDate(NOW);
+            log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
+        }
+
         if(!Util.isNull(appraisalView.getLocationOfProperty())){
             log.debug("-- AppraisalView[{}]", appraisalView.toString());
             final int LOCATE = appraisalView.getLocationOfProperty().getId();
             log.info("-- locate id is {}", appraisalView.getLocationOfProperty().getId());
-
-            if(Util.isNull(appraisalView.getAppraisalDate())){
-                appraisalView.setAppraisalDate(NOW);
-                log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
-            }
-
-            if(Util.isNull(appraisalView.getDueDate())){
-                appraisalView.setDueDate(NOW);
-                log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
-            }
-
             final int BANGKOK_AND_PERIMETER = 3;
             final int COUNTRY = 4;
             final int OTHER_CASE = 6;
