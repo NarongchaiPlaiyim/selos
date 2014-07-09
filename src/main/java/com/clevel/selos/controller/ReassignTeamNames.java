@@ -894,6 +894,8 @@ public class ReassignTeamNames implements Serializable
 
             setChecked(checked);
 
+            log.debug("Checked size : {}, values : {}",checked.size(),checked);
+
             popupselectedteamname= "";
 
             setPopupselectedteamname("");
