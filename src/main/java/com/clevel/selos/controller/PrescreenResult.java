@@ -68,7 +68,7 @@ public class PrescreenResult implements Serializable {
     }
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         log.info("preRender ::: setSession ");
 
         if (session.getAttribute("workCasePreScreenId") != null) {
@@ -100,7 +100,7 @@ public class PrescreenResult implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("PrescreenResult ::: onCreation");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (session.getAttribute("workCasePreScreenId") != null) {
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));

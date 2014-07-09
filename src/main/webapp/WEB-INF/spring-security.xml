@@ -17,6 +17,7 @@
         <logout invalidate-session="true" delete-cookies="true" logout-success-url="/login.jsf"/>
         <access-denied-handler error-page="/error/accessDenied.jsf"/>
         <anonymous enabled="false"/>
+        <custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER"/>
         <session-management>
             <concurrency-control session-registry-ref="sessionRegistry" expired-url="/login.jsf"/>
         </session-management>

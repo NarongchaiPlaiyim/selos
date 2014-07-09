@@ -8,7 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class IsaSearchView implements Serializable {
-
     private String id;
     private String username;
     private Role roleId;
@@ -17,21 +16,33 @@ public class IsaSearchView implements Serializable {
     private UserRegion regionId;
     private UserTeam teamId;
     private UserTitle titleId;
-    private UserZone zoneId;
     private UserStatus userStatus;
 
-    public void reset() {
-        this.id = "";
-        this.username = "";
-        this.roleId = new Role();
-        this.departmentId = new UserDepartment();
-        this.divisionId = new UserDivision();
-        this.regionId = new UserRegion();
-        this.teamId = new UserTeam();
-        this.titleId = new UserTitle();
-        this.zoneId = new UserZone();
-//        this.userStatus = userStatus;
+    public IsaSearchView() {
+        init();
     }
+
+    private void init(){
+        roleId = new Role();
+        departmentId = new UserDepartment();
+        divisionId = new UserDivision();
+        regionId = new UserRegion();
+        teamId = new UserTeam();
+        titleId = new UserTitle();
+    }
+
+//    public void reset() {
+//        this.id = "";
+//        this.username = "";
+//        this.roleId = new Role();
+//        this.departmentId = new UserDepartment();
+//        this.divisionId = new UserDivision();
+//        this.regionId = new UserRegion();
+//        this.teamId = new UserTeam();
+//        this.titleId = new UserTitle();
+//        this.zoneId = new UserZone();
+////        this.userStatus = userStatus;
+//    }
 
     public String getId() {
         return id;
@@ -97,14 +108,6 @@ public class IsaSearchView implements Serializable {
         this.titleId = titleId;
     }
 
-    public UserZone getZoneId() {
-        return zoneId;
-    }
-
-    public void setZoneId(UserZone zoneId) {
-        this.zoneId = zoneId;
-    }
-
     public UserStatus getUserStatus() {
         return userStatus;
     }
@@ -124,7 +127,6 @@ public class IsaSearchView implements Serializable {
                 .append("regionId", regionId)
                 .append("teamId", teamId)
                 .append("titleId", titleId)
-                .append("zoneId", zoneId)
                 .append("userStatus", userStatus)
                 .toString();
     }

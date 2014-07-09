@@ -175,7 +175,7 @@ public class AppraisalResult implements Serializable {
 
     public void preRender(){
         log.info("preRender...");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
 
@@ -195,7 +195,7 @@ public class AppraisalResult implements Serializable {
     public void onCreation() {
         log.info("onCreation...");
         init();
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
                 workCaseId = (Long)session.getAttribute("workCaseId");
@@ -268,8 +268,8 @@ public class AppraisalResult implements Serializable {
                             saveAndEditFlag = true;
                         } else {
                             saveAndEditFlag = false;
-                            messageHeader = ""+appraisalDataResult.getActionResult();
-                            message = appraisalDataResult.getReason();
+                            messageHeader = "Result "+appraisalDataResult.getActionResult();
+                            message = "Result" +  appraisalDataResult.getReason();
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     } else {
@@ -291,13 +291,26 @@ public class AppraisalResult implements Serializable {
                 }
             } catch (COMSInterfaceException e){
                 log.error("COMSInterfaceException ::: {}",e);
-                messageHeader = "Exception";
-                message = e.getMessage();
+                messageHeader = "COM-S Exception";
+                message = "Data not found.";
+//                message = e.getMessage();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } catch (Exception e){
                 log.error("Exception ::: {}",e);
                 messageHeader = "Exception";
-                message = e.getMessage();
+
+                if(!Util.isNull(e.getMessage())){
+                    if(e.getMessage().indexOf("Data Not Found!") > -1){
+                        message = "Data Not Found!";
+                    }
+                } else {
+                    message = e.getMessage();
+                }
+                if("See nested exception; nested exception is: COMSInterfaceException[code=053,message=Data Not Found!]".equalsIgnoreCase(e.getMessage())){
+                    message = "Data Not Found!";
+                } else {
+                    message = e.getMessage();
+                }
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
@@ -315,7 +328,7 @@ public class AppraisalResult implements Serializable {
         }
         return true;
     }
-    private AppraisalDataResult callCOM_S(final String jobID){
+    private AppraisalDataResult callCOM_S(final String jobID) throws COMSInterfaceException{
         AppraisalDataResult appraisalDataResult = appraisalResultControl.retrieveDataFromCOMS(jobID);
         return appraisalDataResult;
     }

@@ -18,10 +18,12 @@ import com.clevel.selos.model.db.master.TDRCondition;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.model.view.SettlementStatusView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.SettlementStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.rits.cloning.Cloner;
@@ -57,7 +59,7 @@ public class NCBInfo extends BaseController {
     @ExceptionMessage
     Message exceptionMsg;
 
-    private List<SettlementStatus> settlementStatusList;
+    private List<SettlementStatusView> settlementStatusList;
     private List<AccountStatus> accountStatusList;
     private List<AccountType> accountTypeList;
     private List<TDRCondition> tdrConditionList;
@@ -108,6 +110,8 @@ public class NCBInfo extends BaseController {
     DBRControl dbrControl;
     @Inject
     CreditFacProposeControl creditFacProposeControl;
+    @Inject
+    SettlementStatusTransform settlementStatusTransform;
 
     private long workCaseId;
 
@@ -129,7 +133,7 @@ public class NCBInfo extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid stepId
@@ -162,7 +166,7 @@ public class NCBInfo extends BaseController {
         }
 
         if (settlementStatusList == null) {
-            settlementStatusList = new ArrayList<SettlementStatus>();
+            settlementStatusList = new ArrayList<SettlementStatusView>();
         }
 
         if (tdrConditionList == null) {
@@ -198,7 +202,7 @@ public class NCBInfo extends BaseController {
 
         initial();
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
@@ -228,7 +232,7 @@ public class NCBInfo extends BaseController {
                     accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfo.getCustomerEntity().getId());
                     log.debug("accountTypeList :: {}", accountTypeList.size());
 
-                    settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfo.getCustomerEntity().getId());
+                    settlementStatusList = settlementStatusTransform.transformToView(settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfo.getCustomerEntity().getId()));
                     log.debug("settlementStatusList :: {}", settlementStatusList.size());
 
                     log.debug("customerInfo : {}", customerInfo.toString());
@@ -312,8 +316,8 @@ public class NCBInfo extends BaseController {
             if (modeForButton != null && modeForButton == ModeForButton.ADD) {
                 AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
                 AccountStatus accountStatus = accountStatusDAO.findById(ncbDetailView.getAccountStatus().getId());
-                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId());
-                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId());
+                SettlementStatusView tdrConditionCurrent = settlementStatusTransform.transformToView(settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId()));
+                SettlementStatusView tdrConditionHistory = settlementStatusTransform.transformToView(settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId()));
 
                 NCBDetailView ncbAdd = new NCBDetailView();
                 ncbAdd.setAccountType(accountType);
@@ -362,8 +366,8 @@ public class NCBInfo extends BaseController {
 
                 AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
                 AccountStatus accountStatus = accountStatusDAO.findById(ncbDetailView.getAccountStatus().getId());
-                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId());
-                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId());
+                SettlementStatusView tdrConditionCurrent = settlementStatusTransform.transformToView(settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId()));
+                SettlementStatusView tdrConditionHistory = settlementStatusTransform.transformToView(settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId()));
 
                 NCBDetailView tmpNcbDetail = new NCBDetailView();
                 tmpNcbDetail.setAccountType(accountType);
@@ -498,11 +502,11 @@ public class NCBInfo extends BaseController {
         this.modeForButton = modeForButton;
     }
 
-    public List<SettlementStatus> getSettlementStatusList() {
+    public List<SettlementStatusView> getSettlementStatusList() {
         return settlementStatusList;
     }
 
-    public void setSettlementStatusList(List<SettlementStatus> settlementStatusList) {
+    public void setSettlementStatusList(List<SettlementStatusView> settlementStatusList) {
         this.settlementStatusList = settlementStatusList;
     }
 

@@ -43,21 +43,21 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
     }
 
     public List<NewCollateralHead> findByNewCollateralIdAndPurpose(final long newCollateralId) {
-        log.info("---- findByNewCollateral NewCollateral.id[{}]", newCollateralId);
+        log.info("---- findByNewCollateralIdAndPurpose NewCollateral.id[{}]", newCollateralId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
-        criteria.add(Restrictions.eq("proposeType", "P"));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.P));
         criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value()));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
         return newCollateralHeadDetails;
     }
 
-    public List<NewCollateralHead> findByCollateralProposeTypeRequestAppraisalType(long newCollateralId, ProposeType proposeType, RequestAppraisalValue requestAppraisalValue){
-        log.info("---- findByCollateralAndProposeType newCollateralId : [{}], proposeType : [{}], requestAppraisal : [{}]", newCollateralId, proposeType, requestAppraisalValue);
+    public List<NewCollateralHead> findByCollateralProposeTypeRequestAppraisalType(long newCollateralId, RequestAppraisalValue requestAppraisalValue){
+        log.info("---- findByCollateralAndProposeType newCollateralId : [{}], requestAppraisal : [{}]", newCollateralId, requestAppraisalValue);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
-        criteria.add(Restrictions.eq("proposeType", proposeType.toString()));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.P));
         criteria.add(Restrictions.ne("appraisalRequest", requestAppraisalValue.value()));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();

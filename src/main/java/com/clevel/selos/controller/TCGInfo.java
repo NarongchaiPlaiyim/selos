@@ -80,7 +80,7 @@ public class TCGInfo extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid step
@@ -94,7 +94,7 @@ public class TCGInfo extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             TCGView = tcgInfoControl.getTCGView(workCaseId);

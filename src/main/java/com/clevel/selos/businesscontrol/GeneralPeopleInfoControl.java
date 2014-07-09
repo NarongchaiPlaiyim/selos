@@ -68,7 +68,7 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 		 }
 		 return rtnDatas;
 	 }
-	 
+	
 	 public List<SelectItem> listRelationTypes() {
 		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
 		 List<Relation> list = relationDAO.findActiveAll();

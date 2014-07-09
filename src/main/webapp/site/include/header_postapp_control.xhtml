@@ -22,13 +22,13 @@
 		styleClass="blueButton"
 		title="#{msg.get('app.header.button.mandateDoc')}"
 		rendered="#{headerController.checkButton('Check Mandate Doc')}"
-		actionListener="#{headerController.onCheckMandateForChecker()}"
+		actionListener="#{headerController.onCheckMandateForFullApp()}"
         oncomplete="checkMandateDlg.show()"
         update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
 		<p:resetInput target=":frmMain:checkMandatePanel"/>
  	</p:commandButton>
+ 	
  
-
 	<!--Request for Price Reduction -->
 	<p:commandButton id="btnPriceReduction_POSTAPP"
 		value="#{msg.get('app.header.button.requestPriceReduction')}"
@@ -96,6 +96,7 @@
 		partialSubmit="true"
 		process="@this"
 		update=":postApp_returnBDM_Dlg"
+		actionListener="#{postAppGeneral.onOpenReturnDialog()}"
 		>
 		<p:resetInput target=":postApp_returnBDM_Dlg" />
 	</p:commandButton>

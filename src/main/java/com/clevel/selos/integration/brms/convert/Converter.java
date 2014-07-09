@@ -2,11 +2,13 @@ package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
+import com.clevel.selos.integration.brms.model.request.BRMSTMBAccountInfo;
 import com.clevel.selos.integration.brms.model.response.DocumentDetail;
 import com.clevel.selos.integration.brms.model.response.UWRulesResponse;
 import com.clevel.selos.integration.brms.model.response.UWRulesResult;
 import com.clevel.selos.model.BRMSYesNo;
 import com.clevel.selos.model.DocLevel;
+import com.clevel.selos.model.TMBTDRFlag;
 import com.clevel.selos.model.UWRuleType;
 import com.clevel.selos.util.Util;
 import com.ilog.rules.decisionservice.DecisionServiceResponse;
@@ -81,8 +83,6 @@ public class Converter implements Serializable {
     protected AttributeType getAttributeType(BRMSFieldAttributes field, boolean value){
         AttributeType attributeType = new AttributeType();
         attributeType.setName(field.value());
-
-        //attributeType.setBooleanValue(value);
         attributeType.setStringValue(BRMSYesNo.lookup(value).value());
 
         return attributeType;
@@ -116,6 +116,42 @@ public class Converter implements Serializable {
         if(value == null)
             return false;
         return value;
+    }
+
+    protected void convertTMBAccountInfo(List<AccountType> accountTypeList, List<BRMSTMBAccountInfo> tmbAccountInfoList){
+
+        if(tmbAccountInfoList != null && tmbAccountInfoList.size() > 0) {
+            for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
+                AccountType accountType = new AccountType();
+                List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.getTmbTDRFlag()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
+                tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
+                accountTypeList.add(accountType);
+            }
+        } else {
+            AccountType accountType = new AccountType();
+            List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, Boolean.FALSE));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, (String)null));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, (String)null));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, (String)null));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, TMBTDRFlag.NORMAL.value()));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, BigDecimal.ZERO));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, BigDecimal.ZERO));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, BigDecimal.ZERO));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, BigDecimal.ZERO));
+            tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, (String)null));
+            accountTypeList.add(accountType);
+        }
+
     }
 
     protected List<DocumentDetail> getDocumentDetail(List<DocumentSetType> documentSetTypeList, String owner, DocLevel docLevel){

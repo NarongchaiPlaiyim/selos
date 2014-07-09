@@ -2,6 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.businesscontrol.BRMSControl;
+import com.clevel.selos.dao.master.AppraisalCompanyDAO;
+import com.clevel.selos.dao.master.ProvinceDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.BRMSInterface;
@@ -23,14 +26,19 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.MandateDocResponseView;
 import com.clevel.selos.model.view.MandateDocView;
 import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.Util;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -69,6 +77,7 @@ public class TestNCRS implements Serializable {
 
     @Inject
     private BRMSControl brmsControl;
+
 
     private String appNumber;
     private String crsCustName;
@@ -112,9 +121,60 @@ public class TestNCRS implements Serializable {
     //Call ECM
     private String caNumberECM = "04621809124082010060";
 
+    private UploadedFile uploadedFile;
+
+    @Inject
+    private UserTeamDAO userTeamDAO;
+    private int roleId;
+
+    private List<Province> provinceList;
+    @Inject
+    private ProvinceDAO provinceDAO;
+    private List<AppraisalCompany> appraisalCompanyList;
+    @Inject
+    private AppraisalCompanyDAO appraisalCompanyDAO;
 
     @Inject
     public TestNCRS() {
+
+    }
+
+    @PostConstruct
+    public void init(){
+        onLoadProvince();
+        onLoadCompany();
+    }
+
+    private void onLoadProvince(){
+        log.debug("-- onLoadProvince()");
+        provinceList =  provinceDAO.findAllASC();
+        if(!Util.isSafetyList(provinceList)){
+            provinceList = new ArrayList<Province>();
+        }
+    }
+
+    public List<Province> getProvinceList() {
+        return provinceList;
+    }
+
+    public void setProvinceList(List<Province> provinceList) {
+        this.provinceList = provinceList;
+    }
+
+    private void onLoadCompany(){
+        log.debug("-- onLoadCompany()");
+        appraisalCompanyList =  appraisalCompanyDAO.findAllASC();
+        if(!Util.isSafetyList(appraisalCompanyList)){
+            appraisalCompanyList = new ArrayList<AppraisalCompany>();
+        }
+    }
+
+    public List<AppraisalCompany> getAppraisalCompanyList() {
+        return appraisalCompanyList;
+    }
+
+    public void setAppraisalCompanyList(List<AppraisalCompany> appraisalCompanyList) {
+        this.appraisalCompanyList = appraisalCompanyList;
     }
 
     public void onClickNCRS() {
@@ -327,6 +387,53 @@ public class TestNCRS implements Serializable {
             log.error("-- Exception : {}", e.getMessage());
             result = e.getMessage();
         }
+    }
+
+
+    public void onClickISA(){
+        log.debug("-- onClickISA()");
+        try {
+            log.debug("-- RoleID : {}", roleId);
+            userTeamDAO.findByRoleId(roleId);
+            result = userTeamDAO.findByRoleId(roleId).toString();
+        } catch (Exception e) {
+            log.debug("", e);
+            result = e.getMessage();
+        }
+    }
+
+    public void fileUploadHandle(final FileUploadEvent event) {
+        log.debug("-- fileUploadHandle()");
+        String fileName = null;
+        try {
+            uploadedFile = event.getFile();
+            fileName = uploadedFile.getFileName();
+            log.debug("-- FileName : {}", fileName);
+            result = fileName;
+            log.debug("-- Result : {}", result);
+        } catch (Exception e) {
+            log.debug("", e);
+            result = e.getMessage();
+        }
+    }
+
+    public void onClickUpload(){
+        log.debug("-- onClickUpload()");
+        try {
+            result = "Test : " + uploadedFile.getFileName();
+            log.debug("-- Result : {}", uploadedFile.getFileName());
+        } catch (Exception e) {
+            log.debug("", e);
+            result = e.getMessage();
+        }
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        log.debug("--asdlfjl;askdjf;lkasd");
+        UploadedFile file = event.getFile();
+        String fileName = file.getFileName();
+        long fileSize = file.getSize();
+        //Save myInputStream in a directory of your choice and store that path in DB
     }
 
     public void onClickECMCAPShareUpdate(){
@@ -624,5 +731,21 @@ public class TestNCRS implements Serializable {
 
     public void setCrsCustName(String crsCustName) {
         this.crsCustName = crsCustName;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
     }
 }

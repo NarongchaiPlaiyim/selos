@@ -139,6 +139,7 @@
                                                        var="province"
                                                        itemLabel="#{province.name}"
                                                        itemValue="#{province.code}"/>
+                                        <p:ajax process=":frmMain" listener="#{appraisalAppointment.onChangeLocationOfProperty()}" update=":frmMain:dueDate" />
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -155,7 +156,7 @@
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                        <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appointmentDate" />
+                                        <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate" />
                                     </clv:BECalendar>
                                 </td>
                                 <td class="title">
@@ -345,13 +346,16 @@
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                        <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppointmentDate()}" update=":frmMain:appraisalDate, :frmMain:dueDate" />
                                     </clv:BECalendar>
                                 </td>
                                 <td class="title">
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>
                                 </td>
                                 <td >
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}" maxlength="50" />
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"
+                                                 required="true"
+                                                 maxlength="50" />
                                 </td>
                             </tr>
                             <tr>

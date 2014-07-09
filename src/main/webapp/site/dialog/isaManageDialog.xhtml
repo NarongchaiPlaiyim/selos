@@ -6,101 +6,205 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
     <h:form id="manageDialogForm">
-        <h:panelGrid columns="2">
+        <table border="0">
+            <tr>
+                <td style="width: 120px; min-width: 120px; max-width: 120px;" />
+                <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+            </tr>
 
-            <h:outputText value="userId :"/>
-            <p:inputText value="#{isa.isaManageUserView.id}" required="true" readonly="#{isa.isaManageUserView.readOnlyUserId}"/>
-
-            <h:outputText value="Username :"/>
-            <p:inputText value="#{isa.isaManageUserView.username}"/>
-
-            <h:outputText value="EmailAddress :"/>
-            <p:inputText value="#{isa.isaManageUserView.emailAddress}"/>
-
-            <h:outputText value="BuCode :"/>
-            <p:inputText value="#{isa.isaManageUserView.buCode}"/>
-
-            <h:outputText value="PhoneExt :"/>
-            <p:inputText value="#{isa.isaManageUserView.phoneExt}"/>
-
-            <h:outputText value="PhoneNumber :"/>
-            <p:inputText value="#{isa.isaManageUserView.phoneNumber}"/>
-
-            <h:outputText value="Role"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.role.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userRoleList}"
-                               var="roleItem"
-                               itemLabel="#{roleItem.name}"
-                               itemValue="#{roleItem.id}"/>
-            </p:selectOneMenu>
-            <h:outputText value="Department"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.userDepartment.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userDepartmentList}"
-                               var="departmentItem"
-                               itemLabel="#{departmentItem.name}"
-                               itemValue="#{departmentItem.id}"/>
-            </p:selectOneMenu>
-            <h:outputText value="Division"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.userDivision.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userDivisionList}"
-                               var="divisionItem"
-                               itemLabel="#{divisionItem.name}"
-                               itemValue="#{divisionItem.id}"/>
-            </p:selectOneMenu>
-            <h:outputText value="Region"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.userRegion.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userRegionList}"
-                               var="regionItem"
-                               itemLabel="#{regionItem.name}"
-                               itemValue="#{regionItem.id}"/>
-            </p:selectOneMenu>
-            <h:outputText value="Team"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.userTeam.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userTeamList}"
-                               var="teamItem"
-                               itemLabel="#{teamItem.name}"
-                               itemValue="#{teamItem.id}"/>
-            </p:selectOneMenu>
-            <h:outputText value="Title"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.userTitle.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userTitleList}"
-                               var="titleItem"
-                               itemLabel="#{titleItem.name}"
-                               itemValue="#{titleItem.id}"/>
-            </p:selectOneMenu>
-            <h:outputText value="Zone"/>
-            <p:selectOneMenu value="#{isa.isaManageUserView.userZone.id}" required="true">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
-                <f:selectItems value="#{isa.userZoneList}"
-                               var="zoneItem"
-                               itemLabel="#{zoneItem.name}"
-                               itemValue="#{zoneItem.id}"/>
-            </p:selectOneMenu>
-
-            <h:outputText value="Active"/>
-            <h:selectOneRadio value="#{isa.isaManageUserView.active}">
-                <f:selectItem itemLabel="Active" itemValue="1"/>
-                <f:selectItem itemLabel="InActive" itemValue="0"/>
-            </h:selectOneRadio>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="User ID" />
+                </td>
+                <td>
+                    <p:inputText value="#{isa.isaManageUserView.id}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 required="true" readonly="#{isa.isaManageUserView.readOnlyUserId}"
+                                 maxlength="10"
+                            />
+                    <!--onkeypress="return onKeyPressName(event);" -->
+                    <!--onkeydown="return onKeyDownName(event);"-->
+                </td>
+            </tr>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="User Name"/>
+                </td>
+                <td>
+                    <p:inputText value="#{isa.isaManageUserView.username}" required="true" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="50"
+                            />
+                </td>
+            </tr>
 
 
-            <p:commandButton value="OK"
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="EmailAddress"/>
+                </td>
+                <td>
+                    <p:inputText value="#{isa.isaManageUserView.emailAddress}" style="width: 250px; min-width: 250px; max-width: 250px;" />
+                </td>
+            </tr>
 
-                             actionListener="#{isa.onManageUserAction()}"
-                             update=":userTableData,:msgBoxSystemMessagePanel,:manageDialogForm"
-                             oncomplete="handleManageUserDialogRequest(xhr,status, args)"/>
-            <p:commandButton value="Cancel"
-                             process="@this"
-                             onclick="manageUserDlg.hide()"
-                             styleClass="small"
-                             update=":manageDialogForm"
-                             type="button"/>
-        </h:panelGrid>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="BU Code"/>
+                </td>
+                <td>
+                    <p:inputText value="#{isa.isaManageUserView.buCode}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="20"
+                            />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Tel No."/>
+                </td>
+                <td>
+                    <p:inputText value="#{isa.isaManageUserView.phoneExt}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="20"
+                            />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Phone No."/>
+                </td>
+                <td>
+                    <p:inputText value="#{isa.isaManageUserView.phoneNumber}" style="width: 250px; min-width: 250px; max-width: 250px;"
+                                 maxlength="20"
+                            />
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Role"/>
+                </td>
+                <td>
+                    <p:selectOneMenu value="#{isa.isaManageUserView.role.id}"
+                                     required="true"
+                                     style="width: 250px; min-width: 250px; max-width: 250px;">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userRoleList}"
+                                       var="roleItem"
+                                       itemLabel="#{roleItem.name}"
+                                       itemValue="#{roleItem.id}"/>
+                        <p:ajax update="userTeamDialog" listener="#{isa.onChangeRole()}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Team"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="userTeamDialog" value="#{isa.isaManageUserView.userTeam.id}"
+                                     required="true"
+                                     style="width: 250px; min-width: 250px; max-width: 250px;">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userTeamList}"
+                                       var="teamItem"
+                                       itemLabel="#{teamItem.team_name}"
+                                       itemValue="#{teamItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Department"/>
+                </td>
+                <td>
+                    <p:selectOneMenu value="#{isa.isaManageUserView.userDepartment.id}"
+                                     required="true"
+                                     style="width: 250px; min-width: 250px; max-width: 250px;">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userDepartmentList}"
+                                       var="departmentItem"
+                                       itemLabel="#{departmentItem.name}"
+                                       itemValue="#{departmentItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Division"/>
+                </td>
+                <td>
+                    <p:selectOneMenu value="#{isa.isaManageUserView.userDivision.id}"
+                                     required="true"
+                                     style="width: 250px; min-width: 250px; max-width: 250px;">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userDivisionList}"
+                                       var="divisionItem"
+                                       itemLabel="#{divisionItem.name}"
+                                       itemValue="#{divisionItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Region"/>
+                </td>
+                <td>
+                    <p:selectOneMenu value="#{isa.isaManageUserView.userRegion.id}"
+                                     required="true"
+                                     style="width: 250px; min-width: 250px; max-width: 250px;">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userRegionList}"
+                                       var="regionItem"
+                                       itemLabel="#{regionItem.name}"
+                                       itemValue="#{regionItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Title"/>
+                </td>
+                <td>
+                    <p:selectOneMenu value="#{isa.isaManageUserView.userTitle.id}"
+                                     required="true"
+                                     style="width: 250px; min-width: 250px; max-width: 250px;">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userTitleList}"
+                                       var="titleItem"
+                                       itemLabel="#{titleItem.name}"
+                                       itemValue="#{titleItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" >
+                    <p:outputLabel value="Active"/>
+                </td>
+                <td>
+                    <p:selectOneRadio value="#{isa.isaManageUserView.active}">
+                        <f:selectItem itemLabel="Active" itemValue="1"/>
+                        <f:selectItem itemLabel="InActive" itemValue="0"/>
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td/>
+                <td>
+                    <p:commandButton value="OK"
+                                     styleClass="medium"
+                                     actionListener="#{isa.onSubmitSaveDialog()}"
+                                     update=":userTableData,:msgBoxSystemMessagePanel,:manageDialogForm"
+                                     oncomplete="handleManageUserDialogRequest(xhr,status, args)"/>
+                    <p:commandButton value="Cancel"
+                                     styleClass="medium"
+                                     process="@this"
+                                     onclick="manageUserDlg.hide()"
+                                     update=":manageDialogForm"
+                                     type="button"/>
+                </td>
+            </tr>
+        </table>
     </h:form>
 </ui:composition>

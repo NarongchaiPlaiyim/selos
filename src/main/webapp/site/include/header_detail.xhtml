@@ -20,7 +20,7 @@
     </p:commandButton>
     <!-- Check Mandate Doc for Checker -->
     <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1002}"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and ( headerController.stepId == 1002 || headerController.stepId == 1001 )}"
                      actionListener="#{headerController.onCheckMandateForChecker()}"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
@@ -52,6 +52,7 @@
     <!-- Check PreScreen (BRMS)-->
     <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
+                     disabled="#{not headerController.canCheckPreScreen}"
                      rendered="#{headerController.checkButton('Check Prescreen')}"
                      actionListener="#{headerController.onCheckPreScreen}"
                      oncomplete="blockUI.hide()"
@@ -61,6 +62,7 @@
     <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
+                     disabled="#{not headerController.canRequestAppraisal}"
                      oncomplete="reqApprDlg.show()"
                      update=":frmMain:reqApprDialogPanel">
         <p:resetInput target=":frmMain:reqApprDialogPanel"/>
@@ -104,7 +106,7 @@
     <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
-                     disabled="#{not headerController.canCloseSale}"
+                     disabled="#{not headerController.canCloseSale or not headerController.canCheckPreScreen}"
                      type="button"
                      onclick="confrmCloseSaleCA.show()"/>
     <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
@@ -171,6 +173,7 @@
 <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                  actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
+                 disabled="#{not headerController.canRequestAppraisal}"
                  oncomplete="reqApprDlg.show()"
                  update=":frmMain:reqApprDialogPanel">
     <p:resetInput target=":frmMain:reqApprDialogPanel"/>
@@ -208,14 +211,14 @@
 <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
 <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2001 || headerController.stepId == 2018 )}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  action="#{headerController.onOpenSubmitZM}"
                  update=":frmMain:submitZMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
 </p:commandButton>
 <!--Submit To Region Manager [ From Zone Manager ]-->
 <p:commandButton id="btnSubmitCaseToRGM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2002}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="confirmSubmitSubmitRGM.show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -234,7 +237,7 @@
 <!--Submit to Region Manager [ Pricing Flow ]-->
 <p:commandButton id="btnSubmitCaseToRGM_FCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2019}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="PF('confirmSubmitSubmitRGM_FCash').show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -253,7 +256,7 @@
 <!--Submit To Group Head [ From Region Manager - Pricing Flow ]-->
 <p:commandButton id="btnSubmitCaseToGH" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2020}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="confirmSubmitSubmitGH.show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -272,7 +275,7 @@
 <!--Submit To CSSO [ From Group Head - Pricing Flow ]-->
 <p:commandButton id="btnSubmitCaseToCSSO" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2021}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="confirmSubmitSubmitCSSO.show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -291,7 +294,7 @@
 <!--Submit To UW1 [ From CSSO - Pricing Flow ]-->
 <p:commandButton id="btnSubmitCaseToUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2022}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="confirmSubmitSubmitUW.show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -311,7 +314,7 @@
 <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2003}"
                  action="#{headerController.onOpenSubmitUW2()}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
 <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
 <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
@@ -334,7 +337,7 @@
 <!--Submit CA [ END OF CA ]-->
 <p:commandButton id="btnSubmitCaseUW2" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="confirmSubmitSubmitCAUW2.show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -353,7 +356,7 @@
 <!--Submit CA [ Zone Manager F-Cash ]-->
 <p:commandButton id="btnSubmitCase_ZMFCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2009}"
-                 disabled="#{not headerController.canSubmitCA}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  onclick="PF('confirmSubmitZM_FCash').show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
@@ -475,6 +478,14 @@
     <p:commandButton id="btnCheckMandate_AADC" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2008}"
                      actionListener="#{headerController.onCheckMandateForAADCommittee()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
+    </p:commandButton>
+    <!-- Check Mandate Doc [ For STEP CHECK DOC ]-->
+    <p:commandButton id="btnCheckMandate_CheckDoc" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 3008}"
+                     actionListener="#{headerController.onCheckMandateForStepCheckDoc()}"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>

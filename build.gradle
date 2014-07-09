@@ -138,7 +138,6 @@ task buildLibrary(dependsOn: classes, type: Jar) {
     include 'com/clevel/selos/security/encryption/**/*'
     include 'com/clevel/selos/security/UserDetail.*'
 
-
     //************* Exceptions ***********************
     include 'com/clevel/selos/exception/**/*'
 
@@ -168,6 +167,7 @@ task buildEJB(dependsOn:'buildLibrary', type: Jar) {
 
     //************** @Stateless ***************
     include 'com/clevel/selos/businesscontrol/**/*'
+    //include 'com/clevel/selos/businesscontrol/**/**/*'
     include 'com/clevel/selos/controller/TestList.*'
     include 'com/clevel/selos/ws/WSDataPersist.*'
     include 'com/clevel/selos/system/audit/**/*'

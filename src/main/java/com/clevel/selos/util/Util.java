@@ -1,5 +1,6 @@
 package com.clevel.selos.util;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,13 @@ public class Util implements Serializable {
         return createDateStringTH(date, "dd/MM/yyyy HH:mm");
     }
 
+    public static<T> boolean isSafetyList(final List<T> list){
+        return !Util.isNull(list) && !Util.isZero(list.size());
+    }
+
+    public static String getFileNameForISA() {
+        return createDateString(DateTime.now().toDate(), "yyyyyMMddHHmmss");
+    }
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = null;
@@ -352,11 +360,12 @@ public class Util implements Serializable {
     }
 
     public static<T> boolean isNull(T object){
-        if(object != null){
-            return !"null".equalsIgnoreCase(object.toString().trim()) ? false : true;
-        } else {
-            return true;
-        }
+//        if(object != null){
+//            return !"null".equalsIgnoreCase(object.toString().trim()) ? false : true;
+//        } else {
+//            return true;
+//        }
+        return object == null;
     }
 
     public static boolean isZero(int id){
@@ -507,5 +516,17 @@ public class Util implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public static String getAccountNumberFormatForExistingCredit(String accountNumber){
+        if(accountNumber!=null && accountNumber.length()==10){
+            String first = accountNumber.substring(0,3);
+            String second = accountNumber.substring(3,4);
+            String third = accountNumber.substring(4,9);
+            String fourth = accountNumber.substring(9,10);
+
+            return first+"-"+second+"-"+third+"-"+fourth;
+        }
+        return accountNumber;
     }
 }

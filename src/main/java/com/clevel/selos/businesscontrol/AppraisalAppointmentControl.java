@@ -1,9 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.AppraisalCompanyDAO;
+import com.clevel.selos.dao.master.HolidayDAO;
+import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
@@ -16,6 +20,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -55,7 +60,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private ContactRecordDetailTransform contactRecordDetailTransform;
     @Inject
     private ContactRecordDetailDAO contactRecordDetailDAO;
-
+    @Inject
+    private AppraisalCompanyDAO appraisalCompanyDAO;
     private Appraisal appraisal;
     private AppraisalView appraisalView;
     private List<AppraisalContactDetail> appraisalContactDetailList;
@@ -70,12 +76,33 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private NewCreditFacility newCreditFacility;
     private CustomerAcceptance customerAcceptance;
     private ContactRecordDetail contactRecordDetail;
+    @Inject
+    private ProvinceDAO provinceDAO;
+    @Inject
+    private HolidayDAO holidayDAO;
 
     @Inject
     public AppraisalAppointmentControl(){
 
     }
-	
+
+    public List<Province> getProvince(){
+        return provinceDAO.findAllASC();
+    }
+
+    public List<AppraisalCompany> getCompany(){
+        return appraisalCompanyDAO.findAllASC();
+    }
+
+    public boolean isHoliday(final Date holiday){
+        try {
+            return holidayDAO.isHoliday(holiday);
+        } catch (Exception e){
+            log.debug("-- Exception while get holiday {}", e);
+            return false;
+        }
+    }
+
 	public AppraisalView getAppraisalAppointment(final long workCaseId, final long workCasePreScreenId){
         log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
@@ -117,7 +144,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
                 for(NewCollateral newCollateral : newCollateralList){
                     //newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
-                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);

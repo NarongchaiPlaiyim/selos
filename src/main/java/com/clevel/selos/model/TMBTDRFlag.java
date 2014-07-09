@@ -23,4 +23,8 @@ public enum TMBTDRFlag {
     public boolean isTdrFlag(){
         return tdrFlag;
     }
+
+    public String value(){
+        return value;
+    }
 }

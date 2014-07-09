@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ExistingSplitLineDetailView implements Serializable {
-    private int id;
+    private long id;
     private int no;
     private ProductProgram productProgram;
     private BigDecimal limit;
@@ -18,7 +18,7 @@ public class ExistingSplitLineDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    public int getId() {
+    public long getId() {
         return id;
     }
 

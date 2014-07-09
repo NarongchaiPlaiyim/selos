@@ -88,7 +88,7 @@ public class AppraisalDetailTransform extends Transform {
                                 newCollateralHead.setModifyBy(user);
                                 newCollateralHead.setModifyDate(DateTime.now().toDate());
                                 newCollateralHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
-                                newCollateralHead.setProposeType(ProposeType.P.toString());
+                                newCollateralHead.setProposeType(ProposeType.P);
 
                                 newCollateralHeadForAdd.add(newCollateralHead);
 
@@ -130,7 +130,7 @@ public class AppraisalDetailTransform extends Transform {
                 newCollateralHeadForNewCollateralHead.setCreateDate(DateTime.now().toDate());
                 newCollateralHeadForNewCollateralHead.setCreateBy(user);
                 newCollateralHeadForNewCollateralHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
-                newCollateralHeadForNewCollateralHead.setProposeType(ProposeType.P.toString());
+                newCollateralHeadForNewCollateralHead.setProposeType(ProposeType.P);
                 newCollateralHeadForNewCollateralHead.setNewCollateral(newCollateral);
 
                 newCollateralHeadListForNewCollateralHead.add(newCollateralHeadForNewCollateralHead);

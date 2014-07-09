@@ -7,7 +7,10 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.MandateDocument;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
@@ -260,7 +263,16 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getBusinessLocation() != null)
             applicationInfo.setBizLocation(String.valueOf(prescreen.getBusinessLocation().getCode()));
 
-        applicationInfo.setYearInBusinessMonth(new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now)));
+        //---- Check register date is older than reference date : use older date to send BRMS ----
+        BigDecimal registerDateMonth = new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now));
+        BigDecimal referenceDateMonth = new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getReferredDate(), now));
+        BigDecimal yearInBusinessMonth;
+        if(registerDateMonth.compareTo(referenceDateMonth) > 0)
+            yearInBusinessMonth = registerDateMonth;
+        else
+            yearInBusinessMonth = referenceDateMonth;
+
+        applicationInfo.setYearInBusinessMonth(yearInBusinessMonth);
         if(prescreen.getCountryOfRegister() != null)
             applicationInfo.setCountryOfRegistration(prescreen.getCountryOfRegister().getCode2());
 
@@ -354,7 +366,7 @@ public class BRMSControl extends BusinessControl {
         /*End Set Account Request*/
 
         /*Start Set Business Info List*/
-        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
+        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(prescreen.getId());
         actionValidationControl.validate(businessList, PrescreenBusiness.class);
 
         List<BRMSBizInfo> bizInfoList = new ArrayList<BRMSBizInfo>();
@@ -847,9 +859,9 @@ public class BRMSControl extends BusinessControl {
             if(!Util.isNull(applicationInfo)){
                 docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
                 if(!Util.isNull(docCustomerResponse)){
+                    mandateDocResponseView = new MandateDocResponseView();
                     logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
                     if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                        mandateDocResponseView = new MandateDocResponseView();
                         Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
                         mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                         mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
@@ -1128,9 +1140,11 @@ public class BRMSControl extends BusinessControl {
             BRMSTMBAccountInfo tmbAccountInfo = new BRMSTMBAccountInfo();
             tmbAccountInfo.setActiveFlag(customerOblAccountInfo.isAccountActiveFlag());
             tmbAccountInfo.setDataSource(customerOblAccountInfo.getDataSource());
-            tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef());
+            if(customerOblAccountInfo.getAccountRef() != null && customerOblAccountInfo.getAccountRef().length() >= 2){
+                tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef().substring(customerOblAccountInfo.getAccountRef().length() - 2));
+            }
             tmbAccountInfo.setCustToAccountRelationCD(customerOblAccountInfo.getCusRelAccount());
-            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().isTdrFlag());
+            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().value());
             tmbAccountInfo.setNumMonthIntPastDue(customerOblAccountInfo.getNumMonthIntPastDue());
             tmbAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfo.getNumMonthIntPastDueTDRAcc());
             tmbAccountInfo.setTmbDelPriDay(customerOblAccountInfo.getTmbDelPriDay());

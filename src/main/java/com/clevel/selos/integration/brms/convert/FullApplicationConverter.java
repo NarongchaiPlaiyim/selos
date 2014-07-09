@@ -217,24 +217,7 @@ public class FullApplicationConverter extends Converter{
             //7. Convert Acc/TMB Acc information//
             List<BRMSTMBAccountInfo> brmsTMBAccountInfoList = customerInfo.getTmbAccountInfoList();
             List<AccountType> cusAccountList = borrowerType.getAccount();
-            if(brmsTMBAccountInfoList != null){
-                for(BRMSTMBAccountInfo brmsTMBAccountInfo : brmsTMBAccountInfoList){
-                    AccountType cusAccount = new AccountType();
-                    List<AttributeType> cusAccountAttributeList = cusAccount.getAttribute();
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, brmsTMBAccountInfo.isActiveFlag()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, brmsTMBAccountInfo.getDataSource()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, brmsTMBAccountInfo.getAccountRef()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, brmsTMBAccountInfo.getCustToAccountRelationCD()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, brmsTMBAccountInfo.isTmbTDRFlag()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, brmsTMBAccountInfo.getNumMonthIntPastDue()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, brmsTMBAccountInfo.getNumMonthIntPastDueTDRAcc()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, brmsTMBAccountInfo.getTmbDelPriDay()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, brmsTMBAccountInfo.getTmbDelIntDay()));
-                    cusAccountAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, brmsTMBAccountInfo.getTmbBlockCode()));
-
-                    cusAccountList.add(cusAccount);
-                }
-            }
+            convertTMBAccountInfo(cusAccountList, brmsTMBAccountInfoList);
 
             //8. Convert NCB Account//
             List<NCBReportType> ncbReportList = borrowerType.getNcbReport();
@@ -281,9 +264,7 @@ public class FullApplicationConverter extends Converter{
             //Convert Warning Code into Customer.
             List<WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
             List<String> csiFullyMatchList = customerInfo.getCsiFullyMatchCode();
-            int csiFullyMatchSize = 0;
             if(csiFullyMatchList != null && csiFullyMatchList.size() > 0) {
-                csiFullyMatchSize = csiFullyMatchList.size();
                 for (String csiFullyMatchCode : csiFullyMatchList) {
                     WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
                     warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
@@ -297,7 +278,7 @@ public class FullApplicationConverter extends Converter{
 
             List<WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
             List<String> csiSomeMatchList = customerInfo.getCsiSomeMatchCode();
-            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0 && csiFullyMatchSize == 0) {
+            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0) {
                 for (String csiSomeMatchCode : csiSomeMatchList) {
                     WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
                     warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));

@@ -69,7 +69,7 @@ public class ReturnInfoUW implements Serializable {
     }
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         log.info("preRender ::: setSession ");
 
         if (session.getAttribute("workCaseId") != null) {
@@ -90,7 +90,7 @@ public class ReturnInfoUW implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("ReturnInfoBDM ::: onCreation");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if (session.getAttribute("workCaseId") != null) {
             log.info("onCreation ::: getAttrubute workCaseId : {}", session.getAttribute("workCaseId"));
@@ -117,7 +117,7 @@ public class ReturnInfoUW implements Serializable {
     public void onSave() {
         log.info("Start onSave {}", returnInfoViewList);
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
