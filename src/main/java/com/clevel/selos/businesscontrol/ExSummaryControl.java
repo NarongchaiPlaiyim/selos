@@ -361,14 +361,12 @@ public class ExSummaryControl extends BusinessControl {
         exSumCollateralView.setNoneCoreAssetValue(tmpNonCore);
 
 //        Sum of (Propose/PreApprove/Approve Limit)
-        if(decisionView != null && newCreditFacilityView != null){
-            exSumCollateralView.setLimitApprove(Util.add(decisionView.getApproveTotalCreditLimit(),newCreditFacilityView.getTotalPropose()));
-        }else if(decisionView != null){
+        if(decisionView != null && decisionView.getApproveTotalCreditLimit()!=null){
             exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
-        }else if(newCreditFacilityView != null){
+        } else if(newCreditFacilityView!=null && newCreditFacilityView.getTotalPropose()!=null) {
             exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
-        }else{
-            exSumCollateralView.setLimitApprove(null);
+        } else {
+            exSumCollateralView.setLimitApprove(BigDecimal.ZERO);
         }
 
         //Todo: Percent LTV
