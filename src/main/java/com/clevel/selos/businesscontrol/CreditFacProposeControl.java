@@ -698,8 +698,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
                 //********************************************** TCG is YES****************************************//
                 if (tcg.getTCG() == RadioValue.YES.value()) {
+                    log.debug("TCG Flag : YES");
                     //********** ProductGroup เป็น TMB_SME_SMART_BIZ หรือ RETENTION*********//
                     if ((ProductGroupValue.TMB_SME_SMART_BIZ.id() == productGroupView.getId()) || (ProductGroupValue.RETENTION.id() == productGroupView.getId())) {
+                        log.debug("ProductGroup is SMARTBIZ or RETENTION,, ProductGroup id : {}", productGroupView.getId());
                         List<NewCollateralView> newCollateralViewList = newCreditFacilityView.getNewCollateralViewList();
                         if (newCollateralViewList != null && newCollateralViewList.size() > 0) {
                             for (NewCollateralView collateralView : newCollateralViewList) {
@@ -707,27 +709,32 @@ public class CreditFacProposeControl extends BusinessControl {
                                 if (collHeadViewList != null && collHeadViewList.size() > 0) {
                                     for (NewCollateralHeadView collHeadView : collHeadViewList) {
                                         PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
+                                        potentialCollValue = BigDecimal.ZERO;
                                          /*
                                           Sum of [(HeadCollateral-Appraisal of coreAsset/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
                                           Sum of [(HeadCollateral-Appraisal of nonCoreAsset/50%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
                                           Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???)/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())]
                                          */
+                                        log.debug("Potential Collateral : {}", potentialCollateral);
                                         if (potentialCollateral.getId() != 0) {
+                                            log.debug("AppraisalValue : {}, ExistingCreditValue : {}", collHeadView.getAppraisalValue(), collHeadView.getExistingCredit());
                                             if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                                potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
+                                                potentialCollValue = Util.subtract(Util.divide(collHeadView.getAppraisalValue(), thirtyPercent), collHeadView.getExistingCredit());
                                             } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
                                                 potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), fiftyPercent)), collHeadView.getExistingCredit());
                                             } else if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
                                                 potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
                                             }
                                         }
+                                        log.debug("Potential Value : {}", potentialCollateral);
                                         summaryOne.add(potentialCollValue);
                                     }
                                 }
                             }
                         }
-
+                        log.debug("Summary of Potential Value : {}", summaryOne);
                         summaryTwo = calSum2ForCompareSum1(newCreditFacilityView, workCaseId);
+                        log.debug("Summary of Compare Value : {}", summaryTwo);
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
                             maximumSMELimit = summaryOne;
@@ -736,6 +743,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         }
                         //********** ProductGroup เป็น F_CASH *********//
                     } else if (ProductGroupValue.F_CASH.id() == productGroupView.getId()) {
+                        log.debug("ProductGroup is FCASH");
                         //Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???))-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())]
                         List<NewCollateralView> newCollateralViewList = newCreditFacilityView.getNewCollateralViewList();
                         if (newCollateralViewList != null && newCollateralViewList.size() > 0) {
@@ -744,20 +752,26 @@ public class CreditFacProposeControl extends BusinessControl {
                                 if (collHeadViewList != null && collHeadViewList.size() > 0) {
                                     for (NewCollateralHeadView collHeadView : collHeadViewList) {
                                         PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
+                                        potentialCollValue = BigDecimal.ZERO;
 
+                                        log.debug("PotentialCollateral : {}", potentialCollateral);
                                         if (potentialCollateral.getId() != 0) {
                                             if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
+                                                log.debug("AppraisalValue : {}, ExistingCredit : {}", collHeadView.getAppraisalValue(), collHeadView.getExistingCredit());
                                                 potentialCollValue = Util.subtract(collHeadView.getAppraisalValue(), collHeadView.getExistingCredit());
                                             }
                                         }
+                                        log.debug("Potential Value : {}", potentialCollValue);
                                         summaryOne.add(potentialCollValue);   // Sum of [Head Coll - Appraisal of Cash Collateral / BE - ภาระสินเชื่อเดิม]
                                     }
                                 }
                             }
                         }
 
+                        log.debug("Summary of Potential Value : {}", summaryOne);
                         //20,000,000 - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ)
                         summaryTwo = Util.subtract(num4, newCreditFacilityView.getExistingSMELimit());
+                        log.debug("Summary of Compare Value : {}", summaryTwo);
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
                             maximumSMELimit = summaryOne;
@@ -766,8 +780,10 @@ public class CreditFacProposeControl extends BusinessControl {
                         }
 
                     } else if (ProductGroupValue.OD_NO_ASSET.id() == productGroupView.getId()) {//********** ProductGroup เป็น OD_NO_ASSET *********//
+                        log.debug("ProductGroup is OD");
                         maximumSMELimit = Util.subtract(num1, newCreditFacilityView.getExistingSMELimit()); // 10 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ)
                     } else if (ProductGroupValue.QUICK_LOAN.id() == productGroupView.getId()) {   //********** ProductGroup เป็น QUICK_LOAN *********//
+                        log.debug("ProductGroup is QuickLoan");
                         summaryOne = num3;  // 3 ล้าน
 
                         if (newCreditFacilityView.getExistingSMELimit().doubleValue() < num4.doubleValue()) {  // if วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ) น้อยกว่า 20 ล้าน
@@ -786,11 +802,12 @@ public class CreditFacProposeControl extends BusinessControl {
                     }
                     //********************************************** TCG is NO ****************************************//
                 } else if (tcg.getTCG() == RadioValue.NO.value()) {
+                    log.debug("TCG Flag : NO");
                     //********** ProductGroup เป็น TMB_SME_SMART_BIZ หรือ RETENTION หรือ F_CASH*********//
                     if ((ProductGroupValue.TMB_SME_SMART_BIZ.id() == productGroupView.getId()) ||
                             (ProductGroupValue.RETENTION.id() == productGroupView.getId()) ||
                             (ProductGroupValue.F_CASH.id() == productGroupView.getId())) {
-
+                        log.debug("ProductGroup is SMARTBIZ, RETENTION, FCASH");
                         // sum of[(ราคาประเมิน (collHeadView.getAppraisalValue())*LTVPercent) - ภาระสินเชื่อเดิม]
                         List<NewCollateralView> newCollateralViewList = newCreditFacilityView.getNewCollateralViewList();
                         if (newCollateralViewList != null && newCollateralViewList.size() > 0) {
@@ -800,15 +817,21 @@ public class CreditFacProposeControl extends BusinessControl {
                                 if (collHeadViewList != null && collHeadViewList.size() > 0) {
                                     BigDecimal percentLTV = BigDecimal.ZERO;
                                     for (NewCollateralHeadView collHeadView : collHeadViewList) {
+                                        log.debug("CollateralHeadView : {}", collHeadView);
                                         percentLTV = findLTVPercent(collHeadView, workCaseId);
+                                        log.debug("percentLTV : {}", percentLTV);
                                         ltvValue = Util.multiply(collHeadView.getAppraisalValue(), percentLTV);
+                                        log.debug("LTV Value : {}", ltvValue);
+
                                         summaryOne = Util.add(summaryOne, (Util.subtract(ltvValue, collHeadView.getExistingCredit())));
+                                        log.debug("summaryOne : {}", summaryOne);
                                     }
                                 }
                             }
                         }
 
                         summaryTwo = calSum2ForCompareSum1(newCreditFacilityView, workCaseId);
+                        log.debug("summaryTwo : {}", summaryTwo);
 
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
@@ -818,8 +841,10 @@ public class CreditFacProposeControl extends BusinessControl {
                         }
 
                     } else if (ProductGroupValue.OD_NO_ASSET.id() == productGroupView.getId()) {   //********** ProductGroup เป็น OD_NO_ASSET *********//
+                        log.debug("ProductGroup is OD");
                         maximumSMELimit = Util.subtract(num1, newCreditFacilityView.getExistingSMELimit()); // 10 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ)
                     } else if (ProductGroupValue.QUICK_LOAN.id() == productGroupView.getId()) {   //********** ProductGroup เป็น QUICK_LOAN *********//
+                        log.debug("ProductGroup is QuickLoan");
                         summaryOne = num3;  // 3 ล้าน
 
                         if (newCreditFacilityView.getExistingSMELimit().doubleValue() < num4.doubleValue()) {  // if วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ) น้อยกว่า 20 ล้าน
@@ -840,6 +865,8 @@ public class CreditFacProposeControl extends BusinessControl {
             }
 
         }
+
+        log.debug("maximumSMELimit before compare to Zero : {}", maximumSMELimit);
 
 
         if (maximumSMELimit.doubleValue() < 0) {
