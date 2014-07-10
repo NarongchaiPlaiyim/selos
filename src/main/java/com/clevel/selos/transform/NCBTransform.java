@@ -119,9 +119,12 @@ public class NCBTransform extends Transform {
         //TDR Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
         ncbInfoView.setTdrOtherMonth(ncb.getTdrOtherMonth());
+        if(ncb.getTdrOtherMonth() != 0) ncbInfoView.setTdrOtherMonthStr(getMonthString(ncb.getTdrOtherMonth()));
         ncbInfoView.setTdrOtherYear(ncb.getTdrOtherYear());
+
         ncbInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
         ncbInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
+        if(ncb.getTdrTMBMonth() != 0) ncbInfoView.setTdrTMBMonthStr(getMonthString(ncb.getTdrTMBMonth()));
         ncbInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
 
         ncbInfoView.setPaymentClass(ncb.getPaymentClass());

@@ -1969,7 +1969,7 @@ public class CreditFacExisting extends BaseController {
         Cloner cloner = new Cloner();
         List<ExistingCreditDetailView> existingBrwCreditDetailViews = cloner.deepClone(existingCreditFacilityView.getBorrowerComExistingCredit());
         List<ExistingCreditDetailView> existingRelCreditDetailViews = cloner.deepClone(existingCreditFacilityView.getRelatedComExistingCredit());
-        /*if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
+        if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
             for(ExistingCreditDetailView brExistingCreditDetailView : existingBrwCreditDetailViews){
                 if(creditFacExistingControl.isUsedInProposeCredit(brExistingCreditDetailView.getId())){
                     messageHeader = msg.get("app.header.error");
@@ -1989,7 +1989,7 @@ public class CreditFacExisting extends BaseController {
                     return;
                 }
             }
-        }*/
+        }
 
 
         List<CustomerInfoView> customerInfoViews = creditFacExistingControl.getCustomerListByWorkCaseId(workCaseId);
@@ -2001,9 +2001,9 @@ public class CreditFacExisting extends BaseController {
         clearExistingCreditFacilityView();
 
         ExistingCreditFacilityView existingCreditFacilityViewTmp = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        /*existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);*/
-        existingCreditFacilityView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>());
-        existingCreditFacilityView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
+        /*existingCreditFacilityView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>());*/
 
         existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
         existingCreditFacilityView.setBorrowerRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
