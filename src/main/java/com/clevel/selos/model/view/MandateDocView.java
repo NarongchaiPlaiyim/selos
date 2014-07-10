@@ -11,7 +11,7 @@ import java.util.List;
 public class MandateDocView implements Serializable{
 
     private String ecmDocTypeId;
-    private String ecmDocTypeDesc;
+    private String ecmDocTypeDesc; //--
     private List<String> brmsDescList;
     private List<CustomerInfoSimpleView> customerInfoSimpleViewList;
     private DocLevel docLevel;

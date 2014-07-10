@@ -4,6 +4,7 @@ import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
+import com.clevel.selos.integration.ecm.db.ECMTypeName;
 import com.clevel.selos.integration.ecm.module.DBExecute;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -46,6 +47,27 @@ public class ECMService implements Serializable {
             throw e;
         } catch (Exception e) {
             log.error("Exception while get ECM data!",e);
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
+    public ECMTypeName getECMTypeName(final String ECM_DOC_ID) throws Exception{
+        ECMTypeName ecmTypeName = null;
+        try {
+            if(!Util.isNull(ECM_DOC_ID) && !Util.isZero(ECM_DOC_ID.length())){
+                ecmTypeName = dbExecute.findByEcmDocId(ECM_DOC_ID);
+                if(Util.isNull(ecmTypeName)){
+                    log.debug("Data Not Found!");
+                    throw new ECMInterfaceException(new Exception(msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND)),ExceptionMapping.ECM_DATA_NOT_FOUND, msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND));
+                }
+            }
+            return ecmTypeName;
+        } catch (ECMInterfaceException e){
+            log.error("ECMInterfaceException while get ECM Type Name!",e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while get ECM Type Name!",e);
             throw new Exception(e.getMessage());
         }
     }

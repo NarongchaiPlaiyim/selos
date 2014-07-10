@@ -5,6 +5,7 @@ import com.clevel.selos.integration.ecm.model.ECMDataResult;
 
 public interface ECMInterface {
     public ECMDataResult getECMDataResult(final String caNumber);
+    public ECMDataResult getECMTypeName(final String ecmDocId);
     public boolean update(final ECMCAPShare ecmcapShare);
     public boolean insert(final ECMCAPShare ecmcapShare);
 }
