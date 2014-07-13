@@ -91,7 +91,7 @@ public class InsuranceInformation implements Serializable {
 	 * Action
 	 */
 	@PostConstruct
-	private void init() {
+	public void onCreation() {
 
 		HttpSession session = FacesUtil.getSession(false);
 
@@ -186,7 +186,7 @@ public class InsuranceInformation implements Serializable {
 	public void onSave() {
 		log.info("InsuranceInfo: onSave()");
 		insuranceInfoControl.saveInsuranceInfo(insuranceInfoViewList, this.total, workCaseId);
-		init();
+		onCreation();
 	}
 
 	private void _loadInitData() {
