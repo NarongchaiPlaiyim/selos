@@ -1,44 +1,23 @@
 package com.clevel.selos.businesscontrol;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
 import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.AgreementInfo;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.NewCreditFacility;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountCredit;
-import com.clevel.selos.model.db.working.OpenAccountName;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.ApproveDetailInformationView;
-import com.clevel.selos.model.view.NewCreditDetailView;
-import com.clevel.selos.model.view.NewCreditFacilityView;
-import com.clevel.selos.model.view.OpenAccountCreditView;
-import com.clevel.selos.model.view.OpenAccountFullView;
-import com.clevel.selos.model.view.OpenAccountNameView;
-import com.clevel.selos.model.view.OpenAccountPurposeView;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ApproveDetailInformationTransform;
 import com.clevel.selos.transform.CreditDetailSimpleTransform;
-import com.clevel.selos.transform.NewCreditDetailTransform;
-import com.clevel.selos.transform.NewCreditFacilityTransform;
 import com.clevel.selos.transform.OpenAccountTransform;
-
+import com.clevel.selos.transform.ProposeLineTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Stateless
 public class ApproveDetailInformationControl extends BusinessControl {
@@ -53,16 +32,13 @@ public class ApproveDetailInformationControl extends BusinessControl {
 	WorkCaseDAO workCaseDAO;
 
 	@Inject
-	NewCreditDetailDAO newCreditDetailDAO;
+	ProposeCreditInfoDAO newCreditDetailDAO;
 
 	@Inject
-	NewCreditDetailTransform newCreditDetailTransform;
+    ProposeLineTransform proposeLineTransform;
 
 	@Inject
-	NewCreditFacilityDAO newCreditFacilityDAO;
-
-	@Inject
-	NewCreditFacilityTransform newCreditFacilityTransform;
+	ProposeLineDAO newCreditFacilityDAO;
 
 	@Inject
 	OpenAccountDAO openAccountDAO;
@@ -97,10 +73,10 @@ public class ApproveDetailInformationControl extends BusinessControl {
 			WorkCase workCase = workCaseDAO.findById(workCaseId);
 			approveDetailInformationView.setModifyBy(workCase.getModifyBy());
 			approveDetailInformationView.setModifyDate(workCase.getModifyDate());
-			List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
-			List<NewCreditDetailView> newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
-			for (NewCreditDetail newCreditDetail : newCreditDetailList) {
-				NewCreditDetailView newCreditDetailView = newCreditDetailTransform.transformToView(newCreditDetail);
+			List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
+			List<ProposeCreditInfoDetailView> newCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
+			for (ProposeCreditInfo newCreditDetail : newCreditDetailList) {
+                ProposeCreditInfoDetailView newCreditDetailView = proposeLineTransform.transformProposeCreditToView(newCreditDetail);
 				newCreditDetailViewList.add(newCreditDetailView);
 				totalApprovedLimit = totalApprovedLimit.add(newCreditDetail.getLimit());
 			}
@@ -109,11 +85,6 @@ public class ApproveDetailInformationControl extends BusinessControl {
 			approveDetailInformationView.setOpenAccountFullViewList(getOpenAccountViewList(workCaseId));
 		}
 		return approveDetailInformationView;
-	}
-
-	public NewCreditFacilityView getNewCreditFacilityView(long workCaseId) {
-		NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-		return newCreditFacilityTransform.transformToView(newCreditFacility);
 	}
 
 	public List<OpenAccountFullView> getOpenAccountViewList(long workCaseId) {
@@ -135,9 +106,9 @@ public class ApproveDetailInformationControl extends BusinessControl {
 					OpenAccountCreditView creditView = new OpenAccountCreditView();
 					if (creditModel.getExistingCreditDetail() != null) {
 						creditDetailSimpleTransform.updateSimpleView(creditView, creditModel.getExistingCreditDetail());
-					} else if (creditModel.getNewCreditDetail() != null) {
-						creditDetailSimpleTransform.updateSimpleView(creditView, creditModel.getNewCreditDetail());
-						newCreditSet.add(creditModel.getNewCreditDetail().getId());
+					} else if (creditModel.getProposeCreditInfo() != null) {
+						creditDetailSimpleTransform.updateSimpleView(creditView, creditModel.getProposeCreditInfo());
+						newCreditSet.add(creditModel.getProposeCreditInfo().getId());
 					} else {
 						continue;
 					}
@@ -148,8 +119,8 @@ public class ApproveDetailInformationControl extends BusinessControl {
 				}
 			}
 			// List from new credit detail
-			List<NewCreditDetail> newCreditModels = newCreditDetailDAO.findApprovedNewCreditDetail(model.getWorkCase().getId());
-			for (NewCreditDetail newCreditModel : newCreditModels) {
+			List<ProposeCreditInfo> newCreditModels = newCreditDetailDAO.findApprovedNewCreditDetail(model.getWorkCase().getId());
+			for (ProposeCreditInfo newCreditModel : newCreditModels) {
 				if (newCreditSet.contains(newCreditModel.getId()))
 					continue;
 				OpenAccountCreditView creditView = new OpenAccountCreditView();

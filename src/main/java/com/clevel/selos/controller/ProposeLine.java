@@ -820,7 +820,7 @@ public class ProposeLine extends BaseController {
         try {
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
             proposeLineControl.calWC(workCaseId);
-//            exSummaryControl.calForCreditFacility(workCaseId);
+            exSummaryControl.calForCreditFacility(workCaseId);
 
             onCreation();
 

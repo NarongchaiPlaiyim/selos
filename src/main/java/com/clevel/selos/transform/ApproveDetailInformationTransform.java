@@ -1,12 +1,9 @@
 package com.clevel.selos.transform;
 
-import java.util.Calendar;
-
 import com.clevel.selos.model.db.working.AgreementInfo;
-import com.clevel.selos.model.db.working.TCGInfo;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ApproveDetailInformationView;
-import com.clevel.selos.model.view.TCGInfoView;
+
+import java.util.Calendar;
 
 public class ApproveDetailInformationTransform extends Transform {
 	

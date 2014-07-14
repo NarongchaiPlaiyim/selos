@@ -16,7 +16,6 @@ import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;

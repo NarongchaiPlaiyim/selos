@@ -1,8 +1,5 @@
 package com.clevel.selos.model.db.report;
 
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
