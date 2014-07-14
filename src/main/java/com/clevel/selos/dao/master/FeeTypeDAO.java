@@ -20,4 +20,10 @@ public class FeeTypeDAO  extends GenericDAO<FeeType,Integer>{
         FeeType feeType = (FeeType) criteria.uniqueResult();
         return feeType;
     }
+    public FeeType findByDescription(String description) {
+    	Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("description", description));
+        FeeType feeType = (FeeType) criteria.uniqueResult();
+        return feeType;
+    }
 }

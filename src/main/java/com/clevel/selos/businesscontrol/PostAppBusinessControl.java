@@ -2,13 +2,17 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
+import com.clevel.selos.dao.master.FeePaymentMethodDAO;
+import com.clevel.selos.dao.master.FeeTypeDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.FeeLevel;
 import com.clevel.selos.model.PerfectReviewStatus;
 import com.clevel.selos.model.PerfectReviewType;
 import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.FeeType;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -22,10 +26,12 @@ import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
 import com.clevel.selos.util.Util;
+
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -78,6 +84,12 @@ public class PostAppBusinessControl extends BusinessControl {
 	private TCGInfoDAO tcgInfoDAO;
 	@Inject
 	private MortgageSummaryControl mortgageSummaryControl;
+	@Inject
+	private FeePaymentMethodDAO feePaymentMethodDAO;
+	@Inject
+	private FeeTypeDAO feeTypeDAO;
+	@Inject
+	private InsuranceInfoDAO insuranceInfoDAO;
 	
 	
 	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark) throws Exception {
@@ -413,21 +425,33 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Insurance Premium Quote (3002) , Action Submit CA (1015)
-		//TODO
-		/*
-		FeeDetail model = new FeeDetail();
-		model.setPaymentMethod(null);
-		model.setFeeType(null);
+		BigDecimal amount;
+		InsuranceInfo info = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCase.getId());
+		if (info != null && info.getTotalPremiumAmount() != null) {
+			amount = info.getTotalPremiumAmount();
+		} else {
+			amount = BigDecimal.ZERO;
+		}
+		FeeType type = feeTypeDAO.findByDescription("Insurance Premium");
+		if (type == null)
+			return;
+		ProposeFeeDetail model = feeDetailDAO.findByType(workCase.getId(), type.getId());
+		if (model == null) {
+			model = new ProposeFeeDetail();
+			model.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode("01"));
+			model.setFeeType(type);
+			model.setWorkCase(workCase);
+		}
 		model.setPercentFee(BigDecimal.ZERO);
 		model.setPercentFeeAfter(BigDecimal.ZERO);
 		model.setFeeYear(BigDecimal.ZERO);
-		model.setAmount(BigDecimal.ZERO);
-		model.setFeeLevel(FeeLevel.NA);
+		model.setAmount(amount);
+		model.setFeeLevel(FeeLevel.APP_LEVEL);
 		model.setDescription(null);
-		model.setNewCreditDetail(null);
-		model.setWorkCase(workCase);
+		model.setProposeType(null);
+		model.setProposeCreditInfo(null);
+
 		feeDetailDAO.save(model);
-		*/
 	}
 	private void _3009_FixDataInDecision(WorkCase workCase,long actionId) {
 		if (actionId != ACTION_SUBMIT)
