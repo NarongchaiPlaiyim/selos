@@ -20,7 +20,7 @@ public class MortgageInfoCredit implements Serializable {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "new_collateral_credit_id")
-    private NewCollateralCredit newCollateralCredit;
+    private ProposeCollateralInfoRelation newCollateralCredit;
 
     public MortgageInfoCredit() {
     	
@@ -42,12 +42,11 @@ public class MortgageInfoCredit implements Serializable {
 		this.mortgageInfo = mortgageInfo;
 	}
 
-	public NewCollateralCredit getNewCollateralCredit() {
-		return newCollateralCredit;
-	}
-	
-	public void setNewCollateralCredit(NewCollateralCredit newCollateralCredit) {
-		this.newCollateralCredit = newCollateralCredit;
-	}
-	
+    public ProposeCollateralInfoRelation getNewCollateralCredit() {
+        return newCollateralCredit;
+    }
+
+    public void setNewCollateralCredit(ProposeCollateralInfoRelation newCollateralCredit) {
+        this.newCollateralCredit = newCollateralCredit;
+    }
 }

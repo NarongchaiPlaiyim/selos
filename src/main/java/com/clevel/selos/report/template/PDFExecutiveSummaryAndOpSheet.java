@@ -9,7 +9,10 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.*;
+import com.clevel.selos.model.CreditCustomerType;
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
@@ -84,7 +87,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     @Inject
     DecisionControl decisionControl;
 
-    private List<NewCreditDetailView> newCreditDetailViewList;
+    private List<ProposeCreditInfoDetailView> newCreditDetailViewList;
 
     @Inject
     public PDFExecutiveSummaryAndOpSheet() {
@@ -97,7 +100,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         exSummaryView = new ExSummaryView();
         if(workCaseId != 0){
             exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-            decisionView = decisionControl.getDecisionView(workCaseId);
+            decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
             exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId, statusId);
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
             log.debug("exSummary: {},exSummaryView: {}, decision: {},bizInfoSummaryView: {}",exSummary,exSummaryView,decisionView,bizInfoSummaryView);
@@ -169,15 +172,15 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<TradeFinanceExsumReport> fillTradeFinance(){
         List<TradeFinanceExsumReport> financeExsumReports = new ArrayList<TradeFinanceExsumReport>();
 
-        List<NewCreditFacilityView>  newCreditFacilityViewArrayList = new ArrayList<NewCreditFacilityView>();
-        NewCreditFacilityView creditFacilityViews = exSummaryView.getTradeFinance();
+        List<ProposeLineView>  newCreditFacilityViewArrayList = new ArrayList<ProposeLineView>();
+        ProposeLineView creditFacilityViews = exSummaryView.getTradeFinance();
 
         if (!Util.isNull(creditFacilityViews)){
             log.info("creditFacilityViews: {}",creditFacilityViews);
             newCreditFacilityViewArrayList.add(creditFacilityViews);
 
             if (Util.safetyList(newCreditFacilityViewArrayList).size() > 0) {
-                for (NewCreditFacilityView facilityView : newCreditFacilityViewArrayList){
+                for (ProposeLineView facilityView : newCreditFacilityViewArrayList){
                     TradeFinanceExsumReport tradeFinanceExsumReport = new TradeFinanceExsumReport();
                     tradeFinanceExsumReport.setContactName(Util.checkNullString(facilityView.getContactName()));
                     tradeFinanceExsumReport.setContactPhoneNo(Util.checkNullString(facilityView.getContactPhoneNo()));
@@ -1007,7 +1010,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         int count = 1;
         if (Util.safetyList(newCreditDetailViewList).size() > 0){
             log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
-            for (NewCreditDetailView detailView : newCreditDetailViewList){
+            for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
                 proposedView.setPath(pathsub);
                 proposedView.setCount(count++);
@@ -1019,7 +1022,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 proposedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
                 proposedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                proposedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
+                proposedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getProposeCreditInfoTierDetailViewList()));
 
                 StringBuilder builder = new StringBuilder();
                 if (detailView.getRequestType() == RequestTypes.NEW.value()){
@@ -1042,7 +1045,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     builder =builder.append("Purpose : ").append("\n");
                 }
 
-                builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getRemark())).append("\n");
+                builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
 
                 if (!Util.isNull(detailView.getDisbursementTypeView())){
                     builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
@@ -1074,7 +1077,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         int count = 1;
         if (Util.safetyList(newCreditDetailViewList).size() > 0){
             log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
-            for (NewCreditDetailView detailView : newCreditDetailViewList){
+            for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 approvedView.setPath(pathsub);
 
@@ -1099,7 +1102,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
                 approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
+                approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getProposeCreditInfoTierDetailViewList()));
 
                 StringBuilder builder = new StringBuilder();
 
@@ -1123,7 +1126,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     builder = builder.append("Purpose : ").append("\n");
                 }
 
-                builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getRemark())).append("\n");
+                builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
 
                 if (!Util.isNull(detailView.getDisbursementTypeView())){
                     builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
@@ -1159,7 +1162,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         int count = 1;
         if (Util.safetyList(newCreditDetailViewList).size() > 0){
             log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
-            for (NewCreditDetailView detailView : newCreditDetailViewList){
+            for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 approvedView.setPath(pathsub);
 
@@ -1180,7 +1183,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     approvedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
                     approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                     approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                    approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getNewCreditTierDetailViewList()));
+                    approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getProposeCreditInfoTierDetailViewList()));
 
                     StringBuilder builder = new StringBuilder();
 
@@ -1204,7 +1207,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         builder = builder.append("Purpose : ").append("\n");
                     }
 
-                    builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getRemark())).append("\n");
+                    builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
 
                     if (!Util.isNull(detailView.getDisbursementTypeView())){
                         builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
@@ -1233,12 +1236,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     public List<ProposeFeeInformationDecisionReport> fillProposeFeeInformation(){
         List<ProposeFeeInformationDecisionReport> proposeFeeInformationDecisionReportList = new ArrayList<ProposeFeeInformationDecisionReport>();
-        List<NewFeeDetailView> feeDetailViewList = decisionView.getProposeFeeInfoList();
+        List<ProposeFeeDetailView> feeDetailViewList = decisionView.getApproveFeeDetailViewList();
 
         int count = 1;
         if (Util.safetyList(feeDetailViewList).size() > 0){
             log.debug("feeDetailViewList by fillProposeFeeInformation. {}",feeDetailViewList);
-            for (NewFeeDetailView view : feeDetailViewList){
+            for (ProposeFeeDetailView view : feeDetailViewList){
                 ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
                 proposeFeeInformationDecisionReport.setCount(count++);
                 proposeFeeInformationDecisionReport.setProductProgram(Util.checkNullString(view.getProductProgram()));
@@ -1304,12 +1307,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     public List<ProposedCollateralDecisionReport> fillProposedCollateral(String pathsub){
         List<ProposedCollateralDecisionReport> proposedCollateralDecisionReportList = new ArrayList<ProposedCollateralDecisionReport>();
-        List<NewCollateralView> newCollateralViews = decisionView.getProposeCollateralList();
-        List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+        List<ProposeCollateralInfoView> newCollateralViews = decisionView.getProposeCollateralList();
+        List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
         if (Util.safetyList(newCollateralViews).size() > 0){
             log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
-            for (NewCollateralView view : newCollateralViews){
+            for (ProposeCollateralInfoView view : newCollateralViews){
                 ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 collateralDecisionReport.setPath(pathsub);
@@ -1323,17 +1326,17 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 collateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
                 collateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
-                if (Util.safetyList(view.getProposeCreditDetailViewList()).size() > 0) {
-                    log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditDetailViewList());
-                    collateralDecisionReport.setDetailViewList(view.getProposeCreditDetailViewList());
+                if (Util.safetyList(view.getProposeCreditInfoDetailViewList()).size() > 0) {
+                    log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
+                    collateralDecisionReport.setDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
-                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditDetailViewList());
+                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditInfoDetailViewList());
                 }
 
-                collateralHeadViewList = view.getNewCollateralHeadViewList();
+                collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
                 if (Util.safetyList(collateralHeadViewList).size() > 0){
                     log.debug("collateralHeadViewList. {}",collateralHeadViewList);
-                    for (NewCollateralHeadView headView : collateralHeadViewList){
+                    for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                         collateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
                                 (Util.checkNullString(headView.getPotentialCollateral().getDescription())) : SPACE);
                         collateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
@@ -1351,7 +1354,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         } else {
                             collateralDecisionReport.setInsuranceCompany(SPACE);
                         }
-                        collateralDecisionReport.setCollateralSubViewList(headView.getNewCollateralSubViewList());
+                        collateralDecisionReport.setCollateralSubViewList(headView.getProposeCollateralInfoSubViewList());
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
@@ -1370,12 +1373,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //ExSum
     public List<ApprovedCollateralDecisionReport> fillExSumApprovedCollaterral(final String pathsub){
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
-        List<NewCollateralView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
-        List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+        List<ProposeCollateralInfoView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
+        List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
         if (!Util.isZero(newCollateralViews.size())){
             log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
-            for (NewCollateralView view : newCollateralViews){
+            for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
                 log.debug("--Path. {}",pathsub);
@@ -1400,17 +1403,17 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
-                if (Util.safetyList(view.getProposeCreditDetailViewList()).size() > 0) {
-                    log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditDetailViewList());
-                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
+                if (Util.safetyList(view.getProposeCreditInfoDetailViewList()).size() > 0) {
+                    log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
+                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
                 } else {
-                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditDetailViewList());
+                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditInfoDetailViewList());
                 }
 
-                collateralHeadViewList = view.getNewCollateralHeadViewList();
+                collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
                 if (Util.safetyList(collateralHeadViewList).size() > 0){
                     log.debug("collateralHeadViewList. {}",collateralHeadViewList);
-                    for (NewCollateralHeadView headView : collateralHeadViewList){
+                    for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                         approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
                                 Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
                         approvedCollateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
@@ -1428,7 +1431,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         } else {
                             approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
                         }
-                        approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getNewCollateralSubViewList()));
+                        approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getProposeCollateralInfoSubViewList()));
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
@@ -1451,12 +1454,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //Opsheet
     public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(final String pathsub){
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
-        List<NewCollateralView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
-        List<NewCollateralHeadView> collateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+        List<ProposeCollateralInfoView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
+        List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
         if (!Util.isZero(newCollateralViews.size())){
             log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
-            for (NewCollateralView view : newCollateralViews){
+            for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
                 log.debug("--Path. {}",pathsub);
@@ -1477,17 +1480,17 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                     approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
-                    if (Util.safetyList(view.getProposeCreditDetailViewList()).size() > 0) {
-                        log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditDetailViewList());
-                        approvedCollateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
+                    if (Util.safetyList(view.getProposeCreditInfoDetailViewList()).size() > 0) {
+                        log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
+                        approvedCollateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
                     } else {
-                        log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditDetailViewList());
+                        log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditInfoDetailViewList());
                     }
 
-                    collateralHeadViewList = view.getNewCollateralHeadViewList();
+                    collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
                     if (Util.safetyList(collateralHeadViewList).size() > 0){
                         log.debug("collateralHeadViewList. {}",collateralHeadViewList);
-                        for (NewCollateralHeadView headView : collateralHeadViewList){
+                        for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                             approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
                                     Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
                             approvedCollateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
@@ -1505,7 +1508,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             } else {
                                 approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
                             }
-                            approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getNewCollateralSubViewList()));
+                            approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getProposeCollateralInfoSubViewList()));
                         }
                     } else {
                         log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
@@ -1527,12 +1530,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     public List<ProposedGuarantorDecisionReport> fillProposedGuarantor(String pathsub){
         List<ProposedGuarantorDecisionReport> proposedGuarantorDecisionReportList = new ArrayList<ProposedGuarantorDecisionReport>();
-        List<NewGuarantorDetailView> detailViews = decisionView.getApproveGuarantorList();
+        List<ProposeGuarantorInfoView> detailViews = decisionView.getApproveGuarantorList();
 
         int count = 1;
         if (Util.safetyList(detailViews).size() > 0){
             log.debug("detailViews by fillProposedGuarantor. {}",detailViews);
-            for (NewGuarantorDetailView view : detailViews){
+            for (ProposeGuarantorInfoView view : detailViews){
                 ProposedGuarantorDecisionReport guarantorDecisionReport = new ProposedGuarantorDecisionReport();
                 guarantorDecisionReport.setCount(count++);
                 guarantorDecisionReport.setPath(pathsub);
@@ -1546,8 +1549,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 guarantorDecisionReport.setName(name.toString());
                 guarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
-                guarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
-                guarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getTotalLimitGuaranteeAmount()));
+                guarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
+                guarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
                 proposedGuarantorDecisionReportList.add(guarantorDecisionReport);
             }
         } else {
@@ -1562,12 +1565,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //ExSum
     public List<ApprovedGuarantorDecisionReport> fillExSumApprovedGuarantor(String pathsub){
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
-        List<NewGuarantorDetailView> newGuarantorDetails = decisionView.getApproveGuarantorList();
+        List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
 
         int count = 1;
         if (Util.safetyList(newGuarantorDetails).size() > 0){
             log.debug("newGuarantorDetails by fillApprovedGuarantor. {}",newGuarantorDetails);
-            for (NewGuarantorDetailView view : newGuarantorDetails){
+            for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
                 approvedGuarantorDecisionReport.setPath(pathsub);
@@ -1584,8 +1587,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 approvedGuarantorDecisionReport.setName(name.toString());
                 approvedGuarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
-                approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
-                approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getTotalLimitGuaranteeAmount()));
+                approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
+                approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
                 if (view.getUwDecision() == DecisionType.APPROVED){
                     approvedGuarantorDecisionReport.setUwDecision("Approved");
                 } else if (view.getUwDecision() == DecisionType.REJECTED){
@@ -1594,7 +1597,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     approvedGuarantorDecisionReport.setUwDecision(SPACE);
                 }
 
-                if(Util.isNull(view.getTotalLimitGuaranteeAmount())){
+                if(Util.isNull(view.getGuaranteeAmount())){
                     approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
                 } else {
                     approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
@@ -1620,12 +1623,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //Opsheet
     public List<ApprovedGuarantorDecisionReport> fillApprovedGuarantor(String pathsub){
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
-        List<NewGuarantorDetailView> newGuarantorDetails = decisionView.getApproveGuarantorList();
+        List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
 
         int count = 1;
         if (Util.safetyList(newGuarantorDetails).size() > 0){
             log.debug("newGuarantorDetails by fillApprovedGuarantor. {}",newGuarantorDetails);
-            for (NewGuarantorDetailView view : newGuarantorDetails){
+            for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
                 approvedGuarantorDecisionReport.setPath(pathsub);
@@ -1642,13 +1645,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                     approvedGuarantorDecisionReport.setName(name.toString());
                     approvedGuarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
-                    approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditDetailViewList()));
-                    approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getTotalLimitGuaranteeAmount()));
+                    approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
+                    approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
                     if (view.getUwDecision() == DecisionType.APPROVED){
                         approvedGuarantorDecisionReport.setUwDecision("Approved");
                     }
 
-                    if(Util.isNull(view.getTotalLimitGuaranteeAmount())){
+                    if(Util.isNull(view.getGuaranteeAmount())){
                         approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
                     } else {
                         approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
@@ -1774,7 +1777,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
         //Approved Propose Credit
         newCreditDetailViewList = decisionView.getApproveCreditList();
-        for (NewCreditDetailView detailView : newCreditDetailViewList){
+        for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
             if ((DecisionType.APPROVED).equals(detailView.getUwDecision()) && ("opsheet").equals(type)){
                 totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
             } else if (("all").equals(type)){
@@ -1805,9 +1808,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         totalDecisionReport.setProposeTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getProposeTotalGuaranteeAmt()));
 
         //Approved Guarantor
-        List<NewGuarantorDetailView> newGuarantorDetails = Util.safetyList(decisionView.getApproveGuarantorList());
+        List<ProposeGuarantorInfoView> newGuarantorDetails = Util.safetyList(decisionView.getApproveGuarantorList());
 
-        for (NewGuarantorDetailView view : newGuarantorDetails){
+        for (ProposeGuarantorInfoView view : newGuarantorDetails){
             if ((DecisionType.APPROVED).equals(view.getUwDecision()) && ("opsheet").equals(type)){
                 totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
             } else if (("all").equals(type)){

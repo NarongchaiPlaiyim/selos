@@ -1,9 +1,12 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCustomerType;
+import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DecisionView implements Serializable {
@@ -42,10 +45,9 @@ public class DecisionView implements Serializable {
     private BigDecimal extTotalGuaranteeAmount;
 
     // Propose
-    private List<NewCreditDetailView> proposeCreditList;
-    private List<NewFeeDetailView> proposeFeeInfoList;
-    private List<NewCollateralView> proposeCollateralList;
-    private List<NewGuarantorDetailView> proposeGuarantorList;
+    private List<ProposeCreditInfoDetailView> proposeCreditList;
+    private List<ProposeCollateralInfoView> proposeCollateralList;
+    private List<ProposeGuarantorInfoView> proposeGuarantorList;
 
     private BigDecimal proposeTotalCreditLimit;
     private BigDecimal proposeTotalGuaranteeAmt;
@@ -57,9 +59,9 @@ public class DecisionView implements Serializable {
     private BigDecimal maximumSMELimit;
 
     // Approve
-    private List<NewCreditDetailView> approveCreditList;
-    private List<NewCollateralView> approveCollateralList;
-    private List<NewGuarantorDetailView> approveGuarantorList;
+    private List<ProposeCreditInfoDetailView> approveCreditList;
+    private List<ProposeCollateralInfoView> approveCollateralList;
+    private List<ProposeGuarantorInfoView> approveGuarantorList;
 
     private BigDecimal approveTotalCreditLimit;
     private BigDecimal approveBrwTotalCommercial;
@@ -87,7 +89,30 @@ public class DecisionView implements Serializable {
 
     private long newCreditFacilityViewId;
 
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+
+    private List<ProposeFeeDetailView> approveFeeDetailViewList; // for only show in screen
+    private List<ProposeFeeDetailView> approveFeeDetailViewOriginalList; // have all proposeFeeDetail
+
+    private List<Long> deleteCreditIdList;
+    private List<Long> deleteFollowConditionIdList;
+    private List<Long> deleteGuarantorIdList;
+    private List<Long> deleteCollateralIdList;
+
     public DecisionView() {
+        this.approveTotalCreditLimit = BigDecimal.ZERO;
+        this.approveBrwTotalCommercial = BigDecimal.ZERO;
+        this.approveBrwTotalComAndOBOD = BigDecimal.ZERO;
+        this.approveTotalExposure = BigDecimal.ZERO;
+        this.approveTotalGuaranteeAmt = BigDecimal.ZERO;
+
+        this.deleteCreditIdList = new ArrayList<Long>();
+        this.deleteFollowConditionIdList = new ArrayList<Long>();
+        this.deleteGuarantorIdList = new ArrayList<Long>();
+        this.deleteCollateralIdList = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -338,38 +363,6 @@ public class DecisionView implements Serializable {
         this.extTotalGuaranteeAmount = extTotalGuaranteeAmount;
     }
 
-    public List<NewCreditDetailView> getProposeCreditList() {
-        return proposeCreditList;
-    }
-
-    public void setProposeCreditList(List<NewCreditDetailView> proposeCreditList) {
-        this.proposeCreditList = proposeCreditList;
-    }
-
-    public List<NewFeeDetailView> getProposeFeeInfoList() {
-        return proposeFeeInfoList;
-    }
-
-    public void setProposeFeeInfoList(List<NewFeeDetailView> proposeFeeInfoList) {
-        this.proposeFeeInfoList = proposeFeeInfoList;
-    }
-
-    public List<NewCollateralView> getProposeCollateralList() {
-        return proposeCollateralList;
-    }
-
-    public void setProposeCollateralList(List<NewCollateralView> proposeCollateralList) {
-        this.proposeCollateralList = proposeCollateralList;
-    }
-
-    public List<NewGuarantorDetailView> getProposeGuarantorList() {
-        return proposeGuarantorList;
-    }
-
-    public void setProposeGuarantorList(List<NewGuarantorDetailView> proposeGuarantorList) {
-        this.proposeGuarantorList = proposeGuarantorList;
-    }
-
     public BigDecimal getProposeTotalCreditLimit() {
         return proposeTotalCreditLimit;
     }
@@ -418,27 +411,51 @@ public class DecisionView implements Serializable {
         this.maximumSMELimit = maximumSMELimit;
     }
 
-    public List<NewCreditDetailView> getApproveCreditList() {
+    public List<ProposeCreditInfoDetailView> getProposeCreditList() {
+        return proposeCreditList;
+    }
+
+    public void setProposeCreditList(List<ProposeCreditInfoDetailView> proposeCreditList) {
+        this.proposeCreditList = proposeCreditList;
+    }
+
+    public List<ProposeCollateralInfoView> getProposeCollateralList() {
+        return proposeCollateralList;
+    }
+
+    public void setProposeCollateralList(List<ProposeCollateralInfoView> proposeCollateralList) {
+        this.proposeCollateralList = proposeCollateralList;
+    }
+
+    public List<ProposeGuarantorInfoView> getProposeGuarantorList() {
+        return proposeGuarantorList;
+    }
+
+    public void setProposeGuarantorList(List<ProposeGuarantorInfoView> proposeGuarantorList) {
+        this.proposeGuarantorList = proposeGuarantorList;
+    }
+
+    public List<ProposeCreditInfoDetailView> getApproveCreditList() {
         return approveCreditList;
     }
 
-    public void setApproveCreditList(List<NewCreditDetailView> approveCreditList) {
+    public void setApproveCreditList(List<ProposeCreditInfoDetailView> approveCreditList) {
         this.approveCreditList = approveCreditList;
     }
 
-    public List<NewCollateralView> getApproveCollateralList() {
+    public List<ProposeCollateralInfoView> getApproveCollateralList() {
         return approveCollateralList;
     }
 
-    public void setApproveCollateralList(List<NewCollateralView> approveCollateralList) {
+    public void setApproveCollateralList(List<ProposeCollateralInfoView> approveCollateralList) {
         this.approveCollateralList = approveCollateralList;
     }
 
-    public List<NewGuarantorDetailView> getApproveGuarantorList() {
+    public List<ProposeGuarantorInfoView> getApproveGuarantorList() {
         return approveGuarantorList;
     }
 
-    public void setApproveGuarantorList(List<NewGuarantorDetailView> approveGuarantorList) {
+    public void setApproveGuarantorList(List<ProposeGuarantorInfoView> approveGuarantorList) {
         this.approveGuarantorList = approveGuarantorList;
     }
 
@@ -616,5 +633,85 @@ public class DecisionView implements Serializable {
 
     public void setNewCreditFacilityViewId(long newCreditFacilityViewId) {
         this.newCreditFacilityViewId = newCreditFacilityViewId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public List<ProposeFeeDetailView> getApproveFeeDetailViewList() {
+        return approveFeeDetailViewList;
+    }
+
+    public void setApproveFeeDetailViewList(List<ProposeFeeDetailView> approveFeeDetailViewList) {
+        this.approveFeeDetailViewList = approveFeeDetailViewList;
+    }
+
+    public List<ProposeFeeDetailView> getApproveFeeDetailViewOriginalList() {
+        return approveFeeDetailViewOriginalList;
+    }
+
+    public void setApproveFeeDetailViewOriginalList(List<ProposeFeeDetailView> approveFeeDetailViewOriginalList) {
+        this.approveFeeDetailViewOriginalList = approveFeeDetailViewOriginalList;
+    }
+
+    public List<Long> getDeleteCreditIdList() {
+        return deleteCreditIdList;
+    }
+
+    public void setDeleteCreditIdList(List<Long> deleteCreditIdList) {
+        this.deleteCreditIdList = deleteCreditIdList;
+    }
+
+    public List<Long> getDeleteFollowConditionIdList() {
+        return deleteFollowConditionIdList;
+    }
+
+    public void setDeleteFollowConditionIdList(List<Long> deleteFollowConditionIdList) {
+        this.deleteFollowConditionIdList = deleteFollowConditionIdList;
+    }
+
+    public List<Long> getDeleteGuarantorIdList() {
+        return deleteGuarantorIdList;
+    }
+
+    public void setDeleteGuarantorIdList(List<Long> deleteGuarantorIdList) {
+        this.deleteGuarantorIdList = deleteGuarantorIdList;
+    }
+
+    public List<Long> getDeleteCollateralIdList() {
+        return deleteCollateralIdList;
+    }
+
+    public void setDeleteCollateralIdList(List<Long> deleteCollateralIdList) {
+        this.deleteCollateralIdList = deleteCollateralIdList;
     }
 }

@@ -23,7 +23,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.view.NewCollateralView;
+import com.clevel.selos.model.view.ProposeCollateralInfoView;
 import com.clevel.selos.model.view.UWRuleResultDetailView;
 import com.clevel.selos.model.view.UWRuleResultSummaryView;
 import com.clevel.selos.report.ReportService;
@@ -234,7 +234,7 @@ public class WelcomePage implements Serializable {
             AppraisalDataResult appraisalDataResult = new AppraisalDataResult();
             appraisalDataResult = coms.getAppraisalData("BDM001","PR5401-036-00001");
             log.debug("appraisalDataResult result : {}", appraisalDataResult);
-            NewCollateralView collateralDetailView = callateralBizTransform.transformCollateral(appraisalDataResult);
+            ProposeCollateralInfoView collateralDetailView = callateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
             log.debug("collateralDetailView result : {}", collateralDetailView);
         } catch (Exception e) {
             log.error("", e);

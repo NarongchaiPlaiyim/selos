@@ -1,14 +1,14 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.working.NewCreditDetailDAO;
+import com.clevel.selos.dao.working.ProposeCreditInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.NewCreditDetail;
+import com.clevel.selos.model.db.working.ProposeCreditInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.LimitSetupView;
-import com.clevel.selos.model.view.NewCreditDetailView;
-import com.clevel.selos.transform.NewCreditDetailTransform;
+import com.clevel.selos.model.view.ProposeCreditInfoDetailView;
+import com.clevel.selos.transform.ProposeLineTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -30,10 +30,10 @@ public class LimitSetupControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
 
     @Inject
-    NewCreditDetailDAO newCreditDetailDAO;
+    ProposeCreditInfoDAO newCreditDetailDAO;
     
     @Inject
-    NewCreditDetailTransform newCreditDetailTransform;
+    ProposeLineTransform newCreditDetailTransform;
     
     @Inject
     public LimitSetupControl(){
@@ -45,10 +45,10 @@ public class LimitSetupControl extends BusinessControl {
     	WorkCase workCase = workCaseDAO.findById(workCaseId);
     	limitSetupView.setModifyBy(workCase.getModifyBy());
     	limitSetupView.setModifyDate(workCase.getModifyDate());
-    	List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
-    	List<NewCreditDetailView> newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
-    	for (NewCreditDetail newCreditDetail : newCreditDetailList){
-    		NewCreditDetailView newCreditDetailView = newCreditDetailTransform.transformToView(newCreditDetail);
+    	List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
+    	List<ProposeCreditInfoDetailView> newCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
+    	for (ProposeCreditInfo newCreditDetail : newCreditDetailList){
+            ProposeCreditInfoDetailView newCreditDetailView = newCreditDetailTransform.transformProposeCreditToView(newCreditDetail);
     		newCreditDetailViewList.add(newCreditDetailView);
     	}
     	limitSetupView.setNewCreditDetailViewList(newCreditDetailViewList);
@@ -56,9 +56,9 @@ public class LimitSetupControl extends BusinessControl {
     }
     
     public void saveLimitSetup(LimitSetupView limitSetupView){
-    	for (NewCreditDetailView newCreditDetailView : limitSetupView.getNewCreditDetailViewList()){
-    		NewCreditDetail newCreditDetail = newCreditDetailDAO.findById(newCreditDetailView.getId());
-    		newCreditDetail.setSetupCompleted(newCreditDetailView.getIsSetupCompleted());
+    	for (ProposeCreditInfoDetailView newCreditDetailView : limitSetupView.getNewCreditDetailViewList()){
+            ProposeCreditInfo newCreditDetail = newCreditDetailDAO.findById(newCreditDetailView.getId());
+    		newCreditDetail.setSetupCompleted(newCreditDetailView.getSetupCompleted());
     		newCreditDetailDAO.save(newCreditDetail);
     	}
     }

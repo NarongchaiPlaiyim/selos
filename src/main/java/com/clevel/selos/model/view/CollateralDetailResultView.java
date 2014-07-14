@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class CollateralDetailResultView implements Serializable {
     private ActionResult actionResult;
     private String reason;
-    private NewCollateralView collateralDetailView;
+    private ProposeCollateralInfoView collateralDetailView;
 
     public CollateralDetailResultView() {
         //reset();
@@ -31,11 +31,11 @@ public class CollateralDetailResultView implements Serializable {
         this.reason = reason;
     }
 
-    public NewCollateralView getCollateralDetailView() {
+    public ProposeCollateralInfoView getCollateralDetailView() {
         return collateralDetailView;
     }
 
-    public void setCollateralDetailView(NewCollateralView collateralDetailView) {
+    public void setCollateralDetailView(ProposeCollateralInfoView collateralDetailView) {
         this.collateralDetailView = collateralDetailView;
     }
 

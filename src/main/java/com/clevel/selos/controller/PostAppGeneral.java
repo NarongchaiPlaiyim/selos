@@ -1,27 +1,6 @@
 package com.clevel.selos.controller;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-
-import com.clevel.selos.businesscontrol.ActionValidationControl;
-import com.clevel.selos.businesscontrol.GeneralPeopleInfoControl;
-import com.clevel.selos.businesscontrol.PostAppBusinessControl;
-import com.clevel.selos.businesscontrol.ReturnControl;
-import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
@@ -32,6 +11,21 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "postAppGeneral")

@@ -35,23 +35,23 @@ public class PledgeInfoTransform extends Transform {
 		_processSimpleView(model, view,workCaseId);
 		List<CustomerInfoSimpleView> customerViews = new ArrayList<CustomerInfoSimpleView>();
 		List<CreditDetailSimpleView> creditViews = new ArrayList<CreditDetailSimpleView>();
-		
-		NewCollateralSub collateral = model.getNewCollateralSub();
-		List<NewCollateralSubOwner> owners = collateral.getNewCollateralSubOwnerList();
+
+		ProposeCollateralInfoSub collateral = model.getNewCollateralSub();
+		List<ProposeCollateralSubOwner> owners = collateral.getProposeCollateralSubOwnerList();
 		if (owners != null && !owners.isEmpty()) {
-			for (NewCollateralSubOwner owner : owners) {
+			for (ProposeCollateralSubOwner owner : owners) {
 				customerViews.add(customerTransform.transformToSimpleView(owner.getCustomer()));
 			}
 		}
 		view.setCustomers(customerViews);
-		
-		List<NewCollateralCredit> credits = collateral.getNewCollateralHead().getNewCollateral().getNewCollateralCreditList();
+
+		List<ProposeCollateralInfoRelation> credits = collateral.getProposeCollateralHead().getProposeCollateral().getProposeCollateralInfoRelationList();
 		if (credits != null && !credits.isEmpty()) {
-			for (NewCollateralCredit credit : credits) {
+			for (ProposeCollateralInfoRelation credit : credits) {
 				if (credit.getExistingCreditDetail() != null) {
 					creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getExistingCreditDetail()));
-				} else if (credit.getNewCreditDetail() != null) {
-					creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getNewCreditDetail()));
+				} else if (credit.getProposeCreditInfo() != null) {
+					creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getProposeCreditInfo()));
 				}
 			}
 		}

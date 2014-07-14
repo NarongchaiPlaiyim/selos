@@ -91,7 +91,7 @@
                     <td colspan="2" class="center">
                         <p:commandButton
                                 id="saveGuarantor" disabled="#{not creditFacExisting.canSaveGarantor}"
-                                value="#{msg.get('app.credit.facility.propose.okButton')}"
+                                value="#{msg.get('app.button.ok')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
                                 actionListener="#{creditFacExisting.onSaveExistingGuarantor()}"
@@ -100,7 +100,7 @@
                                 oncomplete="handleExistingGuarantorRequest(xhr, status, args)"/>
 
                         <p:commandButton
-                                value="#{msg.get('app.credit.facility.propose.cancelButton')}"
+                                value="#{msg.get('app.button.cancel')}"
                                 styleClass="small"
                                 onclick="existingGuarantorDlg.hide()"/>
                     </td>

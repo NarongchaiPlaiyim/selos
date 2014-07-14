@@ -13,13 +13,11 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
 import com.clevel.selos.util.DateTimeUtil;
-import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +48,7 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private DBRDAO dbrDAO;
     @Inject
-    private NewCreditFacilityDAO newCreditFacilityDAO;
+    private ProposeLineDAO proposeLineDAO;
     @Inject
     private RiskTypeDAO riskTypeDAO;
     @Inject
@@ -74,7 +72,7 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private QualitativeControl qualitativeControl;
     @Inject
-    private CreditFacProposeControl creditFacProposeControl;
+    private ProposeLineControl proposeLineControl;
     @Inject
     private DecisionControl decisionControl;
     @Inject
@@ -118,7 +116,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
-        NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+        ProposeLineView newCreditFacilityView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
             exSummaryView.setTradeFinance(newCreditFacilityView);
         } else {
@@ -317,9 +315,9 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
-            if(newCreditFacilityView.getCreditCustomerType() == 1){ // normal 1, prime 2
+            if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.NORMAL){ // normal 1, prime 2
                 exSumCharacteristicView.setCustomer("Normal");
-            } else if(newCreditFacilityView.getCreditCustomerType() == 2){
+            } else if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.PRIME){
                 exSumCharacteristicView.setCustomer("Prime");
             } else {
                 exSumCharacteristicView.setCustomer("-");
@@ -337,15 +335,15 @@ public class ExSummaryControl extends BusinessControl {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Collateral
-        DecisionView decisionView = decisionControl.getDecisionView(workCaseId);
+        DecisionView decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
         BigDecimal tmpCashColl = null;
         BigDecimal tmpCoreAsset = null;
         BigDecimal tmpNonCore = null;
         if(decisionView != null){
             if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
-                for(NewCollateralView acl : decisionView.getApproveCollateralList()){
-                    if(acl.getNewCollateralHeadViewList() != null && acl.getNewCollateralHeadViewList().size() > 0){
-                        for(NewCollateralHeadView nch : acl.getNewCollateralHeadViewList()){
+                for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
+                    if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
+                        for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
                             if(nch != null && nch.getPotentialCollateral() != null){
                                 if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
                                     tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
@@ -618,7 +616,7 @@ public class ExSummaryControl extends BusinessControl {
     public void calIncomeBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose & DBR & Decision , Pls Call me !!
         log.debug("calIncomeBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal totalWCTMB = BigDecimal.ZERO;
         BigDecimal odLimit = BigDecimal.ZERO;
@@ -627,7 +625,7 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal twelve = BigDecimal.valueOf(12);
 
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            totalWCTMB = newCreditFacility.getTotalWcTmb();
+            totalWCTMB = newCreditFacility.getTotalWCTmb();
             odLimit = newCreditFacility.getTotalCommercialAndOBOD();
             loanCoreWC = newCreditFacility.getTotalCommercial();
         }
@@ -662,7 +660,7 @@ public class ExSummaryControl extends BusinessControl {
 //    Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
     public void calRecommendedWCNeedBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose , Pls Call me !!
         log.debug("calRecommendedWCNeedBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal recommendedWCNeed = BigDecimal.ZERO;
@@ -671,16 +669,16 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal value3 = BigDecimal.ZERO;
         BigDecimal value6 = BigDecimal.ZERO;
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            if(newCreditFacility.getCase1WcLimit() != null){
-                value1 = newCreditFacility.getCase1WcLimit();
+            if(newCreditFacility.getCase1WCLimit() != null){
+                value1 = newCreditFacility.getCase1WCLimit();
             }
-            if(newCreditFacility.getCase2WcLimit() != null){
-                value2 = newCreditFacility.getCase2WcLimit();
+            if(newCreditFacility.getCase2WCLimit() != null){
+                value2 = newCreditFacility.getCase2WCLimit();
             }
-            if(newCreditFacility.getCase3WcLimit() != null){
-                value3 = newCreditFacility.getCase3WcLimit();
+            if(newCreditFacility.getCase3WCLimit() != null){
+                value3 = newCreditFacility.getCase3WCLimit();
             }
-            value6 = Util.subtract(newCreditFacility.getWcNeed(),newCreditFacility.getTotalWcTmb());
+            value6 = Util.subtract(newCreditFacility.getWcNeed(), newCreditFacility.getTotalWCTmb());
         }
 
         if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null && newCreditFacility.getId() != 0){
@@ -901,7 +899,7 @@ public class ExSummaryControl extends BusinessControl {
 //    groupExposureUW - Group Total Exposure + Total Approved Credit
     public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = null;
         BigDecimal groupExposureUW = null;

@@ -19,7 +19,7 @@ public class OpenAccountCredit implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "new_credit_detail_id")
-    private NewCreditDetail newCreditDetail;
+    private ProposeCreditInfo proposeCreditInfo;
     
     @ManyToOne
     @JoinColumn(name = "existing_credit_detail_id")
@@ -44,15 +44,15 @@ public class OpenAccountCredit implements Serializable {
 		this.openAccount = openAccount;
 	}
 
-	public NewCreditDetail getNewCreditDetail() {
-		return newCreditDetail;
-	}
+    public ProposeCreditInfo getProposeCreditInfo() {
+        return proposeCreditInfo;
+    }
 
-	public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
-		this.newCreditDetail = newCreditDetail;
-	}
+    public void setProposeCreditInfo(ProposeCreditInfo proposeCreditInfo) {
+        this.proposeCreditInfo = proposeCreditInfo;
+    }
 
-	public ExistingCreditDetail getExistingCreditDetail() {
+    public ExistingCreditDetail getExistingCreditDetail() {
 		return existingCreditDetail;
 	}
 

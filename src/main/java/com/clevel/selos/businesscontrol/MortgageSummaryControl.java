@@ -27,9 +27,9 @@ public class MortgageSummaryControl extends BusinessControl {
     @Inject private MortgageInfoDAO mortgageInfoDAO;
     @Inject private PledgeInfoDAO pledgeInfoDAO;
     @Inject private GuarantorInfoDAO guarantorInfoDAO;
-    @Inject private NewCollateralSubDAO newCollateralSubDAO;
+    @Inject private ProposeCollateralInfoSubDAO newCollateralSubDAO;
     @Inject private WorkCaseDAO workCaseDAO;
-    @Inject private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject private ProposeGuarantorInfoDAO newGuarantorDetailDAO;
     @Inject private OpenAccountDAO openAccountDAO;
     @Inject private OpenAccountNameDAO openAccountNameDAO;
     @Inject private OpenAccountCreditDAO openAccountCreditDAO;
@@ -142,27 +142,27 @@ public class MortgageSummaryControl extends BusinessControl {
     	WorkCase workCase = workCaseDAO.findRefById(workCaseId);
     	
     	//calculate mortgage summary by grouping into 3 types (Mortgage, Pledge and Guarantor)
-    	List<NewCollateralSub> subColleterals = newCollateralSubDAO.findForMortgageSummary(workCaseId);
+    	List<ProposeCollateralInfoSub> subColleterals = newCollateralSubDAO.findForMortgageSummary(workCaseId);
     	
     	//For validate 
-    	HashMap<Long, NewCollateralSub> collateralMap = new HashMap<Long, NewCollateralSub>();
+    	HashMap<Long, ProposeCollateralInfoSub> collateralMap = new HashMap<Long, ProposeCollateralInfoSub>();
     	
     	HashSet<Long> pledgeSet = new HashSet<Long>();
 
-    	HashMap<Long,ArrayList<NewCollateralSub>> mortgageGroup = new HashMap<Long, ArrayList<NewCollateralSub>>();
-    	HashMap<String,ArrayList<NewCollateralSub>> referredGroup = new HashMap<String, ArrayList<NewCollateralSub>>();
+    	HashMap<Long,ArrayList<ProposeCollateralInfoSub>> mortgageGroup = new HashMap<Long, ArrayList<ProposeCollateralInfoSub>>();
+    	HashMap<String,ArrayList<ProposeCollateralInfoSub>> referredGroup = new HashMap<String, ArrayList<ProposeCollateralInfoSub>>();
     	
     	// For calculate Main+Join , Key = collateral id, value = list of main coll id
     	HashMap<Long,ArrayList<Long>> joinMortgageList = new HashMap<Long, ArrayList<Long>>();
-    	for (NewCollateralSub subColleteral : subColleterals) {
+    	for (ProposeCollateralInfoSub subColleteral : subColleterals) {
     		collateralMap.put(subColleteral.getId(),subColleteral);
     		
     		long collateralId = subColleteral.getId();
-    		List<NewCollateralSubMortgage> mortgageCheckTypes = subColleteral.getNewCollateralSubMortgageList();
+    		List<ProposeCollateralSubMortgage> mortgageCheckTypes = subColleteral.getProposeCollateralSubMortgageList();
     		boolean isMortgage = false;
     		boolean isReferred = false;
     		
-    		for (NewCollateralSubMortgage mortgageCheckType : mortgageCheckTypes) {
+    		for (ProposeCollateralSubMortgage mortgageCheckType : mortgageCheckTypes) {
     			MortgageType type = mortgageCheckType.getMortgageType();
     			if (type.isPledgeFlag()) {
     				pledgeSet.add(subColleteral.getId());
@@ -176,26 +176,26 @@ public class MortgageSummaryControl extends BusinessControl {
     		
     		if (isMortgage) {
     			if (!isReferred) {
-    				List<NewCollateralSubRelated> relateds = subColleteral.getNewCollateralSubRelatedList();
+    				List<ProposeCollateralSubRelated> relateds = subColleteral.getProposeCollateralSubRelatedList();
     				if (relateds != null && !relateds.isEmpty()) {
     					//it's sub
     					ArrayList<Long> list = new ArrayList<Long>();
-    					for (NewCollateralSubRelated related : relateds) {
-    						long mainCollId = related.getNewCollateralSubRelated().getId();
+    					for (ProposeCollateralSubRelated related : relateds) {
+    						long mainCollId = related.getProposeCollateralSubRelated().getId();
     						list.add(mainCollId);
     					}
     					joinMortgageList.put(collateralId, list);
     				} else {
     					//it's main
-    					ArrayList<NewCollateralSub> list = new ArrayList<NewCollateralSub>();
+    					ArrayList<ProposeCollateralInfoSub> list = new ArrayList<ProposeCollateralInfoSub>();
     					list.add(subColleteral);
     					mortgageGroup.put(collateralId, list);
     				}
     			} else {
     				String key = _generateKeyForReferred(subColleteral);
-    				ArrayList<NewCollateralSub> list = referredGroup.get(key);
+    				ArrayList<ProposeCollateralInfoSub> list = referredGroup.get(key);
     				if (list == null) {
-    					list = new ArrayList<NewCollateralSub>();
+    					list = new ArrayList<ProposeCollateralInfoSub>();
     					referredGroup.put(key, list);
     				}
     				list.add(subColleteral);
@@ -257,14 +257,14 @@ public class MortgageSummaryControl extends BusinessControl {
     /*
      * Private
      */
-    private String _generateKeyForReferred(NewCollateralSub collateralSub) {
+    private String _generateKeyForReferred(ProposeCollateralInfoSub collateralSub) {
     	StringBuilder builder = new StringBuilder();
     	//Collateral Type
-    	if (collateralSub.getCollateralTypeType() != null)
-    		builder.append(collateralSub.getCollateralTypeType().getId());
-    	else
-    		builder.append(0);
-    	builder.append("::");
+//    	if (collateralSub.getCollateralTypeType() != null)
+//    		builder.append(collateralSub.getCollateralTypeType().getId());
+//    	else
+//    		builder.append(0);
+//    	builder.append("::");
     	if (collateralSub.getSubCollateralType() != null)
     		builder.append(collateralSub.getSubCollateralType().getId());
     	else
@@ -272,7 +272,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	builder.append("&&");
     	
     	//Owner
-    	List<NewCollateralSubOwner> owners = collateralSub.getNewCollateralSubOwnerList();
+    	List<ProposeCollateralSubOwner> owners = collateralSub.getProposeCollateralSubOwnerList();
     	if (owners != null && !owners.isEmpty()) {
     		long[] ownerIds = new long[owners.size()];
 	    	for (int i=0;i<ownerIds.length;i++) {
@@ -291,7 +291,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	builder.append("&&");
     	
     	//Mortgage Type
-    	List<NewCollateralSubMortgage> mortgageTypes = collateralSub.getNewCollateralSubMortgageList();
+    	List<ProposeCollateralSubMortgage> mortgageTypes = collateralSub.getProposeCollateralSubMortgageList();
     	if (mortgageTypes != null && !mortgageTypes.isEmpty()) {
     		int[] typeIds = new int[mortgageTypes.size()];
     		for (int i=0;i<typeIds.length;i++) {
@@ -310,11 +310,11 @@ public class MortgageSummaryControl extends BusinessControl {
     	builder.append("&&");
     	
     	//Mortgage Related (Main ref)
-    	List<NewCollateralSubRelated> relateds = collateralSub.getNewCollateralSubRelatedList();
+    	List<ProposeCollateralSubRelated> relateds = collateralSub.getProposeCollateralSubRelatedList();
     	if (relateds != null && !relateds.isEmpty()) {
     		long[] relatedIds = new long[relateds.size()];
 	    	for (int i=0;i<relatedIds.length;i++) {
-	    		NewCollateralSub collateralRelated = relateds.get(i).getNewCollateralSubRelated();
+	    		ProposeCollateralInfoSub collateralRelated = relateds.get(i).getProposeCollateralSubRelated();
 	    		if (collateralRelated != null)
 	    			relatedIds[i] = collateralRelated.getId();
 	    		else
@@ -330,8 +330,8 @@ public class MortgageSummaryControl extends BusinessControl {
     	return "HASH::"+builder.toString().hashCode();
     }
     private void _findMainCollateralSub(long mainCollSubId,
-    		HashMap<Long, NewCollateralSub> collateralMap,
-    		HashMap<Long,ArrayList<NewCollateralSub>> mortgageGroup,
+    		HashMap<Long, ProposeCollateralInfoSub> collateralMap,
+    		HashMap<Long,ArrayList<ProposeCollateralInfoSub>> mortgageGroup,
     		HashMap<Long,ArrayList<Long>> joinMortgageList,
     		HashSet<Long> mainCollSet,
     		HashSet<Long> checkRecursive) {
@@ -357,7 +357,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	}
     }
     
-    private void _processMortgageInfo(String refKey,MortgageInfo mortgageInfo,List<NewCollateralSub> collaterals,User user,WorkCase workCase) {
+    private void _processMortgageInfo(String refKey,MortgageInfo mortgageInfo,List<ProposeCollateralInfoSub> collaterals,User user,WorkCase workCase) {
     	Date now = new Date();
     	BigDecimal mortgageAmount = new BigDecimal(0);
 		HashMap<Long,MortgageInfoCollSub> subMap = new HashMap<Long, MortgageInfoCollSub>();
@@ -399,9 +399,9 @@ public class MortgageSummaryControl extends BusinessControl {
     			creditMap.put(credit.getNewCollateralCredit().getId(),credit);    		
     	}
     	
-    	HashSet<NewCollateralCredit> creditSet = new HashSet<NewCollateralCredit>();
+    	HashSet<ProposeCollateralInfoRelation> creditSet = new HashSet<ProposeCollateralInfoRelation>();
 		HashSet<Customer> ownerSet = new HashSet<Customer>();
-		for (NewCollateralSub collateral : collaterals) {
+		for (ProposeCollateralInfoSub collateral : collaterals) {
 			if (collateral.getMortgageValue() != null)
 				mortgageAmount =mortgageAmount.add(collateral.getMortgageValue());
 			
@@ -417,20 +417,20 @@ public class MortgageSummaryControl extends BusinessControl {
 			}
 			
 			//Retrieve credit
-			NewCollateralHead head = collateral.getNewCollateralHead();
+			ProposeCollateralInfoHead head = collateral.getProposeCollateralHead();
 			if (head != null) {
-				List<NewCollateralCredit> credits = head.getNewCollateral().getNewCollateralCreditList();
+				List<ProposeCollateralInfoRelation> credits = head.getProposeCollateral().getProposeCollateralInfoRelationList();
 				if (credits != null && !credits.isEmpty()) {
-					for (NewCollateralCredit credit : credits) {
+					for (ProposeCollateralInfoRelation credit : credits) {
 						creditSet.add(credit);
 					}
 				}
 			}
 			
 			//Retrieve owner
-			List<NewCollateralSubOwner> owners =collateral.getNewCollateralSubOwnerList();
+			List<ProposeCollateralSubOwner> owners = collateral.getProposeCollateralSubOwnerList();
 			if (owners != null && !owners.isEmpty()) {
-				for (NewCollateralSubOwner owner : owners) {
+				for (ProposeCollateralSubOwner owner : owners) {
 					if (owner.getCustomer() != null)
 						ownerSet.add(owner.getCustomer());
 				}
@@ -438,7 +438,7 @@ public class MortgageSummaryControl extends BusinessControl {
 		}
 		
 		//process credit 
-		for (NewCollateralCredit credit : creditSet) {
+		for (ProposeCollateralInfoRelation credit : creditSet) {
 			MortgageInfoCredit mortgageCredit = creditMap.get(credit.getId());
 			if (mortgageCredit == null) {
     			mortgageCredit = new MortgageInfoCredit();
@@ -476,9 +476,9 @@ public class MortgageSummaryControl extends BusinessControl {
 			mortgageTypeMap.put(type.getMortgageType().getId(),type);
 		}
 		
-		NewCollateralSub collateral = collaterals.get(0);
-		List<NewCollateralSubMortgage> types = collateral.getNewCollateralSubMortgageList();
-		for (NewCollateralSubMortgage type : types) {
+		ProposeCollateralInfoSub collateral = collaterals.get(0);
+		List<ProposeCollateralSubMortgage> types = collateral.getProposeCollateralSubMortgageList();
+		for (ProposeCollateralSubMortgage type : types) {
 			MortgageInfoMortgage mortgageType = mortgageTypeMap.get(type.getMortgageType().getId());
 			if (mortgageType == null) {
 				mortgageType = new MortgageInfoMortgage();
@@ -509,10 +509,10 @@ public class MortgageSummaryControl extends BusinessControl {
     }
     
     
-    private void _processMortgageGroup (HashMap<Long, NewCollateralSub> collateralMap,
-    		HashMap<Long,ArrayList<NewCollateralSub>> mortgageGroup,
+    private void _processMortgageGroup (HashMap<Long, ProposeCollateralInfoSub> collateralMap,
+    		HashMap<Long,ArrayList<ProposeCollateralInfoSub>> mortgageGroup,
     		HashMap<Long,ArrayList<Long>> joinMortgageList,
-    		HashMap<String,ArrayList<NewCollateralSub>> referredGroup,
+    		HashMap<String,ArrayList<ProposeCollateralInfoSub>> referredGroup,
     		User user, WorkCase workCase
     		) {
     
@@ -533,7 +533,7 @@ public class MortgageSummaryControl extends BusinessControl {
 			if (mainCollSet.isEmpty()) //Invalid join
 				continue;
 			for (Long mainCollSubId : mainCollSet) {
-				ArrayList<NewCollateralSub> list = mortgageGroup.get(mainCollSubId);
+				ArrayList<ProposeCollateralInfoSub> list = mortgageGroup.get(mainCollSubId);
 				list.add(collateralMap.get(joinCollSubId));
 			}
 		}
@@ -542,14 +542,14 @@ public class MortgageSummaryControl extends BusinessControl {
     	Long[] mainIds = mortgageGroup.keySet().toArray(new Long[mortgageGroup.size()]);
     	Arrays.sort(mainIds);
     	for (Long mainId : mainIds) {
-    		List<NewCollateralSub> collaterals = mortgageGroup.get(mainId);
+    		List<ProposeCollateralInfoSub> collaterals = mortgageGroup.get(mainId);
     		MortgageInfo mortgageInfo = currMortgageHash.remove(mainId.toString());
     		_processMortgageInfo(mainId.toString(), mortgageInfo, collaterals, user, workCase);
     	}
     	
     	//Process Refer group
     	for (String referKey : referredGroup.keySet()) {
-    		List<NewCollateralSub> collaterals = referredGroup.get(referKey);
+    		List<ProposeCollateralInfoSub> collaterals = referredGroup.get(referKey);
     		MortgageInfo mortgageInfo = currMortgageHash.remove(referKey);
     		_processMortgageInfo(referKey, mortgageInfo, collaterals, user, workCase);
     	}
@@ -604,7 +604,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	}
     }
     
-    private void _processPledgeData(HashMap<Long, NewCollateralSub> collateralMap,HashSet<Long> pledgeSet,User user, WorkCase workCase) {
+    private void _processPledgeData(HashMap<Long, ProposeCollateralInfoSub> collateralMap,HashSet<Long> pledgeSet,User user, WorkCase workCase) {
     	BankAccountPurpose defaultPurpose = bankAccountPurposeDAO.getDefaultProposeForPledge();
     	List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
     	List<PledgeInfo> pledgeInfos = pledgeInfoDAO.findAllByWorkCaseId(workCase.getId());
@@ -619,7 +619,7 @@ public class MortgageSummaryControl extends BusinessControl {
     	}
     	
     	for (Long subCollateralId : pledgeSet) {
-    		NewCollateralSub collateral = collateralMap.get(subCollateralId);
+    		ProposeCollateralInfoSub collateral = collateralMap.get(subCollateralId);
     		PledgeInfo pledgeInfo = pledgeMap.get(subCollateralId);
     		if (pledgeInfo == null) {
     			OpenAccount account = new OpenAccount();
@@ -639,7 +639,7 @@ public class MortgageSummaryControl extends BusinessControl {
     			
     			pledgeInfo.setModifyBy(user);
     			pledgeInfo.setModifyDate(new Date());
-    			pledgeInfo.setPledgeType(collateral.getNewCollateralSubMortgageList().get(0).getMortgageType());
+    			pledgeInfo.setPledgeType(collateral.getProposeCollateralSubMortgageList().get(0).getMortgageType());
     			pledgeInfo.setPledgeAmount(collateral.getMortgageValue());
     			pledgeInfoDAO.save(pledgeInfo);
     		} else {
@@ -647,7 +647,7 @@ public class MortgageSummaryControl extends BusinessControl {
     			
     			pledgeInfo.setModifyBy(user);
     			pledgeInfo.setModifyDate(new Date());
-    			pledgeInfo.setPledgeType(collateral.getNewCollateralSubMortgageList().get(0).getMortgageType());
+    			pledgeInfo.setPledgeType(collateral.getProposeCollateralSubMortgageList().get(0).getMortgageType());
     			pledgeInfo.setPledgeAmount(collateral.getMortgageValue());
     			
     			OpenAccount account = pledgeInfo.getOpenAccount();
@@ -688,11 +688,11 @@ public class MortgageSummaryControl extends BusinessControl {
     		openAccountDAO.persist(account);
     	}
     }
-	private void updateOpenAccountData(OpenAccount account,NewCollateralSub collateral,BankAccountPurpose defaultPurpose) {
+	private void updateOpenAccountData(OpenAccount account,ProposeCollateralInfoSub collateral,BankAccountPurpose defaultPurpose) {
 		account.setRequestType(RequestAccountType.EXISTING);
 		account.setAccountNumber(collateral.getTitleDeed());
 		account.setBankBranch(null);
-		BankAccountProduct accountProduct = bankAccountProductDAO.findByCollateral(collateral.getCollateralTypeType(), collateral.getSubCollateralType());
+		BankAccountProduct accountProduct = bankAccountProductDAO.findByCollateral(collateral.getProposeCollateralHead().getHeadCollType(), collateral.getSubCollateralType());
 		account.setBankAccountProduct(accountProduct);
 		if (accountProduct != null)
 			account.setBankAccountType(accountProduct.getBankAccountType());
@@ -708,8 +708,8 @@ public class MortgageSummaryControl extends BusinessControl {
 		HashMap<Long,OpenAccountName> accountNameMap = new HashMap<Long,OpenAccountName> ();
 		for (OpenAccountName name : accountNames)
 			accountNameMap.put(name.getCustomer().getId(),name);
-		List<NewCollateralSubOwner> owners = collateral.getNewCollateralSubOwnerList();
-		for (NewCollateralSubOwner owner : owners) {
+		List<ProposeCollateralSubOwner> owners = collateral.getProposeCollateralSubOwnerList();
+		for (ProposeCollateralSubOwner owner : owners) {
 			if (owner.getCustomer() == null)
 				continue;
 			OpenAccountName accountName = accountNameMap.get(owner.getCustomer().getId());
@@ -765,18 +765,18 @@ public class MortgageSummaryControl extends BusinessControl {
 			credits = new ArrayList<OpenAccountCredit>();
 			account.setOpenAccountCreditList(credits);
 		}
-		List<NewCollateralCredit> collCredits = collateral.getNewCollateralHead().getNewCollateral().getNewCollateralCreditList();
+		List<ProposeCollateralInfoRelation> collCredits = collateral.getProposeCollateralHead().getProposeCollateral().getProposeCollateralInfoRelationList();
 		HashMap<String,OpenAccountCredit> creditHash = new HashMap<String, OpenAccountCredit>();
 		for (OpenAccountCredit credit : credits) {
 			if (credit.getExistingCreditDetail()  != null) {
 				creditHash.put("E::"+credit.getExistingCreditDetail().getId(), credit);
-			} else if (credit.getNewCreditDetail() != null) {
-				creditHash.put("N::"+credit.getNewCreditDetail().getId(), credit);
+			} else if (credit.getProposeCreditInfo() != null) {
+				creditHash.put("N::"+credit.getProposeCreditInfo().getId(), credit);
 			}
 		}
 		
 		//new and update
-		for (NewCollateralCredit collCredit : collCredits) {
+		for (ProposeCollateralInfoRelation collCredit : collCredits) {
 			if (collCredit.getExistingCreditDetail() != null) {
 				String key = "E::"+collCredit.getExistingCreditDetail().getId();
 				OpenAccountCredit credit = creditHash.get(key);
@@ -789,13 +789,13 @@ public class MortgageSummaryControl extends BusinessControl {
 					creditHash.remove(key);
 				}
 				credit.setFromPledge(true);
-			} else if (collCredit.getNewCreditDetail() != null) {
-				String key = "N::"+collCredit.getNewCreditDetail().getId();
+			} else if (collCredit.getProposeCreditInfo() != null) {
+				String key = "N::"+collCredit.getProposeCreditInfo().getId();
 				OpenAccountCredit credit = creditHash.get(key);
 				if (credit == null) {
 					credit = new OpenAccountCredit();
 					credit.setOpenAccount(account);
-					credit.setNewCreditDetail(collCredit.getNewCreditDetail());
+					credit.setProposeCreditInfo(collCredit.getProposeCreditInfo());
 					credits.add(credit);
 				} else {
 					creditHash.remove(key);

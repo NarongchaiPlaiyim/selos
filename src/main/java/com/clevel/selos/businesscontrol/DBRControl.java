@@ -5,7 +5,6 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.NCBDetailView;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -45,7 +43,7 @@ public class DBRControl extends BusinessControl {
     @Inject
     DBRDetailTransform dbrDetailTransform;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
+    ProposeLineDAO newCreditFacilityDAO;
 
     @Inject
     NCBInfoControl ncbInfoControl;
@@ -255,7 +253,7 @@ public class DBRControl extends BusinessControl {
         BigDecimal result = BigDecimal.ZERO;
         BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
         int roleId = getCurrentUser().getRole().getId();
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+        ProposeLine newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
         //todo not confirm
         BigDecimal debt = BigDecimal.ZERO;
         debt = Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated);

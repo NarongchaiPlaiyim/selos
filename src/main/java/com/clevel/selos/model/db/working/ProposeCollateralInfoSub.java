@@ -1,0 +1,209 @@
+package com.clevel.selos.model.db.working;
+
+import com.clevel.selos.model.db.master.SubCollateralType;
+import com.clevel.selos.model.db.master.User;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "wrk_new_coll_sub")
+public class ProposeCollateralInfoSub implements Serializable {
+    @Id
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_SUB_ID", sequenceName = "SEQ_WRK_NEW_COLL_SUB_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_SUB_ID")
+    private long id;
+
+    @OneToOne
+    @JoinColumn(name = "sub_collateral_type_id")
+    private SubCollateralType subCollateralType;
+
+    @Column(name = "title_deed")
+    private String titleDeed;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "land_office")
+    private String landOffice;
+
+    @Column(name = "collateral_owner_aad")
+    private String collateralOwnerAAD;
+
+    @Column(name = "appraisal_value")
+    private BigDecimal appraisalValue;
+
+    @Column(name = "mortgage_value")
+    private BigDecimal mortgageValue;
+
+    @Column(name = "sub_id")
+    private String subId;
+
+    @ManyToOne
+    @JoinColumn(name = "new_collateral_head_id")
+    private ProposeCollateralInfoHead proposeCollateralHead;
+
+    @OneToMany(mappedBy = "proposeCollateralSub")
+    private List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList;
+
+    @OneToMany(mappedBy = "proposeCollateralSub")
+    private List<ProposeCollateralSubMortgage> proposeCollateralSubMortgageList;
+
+    @OneToMany(mappedBy = "proposeCollateralSub")
+    private List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name = "create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name = "modify_user_id")
+    private User modifyBy;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public SubCollateralType getSubCollateralType() {
+        return subCollateralType;
+    }
+
+    public void setSubCollateralType(SubCollateralType subCollateralType) {
+        this.subCollateralType = subCollateralType;
+    }
+
+    public String getTitleDeed() {
+        return titleDeed;
+    }
+
+    public void setTitleDeed(String titleDeed) {
+        this.titleDeed = titleDeed;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLandOffice() {
+        return landOffice;
+    }
+
+    public void setLandOffice(String landOffice) {
+        this.landOffice = landOffice;
+    }
+
+    public String getCollateralOwnerAAD() {
+        return collateralOwnerAAD;
+    }
+
+    public void setCollateralOwnerAAD(String collateralOwnerAAD) {
+        this.collateralOwnerAAD = collateralOwnerAAD;
+    }
+
+    public BigDecimal getAppraisalValue() {
+        return appraisalValue;
+    }
+
+    public void setAppraisalValue(BigDecimal appraisalValue) {
+        this.appraisalValue = appraisalValue;
+    }
+
+    public BigDecimal getMortgageValue() {
+        return mortgageValue;
+    }
+
+    public void setMortgageValue(BigDecimal mortgageValue) {
+        this.mortgageValue = mortgageValue;
+    }
+
+    public String getSubId() {
+        return subId;
+    }
+
+    public void setSubId(String subId) {
+        this.subId = subId;
+    }
+
+    public ProposeCollateralInfoHead getProposeCollateralHead() {
+        return proposeCollateralHead;
+    }
+
+    public void setProposeCollateralHead(ProposeCollateralInfoHead proposeCollateralHead) {
+        this.proposeCollateralHead = proposeCollateralHead;
+    }
+
+    public List<ProposeCollateralSubOwner> getProposeCollateralSubOwnerList() {
+        return proposeCollateralSubOwnerList;
+    }
+
+    public void setProposeCollateralSubOwnerList(List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList) {
+        this.proposeCollateralSubOwnerList = proposeCollateralSubOwnerList;
+    }
+
+    public List<ProposeCollateralSubMortgage> getProposeCollateralSubMortgageList() {
+        return proposeCollateralSubMortgageList;
+    }
+
+    public void setProposeCollateralSubMortgageList(List<ProposeCollateralSubMortgage> proposeCollateralSubMortgageList) {
+        this.proposeCollateralSubMortgageList = proposeCollateralSubMortgageList;
+    }
+
+    public List<ProposeCollateralSubRelated> getProposeCollateralSubRelatedList() {
+        return proposeCollateralSubRelatedList;
+    }
+
+    public void setProposeCollateralSubRelatedList(List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList) {
+        this.proposeCollateralSubRelatedList = proposeCollateralSubRelatedList;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+}

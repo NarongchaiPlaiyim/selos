@@ -1,51 +1,17 @@
 package com.clevel.selos.businesscontrol;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
-import com.clevel.selos.dao.working.AgreementInfoDAO;
-import com.clevel.selos.dao.working.DisbursementDAO;
-import com.clevel.selos.dao.working.FeeDetailDAO;
-import com.clevel.selos.dao.working.MortgageInfoDAO;
-import com.clevel.selos.dao.working.OpenAccountDAO;
-import com.clevel.selos.dao.working.PerfectionReviewDAO;
-import com.clevel.selos.dao.working.PledgeInfoDAO;
-import com.clevel.selos.dao.working.ReturnInfoDAO;
-import com.clevel.selos.dao.working.TCGInfoDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.FeeLevel;
 import com.clevel.selos.model.PerfectReviewStatus;
 import com.clevel.selos.model.PerfectReviewType;
 import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.AgreementInfo;
-import com.clevel.selos.model.db.working.FeeDetail;
-import com.clevel.selos.model.db.working.MortgageInfo;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.PerfectionReview;
-import com.clevel.selos.model.db.working.PledgeInfo;
-import com.clevel.selos.model.db.working.ReturnInfo;
-import com.clevel.selos.model.db.working.TCGInfo;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.model.view.StepView;
@@ -56,6 +22,13 @@ import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Stateless
 public class PostAppBusinessControl extends BusinessControl {
@@ -84,7 +57,7 @@ public class PostAppBusinessControl extends BusinessControl {
 	@Inject
 	private ReturnInfoDAO returnInfoDAO;
 	@Inject
-	private FeeDetailDAO feeDetailDAO;
+	private ProposeFeeDetailDAO feeDetailDAO;
 	@Inject
 	private PerfectionReviewDAO perfectionReviewDAO;
 	@Inject
