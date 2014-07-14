@@ -78,10 +78,11 @@ public class CollateralBizTransform extends BusinessTransform {
                     if(!Util.isNull(subCollateralDataList) && subCollateralDataList.size()>0){
                         for(SubCollateralData subCollateralData: subCollateralDataList){
                             newCollateralSubView = new NewCollateralSubView();
-                            if(!Util.isNull(collateralType) && !Util.isZero(collateralType.getId())){
-                                SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,subCollateralData.getSubCollType());
+                            CollateralType collateralTypeSub = collateralTypeDAO.findByCollateralCode(subCollateralData.getHeadCollType());
+                            if(!Util.isNull(collateralTypeSub) && !Util.isZero(collateralTypeSub.getId())){
+                                SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralTypeSub,subCollateralData.getSubCollType());
                                 newCollateralSubView.setSubCollateralType(subCollateralType);
-                                newCollateralSubView.setHeadCollType(collateralType);
+                                newCollateralSubView.setHeadCollType(collateralTypeSub);
                             }
                             newCollateralSubView.setAddress(subCollateralData.getAddress());
                             newCollateralSubView.setTitleDeed(subCollateralData.getTitleDeed());
