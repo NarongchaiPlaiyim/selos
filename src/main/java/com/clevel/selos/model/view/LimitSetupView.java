@@ -12,7 +12,7 @@ import java.util.List;
 public class LimitSetupView implements Serializable{
 
 	private long id;
-	private List<NewCreditDetailView> newCreditDetailViewList;
+	private List<ProposeCreditInfoDetailView> newCreditDetailViewList;
 
     private User modifyBy;
     private Date modifyDate;
@@ -54,14 +54,11 @@ public class LimitSetupView implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 
+    public List<ProposeCreditInfoDetailView> getNewCreditDetailViewList() {
+        return newCreditDetailViewList;
+    }
 
-	public List<NewCreditDetailView> getNewCreditDetailViewList() {
-		return newCreditDetailViewList;
-	}
-
-
-	public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-		this.newCreditDetailViewList = newCreditDetailViewList;
-	}
-
+    public void setNewCreditDetailViewList(List<ProposeCreditInfoDetailView> newCreditDetailViewList) {
+        this.newCreditDetailViewList = newCreditDetailViewList;
+    }
 }

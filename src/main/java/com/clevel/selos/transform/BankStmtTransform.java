@@ -454,6 +454,7 @@ public class BankStmtTransform extends Transform {
             bankStatement.setOverLimitDays(bankStmtView.getOverLimitDays());
             bankStatement.setRemark(bankStmtView.getRemark());
             bankStatement.setAvgOSBalanceAmount(bankStmtView.getAvgOSBalanceAmount());
+            bankStatement.setNetIncomeLastSix(bankStmtView.getNetIncomeLastSix());
             //set bank statement detail list
             List<BankStatementDetail> bankStatementDetailList = new ArrayList<BankStatementDetail>();
             for (BankStmtDetailView detailView : Util.safetyList(bankStmtView.getBankStmtDetailViewList())) {

@@ -2,7 +2,6 @@ package com.clevel.selos.model.view;
 
 
 import com.clevel.selos.model.db.master.User;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,8 +13,8 @@ import java.util.List;
 public class ApproveDetailInformationView implements Serializable{
 
 	private long id;
-	private List<NewCreditDetailView> newCreditDetailViewList;
-	private NewCreditFacilityView newCreditFacilityView;
+	private List<ProposeCreditInfoDetailView> newCreditDetailViewList;
+	private ProposeLineView newCreditFacilityView;
 	private List<OpenAccountFullView> openAccountFullViewList;
 	
 	private BigDecimal totalApprovedCredit;
@@ -64,74 +63,59 @@ public class ApproveDetailInformationView implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 
+    public List<ProposeCreditInfoDetailView> getNewCreditDetailViewList() {
+        return newCreditDetailViewList;
+    }
 
-	public List<NewCreditDetailView> getNewCreditDetailViewList() {
-		return newCreditDetailViewList;
-	}
+    public void setNewCreditDetailViewList(List<ProposeCreditInfoDetailView> newCreditDetailViewList) {
+        this.newCreditDetailViewList = newCreditDetailViewList;
+    }
 
+    public ProposeLineView getNewCreditFacilityView() {
+        return newCreditFacilityView;
+    }
 
-	public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-		this.newCreditDetailViewList = newCreditDetailViewList;
-	}
+    public void setNewCreditFacilityView(ProposeLineView newCreditFacilityView) {
+        this.newCreditFacilityView = newCreditFacilityView;
+    }
 
+    public List<OpenAccountFullView> getOpenAccountFullViewList() {
+        return openAccountFullViewList;
+    }
 
-	public BigDecimal getTotalApprovedCredit() {
-		return totalApprovedCredit;
-	}
+    public void setOpenAccountFullViewList(List<OpenAccountFullView> openAccountFullViewList) {
+        this.openAccountFullViewList = openAccountFullViewList;
+    }
 
+    public BigDecimal getTotalApprovedCredit() {
+        return totalApprovedCredit;
+    }
 
-	public void setTotalApprovedCredit(BigDecimal totalApprovedCredit) {
-		this.totalApprovedCredit = totalApprovedCredit;
-	}
+    public void setTotalApprovedCredit(BigDecimal totalApprovedCredit) {
+        this.totalApprovedCredit = totalApprovedCredit;
+    }
 
+    public Date getSigningDate() {
+        return signingDate;
+    }
 
-	public NewCreditFacilityView getNewCreditFacilityView() {
-		return newCreditFacilityView;
-	}
+    public void setSigningDate(Date signingDate) {
+        this.signingDate = signingDate;
+    }
 
+    public Date getFirstPaymentDate() {
+        return firstPaymentDate;
+    }
 
-	public void setNewCreditFacilityView(NewCreditFacilityView newCreditFacilityView) {
-		this.newCreditFacilityView = newCreditFacilityView;
-	}
+    public void setFirstPaymentDate(Date firstPaymentDate) {
+        this.firstPaymentDate = firstPaymentDate;
+    }
 
+    public int getPayDate() {
+        return payDate;
+    }
 
-	public Date getSigningDate() {
-		return signingDate;
-	}
-
-
-	public void setSigningDate(Date signingDate) {
-		this.signingDate = signingDate;
-	}
-
-
-	public Date getFirstPaymentDate() {
-		return firstPaymentDate;
-	}
-
-
-	public void setFirstPaymentDate(Date firstPaymentDate) {
-		this.firstPaymentDate = firstPaymentDate;
-	}
-
-
-	public int getPayDate() {
-		return payDate;
-	}
-
-
-	public void setPayDate(int payDate) {
-		this.payDate = payDate;
-	}
-
-
-	public List<OpenAccountFullView> getOpenAccountFullViewList() {
-		return openAccountFullViewList;
-	}
-
-
-	public void setOpenAccountFullViewList(List<OpenAccountFullView> openAccountFullViewList) {
-		this.openAccountFullViewList = openAccountFullViewList;
-	}
-
+    public void setPayDate(int payDate) {
+        this.payDate = payDate;
+    }
 }

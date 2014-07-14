@@ -102,7 +102,7 @@
                     <td colspan="2" class="center">
                         <p:commandButton
                                 id="save"
-                                value="#{msg.get('app.credit.facility.propose.okButton')}"
+                                value="#{msg.get('app.button.ok')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
                                 actionListener="#{creditFacPropose.onSaveGuarantorInfoDlg()}"
@@ -111,7 +111,7 @@
                                 oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
 
                         <p:commandButton
-                                value="#{msg.get('app.credit.facility.propose.cancelButton')}"
+                                value="#{msg.get('app.button.cancel')}"
                                 styleClass="small"
                                 onclick="PF('guarantorDlg').hide()"
                                 update=":guarantorDlgForm"/>

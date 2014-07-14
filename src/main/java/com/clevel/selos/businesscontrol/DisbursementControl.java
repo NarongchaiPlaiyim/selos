@@ -9,27 +9,8 @@ import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.CrossType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.BAPAInfo;
-import com.clevel.selos.model.db.working.BAPAInfoCredit;
-import com.clevel.selos.model.db.working.Disbursement;
-import com.clevel.selos.model.db.working.DisbursementBahtnet;
-import com.clevel.selos.model.db.working.DisbursementBahtnetCredit;
-import com.clevel.selos.model.db.working.DisbursementCredit;
-import com.clevel.selos.model.db.working.DisbursementMC;
-import com.clevel.selos.model.db.working.DisbursementMCCredit;
-import com.clevel.selos.model.db.working.DisbursementTR;
-import com.clevel.selos.model.db.working.DisbursementTRCredit;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountCredit;
-import com.clevel.selos.model.db.working.OpenAccountName;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.view.DisbursementBahtnetDetailView;
-import com.clevel.selos.model.view.DisbursementCreditTypeView;
-import com.clevel.selos.model.view.DisbursementDepositBaDetailView;
-import com.clevel.selos.model.view.DisbursementInfoView;
-import com.clevel.selos.model.view.DisbursementMcDetailView;
-import com.clevel.selos.model.view.DisbursementSummaryView;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CreditTypeDetailTransform;
 import org.slf4j.Logger;
 
@@ -50,7 +31,7 @@ public class DisbursementControl extends BusinessControl {
 	Logger logger;
 
 	@Inject
-	NewCreditDetailDAO newCreditDetailDAO;
+    ProposeCreditInfoDAO newCreditDetailDAO;
 
 	@Inject
 	DisbursementDAO disbursementDAO;
@@ -120,9 +101,9 @@ public class DisbursementControl extends BusinessControl {
 	}
 
 	public List<DisbursementSummaryView> getDisbursementSummaryViewByWorkCase(long workCaseId) {
-		List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
+		List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
 		List<DisbursementSummaryView> disbursementSummaryViewList = new ArrayList<DisbursementSummaryView>();
-		for (NewCreditDetail newCreditDetail : newCreditDetailList) {
+		for (ProposeCreditInfo newCreditDetail : newCreditDetailList) {
 			DisbursementSummaryView disbursementSummaryView = new DisbursementSummaryView();
 			disbursementSummaryView.setNewCreditDetailID(newCreditDetail.getId());
 			disbursementSummaryView.setProductCode(newCreditDetail.getProductCode());
@@ -413,10 +394,10 @@ public class DisbursementControl extends BusinessControl {
 		BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCaseId);
 		List<BAPAInfoCredit> bapaInfoCreditList = bapaInfoCreditDAO.findByBAPAInfo(bapaInfo.getId());
 		for (BAPAInfoCredit bapaInfoCredit : bapaInfoCreditList) {
-			NewCreditDetail newCreditDetail = bapaInfoCredit.getCreditDetail();
+            ProposeCreditInfo newCreditDetail = bapaInfoCredit.getCreditDetail();
 			DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
-			depositBaDetailView.setAccountName(newCreditDetail.getAccountName());
-			depositBaDetailView.setAccountNumber(newCreditDetail.getAccountNumber());
+//			depositBaDetailView.setAccountName(newCreditDetail.getAccountName());
+//			depositBaDetailView.setAccountNumber(newCreditDetail.getAccountNumber());
 			depositBaDetailView.setTotalAmount(bapaInfoCredit.getExpenseAmount());
 
 			List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
@@ -439,7 +420,7 @@ public class DisbursementControl extends BusinessControl {
 		List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
 		if (openAccountCreditList != null && !openAccountCreditList.isEmpty()) {
     		for (OpenAccountCredit openAccountCredit : openAccountCreditList) {
-    			NewCreditDetail newCreditDetail = openAccountCredit.getNewCreditDetail();
+                ProposeCreditInfo newCreditDetail = openAccountCredit.getProposeCreditInfo();
     			DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
     			disbursementCreditView.setNewCreditDetailId(newCreditDetail.getId());
     			disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());

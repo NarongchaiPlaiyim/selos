@@ -33,7 +33,7 @@ public class AppraisalView implements Serializable {
     private String appointmentRemark;
     private List<AppraisalDetailView> appraisalDetailViewList;
     private List<ContactRecordDetailView> contactRecordDetailViewList;
-    private List<NewCollateralView> newCollateralViewList;
+    private List<ProposeCollateralInfoView> newCollateralViewList;
     private AppraisalContactDetailView appraisalContactDetailView;
     private WorkCase workCase;
     private Date createDate;
@@ -271,11 +271,11 @@ public class AppraisalView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public List<NewCollateralView> getNewCollateralViewList() {
+    public List<ProposeCollateralInfoView> getNewCollateralViewList() {
         return newCollateralViewList;
     }
 
-    public void setNewCollateralViewList(List<NewCollateralView> newCollateralViewList) {
+    public void setNewCollateralViewList(List<ProposeCollateralInfoView> newCollateralViewList) {
         this.newCollateralViewList = newCollateralViewList;
     }
 

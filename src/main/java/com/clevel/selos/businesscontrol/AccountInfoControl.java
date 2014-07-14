@@ -47,7 +47,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     @Inject private BankAccountProductDAO bankAccountProductDAO;
     @Inject private CustomerDAO customerDAO;
     @Inject private CreditDetailSimpleTransform creditDetailSimpleTransform;
-    @Inject private NewCreditDetailDAO newCreditDetailDAO;
+    @Inject private ProposeCreditInfoDAO proposeCreditInfoDAO;
 	@Inject	private ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject private BankAccountPurposeDAO bankAccountPurposeDAO;
     
@@ -88,9 +88,9 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         			OpenAccountCreditView creditView = new OpenAccountCreditView();
         			if (creditModel.getExistingCreditDetail() != null) {
         				creditDetailSimpleTransform.updateSimpleView(creditView, creditModel.getExistingCreditDetail());
-        			} else if (creditModel.getNewCreditDetail() != null) {
-        				creditDetailSimpleTransform.updateSimpleView(creditView, creditModel.getNewCreditDetail());
-        				newCreditSet.add(creditModel.getNewCreditDetail().getId());
+        			} else if (creditModel.getProposeCreditInfo() != null) {
+        				creditDetailSimpleTransform.updateSimpleView(creditView, creditModel.getProposeCreditInfo());
+        				newCreditSet.add(creditModel.getProposeCreditInfo().getId());
         			} else {
         				continue;
         			}
@@ -101,8 +101,8 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         		}
         	}
         	//List from new credit detail
-        	List<NewCreditDetail> newCreditModels = newCreditDetailDAO.findApprovedNewCreditDetail(model.getWorkCase().getId());
-        	for (NewCreditDetail newCreditModel : newCreditModels) {
+        	List<ProposeCreditInfo> newCreditModels = proposeCreditInfoDAO.findApprovedNewCreditDetail(model.getWorkCase().getId());
+        	for (ProposeCreditInfo newCreditModel : newCreditModels) {
         		if (newCreditSet.contains(newCreditModel.getId()))
         			continue;
         		OpenAccountCreditView creditView = new OpenAccountCreditView();
@@ -237,8 +237,8 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     	if (workCaseId <= 0)
     		return Collections.emptyList();
     	List<OpenAccountCreditView> rtnDatas = new ArrayList<OpenAccountCreditView>();
-    	List<NewCreditDetail> credits = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
-    	for (NewCreditDetail credit : credits) {
+    	List<ProposeCreditInfo> credits = proposeCreditInfoDAO.findApprovedNewCreditDetail(workCaseId);
+    	for (ProposeCreditInfo credit : credits) {
     		OpenAccountCreditView creditView = new OpenAccountCreditView();
     		creditDetailSimpleTransform.updateSimpleView(creditView, credit);
     		creditView.setOpenAccountCreditId(0);
@@ -326,7 +326,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
 					creditModel.setFromPledge(false);
 					creditModel.setOpenAccount(model);
 					if (creditView.isNewCredit())
-						creditModel.setNewCreditDetail(newCreditDetailDAO.findRefById(creditView.getId()));
+						creditModel.setProposeCreditInfo(proposeCreditInfoDAO.findRefById(creditView.getId()));
 					else
 						creditModel.setExistingCreditDetail(existingCreditDetailDAO.findRefById(creditView.getId()));
 					model.getOpenAccountCreditList().add(creditModel);

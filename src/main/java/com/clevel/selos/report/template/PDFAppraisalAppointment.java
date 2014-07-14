@@ -7,7 +7,6 @@ import com.clevel.selos.model.report.AppraisalContactDetailViewReport;
 import com.clevel.selos.model.report.AppraisalDetailViewReport;
 import com.clevel.selos.model.report.AppraisalViewReport;
 import com.clevel.selos.model.report.ContactRecordDetailViewReport;
-import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ContactRecordDetailView;

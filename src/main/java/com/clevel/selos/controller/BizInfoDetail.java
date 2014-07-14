@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -110,7 +108,7 @@ public class BizInfoDetail extends BaseController {
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    private CreditFacProposeControl creditFacProposeControl;
+    private ProposeLineControl proposeLineControl;
     @Inject
     private DBRControl dbrControl;
     @Inject
@@ -696,7 +694,7 @@ public class BizInfoDetail extends BaseController {
                 session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
 
                 log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}", session.getAttribute("bizInfoDetailViewId"));
-                creditFacProposeControl.calWC(workCaseId);
+                proposeLineControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }

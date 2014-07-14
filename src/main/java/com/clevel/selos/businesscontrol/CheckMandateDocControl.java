@@ -329,6 +329,27 @@ public class CheckMandateDocControl extends BusinessControl{
         }
         return listECMDetailMap;
     }
+    private String callECMByECMDocId(final String ecmDocId){
+        log.debug("-- callECMByECMDocId(ecmDocId : {})", ecmDocId);
+        String result = "";
+        ecmDataResult = ecmInterface.getECMTypeName(ecmDocId);
+        if(!Util.isNull(ecmDataResult) && ActionResult.SUCCESS.equals(ecmDataResult.getActionResult())){
+            log.debug("-- ActionResult is {}", ecmDataResult.getActionResult());
+            if(!Util.isNull(ecmDataResult.getEcmTypeName())){
+                if(!Util.isNull(ecmDataResult.getEcmTypeName().getTypeNameTH()) && !Util.isZero(ecmDataResult.getEcmTypeName().getTypeNameTH().length())){
+                    result = ecmDataResult.getEcmTypeName().getTypeNameTH();
+                } else if(!Util.isNull(ecmDataResult.getEcmTypeName().getTypeNameEN()) && !Util.isZero(ecmDataResult.getEcmTypeName().getTypeNameEN().length())){
+                    result = ecmDataResult.getEcmTypeName().getTypeNameEN();
+                }
+            } else {
+                log.debug("-- ECM Type Name is null");
+            }
+        } else {
+            log.debug("-- Find by ECM DOC ID = {} ActionResult is {} and reason is {}  ", ecmDocId, ecmDataResult.getActionResult(), ecmDataResult.getReason());
+        }
+        log.debug("-- Result : {}", result);
+        return result;
+    }
     private Map<String, List<ECMDetail>> callECMByWorkCasePreScreenId(final long workCasePreScreenId){
         log.debug("-- callECMByWorkCasePreScreenId(workCasePreScreenId : {})", workCasePreScreenId);
         Map<String,List<ECMDetail>> listECMDetailMap = null;
@@ -401,14 +422,17 @@ public class CheckMandateDocControl extends BusinessControl{
             mandateDocView = BRMSentry.getValue();
             if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
+                mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
                 checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, 2);
                 mandatoryDocumentsList.add(checkMandatoryDocView);
             } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
+                mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
                 optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, 2);
                 optionalDocumentsList.add(optionalDocView);
             } else {
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
+                mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
                 checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, 2);
                 otherDocumentsList.add(checkOtherDocView);
             }
@@ -628,14 +652,17 @@ public class CheckMandateDocControl extends BusinessControl{
             mandateDocView = BRMSentry.getValue();
             if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
+                mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
                 checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, 2);
                 mandatoryDocumentsList.add(checkMandatoryDocView);
             } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
+                mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
                 optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, 2);
                 optionalDocumentsList.add(optionalDocView);
             } else {
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
+                mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
                 checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, 2);
                 otherDocumentsList.add(checkOtherDocView);
             }

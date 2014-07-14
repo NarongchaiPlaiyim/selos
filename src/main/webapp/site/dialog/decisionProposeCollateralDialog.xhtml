@@ -13,7 +13,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
                 </td>
                 <td class="left" style="width: 80%" colspan="3">
-                    <h:outputText value="#{decision.selectedApproveCollateral.jobID}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.jobID}"/>
                 </td>
             </tr>
             <tr>
@@ -21,7 +21,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <h:outputText value="#{decision.selectedApproveCollateral.appraisalDate}">
+                    <h:outputText value="#{decision.approveCollateralInfoView.appraisalDate}">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </h:outputText>
                 </td>
@@ -31,7 +31,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <h:outputText value="#{decision.selectedApproveCollateral.aadDecision}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecision}"/>
                 </td>
             </tr>
             <tr>
@@ -39,13 +39,13 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
                 </td>
                 <td class="left" style="width: 30%;">
-                    <h:outputText value="#{decision.selectedApproveCollateral.aadDecisionReason}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReason}"/>
                 </td>
                 <td class="title" style="width: 20%;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
                 </td>
                 <td class="left" style="width: 30%">
-                    <h:outputText value="#{decision.selectedApproveCollateral.aadDecisionReasonDetail}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReasonDetail}"/>
                 </td>
             </tr>
             <tr>
@@ -53,13 +53,13 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedApproveCollateral.usage}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.usage}"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedApproveCollateral.typeOfUsage}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.typeOfUsage}"/>
                 </td>
             </tr>
             <tr>
@@ -73,10 +73,11 @@
                             <td style="width: 80px">#{msg.get('app.decision.label.approved')}</td>
                             <td style="text-align: left">
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
-                                                  value="#{decision.selectedApproveCollateral.uwDecision}"
+                                                  value="#{decision.approveCollateralInfoView.uwDecision}"
                                                   required="#{not empty param[saveCollateralButton.clientId]}">
                                     <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="#{decision.decisionAPPROVED}"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="#{decision.decisionREJECTED}"/>
+                                    <p:ajax event="click" update="@this"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>
@@ -88,8 +89,9 @@
                     <p:outputLabel value="#{msg.get('app.decision.label.UWRemark')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.selectedApproveCollateral.uwRemark}"
-                                     rows="3" cols="100"/>
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.uwRemark}" rows="3" cols="100">
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputTextarea>
                 </td>
             </tr>
             <tr>
@@ -97,13 +99,13 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedApproveCollateral.mortgageCondition}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageCondition}"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.selectedApproveCollateral.mortgageConditionDetail}"/>
+                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageConditionDetail}"/>
                 </td>
             </tr>
             <tr>
@@ -111,61 +113,57 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:dataTable id="dlgCollCrdTypeTable"
-                                 value="#{decision.collateralCreditTypeList}"
-                                 var="creditTypeDetailItem"
-                                 selection="#{decision.selectedCollateralCrdTypeItems}"
-                                 rowKey="#{creditTypeDetailItem.seq}"
+                    <p:dataTable value="#{decision.proposeCreditViewList}"
+                                 var="creditTypeItem"
+                                 rowKey="#{creditTypeItem.seq}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width: 5%; padding: 4px 10px !important;"
-                                          selectionMode="multiple"/>
-                                <p:column style="width: 40%; padding: 4px 10px !important;"
+                                <p:column style="width: 5%; padding: 4px 10px !important;" />
+                                <p:column style="width: 40%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
-                                <p:column style="width: 10%; padding: 4px 10px !important;"
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
-                                <p:column style="width: 15%; padding: 4px 10px !important;"
+                                <p:column style="width: 15%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
-                                <p:column style="width: 15%; padding: 4px 10px !important;"
+                                <p:column style="width: 15%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
-                                <p:column style="width: 15%; padding: 4px 10px !important;"
+                                <p:column style="width: 15%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
                             </p:row>
                         </p:columnGroup>
 
-                        <p:column styleClass="center" selectionMode="multiple"/>
+                        <p:column styleClass="center">
+                            <p:selectBooleanCheckbox value="#{creditTypeItem.noFlag}">
+                                <p:ajax listener="#{decision.onCheckNoFlag(creditTypeItem)}"/>
+                            </p:selectBooleanCheckbox>
+                        </p:column>
 
                         <p:column styleClass="left top">
-                            #{creditTypeDetailItem.accountName}
+                            <h:outputText value="#{creditTypeItem.accountName}"/>
                             <br/>
-                            #{msg.get('app.decision.tb.td.label.accNo')} #{creditTypeDetailItem.accountNumber},&#160;
-                            #{msg.get('app.decision.tb.td.label.suf')} #{creditTypeDetailItem.accountSuf}
+                            <h:outputText value="#{creditTypeItem.accountNumber} #{creditTypeItem.accountSuf}"/>
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new')
-                            : creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}
+                            <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') : creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeDetailItem.productProgramView ? creditTypeDetailItem.productProgramView.name : ''}
+                            <h:outputText value="#{not empty creditTypeItem.productProgramView ? creditTypeItem.productProgramView.name : ''}"/>
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeDetailItem.creditFacilityView ? creditTypeDetailItem.creditFacilityView.name : ''}
+                            <h:outputText value="#{not empty creditTypeItem.creditTypeView ? creditTypeItem.creditTypeView.name : ''}"/>
                         </p:column>
 
                         <p:column styleClass="right top">
-                            <h:outputText value="#{creditTypeDetailItem.limit}">
-                                <f:convertNumber pattern="#,##0.##"
-                                                 minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
+                            <h:outputText value="#{creditTypeItem.limit}">
+                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             </h:outputText>
                         </p:column>
-
                     </p:dataTable>
                 </td>
             </tr>
@@ -174,8 +172,9 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.selectedApproveCollateral.bdmComments}"
-                                     cols="100" rows="3"/>
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.bdmComments}" cols="100" rows="3">
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputTextarea>
                 </td>
             </tr>
 
@@ -186,12 +185,11 @@
             </tr>
 
             <!-- Collateral Head -->
-            <ui:repeat value="#{decision.selectedApproveCollateral.newCollateralHeadViewList}"
+            <ui:repeat value="#{decision.approveCollateralInfoView.proposeCollateralInfoHeadViewList}"
                        var="collHeadDetail" varStatus="collHeadIndex">
                 <tr>
                     <td class="title">
-                        <p:outputLabel for="dlgPotentialColl"
-                                       value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
+                        <p:outputLabel for="dlgPotentialColl" value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgPotentialColl"
@@ -203,8 +201,8 @@
                                            var="potentialItem"
                                            itemLabel="#{potentialItem.description}"
                                            itemValue="#{potentialItem.id}"/>
-                            <p:ajax event="change" listener="#{decision.onChangePotentialCollateralType(collHeadDetail)}"
-                                    process="@form" update=":collateralDlgForm"/>
+                            <p:ajax listener="#{decision.onChangePotentialCollateralType(collHeadDetail)}"
+                                    update="dlgCollTypePercentLTV"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -214,30 +212,18 @@
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
                     </td>
                     <td class="left" colspan="3">
-                        <!--<p:selectOneMenu id="dlgCollTypePercentLTV"
-                                         value="#{collHeadDetail.collTypePercentLTV.id}"
-                                         style="min-width: 200px; width: 200px; max-width: 200px;"
-                                         required="#{not empty param[saveCollateralButton.clientId]}">
-                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{decision.collateralTypeViewList}"
-                                           var="collTypePercentItem"
-                                           itemLabel="#{collTypePercentItem.description}"
-                                           itemValue="#{collTypePercentItem.id}"/>
-                        </p:selectOneMenu>-->
                         <p:selectOneMenu id="dlgCollTypePercentLTV"
                                          value="#{collHeadDetail.tcgCollateralType.id}"
-                                         required="#{not empty param[saveCollateralButton.clientId]}"
                                          styleClass="largest"
+                                         size="1"
+                                         required="#{not empty param[btnSaveCollateral.clientId]}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{decision.potentialColToTCGColList}"
+                            <f:selectItems value="#{collHeadDetail.potentialColToTCGColList}"
                                            var="dlgPotentialColToTCGColList"
                                            itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
                                            itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
-                            <p:ajax event="change"
-                                    listener="#{decision.onChangeCollTypeLTV(collHeadDetail)}"
-                                    process="@form"
-                                    update=":collateralDlgForm"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -249,14 +235,14 @@
                     <td class="left">
                         <p:inputText id="dlgExistingCredit"
                                      value="#{collHeadDetail.existingCredit}"
-                                     maxlength="18"
+                                     maxlength="14"
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);"
                                      onkeypress="return onKeyPressMoney(event);"
-                                     styleClass="right">
-                            <f:convertNumber pattern="#,##0.##"
-                                             minFractionDigits="2" maxFractionDigits="2"
-                                             maxIntegerDigits="14"/>
+                                     onfocus="removeComma(this)"
+                                     style="width:200px;text-align: right"
+                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -268,7 +254,10 @@
                     </td>
                     <td class="left">
                         <p:inputText id="dlgTitleDeed" value="#{collHeadDetail.titleDeed}"
-                                     required="#{not empty param[saveCollateralButton.clientId]}"/>
+                                     required="#{not empty param[saveCollateralButton.clientId]}"
+                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                            <p:ajax event="blur" update="@this"/>
+                        </p:inputText>
                     </td>
                 </tr>
                 <tr>
@@ -279,7 +268,10 @@
                     <td class="left">
                         <p:inputText id="dlgCollLocation" value="#{collHeadDetail.collateralLocation}"
                                      style="width: 400px;"
-                                     required="#{not empty param[saveCollateralButton.clientId]}"/>
+                                     required="#{not empty param[saveCollateralButton.clientId]}"
+                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                            <p:ajax event="blur" update="@this"/>
+                        </p:inputText>
                     </td>
                 </tr>
                 <tr>
@@ -290,15 +282,15 @@
                     <td class="left">
                         <p:inputText id="dlgAppraisalValue"
                                      value="#{collHeadDetail.appraisalValue}"
-                                     maxlength="18"
+                                     maxlength="14"
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);"
                                      onkeypress="return onKeyPressMoney(event);"
+                                     onfocus="removeComma(this)"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
-                                     styleClass="right">
-                            <f:convertNumber pattern="#,##0.##"
-                                             minFractionDigits="2" maxFractionDigits="2"
-                                             maxIntegerDigits="14"/>
+                                     style="width:200px;text-align: right"
+                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -309,29 +301,17 @@
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.headCollType')}"/>
                     </td>
                     <td class="left">
-                        <!--<p:selectOneMenu id="dlgHeadCollType"
-                                         value="#{collHeadDetail.headCollType.id}"
-                                         style="min-width: 200px; width: 200px; max-width: 200px;"
-                                         required="#{not empty param[saveCollateralButton.clientId]}">
-                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{decision.collateralTypeViewList}"
-                                           var="collateralTypeItem"
-                                           itemLabel="#{collateralTypeItem.description}"
-                                           itemValue="#{collateralTypeItem.id}"/>
-                        </p:selectOneMenu>-->
                         <p:selectOneMenu id="dlgHeadCollType"
                                          value="#{collHeadDetail.headCollType.id}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;"
-                                         required="#{not empty param[saveCollateralButton.clientId]}">
-                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                         required="#{not empty param[saveCollateralButton.clientId]}"
+                                         disabled="#{collHeadDetail.haveSubColl}">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                             <f:selectItems value="#{decision.headCollTypeViewList}"
                                            var="headCollateralTypeItem"
                                            itemLabel="#{headCollateralTypeItem.description}"
                                            itemValue="#{headCollateralTypeItem.id}"/>
-                            <p:ajax event="change"
-                                    listener="#{decision.onChangeHeadCollType(collHeadDetail)}"
-                                    process="@form"
-                                    update=":collateralDlgForm"/>
+                            <p:ajax event="change" update="@this"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -341,25 +321,24 @@
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
                     </td>
                     <td class="left">
-                        <p:selectOneRadio id="dlgInsuranceComp"
-                                          value="#{collHeadDetail.insuranceCompany}">
+                        <p:selectOneRadio id="dlgInsuranceComp" value="#{collHeadDetail.insuranceCompany}">
                             <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="#{decision.yesValue}"/>
                             <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="#{decision.noValue}"/>
+                            <p:ajax event="click" update="@this"/>
                         </p:selectOneRadio>
                     </td>
                 </tr>
                 <tr>
                     <td class="left" colspan="4">
-                        <p:commandButton
-                                id="btnAddSubCollateralInfo"
-                                value="#{msg.get('app.button.add')}"
-                                styleClass="smaller"
-                                process="@this"
-                                action="#{decision.onAddSubCollateral()}"
-                                update=":subCollateralDlgForm"
-                                oncomplete="subCollateralInfoDlg.show();">
-                            <f:setPropertyActionListener value="#{collHeadIndex.index}"
-                                                         target="#{decision.rowIndexCollHead}"/>
+                        <p:commandButton id="btnAddSubCollateralInfo"
+                                         value="#{msg.get('app.button.add')}"
+                                         styleClass="small"
+                                         process="@this"
+                                         actionListener="#{decision.onAddSubCollateral()}"
+                                         update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                         disabled="#{proposeLine.proposeCollateralInfoView.coms}">
+                            <f:setPropertyActionListener value="#{i.index}" target="#{proposeLine.rowHeadCollIndex}"/>
+                            <p:resetInput target=":subCollateralDlgForm"/>
                         </p:commandButton>
                     </td>
                 </tr>
@@ -367,33 +346,33 @@
                 <tr>
                     <td class="left" colspan="4">
                         <p:dataTable id="subCollateralDetailViewTable"
-                                     value="#{collHeadDetail.newCollateralSubViewList}"
-                                     var="subCollateralDetail"
-                                     rowKey="#{subCollateralDetail}"
+                                     value="#{collHeadDetail.proposeCollateralInfoSubViewList}"
+                                     var="proposeCollSubView"
+                                     rowKey="#{proposeCollSubView.subId}"
                                      rowIndexVar="rowIndex"
                                      paginator="false"
                                      style="width: 100%;">
 
                             <p:columnGroup type="header">
                                 <p:row>
-                                    <p:column style="width: 5%;"/>
-                                    <p:column style="width: 20%"
+                                    <p:column style="width: 5%"/>
+                                    <p:column style="width: 15%"
                                               headerText="#{msg.get('app.credit.facility.propose.label.subcoll.subcollTypeCaption')}"/>
-                                    <p:column style="width: 10%;"
+                                    <p:column style="width: 10%"
                                               headerText="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}"/>
-                                    <p:column style="width: 10%;"
+                                    <p:column style="width: 10%"
                                               headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')}"/>
-                                    <p:column style="width: 10%;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')} "/>
-                                    <p:column style="width: 10%;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')} "/>
-                                    <p:column style="width: 10%;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')} "/>
-                                    <p:column style="width: 10%;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')} "/>
-                                    <p:column style="width: 10%;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')} "/>
-                                    <p:column style="width: 5%;"/>
+                                    <p:column style="width: 10%"
+                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')}"/>
+                                    <p:column style="width: 10%"
+                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
+                                    <p:column style="width: 10%"
+                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
+                                    <p:column style="width: 10%"
+                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')}"/>
+                                    <p:column style="width: 10%"
+                                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')}"/>
+                                    <p:column style="width: 10%"/>
                                 </p:row>
                             </p:columnGroup>
 
@@ -402,53 +381,57 @@
                             </p:column>
 
                             <p:column styleClass="left top">
-                                <h:outputText value="#{subCollateralDetail.subCollateralType.description}"
-                                              rendered="#{not empty subCollateralDetail.subCollateralType}"/><br/>
-                                #{msg.get('app.decision.tb.td.label.address')} #{subCollateralDetail.address}<br/>
-                                #{msg.get('app.decision.tb.td.label.landOffice')} #{subCollateralDetail.landOffice}
-                            </p:column>
-
-                            <p:column styleClass="left top">#{subCollateralDetail.titleDeed}</p:column>
-
-                            <p:column styleClass="left top">#{subCollateralDetail.collateralOwnerAAD}</p:column>
-
-                            <p:column styleClass="left top">
-                                <ui:repeat value="#{subCollateralDetail.collateralOwnerUWList}"
-                                           var="ownerUW" varStatus="a">
-                                    <h:outputText value="#{ownerUW}"/>
-                                    <h:outputText value="," rendered="#{not a.last}"/>
-                                </ui:repeat>
+                                <h:outputText value="#{proposeCollSubView.subCollateralType.description}" rendered="#{not empty proposeCollSubView.subCollateralType}"/>
+                                <br/>
+                                <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')} #{proposeCollSubView.address}"/>
+                                <br/>
+                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')} #{proposeCollSubView.landOffice}"/>
                             </p:column>
 
                             <p:column styleClass="left top">
-                                <ui:repeat value="#{subCollateralDetail.mortgageList}"
-                                           var="mortgage" varStatus="b">
-                                    <h:outputText value="#{mortgage.mortgage}"/>
-                                    <h:outputText value="," rendered="#{not b.last}"/>
-                                </ui:repeat>
+                                <h:outputText value="#{proposeCollSubView.titleDeed}"/>
                             </p:column>
 
                             <p:column styleClass="left top">
-                                <ui:repeat value="#{subCollateralDetail.relatedWithList}"
-                                           var="relatedWith" varStatus="c">
-                                    <h:outputText value="#{relatedWith.subCollateralType.description}"/>
-                                    <h:outputText value="," rendered="#{not c.last}"/>
-                                </ui:repeat>
+                                <h:outputText value="#{proposeCollSubView.collateralOwnerAAD}"/>
+                            </p:column>
+
+                            <p:column styleClass="left top">
+                                <p:panel rendered="#{not empty proposeCollSubView.collateralOwnerUWList and fn:length(proposeCollSubView.collateralOwnerUWList) gt 0}" styleClass="panel">
+                                    <ui:repeat value="#{proposeCollSubView.collateralOwnerUWList}" var="collateralOwnerUW" varStatus="a">
+                                        <h:outputText value="#{collateralOwnerUW.firstNameTh} #{collateralOwnerUW.lastNameTh}"/>
+                                        <h:outputText value=", " rendered="#{not a.last}"/>
+                                    </ui:repeat>
+                                </p:panel>
+                            </p:column>
+
+                            <p:column styleClass="left top">
+                                <p:panel rendered="#{not empty proposeCollSubView.mortgageList and fn:length(proposeCollSubView.mortgageList) gt 0}" styleClass="panel">
+                                    <ui:repeat value="#{proposeCollSubView.mortgageList}" var="mortgage" varStatus="b">
+                                        <h:outputText value="#{mortgage.mortgage}"/>
+                                        <h:outputText value=", " rendered="#{not b.last}"/>
+                                    </ui:repeat>
+                                </p:panel>
+                            </p:column>
+
+                            <p:column styleClass="left top">
+                                <p:panel rendered="#{not empty proposeCollSubView.relatedWithList and fn:length(proposeCollSubView.relatedWithList) gt 0}" styleClass="panel">
+                                    <ui:repeat value="#{proposeCollSubView.relatedWithList}" var="relatedWith" varStatus="c">
+                                        <h:outputText value="#{relatedWith.titleDeed}"/>
+                                        <h:outputText value=", " rendered="#{not c.last}"/>
+                                    </ui:repeat>
+                                </p:panel>
                             </p:column>
 
                             <p:column styleClass="right top">
-                                <h:outputText value="#{subCollateralDetail.appraisalValue}">
-                                    <f:convertNumber pattern="#,##0.##"
-                                                     minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="14"/>
+                                <h:outputText value="#{proposeCollSubView.appraisalValue}" maxlength="14" >
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column styleClass="right top">
-                                <h:outputText value="#{subCollateralDetail.mortgageValue}">
-                                    <f:convertNumber pattern="#,##0.##"
-                                                     minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="14"/>
+                                <h:outputText value="#{proposeCollSubView.mortgageValue}" maxlength="14">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 </h:outputText>
                             </p:column>
 
@@ -457,26 +440,19 @@
                                                  action="#{decision.onEditSubCollateral()}"
                                                  update=":subCollateralDlgForm"
                                                  process="@this"
-                                                 oncomplete="subCollateralInfoDlg.show();">
-                                    <f:setPropertyActionListener value="#{collHeadIndex.index}"
-                                                                 target="#{decision.rowIndexCollHead}"/>
-                                    <f:setPropertyActionListener value="#{rowIndex}"
-                                                                 target="#{decision.rowIndexSubColl}"/>
-                                    <f:setPropertyActionListener value="#{subCollateralDetail}"
-                                                                 target="#{decision.selectedApproveSubColl}"/>
+                                                 oncomplete="subCollateralInfoDlg.show();"
+                                                 disabled="#{decision.approveCollateralInfoView.coms}">
+                                    <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowSubCollIndex}"/>
+                                    <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{decision.approveCollateralInfoSubView}"/>
+                                    <p:resetInput target=":subCollateralDlgForm"/>
                                 </p:commandButton>
-
-                                <p:commandButton title="#{msg.get('app.button.delete')}"
-                                                 icon="ui-icon-trash"
+                                <p:commandButton icon="ui-icon-trash"
                                                  process="@this"
-                                                 oncomplete="confirmDeleteSubCollateralInfoDlg.show()">
-                                    <f:setPropertyActionListener value="#{collHeadIndex.index}"
-                                                                 target="#{decision.rowIndexCollHead}"/>
-                                    <f:setPropertyActionListener value="#{rowIndex}"
-                                                                 target="#{decision.rowIndexSubColl}"/>
+                                                 oncomplete="confirmDeleteSubCollateralInfoDlg.show()"
+                                                 disabled="#{decision.approveCollateralInfoView.coms}">
+                                    <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{decision.approveCollateralInfoSubView}"/>
                                 </p:commandButton>
                             </p:column>
-
                         </p:dataTable>
                     </td>
                 </tr>
@@ -497,16 +473,18 @@
                 <td colspan="4" style="text-align: center">
                     <p:commandButton id="btnSaveCollateral"
                                      styleClass="small"
-                                     value="#{msg.get('app.button.ok')}"
                                      binding="#{saveCollateralButton}"
+                                     value="#{msg.get('app.button.ok')}"
                                      action="#{decision.onSaveProposeCollInfo()}"
-                                     process="@form"
+                                     process=":collateralDlgForm"
                                      update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
                     <p:spacer width="10" height=""/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
-                                     onclick="proposeCollateralDlg.hide()"/>
+                                     update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
+                                     action="#{decision.onCancelCollateralInfo()}"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
                 </td>
             </tr>
             <tr>

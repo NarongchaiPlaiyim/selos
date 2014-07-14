@@ -134,6 +134,9 @@ public class BankStatement implements Serializable {
     @OneToMany(mappedBy = "bankStatement", cascade = CascadeType.ALL)
     private List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList;
 
+    @Column(name = "net_income_last_six")
+    private BigDecimal netIncomeLastSix;
+
     public long getId() {
         return id;
     }
@@ -420,6 +423,14 @@ public class BankStatement implements Serializable {
 
     public void setSrcOfCollateralProofList(List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList) {
         this.srcOfCollateralProofList = srcOfCollateralProofList;
+    }
+
+    public BigDecimal getNetIncomeLastSix() {
+        return netIncomeLastSix;
+    }
+
+    public void setNetIncomeLastSix(BigDecimal netIncomeLastSix) {
+        this.netIncomeLastSix = netIncomeLastSix;
     }
 
     @Override

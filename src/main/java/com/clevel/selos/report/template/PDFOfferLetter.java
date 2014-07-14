@@ -60,7 +60,7 @@ public class PDFOfferLetter implements Serializable {
         decisionView = new DecisionView();
 
         if(!Util.isNull(workCaseId)){
-            decisionView = decisionControl.getDecisionView(workCaseId);
+            decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
             log.debug("--decisionView. {[]}",decisionView);
         } else {
             log.debug("--workcaseId is Null. {}",workCaseId);
@@ -74,13 +74,13 @@ public class PDFOfferLetter implements Serializable {
 //        init();
         log.debug("--fillApprovedCredit()");
         List<ApprovedCreditOfferLetterReport> reports = new ArrayList<ApprovedCreditOfferLetterReport>();
-        List<NewCreditDetailView> newCreditDetailViews = decisionView.getApproveCreditList();
+        List<ProposeCreditInfoDetailView> newCreditDetailViews = decisionView.getApproveCreditList();
 
         if(Util.safetyList(newCreditDetailViews).size() > 0){
             log.debug("--ApproveCreditList. [{}],Size. {}",newCreditDetailViews,newCreditDetailViews.size());
-            for (NewCreditDetailView view : newCreditDetailViews){
-                log.debug("--tierDetailView Size. {}",view.getNewCreditTierDetailViewList().size());
-                for (NewCreditTierDetailView tierDetailView : view.getNewCreditTierDetailViewList()){
+            for (ProposeCreditInfoDetailView view : newCreditDetailViews){
+                log.debug("--tierDetailView Size. {}",view.getProposeCreditInfoTierDetailViewList().size());
+                for (ProposeCreditInfoTierDetailView tierDetailView : view.getProposeCreditInfoTierDetailViewList()){
                     ApprovedCreditOfferLetterReport approvedCredit = new ApprovedCreditOfferLetterReport();
                     approvedCredit.setProductProgramName(Util.checkNullString(view.getProductProgramView().getName()));
                     approvedCredit.setCreditTypeName(Util.checkNullString(view.getCreditTypeView().getName()));
@@ -105,22 +105,22 @@ public class PDFOfferLetter implements Serializable {
     public List<ApprovedCollateralOfferLetterReport> fillGuarantor(String path){
         log.debug("--fillGuarantor");
         List<ApprovedCollateralOfferLetterReport> reports = new ArrayList<ApprovedCollateralOfferLetterReport>();
-        List<NewCollateralView> collateralViews = decisionView.getApproveCollateralList();
+        List<ProposeCollateralInfoView> collateralViews = decisionView.getApproveCollateralList();
         StringBuilder collOwnerUW = null;
         StringBuilder guarantorName = null;
         ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = null;
 
         //Approved Guarantor
-        List<NewGuarantorDetailView> guarantorDetailViews = decisionView.getApproveGuarantorList();
+        List<ProposeGuarantorInfoView> guarantorDetailViews = decisionView.getApproveGuarantorList();
         List<ApprovedGuarantorOfferLetterReport> approvedGuarantorOfferLetterReports = new ArrayList<ApprovedGuarantorOfferLetterReport>();
 
         // Approved Collateral
         if (Util.safetyList(collateralViews).size() > 0){
             log.debug("--Approved Collateral Size. {}",collateralViews.size());
 
-            for(NewCollateralView view : collateralViews){
-                for (NewCollateralHeadView headView : view.getNewCollateralHeadViewList()){
-                    for (NewCollateralSubView newCollateralSubView : headView.getNewCollateralSubViewList()){
+            for(ProposeCollateralInfoView view : collateralViews){
+                for (ProposeCollateralInfoHeadView headView : view.getProposeCollateralInfoHeadViewList()){
+                    for (ProposeCollateralInfoSubView newCollateralSubView : headView.getProposeCollateralInfoSubViewList()){
                         collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
                         collateralAndGuarantorOfferLetterReport.setPath(path);
                         collateralAndGuarantorOfferLetterReport.setSubCollateralTypeName(Util.checkNullString(newCollateralSubView.getSubCollateralType().getDescription()));
@@ -148,7 +148,7 @@ public class PDFOfferLetter implements Serializable {
 
                         if (Util.safetyList(guarantorDetailViews).size() > 0){
                         log.debug("--Approved Guarantor Size. {}",collateralViews.size());
-                            for(NewGuarantorDetailView guarantorDetailView : guarantorDetailViews){
+                            for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
                                 ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
 
                                 guarantorName = new StringBuilder();
@@ -156,7 +156,7 @@ public class PDFOfferLetter implements Serializable {
                                         .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
 
                                 approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
-                                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getTotalLimitGuaranteeAmount()));
+                                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getGuaranteeAmount()));
                                 approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
 
                                 collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
@@ -176,7 +176,7 @@ public class PDFOfferLetter implements Serializable {
             if (Util.safetyList(guarantorDetailViews).size() > 0){
             log.debug("--Approved Guarantor Size. {}",guarantorDetailViews.size());
 
-            for(NewGuarantorDetailView guarantorDetailView : guarantorDetailViews){
+            for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
                 ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
                 collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
                 guarantorName = new StringBuilder();
@@ -184,7 +184,7 @@ public class PDFOfferLetter implements Serializable {
                         .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
 
                 approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
-                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getTotalLimitGuaranteeAmount()));
+                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getGuaranteeAmount()));
                 approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
 
                 collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);

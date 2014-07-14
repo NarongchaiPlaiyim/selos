@@ -46,7 +46,7 @@ public class ProductProgramDAO extends GenericDAO<ProductProgram, Integer> {
             List<ProductProgram> productProgramList = criteria.list();
             return productProgramList;
         } catch (Exception e){
-
+            log.error("findExistingProductProgram - Exception :: {}", e);
         }
         return null;
     }

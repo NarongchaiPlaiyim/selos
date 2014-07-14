@@ -43,7 +43,7 @@ public class PledgeInfo implements Serializable  {
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "new_coll_sub_id")
-    private NewCollateralSub newCollateralSub;
+    private ProposeCollateralInfoSub newCollateralSub;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -117,15 +117,15 @@ public class PledgeInfo implements Serializable  {
 		this.openAccount = openAccount;
 	}
 
-	public NewCollateralSub getNewCollateralSub() {
-		return newCollateralSub;
-	}
+    public ProposeCollateralInfoSub getNewCollateralSub() {
+        return newCollateralSub;
+    }
 
-	public void setNewCollateralSub(NewCollateralSub newCollateralSub) {
-		this.newCollateralSub = newCollateralSub;
-	}
+    public void setNewCollateralSub(ProposeCollateralInfoSub newCollateralSub) {
+        this.newCollateralSub = newCollateralSub;
+    }
 
-	public Date getCreateDate() {
+    public Date getCreateDate() {
 		return createDate;
 	}
 

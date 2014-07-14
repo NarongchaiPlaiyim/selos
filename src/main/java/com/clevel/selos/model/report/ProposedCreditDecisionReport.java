@@ -1,6 +1,6 @@
 package com.clevel.selos.model.report;
 
-import com.clevel.selos.model.view.NewCreditTierDetailView;
+import com.clevel.selos.model.view.ProposeCreditInfoTierDetailView;
 import com.clevel.selos.report.ReportModel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -37,7 +37,7 @@ public class ProposedCreditDecisionReport extends ReportModel{
     //Approved Credit
     private String uwDecision;
 
-    private List<NewCreditTierDetailView> newCreditTierDetailViews;
+    private List<ProposeCreditInfoTierDetailView> newCreditTierDetailViews;
 
 
     public ProposedCreditDecisionReport() {
@@ -55,7 +55,7 @@ public class ProposedCreditDecisionReport extends ReportModel{
         remark = "";
         disbursement = "";
         uwDecision = "";
-        newCreditTierDetailViews = new ArrayList<NewCreditTierDetailView>();
+        newCreditTierDetailViews = new ArrayList<ProposeCreditInfoTierDetailView>();
     }
 
     public int getCount() {
@@ -154,11 +154,11 @@ public class ProposedCreditDecisionReport extends ReportModel{
         this.frontEndFee = frontEndFee;
     }
 
-    public List<NewCreditTierDetailView> getNewCreditTierDetailViews() {
+    public List<ProposeCreditInfoTierDetailView> getNewCreditTierDetailViews() {
         return newCreditTierDetailViews;
     }
 
-    public void setNewCreditTierDetailViews(List<NewCreditTierDetailView> newCreditTierDetailViews) {
+    public void setNewCreditTierDetailViews(List<ProposeCreditInfoTierDetailView> newCreditTierDetailViews) {
         this.newCreditTierDetailViews = newCreditTierDetailViews;
     }
 

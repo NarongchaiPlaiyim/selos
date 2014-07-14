@@ -47,7 +47,7 @@ public class GuarantorInfo implements Serializable  {
     
     @OneToOne
     @JoinColumn(name="new_guarantor_id")
-    private NewGuarantorDetail newGuarantorDetail;
+    private ProposeGuarantorInfo newGuarantorDetail;
     
     public GuarantorInfo() {
     	
@@ -116,12 +116,12 @@ public class GuarantorInfo implements Serializable  {
 	public void setModifyBy(User modifyBy) {
 		this.modifyBy = modifyBy;
 	}
-	
-	public NewGuarantorDetail getNewGuarantorDetail() {
-		return newGuarantorDetail;
-	}
-	
-	public void setNewGuarantorDetail(NewGuarantorDetail newGuarantorDetail) {
-		this.newGuarantorDetail = newGuarantorDetail;
-	}
+
+    public ProposeGuarantorInfo getNewGuarantorDetail() {
+        return newGuarantorDetail;
+    }
+
+    public void setNewGuarantorDetail(ProposeGuarantorInfo newGuarantorDetail) {
+        this.newGuarantorDetail = newGuarantorDetail;
+    }
 }

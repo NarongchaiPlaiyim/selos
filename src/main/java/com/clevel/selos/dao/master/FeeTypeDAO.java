@@ -15,11 +15,15 @@ public class FeeTypeDAO  extends GenericDAO<FeeType,Integer>{
     private Logger logger;
 
     public FeeType findByBRMSCode(String brmsCode){
-        logger.debug("findByBRMSCode {}", brmsCode);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("brmsCode", brmsCode));
         FeeType feeType = (FeeType) criteria.uniqueResult();
-        logger.debug("retrun FeeType {}", feeType);
+        return feeType;
+    }
+    public FeeType findByDescription(String description) {
+    	Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("description", description));
+        FeeType feeType = (FeeType) criteria.uniqueResult();
         return feeType;
     }
 }
