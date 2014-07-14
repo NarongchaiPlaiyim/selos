@@ -27,4 +27,15 @@ public class ProposeFeeDetailDAO extends GenericDAO<ProposeFeeDetail, Long>{
                 .addOrder(Order.asc("id"));
         return criteria.list();
     }
+    public ProposeFeeDetail findByType(long workCaseId,long feeTypeId) {
+    	Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("feeType.id", feeTypeId));
+        List<ProposeFeeDetail> list = criteria.list();
+        if (list == null || list.isEmpty())
+        	return null;
+        else
+        	return list.get(0);
+    }
+    
 }
