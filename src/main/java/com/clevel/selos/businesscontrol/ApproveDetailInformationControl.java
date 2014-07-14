@@ -3,17 +3,17 @@ package com.clevel.selos.businesscontrol;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.dao.working.NewCreditDetailDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountPurpose;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AgreementInfo;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
@@ -34,6 +34,7 @@ import com.clevel.selos.transform.CreditDetailSimpleTransform;
 import com.clevel.selos.transform.NewCreditDetailTransform;
 import com.clevel.selos.transform.NewCreditFacilityTransform;
 import com.clevel.selos.transform.OpenAccountTransform;
+
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -88,7 +89,9 @@ public class ApproveDetailInformationControl extends BusinessControl {
 
 	public ApproveDetailInformationView getApproveDetailInformationView(long workCaseId) {
 		BigDecimal totalApprovedLimit = new BigDecimal(0);
+		log.info("workCaseId: " + workCaseId);
 		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCaseId);
+		log.info("agreementInfo: " + agreementInfo);
 		ApproveDetailInformationView approveDetailInformationView = approveDetailInformationTransform.transformToView(agreementInfo);
 		if (workCaseId > 0) {
 			WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -211,9 +214,24 @@ public class ApproveDetailInformationControl extends BusinessControl {
 
 	public void saveApproveDetailInformationView(ApproveDetailInformationView approveDetailInformationView, long workCaseId) {
 		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCaseId);
+		User user = getCurrentUser();
 		if (agreementInfo != null) {
+			log.info("agreementInfo: " + agreementInfo.getId() + "," + agreementInfo.getWorkCase().getId());
+			log.info("approveDetailInformationView.getFirstPaymentDate(): " + approveDetailInformationView.getFirstPaymentDate());
+			agreementInfo.setFirstPaymentDate(approveDetailInformationView.getFirstPaymentDate());
+			log.info("approveDetailInformationView.getPayDate(): " + approveDetailInformationView.getPayDate());
+			agreementInfo.setPayDate(approveDetailInformationView.getPayDate());
+			agreementInfo.setModifyBy(user);
+			agreementInfo.setModifyDate(new Date());
+			agreementInfoDAO.persist(agreementInfo);
+		}else{
+			agreementInfo = new AgreementInfo();
 			agreementInfo.setFirstPaymentDate(approveDetailInformationView.getFirstPaymentDate());
 			agreementInfo.setPayDate(approveDetailInformationView.getPayDate());
+			agreementInfo.setCreateBy(user);
+			agreementInfo.setCreateDate(new Date());
+			agreementInfo.setWorkCase(workCaseDAO.findById(workCaseId));
+			log.info("agreementInfo: " + agreementInfo.getWorkCase().getId());
 			agreementInfoDAO.persist(agreementInfo);
 		}
 	}
