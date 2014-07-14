@@ -353,9 +353,9 @@ public class Decision extends BaseController {
         //disable retrieve pricing button
         if(!Util.isNull(decisionView) && !Util.isNull(decisionView.getApproveCreditList())
                 && Util.isZero(decisionView.getApproveCreditList().size())) { // list not null but size = 0
-            setDisabledValue("retrieveProposeCreditButton",true);
+            setDisabledValue("retrieveApproveCreditButton",true);
         } else if(Util.isNull(decisionView.getApproveCreditList())) { // list is null
-            setDisabledValue("retrieveProposeCreditButton",true);
+            setDisabledValue("retrieveApproveCreditButton",true);
         }
         // ================================================== //
 
