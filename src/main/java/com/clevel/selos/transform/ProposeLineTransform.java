@@ -1494,47 +1494,6 @@ public class ProposeLineTransform extends Transform {
         List<ProposeGuarantorInfo> approveGuarantorList = proposeGuarantorInfoDAO.findNewGuarantorByNewCreditFacId(proposeLineView.getId(), ProposeType.A);
         decisionView.setApproveGuarantorList(transformProposeGuarantorToViewList(approveGuarantorList, ProposeType.A));
 
-        //Fee Info.
-        List<ProposeFeeDetail> proposeFeeDetailList = proposeFeeDetailDAO.findByWorkCaseId(decision.getWorkCase().getId(), ProposeType.A);
-        List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList);
-        List<ProposeFeeDetailView> proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
-
-        Map<String, ProposeFeeDetailView> proposeFeeDetailViewMap = new HashMap<String, ProposeFeeDetailView>();
-        if(!Util.isNull(proposeFeeDetailViewOriginalList) && !Util.isZero(proposeFeeDetailViewOriginalList.size())) {
-            for(ProposeFeeDetailView proFeeDetView : proposeFeeDetailViewOriginalList) {
-                if(!proposeFeeDetailViewMap.containsKey(proFeeDetView.getProductProgram())){
-                    proposeFeeDetailViewMap.put(proFeeDetView.getProductProgram(), proFeeDetView);
-                    proposeFeeDetailViewList.add(proFeeDetView);
-                }
-            }
-        }
-
-        decisionView.setApproveFeeDetailViewList(proposeFeeDetailViewList);
-        decisionView.setApproveFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
-
-        Map<String, ProposeCreditInfoDetailView> proProgramMap = new Hashtable<String, ProposeCreditInfoDetailView>();
-        for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
-            if(proposeCreditInfoDetailView.getUwDecision() == DecisionType.APPROVED) {
-                if(!proProgramMap.containsKey(proposeCreditInfoDetailView.getProductProgramView().getName())){
-                    proProgramMap.put(proposeCreditInfoDetailView.getProductProgramView().getName(), proposeCreditInfoDetailView);
-                }
-            }
-        }
-
-        for (ProposeFeeDetailView proFeeDetView : decisionView.getApproveFeeDetailViewList()) {
-            if(!proProgramMap.containsKey(proFeeDetView.getProductProgram())){
-                decisionView.getApproveFeeDetailViewList().remove(proFeeDetView);
-            }
-        }
-
-        Iterator<ProposeFeeDetailView> proposeFeeDetailViewIterator = decisionView.getApproveFeeDetailViewList().iterator();
-        while (proposeFeeDetailViewIterator.hasNext()) {
-            ProposeFeeDetailView proFeeDetView = proposeFeeDetailViewIterator.next();
-            if(!proProgramMap.containsKey(proFeeDetView.getProductProgram())){
-                proposeFeeDetailViewIterator.remove();
-            }
-        }
-
         if(!Util.isNull(decision) && !Util.isZero(decision.getId())) {
             decisionView.setId(decision.getId());
             decisionView.setApproveTotalCreditLimit(decision.getTotalApproveCredit());
@@ -1558,6 +1517,47 @@ public class ProposeLineTransform extends Transform {
             decisionView.setApproveTotalTCGGuaranteeAmt(decision.getTotalApproveTCGGuaranteeAmt());
             decisionView.setApproveTotalIndvGuaranteeAmt(decision.getTotalApproveIndiGuaranteeAmt());
             decisionView.setApproveTotalJurisGuaranteeAmt(decision.getTotalApproveJuriGuaranteeAmt());
+
+            //Fee Info.
+            List<ProposeFeeDetail> proposeFeeDetailList = proposeFeeDetailDAO.findByWorkCaseId(decision.getWorkCase().getId(), ProposeType.A);
+            List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList);
+            List<ProposeFeeDetailView> proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
+
+            Map<String, ProposeFeeDetailView> proposeFeeDetailViewMap = new HashMap<String, ProposeFeeDetailView>();
+            if(!Util.isNull(proposeFeeDetailViewOriginalList) && !Util.isZero(proposeFeeDetailViewOriginalList.size())) {
+                for(ProposeFeeDetailView proFeeDetView : proposeFeeDetailViewOriginalList) {
+                    if(!proposeFeeDetailViewMap.containsKey(proFeeDetView.getProductProgram())){
+                        proposeFeeDetailViewMap.put(proFeeDetView.getProductProgram(), proFeeDetView);
+                        proposeFeeDetailViewList.add(proFeeDetView);
+                    }
+                }
+            }
+
+            decisionView.setApproveFeeDetailViewList(proposeFeeDetailViewList);
+            decisionView.setApproveFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
+
+            Map<String, ProposeCreditInfoDetailView> proProgramMap = new Hashtable<String, ProposeCreditInfoDetailView>();
+            for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
+                if(proposeCreditInfoDetailView.getUwDecision() == DecisionType.APPROVED) {
+                    if(!proProgramMap.containsKey(proposeCreditInfoDetailView.getProductProgramView().getName())){
+                        proProgramMap.put(proposeCreditInfoDetailView.getProductProgramView().getName(), proposeCreditInfoDetailView);
+                    }
+                }
+            }
+
+            for (ProposeFeeDetailView proFeeDetView : decisionView.getApproveFeeDetailViewList()) {
+                if(!proProgramMap.containsKey(proFeeDetView.getProductProgram())){
+                    decisionView.getApproveFeeDetailViewList().remove(proFeeDetView);
+                }
+            }
+
+            Iterator<ProposeFeeDetailView> proposeFeeDetailViewIterator = decisionView.getApproveFeeDetailViewList().iterator();
+            while (proposeFeeDetailViewIterator.hasNext()) {
+                ProposeFeeDetailView proFeeDetView = proposeFeeDetailViewIterator.next();
+                if(!proProgramMap.containsKey(proFeeDetView.getProductProgram())){
+                    proposeFeeDetailViewIterator.remove();
+                }
+            }
         }
 
         // Decision FollowUp Condition
