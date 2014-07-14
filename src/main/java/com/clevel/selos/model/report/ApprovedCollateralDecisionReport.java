@@ -1,7 +1,7 @@
 package com.clevel.selos.model.report;
 
-import com.clevel.selos.model.view.NewCollateralSubView;
-import com.clevel.selos.model.view.ProposeCreditDetailView;
+import com.clevel.selos.model.view.ProposeCollateralInfoSubView;
+import com.clevel.selos.model.view.ProposeCreditInfoDetailView;
 import com.clevel.selos.report.ReportModel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -27,7 +27,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
     private String UwDecision;
     private String approved;
 
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<ProposeCreditInfoDetailView> proposeCreditDetailViewList;
 
     //Coll Head
     private String collateralDescription;
@@ -41,7 +41,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
     private String insuranceCompany;
 
     //Sub Collateral
-    private List<NewCollateralSubView> subViewList;
+    private List<ProposeCollateralInfoSubView> subViewList;
 
 
     public ApprovedCollateralDecisionReport() {
@@ -53,8 +53,8 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         typeOfUsage = "";
         mortgageCondition = "";
         mortgageConditionDetail = "";
-        proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-        subViewList = new ArrayList<NewCollateralSubView>();
+        proposeCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
+        subViewList = new ArrayList<ProposeCollateralInfoSubView>();
         bdmComments = "";
         collateralDescription = "";
         percentLTVDescription = "";
@@ -186,14 +186,6 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         this.percentLTVDescription = percentLTVDescription;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
-        return proposeCreditDetailViewList;
-    }
-
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
-    }
-
     public String getTitleDeed() {
         return titleDeed;
     }
@@ -218,12 +210,21 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         this.usage = usage;
     }
 
-    public List<NewCollateralSubView> getSubViewList() {
+    public List<ProposeCollateralInfoSubView> getSubViewList() {
         return subViewList;
     }
 
-    public void setSubViewList(List<NewCollateralSubView> subViewList) {
+    public void setSubViewList(List<ProposeCollateralInfoSubView> subViewList) {
         this.subViewList = subViewList;
+    }
+
+    public List<ProposeCreditInfoDetailView> getProposeCreditDetailViewList() {
+
+        return proposeCreditDetailViewList;
+    }
+
+    public void setProposeCreditDetailViewList(List<ProposeCreditInfoDetailView> proposeCreditDetailViewList) {
+        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
     }
 
     public String getHeadCollTypeDescription() {

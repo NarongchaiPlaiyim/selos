@@ -59,9 +59,9 @@ public class CustomerInfoControl extends BusinessControl {
     @Inject
     OpenAccountNameDAO openAccountNameDAO;
     @Inject
-    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    ProposeGuarantorInfoDAO proposeGuarantorInfoDAO;
     @Inject
-    NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
+    ProposeCollateralSubOwnerDAO proposeCollateralSubOwnerDAO;
     @Inject
     ExistingGuarantorDetailDAO existingGuarantorDetailDAO;
 
@@ -557,11 +557,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public List<CustomerInfoView> getCollateralOwnerUWByWorkCase(long workCaseId){
-        log.info("getCollateralOwnerUWByWorkCase ::: workCaseId : {}", workCaseId);
-
-        List<Customer> customerList = customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId);
-        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
-
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId));
         return customerInfoViewList;
     }
 
@@ -733,16 +729,16 @@ public class CustomerInfoControl extends BusinessControl {
         boolean isExist = false;
         if(customerId != 0){
             List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByCustomerId(customerId);
-            List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findByCustomerId(customerId);
-            List<NewCollateralSubOwner> newCollateralSubOwners = newCollateralSubOwnerDAO.findByCustomerId(customerId);
+            List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findByCustomerId(customerId);
+            List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList = proposeCollateralSubOwnerDAO.findByCustomerId(customerId);
             List<ExistingGuarantorDetail> existingGuarantorDetails = existingGuarantorDetailDAO.findByCustomerId(customerId);
             if(openAccountNameList != null && openAccountNameList.size() > 0){
                 isExist = true;
                 return isExist;
-            } else if(newGuarantorDetails != null && newGuarantorDetails.size() > 0) {
+            } else if(proposeGuarantorInfoList != null && proposeGuarantorInfoList.size() > 0) {
                 isExist = true;
                 return isExist;
-            } else if(newCollateralSubOwners != null && newCollateralSubOwners.size() > 0) {
+            } else if(proposeCollateralSubOwnerList != null && proposeCollateralSubOwnerList.size() > 0) {
                 isExist = true;
                 return isExist;
             } else if(existingGuarantorDetails != null && existingGuarantorDetails.size() > 0) {

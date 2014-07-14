@@ -1356,21 +1356,26 @@ public class CustomerTransform extends Transform {
     public List<CustomerInfoView> transformToSelectList(List<Customer> customerList){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         for(Customer item : customerList){
-            CustomerInfoView customerInfoView = new CustomerInfoView();
-            customerInfoView.setId(item.getId());
-            if(!Util.isNull(item.getTitle())){
-                customerInfoView.setTitleTh(item.getTitle());
-            }
-            customerInfoView.setFirstNameTh(item.getNameTh());
-            if(!Util.isNull(item.getLastNameTh())){
-                customerInfoView.setLastNameTh(item.getLastNameTh());
-            }
-            customerInfoView.setCustomerEntity(item.getCustomerEntity());
-
+            CustomerInfoView customerInfoView = transformToSelect(item);
             customerInfoViewList.add(customerInfoView);
         }
 
         return customerInfoViewList;
+    }
+
+    public CustomerInfoView transformToSelect(Customer customer) {
+        CustomerInfoView customerInfoView = new CustomerInfoView();
+        customerInfoView.setId(customer.getId());
+        if(!Util.isNull(customer.getTitle())){
+            customerInfoView.setTitleTh(customer.getTitle());
+        }
+        customerInfoView.setFirstNameTh(customer.getNameTh());
+        if(!Util.isNull(customer.getLastNameTh())){
+            customerInfoView.setLastNameTh(customer.getLastNameTh());
+        }
+        customerInfoView.setCustomerEntity(customer.getCustomerEntity());
+
+        return customerInfoView;
     }
 
     public Customer transformSelectListToModel(CustomerInfoView customerInfoView) {

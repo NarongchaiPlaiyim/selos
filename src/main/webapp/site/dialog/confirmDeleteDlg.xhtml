@@ -23,14 +23,14 @@
                                  <!--value="#{msg.get('app.button.cancel')}"-->
                                  <!--onclick="#{name}.hide()"/>-->
 
-                <p:commandButton id="#{id}OkBtn" widgetVar="#{id}SaveBtn"
+                <p:commandButton id="#{id}OkBtn" widgetVar="#{id}SaveBtn" styleClass="smallest"
                                  value="#{msg.get('app.button.ok')}"
                                  update="#{update}"
                                  oncomplete="#{name}.hide();#{id}SaveBtn.enable();#{id}CancelBtn.enable()"
                                  onclick="#{id}SaveBtn.disable();#{id}CancelBtn.disable()"
                                  action="#{controller[action]}"/>
 
-                <p:commandButton widgetVar="#{id}CancelBtn"
+                <p:commandButton widgetVar="#{id}CancelBtn" styleClass="smaller"
                                  value="#{msg.get('app.button.cancel')}"
                                  onclick="#{name}.hide()"/>
             </div>

@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class CollateralTypeDAO extends GenericDAO<CollateralType, Integer> {
     @Inject
@@ -31,6 +32,13 @@ public class CollateralTypeDAO extends GenericDAO<CollateralType, Integer> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("code", code));
         CollateralType collateralTypeResult = (CollateralType)criteria.uniqueResult();
+        return collateralTypeResult;
+    }
+
+    public List<CollateralType> findByAppraisal(int appraisal) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("appraisalRequire", appraisal));
+        List<CollateralType> collateralTypeResult = criteria.list();
         return collateralTypeResult;
     }
 }

@@ -36,7 +36,7 @@ public class BAPAInfoCredit implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "new_credit_detail_id")
-    private NewCreditDetail creditDetail;
+    private ProposeCreditInfo creditDetail;
 
     @ManyToOne
     @JoinColumn(name = "bapa_info_id")
@@ -92,15 +92,15 @@ public class BAPAInfoCredit implements Serializable {
 		this.expenseAmount = expenseAmount;
 	}
 
-	public NewCreditDetail getCreditDetail() {
-		return creditDetail;
-	}
+    public ProposeCreditInfo getCreditDetail() {
+        return creditDetail;
+    }
 
-	public void setCreditDetail(NewCreditDetail creditDetail) {
-		this.creditDetail = creditDetail;
-	}
+    public void setCreditDetail(ProposeCreditInfo creditDetail) {
+        this.creditDetail = creditDetail;
+    }
 
-	public BAPAInfo getBapaInfo() {
+    public BAPAInfo getBapaInfo() {
 		return bapaInfo;
 	}
 

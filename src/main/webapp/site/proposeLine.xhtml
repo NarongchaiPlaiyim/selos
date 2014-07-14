@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+    <title>SE-LOS : Credit Facility - Propose Line</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style>
+        .ui-datatable td,.ui-datatable th,.ui-datatable span {
+            white-space: normal!important;
+            word-wrap: break-word;
+        }
+
+        .ui-datatable thead th {
+            white-space: normal !important;
+        }
+
+        .ui-datatable tbody td {
+            border-color: #868686 !important;
+            white-space: normal !important;
+        }
+
+        tfoot {
+            background: none !important;
+        }
+
+        .ui-datatable table {
+            width: 100% !important;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{proposeLine.preRender()}"/>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml" />
+                <!-- End Menu -->
+                <div id="content_container">
+                    <div id="content_name">#{msg.get('app.credit.facility.propose.title.header')}</div>
+                    <div id="content">
+                        <div id="content_info">
+                            <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                            <div id="content_lastupdate">Last update by
+                                <h:outputText id="lastupdateName" value="#{proposeLine.proposeLineView.modifyBy != null ? proposeLine.proposeLineView.modifyBy.userName : ''}"/> ,
+                                <h:outputText value="#{proposeLine.proposeLineView.modifyDate}"/>
+                            </div>
+                        </div>
+                        <div id="content_form">
+                            <!-- start content -->
+                            <table class="content_table_form">
+                                <!-- wcRequirement -->
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.title.wcRequirement')}"/>
+                                    </td>
+                                </tr>
+    
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_content" style="width:100%">
+                                            <tr>
+                                                <td class="title left" style="background-color: #ffffff;width: 150px">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.WCNeed')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('WCNeed')}" styleClass="require-field"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff;width: 170px">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.wcNeed}"
+                                                                 maxlength="14"
+                                                                 readonly="#{proposeLine.isDisabled('WCNeed')}"
+                                                                 style="width:170px;text-align: right">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                    </p:inputText>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                </td>
+                
+                                                <td class="title left" style="background-color: #ffffff;width: 170px">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.totalWCdebit')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('totalWCdebit')}" styleClass="require-field"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff;width: 170px">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.totalWCDebit}"
+                                                                 maxlength="14"
+                                                                 readonly="#{proposeLine.isDisabled('totalWCdebit')}"
+                                                                 style="width:170px;text-align: right">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                    </p:inputText>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                </td>
+                
+                                                <td class="title left" style="background-color: #ffffff;width: 190px">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.WCNeedDiffer')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('WCNeedDiffer')}" styleClass="require-field"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.wcNeedDiffer}"
+                                                                 maxlength="14"
+                                                                 readonly="#{proposeLine.isDisabled('WCNeedDiffer')}"
+                                                                 style="width:170px;text-align: right">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                    </p:inputText>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                </td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td colspan="2" style="background-color:#e6e6e6;"></td>
+                
+                                                <td class="title left" style="background-color: #e6e6e6;;width: 190px">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.totalWCTMB')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('totalWCTMB')}" styleClass="require-field"/>
+                                                </td>
+                                                <td class="left" style="background-color: #e6e6e6;">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.totalWCTmb}"
+                                                                 maxlength="14"
+                                                                 readonly="#{proposeLine.isDisabled('totalWCTMB')}"
+                                                                 style="width:170px;text-align: right">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                    </p:inputText>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                </td>
+                
+                                                <td colspan="2" style="background-color: #e6e6e6;"></td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td colspan="6" style="height:28px;"></td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td colspan="6" style="background-color: #e6e6e6;">
+                                                    <table class="table_noborder">
+                                                        <tr>
+                                                            <td class="title left" colspan="8">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC')}"/>
+                                                            </td>
+                                                        </tr>
+                
+                                                        <tr>
+                                                            <td class="title right" style="width: 40px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.limit')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case1WC.limit')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case1WCLimit}"
+                                                                             maxlength="17"
+                                                                             readonly="#{proposeLine.isDisabled('case1WC.limit')}"
+                                                                             style="text-align: right">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     type="number"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 200px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.minLimit')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case1WC.minLimit')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case1WCMinLimit}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case1WC.minLimit')}"
+                                                                             style="text-align: right">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     type="number"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 120px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.50CoreWC')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case1WC.50CoreWC')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case1WC50CoreWC}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case1WC.50CoreWC')}"
+                                                                             style="text-align: right">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     type="number"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 190px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case1WC.debitCoreWC')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case1WC.debitCoreWC')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case1WCDebitCoreWC}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case1WC.debitCoreWC')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td colspan="6" style="background-color:#ffffff">
+                                                    <table class="table_noborder">
+                                                        <tr>
+                                                            <td class="title left" colspan="8">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC')}"/>
+                                                            </td>
+                                                        </tr>
+                
+                                                        <tr>
+                                                            <td class="title right" style="width: 40px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.limit')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case2WC.limit')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case2WCLimit}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case2WC.limit')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 200px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.minLimit')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case2WC.minLimit')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case2WCMinLimit}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case2WC.minLimit')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 120px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.50CoreWC')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case2WC.50CoreWC')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case2WC50CoreWC}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case2WC.50CoreWC')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 190px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case2WC.debitCoreWC')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case2WC.debitCoreWC')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case2WCDebitCoreWC}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case2WC.debitCoreWC')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                
+                                            <tr>
+                                                <td colspan="6" style="background-color: #e6e6e6;">
+                                                    <table class="table_noborder">
+                                                        <tr>
+                                                            <td class="title left" colspan="8">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC')}"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="title right" style="width: 40px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.limit')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case3WC.limit')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case3WCLimit}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case3WC.limit')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 200px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.minLimit')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case3WC.minLimit')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case3WCMinLimit}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case3WC.minLimit')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 120px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.50CoreWC')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case3WC.50CoreWC')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case3WC50CoreWC}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case3WC.50CoreWC')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                
+                                                            <td class="title right" style="width: 190px">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.case3WC.debitCoreWC')}"/>
+                                                                <h:outputText value="#{proposeLine.mandate('case3WC.debitCoreWC')}" styleClass="require-field"/>
+                                                            </td>
+                                                            <td style="padding: 0">
+                                                                <p:inputText value="#{proposeLine.proposeLineView.case3WCDebitCoreWC}"
+                                                                             maxlength="14"
+                                                                             readonly="#{proposeLine.isDisabled('case3WC.debitCoreWC')}"
+                                                                             styleClass="right">
+                                                                    <f:convertNumber pattern="#,##0.##"
+                                                                                     minFractionDigits="2"
+                                                                                     maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:inputText>
+                                                                <p:spacer width="5" height="0"/>
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}" style="font-weight: bold;!important"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.proposed.credit')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.proposedPurposed.caption')}"/>
+                                        <h:outputText value="#{proposeLine.mandate('creditCusType')}" styleClass="require-field"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:selectOneRadio id="creditCustomerTypeValue"
+                                                          value="#{proposeLine.proposeLineView.creditCustomerType}"
+                                                          disabled="#{proposeLine.isDisabled('creditCusType')}"
+                                                          required="true">
+                                            <f:selectItems value="#{app.getCreditCustomerTypeValues('NORMAL|PRIME')}"
+                                                           var="creditCusType" itemLabel="#{creditCusType.shortName()}" itemValue="#{creditCusType}"/>
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_noborder">
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.proposed.credit.loanRequestType')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('loanRequestType')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:selectOneMenu id="creditRequest"
+                                                                     value="#{proposeLine.proposeLineView.loanRequestType.id}"
+                                                                     style="width: 200px;"
+                                                                     disabled="#{proposeLine.isDisabled('loanRequestType')}"
+                                                                     required="#{not empty param[onSaveProposeLineBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                                        <f:selectItems value="#{proposeLine.creditRequestTypeViewList}" var="creditRequest"
+                                                                       itemLabel="#{creditRequest.name}"
+                                                                       itemValue="#{creditRequest.id}"/>
+                                                        <p:ajax event="change" process="@this" update="@this"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_noborder">
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.investedCountry')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('investedCountry')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:selectOneMenu id="countryItem"
+                                                                     value="#{proposeLine.proposeLineView.investedCountry.id}"
+                                                                     style="width: 200px;"
+                                                                     disabled="#{proposeLine.isDisabled('investedCountry')}"
+                                                                     required="#{not empty param[onSaveProposeLineBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                                        <f:selectItems value="#{proposeLine.countryViewList}"
+                                                                       var="country"
+                                                                       itemLabel="#{country.name}"
+                                                                       itemValue="#{country.id}"/>
+                                                        <p:ajax event="change" process="@this" update="@this"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_noborder">
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.existingSMELimit')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('existingSMELimit')}" styleClass="require-field"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.existingSMELimit}"
+                                                                 maxlength="14"
+                                                                 onclick="this.select()"
+                                                                 required="#{not empty param[onSaveProposeLineBtn.clientId]}"
+                                                                 style="width:200px;text-align: right"
+                                                                 onkeydown="return onKeyDownMoney(event);"
+                                                                 onkeypress="return onKeyPressMoney(event);"
+                                                                 onfocus="removeComma(this)"
+                                                                 readonly="#{proposeLine.isDisabled('existingSMELimit')}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                        <p:ajax event="blur" update="@this"/>
+                                                    </p:inputText>
+
+                                                    <p:spacer width="10" height="0"/>
+
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.maximumSMELimit')}" styleClass="title"/>
+                                                    <h:outputText value="#{proposeLine.mandate('maximumSMELimit')}" styleClass="require-field"/>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <p:inputText value="#{proposeLine.proposeLineView.maximumSMELimit}"
+                                                                 required="#{not empty param[onSaveProposeLineBtn.clientId]}"
+                                                                 maxlength="14"
+                                                                 onclick="this.select()"
+                                                                 style="width:200px;text-align: right"
+                                                                 onkeydown="return onKeyDownMoney(event);"
+                                                                 onkeypress="return onKeyPressMoney(event);"
+                                                                 onfocus="removeComma(this)"
+                                                                 readonly="#{proposeLine.isDisabled('maximumSMELimit')}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                        <p:ajax event="blur" update="@this"/>
+                                                    </p:inputText>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                            <tr>
+                                <td class="left" colspan="2" style="padding-left: 5px">
+                                    <p:commandButton
+                                            id="btnAddCreditInfo"
+                                            value="#{msg.get('app.button.add')}"
+                                            styleClass="small"
+                                            process="@form"
+                                            actionListener="#{proposeLine.onAddCreditInfo}"
+                                            update=":creditInfoDlgForm,:msgBoxSystemMessagePanel"
+                                            disabled="#{proposeLine.isDisabled('addProposeCreditButton')}">
+                                        <p:resetInput target=":creditInfoDlgForm"/>
+                                    </p:commandButton>
+
+                                    <p:spacer width="10" height="0"/>
+
+                                    <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
+                                                     id="retrieveCredit"
+                                                     styleClass="largest"
+                                                     process="@form"
+                                                     update=":frmMain,:msgBoxSystemMessagePanel"
+                                                     action="#{proposeLine.onRetrievePricingFee}"
+                                                     disabled="#{proposeLine.isDisabled('retrieveProposeCreditButton')}"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="left" colspan="2">
+                                    <div class="ui-datatable ui-widget">
+                                        <div class="ui-datatable-tablewrapper">
+                                            <table style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="ui-state-default" style="width: 3%"></th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productProgram')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.creditType')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productCode')}</th>
+                                                        <th class="ui-state-default" style="width: 13%">#{msg.get('app.credit.facility.propose.tb.label.limit')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.standardPrice')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.suggestPrice')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.finalPrice')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.installment')}</th>
+                                                        <th class="ui-state-default" style="width: 8%">#{msg.get('app.credit.facility.propose.tb.label.tenor')}</th>
+                                                        <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.frontEndFee')}</th>
+                                                        <th class="ui-state-default" style="width: 4%"></th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody class="ui-datatable-data ui-widget-content">
+                                                    <ui:repeat value="#{proposeLine.proposeLineView.proposeCreditInfoDetailViewList}" var="proposeCredit" varStatus="i">
+                                                    <tr>
+                                                        <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) + 1 : '2'}">
+                                                            <h:outputText value="#{i.index + 1}"/>
+                                                        </td>
+                                                        <td class="top left" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) : '1'}">
+                                                            <h:outputText value="#{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.name : ''}"/>
+                                                        </td>
+                                                        <td class="top left" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) : '1'}">
+                                                            <h:outputText value="#{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.name : ''}"/>
+                                                        </td>
+                                                        <td class="top left" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) : '1'}">
+                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{proposeCredit.productCode}"/><br/>
+                                                            <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{proposeCredit.projectCode}"/>
+                                                        </td>
+                                                        <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) : '1'}">
+                                                            <h:outputText value="#{proposeCredit.limit}">
+                                                                <f:convertNumber pattern="#,##0.##"
+                                                                                 minFractionDigits="2"
+                                                                                 maxFractionDigits="2"
+                                                                                 maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+
+                                                        <!--BEGIN: Credit Tier Detail [0]-->
+                                                        <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{(not empty proposeCredit.proposeCreditInfoTierDetailViewList
+                                                                                        and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0) ?
+                                                                                        proposeCredit.proposeCreditInfoTierDetailViewList[0].standardPriceLabel : ''}">
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{(not empty proposeCredit.proposeCreditInfoTierDetailViewList
+                                                                                        and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0) ?
+                                                                                        proposeCredit.proposeCreditInfoTierDetailViewList[0].suggestPriceLabel : ''}"/>
+                                                        </td>
+                                                        <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{(not empty proposeCredit.proposeCreditInfoTierDetailViewList
+                                                                                        and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0) ?
+                                                                                        proposeCredit.proposeCreditInfoTierDetailViewList[0].finalPriceLabel : ''}"/>
+                                                        </td>
+                                                        <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{(not empty proposeCredit.proposeCreditInfoTierDetailViewList
+                                                                                        and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0) ?
+                                                                                        proposeCredit.proposeCreditInfoTierDetailViewList[0].installment : ''}">
+                                                                <f:convertNumber pattern="#,##0.##"
+                                                                                 minFractionDigits="2"
+                                                                                 maxFractionDigits="2"
+                                                                                 maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{(not empty proposeCredit.proposeCreditInfoTierDetailViewList
+                                                                                        and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0) ?
+                                                                                        proposeCredit.proposeCreditInfoTierDetailViewList[0].tenor : ''}">
+                                                                <f:convertNumber pattern="#,##0"
+                                                                                 integerOnly="true"
+                                                                                 maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <!--END: Credit Tier Detail [0]-->
+
+                                                        <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) : '1'}">
+                                                            <h:outputText value="#{proposeCredit.frontEndFee}">
+                                                                <f:convertNumber pattern="##0.##"
+                                                                                 minFractionDigits="2"
+                                                                                 maxFractionDigits="2"
+                                                                                 maxIntegerDigits="3"/>
+                                                            </h:outputText>
+                                                        </td>
+
+                                                        <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                            rowspan="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 0 ?
+                                                                                fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) : '1'}">
+                                                            <p:commandButton icon="ui-icon-pencil"
+                                                                             action="#{proposeLine.onEditCreditInfo()}"
+                                                                             process="@this"
+                                                                             update=":creditInfoDlgForm"
+                                                                             oncomplete="creditInfoDlg.show();">
+                                                                <f:setPropertyActionListener value="#{proposeCredit}" target="#{proposeLine.proposeCreditInfoDetailView}"/>
+                                                                <f:setPropertyActionListener value="#{i.index}" target="#{proposeLine.rowIndex}"/>
+                                                                <p:resetInput target=":creditInfoDlgForm"/>
+                                                            </p:commandButton>
+
+                                                            <p:commandButton icon="ui-icon-trash"
+                                                                             process="@this"
+                                                                             onsuccess="confirmDeleteCreditInfoDlg.show();">
+                                                                <f:setPropertyActionListener value="#{proposeCredit}" target="#{proposeLine.proposeCreditInfoDetailView}"/>
+                                                            </p:commandButton>
+                                                        </td>
+                                                    </tr>
+
+                                                    <!--BEGIN: Credit Tier Detail [1]->[N-1]-->
+                                                    <p:panel rendered="#{not empty proposeCredit.proposeCreditInfoTierDetailViewList
+                                                                         and fn:length(proposeCredit.proposeCreditInfoTierDetailViewList) gt 1}" styleClass="panel">
+                                                        <ui:repeat value="#{proposeCredit.proposeCreditInfoTierDetailViewList}"
+                                                                   var="creditTierDetail" varStatus="j"
+                                                                   offset="1">
+                                                            <tr>
+                                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
+                                                                </td>
+                                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
+                                                                </td>
+                                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
+                                                                </td>
+                                                                <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{creditTierDetail.installment}">
+                                                                        <f:convertNumber pattern="#,##0.##"
+                                                                                         minFractionDigits="2"
+                                                                                         maxFractionDigits="2"
+                                                                                         maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{creditTierDetail.tenor}">
+                                                                        <f:convertNumber pattern="#,##0.##"
+                                                                                         integerOnly="true"
+                                                                                         maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                            </tr>
+                                                        </ui:repeat>
+                                                    </p:panel>
+                                                    <!--END: Credit Tier Detail [1]->[N-1]-->
+
+                                                    <tr>
+                                                        <td class="left top" colspan="11" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <table style="margin:-1px 0 -1px -10px; width: 600px !important;">
+                                                                <tr>
+                                                                    <td class="title" style="border-style:none !important;">
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.requestType')}"/>
+                                                                    </td>
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
+                                                                                               proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}"/>
+                                                                    </td>
+                                                                    <td class="title" style="border-style:none !important;">
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.refinance')}"/>
+                                                                    </td>
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{proposeCredit.refinance == 2 ? msg.get('app.label.yes') :
+                                                                                               proposeCredit.refinance == 1 ? msg.get('app.label.no') : ''}"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="title" style="border-style: none !important;">
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.purpose')}"/>
+                                                                    </td>
+                                                                    <td class="left" colspan="3" style="border-style: none !important;">
+                                                                        <h:outputText value="#{not empty proposeCredit.loanPurposeView ?
+                                                                                               proposeCredit.loanPurposeView.description : ''}"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="title" style="border-style: none !important;">
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.purposeDetail')}"/>
+                                                                    </td>
+                                                                    <td class="left" colspan="3" style="border-style: none !important;">
+                                                                        <h:outputText value="#{proposeCredit.proposeDetail}"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="title" style="border-style: none !important;">
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.disbursement')}"/>
+                                                                    </td>
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{not empty proposeCredit.disbursementTypeView ?
+                                                                                               proposeCredit.disbursementTypeView.disbursement : ''}"/>
+                                                                    </td>
+                                                                    <td class="title" style="border-style: none !important;">
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.holdAmount')}"/>
+                                                                    </td>
+                                                                    <td class="left" style="border-style: none !important;">
+                                                                        <h:outputText value="#{proposeCredit.holdLimitAmount}">
+                                                                            <f:convertNumber pattern="#,##0.##"
+                                                                                             minFractionDigits="2"
+                                                                                             maxFractionDigits="2"
+                                                                                             maxIntegerDigits="14"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    </ui:repeat>
+
+                                                    <h:panelGroup rendered="#{empty proposeLine.proposeLineView.proposeCreditInfoDetailViewList}">
+                                                        <tr>
+                                                            <td colspan="12">#{msg.get('app.label.noRecordsFound')}</td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                </tbody>
+
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="summary_column"></td>
+                                                        <td class="summary_column title" style="text-align: left;" colspan="3">
+                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.totalPropose')}"/>
+                                                        </td>
+                                                        <td class="summary_column title" style="text-align: right;">
+                                                            <h:outputText value="#{proposeLine.proposeLineView.totalPropose}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="summary_column" colspan="7"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"></td>
+                                                    </tr>
+
+                                                    <!--Total Borrower-->
+                                                    <tr>
+                                                        <td class="title" colspan="12" style="line-height:30px; height:30px; text-align:left;">
+                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.caption.borrower')}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="summary_column"></td>
+                                                        <td class="summary_column title" style="text-align: left;" colspan="3">
+                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.totalCommercial')}"/>
+                                                        </td>
+                                                        <td class="summary_column title" style="text-align: right;">
+                                                            <h:outputText value="#{proposeLine.proposeLineView.totalCommercial}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="summary_column" colspan="7"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="12" style="line-height:10px; height:10px;"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="summary_column"></td>
+                                                        <td class="summary_column title" style="text-align: left;" colspan="3">
+                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.totalCommercialAndOBOD')}"/>
+                                                        </td>
+                                                        <td class="summary_column title" style="text-align: right;">
+                                                            <h:outputText value="#{proposeLine.proposeLineView.totalCommercialAndOBOD}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="summary_column" colspan="7"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="12" style="line-height:10px; height:10px;"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="summary_column"></td>
+                                                        <td class="summary_column title" style="text-align: left;" colspan="3">
+                                                            <h:outputText value="#{msg.get('app.credit.facility.propose.tb.label.totalExposure')}"/>
+                                                        </td>
+                                                        <td class="summary_column title" style="text-align: right;">
+                                                            <h:outputText value="#{proposeLine.proposeLineView.totalExposure}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="summary_column" colspan="7"></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title left" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.tradeFinanceHeader')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_content" style="width:100%">
+                                            <tr>
+                                                <td class="left" style="background-color: #ffffff;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactName')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.contactName')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <p:inputText styleClass="large" value="#{proposeLine.proposeLineView.contactName}"
+                                                                 readonly="#{proposeLine.isDisabled('trade.contactName')}"/>
+
+                                                    <p:spacer width="10" height="0"/>
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactPhoneNo')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.contactPhoneNo')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <p:inputMask value="#{proposeLine.proposeLineView.contactPhoneNo}" mask="(999)999-9999"
+                                                                 readonly="#{proposeLine.isDisabled('trade.contactPhoneNo')}"/>
+
+                                                    <p:spacer width="10" height="0"/>
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.interService')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.interService')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                    <p:spacer width="5" height="0"/>
+                                                    <p:inputText styleClass="large" value="#{proposeLine.proposeLineView.interService}"
+                                                                 readonly="#{proposeLine.isDisabled('trade.interService')}"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="background-color: #e6e6e6;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.currentAddress')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.currentAddress')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #e6e6e6;">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.currentAddress}" style="width:70%"
+                                                                 readonly="#{proposeLine.isDisabled('trade.currentAddress')}"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="background-color: #ffffff;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.registerredAddress')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.registerredAddress')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.registeredAddress}" style="width:70%"
+                                                                 readonly="#{proposeLine.isDisabled('trade.registerredAddress')}"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="background-color: #e6e6e6;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.emailAddress')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.emailAddress')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #e6e6e6;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.import')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.import')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+
+                                                    <p:spacer width="5" height="0"/>
+
+                                                    <p:inputText value="#{proposeLine.proposeLineView.importMail}" styleClass="large"
+                                                                 readonly="#{proposeLine.isDisabled('trade.import')}"/>
+
+                                                    <p:spacer width="10" height="0"/>
+
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.export')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.export')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+
+                                                    <p:spacer width="5" height="0"/>
+
+                                                    <p:inputText value="#{proposeLine.proposeLineView.exportMail}" styleClass="large"
+                                                                 readonly="#{proposeLine.isDisabled('trade.export')}"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="background-color: #ffffff;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.depositBranchCode')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.depositBranchCode')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.depositBranchCode}" styleClass="large"
+                                                                 readonly="#{proposeLine.isDisabled('trade.depositBranchCode')}"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="background-color: #e6e6e6;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.ownerBranchCode')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('trade.ownerBranchCode')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #e6e6e6">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.ownerBranchCode}" styleClass="large"
+                                                                 readonly="#{proposeLine.isDisabled('trade.ownerBranchCode')}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.priceFeeReduction')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_content" style="width:100%; background-color: #ffffff">
+                                            <tr>
+                                                <td class="left" style="width: 280px;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.intFeeDOA')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('intFeeDOA')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="width: 190px;">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.intFeeDOA}"
+                                                                 maxlength="6"
+                                                                 onclick="this.select()"
+                                                                 onkeydown="return onKeyDownMoney(event);"
+                                                                 onkeypress="return onKeyPressMoney(event);"
+                                                                 styleClass="right"
+                                                                 required="#{not empty param[onSaveProposeLineBtn.clientId]}"
+                                                                 readonly="#{proposeLine.isDisabled('intFeeDOA')}">
+                                                        <f:convertNumber pattern="##0.00"
+                                                                         minFractionDigits="2"
+                                                                         maxFractionDigits="2"
+                                                                         maxIntegerDigits="3"/>
+                                                        <f:validateDoubleRange maximum="100"/>
+                                                        <p:ajax event="blur" update="@this"/>
+                                                    </p:inputText>
+                                                    <h:outputText value=" %"/>
+                                                </td>
+
+                                                <td class="left" style="width: 300px;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.frontendFeeDOA')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('frontendFeeDOA')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="width: 190px;">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.frontendFeeDOA}"
+                                                                 maxlength="6"
+                                                                 onclick="this.select()"
+                                                                 onkeydown="return onKeyDownMoney(event);"
+                                                                 onkeypress="return onKeyPressMoney(event);"
+                                                                 styleClass="right"
+                                                                 required="#{not empty param[onSaveProposeLineBtn.clientId]}"
+                                                                 readonly="#{proposeLine.isDisabled('frontendFeeDOA')}">
+                                                        <f:convertNumber pattern="##0.00"
+                                                                         minFractionDigits="2"
+                                                                         maxFractionDigits="2"
+                                                                         maxIntegerDigits="3"/>
+                                                        <f:validateDoubleRange maximum="100"/>
+                                                        <p:ajax event="blur" update="@this"/>
+                                                    </p:inputText>
+                                                    <h:outputText value=" %"/>
+                                                </td>
+
+                                                <td class="left" style="width: 130px;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorBA')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('guarantorBA')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="width: 190px;">
+                                                    <p:inputText value="#{proposeLine.proposeLineView.guarantorBA}"
+                                                                 maxlength="14"
+                                                                 onclick="this.select()"
+                                                                 onkeydown="return onKeyDownMoney(event);"
+                                                                 onkeypress="return onKeyPressMoney(event);"
+                                                                 style="width:200px;text-align: right"
+                                                                 readonly="#{proposeLine.isDisabled('guarantorBA')}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
+                                                        <p:ajax event="blur" update="@this"/>
+                                                    </p:inputText>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="width: 250px;">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.reasonForReduction')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('reasonForReduction')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" colspan="5">
+                                                    <p:inputTextarea value="#{proposeLine.proposeLineView.reasonForReduction}"
+                                                                     rows="3" cols="150"
+                                                                     autoResize="false"
+                                                                     readonly="#{proposeLine.isDisabled('reasonForReduction')}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:dataTable id="tradeTable"
+                                                     var="tradeTableItem"
+                                                     value="#{proposeLine.proposeLineView.proposeFeeDetailViewList}"
+                                                     rowKey="#{tradeTableItem.ProposeFeeDetailView}"
+                                                     rowIndexVar="rowIndex"
+                                                     style="width: 100%">
+
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column style="width: 16%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.productProgram')}"/>
+                                                    <p:column style="width: 16%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.standardFrontEndFee')}"/>
+                                                    <p:column style="width: 17%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.commitmentFee')}"/>
+                                                    <p:column style="width: 17%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.extensionFee')}"/>
+                                                    <p:column style="width: 17%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.prepaymentFee')}"/>
+                                                    <p:column style="width: 17%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.cancellationFee')}"/>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{tradeTableItem.productProgram}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.percentFee ?
+                                                                                 tradeTableItem.standardFrontEndFee.percentFee : '0.00' : '0.00'} % ,
+                                                                     #{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                                                 tradeTableItem.standardFrontEndFee.feeYear : '-' : '-'}
+                                                                     #{not empty tradeTableItem.standardFrontEndFee ? not empty tradeTableItem.standardFrontEndFee.feeYear ?
+                                                                                 ' Years' : '' : ''}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.percentFee ?
+                                                                                 tradeTableItem.commitmentFee.percentFee : '0.00' : '0.00'} %,
+                                                                     #{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.feeYear ?
+                                                                                 tradeTableItem.commitmentFee.feeYear : '-' : '-'}
+                                                                     #{not empty tradeTableItem.commitmentFee ? not empty tradeTableItem.commitmentFee.feeYear ?
+                                                                                 ' Years' : '' : ''}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.percentFee ?
+                                                                                 tradeTableItem.extensionFee.percentFee : '0.00' : '0.00'} %,
+                                                                     #{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.feeYear ?
+                                                                                 tradeTableItem.extensionFee.feeYear : '-' : '-'}
+                                                                     #{not empty tradeTableItem.extensionFee ? not empty tradeTableItem.extensionFee.feeYear ?
+                                                                                 ' Years' : '' : ''}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.percentFee ?
+                                                                                 tradeTableItem.prepaymentFee.percentFee : '0.00' : '0.00'} %,
+                                                                     #{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                                                 tradeTableItem.prepaymentFee.feeYear : '-' : '-'}
+                                                                     #{not empty tradeTableItem.prepaymentFee ? not empty tradeTableItem.prepaymentFee.feeYear ?
+                                                                                 ' Years' : '' : ''}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.percentFee ?
+                                                                                 tradeTableItem.cancellationFee.percentFee : '0.00' : '0.00'} %,
+                                                                     #{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.feeYear ?
+                                                                                 tradeTableItem.cancellationFee.feeYear : '-' : '-'}
+                                                                     #{not empty tradeTableItem.cancellationFee ? not empty tradeTableItem.cancellationFee.feeYear ?
+                                                                                 ' Years' : '' : ''}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.propose.collateral')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.desc.propose.collateral')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:commandButton
+                                                id="btnAddCollateralInfo"
+                                                value="#{msg.get('app.button.add')}"
+                                                styleClass="small"
+                                                process="@form"
+                                                actionListener="#{proposeLine.onAddCollateralInfo}"
+                                                update=":collateralDlgForm"
+                                                oncomplete="collateralInfoDlg.show();"
+                                                disabled="#{proposeLine.isDisabled('addProposeCollateralButton')}">
+                                            <p:resetInput target=":collateralDlgForm"/>
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table border="0" style="width: 100%">
+                                            <ui:repeat value="#{proposeLine.proposeLineView.proposeCollateralInfoViewList}"
+                                                       var="proposeCollView" varStatus="collIndex">
+                                                <tr>
+                                                    <td class="title" style="width: 150px;">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText id="jobID" value="#{proposeCollView.jobID}"/>
+                                                    </td>
+                                                    <td class="right" colspan="2">
+                                                        <p:commandButton value="Edit" id="editCollBtn" styleClass="small"
+                                                                         action="#{proposeLine.onEditCollateralInfo()}"
+                                                                         update=":collateralDlgForm"
+                                                                         process="@form"
+                                                                         oncomplete="collateralInfoDlg.show();"
+                                                                         disabled="#{proposeLine.isDisabled('collateral.editButton') or (proposeLine.workCaseRequestAppraisal and proposeCollView.headCollAppraisal)}">
+                                                            <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
+                                                            <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
+                                                            <p:resetInput target=":collateralDlgForm"/>
+                                                        </p:commandButton>
+                                                        <p:spacer width="10" height="0"/>
+                                                        <p:commandButton value="Remove"
+                                                                         process="@form" styleClass="small"
+                                                                         oncomplete="confirmDeleteCollateralInfoDlg.show()"
+                                                                         disabled="#{proposeLine.isDisabled('collateral.deleteButton') or (proposeLine.workCaseRequestAppraisal and proposeCollView.headCollAppraisal)}">
+                                                            <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
+                                                        </p:commandButton>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
+                                                    </td>
+                                                    <td class="left" colspan="3">
+                                                        <h:outputText value="#{proposeCollView.appraisalDate}">
+                                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
+                                                    </td>
+                                                    <td class="left" colspan="3">
+                                                        <h:outputText value="#{proposeCollView.aadDecision}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{proposeCollView.aadDecisionReason}"/>
+                                                    </td>
+
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{proposeCollView.aadDecisionReasonDetail}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{proposeCollView.usage}"/>
+                                                    </td>
+
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{proposeCollView.typeOfUsage}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{proposeCollView.mortgageCondition}"/>
+                                                    </td>
+
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{proposeCollView.mortgageConditionDetail}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
+                                                    </td>
+                                                    <td class="left" colspan="3">
+                                                        <p:dataTable value="#{proposeCollView.proposeCreditInfoDetailViewList}"
+                                                                     var="proposeCreditDetail"
+                                                                     rowKey="#{proposeCreditDetail.seq}"
+                                                                     rowIndexVar="rowIndex"
+                                                                     style="width: 100%">
+
+                                                            <p:columnGroup type="header">
+                                                                <p:row>
+                                                                    <p:column style="width: 5%"/>
+                                                                    <p:column style="width: 30%"
+                                                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
+                                                                    <p:column style="width: 10%"
+                                                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
+                                                                    <p:column style="width: 18%"
+                                                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
+                                                                    <p:column style="width: 18%"
+                                                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
+                                                                    <p:column style="width: 19%"
+                                                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
+                                                                </p:row>
+                                                            </p:columnGroup>
+
+                                                            <p:column styleClass="top center">
+                                                                <h:outputText value="#{rowIndex + 1}"/>
+                                                            </p:column>
+
+                                                            <p:column styleClass="top left">
+                                                                <h:outputText value="#{proposeCreditDetail.accountName}"/>
+                                                                <br/>
+                                                                <h:outputText value="#{proposeCreditDetail.accountNumber} #{proposeCreditDetail.accountSuf}"/>
+                                                            </p:column>
+
+                                                            <p:column styleClass="top left">
+                                                                <h:outputText value="#{proposeCreditDetail.requestType == 2 ? msg.get('app.label.new') :
+                                                                                           proposeCreditDetail.requestType == 1 ? msg.get('app.label.change') : ''}"/>
+                                                            </p:column>
+
+                                                            <p:column styleClass="top left">
+                                                                <h:outputText value="#{not empty proposeCreditDetail.productProgramView ?
+                                                                                           proposeCreditDetail.productProgramView.name : ''}"/>
+                                                            </p:column>
+
+                                                            <p:column styleClass="top left">
+                                                                <h:outputText value="#{not empty proposeCreditDetail.creditTypeView ?
+                                                                                           proposeCreditDetail.creditTypeView.name : ''}"/>
+                                                            </p:column>
+
+                                                            <p:column styleClass="top right">
+                                                                <h:outputText value="#{proposeCreditDetail.limit}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="title">
+                                                        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
+                                                    </td>
+                                                    <td class="left" colspan="3">
+                                                        <h:outputText value="#{proposeCollView.bdmComments}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <div class="separate"><!-- --></div>
+                                                    </td>
+                                                </tr>
+
+                                                <!-- Collateral Head -->
+                                                <p:panel rendered="#{not empty proposeCollView.proposeCollateralInfoHeadViewList and fn:length(proposeCollView.proposeCollateralInfoHeadViewList) gt 0}" styleClass="panel">
+                                                    <ui:repeat value="#{proposeCollView.proposeCollateralInfoHeadViewList}"
+                                                               var="proposeCollHeadView" varStatus="collHeadIndex">
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{not empty proposeCollHeadView.potentialCollateral ? proposeCollHeadView.potentialCollateral.description : ''}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{not empty proposeCollHeadView.tcgCollateralType ?
+                                                                                           proposeCollHeadView.tcgCollateralType.description : ''}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{proposeCollHeadView.existingCredit}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.titleDeed')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{proposeCollHeadView.titleDeed}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.collateralLocation')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{proposeCollHeadView.collateralLocation}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.appraisalValue')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{proposeCollHeadView.appraisalValue}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.headCollType')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <h:outputText value="#{not empty proposeCollHeadView.headCollType ?
+                                                                                           proposeCollHeadView.headCollType.description : ''}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="title">
+                                                            <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
+                                                        </td>
+                                                        <td class="left">
+                                                            <p:selectOneRadio value="#{proposeCollHeadView.insuranceCompany}" disabled="true">
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
+                                                                <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
+                                                            </p:selectOneRadio>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="left" colspan="4">
+                                                            <!-- Sub Collateral -->
+                                                            <p:dataTable id="subCollateralDetailViewTable"
+                                                                         value="#{proposeCollHeadView.proposeCollateralInfoSubViewList}"
+                                                                         var="proposeCollSubView"
+                                                                         paginator="false"
+                                                                         rowKey="#{proposeCollSubView}"
+                                                                         rowIndexVar="rowIndex"
+                                                                         style="width: 100%">
+
+                                                                <p:columnGroup type="header">
+                                                                    <p:row>
+                                                                        <p:column style="width: 3%"/>
+                                                                        <p:column style="width: 30%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.subcollTypeCaption')}"/>
+                                                                        <p:column style="width: 7%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}"/>
+                                                                        <p:column style="width: 10%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')}"/>
+                                                                        <p:column style="width: 10%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')} "/>
+                                                                        <p:column style="width: 10%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')} "/>
+                                                                        <p:column style="width: 10%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')} "/>
+                                                                        <p:column style="width: 10%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')} "/>
+                                                                        <p:column style="width: 10%"
+                                                                                  headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')} "/>
+                                                                    </p:row>
+                                                                </p:columnGroup>
+
+                                                                <p:column styleClass="top center">
+                                                                    <h:outputText value="#{rowIndex + 1}"/>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top left">
+                                                                    #{not empty proposeCollSubView.subCollateralType ?
+                                                                            proposeCollSubView.subCollateralType.description : ''}
+                                                                    <br/>
+                                                                    #{msg.get('app.credit.facility.propose.dlg.subcoll.address')} #{proposeCollSubView.address}
+                                                                    <br/>
+                                                                    #{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')} #{proposeCollSubView.landOffice}
+                                                                </p:column>
+
+                                                                <p:column styleClass="top center">
+                                                                    <h:outputText value="#{proposeCollSubView.titleDeed}"/>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top left">
+                                                                    <h:outputText value="#{proposeCollSubView.collateralOwnerAAD}"/>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top left">
+                                                                    <p:panel rendered="#{not empty proposeCollSubView.collateralOwnerUWList and fn:length(proposeCollSubView.collateralOwnerUWList) gt 0}" styleClass="panel">
+                                                                        <ui:repeat value="#{proposeCollSubView.collateralOwnerUWList}" var="collateralOwnerUW" varStatus="a">
+                                                                            <h:outputText value="#{collateralOwnerUW.titleTh.titleTh} #{collateralOwnerUW.firstNameTh} #{collateralOwnerUW.lastNameTh}#{!a.last ? ', ' : ''}"/>
+                                                                        </ui:repeat>
+                                                                    </p:panel>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top left">
+                                                                    <p:panel rendered="#{not empty proposeCollSubView.mortgageList and fn:length(proposeCollSubView.mortgageList) gt 0}" styleClass="panel">
+                                                                        <ui:repeat value="#{proposeCollSubView.mortgageList}" var="mortgage" varStatus="b">
+                                                                            <h:outputText value="#{mortgage.mortgage}#{!b.last ? ', ' : ''}"/>
+                                                                        </ui:repeat>
+                                                                    </p:panel>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top left">
+                                                                    <p:panel rendered="#{not empty proposeCollSubView.relatedWithList and fn:length(proposeCollSubView.relatedWithList) gt 0}" styleClass="panel">
+                                                                        <ui:repeat value="#{proposeCollSubView.relatedWithList}" var="relatedWith" varStatus="c">
+                                                                            <h:outputText value="#{relatedWith.titleDeed}#{!c.last ? ', ' : ''}"/>
+                                                                        </ui:repeat>
+                                                                    </p:panel>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top right">
+                                                                    <h:outputText value="#{proposeCollSubView.appraisalValue}">
+                                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </p:column>
+
+                                                                <p:column styleClass="top right">
+                                                                    <h:outputText value="#{proposeCollSubView.mortgageValue}">
+                                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </td>
+                                                    </tr>
+
+                                                    <h:panelGroup rendered="#{!collHeadIndex.last}">
+                                                        <tr>
+                                                            <td colspan="4">
+                                                                <div class="separate"><!-- --></div>
+                                                            </td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    </ui:repeat>
+                                                </p:panel>
+
+                                                <h:panelGroup rendered="#{!collIndex.last}">
+                                                    <tr>
+                                                        <td colspan="4">
+                                                            <div class="separate"><!-- --></div>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                            </ui:repeat>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.proposedGuarantor')}"/>
+                                    </td>
+                                </tr>
+
+                                <!-- Propose Guarantor Information-->
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:commandButton
+                                                id="addGuarantorButton"
+                                                value="#{msg.get('app.button.add')}"
+                                                styleClass="small"
+                                                actionListener="#{proposeLine.onAddGuarantorInfo()}"
+                                                process="@form"
+                                                update=":guarantorDlgForm">
+                                            <p:resetInput target=":guarantorDlgForm"/>
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:dataTable value="#{proposeLine.proposeLineView.proposeGuarantorInfoViewList}"
+                                                     var="proposeGuarantorView"
+                                                     paginator="false"
+                                                     rowKey="#{proposeGuarantorView}"
+                                                     rowIndexVar="rowIndex"
+                                                     style="width: 100%">
+
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column style="width: 5%"/>
+                                                    <p:column style="width: 15%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guarantorName')}"/>
+                                                    <p:column style="width: 10%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.TCGLGNo')}"/>
+                                                    <p:column style="width: 45%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.creditType')}"/>
+                                                    <p:column style="width: 15%"
+                                                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.totalGuaranteeAmount')}"/>
+                                                    <p:column style="width: 5%"/>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="top center">#{rowIndex + 1}</p:column>
+
+                                            <p:column styleClass="top left">
+                                                <h:outputText value="#{proposeGuarantorView.guarantorName.titleTh.titleTh}"
+                                                              rendered="#{not empty proposeGuarantorView.guarantorName and not empty proposeGuarantorView.guarantorName.titleTh}"/>
+                                                <h:outputText value="#{proposeGuarantorView.guarantorName.firstNameTh} #{proposeGuarantorView.guarantorName.lastNameTh}"
+                                                              rendered="#{not empty proposeGuarantorView.guarantorName}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="top center">
+                                                <h:outputText value="#{proposeGuarantorView.tcgLgNo}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="top left">
+                                                <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
+                                                    <ui:repeat value="#{proposeGuarantorView.proposeCreditInfoDetailViewList}" var="proposeCreditDetail">
+                                                        <tr>
+                                                            <td class="top left" style="border-style: none !important;">
+                                                                <h:outputText value="#{proposeCreditDetail.accountName}"/>
+                                                                <br/>
+                                                                <h:outputText value="#{proposeCreditDetail.accountNumber} #{proposeCreditDetail.accountSuf}"/>
+                                                            </td>
+                                                            <td class="top left" style="border-style: none !important;">
+                                                                <h:outputText value="#{not empty proposeCreditDetail.productProgramView ? proposeCreditDetail.productProgramView.name : ''}"/>
+                                                                <br/>
+                                                                <h:outputText value="#{not empty proposeCreditDetail.creditTypeView ? proposeCreditDetail.creditTypeView.name : ''}"/>
+                                                            </td>
+                                                            <td class="top left" style="border-style: none !important;">
+                                                                <h:outputText value="#{proposeCreditDetail.limit}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                            <td class="top left" style="border-style: none !important;">
+                                                                <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>
+                                                                <br/>
+                                                                <h:outputText value="#{proposeCreditDetail.guaranteeAmount}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </ui:repeat>
+                                                </table>
+                                            </p:column>
+
+                                            <p:column styleClass="top right">
+                                                <h:outputText value="#{proposeGuarantorView.guaranteeAmount}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                            </p:column>
+
+                                            <p:column styleClass="top center">
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                 action="#{proposeLine.onEditGuarantorInfo()}"
+                                                                 update=":guarantorDlgForm"
+                                                                 process="@form"
+                                                                 oncomplete="guarantorInfoDlg.show();">
+                                                    <f:setPropertyActionListener value="#{proposeGuarantorView}" target="#{proposeLine.proposeGuarantorInfoView}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}" target="#{proposeLine.rowIndex}"/>
+                                                    <p:resetInput target=":guarantorDlgForm"/>
+                                                </p:commandButton>
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                 process="@form"
+                                                                 oncomplete="confirmDeleteGuarantorInfoDlg.show()"
+                                                                 disabled="#{proposeLine.isDisabled('guarantor.actionList')}">
+                                                    <f:setPropertyActionListener value="#{proposeGuarantorView}" target="#{proposeLine.proposeGuarantorInfoView}"/>
+                                                </p:commandButton>
+                                            </p:column>
+
+                                            <p:columnGroup type="footer">
+                                                <p:row>
+                                                    <p:column colspan="6" style="background-color: #ffffff; line-height: 10px; height: 10px;"/>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column colspan="4" styleClass="summary_column title" style="text-align: left"
+                                                              footerText="#{msg.get('app.credit.facility.propose.label.guarantor.total')}"/>
+                                                    <p:column styleClass="summary_column title" style="text-align: right">
+                                                        <f:facet name="footer">
+                                                            <h:outputText value="#{proposeLine.proposeLineView.totalGuaranteeAmount}" styleClass="right">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </f:facet>
+                                                    </p:column>
+                                                    <p:column styleClass="summary_column"/>
+                                                </p:row>
+                                            </p:columnGroup>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <!-- Propose Condition -->
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.condition')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:commandButton
+                                                id="addConditionButton"
+                                                value="#{msg.get('app.button.add')}"
+                                                styleClass="small"
+                                                process="@form"
+                                                actionListener="#{proposeLine.onAddConditionInfo()}"
+                                                update=":conditionDlgForm"
+                                                disabled="#{proposeLine.isDisabled('addConditionButton')}">
+                                            <p:resetInput target=":conditionDlgForm"/>
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <p:dataTable id="conditionInfoDetailTable" var="conditionInfoItem"
+                                                     value="#{proposeLine.proposeLineView.proposeConditionInfoViewList}"
+                                                     paginator="false" rowKey="#{conditionInfoItem}" rowIndexVar="rowIndex"
+                                                     style="width: 100%">
+
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column style="width: 5%;"/>
+                                                    <p:column style="width: 35%;" headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.loanType')}"/>
+                                                    <p:column style="width: 65%;" headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.conditionDesc')}"/>
+                                                    <p:column style="width: 5%;"/>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="top center">
+                                                <h:outputText value="#{rowIndex + 1}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="top left">
+                                                <h:outputText value="#{conditionInfoItem.loanType}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="top left">
+                                                <h:outputText value="#{conditionInfoItem.conditionDesc}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="top center">
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                 process="@this"
+                                                                 onsuccess="confirmDeleteConditionInfoDlg.show();">
+                                                    <f:setPropertyActionListener value="#{conditionInfoItem}" target="#{proposeLine.proposeConditionInfoView}"/>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="height:28px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.other.related.info')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="left" colspan="2">
+                                        <table class="table_content" style="width: 100%">
+                                            <tr>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.relatedTMBLending')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('relatedTMBLending')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <p:selectOneRadio value="#{proposeLine.proposeLineView.relatedTMBLending}"
+                                                                      disabled="#{proposeLine.isDisabled('relatedTMBLending')}">
+                                                        <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
+                                                        <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.25percentShareRelatedTMBLending')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('25percentShareRelatedTMBLending')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:selectOneRadio value="#{proposeLine.proposeLineView.twentyFivePercentShareRelatedTMBLending}"
+                                                                      disabled="#{proposeLine.isDisabled('25percentShareRelatedTMBLending')}">
+                                                        <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
+                                                        <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.singleLendingLimit')}"/>
+                                                    <h:outputText value="#{proposeLine.mandate('singleLendingLimit')}" styleClass="require-field"/>
+                                                    <h:outputText value=" :"/>
+                                                </td>
+                                                <td class="left" style="background-color: #ffffff">
+                                                    <p:selectOneRadio value="#{proposeLine.proposeLineView.singleLendingLimit}"
+                                                                      disabled="#{proposeLine.isDisabled('singleLendingLimit')}">
+                                                        <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="2"/>
+                                                        <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="center" colspan="2">
+                                        <p:commandButton id="saveBtn"
+                                                         value="#{msg.get('app.button.save')}"
+                                                         binding="#{onSaveProposeLineBtn}"
+                                                         styleClass="small"
+                                                         process="@form"
+                                                         update=":frmMain, :msgBoxSystemMessagePanel"
+                                                         actionListener="#{proposeLine.onSaveProposeLine()}"
+                                                         disabled="#{proposeLine.isDisabled('saveButton')}"/>
+                                        <p:spacer width="10" height="0"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                                         styleClass="small"
+                                                         id="cancelBtn"
+                                                         process="@form"
+                                                         update=":frmMain"
+                                                         actionListener="#{proposeLine.onCreation}"
+                                                         disabled="#{proposeLine.isDisabled('cancelButton')}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- end content -->
+                        </div>
+                    </div>
+                    <div id="bottom_line"><!-- --></div>
+                </div>
+                <div class="clear"></div>
+                <!-- Start Footer -->
+                <ui:include src="include/footer.xhtml" />
+                <!-- End Footer -->
+            </div>
+            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:cancelBtn,:frmMain:retrieveCredit,
+                                                 :frmMain:btnAddCollateralInfo,:frmMain:btnAddCreditInfo,
+                                                 :frmMain:addConditionButton,:frmMain:addGuarantorButton">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
+        </h:form>
+    </p:panel>
+
+    <!-- Propose Credit Dialog -->
+    <p:dialog id="creditInfoDialog"
+              header="Propose Credit Information"
+              widgetVar="creditInfoDlg"
+              modal="true" resizable="false"
+              width="900" height="500"
+              onShow="hideWindowsScrollBar()"
+              onHide="showWindowsScrollBar()"
+              closable="false"
+              closeOnEscape="false">
+        <ui:include src="dialog/proposeCreditDialog.xhtml"/>
+    </p:dialog>
+
+    <!-- Propose Collateral Dialog -->
+    <p:dialog id="collateralInfoDialog"
+              header="Propose Collateral Information"
+              widgetVar="collateralInfoDlg"
+              modal="true" resizable="false"
+              width="900" height="500"
+              onShow="hideWindowsScrollBar()"
+              onHide="showWindowsScrollBar()"
+              closable="false"
+              closeOnEscape="false">
+        <ui:include src="dialog/proposeCollateralDialog.xhtml"/>
+    </p:dialog>
+
+    <!-- Sub-Collateral Dialog  -->
+    <p:dialog id="subCollateralInfoDialog"
+              header="Sub Collateral Information"
+              widgetVar="subCollateralInfoDlg"
+              modal="true" resizable="false"
+              width="600" height="500"
+              onShow="hideWindowsScrollBar()"
+              onHide="showWindowsScrollBar()"
+              closable="false"
+              closeOnEscape="false">
+        <ui:include src="dialog/proposeSubCollateralDialog.xhtml"/>
+    </p:dialog>
+
+    <!-- Propose Guarantor Dialog -->
+    <p:dialog id="guarantorDialog"
+              header="Propose Guarantor Information"
+              widgetVar="guarantorInfoDlg"
+              modal="true" resizable="false"
+              width="800" height="400"
+              onShow="hideWindowsScrollBar()"
+              onHide="showWindowsScrollBar()"
+              closable="false"
+              closeOnEscape="false">
+        <ui:include src="dialog/proposeGuarantorDialog.xhtml"/>
+    </p:dialog>
+
+    <!-- Propose Condition Dialog -->
+    <p:dialog id="conditionDialog"
+              header="Condition Information"
+              widgetVar="conditionDlg"
+              modal="true" resizable="false"
+              width="650" height="150"
+              onShow="hideWindowsScrollBar()"
+              onHide="showWindowsScrollBar()"
+              closable="false"
+              closeOnEscape="false">
+        <ui:include src="dialog/proposeConditionDialog.xhtml"/>
+    </p:dialog>
+
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         resizable="false" closeOnEscape="false" severity="#{proposeLine.severity}"
+                         header="#{proposeLine.messageHeader}" closable="false">
+            <f:facet name="message">
+                <h:outputText value="#{proposeLine.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK" process="@this" update=":frmMain,:msgBoxSystemMessagePanel" oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteCreditInfoDialog"/>
+        <ui:param name="name" value="confirmDeleteCreditInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteCreditInfo"/>
+        <ui:param name="controller" value="#{proposeLine}"/>
+        <ui:param name="action" value="onDeleteCreditInfo"/>
+        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteGuarantorInfoDialog"/>
+        <ui:param name="name" value="confirmDeleteGuarantorInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteGuarantorInfo"/>
+        <ui:param name="controller" value="#{proposeLine}"/>
+        <ui:param name="action" value="onDeleteGuarantorInfo"/>
+        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteConditionInfoDialog"/>
+        <ui:param name="name" value="confirmDeleteConditionInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteConditionInfo"/>
+        <ui:param name="controller" value="#{proposeLine}"/>
+        <ui:param name="action" value="onDeleteConditionInfo"/>
+        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteCollateralInfoDialog"/>
+        <ui:param name="name" value="confirmDeleteCollateralInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteCollateralInfo"/>
+        <ui:param name="controller" value="#{proposeLine}"/>
+        <ui:param name="action" value="onDeleteCollateralInfo"/>
+        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteSubCollateralInfoDialog"/>
+        <ui:param name="name" value="confirmDeleteSubCollateralInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
+        <ui:param name="controller" value="#{proposeLine}"/>
+        <ui:param name="action" value="onDeleteSubCollateral"/>
+        <ui:param name="update" value=":collateralDlgForm,:msgBoxSystemMessagePanel"/>
+    </ui:include>
+</h:body>
+</f:view>
+</html>

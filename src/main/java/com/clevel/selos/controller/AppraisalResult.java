@@ -102,19 +102,19 @@ public class AppraisalResult implements Serializable {
     private AppraisalView appraisalView;
 
     //collateralDetailViewList
-    private List<NewCollateralView> newCollateralViewList;
+    private List<ProposeCollateralInfoView> newCollateralViewList;
     //collateralDetailView
-    private NewCollateralView newCollateralView;
+    private ProposeCollateralInfoView newCollateralView;
 
     //collateralHeaderDetailViewList
-    private List<NewCollateralHeadView> newCollateralHeadViewList;
+    private List<ProposeCollateralInfoHeadView> newCollateralHeadViewList;
     //collateralHeaderDetailView
-    private NewCollateralHeadView newCollateralHeadView;
+    private ProposeCollateralInfoHeadView newCollateralHeadView;
 
     //subCollateralDetailViewList
-    private List<NewCollateralSubView> newCollateralSubViewList;
+    private List<ProposeCollateralInfoSubView> newCollateralSubViewList;
     //subCollateralDetailView
-    private NewCollateralSubView newCollateralSubView;
+    private ProposeCollateralInfoSubView newCollateralSubView;
 
     private AppraisalData appraisalData;
 
@@ -124,7 +124,7 @@ public class AppraisalResult implements Serializable {
     private SubCollateralData subCollateralData;
     private List<SubCollateralData> subCollateralDataList;
 
-    private NewCollateralView selectCollateralDetailView;
+    private ProposeCollateralInfoView selectCollateralDetailView;
 
     private ContactRecordDetailView selectContactRecordDetail;
     private ContactRecordDetailView contactRecordDetailViewTemp;
@@ -164,7 +164,7 @@ public class AppraisalResult implements Serializable {
         locationPropertyList= locationPropertyDAO.findAll();
         provinceList= provinceDAO.findAll();
 
-        newCollateralViewList = new ArrayList<NewCollateralView>();
+        newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
         newCollateralViewList.add(newCollateralViewForTest());
         newCollateralViewList.add(newCollateralViewForTest2());
 
@@ -209,7 +209,7 @@ public class AppraisalResult implements Serializable {
                 newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
                 log.debug("onCreation ::: newCollateralViewList : {}", newCollateralViewList);
                 if(newCollateralViewList.size() == 0){
-                    newCollateralViewList = new ArrayList<NewCollateralView>();
+                    newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
                 }
             } else {
                 appraisalView = new AppraisalView();
@@ -245,7 +245,7 @@ public class AppraisalResult implements Serializable {
         modeForButton = ModeForButton.ADD;
         flagReadOnly = false;
         saveAndEditFlag = false;
-        newCollateralView = new NewCollateralView();
+        newCollateralView = new ProposeCollateralInfoView();
         newCollateralView.setJobID("");
         log.debug("-- NewCollateralView[New] created");
     }
@@ -264,7 +264,7 @@ public class AppraisalResult implements Serializable {
                         AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
                         log.debug("appraisalDataResult ::: {}",appraisalDataResult);
                         if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
-                            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                            newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
                             saveAndEditFlag = true;
                         } else {
                             saveAndEditFlag = false;
@@ -280,7 +280,7 @@ public class AppraisalResult implements Serializable {
                     log.debug("-- EDIT");
                     AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
                     if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
-                        newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                        newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
                         saveAndEditFlag = true;
                     } else {
                         saveAndEditFlag = false;
@@ -307,8 +307,8 @@ public class AppraisalResult implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
-    private boolean checkJobIdExist(final List<NewCollateralView> viewList, String jobIDSearch){
-        for(NewCollateralView view : viewList){
+    private boolean checkJobIdExist(final List<ProposeCollateralInfoView> viewList, String jobIDSearch){
+        for(ProposeCollateralInfoView view : viewList){
             if(Util.equals(view.getJobID(), jobIDSearch)){
                 return false;
             }
@@ -540,51 +540,51 @@ public class AppraisalResult implements Serializable {
         }
     }
 
-    public List<NewCollateralView> getNewCollateralViewList() {
+    public List<ProposeCollateralInfoView> getNewCollateralViewList() {
         return newCollateralViewList;
     }
 
-    public void setNewCollateralViewList(List<NewCollateralView> newCollateralViewList) {
+    public void setNewCollateralViewList(List<ProposeCollateralInfoView> newCollateralViewList) {
         this.newCollateralViewList = newCollateralViewList;
     }
 
-    public NewCollateralView getNewCollateralView() {
+    public ProposeCollateralInfoView getNewCollateralView() {
         return newCollateralView;
     }
 
-    public void setNewCollateralView(NewCollateralView newCollateralView) {
+    public void setNewCollateralView(ProposeCollateralInfoView newCollateralView) {
         this.newCollateralView = newCollateralView;
     }
 
-    public List<NewCollateralHeadView> getNewCollateralHeadViewList() {
+    public List<ProposeCollateralInfoHeadView> getNewCollateralHeadViewList() {
         return newCollateralHeadViewList;
     }
 
-    public void setNewCollateralHeadViewList(List<NewCollateralHeadView> newCollateralHeadViewList) {
+    public void setNewCollateralHeadViewList(List<ProposeCollateralInfoHeadView> newCollateralHeadViewList) {
         this.newCollateralHeadViewList = newCollateralHeadViewList;
     }
 
-    public NewCollateralHeadView getNewCollateralHeadView() {
+    public ProposeCollateralInfoHeadView getNewCollateralHeadView() {
         return newCollateralHeadView;
     }
 
-    public void setNewCollateralHeadView(NewCollateralHeadView newCollateralHeadView) {
+    public void setNewCollateralHeadView(ProposeCollateralInfoHeadView newCollateralHeadView) {
         this.newCollateralHeadView = newCollateralHeadView;
     }
 
-    public List<NewCollateralSubView> getNewCollateralSubViewList() {
+    public List<ProposeCollateralInfoSubView> getNewCollateralSubViewList() {
         return newCollateralSubViewList;
     }
 
-    public void setNewCollateralSubViewList(List<NewCollateralSubView> newCollateralSubViewList) {
+    public void setNewCollateralSubViewList(List<ProposeCollateralInfoSubView> newCollateralSubViewList) {
         this.newCollateralSubViewList = newCollateralSubViewList;
     }
 
-    public NewCollateralSubView getNewCollateralSubView() {
+    public ProposeCollateralInfoSubView getNewCollateralSubView() {
         return newCollateralSubView;
     }
 
-    public void setNewCollateralSubView(NewCollateralSubView newCollateralSubView) {
+    public void setNewCollateralSubView(ProposeCollateralInfoSubView newCollateralSubView) {
         this.newCollateralSubView = newCollateralSubView;
     }
 
@@ -620,11 +620,11 @@ public class AppraisalResult implements Serializable {
         this.subCollateralDataList = subCollateralDataList;
     }
 
-    public NewCollateralView getSelectCollateralDetailView() {
+    public ProposeCollateralInfoView getSelectCollateralDetailView() {
         return selectCollateralDetailView;
     }
 
-    public void setSelectCollateralDetailView(NewCollateralView selectCollateralDetailView) {
+    public void setSelectCollateralDetailView(ProposeCollateralInfoView selectCollateralDetailView) {
         this.selectCollateralDetailView = selectCollateralDetailView;
     }
 
@@ -685,11 +685,10 @@ public class AppraisalResult implements Serializable {
     }
 
     //todo : for test
-    private NewCollateralView newCollateralViewForTest(){
-        newCollateralView = new NewCollateralView();
+    private ProposeCollateralInfoView newCollateralViewForTest(){
+        newCollateralView = new ProposeCollateralInfoView();
 
         newCollateralView.setJobID("111");
-        newCollateralView.setJobIDSearch("111");
         newCollateralView.setAadDecision("AADDecision");
         newCollateralView.setAadDecisionReason("AadDecisionReason");
         newCollateralView.setAadDecisionReasonDetail("AadDecisionReasonDetail");
@@ -697,28 +696,27 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setUwDecision(DecisionType.NO_DECISION);
         newCollateralView.setBdmComments("BdmComments");
 
-        newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+        newCollateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
-        newCollateralHeadView = new NewCollateralHeadView();
+        newCollateralHeadView = new ProposeCollateralInfoHeadView();
         newCollateralHeadView.setAppraisalValue(BigDecimal.valueOf(55555));
         newCollateralHeadView.setExistingCredit(BigDecimal.valueOf(66666));
 
-        newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
-        newCollateralSubView = new NewCollateralSubView();
+        newCollateralSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+        newCollateralSubView = new ProposeCollateralInfoSubView();
         newCollateralSubView.setAddress("Address");
-        newCollateralSubView.setCollateralOwner("sadfsadfsda");
+        newCollateralSubView.setCollateralOwnerAAD("sadfsadfsda");
         newCollateralSubViewList.add(newCollateralSubView);
-        newCollateralHeadView.setNewCollateralSubViewList(newCollateralSubViewList);
+        newCollateralHeadView.setProposeCollateralInfoSubViewList(newCollateralSubViewList);
         newCollateralHeadViewList.add(newCollateralHeadView);
-        newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViewList);
+        newCollateralView.setProposeCollateralInfoHeadViewList(newCollateralHeadViewList);
 
         return newCollateralView;
     }
-    private NewCollateralView newCollateralViewForTest2(){
-        newCollateralView = new NewCollateralView();
+    private ProposeCollateralInfoView newCollateralViewForTest2(){
+        newCollateralView = new ProposeCollateralInfoView();
 
         newCollateralView.setJobID("222");
-        newCollateralView.setJobIDSearch("222");
         newCollateralView.setAadDecision("AADDecision");
         newCollateralView.setAadDecisionReason("AadDecisionReason");
         newCollateralView.setAadDecisionReasonDetail("AadDecisionReasonDetail");
@@ -726,20 +724,20 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setUwDecision(DecisionType.NO_DECISION);
         newCollateralView.setBdmComments("BdmComments");
 
-        newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
+        newCollateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
-        newCollateralHeadView = new NewCollateralHeadView();
+        newCollateralHeadView = new ProposeCollateralInfoHeadView();
         newCollateralHeadView.setAppraisalValue(BigDecimal.valueOf(999999999));
         newCollateralHeadView.setExistingCredit(BigDecimal.valueOf(555555555));
 
-        newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
-        newCollateralSubView = new NewCollateralSubView();
+        newCollateralSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+        newCollateralSubView = new ProposeCollateralInfoSubView();
         newCollateralSubView.setAddress("Address");
-        newCollateralSubView.setCollateralOwner("sadfsadfsda");
+        newCollateralSubView.setCollateralOwnerAAD("sadfsadfsda");
         newCollateralSubViewList.add(newCollateralSubView);
-        newCollateralHeadView.setNewCollateralSubViewList(newCollateralSubViewList);
+        newCollateralHeadView.setProposeCollateralInfoSubViewList(newCollateralSubViewList);
         newCollateralHeadViewList.add(newCollateralHeadView);
-        newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViewList);
+        newCollateralView.setProposeCollateralInfoHeadViewList(newCollateralHeadViewList);
 
         return newCollateralView;
     }

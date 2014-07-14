@@ -37,7 +37,7 @@
                     <td colspan="2" class="center">
                         <p:commandButton
                                 id="saveCondition"
-                                value="#{msg.get('app.credit.facility.propose.okButton')}"
+                                value="#{msg.get('app.button.ok')}"
                                 binding="#{addConditionDlg}"
                                 styleClass="small"
                                 actionListener="#{creditFacExisting.onSaveConditionDetailDlg()}"
@@ -46,7 +46,7 @@
                                 oncomplete="handleExistingConditionRequest(xhr, status, args)"/>
 
                         <p:commandButton
-                                value="#{msg.get('app.credit.facility.propose.cancelButton')}"
+                                value="#{msg.get('app.button.cancel')}"
                                 styleClass="small"
                                 onclick="conditionDlg.hide()"
                                 update=":conditionDlgForm"/>

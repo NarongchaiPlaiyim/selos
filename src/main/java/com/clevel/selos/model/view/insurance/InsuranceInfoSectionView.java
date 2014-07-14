@@ -1,12 +1,12 @@
 package com.clevel.selos.model.view.insurance;
 
-import com.clevel.selos.model.view.NewCollateralHeadView;
+import com.clevel.selos.model.view.ProposeCollateralInfoHeadView;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class InsuranceInfoSectionView implements Serializable {
-    private NewCollateralHeadView newCollateralHeadView = new NewCollateralHeadView();
+    private ProposeCollateralInfoHeadView newCollateralHeadView = new ProposeCollateralInfoHeadView();
     
     public String getTitleDeed() {
         return this.newCollateralHeadView.getTitleDeed();
@@ -32,11 +32,11 @@ public class InsuranceInfoSectionView implements Serializable {
         this.newCollateralHeadView.setInsuranceCompany(company);
     }
 
-	public NewCollateralHeadView getNewCollateralHeadView() {
+	public ProposeCollateralInfoHeadView getNewCollateralHeadView() {
 		return newCollateralHeadView;
 	}
 
-	public void setNewCollateralHeadView(NewCollateralHeadView newCollateralHeadView) {
+	public void setNewCollateralHeadView(ProposeCollateralInfoHeadView newCollateralHeadView) {
 		this.newCollateralHeadView = newCollateralHeadView;
 	}
 }

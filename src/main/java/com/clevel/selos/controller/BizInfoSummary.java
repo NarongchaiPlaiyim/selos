@@ -1,6 +1,9 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.*;
+import com.clevel.selos.businesscontrol.BankStmtControl;
+import com.clevel.selos.businesscontrol.BizInfoDetailControl;
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
@@ -99,8 +102,6 @@ public class BizInfoSummary extends BaseController {
     BankStatementSummaryDAO bankStmtSummaryDAO;
     @Inject
     ExSummaryControl exSummaryControl;
-    @Inject
-    CreditFacProposeControl creditFacProposeControl;
 
     @Inject
     private Util util;

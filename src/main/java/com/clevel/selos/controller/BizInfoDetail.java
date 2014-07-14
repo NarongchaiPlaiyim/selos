@@ -108,7 +108,7 @@ public class BizInfoDetail extends BaseController {
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    private CreditFacProposeControl creditFacProposeControl;
+    private ProposeLineControl proposeLineControl;
     @Inject
     private DBRControl dbrControl;
     @Inject
@@ -682,7 +682,7 @@ public class BizInfoDetail extends BaseController {
                 HttpSession session = FacesUtil.getSession(true);
                 session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
                 log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
-                creditFacProposeControl.calWC(workCaseId);
+                proposeLineControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }

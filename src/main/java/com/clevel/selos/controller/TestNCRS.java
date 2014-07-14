@@ -26,7 +26,7 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.model.view.MandateDocResponseView;
 import com.clevel.selos.model.view.MandateDocView;
-import com.clevel.selos.model.view.NewCollateralView;
+import com.clevel.selos.model.view.ProposeCollateralInfoView;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -107,7 +107,7 @@ public class TestNCRS implements Serializable {
     private String userIdForComS = "10001";
     @Inject
     private CollateralBizTransform collateralBizTransform;
-    private NewCollateralView newCollateralView;
+    private ProposeCollateralInfoView newCollateralView;
 
     //Call ECM
     private String caNumberECM = "04621809124082010060";
@@ -292,7 +292,7 @@ public class TestNCRS implements Serializable {
         try{                                                                           //10001
              AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(userIdForComS, jobId);
             if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
-                newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
                 result = newCollateralView.toString();
             } else {
                 result = "FAILED";

@@ -40,7 +40,7 @@ public class BAPAInfoControl extends BusinessControl {
 	 @Inject 
 	 private BAPAInfoCreditDAO bapaInfoCreditDAO;
 	 @Inject
-	 private NewCreditDetailDAO newCreditDetailDAO;
+	 private ProposeCreditInfoDAO newCreditDetailDAO;
 	 
 	  @Inject 
 	 private InsuranceCompanyDAO insuranceCompanyDAO;
@@ -248,9 +248,9 @@ public class BAPAInfoControl extends BusinessControl {
 	 public List<BAPAInfoCreditToSelectView> getBAPAInfoCreditToSelectView(long workCaseId) {
 		 if (workCaseId <= 0)
 			 return Collections.emptyList();
-		 List<NewCreditDetail> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,false);
+		 List<ProposeCreditInfo> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,false);
 		 ArrayList<BAPAInfoCreditToSelectView> rtnDatas = new ArrayList<BAPAInfoCreditToSelectView>();
-		 for (NewCreditDetail credit : credits) {
+		 for (ProposeCreditInfo credit : credits) {
 			 BAPAInfoCreditToSelectView view = new BAPAInfoCreditToSelectView();
 			 view.setId(credit.getId());
 			 view.setProductProgram(credit.getProductProgram().getName());
@@ -266,10 +266,10 @@ public class BAPAInfoControl extends BusinessControl {
 		 if (workCaseId <= 0)
 			 return Collections.emptyList();
 		 List<BAPAInfoCredit> bapaCredits = bapaInfoCreditDAO.findByBAPAInfo(bapaInfoId);
-		 List<NewCreditDetail> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,true);
+		 List<ProposeCreditInfo> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,true);
 		 
-		 HashMap<Long, NewCreditDetail> creditHash = new HashMap<Long, NewCreditDetail>();
-		 for (NewCreditDetail credit : credits) {
+		 HashMap<Long, ProposeCreditInfo> creditHash = new HashMap<Long, ProposeCreditInfo>();
+		 for (ProposeCreditInfo credit : credits) {
 			 creditHash.put(credit.getId(), credit);
 		 }
 		
@@ -298,7 +298,7 @@ public class BAPAInfoControl extends BusinessControl {
 			 view.setExpenseAmount(bapaCredit.getExpenseAmount());
 			 
 			 if (bapaCredit.getCreditDetail() != null) {
-				 NewCreditDetail credit = creditHash.get(bapaCredit.getCreditDetail().getId());
+                 ProposeCreditInfo credit = creditHash.get(bapaCredit.getCreditDetail().getId());
 				 if (credit != null) {
 					 creditHash.remove(bapaCredit.getCreditDetail().getId());
 				 }
@@ -308,7 +308,7 @@ public class BAPAInfoControl extends BusinessControl {
 		
 		 if (!creditHash.isEmpty()) {
 			 for (long id : creditHash.keySet()) {
-				 NewCreditDetail credit = creditHash.get(id);
+                 ProposeCreditInfo credit = creditHash.get(id);
 				 
 				 BAPAInfoCreditView view = new BAPAInfoCreditView();
 				 view.setId(0);

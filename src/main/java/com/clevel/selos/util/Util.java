@@ -103,6 +103,22 @@ public class Util implements Serializable {
         return numberFormat.format(value);
     }
 
+    public static String formatNumber(BigDecimal value) {
+        if(!Util.isNull(value)){
+            return numberFormat.format(value);
+        } else {
+            return "";
+        }
+    }
+
+    public static String formatNumberPricing(BigDecimal value) {
+        if(!Util.isNull(value)){
+            return numberFormat.format(value);
+        } else {
+            return "0.00";
+        }
+    }
+
     public static String fixLength(long number, int digit) {
         return String.format("%0" + digit + "d", number);
     }
@@ -459,6 +475,7 @@ public class Util implements Serializable {
     	else
     		return 0;
     }
+
     public static int compareInt(int i1,int i2) {
     	int value = i1-i2;
     	if (value > 0)

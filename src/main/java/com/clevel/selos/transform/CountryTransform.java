@@ -17,59 +17,59 @@ public class CountryTransform extends Transform {
     }
 
     public Country transformToModel(CountryView countryView) {
-        if (countryView == null) {
-            return new Country();
-        }
-
-        Country country;
-        if (countryView.getId() != 0) {
+        Country country = new Country();
+        if(countryView != null && countryView.getId() != 0){
             country = countryDAO.findById(countryView.getId());
-        } else {
-            country = new Country();
         }
         country.setName(countryView.getName());
         country.setCode(countryView.getCode());
         country.setCode2(countryView.getCode2());
         country.setIsoCode(countryView.getIsoCode());
         country.setActive(countryView.getActive());
+
         return country;
-    }
-
-    public List<Country> transformToModel(List<CountryView> countryViewList) {
-        List<Country> countryList = new ArrayList<Country>();
-        if (countryViewList == null) {
-            return countryList;
-        }
-
-        for (CountryView countryView : countryViewList) {
-            countryList.add(transformToModel(countryView));
-        }
-        return countryList;
     }
 
     public CountryView transformToView(Country country) {
         CountryView countryView = new CountryView();
-        if (country == null) {
-            return countryView;
+        if(country != null){
+            countryView.setId(country.getId());
+            countryView.setName(country.getName());
+            countryView.setCode(country.getCode());
+            countryView.setCode2(country.getCode2());
+            countryView.setIsoCode(country.getIsoCode());
+            countryView.setActive(country.getActive());
         }
-        countryView.setId(country.getId());
-        countryView.setName(country.getName());
-        countryView.setCode(country.getCode());
-        countryView.setCode2(country.getCode2());
-        countryView.setIsoCode(country.getIsoCode());
-        countryView.setActive(country.getActive());
         return countryView;
     }
 
-    public List<CountryView> transformToView(List<Country> countryList) {
-        List<CountryView> countryViewList = new ArrayList<CountryView>();
-        if (countryList == null) {
-            return countryViewList;
+    public List<Country> transformToModelList(List<CountryView> countryViewList) {
+        List<Country> countryList = new ArrayList<Country>();
+        if (countryViewList != null) {
+            for (CountryView cv : countryViewList) {
+                Country country = transformToModel(cv);
+                countryList.add(country);
+            }
         }
+        return countryList;
+    }
 
-        for (Country country : countryList) {
-            countryViewList.add(transformToView(country));
+    public List<CountryView> transformToViewList(List<Country> countryList) {
+        List<CountryView> countryViewList = new ArrayList<CountryView>();
+        if (countryList != null) {
+            for (Country c : countryList) {
+                CountryView countryView = transformToView(c);
+                countryViewList.add(countryView);
+            }
         }
         return countryViewList;
+    }
+
+    public Country transformSelectToModel(CountryView countryView) {
+        Country country = new Country();
+        if(countryView != null && countryView.getId() != 0){
+            country = countryDAO.findById(countryView.getId());
+        }
+        return country;
     }
 }

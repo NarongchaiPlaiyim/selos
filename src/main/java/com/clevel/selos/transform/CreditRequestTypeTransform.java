@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.view.CreditRequestTypeView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -17,57 +18,57 @@ public class CreditRequestTypeTransform extends Transform {
     }
 
     public CreditRequestType transformToModel(CreditRequestTypeView creditRequestTypeView) {
-        if (creditRequestTypeView == null) {
-            return new CreditRequestType();
-        }
-
-        CreditRequestType creditRequestType;
-        if (creditRequestTypeView.getId() != 0) {
+        CreditRequestType creditRequestType = new CreditRequestType();
+        if(!Util.isNull(creditRequestTypeView) && !Util.isZero(creditRequestTypeView.getId())){
             creditRequestType = creditRequestTypeDAO.findById(creditRequestTypeView.getId());
-        } else {
-            creditRequestType = new CreditRequestType();
         }
         creditRequestType.setCode(creditRequestTypeView.getCode());
         creditRequestType.setName(creditRequestTypeView.getName());
         creditRequestType.setDescription(creditRequestTypeView.getDescription());
         creditRequestType.setActive(creditRequestTypeView.getActive());
+
         return creditRequestType;
-    }
-
-    public List<CreditRequestType> transformToModel(List<CreditRequestTypeView> creditRequestTypeViewList) {
-        List<CreditRequestType> creditRequestTypeList = new ArrayList<CreditRequestType>();
-        if (creditRequestTypeViewList == null) {
-            return creditRequestTypeList;
-        }
-
-        for (CreditRequestTypeView creditRequestTypeView : creditRequestTypeViewList) {
-            creditRequestTypeList.add(transformToModel(creditRequestTypeView));
-        }
-        return creditRequestTypeList;
     }
 
     public CreditRequestTypeView transformToView(CreditRequestType creditRequestType) {
         CreditRequestTypeView creditRequestTypeView = new CreditRequestTypeView();
-        if (creditRequestType == null) {
-            return creditRequestTypeView;
+        if(creditRequestType != null){
+            creditRequestTypeView.setId(creditRequestType.getId());
+            creditRequestTypeView.setCode(creditRequestType.getCode());
+            creditRequestTypeView.setName(creditRequestType.getName());
+            creditRequestTypeView.setDescription(creditRequestType.getDescription());
+            creditRequestTypeView.setActive(creditRequestType.getActive());
         }
-        creditRequestTypeView.setId(creditRequestType.getId());
-        creditRequestTypeView.setCode(creditRequestType.getCode());
-        creditRequestTypeView.setName(creditRequestType.getName());
-        creditRequestTypeView.setDescription(creditRequestType.getDescription());
-        creditRequestTypeView.setActive(creditRequestType.getActive());
         return creditRequestTypeView;
     }
 
-    public List<CreditRequestTypeView> transformToView(List<CreditRequestType> creditRequestTypeList) {
-        List<CreditRequestTypeView> creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
-        if (creditRequestTypeList == null) {
-            return creditRequestTypeViewList;
+    public List<CreditRequestType> transformToModelList(List<CreditRequestTypeView> creditRequestTypeViewList) {
+        List<CreditRequestType> creditRequestTypeList = new ArrayList<CreditRequestType>();
+        if (creditRequestTypeViewList != null) {
+            for (CreditRequestTypeView crtv : creditRequestTypeViewList) {
+                CreditRequestType creditRequestType = transformToModel(crtv);
+                creditRequestTypeList.add(creditRequestType);
+            }
         }
+        return creditRequestTypeList;
+    }
 
-        for (CreditRequestType creditRequestType : creditRequestTypeList) {
-            creditRequestTypeViewList.add(transformToView(creditRequestType));
+    public List<CreditRequestTypeView> transformToViewList(List<CreditRequestType> creditRequestTypeList) {
+        List<CreditRequestTypeView> creditRequestTypeViewList = new ArrayList<CreditRequestTypeView>();
+        if (creditRequestTypeList != null) {
+            for (CreditRequestType crt : creditRequestTypeList) {
+                CreditRequestTypeView creditRequestTypeView = transformToView(crt);
+                creditRequestTypeViewList.add(creditRequestTypeView);
+            }
         }
         return creditRequestTypeViewList;
+    }
+
+    public CreditRequestType transformSelectToModel(CreditRequestTypeView creditRequestTypeView) {
+        CreditRequestType creditRequestType = new CreditRequestType();
+        if(!Util.isNull(creditRequestTypeView) && !Util.isZero(creditRequestTypeView.getId())){
+            creditRequestType = creditRequestTypeDAO.findById(creditRequestTypeView.getId());
+        }
+        return creditRequestType;
     }
 }
