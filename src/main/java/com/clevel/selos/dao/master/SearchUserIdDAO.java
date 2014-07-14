@@ -33,7 +33,7 @@ public class SearchUserIdDAO extends GenericDAO<SearchUserId,Integer>
 
         Criteria criteria = getSession().createCriteria(SearchUserId.class);
 
-        criteria.setProjection( Projections.projectionList().add(Projections.property("workcaseid"),"workcaseid").add(Projections.property("id"), "id"));
+        criteria.setProjection( Projections.projectionList().add(Projections.property("workcaseid"),"workcaseid").add(Projections.property("workCasePreScreenId"),"workCasePreScreenId").add(Projections.property("id"), "id"));
 
         criteria.add(Restrictions.eq("userid", userId)).setResultTransformer(Transformers.aliasToBean(SearchUserId.class));
 

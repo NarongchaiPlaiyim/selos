@@ -63,12 +63,12 @@
                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementBahtnet()}"
                                      styleClass="smaller"
-                                     update=":disbursementForm ,:disbursementBahtnetForm"
+                                     update=":frmMain ,:disbursementBahtnetForm"
                                      process="@form"
                                      oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="bahtnetDisbursementDialog.hide()"
-                                     update=":disbursementForm"/>
+                                     update=":frmMain"/>
                 </td>
             </tr>
         </table>

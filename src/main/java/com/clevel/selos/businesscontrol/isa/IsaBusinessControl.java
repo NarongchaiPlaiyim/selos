@@ -1,252 +1,340 @@
 package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.dao.audit.SecurityActivityDAO;
-import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.CommandType;
 import com.clevel.selos.model.ManageUserActive;
-import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.audit.IsaActivity;
 import com.clevel.selos.model.db.audit.SecurityActivity;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.isa.IsaAuditLogView;
-import com.clevel.selos.model.view.isa.IsaManageUserView;
-import com.clevel.selos.model.view.isa.IsaSearchView;
-import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.model.view.isa.*;
+import com.clevel.selos.system.Config;
+import com.clevel.selos.system.audit.IsaAuditor;
+import com.clevel.selos.transform.UserTransform;
 import com.clevel.selos.util.DateTimeUtil;
-import org.hibernate.Criteria;
+import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
+import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 @Stateless
 public class IsaBusinessControl extends BusinessControl {
-
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
-    UserDAO userDAO;
-
+    private UserDAO userDAO;
     @Inject
-    SecurityActivityDAO securityActivityDAO;
-
+    private SecurityActivityDAO securityActivityDAO;
     @Inject
-    IsaActivityDAO isaActivityDAO;
-
+    private IsaActivityDAO isaActivityDAO;
+    @Inject
+    private RoleDAO roleDAO;
+    @Inject
+    private UserTeamDAO userTeamDAO;
+    @Inject
+    private UserDepartmentDAO userDepartmentDAO;
+    @Inject
+    private UserDivisionDAO userDivisionDAO;
+    @Inject
+    private UserRegionDAO userRegionDAO;
+    @Inject
+    private UserTitleDAO userTitleDAO;
+    @Inject
+    private UserTransform userTransform;
+    @Inject
+    private CSVService csvService;
+    @Inject
+    private IsaAuditor isaAuditor;
+    @Inject
+    @Config(name = "isa.path.temp")
+    private String path;
+    @Inject
+    @Config(name = "isa.path.export.fileName")
+    private String exportFileName;
+    @Inject
+    @Config(name = "isa.path.import.fileName")
+    private String importFileName;
+    @Inject
+    @Config(name = "isa.path.result.fileName")
+    private String resultFileName;
+    private final String CSV = ".csv";
+    @Inject
+    private STPExecutor stpExecutor;
+    private String userId;
     @Inject
     public IsaBusinessControl() {
-
     }
-
     @PostConstruct
     public void onCreate() {
-
+        onLoadUserId();
     }
 
     boolean complete = true;
     private final Locale THAI_LOCALE = new Locale("th", "TH");
     private final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss.sss";
 
-    public void createUser(IsaManageUserView isaManageUserView) throws Exception {
-
-        log.debug("createUser()");
-
-        User user = new User();
-        user.setId(isaManageUserView.getId());
-        user.setUserName(isaManageUserView.getUsername());
-        user.setBuCode(isaManageUserView.getBuCode());
-        user.setPhoneExt(isaManageUserView.getPhoneExt());
-        user.setPhoneNumber(isaManageUserView.getPhoneNumber());
-        user.setEmailAddress(isaManageUserView.getEmailAddress());
-        user.setRole(isaManageUserView.getRole());
-        user.setDepartment(isaManageUserView.getUserDepartment());
-        user.setDivision(isaManageUserView.getUserDivision());
-        user.setRegion(isaManageUserView.getUserRegion());
-        user.setTeam(isaManageUserView.getUserTeam());
-        user.setTitle(isaManageUserView.getUserTitle());
-        user.setZone(isaManageUserView.getUserZone());
-        user.setUserStatus(UserStatus.NORMAL);
-        user.setActive(isaManageUserView.getActive());
-
-
-        if (isaManageUserView.getUserDepartment().getId() == 0) {
-            user.setDepartment(null);
+    private void onLoadUserId(){
+        log.debug("-- onLoadUserId()");
+        userId = getCurrentUserID();
+    }
+    public List<UserTeam> getUserTeamByRoleId(final int roleId){
+        return userTeamDAO.findByRoleId(roleId);
+    }
+    public List<Role> getAllRole(){
+        return Util.safetyList(roleDAO.findActiveAll());
+    }
+    public List<UserDepartment> getAllUserDepartment(){
+        return Util.safetyList(userDepartmentDAO.findActiveAll());
+    }
+    public List<UserDivision> getAllUserDivision(){
+        return Util.safetyList(userDivisionDAO.findActiveAll());
+    }
+    public List<UserRegion> getAllUserRegion(){
+        return Util.safetyList(userRegionDAO.findActiveAll());
+    }
+    public List<UserTitle> getAllUserTitle(){
+        return Util.safetyList(userTitleDAO.findActiveAll());
+    }
+    public List<User> getAllUser(){
+        return Util.safetyList(userDAO.findByUserStatusNORMAL());
+    }
+    public void createUser(final IsaManageUserView isaManageUserView, final User user) throws Exception {
+        log.debug("-- createUser()");
+        userDAO.createNewUserByISA(userTransform.transformToNewModel(isaManageUserView, user));
+    }
+    public void editUser(final IsaManageUserView isaManageUserView, final User user) throws Exception {
+        log.debug("-- editUser()");
+        User model = null;
+        model = userTransform.transformToModel(isaManageUserView, user);
+        if(!Util.isNull(model)){
+            userDAO.persist(model);
         }
-        if (isaManageUserView.getRole().getId() == 0) {
-            user.setRole(null);
+    }
+    public void deleteUserById(final String id) throws Exception {
+        log.debug("-- deleteUser(id : {})", id);
+        userDAO.deleteUserByISA(id, getCurrentUser());
+    }
+    public void deleteUserList(final User[] users) throws Exception {
+        log.debug("deleteUserList()");
+        for (final User user : users) {
+            userDAO.deleteUserByISA(user.getId(), getCurrentUser());
         }
-        if (isaManageUserView.getUserDivision().getId() == 0) {
-            user.setDivision(null);
-        }
-        if (isaManageUserView.getUserRegion().getId() == 0) {
-            user.setRegion(null);
-        }
-        if (isaManageUserView.getUserTeam().getId() == 0) {
-            user.setTeam(null);
-        }
-        if (isaManageUserView.getUserTitle().getId() == 0) {
-            user.setTitle(null);
-        }
-        if (isaManageUserView.getUserZone().getId() == 0) {
-            user.setZone(null);
-        }
-
-        userDAO.persist(user);
-
+    }
+    public List<User> getUserBySearch(final IsaSearchView isaSearchView) throws Exception {
+        log.debug("-- getUserBySearch()");
+        return userDAO.findByISA(isaSearchView);
+    }
+    public boolean isExistId(final String id) throws Exception{
+        return userDAO.isExistId(id);
+    }
+    public boolean isExistUserName(final String userId) throws Exception{
+        return userDAO.isExistUserName(userId);
     }
 
 
-    public void editUser(IsaManageUserView isaManageUserView) throws ConstraintViolationException, Exception {
-
-        log.debug("editUser()");
-
-
-        User user = userDAO.findById(isaManageUserView.getId());
-
-
-        user.setUserName(isaManageUserView.getUsername());
-        user.setBuCode(isaManageUserView.getBuCode());
-        user.setPhoneExt(isaManageUserView.getPhoneExt());
-        user.setPhoneNumber(isaManageUserView.getPhoneNumber());
-        user.setEmailAddress(isaManageUserView.getEmailAddress());
-        user.setRole(isaManageUserView.getRole());
-        user.setDepartment(isaManageUserView.getUserDepartment());
-        user.setDivision(isaManageUserView.getUserDivision());
-        user.setRegion(isaManageUserView.getUserRegion());
-        user.setTeam(isaManageUserView.getUserTeam());
-        user.setTitle(isaManageUserView.getUserTitle());
-        user.setZone(isaManageUserView.getUserZone());
-        user.setActive(isaManageUserView.getActive());
-        user.setUserStatus(user.getUserStatus());
-
-
-        if (isaManageUserView.getUserDepartment().getId() == 0) {
-            user.setDepartment(null);
+    public String exportProcess() throws Exception {
+        log.debug("-- exportProcess()");
+        List<User> userList = null;
+        userList = Util.safetyList(userDAO.findAll());
+        String fullPath = null;
+        StringBuilder stringBuilder = null;
+        if(!Util.isZero(userList.size())){
+            stringBuilder = new StringBuilder().append(path).append(exportFileName).append(Util.getFileNameForISA()).append(CSV);
+            fullPath = stringBuilder.toString();
+            csvService.CSVExport(fullPath, userList);
         }
-        if (isaManageUserView.getRole().getId() == 0) {
-            user.setRole(null);
-        }
-        if (isaManageUserView.getUserDivision().getId() == 0) {
-            user.setDivision(null);
-        }
-        if (isaManageUserView.getUserRegion().getId() == 0) {
-            user.setRegion(null);
-        }
-        if (isaManageUserView.getUserTeam().getId() == 0) {
-            user.setTeam(null);
-        }
-        if (isaManageUserView.getUserTitle().getId() == 0) {
-            user.setTitle(null);
-        }
-        if (isaManageUserView.getUserZone().getId() == 0) {
-            user.setZone(null);
-        }
+        return fullPath;
+    }
 
-        userDAO.persist(user);
+    public List<DownloadView> getFileUploaded(){
+        List<DownloadView> downloadViewList = null;
+        File file = null;
+        File[] fileList = null;
+        try {
+            file = new File(path);
+            fileList = file.listFiles();
+            downloadViewList = new ArrayList<DownloadView>();
+            for(final File fileFromList : fileList){
+                if(fileFromList.getName().indexOf(resultFileName) > -1){
+                    downloadViewList.add(new DownloadView(DateTimeUtil.convertStringToDate(fileFromList.getName().substring(fileFromList.getName().indexOf(resultFileName) + resultFileName.length(), fileFromList.getName().indexOf(CSV))), fileFromList.getAbsolutePath(), fileFromList.getName()));
+                }
+            }
+        } catch (Exception e) {
+            log.debug("-- ex. {}", e);
+        }
+        return downloadViewList;
+    }
 
+    public DownloadView importProcess(final InputStream inputStream) throws Exception {
+        log.debug("-- importProcess()");
+        List<CSVModel> csvModelList = Util.safetyList(csvService.CSVImport(inputStream));
+        List<ResultModel> resultModelList = null;
+        ResultModel resultModel = null;
+        StringBuilder stringBuilder = null;
+        DownloadView downloadModel = null;
+        if(!Util.isZero(csvModelList.size())){
+            resultModelList = new ArrayList<ResultModel>();
+
+            for(final CSVModel csv : csvModelList){
+                final String command = csv.getCommandType();
+                if(CommandType.INSERT.equals(command)){
+                    resultModel = executeInsert(csv, CommandType.INSERT);
+                } else if(CommandType.UPDATE.equals(command)){
+                    resultModel = executeUpdate(csv, CommandType.UPDATE);
+                } else if(CommandType.DELETE.equals(command)){
+                    resultModel = executeDelete(csv, CommandType.DELETE);
+                } else {
+                    resultModel = new ResultModel();
+                    resultModel.setCommand(command);
+                    resultModel.setId(csv.getUserId());
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail("Command not found");
+                }
+                resultModelList.add(resultModel);
+            }
+
+            if(!Util.isZero(resultModelList.size())){
+                final String fileName = new StringBuilder().append(resultFileName).append(Util.getFileNameForISA()).append(CSV).toString();
+                stringBuilder = new StringBuilder().append(path).append(fileName);
+                final String fullPath = stringBuilder.toString();
+                csvService.CSVExport(fullPath, resultModelList, null);
+                downloadModel = new DownloadView(DateTime.now().toDate(), fullPath, fileName);
+            }
+        }
+        return downloadModel;
+    }
+
+    private ResultModel executeInsert(final CSVModel csvModel, final CommandType commandType){
+        String result = null;
+        ResultModel resultModel = null;
+        try {
+            result = csvModel.valid(commandType);
+            resultModel = new ResultModel();
+            resultModel.setCommand(commandType.toString());
+            resultModel.setId(csvModel.getUserId());
+            if(Util.isZero(result.length())){
+                result = stpExecutor.createFromCSV(csvModel, getCurrentUser());
+                if("SUCCESS".equalsIgnoreCase(result)){
+                    resultModel.setResult(ActionResult.SUCCESS.toString());
+                    isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
+                } else {
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail(result);
+                }
+            } else {
+                resultModel.setResult(ActionResult.FAILED.toString());
+                resultModel.setDetail(result);
+            }
+        } catch(Exception e){
+            if (e.getCause() != null) {
+                result = e.getCause().getMessage();
+            } else {
+                result = e.getMessage();
+            }
+            resultModel.setResult(ActionResult.EXCEPTION.toString());
+            resultModel.setDetail(result);
+            isaAuditor.addException(userId, commandType.toString(), csvModel.toString(), result);
+        }
+        return resultModel;
+    }
+    private ResultModel executeUpdate(final CSVModel csvModel, final CommandType commandType){
+        String result = null;
+        ResultModel resultModel = null;
+        try {
+            result = csvModel.valid(commandType);
+            resultModel = new ResultModel();
+            resultModel.setCommand(commandType.toString());
+            resultModel.setId(csvModel.getUserId());
+            if(Util.isZero(result.length())){
+                result = stpExecutor.updateFromCSV(csvModel, getCurrentUser());
+                if("SUCCESS".equalsIgnoreCase(result)){
+                    resultModel.setResult(ActionResult.SUCCESS.toString());
+                    isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
+                } else {
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail(result);
+                    isaAuditor.addFailed(userId, commandType.toString(), csvModel.toString(), result);
+                }
+            } else {
+                resultModel.setResult(ActionResult.FAILED.toString());
+                resultModel.setDetail(result);
+            }
+        } catch(Exception e){
+            if (e.getCause() != null) {
+                result = e.getCause().getMessage();
+            } else {
+                result = e.getMessage();
+            }
+            resultModel.setResult(ActionResult.EXCEPTION.toString());
+            resultModel.setDetail(result);
+            isaAuditor.addException(userId, commandType.toString(), csvModel.toString(), result);
+        }
+        return resultModel;
+    }
+    private ResultModel executeDelete(final CSVModel csvModel, final CommandType commandType){
+        String result = null;
+        ResultModel resultModel = null;
+        try {
+            result = csvModel.valid(commandType);
+            resultModel = new ResultModel();
+            resultModel.setCommand(commandType.toString());
+            resultModel.setId(csvModel.getUserId());
+            if(Util.isZero(result.length())){
+                result = stpExecutor.deleteFromCSV(csvModel, getCurrentUser());
+                if("SUCCESS".equalsIgnoreCase(result)){
+                    resultModel.setResult(ActionResult.SUCCESS.toString());
+                    isaAuditor.addSucceed(userId, commandType.toString(), csvModel.toString());
+                } else {
+                    resultModel.setResult(ActionResult.FAILED.toString());
+                    resultModel.setDetail(result);
+                    isaAuditor.addFailed(userId, commandType.toString(), csvModel.toString(), result);
+                }
+            } else {
+                resultModel.setResult(ActionResult.FAILED.toString());
+                resultModel.setDetail(result);
+            }
+        } catch(Exception e){
+            if (e.getCause() != null) {
+                result = e.getCause().getMessage();
+            } else {
+                result = e.getMessage();
+            }
+            resultModel.setResult(ActionResult.EXCEPTION.toString());
+            resultModel.setDetail(result);
+            isaAuditor.addException(userId, commandType.toString(), csvModel.toString(), result);
+        }
+        return resultModel;
     }
 
 
-    public IsaManageUserView SelectUserById(String id) throws Exception {
-        log.debug("SelectUserById. (id: {})",id);
+    public IsaManageUserView getUserById(final String id) throws Exception {
+        log.debug("-- getUserById(id: {})",id);
+        IsaManageUserView isaManageUserView = null;
         User user = userDAO.findById(id);
-
-        IsaManageUserView isaManageUserView = new IsaManageUserView();
-        isaManageUserView.setId(user.getId());
-        isaManageUserView.setUsername(user.getUserName());
-        isaManageUserView.setPhoneExt(user.getPhoneExt());
-        isaManageUserView.setPhoneNumber(user.getPhoneNumber());
-        isaManageUserView.setBuCode(user.getBuCode());
-        isaManageUserView.setEmailAddress(user.getEmailAddress());
-        isaManageUserView.setRole(user.getRole() != null ? user.getRole() : new Role());
-        isaManageUserView.setUserDepartment(user.getDepartment() != null ? user.getDepartment() : new UserDepartment());
-        isaManageUserView.setUserDivision(user.getDivision() != null ? user.getDivision() : new UserDivision());
-        isaManageUserView.setUserRegion(user.getRegion() != null ? user.getRegion() : new UserRegion());
-        isaManageUserView.setUserTeam(user.getTeam() != null ? user.getTeam() : new UserTeam());
-        isaManageUserView.setUserTitle(user.getTitle() != null ? user.getTitle() : new UserTitle());
-        isaManageUserView.setUserZone(user.getZone() != null ? user.getZone() : new UserZone());
-        isaManageUserView.setActive(user.getActive());
-
+        if(!Util.isNull(user)){
+            isaManageUserView = userTransform.transformToISAView(user);
+        }
+        log.debug("-- view {}", isaManageUserView.toString());
         return isaManageUserView;
     }
 
-
-    public void deleteUser(String id) throws Exception {
-        log.debug("deleteUser()");
-
-        User user = userDAO.findById(id);
-        user.setUserStatus(UserStatus.MARK_AS_DELETED);
-        userDAO.persist(user);
-
-    }
-
-    public void deleteUserList(User[] users) throws Exception {
-        log.debug("deleteUserList()");
-
-        for (User list : users) {
-            User user = userDAO.findById(list.getId());
-            user.setUserStatus(UserStatus.MARK_AS_DELETED);
-            userDAO.persist(user);
-
-        }
-    }
-
-
-    public List<User> searchUser(IsaSearchView isaSearchView) throws Exception {
-        log.debug("searchUser()");
-
-        Criteria criteria = userDAO.createCriteria();
-        criteria.add(Restrictions.eq("userStatus",UserStatus.NORMAL));
-
-        if (!isaSearchView.getId().equals("")) {
-            criteria.add(Restrictions.like("id", "%" + isaSearchView.getId() + "%"));
-        }
-        if (!isaSearchView.getUsername().equals("")) {
-            criteria.add(Restrictions.like("userName", "%" + isaSearchView.getUsername() + "%"));
-        }
-        if (isaSearchView.getRoleId().getId() != 0) {
-            criteria.add(Restrictions.eq("role", isaSearchView.getRoleId()));
-        }
-        if (isaSearchView.getDepartmentId().getId() != 0) {
-            criteria.add(Restrictions.eq("department", isaSearchView.getDepartmentId()));
-        }
-        if (isaSearchView.getDivisionId().getId() != 0) {
-            criteria.add(Restrictions.eq("division", isaSearchView.getDivisionId()));
-        }
-        if (isaSearchView.getRegionId().getId() != 0) {
-            criteria.add(Restrictions.eq("region", isaSearchView.getRegionId()));
-        }
-        if (isaSearchView.getTeamId().getId() != 0) {
-            criteria.add(Restrictions.eq("team", isaSearchView.getTeamId()));
-        }
-        if (isaSearchView.getTitleId().getId() != 0) {
-            criteria.add(Restrictions.eq("title", isaSearchView.getTitleId()));
-        }
-        if (isaSearchView.getZoneId().getId() != 0) {
-            criteria.add(Restrictions.eq("zone", isaSearchView.getZoneId()));
-        }
-
-        List<User> list = criteria.list();
-
-
-        return list;
-    }
-
-    public void editUserActive(User[] users, ManageUserActive manageUserActive) throws Exception {
-        log.debug("editUserActive()");
-        log.debug("========================= : {}",manageUserActive.getValue());
-        for (User list : users) {
-            User user = userDAO.findById(list.getId());
-            user.setActive(manageUserActive.getValue());
-            userDAO.persist(user);
+    public void editUserActive(final User model, final ManageUserActive manageUserActive) throws Exception {
+        log.debug("-- editUserActive()");
+        if(!Util.isNull(model)){
+            userDAO.updateActiveOrInactive(model, manageUserActive.getValue(), getCurrentUser());
         }
 
     }
@@ -294,8 +382,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setUserName(userlist.getUserName());
             isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
             isaUserDetailView.setBuCode(userlist.getBuCode());
-            isaUserDetailView.setLastIp(userlist.getLastIP());
-            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
+//            isaUserDetailView.setLastIp(userlist.getLastIP());
+//            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
             isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
             isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
             isaUserDetailView.setRole(userlist.getRole()!=null && userlist.getRole().getName() != null? userlist.getRole().getName() : " ");
@@ -304,8 +392,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setRegion(userlist.getRegion()!=null && userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
             isaUserDetailView.setTeam(userlist.getTeam()!=null && userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
             isaUserDetailView.setTitle(userlist.getTitle()!=null && userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
-            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
-            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
+//            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
+//            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
             isaUserDetailView.setUserStatus(userlist.getUserStatus()!=null && userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
 
             list.add(isaUserDetailView);
@@ -353,8 +441,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setUserName(userlist.getUserName());
             isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
             isaUserDetailView.setBuCode(userlist.getBuCode());
-            isaUserDetailView.setLastIp(userlist.getLastIP());
-            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
+//            isaUserDetailView.setLastIp(userlist.getLastIP());
+//            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
             isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
             isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
             isaUserDetailView.setRole(userlist.getRole()!=null && userlist.getRole().getName() != null? userlist.getRole().getName() : " ");
@@ -363,8 +451,8 @@ public class IsaBusinessControl extends BusinessControl {
             isaUserDetailView.setRegion(userlist.getRegion()!=null && userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
             isaUserDetailView.setTeam(userlist.getTeam()!=null && userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
             isaUserDetailView.setTitle(userlist.getTitle()!=null && userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
-            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
-            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
+//            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
+//            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
             isaUserDetailView.setUserStatus(userlist.getUserStatus()!=null && userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
 
             list.add(isaUserDetailView);
@@ -374,5 +462,36 @@ public class IsaBusinessControl extends BusinessControl {
     }
 
 
-
+    public IsaUserDetailView mappingToAudit(final IsaManageUserView isaManageUserView){
+        log.debug("-- mappingToAudit()");
+        IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
+        if(!Util.isNull(isaManageUserView)){
+            isaUserDetailView.setUserId(isaManageUserView.getId());
+            isaUserDetailView.setUserName(isaManageUserView.getUsername());
+            isaUserDetailView.setEmailAddress(isaManageUserView.getEmailAddress());
+            isaUserDetailView.setBuCode(isaManageUserView.getBuCode());
+            isaUserDetailView.setPhoneExt(isaManageUserView.getPhoneExt());
+            isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());
+            if(!Util.isNull(isaManageUserView.getRole())){
+                isaUserDetailView.setRole(isaManageUserView.getRole().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserTeam())){
+                isaUserDetailView.setTeam(isaManageUserView.getUserTeam().getTeam_name());
+            }
+            if(!Util.isNull(isaManageUserView.getUserDepartment())){
+                isaUserDetailView.setDepartment(isaManageUserView.getUserDepartment().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserDivision())){
+                isaUserDetailView.setDivision(isaManageUserView.getUserDivision().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserRegion())){
+                isaUserDetailView.setRegion(isaManageUserView.getUserRegion().getName());
+            }
+            if(!Util.isNull(isaManageUserView.getUserTitle())){
+                isaUserDetailView.setTitle(isaManageUserView.getUserTitle().getName());
+            }
+            isaUserDetailView.setActive(isaManageUserView.getActive());
+        }
+        return isaUserDetailView;
+    }
 }

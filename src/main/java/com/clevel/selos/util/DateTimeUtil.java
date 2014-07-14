@@ -95,6 +95,18 @@ public class DateTimeUtil implements Serializable {
         return dateConvert;
     }
 
+    public static Date convertStringToDate(final String date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyyMMddHHmmss");
+        Date dateConvert = null;
+        try {
+            dateConvert = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            log.error("Error to parsing date. {}", date);
+            dateConvert = DateTime.now().toDate();
+        }
+        return dateConvert;
+    }
+
     public static Date convertStringToDate(String date, String dateFormat){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         Date dateConvert = new Date();
@@ -405,5 +417,17 @@ public class DateTimeUtil implements Serializable {
         cal.setTime(date);
         cal.add(Calendar.DATE, days); //minus number would decrement the days
         return cal.getTime();
+    }
+
+    public static Date addDayForDueDate(final Date date, final int day){
+        DateTime dtOrg = new DateTime(date);
+        return dtOrg.plusDays(day).toDate();
+    }
+
+    public static String getDayOfWeek(final Date date){
+        //EEE gives short day names
+        //EEEE would be full length.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.US);
+        return dateFormat.format(date);
     }
 }

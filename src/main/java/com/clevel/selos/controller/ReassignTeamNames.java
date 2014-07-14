@@ -404,7 +404,11 @@ public class ReassignTeamNames implements Serializable
             if((Long)session.getAttribute("stepId")!= StepValue.COMPLETED_STEP.value() &&session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
             {
                 String wobNumber = (String)session.getAttribute("wobNumber");
-                bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                String queueName = (String)session.getAttribute("queueName");
+                if(wobNumber.trim().length()!=0 || queueName.trim().length()!=0)
+                {
+                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                }
             }
         }
         catch (Exception e)
@@ -559,7 +563,7 @@ public class ReassignTeamNames implements Serializable
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            log.error("",e);
         }
         finally
         {
@@ -889,6 +893,8 @@ public class ReassignTeamNames implements Serializable
             checked.clear();
 
             setChecked(checked);
+
+            log.debug("Checked size : {}, values : {}",checked.size(),checked);
 
             popupselectedteamname= "";
 

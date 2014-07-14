@@ -124,6 +124,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     ProductGroupDAO productGroupDAO;
     @Inject
     CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
+    @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -1181,6 +1183,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(customerModifyFlag > 0){
             prescreenView.setModifyFlag(1);
             modifyFlag = true;
+
+            //Remove PreScreen Result Data
+            log.debug("savePreScreen ::: remove UWResultSummary data...");
+            uwRuleResultControl.deleteUWRuleResult(workCasePreScreenId, 0);
         }else{
             prescreenView.setModifyFlag(0);
             modifyFlag = false;
@@ -1531,12 +1537,13 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void updateCSIData(long workCasePreScreenId) throws Exception{
-        List<Customer> customers = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customers);
+        List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        //List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customers);
         List<CSIResult> csiResultList = new ArrayList<CSIResult>();
         long customerId = 0;
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
-            customerId = customerInfoView.getId();
+        //for(CustomerInfoView customerInfoView : customerInfoViewList){
+        for(Customer customer : customerList){
+            customerId = customer.getId();
             log.debug("updateCSIDataFullApp ::: customerId : {}", customerId);
             if(customerId != 0){
                 List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomerId(customerId);
@@ -1545,30 +1552,65 @@ public class PrescreenBusinessControl extends BusinessControl {
                 log.debug("updateCSIDataFullApp ::: customerAccountNameList : {}", customerAccountNameList);
 
                 List<AccountInfoId> accountInfoIdList = new ArrayList<AccountInfoId>();
-                for(CustomerAccount customerAccount : customerAccountList){
-                    AccountInfoId accountInfoId = new AccountInfoId();
-                    accountInfoId.setIdNumber(customerAccount.getIdNumber());
-                    if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 1){
-                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CITIZEN_ID);
-                    }else if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 2){
-                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.PASSPORT);
-                    }else if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 3){
-                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CORPORATE_ID);
+                //-- if customer never check NCB ( eg. guarantor and related person ) manual add customer account name and customer account--//
+                if(customerAccountList != null && customerAccountList.size() > 0) {
+                    for (CustomerAccount customerAccount : customerAccountList) {
+                        AccountInfoId accountInfoId = new AccountInfoId();
+                        accountInfoId.setIdNumber(customerAccount.getIdNumber());
+                        if (customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 1) {
+                            accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CITIZEN_ID);
+                        } else if (customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 2) {
+                            accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.PASSPORT);
+                        } else if (customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 3) {
+                            accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CORPORATE_ID);
+                        }
+                        accountInfoIdList.add(accountInfoId);
                     }
+                } else {
+                    AccountInfoId accountInfoId = new AccountInfoId();
+                    String idNumber = "";
+
+                    if(customer.getCustomerEntity().getId() == 1)
+                        idNumber = customer.getIndividual().getCitizenId();
+                    else if(customer.getCustomerEntity().getId() == 2)
+                        idNumber = customer.getJuristic().getRegistrationId();
+                    accountInfoId.setIdNumber(idNumber);
+
+                    if(customer.getDocumentType() != null && customer.getDocumentType().getId() == 1)
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CITIZEN_ID);
+                    else if(customer.getDocumentType() != null && customer.getDocumentType().getId() == 2)
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.PASSPORT);
+                    else if (customer.getDocumentType() != null && customer.getDocumentType().getId() == 3)
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CORPORATE_ID);
+
                     accountInfoIdList.add(accountInfoId);
+
                 }
 
                 List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
-                for(CustomerAccountName customerAccountName : customerAccountNameList){
+                //-- if customer never check NCB ( eg. guarantor and related person ) manual add customer account name and customer account--//
+                if(customerAccountNameList != null && customerAccountNameList.size() > 0){
+                    for(CustomerAccountName customerAccountName : customerAccountNameList){
+                        AccountInfoName accountInfoName = new AccountInfoName();
+
+                        accountInfoName.setNameTh(customerAccountName.getNameTh());
+                        accountInfoName.setNameEn(customerAccountName.getNameEn());
+                        accountInfoName.setSurnameTh(customerAccountName.getSurnameTh());
+                        accountInfoName.setSurnameEn(customerAccountName.getSurnameEn());
+
+                        accountInfoNameList.add(accountInfoName);
+                    }
+                } else {
                     AccountInfoName accountInfoName = new AccountInfoName();
 
-                    accountInfoName.setNameTh(customerAccountName.getNameTh());
-                    accountInfoName.setNameEn(customerAccountName.getNameEn());
-                    accountInfoName.setSurnameTh(customerAccountName.getSurnameTh());
-                    accountInfoName.setSurnameEn(customerAccountName.getSurnameEn());
+                    accountInfoName.setNameTh(customer.getNameTh());
+                    accountInfoName.setNameEn(customer.getNameEn());
+                    accountInfoName.setSurnameTh(customer.getLastNameTh());
+                    accountInfoName.setSurnameEn(customer.getLastNameEn());
 
                     accountInfoNameList.add(accountInfoName);
                 }
+
 
                 log.debug("updateCSIDataFullApp ::: accountInfoIdList : {}", accountInfoIdList);
                 log.debug("updateCSIDataFullApp ::: accountInfoNameList : {}", accountInfoNameList);
@@ -1580,14 +1622,19 @@ public class PrescreenBusinessControl extends BusinessControl {
                 log.info("getCSI ::: csiInputData : {}", csiInputData);
                 CSIResult csiResult = new CSIResult();
                 String idNumber = "";
-                Customer customer = new Customer();
+                if(customer.getCustomerEntity().getId() == 1){
+                    idNumber = customer.getIndividual().getCitizenId();
+                }else if(customer.getCustomerEntity().getId() == 2){
+                    idNumber = customer.getJuristic().getRegistrationId();
+                }
+                /*Customer customer = new Customer();
                 if(customerInfoView.getCustomerEntity().getId() == 1){
                     idNumber = customerInfoView.getCitizenId();
                     customer = individualDAO.findByCitizenId(idNumber, workCasePreScreenId);
                 } else if (customerInfoView.getCustomerEntity().getId() == 2){
                     idNumber = customerInfoView.getRegistrationId();
                     customer = juristicDAO.findByRegistrationId(idNumber, workCasePreScreenId);
-                }
+                }*/
                 try{
                     User user = getCurrentUser();
                     csiResult = rlosInterface.getCSIData(user.getId(), csiInputData);
@@ -1638,5 +1685,21 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
             }
         }
+    }
+
+    public int getTimesOfPreScreenCheck(long workCasePreScreenId, long stepId){
+        int timesOfPreScreenCheck = 0;
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerPreScreen(workCasePreScreenId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
+            if(!Util.isNull(workCaseOwner)){
+                log.debug("getTimesOfPreScreenCheck ::: workCaseOwner : {}", workCaseOwner);
+                timesOfPreScreenCheck = workCaseOwner.getTimesOfCriteriaChecked();
+            }
+            log.debug("getTimesOfPreScreenCheck ::: timesOfCriteriaCheck : {}", timesOfPreScreenCheck);
+        }catch(Exception ex){
+            log.error("Exception while get time of check criteria : ", ex);
+        }
+
+        return timesOfPreScreenCheck;
     }
 }

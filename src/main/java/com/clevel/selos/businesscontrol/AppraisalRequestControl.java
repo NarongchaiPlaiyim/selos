@@ -2,14 +2,13 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AppraisalDetailView;
-import com.clevel.selos.model.view.AppraisalView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.AppraisalTransform;
+import com.clevel.selos.transform.NewCollateralTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -32,32 +31,39 @@ public class AppraisalRequestControl extends BusinessControl {
     @Inject
     private AppraisalContactDetailDAO appraisalContactDetailDAO;
     @Inject
-    private ProposeLineDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
-    private ProposeCollateralInfoDAO newCollateralDAO;
+    private NewCollateralDAO newCollateralDAO;
     @Inject
-    private ProposeCollateralInfoHeadDAO newCollateralHeadDAO;
+    private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
-    private ProposeCollateralInfoSubDAO newCollateralSubDAO;
+    private NewCollateralSubDAO newCollateralSubDAO;
     @Inject
     private AppraisalDetailDAO appraisalDetailDAO;
     @Inject
     private AppraisalTransform appraisalTransform;
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
+    @Inject
+    private NewCollateralTransform newCollateralTransform;
 
 
     private Appraisal appraisal;
     private List<AppraisalContactDetail> appraisalContactDetailList;
     private AppraisalView appraisalView;
     private List<AppraisalDetailView> appraisalDetailViewList;
+    private AppraisalContactDetailView appraisalContactDetailView;
 
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
-    private ProposeLine newCreditFacility;
+    private NewCreditFacility newCreditFacility;
 
-    private List<ProposeCollateralInfo> newCollateralList;
-    private List<ProposeCollateralInfoHead> newCollateralHeadList;
+    private List<NewCollateral> newCollateralList;
+    private List<NewCollateralHead> newCollateralHeadList;
+    private List<NewCollateralSub> newCollateralSubList;
+
+    private List<NewCollateralView> newCollateralViewList;
+    private List<NewCollateralHeadView> newCollateralHeadViewList;
 
     @Inject
     public AppraisalRequestControl(){
@@ -91,10 +97,10 @@ public class AppraisalRequestControl extends BusinessControl {
             if(!Util.isNull(newCreditFacility)){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
                 log.debug("getAppraisalRequest ::: newCollateralList : {}", newCollateralList);
-                List<ProposeCollateralInfo> newCollateralListForAdd = new ArrayList<ProposeCollateralInfo>();
-                for(ProposeCollateralInfo newCollateral : newCollateralList){
+                List<NewCollateral> newCollateralListForAdd = new ArrayList<NewCollateral>();
+                for(NewCollateral newCollateral : newCollateralList){
                     log.debug("getAppraisalRequest ::: getCollateralHead newCollateral.getId : {}", newCollateral.getId());
-                    newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
                     newCollateralListForAdd.add(newCollateral);
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralListForAdd);
@@ -145,7 +151,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
             //check newCreditFacility is exist? else create new one
             if(Util.isNull(newCreditFacility)){
-                newCreditFacility = new ProposeLine();
+                newCreditFacility = new NewCreditFacility();
                 newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
                 newCreditFacility.setWorkCase(workCase);
             }
@@ -157,13 +163,13 @@ public class AppraisalRequestControl extends BusinessControl {
             if(newCreditFacility.getId() != 0){
                 newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
             }else{
-                newCollateralList = new ArrayList<ProposeCollateralInfo>();
+                newCollateralList = new ArrayList<NewCollateral>();
             }
             //set flag 0 for all collateral
             log.debug("onSaveAppraisalRequest ::: newCollateralList from database : {}", newCollateralList);
-            for(ProposeCollateralInfo newCollateral : newCollateralList){
+            for(NewCollateral newCollateral : newCollateralList){
                 newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
-                for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                     newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
                 }
                 newCollateralHeadDAO.persist(newCollateralHeadList);

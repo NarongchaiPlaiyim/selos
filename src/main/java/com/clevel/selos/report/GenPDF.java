@@ -1,5 +1,6 @@
 package com.clevel.selos.report;
 
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ReportView;
@@ -34,8 +35,20 @@ public class GenPDF extends ReportService implements Serializable {
     String pathsub;
 
     @Inject
-    @Config(name = "report.rejectletter")
-    String pathRejectLetter;
+    @Config(name = "report.rejectletter.policy")
+    String pathPolicyRejectLetter;
+
+    @Inject
+    @Config(name = "report.rejectletter.ncb")
+    String pathNCBRejectLetter;
+
+    @Inject
+    @Config(name = "report.rejectletter.income")
+    String pathIncomeRejectLetter;
+
+    @Inject
+    @Config(name = "report.rejectletter.policyincome")
+    String pathPolicyIncomeRejectLetter;
 
 
     @Inject
@@ -45,6 +58,7 @@ public class GenPDF extends ReportService implements Serializable {
     @Inject
     @Config(name = "report.offerletter")
     String pathOfferLetter;
+
 
 
     @Inject
@@ -67,6 +81,10 @@ public class GenPDF extends ReportService implements Serializable {
     private ReportView reportView;
 
     long workCaseId;
+    private boolean type;
+
+    @Inject
+    private STPExecutor stpExecutor;
 
     public GenPDF() {
 
@@ -74,7 +92,7 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void init(){
         log.debug("init() {[]}");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -92,50 +110,48 @@ public class GenPDF extends ReportService implements Serializable {
     @PostConstruct
     private void onCreation(){
         init();
-        log.debug("GenPDF onCreation ");
+        reportView = new ReportView();
+        log.debug("GenPDF onCreation and New ReportView");
     }
-
-    String pdfName;
 
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
         String date = Util.createDateTime(new Date());
-        String[] month = date.split("");
-        log.debug("--month. {}",month);
-
-
+        type = false;
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
             String appNumber = workCase.getAppNumber();
-            reportView = new ReportView();
 
             StringBuilder nameOpShect =new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
-            log.debug("--nameOpShect",nameOpShect);
 
             StringBuilder nameExSum =new StringBuilder();
             nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
-            log.debug("--nameExSum",nameExSum);
 
             StringBuilder nameRejectLetter =new StringBuilder();
             nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
-            log.debug("--nameRejectLetter",nameRejectLetter);
 
             StringBuilder nameAppraisal =new StringBuilder();
-            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AppraisalAppointment.pdf");
-            log.debug("--nameAppraisal",nameAppraisal);
+            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest.pdf");
 
             StringBuilder nameOfferLetter =new StringBuilder();
             nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
-            log.debug("--nameOfferLetter",nameOfferLetter);
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
-            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
+
+            pdfReject_letter.init();
+            if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                reportView.setNameReportRejectLetter("-");
+                type = true;
+            } else {
+                reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+            }
         }
     }
 
@@ -183,9 +199,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
-//        pdfName = "Executive_Summary_Report_";
-
-        generatePDF(pathExsum, map, reportView.getNameReportExSum());
+        generatePDF(pathExsum, map, reportView.getNameReportExSum(),null);
     }
 
     public void onPrintDecisionReport() throws Exception {
@@ -205,7 +219,6 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("creditRisk", pdfExecutiveSummary.fillBorrowerRelatedProfile());
         map.put("uwDecision", pdfExecutiveSummary.fillUWDecision());
         map.put("creditRisk", pdfExecutiveSummary.fillCreditRisk());
-//        map.put("fillDecision", pdfExecutiveSummary.fillDecision());
         map.put("fillHeader",pdfExecutiveSummary.fillHeader());
         map.put("fillFooter",pdfExecutiveSummary.fillFooter());
         map.put("fillCreditBorrower",pdfExecutiveSummary.fillCreditBorrower(pathsub));
@@ -227,19 +240,47 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
         map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
 
-        generatePDF(pathDecision, map, reportView.getNameReportOpShect());
+        generatePDF(pathDecision, map, reportView.getNameReportOpShect(),null);
     }
 
     public void onPrintRejectLetter() throws Exception {
         log.debug("--onPrintRejectLetter");
         pdfReject_letter.init();
-
+        String pathReportReject = null;
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
-        map.put("fillAllNameReject",pdfReject_letter.fillAllNameReject());
-        map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
-        generatePDF(pathRejectLetter,map,reportView.getNameReportRejectLetter());
+        if (!Util.isNull( pdfReject_letter.typeReport())){
+            if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
+                    Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject =  pathPolicyIncomeRejectLetter;
+                log.debug("--path4. {}",pathReportReject);
+            } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
+                    Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject =  pathIncomeRejectLetter;
+                log.debug("--path3. {}",pathReportReject);
+            } else if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome()) ||
+                    !Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && !Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject =  pathPolicyRejectLetter;
+                log.debug("--path2. {}",pathReportReject);
+            } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                pathReportReject = pathNCBRejectLetter;//NCBRejectLetter wait it
+                log.debug("--path1. {}",pathReportReject);
+            }
+            map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
+            map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
+
+            generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter(),null);
+        } else {
+            log.debug("--RejectGroup is Null");
+        }
     }
     public void onPrintAppraisal() throws Exception {
         log.debug("--onPrintAppraisal");
@@ -248,11 +289,11 @@ public class GenPDF extends ReportService implements Serializable {
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
         map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
-        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport());
+        map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport(pathsub));
         map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
         map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
-        generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
+        generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal(),null);
     }
 
     public void onPrintOfferletter() throws Exception {
@@ -266,7 +307,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowCondition",pdfOfferLetter.fillFollowCondition());
         map.put("fillMasterOfferLetter",pdfOfferLetter.fillMasterOfferLetter());
 
-        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter());
+        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter(),null);
     }
 
     public ReportView getReportView() {
@@ -275,5 +316,13 @@ public class GenPDF extends ReportService implements Serializable {
 
     public void setReportView(ReportView reportView) {
         this.reportView = reportView;
+    }
+
+    public boolean isType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
     }
 }

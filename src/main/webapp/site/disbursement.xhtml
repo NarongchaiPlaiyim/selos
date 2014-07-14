@@ -8,23 +8,22 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<h:head>
 		<title>#{msg.get('app.disbursement.header.disbursement')}</title>
-		<link type="text/css" rel="stylesheet"
-			href="#{request.contextPath}/resources/css/style.css" />
-	
 		<h:outputStylesheet name="css/style.css" />
-		<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+		<script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
 		<h:outputScript library="js" name="custom.js" />
 		<script type="text/javascript" src="../resources/js/superfish.js"></script>
 	</h:head>
 	<h:body>
-		<p:panel id="pnl_maincontainer">
+	<f:event type="preRenderView"
+			listener="#{disbursementInfo.preRender()}" />
+		<p:panel id="pnl_maincontainer" styleClass="panel">
 			<h:form id="frmMain">
 				<div id="main_container">
 					<!-- Start Header Logo -->
 					<ui:include src="include/header_logo.xhtml" />
 					<!-- End Header Logo -->
 					<!-- Start Header Detail -->
-					<!-- ui:include src="include/header_detail.xhtml" /-->
+					<ui:include src="include/header_detail.xhtml" />
 					<!-- End Header Detail -->
 					<!-- Start Menu -->
 					<ui:include src="include/menubar.xhtml" />
@@ -619,7 +618,7 @@
 			<ui:param name="formId" value="frmConfirmDeleteDisbursementMc" />
 			<ui:param name="controller" value="#{disbursementInfo}" />
 			<ui:param name="action" value="onDeleteDisbursementMcList" />
-			<ui:param name="update" value=":disbursementForm" />
+			<ui:param name="update" value=":frmMain" />
 		</ui:include>
 
 		<ui:include src="dialog/confirmDeleteDlg.xhtml">
@@ -628,7 +627,7 @@
 			<ui:param name="formId" value="frmConfirmDeleteDisbursementDeposit" />
 			<ui:param name="controller" value="#{disbursementInfo}" />
 			<ui:param name="action" value="onDeleteDisbursementDepositList" />
-			<ui:param name="update" value=":disbursementForm" />
+			<ui:param name="update" value=":frmMain" />
 		</ui:include>
 
 		<ui:include src="dialog/confirmDeleteDlg.xhtml">
@@ -637,7 +636,7 @@
 			<ui:param name="formId" value="frmConfirmDeleteDisbursementbahtnet" />
 			<ui:param name="controller" value="#{disbursementInfo}" />
 			<ui:param name="action" value="onDeleteDisbursementBahtnetList" />
-			<ui:param name="update" value=":disbursementForm" />
+			<ui:param name="update" value=":frmMain" />
 		</ui:include>
 		<ui:include src="include/footer_outside_frmmain.xhtml" />
 	</h:body>

@@ -16,7 +16,6 @@ import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizInfoSummaryTransform;
-import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -136,16 +135,8 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bankStmtSummaryView;
     }
 
-    public void calByBankStatement(long workCaseId){
+    public void calByBankStatement(long workCaseId, long stepId){
         log.info("calGrdTotalIncomeByBankStatement :: workCaseId : {}",workCaseId);
-        long stepId = 0;
-
-        HttpSession session = FacesUtil.getSession(true);
-
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            log.debug("stepId : {}",stepId);
-        }
 
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
         if(bizInfoSummary == null){
@@ -154,11 +145,12 @@ public class BizInfoSummaryControl extends BusinessControl {
 
         //for set circulation , cal grd total income gross
         BankStatementSummary bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
-        if (bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
-            bizInfoSummary.setCirculationAmount(bankStatementSummary.getGrdTotalIncomeGross());
-        } else {
-            bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
-        }
+        //CirculationAmount = GrdTotalIncomeNetUW OR GrdTotalIncomeNetBDM * 12
+//        if (bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
+//            bizInfoSummary.setCirculationAmount(bankStatementSummary.getGrdTotalIncomeGross());
+//        } else {
+//            bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
+//        }
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryTransform.transformToView(bizInfoSummary);
         BizInfoSummaryView bizSumView = calSummaryTable(bizInfoSummaryView);
         bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizSumView);
@@ -198,6 +190,7 @@ public class BizInfoSummaryControl extends BusinessControl {
         }
 
         bizInfoSummary.setSumIncomeAmount(sumIncomeNet);
+        bizInfoSummary.setCirculationAmount(sumIncomeNet);
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         bizInfoSummary.setWorkCase(workCase);

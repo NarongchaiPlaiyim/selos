@@ -179,9 +179,7 @@ public class PrescreenConverter extends Converter{
             //Convert Warning Code into Customer.
             List<WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
             List<String> csiFullyMatchList = customerInfo.getCsiFullyMatchCode();
-            int csiFullyMatchSize = 0;
             if(csiFullyMatchList != null && csiFullyMatchList.size() > 0) {
-                csiFullyMatchSize = csiFullyMatchList.size();
                 for (String csiFullyMatchCode : csiFullyMatchList) {
                     WarningCodeFullMatchedType warningCodeFullMatchedType = new WarningCodeFullMatchedType();
                     warningCodeFullMatchedType.setCode(getValueForInterface(csiFullyMatchCode));
@@ -195,7 +193,7 @@ public class PrescreenConverter extends Converter{
 
             List<WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
             List<String> csiSomeMatchList = customerInfo.getCsiSomeMatchCode();
-            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0 && csiFullyMatchSize == 0) {
+            if(csiSomeMatchList != null && csiSomeMatchList.size() > 0) {
                 for (String csiSomeMatchCode : csiSomeMatchList) {
                     WarningCodePartialMatchedType warningCodePartialMatchedType = new WarningCodePartialMatchedType();
                     warningCodePartialMatchedType.setCode(getValueForInterface(csiSomeMatchCode));
@@ -211,24 +209,8 @@ public class PrescreenConverter extends Converter{
 
             List<AccountType> accountTypeList = borrowerType.getAccount();
             List<BRMSTMBAccountInfo> tmbAccountInfoList = customerInfo.getTmbAccountInfoList();
-            if(tmbAccountInfoList != null) {
-                for(BRMSTMBAccountInfo tmbAccountInfo : tmbAccountInfoList){
-                    AccountType accountType = new AccountType();
-                    List<AttributeType> tmbAccAttributeList = accountType.getAttribute();
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_ACTIVE_FLAG, tmbAccountInfo.isActiveFlag()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.DATA_SOURCE, tmbAccountInfo.getDataSource()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.ACCOUNT_REFERENCE, tmbAccountInfo.getAccountRef()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CUST_TO_ACCOUNT_RELATIONSHIP, tmbAccountInfo.getCustToAccountRelationCD()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_TDR_FLAG, tmbAccountInfo.isTmbTDRFlag()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE, tmbAccountInfo.getNumMonthIntPastDue()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_PRINCIPAL_AND_INTEREST_PAST_DUE_OF_TDR_ACCOUNT, tmbAccountInfo.getNumMonthIntPastDueTDRAcc()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_PRINCIPAL_PAST_DUE, tmbAccountInfo.getTmbDelPriDay()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAY_INTEREST_PAST_DUE, tmbAccountInfo.getTmbDelIntDay()));
-                    tmbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CARD_BLOCK_CODE, tmbAccountInfo.getTmbBlockCode()));
 
-                    accountTypeList.add(accountType);
-                }
-            }
+            convertTMBAccountInfo(accountTypeList, tmbAccountInfoList);
 
             borrowerTypeList.add(borrowerType);
         }

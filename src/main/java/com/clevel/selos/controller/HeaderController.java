@@ -5,6 +5,8 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
@@ -12,6 +14,8 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -33,6 +37,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "headerController")
@@ -53,6 +58,10 @@ public class HeaderController extends BaseController {
     ReasonDAO reasonDAO;
     @Inject
     UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
     @Inject
     private CheckMandateDocControl checkMandateDocControl;
@@ -111,9 +120,13 @@ public class HeaderController extends BaseController {
     private String ghmUserId;
     private String cssoUserId;
 
+    private boolean isSubmitToZM;
     private boolean isSubmitToRGM;
     private boolean isSubmitToGHM;
     private boolean isSubmitToCSSO;
+
+    private int submitPricingLevel;
+    private int submitOverSLA;
 
     private String aadAdminId;
     private String aadAdminName;
@@ -165,6 +178,7 @@ public class HeaderController extends BaseController {
     private int requestAppraisal;
     private String queueName;
     private String wobNumber;
+    private String slaStatus;
 
     private String messageHeader;
     private String message;
@@ -198,7 +212,15 @@ public class HeaderController extends BaseController {
     //Check Time of Criteria Check
     private boolean canCheckCriteria;
 
+    //Check NCB result (if red , cannot submit CA and cannot check prescreen again)
+    private boolean canCheckPreScreen;
+    private boolean canCheckFullApp;
+
+    //Check Can Request Appraisal
+    private boolean canRequestAppraisal;
+
     private int timesOfCriteriaCheck;
+    private int timesOfPreScreenCheck;
 
     private int requestAppraisalRequire;
 
@@ -225,7 +247,7 @@ public class HeaderController extends BaseController {
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.debug("HeaderController ::: appHeader : {}", appHeaderView);
 
@@ -235,6 +257,28 @@ public class HeaderController extends BaseController {
                 qualitativeType = basicInfo.getQualitativeType();
             }
             log.debug("Qualitative type : {}", qualitativeType);
+        }
+
+        if(workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(workCasePrescreen!=null && workCasePrescreen.getId()>0){
+                if(workCasePrescreen.getNcbRejectFlag()==0){
+                    canCheckPreScreen = true;
+                } else {
+                    canCheckPreScreen = false;
+                }
+            }
+        }
+
+        if(workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(workCase!=null && workCase.getId()>0){
+                if(workCase.getNcbRejectFlag()==0){
+                    canCheckFullApp = true;
+                } else {
+                    canCheckFullApp = false;
+                }
+            }
         }
 
         user = (User) session.getAttribute("user");
@@ -247,30 +291,47 @@ public class HeaderController extends BaseController {
 
         //check pre-screen result
         canCloseSale = false;
-        if(workCasePreScreenId!=0){
+        if(workCasePreScreenId != 0){
             UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
-            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+            if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canCloseSale = true;
+                    canRequestAppraisal = true;
                 }
+            } else {
+                canRequestAppraisal = false;
+            }
+
+            timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
+            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+            int limitTimeOfPreScreenCheck = 3;
+            if(!Util.isNull(userSysParameterView)){
+                limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+            }
+            if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck){
+                canCheckPreScreen = true;
             }
         }
 
         //check criteria result
         canSubmitCA = false;
         canCheckCriteria = false;
-        if(workCaseId!=0){
-            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+        if(workCaseId != 0){
+            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
             if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canSubmitCA = true;
+                    canRequestAppraisal = true;
                 } else {
                     if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
                         if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
                             canSubmitCA = true;
+                            canRequestAppraisal = true;
                         }
                     }
                 }
+            } else {
+                canRequestAppraisal = false;
             }
 
             timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
@@ -289,7 +350,7 @@ public class HeaderController extends BaseController {
     }
 
     private void _loadSessionVariable(){
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
@@ -299,6 +360,7 @@ public class HeaderController extends BaseController {
         requestAppraisal = Util.parseInt(session.getAttribute("requestAppraisal"), 0);
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+        slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");
     }
 
     public boolean checkButton(String buttonName){
@@ -323,7 +385,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(abdmUserId != null && !abdmUserId.equals("")){
             try{
-                HttpSession session = FacesUtil.getSession(true);
+                HttpSession session = FacesUtil.getSession(false);
                 String queueName = Util.parseString(session.getAttribute("queueName"), "");
                 String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
                 fullApplicationControl.assignToABDM(queueName, wobNumber, abdmUserId);
@@ -626,7 +688,7 @@ public class HeaderController extends BaseController {
         log.debug("onSubmitUWFromZM ::: starting...");
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
             fullApplicationControl.submitToUWFromZM(queueName, workCaseId);
@@ -648,8 +710,8 @@ public class HeaderController extends BaseController {
     //---------- Submit CA ( to UW2 ) -----------//
     public void onOpenSubmitUW2(){
         log.debug("onOpenSubmitUW ::: starting...");
-        HttpSession session = FacesUtil.getSession(true);
-        long workCaseId = (Long)session.getAttribute("workCaseId");
+        HttpSession session = FacesUtil.getSession(false);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         selectedUW2User = "";
         selectedDOALevel = 0;
         try{
@@ -681,7 +743,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             User user = (User) session.getAttribute("user");
 
             if(selectedUW2User != null && !selectedUW2User.equals("")){
@@ -759,6 +821,119 @@ public class HeaderController extends BaseController {
         fullApplicationControl.getUserList(user);
     }*/
 
+    //--------- Submit CA for Generic function ( use for all step ) --------//
+    public void onOpenSubmitFullApplication(){
+        _loadSessionVariable();
+        log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
+        try{
+            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
+                //Check for Request Pricing
+                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
+                if(requestPricing){
+                    //Check for Pricing DOA Level
+                    pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                    log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
+                    if(pricingDOALevel != 0) {
+                        zmEndorseUserId = "";
+                        zmUserId = "";
+                        rgmUserId = "";
+                        ghmUserId = "";
+                        cssoUserId = "";
+
+                        zmEndorseRemark = "";
+                        submitRemark = "";
+                        slaRemark = "";
+
+                        isSubmitToZM = false;
+                        isSubmitToRGM = false;
+                        isSubmitToGHM = false;
+                        isSubmitToCSSO = false;
+
+                        if(stepId <= StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
+                            zmUserList = fullApplicationControl.getUserList(user);
+                            log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
+                            isSubmitToZM = true;
+                        }
+
+                        //TO GET LIST FOR REGION
+                        if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            //Check Pricing DOA more than ZM level or not
+                            if(pricingDOALevel >= 1) {
+                                //Get User Zone from WorkCaseOwner
+                                User zmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.ZM.id());
+                                log.debug("onOpenSubmitFullApplication ::: zmUser : {}", zmUser);
+                                if (!Util.isNull(zmUser)) {
+                                    zmUserId = zmUser.getId();
+                                    onSelectedZM();
+                                }
+                                isSubmitToZM = true;
+                                isSubmitToRGM = true;
+                            }
+                        }
+
+                        //TO GET LIST FOR GROUP HEAD
+                        if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                            //Check Pricing DOA more than RM level or not
+                            if(pricingDOALevel >= 2) {
+                                //Get User Region from WorkCaseOwner
+                                User rmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.RGM.id());
+                                log.debug("onOpenSubmitFullApplication ::: rmUser : {}", rmUser);
+                                if (!Util.isNull(rmUser)) {
+                                    rgmUserId = rmUser.getId();
+                                    onSelectedRM();
+                                }
+                                isSubmitToGHM = true;
+                            }
+                        }
+
+                        //TO GET LIST FOR CHIEF
+                        if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+                            //Check Pricing DOA more than GH level or not
+                            if(pricingDOALevel >= 3) {
+                                //Get User Group Head from WorkCaseOwner
+                                User ghUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.GH.id());
+                                log.debug("onOpenSubmitFullApplication ::: ghUser : {}", ghUser);
+                                if (!Util.isNull(ghUser)) {
+                                    ghmUserId = ghUser.getId();
+                                    onSelectedGH();
+                                }
+                                isSubmitToCSSO = true;
+                            }
+                        }
+                    } else {
+                        messageHeader = msg.get("app.messageHeader.exception");
+                        message = msg.get("app.message.dialog.doapricing.notfound");
+                        showMessageBox();
+                    }
+                } else {
+                    zmUserList = fullApplicationControl.getUserList(user);
+                    log.debug("onOpenSubmitZM ::: No pricing request");
+                    RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
+                }
+            } else {
+                //----Case is updated please check criteria before submit----
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "CA information is updated, please Check Criteria before submit.";
+                showMessageBox();
+            }
+        }catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+
+    }
+
+    public void onSubmitFullApplication(){
+        _loadSessionVariable();
+        HttpSession session = FacesUtil.getSession(false);
+        boolean complete = false;
+        String slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");     //If SLA is R
+
+    }
+
 
     //---------- Submit CA ( UW2 [End Case] ) -----------//
     public void onSubmitCA(){ //Submit From UW2
@@ -766,8 +941,9 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             User user = (User) session.getAttribute("user");
+            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
             List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
 
@@ -785,7 +961,7 @@ public class HeaderController extends BaseController {
                     message = "Submit case fail. Please check return information before submit again.";
                 } else {
                     returnControl.saveReturnHistory(workCaseId,user);
-                    fullApplicationControl.submitCA(queueName, workCaseId);
+                    fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
 
                     messageHeader = "Information.";
                     message = "Submit case success";
@@ -824,7 +1000,7 @@ public class HeaderController extends BaseController {
 
     public void onReturnBDMByBU(){
         log.debug("onReturnBDMByZM ( return to BDM from ZM )");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -851,7 +1027,7 @@ public class HeaderController extends BaseController {
 
     public void onReturnAADMByUW2(){
         log.debug("onReturnAADAdmin ( return to AAD Admin from UW2 )");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -870,15 +1046,9 @@ public class HeaderController extends BaseController {
 
     public void onOpenSubmitAADCommittee(){
         log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
-        HttpSession session = FacesUtil.getSession(true);
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        }
-        if(!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        }
+        HttpSession session = FacesUtil.getSession(false);
+        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
             //List AAD Admin by team structure
             aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
@@ -894,7 +1064,7 @@ public class HeaderController extends BaseController {
     public void onSubmitAADCommittee(){
         log.debug("onSubmitAADCommittee ( submit to AAD committee )");
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
@@ -918,7 +1088,7 @@ public class HeaderController extends BaseController {
         String wobNumber = "";
         String queueName = "";
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -943,7 +1113,7 @@ public class HeaderController extends BaseController {
         String wobNumber = "";
         String queueName = "";
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
@@ -977,7 +1147,7 @@ public class HeaderController extends BaseController {
         String queueName = "";
         boolean complete = false;
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -1001,7 +1171,7 @@ public class HeaderController extends BaseController {
 
     public void onRequestPriceReduction(){
         log.debug("onRequestPriceReduction ( in step Customer Acceptance )");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
@@ -1037,7 +1207,7 @@ public class HeaderController extends BaseController {
 
     public void onCancelRequestPriceReduction(){
         log.debug("onCancelRequestPriceReduction");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -1058,7 +1228,7 @@ public class HeaderController extends BaseController {
     //Request Appraisal after Customer Acceptance
     public void onOpenRequestAppraisalCustomerAccepted(){
         log.debug("onOpenRequestAppraisalCustomerAccepted ( after customer acceptance )");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
         //Check Appraisal data exist.
@@ -1076,7 +1246,7 @@ public class HeaderController extends BaseController {
     }
     public void onRequestAppraisalCustomerAccepted(){
         log.debug("onRequestAppraisal by BDM ( after customer acceptance )");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
@@ -1097,7 +1267,7 @@ public class HeaderController extends BaseController {
     public void onCheckPreScreen(){
         long workCasePreScreenId = 0;
         boolean success = false;
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         if(workCasePreScreenId != 0){
             try{
@@ -1112,6 +1282,13 @@ public class HeaderController extends BaseController {
                             uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                             uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                             uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                            //TODO: wait to confirm spec
+                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
+                                canCheckPreScreen = false;
+                            } else {
+                                canCheckPreScreen = true;
+                            }
+                            headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
@@ -1158,7 +1335,7 @@ public class HeaderController extends BaseController {
         String queueName = "";
         boolean complete = false;
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -1182,7 +1359,7 @@ public class HeaderController extends BaseController {
     public void onOpenReturnAADAdmin(){
         log.debug("onOpenReturnAADAdmin ( return to AADAdmin )");
         //Get aadCommittee from appraisal
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         long workCasePreScreenId = 0;
         long workCaseId = 0;
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
@@ -1205,7 +1382,7 @@ public class HeaderController extends BaseController {
         String queueName = "";
         boolean complete = false;
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -1228,20 +1405,9 @@ public class HeaderController extends BaseController {
     //Maker
     public void onCheckMandateForMaker(){
         log.debug("onCheckMandateForMaker ::: start...");
-        HttpSession session = FacesUtil.getSession(true);
-        try {
-            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-            workCaseId = 0;
-        } catch (Exception e) {
-            workCasePreScreenId = 0;
-        }
-
-        try {
-            stepId = (Long)session.getAttribute("stepId");
-        } catch (Exception e) {
-            stepId = 0;
-        }
-
+        HttpSession session = FacesUtil.getSession(false);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         checkMandateDocView = null;
         try{
             checkMandateDocView = checkMandateDocControl.getMandateDocViewByMaker(workCasePreScreenId);
@@ -1262,20 +1428,9 @@ public class HeaderController extends BaseController {
     //Checker
     public void onCheckMandateForChecker(){
         log.debug("onCheckMandateForChecker ::: start...");
-        HttpSession session = FacesUtil.getSession(true);
-        try {
-            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-            workCaseId = 0;
-        } catch (Exception e) {
-            workCasePreScreenId = 0;
-        }
-
-        try {
-            stepId = (Long)session.getAttribute("stepId");
-        } catch (Exception e) {
-            stepId = 0;
-        }
-
+        HttpSession session = FacesUtil.getSession(false);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         String result = null;
         checkMandateDocView = null;
         try{
@@ -1329,15 +1484,21 @@ public class HeaderController extends BaseController {
         log.debug("onCheckMandateForFullApp ::: stop...");
     }
 
-    private void callFullApp() throws Exception{
-        HttpSession session = FacesUtil.getSession(true);
-        try {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            workCasePreScreenId = 0;
+    //AAD Committee
+    public void onCheckMandateForStepCheckDoc(){
+        log.debug("onCheckMandateForStepCheckDoc ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
         } catch (Exception e) {
-            workCaseId = 0;
+            log.error("-- Exception : ", e);
         }
+        log.debug("onCheckMandateForStepCheckDoc ::: stop...");
+    }
 
+    private void callFullApp() throws Exception{
+        HttpSession session = FacesUtil.getSession(false);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         String result = null;
         checkMandateDocView = null;
         try{
@@ -1384,8 +1545,8 @@ public class HeaderController extends BaseController {
 
     public void onOpenReturnBDMDialog(){
         log.debug("onOpenReturnBDM ::: starting...");
-        HttpSession session = FacesUtil.getSession(true);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        HttpSession session = FacesUtil.getSession(false);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
         //get from not accept List and from CheckMandateDoc
         returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
@@ -1441,7 +1602,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             try{
-                HttpSession session = FacesUtil.getSession(true);
+                HttpSession session = FacesUtil.getSession(false);
                 long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 String queueName = session.getAttribute("queueName").toString();
                 User user = (User) session.getAttribute("user");
@@ -1484,7 +1645,7 @@ public class HeaderController extends BaseController {
     //-SUBMIT CASE FROM ABDM
     public void onSubmitToBDM(){
         log.debug("onSubmitBDM");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         String queueName = Util.parseString(session.getAttribute("queueName"), "");
         String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -1509,7 +1670,7 @@ public class HeaderController extends BaseController {
         log.debug("onSubmitReturnUW1");
 
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
@@ -1544,7 +1705,7 @@ public class HeaderController extends BaseController {
         log.debug("onRestartCase");
 
         try{
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
@@ -1570,7 +1731,7 @@ public class HeaderController extends BaseController {
         log.debug("onReturnToAADAdminByBDM");
 
         try {
-            HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(false);
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
@@ -1592,9 +1753,8 @@ public class HeaderController extends BaseController {
         log.debug("onCompleteCase");
 
         try{
-            HttpSession session = FacesUtil.getSession(true);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
+            HttpSession session = FacesUtil.getSession(false);
+            String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
             fullApplicationControl.completeCase(queueName,wobNumber);
@@ -1643,7 +1803,7 @@ public class HeaderController extends BaseController {
     public void onSubmitRequestAppraisal(){
         log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
         log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
         long workCaseId = 0;
@@ -1795,7 +1955,7 @@ public class HeaderController extends BaseController {
     public void onCheckCriteria(){
         long workCaseId;
         boolean success = false;
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         if(workCaseId != 0){
             try{
@@ -1822,6 +1982,13 @@ public class HeaderController extends BaseController {
                             //----Update Times of Check Criteria----//
                             fullApplicationControl.updateTimeOfCheckCriteria(workCaseId, stepId);
                             fullApplicationControl.clearCaseUpdateFlag(workCaseId);
+
+                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,0,workCaseId,user)){
+                                canCheckFullApp = false;
+                            } else {
+                                canCheckFullApp = true;
+                            }
+                            headerControl.updateNCBRejectFlagFullApp(workCaseId, canCheckFullApp);
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";
@@ -1859,12 +2026,35 @@ public class HeaderController extends BaseController {
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
+    //---- Function for Request Appraisal ( Parallel ) ----//
+    public void onRequestParallelAppraisal(){
+        HttpSession session = FacesUtil.getSession(false);
+
+        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
+        try {
+            log.debug("onRequestParallelAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+            fullApplicationControl.requestParallelAppraisal(workCaseId, workCasePreScreenId);
+            //Redirect to Appraisal Request Page
+            FacesUtil.redirect("/site/appraisalRequest.jsf");
+            return;
+        }catch (Exception ex){
+            log.error("Exception while request parallel appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = "Exception while request parallel appraisal, " + Util.getMessageException(ex);
+            showMessageBox();
+        }
+    }
+
     public boolean checkAccessStage(String stageString){
         boolean accessible = false;
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
+
         long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
         long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
         if("PRESCREEN".equalsIgnoreCase(stageString)){
             if(stageId == 101){
                 accessible = true;
@@ -2440,11 +2630,67 @@ public class HeaderController extends BaseController {
         this.timesOfCriteriaCheck = timesOfCriteriaCheck;
     }
 
+    public boolean isCanCheckPreScreen() {
+        return canCheckPreScreen;
+    }
+
+    public void setCanCheckPreScreen(boolean canCheckPreScreen) {
+        this.canCheckPreScreen = canCheckPreScreen;
+    }
+
+    public boolean isCanCheckFullApp() {
+        return canCheckFullApp;
+    }
+
+    public void setCanCheckFullApp(boolean canCheckFullApp) {
+        this.canCheckFullApp = canCheckFullApp;
+    }
+
     public int getRequestAppraisalRequire() {
         return requestAppraisalRequire;
     }
 
     public void setRequestAppraisalRequire(int requestAppraisalRequire) {
         this.requestAppraisalRequire = requestAppraisalRequire;
+    }
+
+    public boolean isCanRequestAppraisal() {
+        return canRequestAppraisal;
+    }
+
+    public void setCanRequestAppraisal(boolean canRequestAppraisal) {
+        this.canRequestAppraisal = canRequestAppraisal;
+    }
+
+    public int getTimesOfPreScreenCheck() {
+        return timesOfPreScreenCheck;
+    }
+
+    public void setTimesOfPreScreenCheck(int timesOfPreScreenCheck) {
+        this.timesOfPreScreenCheck = timesOfPreScreenCheck;
+    }
+
+    public int getSubmitPricingLevel() {
+        return submitPricingLevel;
+    }
+
+    public void setSubmitPricingLevel(int submitPricingLevel) {
+        this.submitPricingLevel = submitPricingLevel;
+    }
+
+    public int getSubmitOverSLA() {
+        return submitOverSLA;
+    }
+
+    public void setSubmitOverSLA(int submitOverSLA) {
+        this.submitOverSLA = submitOverSLA;
+    }
+
+    public boolean isSubmitToZM() {
+        return isSubmitToZM;
+    }
+
+    public void setSubmitToZM(boolean isSubmitToZM) {
+        this.isSubmitToZM = isSubmitToZM;
     }
 }

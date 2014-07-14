@@ -1,9 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.AppraisalCompanyDAO;
+import com.clevel.selos.dao.master.HolidayDAO;
+import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
@@ -16,6 +20,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -40,13 +45,13 @@ public class AppraisalAppointmentControl extends BusinessControl {
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
     @Inject
-    private ProposeLineDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
-    private ProposeCollateralInfoDAO newCollateralDAO;
+    private NewCollateralDAO newCollateralDAO;
     @Inject
-    private ProposeCollateralInfoHeadDAO newCollateralHeadDAO;
+    private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
-    private ProposeCollateralInfoSubDAO newCollateralSubDAO;
+    private NewCollateralSubDAO newCollateralSubDAO;
     @Inject
     private CustomerAcceptanceTransform customerAcceptanceTransform;
     @Inject
@@ -55,7 +60,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private ContactRecordDetailTransform contactRecordDetailTransform;
     @Inject
     private ContactRecordDetailDAO contactRecordDetailDAO;
-
+    @Inject
+    private AppraisalCompanyDAO appraisalCompanyDAO;
     private Appraisal appraisal;
     private AppraisalView appraisalView;
     private List<AppraisalContactDetail> appraisalContactDetailList;
@@ -63,19 +69,40 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<AppraisalDetailView> appraisalDetailViewList;
 
-    private List<ProposeCollateralInfo> newCollateralList;
-    private List<ProposeCollateralInfoHead> newCollateralHeadList;
+    private List<NewCollateral> newCollateralList;
+    private List<NewCollateralHead> newCollateralHeadList;
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
-    private ProposeLine newCreditFacility;
+    private NewCreditFacility newCreditFacility;
     private CustomerAcceptance customerAcceptance;
     private ContactRecordDetail contactRecordDetail;
+    @Inject
+    private ProvinceDAO provinceDAO;
+    @Inject
+    private HolidayDAO holidayDAO;
 
     @Inject
     public AppraisalAppointmentControl(){
 
     }
-	
+
+    public List<Province> getProvince(){
+        return provinceDAO.findAllASC();
+    }
+
+    public List<AppraisalCompany> getCompany(){
+        return appraisalCompanyDAO.findAllASC();
+    }
+
+    public boolean isHoliday(final Date holiday){
+        try {
+            return holidayDAO.isHoliday(holiday);
+        } catch (Exception e){
+            log.debug("-- Exception while get holiday {}", e);
+            return false;
+        }
+    }
+
 	public AppraisalView getAppraisalAppointment(final long workCaseId, final long workCasePreScreenId){
         log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
@@ -115,9 +142,9 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             if(!Util.isNull(newCreditFacility)){
                 newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
-                for(ProposeCollateralInfo newCollateral : newCollateralList){
+                for(NewCollateral newCollateral : newCollateralList){
                     //newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
-                    newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), ProposeType.P, RequestAppraisalValue.NOT_REQUEST));
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
@@ -178,7 +205,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
 
             if(Util.isNull(newCreditFacility)){
-                newCreditFacility = new ProposeLine();
+                newCreditFacility = new NewCreditFacility();
                 newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
                 newCreditFacility.setWorkCase(workCase);
             }
@@ -225,7 +252,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
                 log.debug("-- newCollateralList.size()[{}]", newCollateralList.size());
                 try {
-                    for(ProposeCollateralInfo newCollateral : newCollateralList){
+                    for(NewCollateral newCollateral : newCollateralList){
                         log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
                         newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
                         newCollateralHeadDAO.setAppraisalRequest(newCollateralHeadList);
@@ -260,7 +287,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 //                    log.debug("-- Exception while call NewCollateralHeadDAO ", e);
 //                }
             }else{
-                newCollateralList = new ArrayList<ProposeCollateralInfo>();
+                newCollateralList = new ArrayList<NewCollateral>();
             }
 
             try {

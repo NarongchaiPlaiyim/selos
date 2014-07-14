@@ -52,6 +52,27 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
     }
 
     @Override
+    public ECMDataResult getECMTypeName(final String ecmDocId) {
+        ECMDataResult ecmDataResult = null;
+        try {
+            ecmDataResult = new ECMDataResult();
+            ecmDataResult.setEcmTypeName(ecmService.getECMTypeName(ecmDocId));
+            ecmDataResult.setActionResult(ActionResult.SUCCESS);
+            return ecmDataResult;
+        } catch (ECMInterfaceException e){
+            log.error("Exception while get ECM Type Name!", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Exception while get ECM Type Name!", e);
+            String exceptionMessage = msg.get(ExceptionMapping.ECM_EXCEPTION);
+            if(!Util.isEmpty(e.getMessage()) && !e.getMessage().trim().equalsIgnoreCase("null")){
+                exceptionMessage = e.getMessage();
+            }
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_EXCEPTION, exceptionMessage);
+        }
+    }
+
+    @Override
     public boolean update(final ECMCAPShare ecmcapShare) {
         try {
             ecmcapShare.setCrsLastUpdate(new Date(new java.util.Date().getTime()));

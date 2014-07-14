@@ -97,7 +97,7 @@ public class CustomerInfoSummary extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());

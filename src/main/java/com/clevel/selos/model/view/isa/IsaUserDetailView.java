@@ -1,19 +1,15 @@
 package com.clevel.selos.model.view.isa;
 
-import com.clevel.selos.model.ManageUserActive;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
 public class IsaUserDetailView implements Serializable {
-
     private String userId;
     private String userName;
     private String emailAddress;
     private String buCode;
-    private String lastIp;
-    private String lastLogon;
     private String phoneExt;
     private String phoneNumber;
     private String role;
@@ -22,10 +18,12 @@ public class IsaUserDetailView implements Serializable {
     private String region;
     private String team;
     private String title;
-    private String zone;
-    private ManageUserActive active;
+    private int active;
     private String userStatus;
 
+    public IsaUserDetailView() {
+
+    }
 
     public String getUserId() {
         return userId;
@@ -57,22 +55,6 @@ public class IsaUserDetailView implements Serializable {
 
     public void setBuCode(String buCode) {
         this.buCode = buCode;
-    }
-
-    public String getLastIp() {
-        return lastIp;
-    }
-
-    public void setLastIp(String lastIp) {
-        this.lastIp = lastIp;
-    }
-
-    public String getLastLogon() {
-        return lastLogon;
-    }
-
-    public void setLastLogon(String lastLogon) {
-        this.lastLogon = lastLogon;
     }
 
     public String getPhoneExt() {
@@ -139,19 +121,11 @@ public class IsaUserDetailView implements Serializable {
         this.title = title;
     }
 
-    public String getZone() {
-        return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
-    public ManageUserActive getActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(ManageUserActive active) {
+    public void setActive(int active) {
         this.active = active;
     }
 
@@ -163,7 +137,6 @@ public class IsaUserDetailView implements Serializable {
         this.userStatus = userStatus;
     }
 
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -171,8 +144,6 @@ public class IsaUserDetailView implements Serializable {
                 .append("userName", userName)
                 .append("emailAddress", emailAddress)
                 .append("buCode", buCode)
-                .append("lastIp", lastIp)
-                .append("lastLogon", lastLogon)
                 .append("phoneExt", phoneExt)
                 .append("phoneNumber", phoneNumber)
                 .append("role", role)
@@ -181,7 +152,6 @@ public class IsaUserDetailView implements Serializable {
                 .append("region", region)
                 .append("team", team)
                 .append("title", title)
-                .append("zone", zone)
                 .append("active", active)
                 .append("userStatus", userStatus)
                 .toString();

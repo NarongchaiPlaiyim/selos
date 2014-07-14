@@ -20,6 +20,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumJuris")
-public class CustomerInfoJuristic implements Serializable {
+public class CustomerInfoJuristic extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -135,6 +136,7 @@ public class CustomerInfoJuristic implements Serializable {
 
     //session
     private long workCaseId;
+    private long stepId;
 
     private int caseBorrowerTypeId;
 
@@ -194,18 +196,9 @@ public class CustomerInfoJuristic implements Serializable {
     public CustomerInfoJuristic(){
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid stepId
@@ -220,9 +213,10 @@ public class CustomerInfoJuristic implements Serializable {
     public void onCreation() {
         log.debug("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             initial();
 
@@ -719,7 +713,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         try{
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
-            exSummaryControl.calForCustomerInfoJuristic(workCaseId);
+            exSummaryControl.calForCustomerInfoJuristic(workCaseId, stepId);
             isFromSummaryParam = true;
             initial();
             onEditJuristic();
@@ -728,13 +722,9 @@ public class CustomerInfoJuristic implements Serializable {
             severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch(Exception ex){
-            log.error("Exception :: {}",ex);
+            log.error("Exception :: ", ex);
             messageHeader = "Error.";
-            if(ex.getCause() != null){
-                message = "Save Juristic Failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save Juristic Failed. Cause : " + ex.getMessage();
-            }
+            message = "Save Juristic Failed. Cause : " + Util.getMessageException(ex);
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }

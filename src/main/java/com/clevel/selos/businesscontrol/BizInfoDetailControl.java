@@ -8,10 +8,7 @@ import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.BankStmtSummaryView;
-import com.clevel.selos.model.view.BizInfoDetailView;
-import com.clevel.selos.model.view.BizProductDetailView;
-import com.clevel.selos.model.view.BizStakeHolderDetailView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
@@ -60,7 +57,7 @@ public class BizInfoDetailControl extends BusinessControl {
 
     }
 
-    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId , long workCaseId) {
+    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId , long workCaseId, long stepId) {
 
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
@@ -82,8 +79,10 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
 
             bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView, user);
+            log.debug("--bizInfoDetailView. {}",bizInfoDetailView);
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
             bizInfoDetailDAO.persist(bizInfoDetail);
+            log.debug("--persist BizInfoDetail is complete");
 
             supplierDetailList = bizInfoDetailView.getSupplierDetailList();
             buyerDetailList = bizInfoDetailView.getBuyerDetailList();
@@ -123,7 +122,7 @@ public class BizInfoDetailControl extends BusinessControl {
 
             bizStakeHolderDetailDAO.persist(bizBuyerList);
             bizInfoDetailView.setId(bizInfoDetail.getId());
-            onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
+            onSaveSumOnSummary(bizInfoSummaryId, workCaseId, stepId);
 
             //--Update flag in WorkCase ( for check before submit )
             WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -140,23 +139,17 @@ public class BizInfoDetailControl extends BusinessControl {
     }
 
 
-    public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId){
+    public void onSaveSumOnSummary(long bizInfoSummaryId, long workCaseId, long stepId){
+        log.debug("--onSaveSumOnSummary.");
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
         BigDecimal bankStatementAvg = BigDecimal.ZERO;
-        long stepId = 0;
         BigDecimal inComeTotalNet = BigDecimal.ZERO;
 
         BigDecimal twenty = BigDecimal.valueOf(12);
         BigDecimal oneHundred = BigDecimal.valueOf(100);
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
-        log.debug("bizInfoDetailList : {}",bizInfoDetailList);
-
-        HttpSession session = FacesUtil.getSession(true);
-        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-
-        log.debug("stepId : {}",stepId);
 
         if (bizInfoDetailList.size() != 0) {
 
@@ -214,15 +207,15 @@ public class BizInfoDetailControl extends BusinessControl {
                 adjustIncomeCal = Util.divide(Util.multiply(adjustIncome,incomePercentD),oneHundred);
                 sumAdjust = Util.add(sumAdjust,adjustIncomeCal);
 
-                ar = bizInfoDetail.getBusinessDescription().getAr();
+                ar = bizInfoDetail.getStandardAccountReceivable();
                 arCal = Util.divide(Util.multiply(ar,incomePercentD),oneHundred);
                 sumAR = Util.add(sumAR,arCal);
 
-                ap = bizInfoDetail.getBusinessDescription().getAp();
+                ap = bizInfoDetail.getStandardAccountPayable();
                 apCal = Util.divide(Util.multiply(ap,incomePercentD),oneHundred);
                 sumAP = Util.add(sumAP,apCal);
 
-                inv = bizInfoDetail.getBusinessDescription().getInv();
+                inv = bizInfoDetail.getStandardStock();
                 invCal = Util.divide(Util.multiply(inv,incomePercentD),oneHundred);
                 sumINV = Util.add(sumINV,invCal);
 
@@ -232,9 +225,11 @@ public class BizInfoDetailControl extends BusinessControl {
 
 
                 bizInfoDetailDAO.persist(bizInfoDetail);
+                log.debug("--persist is Detail.");
             }
 
             BizInfoSummary  bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
+            log.debug("--findById Summary. {}",bizInfoSummary.toString());
 
             sumIncomeAmountD = Util.multiply(bankStatementAvg,twenty);
             BigDecimal sumIncomeAmount = null;
@@ -269,6 +264,7 @@ public class BizInfoDetailControl extends BusinessControl {
 //            bizInfoSummary.setCirculationAmount(sumIncomeAmount); //?????  BankStatementSummary.grandTotal
 //            bizInfoSummary.setCirculationPercentage(oneHundred); //?????
             bizInfoSummary.setSumIncomeAmount(sumIncomeAmount); //?????
+            bizInfoSummary.setCirculationAmount(sumIncomeAmount);
             bizInfoSummary.setSumIncomePercent(sumIncomePercent);
             bizInfoSummary.setSumWeightAR(sumWeightAR);
             bizInfoSummary.setSumWeightAP(sumWeightAP);
@@ -276,7 +272,7 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(sumWeightIntIncomeFactor);
             bizInfoSummary.setWeightIncomeFactor(sumWeightIncFactor);
 
-            System.out.println("SumWeightIncFactor {},"+sumWeightIncFactor);
+//            log.debug("--sumWeightAR. {},--sumWeightAP. {},--sumWeightINV. {}",sumWeightAR,sumWeightAP,sumWeightINV);
 
             log.debug("bizInfoSummary : {}",bizInfoSummary);
 
@@ -305,7 +301,7 @@ public class BizInfoDetailControl extends BusinessControl {
         }
     }
 
-    public BizInfoDetailView onFindByID(long bizInfoDetailId) {
+    public BizInfoDetailView onFindByID(long bizInfoDetailId, long statusId) {
 
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
@@ -329,10 +325,10 @@ public class BizInfoDetailControl extends BusinessControl {
 
             bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailId);
 
-            log.info("bizInfoDetail bizCode after findById {}",bizInfoDetail.getBizCode());
+            log.info("bizInfoDetail bizCode after findById {}",bizInfoDetail.toString());
 
             bizInfoDetailView = bizInfoDetailTransform.transformToView(bizInfoDetail);
-            log.info("bizInfoDetailView bizCode after transform {}",bizInfoDetail.getBizCode());
+//            log.info("bizInfoDetailView bizCode after transform {}",bizInfoDetail.getBizCode());
 
             bizProductDetailViewList = new ArrayList<BizProductDetailView>();
             bizProductDetailList = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
@@ -369,12 +365,6 @@ public class BizInfoDetailControl extends BusinessControl {
             log.info("buyer size {}",bizInfoDetailView.getBuyerDetailList().size());
 
             //for hidden field on status below UW
-            Long statusId = 0L;
-            HttpSession session = FacesUtil.getSession(true);
-            if(session.getAttribute("statusId") != null){
-                statusId = Long.parseLong(session.getAttribute("statusId").toString());
-            }
-
             if(statusId >= StatusValue.REVIEW_CA.value()){
                 bizInfoDetailView.setSupplierUWAdjustPercentCredit(null);
                 bizInfoDetailView.setSupplierUWAdjustCreditTerm(null);
@@ -426,4 +416,17 @@ public class BizInfoDetailControl extends BusinessControl {
         return 0;
     }
 
+    public long onSaveSummaryByDetail(long workCaseId){
+        BizInfoSummaryView bizInfoSummaryView = new BizInfoSummaryView();
+        try {
+                log.debug("--workcase. {}",workCaseId);
+                log.debug("--New BizInfoSummary View. {}",bizInfoSummaryView.toString());
+
+                bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+                bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        } catch (Exception e){
+            log.debug("--Exception Error. {}",e);
+        }
+        return bizInfoSummaryView.getId();
+    }
 }

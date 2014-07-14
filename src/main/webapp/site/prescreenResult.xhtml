@@ -49,7 +49,7 @@
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupExposure')}"/></td>
-                            <td><p:inputText title="msg.get('app.prescreen.result.groupExposure')" styleClass="medium right" readonly="true"
+                            <td><p:inputText title="#{msg.get('app.prescreen.result.groupExposure')}" styleClass="medium right" readonly="true"
                                              value="#{prescreenResult.prescreenResultView.groupExposure}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                 </p:inputText><p:spacer width="5"/><h:outputText
@@ -57,7 +57,7 @@
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupIncome')}"/></td>
-                            <td><p:inputText title="msg.get('app.prescreen.result.groupIncome')" styleClass="medium right" readonly="true"
+                            <td><p:inputText title="#{msg.get('app.prescreen.result.groupIncome')}" styleClass="medium right" readonly="true"
                                              value="#{prescreenResult.prescreenResultView.groupIncome}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                              </p:inputText><p:spacer width="5"/><h:outputText
@@ -533,7 +533,7 @@
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
         <h:inputHidden id="pagename" value="mnuprescreen"/>
-        <h:inputHidden id="subpagename" value="submnuprescreen"/>
+        <h:inputHidden id="subpagename" value="submnuprescreenresult"/>
     </div>
         <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="btnSave, btnRetrieveInterfaceInfo">
             LOADING<br />

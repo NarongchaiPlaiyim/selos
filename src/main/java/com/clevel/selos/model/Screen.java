@@ -18,6 +18,7 @@ public enum Screen {
     TCG_INFO(2600),
     BUSINESS_INFO_SUMMARY(2700),
     BUSINESS_INFO_DETAIL(2710),
+    QUALITATIVE(2800),
     BANK_STATEMENT_SUMMARY(2810),
     BANK_STATEMENT_DETAIL(2820),
     DBR_INFO(2830),
@@ -58,7 +59,6 @@ public enum Screen {
     AddBahtNetDisburseInfoDialog(9000) ,
     Disbursement(9300) ,
     
-    PostDecision(9500) , //???
     UpdateCollateralInfo(9600) ,
     PerfectionReview(10100) ,
     ConfirmLimitSetUp(10200)

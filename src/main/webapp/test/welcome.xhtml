@@ -73,7 +73,9 @@
                     <p:fileDownload value="#{welcomePage.genReport()}" />
                 </p:commandButton>
                 <p:commandButton value="test RM Title" action="#{welcomePage.testRMTitle()}" update=":welcomePanel"/>
-
+                <p:commandButton value="test COMS Agreement" action="#{welcomePage.testCOMSAgreement}" update=":welcomePanel"/>
+                <p:commandButton value="test reject letter" action="#{welcomePage.testRejectLetter()}" update=":welcomePanel"/>
+                <p:commandButton value="test NCB Result" action="#{welcomePage.testNCBResult()}" update=":welcomePanel"/>
             </h:form>
         </p:panel>
 

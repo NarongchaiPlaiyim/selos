@@ -21,7 +21,8 @@
             account Number
         </td>
         <td>
-            <p:inputText value="#{creditFacExisting.existingCreditDetailView.accountNumber}"/>
+            <p:inputMask value="#{creditFacExisting.existingCreditDetailView.accountNumber}"
+                         mask="999-9-99999-9"/>
         </td>
         <td class="title">
             account suffix
@@ -171,25 +172,17 @@
                 <p:columnGroup type="header">
                     <p:row>
                         <p:column style="width:50px;"/>
-                        <p:column style="width:200px;"
-                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
                         <p:column style="width:150px;"
                                   headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.price')}"/>
                         <p:column style="width:200px;"
                                   headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.tenor')}"/>
+                        <p:column style="width:200px;"
+                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
                         <p:column style="width: 80px"/>
                     </p:row>
                 </p:columnGroup>
                 <p:column styleClass="center">
                     <p:outputLabel value="#{creditTier.no}"/>
-                </p:column>
-                <p:column styleClass="center">
-                    <p:inputText  id="tierInstallment" style="text-align:right;" maxlength="14"
-                                  value="#{creditTier.installment}"
-                                  onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="16"/>
-                        <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierInstallment"/>
-                    </p:inputText>
                 </p:column>
                 <p:column>
                     <p:panelGrid  styleClass="panelGridPadding0" style="width:200px;">
@@ -223,6 +216,14 @@
                     <p:inputText id="tierTenor"
                                  onkeydown="return onKeyDownNumber(event)" onkeypress="return onKeyPressNumber(event)" maxlength="5"
                                  value="#{creditTier.tenor}" style="text-align:right;" >
+                    </p:inputText>
+                </p:column>
+                <p:column styleClass="center">
+                    <p:inputText  id="tierInstallment" style="text-align:right;" maxlength="14"
+                                  value="#{creditTier.installment}"
+                                  onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)" >
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="16"/>
+                        <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierInstallment"/>
                     </p:inputText>
                 </p:column>
                 <p:column styleClass="center">

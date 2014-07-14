@@ -64,6 +64,9 @@ public class AppraisalView implements Serializable {
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         appraisalContactDetailView = new AppraisalContactDetailView();
         removeCollListId = new ArrayList<Long>();
+//        appraisalDate = DateTime.now().toDate();
+//        dueDate = DateTime.now().toDate();
+//        appointmentDate = DateTime.now().toDate();
     }
 
     public long getId() {

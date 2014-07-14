@@ -50,6 +50,15 @@ public class WorkCase extends AbstractWorkCase{
     @Column(name = "case_update_flag", columnDefinition = "int default 0")
     private int caseUpdateFlag;
 
+    @Column(name = "parallel_appraisal_flag", columnDefinition = "int default 0")
+    private int parallelAppraisalFlag;
+
+    @Column(name = "insurance_flag", columnDefinition = "int default 0")
+    private int insuranceFlag;
+
+    @Column(name = "ncb_reject_flag", columnDefinition = "int default 0")
+    private int ncbRejectFlag;
+
     public String getRefAppNumber() {
         return refAppNumber;
     }
@@ -146,6 +155,30 @@ public class WorkCase extends AbstractWorkCase{
         this.caseUpdateFlag = caseUpdateFlag;
     }
 
+    public int getParallelAppraisalFlag() {
+        return parallelAppraisalFlag;
+    }
+
+    public void setParallelAppraisalFlag(int parallelAppraisalFlag) {
+        this.parallelAppraisalFlag = parallelAppraisalFlag;
+    }
+
+    public int getInsuranceFlag() {
+        return insuranceFlag;
+    }
+
+    public void setInsuranceFlag(int insuranceFlag) {
+        this.insuranceFlag = insuranceFlag;
+    }
+
+    public int getNcbRejectFlag() {
+        return ncbRejectFlag;
+    }
+
+    public void setNcbRejectFlag(int ncbRejectFlag) {
+        this.ncbRejectFlag = ncbRejectFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -160,6 +193,7 @@ public class WorkCase extends AbstractWorkCase{
                 .append("uwDOA2", uwDOA2)
                 .append("refAppNumber", refAppNumber)
                 .append("caseUpdateFlag", caseUpdateFlag)
+                .append("ncbRejectFlag", ncbRejectFlag)
                 .toString();
     }
 }

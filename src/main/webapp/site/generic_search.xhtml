@@ -123,7 +123,7 @@ function resetter()
                             <tr>
                                 <td class="title" style="width: 150px;">Step:</td>
                                 <td>
-                                    <h:selectOneMenu id="stepNameId"  class="largest" value="#{peSearch.step}" onchange="submit()" readonly="#{peSearch.statusType eq 'CompletedCases'}" disabled="#{peSearch.statusType eq 'CompletedCases'}"  valueChangeListener="#{statusname.valueChangeMethod}"  >
+                                    <h:selectOneMenu id="stepNameId"  class="largest" value="#{peSearch.step}" onchange="submit()" readonly="#{peSearch.statusType eq 'CompletedCases'}" disabled="#{peSearch.statusType eq 'CompletedCases' or statusname.searchType eq 'CompletedCases'}"  valueChangeListener="#{statusname.valueChangeMethod}"  >
                                         <f:selectItem itemValue="" itemLabel="-Please Select-" />
                                         <f:selectItems value="#{stepid.stepnameidlist}"
                                                        var="stepItem"
@@ -247,7 +247,7 @@ function resetter()
                             <tr>
                                 <td class="title" ></td> <td class="title" style="width: 350px;"></td>
                                 <td class="title">
-                                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this"  >
+                                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this" ajax="false" action="#{peSearch.resetSearchFields()}" >
                                         <p:resetInput target="pnl_maincontainer" />
                                     </p:commandButton>
                                 </td>

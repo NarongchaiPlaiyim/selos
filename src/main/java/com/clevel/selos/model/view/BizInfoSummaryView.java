@@ -65,6 +65,31 @@ public class BizInfoSummaryView implements Serializable {
     private List<BizInfoDetailView> bizInfoDetailViewList;
 
     public BizInfoSummaryView() {
+        circulationAmount = BigDecimal.ZERO;
+        circulationPercentage = BigDecimal.ZERO;
+        productionCostsAmount = BigDecimal.ZERO;
+        productionCostsPercentage = BigDecimal.ZERO;
+        profitMarginAmount = BigDecimal.ZERO;
+        profitMarginPercentage = BigDecimal.ZERO;
+        operatingExpenseAmount = BigDecimal.ZERO;
+        operatingExpensePercentage = BigDecimal.ZERO;
+        earningsBeforeTaxAmount = BigDecimal.ZERO;
+        earningsBeforeTaxPercentage = BigDecimal.ZERO;
+        reduceInterestAmount = BigDecimal.ZERO;
+        reduceInterestPercentage = BigDecimal.ZERO;
+        reduceTaxAmount = BigDecimal.ZERO;
+        reduceTaxPercentage = BigDecimal.ZERO;
+        netMarginAmount = BigDecimal.ZERO;
+        netMarginPercentage = BigDecimal.ZERO;
+        netFixAsset = BigDecimal.ZERO;
+        noOfEmployee = BigDecimal.ZERO;
+        sumIncomeAmount = BigDecimal.ZERO;
+        sumIncomePercent = BigDecimal.ZERO;
+        weightIncomeFactor = BigDecimal.ZERO;
+        sumWeightInterviewedIncomeFactorPercent = BigDecimal.ZERO;
+        sumWeightAR = BigDecimal.ZERO;
+        sumWeightAP = BigDecimal.ZERO;
+        sumWeightINV = BigDecimal.ZERO;
     }
 
     public long getId() {

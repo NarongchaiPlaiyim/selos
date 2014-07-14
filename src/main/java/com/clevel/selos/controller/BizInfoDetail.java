@@ -44,6 +44,8 @@ public class BizInfoDetail extends BaseController {
     Message msg;
 
     private long workCaseId;
+    private long stepId;
+    private long statusId;
 
     private String stakeType;
 
@@ -118,18 +120,9 @@ public class BizInfoDetail extends BaseController {
 
     }
 
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if( (Long)session.getAttribute("workCaseId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
-    }
-
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid step
@@ -145,33 +138,46 @@ public class BizInfoDetail extends BaseController {
     public void onCreation(){
         log.debug("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             try{
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+                stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+                statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
                 bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
                 loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL);
 
-                if(bizInfoSummaryView.getId() != 0 ){
+                if(!Util.isNull(bizInfoSummaryView) && !Util.isZero(bizInfoSummaryView.getId())){
                     bizInfoSummaryId = bizInfoSummaryView.getId();
-                } else {
+//                    onChangeBusinessGroupInitial();
+                } /*else {
                     String url = "bizInfoSummary.jsf";
                     FacesContext fc = FacesContext.getCurrentInstance();
                     ExternalContext ec = fc.getExternalContext();
                     log.debug("redirect to new page");
                     ec.redirect(url);
+                } */
+
+                if (!Util.isNull(bizInfoSummaryView)){
+                    if(bizInfoSummaryView.getCirculationAmount() != null){
+                        circulationAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+                    }
+                    if(bizInfoSummaryView.getProductionCostsAmount() != null){
+                        productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
+                    }
+                } else {
+//                    if(bizInfoSummaryView.getCirculationAmount() == null){
+                        circulationAmount = 0;
+//                    }
+//                    if(bizInfoSummaryView.getProductionCostsAmount() == null){
+                        productionCostsAmount = 0;
+
+//                    }
                 }
 
-                if(bizInfoSummaryView.getCirculationAmount() != null){
-                    circulationAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
-                }
-
-                if(bizInfoSummaryView.getProductionCostsAmount() != null){
-                    productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
-                }
                 double x = (circulationAmount/365)*30;
                 double y = (productionCostsAmount/365)*30;
 
@@ -195,7 +201,7 @@ public class BizInfoDetail extends BaseController {
                     bizStakeHolderDetailView = new BizStakeHolderDetailView();
                     bizProductDetailView = new BizProductDetailView();
                 } else {
-                    bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
+                    bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId, statusId);
 
                     if(!Util.isNull(bizInfoDetailView.getBizProductDetailViewList()) && bizInfoDetailView.getBizProductDetailViewList().size() > 0) {
                         bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
@@ -302,9 +308,8 @@ public class BizInfoDetail extends BaseController {
         } else {
             bizInfoDetailView.setBizPermission("N");
         }
-
-        bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
-        bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());
+        bizInfoDetailView.setStandardAccountPayable(businessDesc.getAp());
+        bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAr());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
     }
 
@@ -312,8 +317,8 @@ public class BizInfoDetail extends BaseController {
         log.debug("onChangeBizPermission ");
         if(bizInfoDetailView.getBizPermission() != null ){
             if(bizInfoDetailView.getBizPermission().equals("Y")){
-                bizInfoDetailView.setBizDocPermission("");
-                bizInfoDetailView.setBizDocExpiryDate(null);
+                bizInfoDetailView.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
+                bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
                 setMandateValue("bizDocPermission",true);
                 setDisabledValue("bizDocPermission",false);
                 setMandateValue("bizDocExpiryDate",true);
@@ -651,6 +656,7 @@ public class BizInfoDetail extends BaseController {
 
     public void onSaveBizInfoView(){
         try{
+
             if(Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()) != null){
                 sumBizPercent = Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()).doubleValue();
             }
@@ -662,16 +668,22 @@ public class BizInfoDetail extends BaseController {
                 return;
             }
 
+            if (Util.isNull(bizInfoSummaryView)){
+                bizInfoSummaryId = bizInfoDetailControl.onSaveSummaryByDetail(workCaseId);
+                log.debug("--Creation BizInfoSummary.");
+            }
+
             if(bizInfoDetailView.getId() == 0){
                 bizInfoDetailView.setCreateBy(user);
                 bizInfoDetailView.setCreateDate(DateTime.now().toDate());
             }
 
             if(onCheckPermission()){
+
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-                bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
+                bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId, stepId);
                 dbrControl.updateValueOfDBR(workCaseId);
                 exSummaryControl.calForBizInfoSummary(workCaseId);
                 messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
@@ -679,9 +691,11 @@ public class BizInfoDetail extends BaseController {
 
                 log.debug(" after save to DB BizInfoDetail is {}",bizInfoDetailView.getId());
                 bizInfoDetailViewId =  bizInfoDetailView.getId();
+
                 HttpSession session = FacesUtil.getSession(true);
                 session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
-                log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
+
+                log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}", session.getAttribute("bizInfoDetailViewId"));
                 proposeLineControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

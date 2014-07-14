@@ -50,13 +50,15 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private DBRDAO dbrDAO;
     @Inject
-    private ProposeLineDAO proposeLineDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     private RiskTypeDAO riskTypeDAO;
     @Inject
     private DecisionDAO decisionDAO;
     @Inject
     UWRuleResultDetailDAO uwRuleResultDetailDAO;
+    @Inject
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
@@ -72,13 +74,13 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private QualitativeControl qualitativeControl;
     @Inject
-    private ProposeLineControl proposeLineControl;
+    private CreditFacProposeControl creditFacProposeControl;
     @Inject
     private DecisionControl decisionControl;
     @Inject
     private UWRuleResultControl uwRuleResultControl;
 
-    public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
+    public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId, long statusId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
 
@@ -89,7 +91,7 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         QualitativeView qualitativeView;
-        if(qualitative == 1){
+        if(qualitative == 1){ //todo: enum
             qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
         } else if (qualitative == 2) {
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
@@ -102,12 +104,6 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         ExSummaryView exSummaryView = exSummaryTransform.transformToView(exSummary);
-
-        Long statusId = 0L;
-        HttpSession session = FacesUtil.getSession(false);
-        if(session.getAttribute("statusId") != null){
-            statusId = Long.parseLong(session.getAttribute("statusId").toString());
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -122,9 +118,9 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
-        ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
-        if(proposeLineView != null && proposeLineView.getId() != 0){
-            exSummaryView.setTradeFinance(proposeLineView);
+        NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
+            exSummaryView.setTradeFinance(newCreditFacilityView);
         } else {
             exSummaryView.setTradeFinance(null);
         }
@@ -159,13 +155,17 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
+            List<ExSumAccountMovementView> exSumAccountMovementViewList = new ArrayList<ExSumAccountMovementView>();
             if(mainBank != null || otherBank != null) {
                 if(mainBank != null) {
-                    exSummaryView.getExSumAccMovementViewList().add(mainBank);
+                    exSumAccountMovementViewList.add(mainBank);
+                    //exSummaryView.getExSumAccMovementViewList().add(mainBank);
                 }
                 if(otherBank != null) {
-                    exSummaryView.getExSumAccMovementViewList().add(otherBank);
+                    exSumAccountMovementViewList.add(otherBank);
+                    //exSummaryView.getExSumAccMovementViewList().add(otherBank);
                 }
+                exSummaryView.setExSumAccMovementViewList(exSumAccountMovementViewList);
             } else {
                 exSummaryView.setExSumAccMovementViewList(null);
             }
@@ -254,6 +254,8 @@ public class ExSummaryControl extends BusinessControl {
                         if(DateTimeUtil.compareDate(tmpHighestDate,currentDate) < 0){
                             tmpHighestDate = currentDate;
                             tmpIndexHighestExpire = i;
+                        } else {
+                            tmpIndexHighestExpire = i;
                         }
                     }
                     bizInfoDetailViewList.get(i).getPercentBiz();
@@ -314,10 +316,10 @@ public class ExSummaryControl extends BusinessControl {
             exSumCharacteristicView.setGroupExposureUW(null);
         }
 
-        if(proposeLineView != null && proposeLineView.getId() != 0){
-            if(proposeLineView.getCreditCustomerType() == CreditCustomerType.NORMAL){ // normal 1, prime 2
+        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
+            if(newCreditFacilityView.getCreditCustomerType() == 1){ // normal 1, prime 2
                 exSumCharacteristicView.setCustomer("Normal");
-            } else if(proposeLineView.getCreditCustomerType() == CreditCustomerType.PRIME){
+            } else if(newCreditFacilityView.getCreditCustomerType() == 2){
                 exSumCharacteristicView.setCustomer("Prime");
             } else {
                 exSumCharacteristicView.setCustomer("-");
@@ -335,15 +337,15 @@ public class ExSummaryControl extends BusinessControl {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Collateral
-        DecisionView decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
+        DecisionView decisionView = decisionControl.getDecisionView(workCaseId);
         BigDecimal tmpCashColl = null;
         BigDecimal tmpCoreAsset = null;
         BigDecimal tmpNonCore = null;
         if(decisionView != null){
             if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
-                for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
-                    if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
-                        for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
+                for(NewCollateralView acl : decisionView.getApproveCollateralList()){
+                    if(acl.getNewCollateralHeadViewList() != null && acl.getNewCollateralHeadViewList().size() > 0){
+                        for(NewCollateralHeadView nch : acl.getNewCollateralHeadViewList()){
                             if(nch != null && nch.getPotentialCollateral() != null){
                                 if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
                                     tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
@@ -365,20 +367,19 @@ public class ExSummaryControl extends BusinessControl {
         exSumCollateralView.setNoneCoreAssetValue(tmpNonCore);
 
 //        Sum of (Propose/PreApprove/Approve Limit)
-        if(decisionView != null && proposeLineView != null){
-            exSumCollateralView.setLimitApprove(Util.add(decisionView.getApproveTotalCreditLimit(),proposeLineView.getTotalPropose()));
-        }else if(decisionView != null){
+        if(decisionView != null && decisionView.getApproveTotalCreditLimit()!=null){
             exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
-        }else if(proposeLineView != null){
-            exSumCollateralView.setLimitApprove(proposeLineView.getTotalPropose());
-        }else{
-            exSumCollateralView.setLimitApprove(null);
+        } else if(newCreditFacilityView!=null && newCreditFacilityView.getTotalPropose()!=null) {
+            exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
+        } else {
+            exSumCollateralView.setLimitApprove(BigDecimal.ZERO);
         }
 
+        //Todo: Percent LTV
 //        (limitApprove + Sum(วงเงิน/ภาระสินเชื่อเดิม)) หาร (cashCollateralValue + coreAssetValue + noneCoreAssetValue)
         BigDecimal existingSMELimit = null;
-        if(proposeLineView != null){
-            existingSMELimit = proposeLineView.getExistingSMELimit();
+        if(newCreditFacilityView != null){
+            existingSMELimit = newCreditFacilityView.getExistingSMELimit();
         }
         exSumCollateralView.setPercentLTV(Util.multiply(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)),BigDecimal.valueOf(100)));
 
@@ -573,14 +574,11 @@ public class ExSummaryControl extends BusinessControl {
         exSumDeviateDAO.persist(exSumDeviateList);
     }
 
-    public void calForProposeLine(long workCaseId){
-        calIncomeBorrowerCharacteristic(workCaseId);
-        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
-    }
-
+    //TODO : Method Call For Page
     public void calForCreditFacility(long workCaseId){
         calIncomeBorrowerCharacteristic(workCaseId);
         calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+        calGroupExposureBorrowerCharacteristic(workCaseId);
     }
 
     public void calForDecision(long workCaseId){
@@ -589,9 +587,9 @@ public class ExSummaryControl extends BusinessControl {
         calGroupExposureBorrowerCharacteristic(workCaseId);
     }
 
-    public void calForBankStmtSummary(long workCaseId){
+    public void calForBankStmtSummary(long workCaseId, long stepId){
         calSalePerYearBorrowerCharacteristic(workCaseId);
-        calGroupSaleBorrowerCharacteristic(workCaseId);
+        calGroupSaleBorrowerCharacteristic(workCaseId, stepId);
     }
 
     public void calForDBR(long workCaseId){
@@ -603,8 +601,8 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeFactor(workCaseId);
     }
 
-    public void calForCustomerInfoJuristic(long workCaseId){
-        calGroupSaleBorrowerCharacteristic(workCaseId);
+    public void calForCustomerInfoJuristic(long workCaseId, long stepId){
+        calGroupSaleBorrowerCharacteristic(workCaseId, stepId);
     }
 
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -613,13 +611,14 @@ public class ExSummaryControl extends BusinessControl {
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
 
+    //TODO : Business login here
     //Borrower Characteristic - income ( Line 45 )
     //Credit Facility-Propose + DBR + Decision
     //[สินเชื่อหมุนเวียนที่มีอยู่กับ TMB + OD Limit ที่อนุมัติ + Loan Core WC ที่อนุมัติ] / (รายได้ต่อเดือน Adjusted หน้า DBR *12)
-    public void calIncomeBorrowerCharacteristic(long workCaseId){ //Credit Facility-Propose & DBR & Decision , Pls Call me !!
+    public void calIncomeBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose & DBR & Decision , Pls Call me !!
         log.debug("calIncomeBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
-        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal totalWCTMB = BigDecimal.ZERO;
         BigDecimal odLimit = BigDecimal.ZERO;
@@ -628,7 +627,7 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal twelve = BigDecimal.valueOf(12);
 
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            totalWCTMB = newCreditFacility.getTotalWCTmb();
+            totalWCTMB = newCreditFacility.getTotalWcTmb();
             odLimit = newCreditFacility.getTotalCommercialAndOBOD();
             loanCoreWC = newCreditFacility.getTotalCommercial();
         }
@@ -661,9 +660,9 @@ public class ExSummaryControl extends BusinessControl {
 //    Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
 //    กรณี Refinance In Flag = No + Normal
 //    Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
-    public void calRecommendedWCNeedBorrowerCharacteristic(long workCaseId){ //Credit Facility-Propose , Pls Call me !!
+    public void calRecommendedWCNeedBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose , Pls Call me !!
         log.debug("calRecommendedWCNeedBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal recommendedWCNeed = BigDecimal.ZERO;
@@ -672,16 +671,16 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal value3 = BigDecimal.ZERO;
         BigDecimal value6 = BigDecimal.ZERO;
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            if(newCreditFacility.getCase1WCLimit() != null){
-                value1 = newCreditFacility.getCase1WCLimit();
+            if(newCreditFacility.getCase1WcLimit() != null){
+                value1 = newCreditFacility.getCase1WcLimit();
             }
-            if(newCreditFacility.getCase2WCLimit() != null){
-                value2 = newCreditFacility.getCase2WCLimit();
+            if(newCreditFacility.getCase2WcLimit() != null){
+                value2 = newCreditFacility.getCase2WcLimit();
             }
-            if(newCreditFacility.getCase3WCLimit() != null){
-                value3 = newCreditFacility.getCase3WCLimit();
+            if(newCreditFacility.getCase3WcLimit() != null){
+                value3 = newCreditFacility.getCase3WcLimit();
             }
-            value6 = Util.subtract(newCreditFacility.getWcNeed(),newCreditFacility.getTotalWCTmb());
+            value6 = Util.subtract(newCreditFacility.getWcNeed(),newCreditFacility.getTotalWcTmb());
         }
 
         if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null && newCreditFacility.getId() != 0){
@@ -715,7 +714,7 @@ public class ExSummaryControl extends BusinessControl {
     //Borrower Characteristic - actualWC ( Line 47 )
     //Decision หัวข้อ Approve Credit
 //    Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
-    public void calActualWCBorrowerCharacteristic(long workCaseId){ //Decision , Pls Call me !!
+    public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
         log.debug("calActualWCBorrowerCharacteristic :: workCaseId : {}",workCaseId);
 //        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 //        BigDecimal actualWC = newCreditFacility.getTotalApproveCredit();
@@ -743,7 +742,7 @@ public class ExSummaryControl extends BusinessControl {
     //Bank Statement Summary
 //    Grand Total Income Net BDM จากหน้า Bank Statement Summary * 12
 //    Grand Total Income Net UW จากหน้า Bank Statement Summary * 12
-    public void calSalePerYearBorrowerCharacteristic(long workCaseId){ //BankStatementSummary , Pls Call me !!
+    public void calSalePerYearBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary , Pls Call me !!
         log.debug("calSalePerYearBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         BigDecimal twelve = BigDecimal.valueOf(12);
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
@@ -777,7 +776,7 @@ public class ExSummaryControl extends BusinessControl {
 //    Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
 //    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
 //    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-    public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //BankStatementSummary & Customer Info Juristic , Pls Call me !!
+    public void calGroupSaleBorrowerCharacteristic(long workCaseId, long stepId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
         log.debug("calGroupSaleBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
@@ -789,14 +788,7 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal groupSaleUW = BigDecimal.ZERO;
         BigDecimal twelve = BigDecimal.valueOf(12);
 
-        long stepId = 0;
-
-        HttpSession session = FacesUtil.getSession(false);
-        if(session.getAttribute("stepId") != null){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }
-
-        log.debug("stepId : {}",stepId);
+        log.debug("calGroupSaleBorrowerCharacteristic ::: stepId : {}", stepId);
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
@@ -907,18 +899,16 @@ public class ExSummaryControl extends BusinessControl {
     //Decision
 //    groupExposureBDM - Group Total Exposure + Total Propose Credit
 //    groupExposureUW - Group Total Exposure + Total Approved Credit
-    public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //Decision , Credit Facility-Propose , Pls Call me !!
+    public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-        BigDecimal groupExposureBDM = BigDecimal.ZERO;
-        BigDecimal groupExposureUW = BigDecimal.ZERO;
-        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
-            groupExposureBDM = Util.add(proposeLine.getTotalExposure(), proposeLine.getTotalPropose());
+        BigDecimal groupExposureBDM = null;
+        BigDecimal groupExposureUW = null;
+        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
+            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
             if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
-                groupExposureUW = Util.add(proposeLine.getTotalExposure(), decision.getTotalApproveCredit());
-            } else {
-                groupExposureUW = proposeLine.getTotalExposure();
+                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
             }
         }
 
@@ -930,12 +920,8 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
 
-        User user = getCurrentUser();
-        if(user.getRole().getId() == RoleValue.UW.id()){
-            exSummary.setGroupExposureUW(groupExposureUW);
-        } else {
-            exSummary.setGroupExposureBDM(groupExposureBDM);
-        }
+        exSummary.setGroupExposureUW(groupExposureUW);
+        exSummary.setGroupExposureBDM(groupExposureBDM);
 
         exSummaryDAO.persist(exSummary);
     }
@@ -944,7 +930,7 @@ public class ExSummaryControl extends BusinessControl {
     //Business Info Summary
 //    Max of (วันก่อตั้ง หรือ วันจดทะเบียนพาณิชย์ in businessInfoSummary)
 //    calculate months from yearInBusiness fields.
-    public void calYearInBusinessBorrowerCharacteristic(long workCaseId){ //Business Info Summary , Pls Call me !!
+    public void calYearInBusinessBorrowerCharacteristic(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
         log.debug("calYearInBusinessBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         Date yearInBiz = DateTimeUtil.getMaxOfDate(bizInfoSummaryView.getRegistrationDate(), bizInfoSummaryView.getEstablishDate());
@@ -952,6 +938,7 @@ public class ExSummaryControl extends BusinessControl {
         int month = 0;
         if(yearInBiz != null){
             year = DateTimeUtil.calYearMonth(yearInBiz);
+            //todo:yearInBizMonth To send to BRMS
             month = DateTimeUtil.calMonth(yearInBiz);
         }
 
@@ -985,7 +972,7 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryDAO.persist(exSummary);
     }
 
-    public void calIncomeFactor(long workCaseId){ //Business Info Summary , Pls Call me !!
+    public void calIncomeFactor(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);

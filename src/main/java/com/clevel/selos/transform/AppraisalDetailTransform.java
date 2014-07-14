@@ -1,13 +1,14 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.working.ProposeCollateralInfoDAO;
+import com.clevel.selos.dao.working.NewCollateralDAO;
+import com.clevel.selos.dao.working.NewCollateralHeadDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.ProposeCollateralInfo;
-import com.clevel.selos.model.db.working.ProposeCollateralInfoHead;
-import com.clevel.selos.model.db.working.ProposeLine;
+import com.clevel.selos.model.db.working.NewCollateral;
+import com.clevel.selos.model.db.working.NewCollateralHead;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -28,20 +29,23 @@ public class AppraisalDetailTransform extends Transform {
     @NormalMessage
     private Message msg;
     @Inject
-    private ProposeCollateralInfoDAO proposeCollateralInfoDAO;
+    private NewCollateralHeadTransform newCollateralHeadTransform;
+    @Inject
+    private NewCollateralDAO newCollateralDAO;
+    @Inject
+    private NewCollateralHeadDAO newCollateralHeadDAO;
+    private List<NewCollateral> newCollateralList;
+    private List<NewCollateral> newCollateralListForReturn;
+    private List<NewCollateralHead> newCollateralHeadList;
 
-    private List<ProposeCollateralInfo> newCollateralList;
-    private List<ProposeCollateralInfo> newCollateralListForReturn;
-    private List<ProposeCollateralInfoHead> newCollateralHeadList;
-
-    private ProposeCollateralInfo newCollateral;
+    private NewCollateral newCollateral;
     private List<AppraisalDetailView> appraisalDetailViewList;
 
     @Inject
     public AppraisalDetailTransform() {
     }
 
-    public List<ProposeCollateralInfo> transformToModel(final List<AppraisalDetailView> appraisalDetailViewList, final ProposeLine newCreditFacility, final User user){
+    public List<NewCollateral> transformToModel(final List<AppraisalDetailView> appraisalDetailViewList, final NewCreditFacility newCreditFacility, final User user){
         log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", appraisalDetailViewList.size());
 
         long newCollateralId = 0;
@@ -49,11 +53,11 @@ public class AppraisalDetailTransform extends Transform {
         boolean createNewCollateralFlag = true;
 
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            newCollateralList = Util.safetyList(proposeCollateralInfoDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
+            newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
         }else{
-            newCollateralList = new ArrayList<ProposeCollateralInfo>();
+            newCollateralList = new ArrayList<NewCollateral>();
         }
-        newCollateralListForReturn = new ArrayList<ProposeCollateralInfo>();
+        newCollateralListForReturn = new ArrayList<NewCollateral>();
 
         for(AppraisalDetailView view : appraisalDetailViewList){
             newCollateralId = view.getNewCollateralId();
@@ -64,13 +68,13 @@ public class AppraisalDetailTransform extends Transform {
             //set value for Collateral from Credit facility
             if(!Util.isZero(newCollateralId)){
                 //loop for check collateral with appraisal detail
-                for(ProposeCollateralInfo newCollateral : newCollateralList){
+                for(NewCollateral newCollateral : newCollateralList){
                     if(newCollateral.getId() == newCollateralId){
                         log.debug("---- newCollateral.getId()[{}] == newCollateralId[{}] ", newCollateral.getId(), newCollateralId);
-                        newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+                        newCollateralHeadList = newCollateral.getNewCollateralHeadList();
                         //loop for check head collateral with appraisal detail
-                        List<ProposeCollateralInfoHead> newCollateralHeadForAdd = new ArrayList<ProposeCollateralInfoHead>();
-                        for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                        List<NewCollateralHead> newCollateralHeadForAdd = new ArrayList<NewCollateralHead>();
+                        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                             if(newCollateralHead.getId() == newCollateralHeadId){
                                 //to set collateral head from appraisalDetailView
                                 log.debug("------ NewCollateralHead.getId()[{}] == newCollateralHeadId[{}] ",newCollateralHead.getId(), newCollateralHeadId);
@@ -91,29 +95,29 @@ public class AppraisalDetailTransform extends Transform {
                                 continue;
                             }
                         }
-                        newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadForAdd);
+                        newCollateral.setNewCollateralHeadList(newCollateralHeadForAdd);
                         newCollateralListForReturn.add(newCollateral);
                         continue;
                     }
                 }
             } else {
                 //Create new collateral and collateral head
-                List<ProposeCollateralInfoHead> newCollateralHeadListForNewCollateralHead = null;
-                ProposeCollateralInfoHead newCollateralHeadForNewCollateralHead = null;
+                List<NewCollateralHead> newCollateralHeadListForNewCollateralHead = null;
+                NewCollateralHead newCollateralHeadForNewCollateralHead = null;
                 //New collateral for all new head collateral
                 log.debug("-- Create new Collateral for Appraisal");
-                newCollateral = new ProposeCollateralInfo();
+                newCollateral = new NewCollateral();
                 newCollateral.setModifyDate(DateTime.now().toDate());
                 newCollateral.setModifyBy(user);
                 newCollateral.setCreateDate(DateTime.now().toDate());
                 newCollateral.setCreateBy(user);
-                newCollateral.setProposeLine(newCreditFacility);
+                newCollateral.setNewCreditFacility(newCreditFacility);
                 newCollateral.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
                 newCollateral.setProposeType(ProposeType.P);
                 log.debug("transformToModel ::: newCollateral : {}", newCollateral);
 
-                newCollateralHeadListForNewCollateralHead = new ArrayList<ProposeCollateralInfoHead>();
-                newCollateralHeadForNewCollateralHead = new ProposeCollateralInfoHead();
+                newCollateralHeadListForNewCollateralHead = new ArrayList<NewCollateralHead>();
+                newCollateralHeadForNewCollateralHead = new NewCollateralHead();
 
                 newCollateralHeadForNewCollateralHead.setPurposeNewAppraisal(Util.isTrue(view.isPurposeNewAppraisalB()));
                 newCollateralHeadForNewCollateralHead.setPurposeReviewAppraisal(Util.isTrue(view.isPurposeReviewAppraisalB()));
@@ -127,10 +131,10 @@ public class AppraisalDetailTransform extends Transform {
                 newCollateralHeadForNewCollateralHead.setCreateBy(user);
                 newCollateralHeadForNewCollateralHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
                 newCollateralHeadForNewCollateralHead.setProposeType(ProposeType.P);
-                newCollateralHeadForNewCollateralHead.setProposeCollateral(newCollateral);
+                newCollateralHeadForNewCollateralHead.setNewCollateral(newCollateral);
 
                 newCollateralHeadListForNewCollateralHead.add(newCollateralHeadForNewCollateralHead);
-                newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadListForNewCollateralHead);
+                newCollateral.setNewCollateralHeadList(newCollateralHeadListForNewCollateralHead);
                 newCollateralListForReturn.add(newCollateral);
                 log.debug("-- NewCollateral {}", newCollateral);
                 log.debug("-- NewCollateral added to newCollateralList[Size {}]", newCollateralListForReturn.size());
@@ -140,16 +144,16 @@ public class AppraisalDetailTransform extends Transform {
         return newCollateralListForReturn;
     }
 
-    public List<AppraisalDetailView> transformToView(final List<ProposeCollateralInfo> newCollateralList){
+    public List<AppraisalDetailView> transformToView(final List<NewCollateral> newCollateralList){
         log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", ""+newCollateralList.size());
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         AppraisalDetailView view = null;
-        List<ProposeCollateralInfoHead> newCollateralHeadList = null;
+        List<NewCollateralHead> newCollateralHeadList = null;
         int id = 0;
-        for(ProposeCollateralInfo newCollateral : newCollateralList) {
-            newCollateralHeadList = Util.safetyList(newCollateral.getProposeCollateralInfoHeadList());
+        for(NewCollateral newCollateral : newCollateralList) {
+            newCollateralHeadList = Util.safetyList(newCollateral.getNewCollateralHeadList());
             log.debug("transformToView ::: newCollateralHeadList : {}", newCollateralHeadList);
-            for (ProposeCollateralInfoHead model  : newCollateralHeadList) {
+            for (NewCollateralHead model  : newCollateralHeadList) {
                 view = new AppraisalDetailView();
                 view.setNewCollateralId(newCollateral.getId());
                 view.setNewCollateralHeadId(model.getId());

@@ -19,6 +19,8 @@ public class UserZone implements Serializable {
     private String code;
     @Column(name = "name", length = 50)
     private String name;
+    @Column(name = "phone_number", length = 50)
+    private String phoneNumber;
     @Column(name = "active")
     private int active;
 
@@ -49,6 +51,14 @@ public class UserZone implements Serializable {
         this.name = name;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public int getActive() {
         return active;
     }
@@ -63,6 +73,7 @@ public class UserZone implements Serializable {
                 append("id", id).
                 append("code", code).
                 append("name", name).
+                append("phoneNumber", phoneNumber).
                 append("active", active).
                 toString();
     }

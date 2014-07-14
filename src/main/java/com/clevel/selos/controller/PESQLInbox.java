@@ -167,7 +167,7 @@ public class PESQLInbox implements Serializable
         log.info("onCreation userDetail PESQLInbox.java : {}", userDetail);
 
         //Clear all session before selectInbox
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         try {
 
@@ -179,8 +179,12 @@ public class PESQLInbox implements Serializable
                 if((Long)session.getAttribute("stepId") != StepValue.COMPLETED_STEP.value() && session.getAttribute("wobNumber")!=null && session.getAttribute("queueName")!=null && session.getAttribute("fetchType")!=null)
                 {
                     String wobNumber = (String)session.getAttribute("wobNumber");
-                    log.info("unlocking case queue: {}, wobNumber : {}, fetchType: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
-                    bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                    String queueName = (String)session.getAttribute("queueName");
+                    if(wobNumber.trim().length()!=0 || queueName.trim().length()!=0)
+                    {
+                        log.info("unlocking case queue: {}, wobNumber : {}, fetchType: {}",session.getAttribute("queueName"), session.getAttribute("wobNumber"),session.getAttribute("fetchType"));
+                        bpmInterfaceImpl.unLockCase((String)session.getAttribute("queueName"),wobNumber,(Integer)session.getAttribute("fetchType"));
+                    }
                 }
                 /*else
                 {
@@ -209,7 +213,7 @@ public class PESQLInbox implements Serializable
         }
 
         //Clear all session
-        session = FacesUtil.getSession(false);
+        session = FacesUtil.getSession(true);
 
         session.setAttribute("workCasePreScreenId", 0L);
         session.setAttribute("workCaseAppraisalId", 0L);
@@ -222,6 +226,7 @@ public class PESQLInbox implements Serializable
         session.setAttribute("wobNumber", "");
         session.setAttribute("caseOwner", "");
         session.setAttribute("fetchType",0);
+        session.setAttribute("slaStatus", "");
     }
 
     public void onSelectInbox() {
@@ -242,6 +247,7 @@ public class PESQLInbox implements Serializable
         String queueName = Util.parseString(inboxViewSelectItem.getQueuename(), "0");
         String wobNumber = Util.parseString(inboxViewSelectItem.getFwobnumber(), "");
         String caseOwner = Util.parseString(inboxViewSelectItem.getAtuser(), "");
+        String slaStatus = Util.parseString(inboxViewSelectItem.getSlastatus(), "");
 
         try {
 
@@ -287,6 +293,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("stageId", stageId);
             session.setAttribute("caseOwner", caseOwner);
             session.setAttribute("queueName", queueName);
+            session.setAttribute("slaStatus", slaStatus);
 
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);

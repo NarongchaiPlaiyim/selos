@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.QualitativeClass;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -28,10 +29,11 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "qualitative")
-public class Qualitative implements Serializable {
+public class Qualitative extends BaseController {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
@@ -46,6 +48,7 @@ public class Qualitative implements Serializable {
 
     @Inject
     QualityLevelDAO qualityLevelDAO;
+
     @Inject
     BasicInfoDAO basicInfoDAO;
 
@@ -73,7 +76,7 @@ public class Qualitative implements Serializable {
 
     public void preRender(){
         log.info("preRender.");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ", page);
@@ -115,7 +118,7 @@ public class Qualitative implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ", page);
@@ -159,6 +162,7 @@ public class Qualitative implements Serializable {
             }
 
             onLoadSelectList();
+            loadUserAccessMatrix(Screen.QUALITATIVE);
         }
     }
 

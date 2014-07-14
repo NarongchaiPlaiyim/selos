@@ -263,7 +263,16 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getBusinessLocation() != null)
             applicationInfo.setBizLocation(String.valueOf(prescreen.getBusinessLocation().getCode()));
 
-        applicationInfo.setYearInBusinessMonth(new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now)));
+        //---- Check register date is older than reference date : use older date to send BRMS ----
+        BigDecimal registerDateMonth = new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getRegisterDate(), now));
+        BigDecimal referenceDateMonth = new BigDecimal(DateTimeUtil.monthBetween2Dates(prescreen.getReferredDate(), now));
+        BigDecimal yearInBusinessMonth;
+        if(registerDateMonth.compareTo(referenceDateMonth) > 0)
+            yearInBusinessMonth = registerDateMonth;
+        else
+            yearInBusinessMonth = referenceDateMonth;
+
+        applicationInfo.setYearInBusinessMonth(yearInBusinessMonth);
         if(prescreen.getCountryOfRegister() != null)
             applicationInfo.setCountryOfRegistration(prescreen.getCountryOfRegister().getCode2());
 
@@ -357,7 +366,7 @@ public class BRMSControl extends BusinessControl {
         /*End Set Account Request*/
 
         /*Start Set Business Info List*/
-        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(workcasePrescreenId);
+        List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(prescreen.getId());
         actionValidationControl.validate(businessList, PrescreenBusiness.class);
 
         List<BRMSBizInfo> bizInfoList = new ArrayList<BRMSBizInfo>();
@@ -448,14 +457,10 @@ public class BRMSControl extends BusinessControl {
             }
 
             customerInfoList.add(brmsCustomerInfo);
-
-            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
-                numberOfGuarantor = numberOfGuarantor + 1;
-
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
-        logger.debug("number of guarantor ({})",numberOfGuarantor);
+        logger.debug("number of guarantor ({})", numberOfGuarantor);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");
@@ -851,9 +856,9 @@ public class BRMSControl extends BusinessControl {
             if(!Util.isNull(applicationInfo)){
                 docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
                 if(!Util.isNull(docCustomerResponse)){
+                    mandateDocResponseView = new MandateDocResponseView();
                     logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
                     if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                        mandateDocResponseView = new MandateDocResponseView();
                         Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
                         mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                         mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
@@ -1132,9 +1137,11 @@ public class BRMSControl extends BusinessControl {
             BRMSTMBAccountInfo tmbAccountInfo = new BRMSTMBAccountInfo();
             tmbAccountInfo.setActiveFlag(customerOblAccountInfo.isAccountActiveFlag());
             tmbAccountInfo.setDataSource(customerOblAccountInfo.getDataSource());
-            tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef());
+            if(customerOblAccountInfo.getAccountRef() != null && customerOblAccountInfo.getAccountRef().length() >= 2){
+                tmbAccountInfo.setAccountRef(customerOblAccountInfo.getAccountRef().substring(customerOblAccountInfo.getAccountRef().length() - 2));
+            }
             tmbAccountInfo.setCustToAccountRelationCD(customerOblAccountInfo.getCusRelAccount());
-            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().isTdrFlag());
+            tmbAccountInfo.setTmbTDRFlag(customerOblAccountInfo.getTdrFlag().value());
             tmbAccountInfo.setNumMonthIntPastDue(customerOblAccountInfo.getNumMonthIntPastDue());
             tmbAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfo.getNumMonthIntPastDueTDRAcc());
             tmbAccountInfo.setTmbDelPriDay(customerOblAccountInfo.getTmbDelPriDay());
@@ -1480,19 +1487,22 @@ public class BRMSControl extends BusinessControl {
                     mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
                 }
 
-                stepId = getLong(documentDetail.getOperStep());
-                if(documentDetail.isOperMandateFlag()){
-                    if(stepId != 0 && stepId == step.getId()){
-                        logger.debug("Document is Mandate for Oper step {}.", step);
-                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                //7. check step which operation flag
+                if(step.getOperationFlag() != 0) {
+                    stepId = getLong(documentDetail.getOperStep());
+                    if (documentDetail.isOperMandateFlag()) {
+                        if (stepId != 0 && stepId == step.getId()) {
+                            logger.debug("Document is Mandate for Oper step {}.", step);
+                            mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                        } else {
+                            mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                        }
+                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                     } else {
+                        logger.debug("Document is NOT mandate for any steps.");
                         mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                     }
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
-                } else {
-                    logger.debug("Document is NOT mandate for any steps.");
-                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                 }
 
                 mandateDocViewMap.put(documentDetail.getId(), mandateDocView);

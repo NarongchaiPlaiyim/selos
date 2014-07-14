@@ -94,7 +94,7 @@ public class DBRInfo extends BaseController {
 
     public void preRender(){
         log.debug("preRender");
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             //TODO Check valid step
@@ -110,7 +110,7 @@ public class DBRInfo extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");

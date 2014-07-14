@@ -44,7 +44,7 @@ public class PDFOfferLetter implements Serializable {
     }
 
     public void init(){
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -230,7 +230,7 @@ public class PDFOfferLetter implements Serializable {
     public OfferLetterReport fillMasterOfferLetter(){
         OfferLetterReport report = new OfferLetterReport();
 
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
         if (!Util.isNull(appHeaderView)){

@@ -36,11 +36,11 @@ public class IsaActivity implements Serializable {
     public IsaActivity() {
     }
 
-    public IsaActivity(String userId, String action, String actionDesc, ActionResult actionResult, String resultDesc, String ipAddress) {
+    public IsaActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String ipAddress) {
         this.userId = userId;
         this.action = action;
         this.actionDesc = actionDesc;
-        this.actionDate = new Date();
+        this.actionDate = actionDate;
         this.actionResult = actionResult;
         this.resultDesc = resultDesc;
         this.ipAddress = ipAddress;

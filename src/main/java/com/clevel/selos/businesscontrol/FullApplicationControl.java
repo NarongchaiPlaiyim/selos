@@ -59,15 +59,15 @@ public class FullApplicationControl extends BusinessControl {
     @Inject
     private WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
-    private ProposeLineDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
-    private ProposeCollateralInfoDAO newCollateralDAO;
+    private NewCollateralDAO newCollateralDAO;
     @Inject
-    private ProposeCollateralInfoHeadDAO newCollateralHeadDAO;
+    private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
-    private ProposeCollateralInfoSubDAO newCollateralSubDAO;
+    private NewCollateralSubDAO newCollateralSubDAO;
     @Inject
-    private ProposeCreditInfoDAO newCreditDetailDAO;
+    private NewCreditDetailDAO newCreditDetailDAO;
     @Inject
     private ReasonDAO reasonDAO;
     @Inject
@@ -189,7 +189,7 @@ public class FullApplicationControl extends BusinessControl {
 
                 //TODO: get total com and retail
 
-                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
                 if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                     if(uwRuleResultSummary.getUwResultColor()!=null){
                         resultCode = uwRuleResultSummary.getUwResultColor().code();
@@ -292,7 +292,7 @@ public class FullApplicationControl extends BusinessControl {
                     }
                 }
 
-                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcaseId(workCaseId);
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
                 if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                     if(uwRuleResultSummary.getUwResultColor()!=null){
                         resultCode = uwRuleResultSummary.getUwResultColor().code();
@@ -547,14 +547,18 @@ public class FullApplicationControl extends BusinessControl {
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 
-    public void submitCA(String queueName, long workCaseId) throws Exception {
+    public void submitCA(String wobNumber, String queueName, long workCaseId) throws Exception {
         String decisionFlag = "A";
         String haveRG001 = "N"; //TODO
         WorkCase workCase;
         ApprovalHistory approvalHistoryEndorseCA = null;
 
+        String insuranceRequired = "N";
+        String approvalFlag = "N";
+        String tcgRequired = "N";
+
         if(Long.toString(workCaseId) != null && workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId,getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
 
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
@@ -563,9 +567,20 @@ public class FullApplicationControl extends BusinessControl {
                 approvalHistoryEndorseCA.setSubmit(1);
                 approvalHistoryEndorseCA.setSubmitDate(new Date());
             }
+
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            if(!Util.isNull(basicInfo)){
+                approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
+                tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
+            }
+
+            workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                insuranceRequired = workCase.getInsuranceFlag() == 1 ? "Y" : "N";
+            }
         }
 
-        bpmExecutor.submitCA(workCaseId, queueName, decisionFlag, haveRG001, ActionCode.SUBMIT_CA.getVal());
+        bpmExecutor.submitCA(wobNumber, queueName, decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 
@@ -887,17 +902,19 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void calculateApprovedPricingDOA(long workCaseId){
-        ProposeLine newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        calculatePricingDOA(workCaseId, newCreditFacility);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        workCase = calculatePricingDOA(workCase, newCreditFacility);
+        workCaseDAO.persist(workCase);
     }
 
-    public void calculatePricingDOA(long workCaseId, ProposeLine newCreditFacility){
+    public WorkCase calculatePricingDOA(WorkCase workCase, NewCreditFacility newCreditFacility){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
 
         if(newCreditFacility != null){
             //List of Credit detail
-            List<ProposeCreditInfo> newCreditDetailList = newCreditFacility.getProposeCreditInfoList();
+            List<NewCreditDetail> newCreditDetailList = newCreditFacility.getNewCreditDetailList();
             //List of Credit tier ( find by Credit detail )
             BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
             BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
@@ -910,14 +927,14 @@ public class FullApplicationControl extends BusinessControl {
             boolean exceptionalFlow = false;
             if(newCreditDetailList != null && newCreditDetailList.size() > 0){
                 //Check for Request Price Reduction
-                for(ProposeCreditInfo itemCreditDetail : newCreditDetailList){
+                for(NewCreditDetail itemCreditDetail : newCreditDetailList){
                     if(itemCreditDetail.getReduceFrontEndFee() == 1 || itemCreditDetail.getReducePriceFlag() == 1){
                         requestPricing = 1;
                         break;
                     }
                 }
 
-                for(ProposeCreditInfo proposeCreditInfo : newCreditDetailList){
+                for(NewCreditDetail newCreditDetail : newCreditDetailList){
                     BigDecimal standardPrice = null;
                     BigDecimal suggestPrice = null;
                     BigDecimal finalPrice = null;
@@ -925,62 +942,56 @@ public class FullApplicationControl extends BusinessControl {
                     BigDecimal tmpSuggestPrice = null;
                     BigDecimal tmpFinalPrice = null;
                     BigDecimal tmpBigDecimal = null;
-                    int reducePricing = proposeCreditInfo.getReducePriceFlag();
+                    int reducePricing = newCreditDetail.getReducePriceFlag();
                     //int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
-                    if(proposeCreditInfo.getRequestType() == RequestTypes.NEW.value()) {
-                        if(proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1){
-                            //Check for Final Price first...
-                            if(finalPrice != null){
-                                for(ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
-                                    if(proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
-                                        tmpFinalPrice = proposeCreditInfoTierDetail.getFinalInterest().add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
+                    if(newCreditDetail.getReduceFrontEndFee() == 1 || newCreditDetail.getReducePriceFlag() == 1){
+                        if(newCreditDetail.getProposeCreditTierDetailList() != null){
+                            for(NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()){
+                                //Check for Final Price first...
+                                if(finalPrice != null){
+                                    tmpFinalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                                    tmpStandardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                                    tmpSuggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+
+                                    if(tmpStandardPrice.compareTo(tmpSuggestPrice) > 0){
+                                        tmpBigDecimal = tmpStandardPrice;
+                                    }else{
+                                        tmpBigDecimal = tmpSuggestPrice;
+                                    }
+
+                                    if(reducePricing == 1){
+                                        tmpFinalPrice = tmpBigDecimal.subtract(priceReduceDOA);
+                                    }
+                                    if(tmpFinalPrice.compareTo(finalPrice) > 0){
+                                        finalPrice = tmpFinalPrice;
+                                        standardPrice = tmpStandardPrice;
+                                        suggestPrice = tmpSuggestPrice;
+                                    }
+                                }else{
+                                    finalPrice = newCreditTierDetail.getFinalInterest().add(newCreditTierDetail.getFinalBasePrice().getValue());
+                                    standardPrice = newCreditTierDetail.getStandardInterest().add(newCreditTierDetail.getStandardBasePrice().getValue());
+                                    suggestPrice = newCreditTierDetail.getSuggestInterest().add(newCreditTierDetail.getSuggestBasePrice().getValue());
+
+                                    if(standardPrice.compareTo(suggestPrice) > 0){
+                                        tmpBigDecimal = standardPrice;
+                                    }else{
+                                        tmpBigDecimal = suggestPrice;
+                                    }
+
+                                    if(reducePricing == 1){
+                                        finalPrice = tmpBigDecimal.subtract(priceReduceDOA);
                                     }
                                 }
-                                tmpStandardPrice = proposeCreditInfo.getStandardInterest().add(proposeCreditInfo.getStandardBasePrice().getValue());
-                                tmpSuggestPrice = proposeCreditInfo.getSuggestInterest().add(proposeCreditInfo.getSuggestBasePrice().getValue());
 
-                                if(tmpStandardPrice.compareTo(tmpSuggestPrice) > 0){
-                                    tmpBigDecimal = tmpStandardPrice;
-                                }else{
-                                    tmpBigDecimal = tmpSuggestPrice;
-                                }
-
-                                if(reducePricing == 1){
-                                    tmpFinalPrice = tmpBigDecimal.subtract(priceReduceDOA);
-                                }
-                                if(tmpFinalPrice.compareTo(finalPrice) > 0){
-                                    finalPrice = tmpFinalPrice;
-                                    standardPrice = tmpStandardPrice;
-                                    suggestPrice = tmpSuggestPrice;
-                                }
-                            } else {
-                                for(ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
-                                    if(proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
-                                        finalPrice = proposeCreditInfoTierDetail.getFinalInterest().add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
-                                    }
-                                }
-                                standardPrice = proposeCreditInfo.getStandardInterest().add(proposeCreditInfo.getStandardBasePrice().getValue());
-                                suggestPrice = proposeCreditInfo.getSuggestInterest().add(proposeCreditInfo.getSuggestBasePrice().getValue());
-
-                                if(standardPrice.compareTo(suggestPrice) > 0){
-                                    tmpBigDecimal = standardPrice;
-                                }else{
-                                    tmpBigDecimal = suggestPrice;
-                                }
-
-                                if(reducePricing == 1){
-                                    finalPrice = tmpBigDecimal.subtract(priceReduceDOA);
+                                if(finalPrice.compareTo(suggestPrice) < 0){
+                                    exceptionalFlow = true;
+                                    break;
                                 }
                             }
-
-                            if(finalPrice.compareTo(suggestPrice) < 0){
-                                exceptionalFlow = true;
-                                break;
-                            }
                         }
-                        if(exceptionalFlow){
-                            break;
-                        }
+                    }
+                    if(exceptionalFlow){
+                        break;
                     }
                 }
             }
@@ -1018,22 +1029,51 @@ public class FullApplicationControl extends BusinessControl {
             int appraisalRequire = calculateAppraisalRequest(newCreditFacility);
 
             log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            //WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setRequestPricing(requestPricing);
             workCase.setPricingDoaLevel(pricingDOALevel.value());
             workCase.setRequestAppraisalRequire(appraisalRequire);
-            workCaseDAO.persist(workCase);
+            //workCaseDAO.persist(workCase);
         }
+        return workCase;
     }
 
-    public int calculateAppraisalRequest(ProposeLine newCreditFacility){
+    public int calculateInsuranceRequired(NewCreditFacility newCreditFacility){
+        int insuranceRequire = 0;
+        int insuranceRequireCount = 0;
+        if(!Util.isNull(newCreditFacility)){
+            if(!Util.isNull(newCreditFacility.getNewCollateralDetailList()) && newCreditFacility.getNewCollateralDetailList().size() > 0){
+                for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                    if(!Util.isNull(newCollateral.getNewCollateralHeadList()) && newCollateral.getNewCollateralHeadList().size() > 0){
+                        for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+                            if(!Util.isNull(newCollateralHead.getNewCollateralSubList()) && newCollateralHead.getNewCollateralSubList().size() > 0){
+                                for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
+                                    if(!Util.isNull(newCollateralSub.getSubCollateralType()) && newCollateralSub.getSubCollateralType().getId() != 0){
+                                        if(!Util.isZero(newCollateralSub.getSubCollateralType().getInsuranceFlag())){
+                                            insuranceRequireCount = insuranceRequireCount + 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(insuranceRequireCount > 0){
+            insuranceRequire = 1;
+        }
+        return insuranceRequire;
+    }
+
+    public int calculateAppraisalRequest(NewCreditFacility newCreditFacility){
         int appraisalRequire = 0;
         int appraisalRequireCount = 0;
         if(!Util.isNull(newCreditFacility)){
-            if(!Util.isNull(newCreditFacility.getProposeCollateralInfoList()) && newCreditFacility.getProposeCollateralInfoList().size() > 0){
-                for(ProposeCollateralInfo newCollateral : newCreditFacility.getProposeCollateralInfoList()){
-                    if(!Util.isNull(newCollateral.getProposeCollateralInfoHeadList()) && newCollateral.getProposeCollateralInfoHeadList().size() > 0){
-                        for(ProposeCollateralInfoHead newCollateralHead : newCollateral.getProposeCollateralInfoHeadList()){
+            if(!Util.isNull(newCreditFacility.getNewCollateralDetailList()) && newCreditFacility.getNewCollateralDetailList().size() > 0){
+                for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                    if(!Util.isNull(newCollateral.getNewCollateralHeadList()) && newCollateral.getNewCollateralHeadList().size() > 0){
+                        for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
                             if(!Util.isNull(newCollateralHead.getHeadCollType()) && newCollateralHead.getHeadCollType().getId() != 0){
                                 if(newCollateralHead.getHeadCollType().getAppraisalRequire() == 1){
                                     if(!Util.isNull(newCollateral.getAppraisalDate())){
@@ -1250,6 +1290,20 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    public void requestParallelAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
+        log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+
+        if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setParallelAppraisalFlag(1);
+            workCaseDAO.persist(workCase);
+        } else if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setParallelAppraisalFlag(1);
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        }
+    }
+
     public void updateTimeOfCheckCriteria(long workCaseId, long stepId){
         try{
             WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCaseId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
@@ -1320,7 +1374,7 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("calculateApprovedResult");
         try {
             Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-            ProposeLine newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             log.debug("calculateApprovedResult ::: decision : {}", decision);
             log.debug("calculateApprovedResult ::: prpose : {}", newCreditFacility);
 
@@ -1359,9 +1413,9 @@ public class FullApplicationControl extends BusinessControl {
         int requestType = 1;        //for new = 1, new+change = 2;
         try {
             log.debug("calculateApprovedType");
-            List<ProposeCreditInfo> newCreditDetailApprovedList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+            List<NewCreditDetail> newCreditDetailApprovedList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
             log.debug("calculateApprovedType ::: newCreditDetailApprovedList size : {}", newCreditDetailApprovedList != null ? newCreditDetailApprovedList.size() : null);
-            for (ProposeCreditInfo newCreditDetail : newCreditDetailApprovedList) {
+            for (NewCreditDetail newCreditDetail : newCreditDetailApprovedList) {
                 log.debug("calculateApprovedType ::: newCreditDetail : {}", newCreditDetail);
                 if (newCreditDetail.getUwDecision() == DecisionType.APPROVED && newCreditDetail.getRequestType() == RequestTypes.CHANGE.value()) {
                     requestType = 2;
@@ -1385,17 +1439,17 @@ public class FullApplicationControl extends BusinessControl {
     public int calculatePremiumQuote(long workCaseId){
         int premiumQuote = 0;
         int insuranceFlagCount = 0;
-        ProposeLine newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         if(!Util.isNull(newCreditFacility)) {
-            List<ProposeCollateralInfo> newCollateralList = newCreditFacility.getProposeCollateralInfoList();
+            List<NewCollateral> newCollateralList = newCreditFacility.getNewCollateralDetailList();
             if(!Util.isNull(newCollateralList)){
-                for(ProposeCollateralInfo newCollateral : newCollateralList){
-                    List<ProposeCollateralInfoHead> newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+                for(NewCollateral newCollateral : newCollateralList){
+                    List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
                     if(!Util.isNull(newCollateralHeadList)){
-                        for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
-                            List<ProposeCollateralInfoSub> newCollateralSubList = newCollateralHead.getProposeCollateralInfoSubList();
+                        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+                            List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
                             if(!Util.isNull(newCollateralSubList)){
-                                for(ProposeCollateralInfoSub newCollateralSub : newCollateralSubList){
+                                for(NewCollateralSub newCollateralSub : newCollateralSubList){
                                     if(!Util.isNull(newCollateralSub.getSubCollateralType()) && newCollateralSub.getSubCollateralType().getInsuranceFlag() == 1){
                                         insuranceFlagCount = insuranceFlagCount + 1;
                                         break;
@@ -1430,5 +1484,15 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         return tcgFlag;
+    }
+
+    public User getUserOwnerByRole(long workCaseId, int roleId){
+        WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getLatestWorkCaseOwnerByRole(workCaseId, roleId);
+        User user = null;
+        if(workCaseOwner != null){
+            user = workCaseOwner.getUser();
+        }
+
+        return user;
     }
 }

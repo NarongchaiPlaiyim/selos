@@ -39,6 +39,12 @@ public class WorkCasePrescreen extends AbstractWorkCase {
     @Column(name = "request_appraisal", columnDefinition = "int default 0")
     private int requestAppraisal;
 
+    @Column(name = "parallel_appraisal_flag", columnDefinition = "int default 0")
+    private int parallelAppraisalFlag;
+
+    @Column(name = "ncb_reject_flag", columnDefinition = "int default 0")
+    private int ncbRejectFlag;
+
     /*@Column(name = "request_type_id")
     private int requestTypeId;*/
 
@@ -108,5 +114,21 @@ public class WorkCasePrescreen extends AbstractWorkCase {
 
     public void setRequestAppraisal(int requestAppraisal) {
         this.requestAppraisal = requestAppraisal;
+    }
+
+    public int getParallelAppraisalFlag() {
+        return parallelAppraisalFlag;
+    }
+
+    public void setParallelAppraisalFlag(int parallelAppraisalFlag) {
+        this.parallelAppraisalFlag = parallelAppraisalFlag;
+    }
+
+    public int getNcbRejectFlag() {
+        return ncbRejectFlag;
+    }
+
+    public void setNcbRejectFlag(int ncbRejectFlag) {
+        this.ncbRejectFlag = ncbRejectFlag;
     }
 }

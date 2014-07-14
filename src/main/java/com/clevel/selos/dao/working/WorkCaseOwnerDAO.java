@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.working.WorkCaseOwner;
+import filenet.vw.api.VWLogQuery;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
@@ -123,6 +124,18 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         return workCaseOwner;
     }
+
+    public WorkCaseOwner getWorkCaseOwnerPreScreen(long workCasePreScreenId, int roleId, String userId, long stepId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("role.id", roleId));
+        criteria.add(Restrictions.eq("user.id", userId));
+        WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
+
+        return workCaseOwner;
+    }
+
     public WorkCaseOwner getLatestWorkCaseOwnerByRole(long workCaseId, int roleId) {
     	Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
@@ -162,14 +175,19 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
     }
 
-    public String getUW1(long stepId, long workCaseId){
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("step.id", stepId));
-        criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
-
-        if(workCaseOwner != null){
-            return workCaseOwner.getUser() != null ? workCaseOwner.getUser().getId() : "";
+    public String getUW1(final long stepId, final long workCaseId){
+        Criteria criteria = null;
+        WorkCaseOwner workCaseOwner = null;
+        try{
+            criteria = createCriteria();
+            criteria.add(Restrictions.eq("step.id", stepId));
+            criteria.add(Restrictions.eq("workCase.id", workCaseId));
+            workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
+            if(workCaseOwner != null){
+                return workCaseOwner.getUser() != null ? workCaseOwner.getUser().getId() : "";
+            }
+        } catch (Exception e) {
+            log.debug("Error while getUW1 is processing {}", e);
         }
         return "";
     }

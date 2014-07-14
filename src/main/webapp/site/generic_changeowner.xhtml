@@ -9,7 +9,7 @@
 <h:head>
     <title>SE-LOS : Change Owner</title>
     <h:outputStylesheet name="css/style.css" />
-
+    <h:outputScript library="js" name="custom.js" />
     <style type="text/css">
         table.ui-selectoneradio.nolabel_radio {
             border-collapse: collapse;
@@ -55,6 +55,7 @@
 <h:body>
 <p:panel id="pnl_maincontainer">
 <h:form id="frmMain" style="position: relative; min-height: 100%; height: 100%;">
+
 <div id="main_container">
 <!-- Start Header Logo -->
 <ui:include src="include/header_logo.xhtml" />
@@ -71,32 +72,27 @@
     </div>
     <div id="content">
         <table id="content_form">
-            <!--<tr>
-                <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Change Owner:</label> ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ</td>
-            </tr>
-            <tr>
-                <td colspan="100%" style="color: red;line-height: 15px;"><label style="font-weight: bold">Reassign:</label> ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ</td>
-            </tr>-->
             <tr>
                 <td colspan="100%" class="title"><h2>Search Case from Owner</h2></td>
             </tr>
             <tr>
                 <td class="title">Team Lead Unit Name:</td>
-                <td > <h:selectOneMenu id="teamId" style="width: 220px;"
+                <td > <h:selectOneMenu id="teamId" style="width: 220px;" class="largest"
                                       label="TeamId"
-                                      value="#{change.selectTeam}" onchange="submit()" valueChangeListener="#{change.getRoleNameForSelectedTeam}">
+                                      value="#{change.selectTeam}" valueChangeListener="#{change.getRoleNameForSelectedTeam}">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
                     <f:selectItems value="#{change.teamTypeName}" var="teamName" itemValue="#{teamName.id}" itemLabel="#{teamName.id} - #{teamName.user}"/>
-
+                    <p:ajax event="change" update="@form" />
                 </h:selectOneMenu>  </td>
             </tr>
             <tr>
                 <td class="title"> Role:</td>
-                <td> <h:selectOneMenu id="roleId" style="width: 220px;"
+                <td> <h:selectOneMenu id="roleId" style="width: 220px;"   class="largest"
                                       label="role"
-                                      value="#{change.selectRole}" onchange="submit()" valueChangeListener="#{change.getAllUserNames}">
+                                      value="#{change.selectRole}" valueChangeListener="#{change.getAllUserNames}">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
                     <f:selectItems value="#{change.rolSet}" var="roleItem" itemLabel="#{roleItem.roleName}" itemValue="#{roleItem.roleNumber}"/>
+                    <p:ajax event="change" update="@form" />
                 </h:selectOneMenu></td>
             </tr>
             <tr>
@@ -335,8 +331,8 @@
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <p:commandButton value="Submit" styleClass="small" action="#{change.onReassignBulk}" onclick="appealDlg.close();"/>
-                    <p:commandButton value="Cancel" styleClass="small" onclick="appealDlg.close();"/>
+                    <p:commandButton value="Submit" styleClass="small" action="#{change.onReassignBulk}" update=":frmMain"/>
+                    <p:commandButton value="Cancel" styleClass="small" onclick="changeOwnerDlg.close();"/>
                 </td>
             </tr>
         </table>
