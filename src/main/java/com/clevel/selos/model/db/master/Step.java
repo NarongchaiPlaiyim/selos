@@ -28,6 +28,8 @@ public class Step implements Serializable {
     private int checkBRMS;
     @Column(name = "propose_flag", columnDefinition = "int default 0")
     private ProposeType proposeType;
+    @Column(name = "operation_flag", columnDefinition = "int default 0")
+    private int operationFlag;
     @Column(name = "active")
     private int active;
 
@@ -104,6 +106,14 @@ public class Step implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public int getOperationFlag() {
+        return operationFlag;
+    }
+
+    public void setOperationFlag(int operationFlag) {
+        this.operationFlag = operationFlag;
     }
 
     @Override

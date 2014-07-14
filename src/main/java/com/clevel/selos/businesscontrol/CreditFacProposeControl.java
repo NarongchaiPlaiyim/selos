@@ -727,7 +727,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                             }
                                         }
                                         log.debug("Potential Value : {}", potentialCollateral);
-                                        summaryOne.add(potentialCollValue);
+                                        summaryOne = summaryOne.add(potentialCollValue);
                                     }
                                 }
                             }
@@ -762,7 +762,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                             }
                                         }
                                         log.debug("Potential Value : {}", potentialCollValue);
-                                        summaryOne.add(potentialCollValue);   // Sum of [Head Coll - Appraisal of Cash Collateral / BE - ภาระสินเชื่อเดิม]
+                                        summaryOne = summaryOne.add(potentialCollValue);   // Sum of [Head Coll - Appraisal of Cash Collateral / BE - ภาระสินเชื่อเดิม]
                                     }
                                 }
                             }

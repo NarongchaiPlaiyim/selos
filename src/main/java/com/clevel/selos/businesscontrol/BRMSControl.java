@@ -1486,19 +1486,22 @@ public class BRMSControl extends BusinessControl {
                     mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
                 }
 
-                stepId = getLong(documentDetail.getOperStep());
-                if(documentDetail.isOperMandateFlag()){
-                    if(stepId != 0 && stepId == step.getId()){
-                        logger.debug("Document is Mandate for Oper step {}.", step);
-                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                //7. check step which operation flag
+                if(step.getOperationFlag() != 0) {
+                    stepId = getLong(documentDetail.getOperStep());
+                    if (documentDetail.isOperMandateFlag()) {
+                        if (stepId != 0 && stepId == step.getId()) {
+                            logger.debug("Document is Mandate for Oper step {}.", step);
+                            mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                        } else {
+                            mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                        }
+                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                     } else {
+                        logger.debug("Document is NOT mandate for any steps.");
                         mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                     }
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
-                } else {
-                    logger.debug("Document is NOT mandate for any steps.");
-                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                 }
 
                 mandateDocViewMap.put(documentDetail.getId(), mandateDocView);
