@@ -156,7 +156,7 @@
                                                             <p:inputText id="nplTMBYear"
                                                                          styleClass="small"
                                                                          readonly="#{ncbInfo.isDisabled('TMBNPLYear')}"
-                                                                         value="#{ncbInfo.ncbInfoView.nplTMBYear}"/>
+                                                                         value="#{ncbInfo.ncbInfoView.nplTMBYear==0?'':ncbInfo.ncbInfoView.nplTMBYear}"/>
                                                         </td>
                                                         <td>
                                                             <p:spacer width="10px;" height="20px;"/>
@@ -180,7 +180,7 @@
                                                             <p:inputText id="nplOtherYear"
                                                                          styleClass="small"
                                                                          readonly="#{ncbInfo.isDisabled('OtherNPLYear')}"
-                                                                         value="#{ncbInfo.ncbInfoView.nplOtherYear}"/>
+                                                                         value="#{ncbInfo.ncbInfoView.nplOtherYear==0?'':ncbInfo.ncbInfoView.nplOtherYear}"/>
                                                         </td>
                                                     </p:panel>
                                                 </tr>
@@ -238,7 +238,7 @@
                                                             <p:inputText id="tdrTMBYear"
                                                                          styleClass="small"
                                                                          readonly="#{ncbInfo.isDisabled('TMBTDRYear')}"
-                                                                         value="#{ncbInfo.ncbInfoView.tdrTMBYear}"/>
+                                                                         value="#{ncbInfo.ncbInfoView.tdrTMBYear==0?'':ncbInfo.ncbInfoView.tdrTMBYear}"/>
                                                             <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}"
                                                                              disabled="#{ncbInfo.isDisabled('TMBTDRYear')}">
                                                                 <f:selectItem itemLabel="" itemValue="0"/>
@@ -274,7 +274,7 @@
                                                             <p:inputText id="tdrOtherYear"
                                                                          styleClass="small"
                                                                          readonly="#{ncbInfo.isDisabled('OtherTDRYear')}"
-                                                                         value="#{ncbInfo.ncbInfoView.tdrOtherYear}"/>
+                                                                         value="#{ncbInfo.ncbInfoView.tdrOtherYear==0?'':ncbInfo.ncbInfoView.tdrOtherYear}"/>
                                                             <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}"
                                                                              disabled="#{ncbInfo.isDisabled('OtherTDRYear')}">
                                                                 <f:selectItem itemLabel="" itemValue="0"/>

@@ -106,12 +106,12 @@ public class NCBTransform extends Transform {
         //NPL Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setNplOtherFlag(transFormBooleanToView(ncb.getNplOtherFlag()));
         ncbInfoView.setNplOtherMonth(ncb.getNplOtherMonth());
-        if(ncb.getNplOtherMonth() != 0) ncbInfoView.setNplOtherMonthStr(getMonthString(ncb.getNplOtherMonth()));
+        ncbInfoView.setNplOtherMonthStr(getMonthString(ncb.getNplOtherMonth()));
         ncbInfoView.setNplOtherYear(ncb.getNplOtherYear());
 
         ncbInfoView.setNplTMBFlag(transFormBooleanToView(ncb.getNplTMBFlag()));
         ncbInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
-        if(ncb.getNplTMBMonth() != 0) ncbInfoView.setNplTMBMonthStr(getMonthString(ncb.getNplTMBMonth()));
+        ncbInfoView.setNplTMBMonthStr(getMonthString(ncb.getNplTMBMonth()));
         ncbInfoView.setNplTMBYear(ncb.getNplTMBYear());
 
         //TDR Flag = TDR Radio Value
@@ -119,12 +119,12 @@ public class NCBTransform extends Transform {
         //TDR Other Flag & TMB Flag = Check Box Value
         ncbInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
         ncbInfoView.setTdrOtherMonth(ncb.getTdrOtherMonth());
-        if(ncb.getTdrOtherMonth() != 0) ncbInfoView.setTdrOtherMonthStr(getMonthString(ncb.getTdrOtherMonth()));
+        ncbInfoView.setTdrOtherMonthStr(getMonthString(ncb.getTdrOtherMonth()));
         ncbInfoView.setTdrOtherYear(ncb.getTdrOtherYear());
 
         ncbInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
         ncbInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
-        if(ncb.getTdrTMBMonth() != 0) ncbInfoView.setTdrTMBMonthStr(getMonthString(ncb.getTdrTMBMonth()));
+        ncbInfoView.setTdrTMBMonthStr(getMonthString(ncb.getTdrTMBMonth()));
         ncbInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
 
         ncbInfoView.setPaymentClass(ncb.getPaymentClass());
@@ -202,6 +202,9 @@ public class NCBTransform extends Transform {
             case 11 : monthStr = msg.get("app.month.november");
                 break;
             case 12 : monthStr = msg.get("app.month.december");
+                break;
+            default: monthStr = "";
+                break;
         }
         return monthStr;
     }
