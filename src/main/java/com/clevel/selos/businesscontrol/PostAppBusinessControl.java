@@ -1,17 +1,55 @@
 package com.clevel.selos.businesscontrol;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
+import com.clevel.selos.dao.master.FeePaymentMethodDAO;
+import com.clevel.selos.dao.master.FeeTypeDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
-import com.clevel.selos.dao.working.*;
+import com.clevel.selos.dao.working.AgreementInfoDAO;
+import com.clevel.selos.dao.working.DisbursementDAO;
+import com.clevel.selos.dao.working.InsuranceInfoDAO;
+import com.clevel.selos.dao.working.MortgageInfoDAO;
+import com.clevel.selos.dao.working.OpenAccountDAO;
+import com.clevel.selos.dao.working.PerfectionReviewDAO;
+import com.clevel.selos.dao.working.PledgeInfoDAO;
+import com.clevel.selos.dao.working.ProposeFeeDetailDAO;
+import com.clevel.selos.dao.working.ReturnInfoDAO;
+import com.clevel.selos.dao.working.TCGInfoDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.FeeLevel;
 import com.clevel.selos.model.PerfectReviewStatus;
 import com.clevel.selos.model.PerfectReviewType;
 import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.FeeType;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.AgreementInfo;
+import com.clevel.selos.model.db.working.InsuranceInfo;
+import com.clevel.selos.model.db.working.MortgageInfo;
+import com.clevel.selos.model.db.working.OpenAccount;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
+import com.clevel.selos.model.db.working.PerfectionReview;
+import com.clevel.selos.model.db.working.PledgeInfo;
+import com.clevel.selos.model.db.working.ProposeFeeDetail;
+import com.clevel.selos.model.db.working.ReturnInfo;
+import com.clevel.selos.model.db.working.TCGInfo;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.model.view.StepView;
@@ -21,19 +59,13 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
-import org.slf4j.Logger;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Stateless
 public class PostAppBusinessControl extends BusinessControl {
 	private static final long serialVersionUID = 1881119889067519324L;
-	private static final String DATE_FORMAT = "yyyyMMdd";
+	
 	private static final long ACTION_SUBMIT = 1015;
 	@Inject
     @SELOS
@@ -78,6 +110,12 @@ public class PostAppBusinessControl extends BusinessControl {
 	private TCGInfoDAO tcgInfoDAO;
 	@Inject
 	private MortgageSummaryControl mortgageSummaryControl;
+	@Inject
+	private FeePaymentMethodDAO feePaymentMethodDAO;
+	@Inject
+	private FeeTypeDAO feeTypeDAO;
+	@Inject
+	private InsuranceInfoDAO insuranceInfoDAO;
 	
 	
 	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark) throws Exception {
@@ -247,8 +285,7 @@ public class PostAppBusinessControl extends BusinessControl {
 				mortgageRequired = "Y";
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
-				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 			}
 		}
 		
@@ -260,8 +297,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId == ACTION_SUBMIT) {
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
-				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 			}
 		}
 		fields.put("AppointmentDate",appointDateStr);
@@ -319,8 +355,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId == ACTION_SUBMIT) {
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
-				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 			}
 		}
 		fields.put("AppointmentDate", appointDateStr);
@@ -383,8 +418,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId == ACTION_SUBMIT) {
 			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
 			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				SimpleDateFormat dFmt = new SimpleDateFormat(DATE_FORMAT,Locale.US);
-				appointDateStr = dFmt.format(agreementInfo.getLoanContractDate());
+				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 			}
 		}
 		fields.put("AppointmentDate", appointDateStr);
@@ -413,21 +447,33 @@ public class PostAppBusinessControl extends BusinessControl {
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Insurance Premium Quote (3002) , Action Submit CA (1015)
-		//TODO
-		/*
-		FeeDetail model = new FeeDetail();
-		model.setPaymentMethod(null);
-		model.setFeeType(null);
+		BigDecimal amount;
+		InsuranceInfo info = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCase.getId());
+		if (info != null && info.getTotalPremiumAmount() != null) {
+			amount = info.getTotalPremiumAmount();
+		} else {
+			amount = BigDecimal.ZERO;
+		}
+		FeeType type = feeTypeDAO.findByDescription("Insurance Premium");
+		if (type == null)
+			return;
+		ProposeFeeDetail model = feeDetailDAO.findByType(workCase.getId(), type.getId());
+		if (model == null) {
+			model = new ProposeFeeDetail();
+			model.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode("01"));
+			model.setFeeType(type);
+			model.setWorkCase(workCase);
+		}
 		model.setPercentFee(BigDecimal.ZERO);
 		model.setPercentFeeAfter(BigDecimal.ZERO);
 		model.setFeeYear(BigDecimal.ZERO);
-		model.setAmount(BigDecimal.ZERO);
-		model.setFeeLevel(FeeLevel.NA);
+		model.setAmount(amount);
+		model.setFeeLevel(FeeLevel.APP_LEVEL);
 		model.setDescription(null);
-		model.setNewCreditDetail(null);
-		model.setWorkCase(workCase);
+		model.setProposeType(null);
+		model.setProposeCreditInfo(null);
+
 		feeDetailDAO.save(model);
-		*/
 	}
 	private void _3009_FixDataInDecision(WorkCase workCase,long actionId) {
 		if (actionId != ACTION_SUBMIT)

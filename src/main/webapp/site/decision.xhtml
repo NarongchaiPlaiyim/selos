@@ -1933,8 +1933,8 @@
                                                      process="@form"
                                                      update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
                                                      oncomplete="handleDialogOpen(xhr, status, args, 'proposeCreditDlg')"
+                                                     disabled="#{decision.isDisabled('addApproveCreditButton')}"
                                                      styleClass="smaller">
-                                        <!--disabled="#{decision.isDisabled('addApproveCreditButton')}"-->
                                         <p:resetInput target=":proposeCreditDlgForm"/>
                                     </p:commandButton>
 
@@ -1943,10 +1943,10 @@
                                     <p:commandButton id="btnRetrievePricingFee"
                                                      value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
                                                      actionListener="#{decision.onRetrievePricingFee()}"
+                                                     disabled="#{decision.isDisabled('retrieveApproveCreditButton')}"
                                                      process="@form"
                                                      update=":frmMain,:msgBoxSystemMessagePanel"
                                                      styleClass="largest"/>
-                                    <!--disabled="#{decision.isDisabled('retrieveProposeCreditButton')}"-->
                                 </td>
                             </tr>
                         </h:panelGroup>
@@ -2065,6 +2065,7 @@
                                                                              icon="ui-icon-pencil"
                                                                              action="#{decision.onEditApproveCredit()}"
                                                                              update=":proposeCreditDlgForm"
+                                                                             disabled="#{decision.isDisabled('approve.actionList')}"
                                                                              oncomplete="proposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndex}"/>
@@ -2072,6 +2073,7 @@
 
                                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                              icon="ui-icon-trash"
+                                                                             disabled="#{decision.isDisabled('approve.actionList')}"
                                                                              oncomplete="confirmDeleteAppProposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                             </p:commandButton>
@@ -2626,7 +2628,8 @@
                                                              update=":collateralDlgForm"
                                                              process="@form"
                                                              oncomplete="proposeCollateralDlg.show();"
-                                                             disabled="#{decision.isDisabled('collateral.editButton') or (decision.workCaseRequestAppraisal and approveCollView.headCollAppraisal)}">
+                                                             disabled="#{decision.isDisabled('collateral.editButton')
+                                                                       or (decision.workCaseRequestAppraisal and approveCollView.headCollAppraisal)}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                                 <f:setPropertyActionListener value="#{collIndex.index}" target="#{decision.rowIndex}"/>
                                                 <p:resetInput target=":collateralDlgForm"/>
@@ -2636,7 +2639,8 @@
                                                              value="#{msg.get('app.button.delete')}"
                                                              process="@form" styleClass="small"
                                                              oncomplete="confirmDeleteAppProCollateralDlg.show()"
-                                                             disabled="#{decision.isDisabled('collateral.deleteButton') or (proposeLine.workCaseRequestAppraisal and approveCollView.headCollAppraisal)}">
+                                                             disabled="#{decision.isDisabled('collateral.deleteButton')
+                                                                       or (proposeLine.workCaseRequestAppraisal and approveCollView.headCollAppraisal)}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                             </p:commandButton>
                                         </td>
@@ -3027,9 +3031,9 @@
                                         value="#{msg.get('app.button.add')}"
                                         styleClass="small"
                                         actionListener="#{decision.onAddApproveGuarantor()}"
+                                        disabled="#{decision.isDisabled('addApproveGuarantorButton')}"
                                         process="@form"
                                         update=":guarantorDlgForm">
-                                    <!--disabled="#{decision.isDisabled('addApproveGuarantorButton')}"-->
                                     <p:resetInput target=":guarantorDlgForm"/>
                                 </p:commandButton>
                             </td>
@@ -3123,6 +3127,7 @@
                                                          icon="ui-icon-pencil"
                                                          action="#{decision.onEditApproveGuarantor()}"
                                                          update=":guarantorDlgForm"
+                                                         disabled="#{decision.isDisabled('approveGuarantor.actionList')}"
                                                          oncomplete="proposeGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.approveGuarantorInfoView}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndex}"/>
@@ -3130,6 +3135,7 @@
 
                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                          icon="ui-icon-trash"
+                                                         disabled="#{decision.isDisabled('approveGuarantor.actionList')}"
                                                          oncomplete="confirmDeleteAppGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.approveGuarantorInfoView}"/>
                                         </p:commandButton>
@@ -3191,6 +3197,7 @@
                                          <td class="left" style="border-style: none !important; padding-left: 5px">
                                             <p:commandButton id="btnAddFollowUpCondition"
                                                              binding="#{addFollowUpCondButton}"
+                                                             disabled="#{decision.isDisabled('addFollowupConditionButton')}"
                                                              value="#{msg.get('app.button.add')}"
                                                              action="#{decision.onAddFollowUpCondition()}"
                                                              process="@form"
@@ -3262,6 +3269,7 @@
                                     <p:column styleClass="center top">
                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                          icon="ui-icon-trash"
+                                                         disabled="#{decision.isDisabled('followupCon.actionList')}"
                                                          oncomplete="confirmDeleteFollowUpCondDlg.show()">
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{decision.rowIndexDecisionFollowCondition}"/>

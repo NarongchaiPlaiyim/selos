@@ -161,7 +161,7 @@ public class Qualitative extends BaseController {
             }
 
             onLoadSelectList();
-            loadUserAccessMatrix(Screen.QUALITATIVE);
+            loadFieldControl(workCaseId, Screen.QUALITATIVE);
         }
     }
 
