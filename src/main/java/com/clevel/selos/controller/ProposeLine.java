@@ -498,9 +498,9 @@ public class ProposeLine extends BaseController {
     public void onSaveCollateralInfo() {
         Map<String, Object> resultMapVal;
         if(mode == Mode.ADD) {
-            resultMapVal = proposeLineControl.onSaveCollateralInfo(proposeLineView, proposeCollateralInfoView, hashSeqCredit, proposeCreditViewList, 1, rowIndex);
+            resultMapVal = proposeLineControl.onSaveCollateralInfo(proposeLineView, proposeCollateralInfoView, potentialCollViewList, headCollTypeViewList, hashSeqCredit, proposeCreditViewList, 1, rowIndex);
         } else {
-            resultMapVal = proposeLineControl.onSaveCollateralInfo(proposeLineView, proposeCollateralInfoView, hashSeqCredit, proposeCreditViewList, 2, rowIndex);
+            resultMapVal = proposeLineControl.onSaveCollateralInfo(proposeLineView, proposeCollateralInfoView, potentialCollViewList, headCollTypeViewList, hashSeqCredit, proposeCreditViewList, 2, rowIndex);
         }
 
         boolean notCheckNoFlag = (Boolean) resultMapVal.get("notCheckNoFlag");
@@ -612,9 +612,9 @@ public class ProposeLine extends BaseController {
     public void onSaveSubCollateral() {
         Map<String, Object> resultMapVal;
         if(modeSubColl == Mode.ADD) {
-            resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, 1, rowHeadCollIndex, rowSubCollIndex);
+            resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, subCollateralTypeList, 1, rowHeadCollIndex, rowSubCollIndex);
         } else {
-            resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, 2, rowHeadCollIndex, rowSubCollIndex);
+            resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, subCollateralTypeList, 2, rowHeadCollIndex, rowSubCollIndex);
         }
         proposeCollateralInfoView = (ProposeCollateralInfoView) resultMapVal.get("proposeCollateralInfoView");
         relateWithList = (List<ProposeCollateralInfoSubView>) resultMapVal.get("relateWithList");
