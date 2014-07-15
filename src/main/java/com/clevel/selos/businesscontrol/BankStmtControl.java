@@ -732,6 +732,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal sumCreditAmountUW = BigDecimal.ZERO;
         BigDecimal sumDebitAmount = BigDecimal.ZERO;
         BigDecimal sumGrossInflowPerLimit = BigDecimal.ZERO;
+        BigDecimal totalTransaction = BigDecimal.ZERO;
 
         int numMonthNonOvrLmtAmt = 0;
 
@@ -779,6 +780,9 @@ public class BankStmtControl extends BusinessControl {
                 sumCreditAmountUW = Util.add(sumCreditAmountUW, detailView.getCreditAmountUW());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
 //                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+
+                //----------- Total Transaction -----------//
+                totalTransaction = Util.add(totalTransaction, new BigDecimal(detailView.getTotalTransaction()));
             }
 
             sumCreditAmountBDM = null;
@@ -823,6 +827,9 @@ public class BankStmtControl extends BusinessControl {
                 sumCreditAmountBDM = Util.add(sumCreditAmountBDM, detailView.getCreditAmountBDM());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
 //                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+
+                //---------- Total Transaction --------//
+                totalTransaction = Util.add(totalTransaction, new BigDecimal(detailView.getTotalTransaction()));
                 log.debug("--GrossInflowPerLimit.{}",detailView.getGrossInflowPerLimit());
             }
 
@@ -958,6 +965,7 @@ public class BankStmtControl extends BusinessControl {
         bankStmtView.setOverLimitDays(BigDecimal.valueOf(maxOvrLmtDaysOfLastSixM));
         bankStmtView.setAvgLimit(limit);
         bankStmtView.setNetIncomeLastSix(sumNetIncomeLastSix);
+        bankStmtView.setTotalTransaction(totalTransaction);
 
         Bank bank = bankDAO.findById(bankStmtView.getBankView().getCode());
         if (bank != null) {
