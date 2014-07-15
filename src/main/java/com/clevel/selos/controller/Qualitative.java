@@ -267,6 +267,7 @@ public class Qualitative extends BaseController {
         log.debug("onSaveQualitativeA ::: validation : {}", validate);
         if(validate){
             try {
+                onClickQuality();
                 onSetQualityToSave();
                 qualitativeControl.saveQualitativeA(qualitativeView, workCaseId);
                 modeForButton = ModeForButton.EDIT;
@@ -310,6 +311,7 @@ public class Qualitative extends BaseController {
 
         if(validate){
             try {
+                onClickQuality();
                 onSetQualityToSave();
                 qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
                 messageHeader = msg.get("app.header.save.success");

@@ -82,6 +82,9 @@ public class CustomerInfoControl extends BusinessControl {
     @Inject
     ObligationBizTransform obligationBizTransform;
 
+    @Inject
+    UWRuleResultControl uwRuleResultControl;
+
     public CustomerInfoSummaryView getCustomerInfoSummary(long workCaseId){
         log.info("getCustomerInfoSummary ::: workCaseId : {}", workCaseId);
         CustomerInfoSummaryView customerInfoSummaryView = new CustomerInfoSummaryView();
@@ -199,6 +202,10 @@ public class CustomerInfoControl extends BusinessControl {
 
         log.info("end - saveCustomerInfoIndividual ::: customerId : {}", customer.getId());
 
+        //Delete all UW Result after Save factor data
+        log.debug("Delete all of UWRulesResult");
+        uwRuleResultControl.deleteUWRuleResult(0, workCaseId);
+
         return customer.getId();
     }
 
@@ -259,6 +266,11 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
         log.info("saveCustomerInfoJuristic ::: customerId : {}", customerJuristic.getId());
+
+        //Delete all UW Result after Save factor data
+        log.debug("Delete all of UWRulesResult");
+        uwRuleResultControl.deleteUWRuleResult(0, workCaseId);
+
         return customerJuristic.getId();
     }
 
@@ -306,6 +318,11 @@ public class CustomerInfoControl extends BusinessControl {
     public void deleteCustomerIndividual(long customerId){
         log.info("deleteCustomerIndividual ::: customerId : {}", customerId);
         Customer mainCustomer = customerDAO.findById(customerId);
+
+        //Delete all UW Result after Save factor data
+        log.debug("Delete all of UWRulesResult");
+        if(mainCustomer != null)
+            uwRuleResultControl.deleteUWRuleResult(0, mainCustomer.getWorkCase().getId());
 
         if(mainCustomer.getSpouseId() != 0){ // Main Customer Have spouse
             Customer spouseCustomer = customerDAO.findById(mainCustomer.getSpouseId());
@@ -390,6 +407,10 @@ public class CustomerInfoControl extends BusinessControl {
     public void deleteCustomerJuristic(long customerId){
         log.info("deleteCustomerJuristic ::: customerId : {}", customerId);
         Customer customer = customerDAO.findById(customerId);
+
+        if(customer != null)
+            uwRuleResultControl.deleteUWRuleResult(0, customer.getWorkCase().getId());
+
         List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId()); // find committee
         if(cusIndList != null && cusIndList.size() > 0){
             for(Customer cusInd : cusIndList){
