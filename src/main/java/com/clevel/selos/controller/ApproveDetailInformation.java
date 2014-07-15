@@ -11,7 +11,6 @@ import com.clevel.selos.model.view.ApproveDetailInformationView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -22,7 +21,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -80,13 +78,25 @@ public class ApproveDetailInformation implements Serializable {
 	 * Action
 	 */
 	@PostConstruct
-	private void init() {
+	public void onCreation() {
 		HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
+			log.info("workCaseId: " + workCaseId + ", stepId: " + stepId);
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
+			log.info("workCaseId: " + workCaseId + ", stepId: " + stepId);
+			//workCaseId = 281;
 			this.setApproveDetailInformationView(approveDetailInformationControl.getApproveDetailInformationView(workCaseId));
+			log.info("init ::: workCaseId is " + workCaseId);
+		} else {
+			log.info("init ::: workCaseId is null.");
+			try {
+				FacesUtil.redirect("/site/inbox.jsf");
+				return;
+			} catch (Exception ex) {
+				log.info("Exception :: {}", ex);
+			}
 		}
 		_loadInitData();
 	}
@@ -118,6 +128,7 @@ public class ApproveDetailInformation implements Serializable {
 	}
 	
 	public void onSaveApproveDetail() {
+		log.info("onSaveApproveDetail: " + this.approveDetailInformationView.getPayDate() + "," + this.approveDetailInformationView.getFirstPaymentDate());
 		this.approveDetailInformationControl.saveApproveDetailInformationView(approveDetailInformationView, workCaseId);
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);

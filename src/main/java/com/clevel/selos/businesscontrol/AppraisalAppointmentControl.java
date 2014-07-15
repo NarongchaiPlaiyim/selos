@@ -45,13 +45,13 @@ public class AppraisalAppointmentControl extends BusinessControl {
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
     @Inject
-    private NewCreditFacilityDAO newCreditFacilityDAO;
+    private ProposeLineDAO newCreditFacilityDAO;
     @Inject
-    private NewCollateralDAO newCollateralDAO;
+    private ProposeCollateralInfoDAO newCollateralDAO;
     @Inject
-    private NewCollateralHeadDAO newCollateralHeadDAO;
+    private ProposeCollateralInfoHeadDAO newCollateralHeadDAO;
     @Inject
-    private NewCollateralSubDAO newCollateralSubDAO;
+    private ProposeCollateralInfoSubDAO newCollateralSubDAO;
     @Inject
     private CustomerAcceptanceTransform customerAcceptanceTransform;
     @Inject
@@ -69,11 +69,11 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<AppraisalDetailView> appraisalDetailViewList;
 
-    private List<NewCollateral> newCollateralList;
-    private List<NewCollateralHead> newCollateralHeadList;
+    private List<ProposeCollateralInfo> newCollateralList;
+    private List<ProposeCollateralInfoHead> newCollateralHeadList;
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
-    private NewCreditFacility newCreditFacility;
+    private ProposeLine newCreditFacility;
     private CustomerAcceptance customerAcceptance;
     private ContactRecordDetail contactRecordDetail;
     @Inject
@@ -142,9 +142,9 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             if(!Util.isNull(newCreditFacility)){
                 newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
-                for(NewCollateral newCollateral : newCollateralList){
+                for(ProposeCollateralInfo newCollateral : newCollateralList){
                     //newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
-                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
+                    newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
                 }
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
@@ -205,7 +205,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
 
             if(Util.isNull(newCreditFacility)){
-                newCreditFacility = new NewCreditFacility();
+                newCreditFacility = new ProposeLine();
                 newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
                 newCreditFacility.setWorkCase(workCase);
             }
@@ -252,7 +252,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
                 newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
                 log.debug("-- newCollateralList.size()[{}]", newCollateralList.size());
                 try {
-                    for(NewCollateral newCollateral : newCollateralList){
+                    for(ProposeCollateralInfo newCollateral : newCollateralList){
                         log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
                         newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
                         newCollateralHeadDAO.setAppraisalRequest(newCollateralHeadList);
@@ -287,7 +287,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 //                    log.debug("-- Exception while call NewCollateralHeadDAO ", e);
 //                }
             }else{
-                newCollateralList = new ArrayList<NewCollateral>();
+                newCollateralList = new ArrayList<ProposeCollateralInfo>();
             }
 
             try {

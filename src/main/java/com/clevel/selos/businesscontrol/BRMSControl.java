@@ -37,15 +37,15 @@ public class BRMSControl extends BusinessControl {
     @Inject
     private WorkCaseDAO workCaseDAO;
     @Inject
-    private NewCreditDetailDAO newCreditDetailDAO;
-    @Inject
     private BasicInfoDAO basicInfoDAO;
     @Inject
-    private NewGuarantorDetailDAO newGuarantorDetailDAO;
+    private ProposeLineDAO creditFacilityDAO;
     @Inject
-    private NewCollateralDAO newCollateralDAO;
+    private ProposeCreditInfoDAO newCreditDetailDAO;
     @Inject
-    private NewCreditFacilityDAO creditFacilityDAO;
+    private ProposeGuarantorInfoDAO newGuarantorDetailDAO;
+    @Inject
+    private ProposeCollateralInfoDAO newCollateralDAO;
 
     @Inject
     private WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -70,7 +70,7 @@ public class BRMSControl extends BusinessControl {
     @Inject
     private BizInfoSummaryDAO bizInfoSummaryDAO;
     @Inject
-    private NewCreditFacilityDAO newCreditFacilityDAO;
+    private ProposeLineDAO newCreditFacilityDAO;
     @Inject
     private TCGDAO tcgDAO;
     @Inject
@@ -152,8 +152,8 @@ public class BRMSControl extends BusinessControl {
         BigDecimal numberOfIndvGuarantor = BigDecimal.ZERO;
         BigDecimal numberOfJurisGuarantor = BigDecimal.ZERO;
 
-        List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, workCase.getStep().getProposeType());
-        for(NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList){
+        List<ProposeGuarantorInfo> newGuarantorDetailList = newGuarantorDetailDAO.findGuarantorByProposeType(workCaseId, workCase.getStep().getProposeType());
+        for(ProposeGuarantorInfo newGuarantorDetail : newGuarantorDetailList){
             if(GuarantorCategory.TCG.equals(newGuarantorDetail.getGuarantorCategory())){
                 if(newGuarantorDetail.getTotalLimitGuaranteeAmount().compareTo(BigDecimal.ZERO) > 0){
                     totalTCGGuaranteeAmount = totalTCGGuaranteeAmount.add(newGuarantorDetail.getTotalLimitGuaranteeAmount());
@@ -177,14 +177,14 @@ public class BRMSControl extends BusinessControl {
         if(workCase.getStep() != null)
             _proposeType = workCase.getStep().getProposeType();
 
-        List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, _proposeType);
-        for(NewCollateral newCollateral : newCollateralList){
-            List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
-            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
-                for(NewCollateralSub newCollateralSub : newCollateralSubList){
-                    List<NewCollateralSubMortgage> newCollateralSubMortgageList = newCollateralSub.getNewCollateralSubMortgageList();
-                    for(NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgageList){
+        List<ProposeCollateralInfo> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, _proposeType);
+        for(ProposeCollateralInfo newCollateral : newCollateralList){
+            List<ProposeCollateralInfoHead> newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+            for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                List<ProposeCollateralInfoSub> newCollateralSubList = newCollateralHead.getProposeCollateralInfoSubList();
+                for(ProposeCollateralInfoSub newCollateralSub : newCollateralSubList){
+                    List<ProposeCollateralSubMortgage> newCollateralSubMortgageList = newCollateralSub.getProposeCollateralSubMortgageList();
+                    for(ProposeCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgageList){
                         if(newCollateralSubMortgage.getMortgageType() != null && (MortgageCategory.REDEEM.equals(newCollateralSubMortgage.getMortgageType().getMortgageCategory()))){
                             totalRedeemTransaction = totalRedeemTransaction.add(BigDecimal.ONE);
                             break;
@@ -200,7 +200,7 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setTotalMortgageValue(totalMortgageValue);
 
         //Update Credit Type info
-        NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
+        ProposeLine newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal discountFrontEndFeeRate = newCreditFacility.getFrontendFeeDOA();
         if(_proposeType.equals(ProposeType.P)){
             if(newCreditFacility.getLoanRequestType() != null)
@@ -212,9 +212,9 @@ public class BRMSControl extends BusinessControl {
         }
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
-        List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
+        List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
-        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+        for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
@@ -288,6 +288,8 @@ public class BRMSControl extends BusinessControl {
                 borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
             }
 
+            customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
+
             if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 logger.debug("found guarantor!");
                 if(customer.getReference() != null){
@@ -298,8 +300,6 @@ public class BRMSControl extends BusinessControl {
                     }
                 }
             }
-
-            customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
@@ -434,17 +434,6 @@ public class BRMSControl extends BusinessControl {
         CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
         int numberOfGuarantor = 0;
         for(Customer customer : customerList){
-            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
-                logger.debug("found guarantor!");
-                if(customer.getReference() != null){
-                    logger.debug("customer reference : {}", customer.getReference().getBrmsCode());
-                    if(customer.getReference().getBrmsCode().equalsIgnoreCase("004") || customer.getReference().getBrmsCode().equalsIgnoreCase("005")) {
-                        logger.debug("found guarantor with reference 004/005");
-                        numberOfGuarantor = numberOfGuarantor + 1;
-                    }
-                }
-            }
-
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value() &&
                     customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -458,13 +447,20 @@ public class BRMSControl extends BusinessControl {
 
             customerInfoList.add(brmsCustomerInfo);
 
-            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value())
-                numberOfGuarantor = numberOfGuarantor + 1;
-
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
+                logger.debug("found guarantor!");
+                if(customer.getReference() != null){
+                    logger.debug("customer reference : {}", customer.getReference().getBrmsCode());
+                    if(customer.getReference().getBrmsCode().equalsIgnoreCase("004") || customer.getReference().getBrmsCode().equalsIgnoreCase("005")) {
+                        logger.debug("found guarantor with reference 004/005");
+                        numberOfGuarantor = numberOfGuarantor + 1;
+                    }
+                }
+            }
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
-        logger.debug("number of guarantor ({})",numberOfGuarantor);
+        logger.debug("number of guarantor ({})", numberOfGuarantor);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
             MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
             mandateFieldMessageView.setFieldName("Guarantor.");
@@ -510,8 +506,8 @@ public class BRMSControl extends BusinessControl {
         }
 
         //4. Set TMB Account Request
-        NewCreditFacility newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(newCreditFacility, NewCreditFacility.class);
+        ProposeLine newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
+        actionValidationControl.validate(newCreditFacility, ProposeLine.class);
         BigDecimal discountFrontEndFeeRate = BigDecimal.ZERO;
 
         if(newCreditFacility!=null)
@@ -543,11 +539,11 @@ public class BRMSControl extends BusinessControl {
         }
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
-        List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
-        actionValidationControl.validate(newCreditDetailList, NewCreditDetail.class);
+        List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
+        actionValidationControl.validate(newCreditDetailList, ProposeCreditInfo.class);
 
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
-        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+        for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
@@ -558,18 +554,18 @@ public class BRMSControl extends BusinessControl {
         applicationInfo.setAccountRequestedList(accountRequestedList);
 
         //5. Set TMB Coll Level
-        List<NewCollateral> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, _proposeType);
-        actionValidationControl.validate(newCollateralList, NewCollateral.class);
+        List<ProposeCollateralInfo> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, _proposeType);
+        actionValidationControl.validate(newCollateralList, ProposeCollateralInfo.class);
 
         List<BRMSCollateralInfo> collateralInfoList = new ArrayList<BRMSCollateralInfo>();
-        for(NewCollateral newCollateral : newCollateralList){
-            List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
-            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+        for(ProposeCollateralInfo newCollateral : newCollateralList){
+            List<ProposeCollateralInfoHead> newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+            for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
                 boolean isInboundMortgage = Boolean.FALSE;
-                List<NewCollateralSub> newCollateralSubList = newCollateralHead.getNewCollateralSubList();
-                for(NewCollateralSub newCollateralSub : newCollateralSubList){
-                    List<NewCollateralSubMortgage> mortgageList = newCollateralSub.getNewCollateralSubMortgageList();
-                    for(NewCollateralSubMortgage mortgage : mortgageList){
+                List<ProposeCollateralInfoSub> newCollateralSubList = newCollateralHead.getProposeCollateralInfoSubList();
+                for(ProposeCollateralInfoSub newCollateralSub : newCollateralSubList){
+                    List<ProposeCollateralSubMortgage> mortgageList = newCollateralSub.getProposeCollateralSubMortgageList();
+                    for(ProposeCollateralSubMortgage mortgage : mortgageList){
                         if(mortgage.getMortgageType() != null && MortgageCategory.INBOUND.equals(mortgage.getMortgageType().getMortgageCategory())){
                             isInboundMortgage = Boolean.TRUE;
                             break;
@@ -582,8 +578,9 @@ public class BRMSControl extends BusinessControl {
                     BRMSCollateralInfo brmsCollateralInfo = new BRMSCollateralInfo();
                     if(newCollateralHead.getHeadCollType() != null)
                         brmsCollateralInfo.setCollateralType(newCollateralHead.getHeadCollType().getCode());
-                    if(newCollateralHead.getSubCollateralType() != null)
-                        brmsCollateralInfo.setSubCollateralType(newCollateralHead.getSubCollateralType().getCode());
+                    //todo:this sub coll type is list on head
+//                    if(newCollateralHead.getSubCollateralType() != null)
+//                        brmsCollateralInfo.setSubCollateralType(newCollateralHead.getSubCollateralType().getCode());
                     brmsCollateralInfo.setAadDecision(newCollateral.getAadDecision());
                     if(newCollateral.getAppraisalDate() != null){
                         brmsCollateralInfo.setAppraisalFlag(Boolean.TRUE);
@@ -697,10 +694,10 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setCollateralPercent(tcg.getCollateralRuleResult());
         if(newCreditFacility!=null){
             applicationInfo.setWcNeed(newCreditFacility.getWcNeed());
-            applicationInfo.setCase1WCminLimit(newCreditFacility.getCase1WcMinLimit());
-            applicationInfo.setCase2WCminLimit(newCreditFacility.getCase2WcMinLimit());
-            applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WcLimit());
-            applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWcTmb());
+            applicationInfo.setCase1WCminLimit(newCreditFacility.getCase1WCMinLimit());
+            applicationInfo.setCase2WCminLimit(newCreditFacility.getCase2WCMinLimit());
+            applicationInfo.setCase3WCminLimit(newCreditFacility.getCase3WCLimit());
+            applicationInfo.setTotalWCTMB(newCreditFacility.getTotalWCTmb());
             applicationInfo.setTotalLoanWCTMB(newCreditFacility.getTotalLoanWCTMB());
             applicationInfo.setCreditCusType(newCreditFacility.getCreditCustomerType()==2? "P" : "N");
         }
@@ -889,7 +886,7 @@ public class BRMSControl extends BusinessControl {
         BRMSApplicationInfo applicationInfo = null;
         List<BRMSCustomerInfo> customerInfoList = null;
         List<Customer> customerList = null;
-        List<NewCreditDetail> newCreditDetailList = null;
+        List<ProposeCreditInfo> newCreditDetailList = null;
         List<BRMSAccountRequested> accountRequestedList = null;
         BAPAInfo bapaInfo = null;
         TCG tcg = null;
@@ -947,7 +944,7 @@ public class BRMSControl extends BusinessControl {
 
         accountRequestedList = new ArrayList<BRMSAccountRequested>();
         logger.debug("[NEW] AccountRequestedList created");
-        for(NewCreditDetail newCreditDetail : newCreditDetailList){
+        for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, null));
             }
@@ -1323,7 +1320,7 @@ public class BRMSControl extends BusinessControl {
         return customerInfo;
     }
 
-    private BRMSAccountRequested getBRMSAccountRequested(NewCreditDetail newCreditDetail, BigDecimal discountFrontEndFeeRate){
+    private BRMSAccountRequested getBRMSAccountRequested(ProposeCreditInfo newCreditDetail, BigDecimal discountFrontEndFeeRate){
         logger.debug("-- getBRMSAccountRequested with newCreditDetail {}, discountFrontEndFeeRate {}", newCreditDetail, discountFrontEndFeeRate);
         if(newCreditDetail == null){
             logger.debug("getBRMSAccountRequested return null");
@@ -1337,11 +1334,11 @@ public class BRMSControl extends BusinessControl {
         if(newCreditDetail.getCreditType() != null)
             accountRequested.setCreditType(newCreditDetail.getCreditType().getBrmsCode());
         accountRequested.setLimit(newCreditDetail.getLimit());
-        if(newCreditDetail.getProposeCreditTierDetailList() != null){
-            List<NewCreditTierDetail> creditTierDetailList = newCreditDetail.getProposeCreditTierDetailList();
+        if(newCreditDetail.getProposeCreditInfoTierDetailList() != null){
+            List<ProposeCreditInfoTierDetail> creditTierDetailList = newCreditDetail.getProposeCreditInfoTierDetailList();
             if(creditTierDetailList.size() > 0){
                 int tenors = 0;
-                for(NewCreditTierDetail newCreditTierDetail : creditTierDetailList){
+                for(ProposeCreditInfoTierDetail newCreditTierDetail : creditTierDetailList){
                     tenors = tenors + newCreditTierDetail.getTenor();
                 }
                 accountRequested.setTenors(tenors);
@@ -1490,19 +1487,22 @@ public class BRMSControl extends BusinessControl {
                     mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
                 }
 
-                stepId = getLong(documentDetail.getOperStep());
-                if(documentDetail.isOperMandateFlag()){
-                    if(stepId != 0 && stepId == step.getId()){
-                        logger.debug("Document is Mandate for Oper step {}.", step);
-                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                //7. check step which operation flag
+                if(step.getOperationFlag() != 0) {
+                    stepId = getLong(documentDetail.getOperStep());
+                    if (documentDetail.isOperMandateFlag()) {
+                        if (stepId != 0 && stepId == step.getId()) {
+                            logger.debug("Document is Mandate for Oper step {}.", step);
+                            mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                        } else {
+                            mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                        }
+                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                     } else {
+                        logger.debug("Document is NOT mandate for any steps.");
                         mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                     }
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
-                } else {
-                    logger.debug("Document is NOT mandate for any steps.");
-                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
                 }
 
                 mandateDocViewMap.put(documentDetail.getId(), mandateDocView);

@@ -1,12 +1,9 @@
 package com.clevel.selos.transform;
 
-import java.util.Calendar;
-
 import com.clevel.selos.model.db.working.AgreementInfo;
-import com.clevel.selos.model.db.working.TCGInfo;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ApproveDetailInformationView;
-import com.clevel.selos.model.view.TCGInfoView;
+
+import java.util.Calendar;
 
 public class ApproveDetailInformationTransform extends Transform {
 	
@@ -17,6 +14,9 @@ public class ApproveDetailInformationTransform extends Transform {
     	if (agreementInfo != null){
     		approveDetailInformationView.setSigningDate(agreementInfo.getLoanContractDate());
     		Calendar calendar = Calendar.getInstance();
+    		if (agreementInfo.getFirstPaymentDate() != null){
+    			approveDetailInformationView.setFirstPaymentDate(agreementInfo.getFirstPaymentDate());
+    		}
     		if (agreementInfo.getLoanContractDate() != null){
 	    		calendar.setTime(agreementInfo.getLoanContractDate());
 	    		if ( calendar.get(Calendar.DAY_OF_MONTH) < 16 ){
@@ -33,6 +33,7 @@ public class ApproveDetailInformationTransform extends Transform {
     		}else{
     			approveDetailInformationView.setPayDate(31);
     		}
+    		
     	}
 		return approveDetailInformationView;
 	}

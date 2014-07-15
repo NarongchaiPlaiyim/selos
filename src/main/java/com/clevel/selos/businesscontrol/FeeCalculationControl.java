@@ -29,7 +29,7 @@ public class FeeCalculationControl extends BusinessControl {
 	@Inject private FeeCollectionAccountDAO feeCollectionAccountDAO;
 	@Inject private FeeCollectionDetailDAO feeCollectionDetailDAO;
 	
-	@Inject private FeeDetailDAO feeDetailDAO;
+	@Inject private ProposeFeeDetailDAO feeDetailDAO;
 	@Inject private OpenAccountDAO openAccountDAO;
 	
 	public FeeSummaryView getFeeSummary(long workCaseId) {
@@ -141,10 +141,10 @@ public class FeeCalculationControl extends BusinessControl {
 	
 	private BigDecimal _processFeeDetails(WorkCase workCase) {
 		BigDecimal totalDebit = BigDecimal.ZERO;
-		List<FeeDetail> details = feeDetailDAO.findAllByWorkCaseId(workCase.getId());
+		List<ProposeFeeDetail> details = feeDetailDAO.findAllByWorkCaseId(workCase.getId());
 		
 		HashMap<String, FeeCollectionDetail> map = new HashMap<String, FeeCollectionDetail>();
-		for (FeeDetail detail : details) {
+		for (ProposeFeeDetail detail : details) {
 			FeePaymentMethod paymentMethod = detail.getPaymentMethod();
 			FeeType paymentType = detail.getFeeType();
 			if (paymentMethod == null || paymentType == null)

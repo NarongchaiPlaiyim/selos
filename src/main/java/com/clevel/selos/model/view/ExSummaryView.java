@@ -26,7 +26,7 @@ public class ExSummaryView  implements Serializable {
     private String owner;
 
     //Trade Finance
-    private NewCreditFacilityView tradeFinance;
+    private ProposeLineView tradeFinance;
 
     //Borrower Characteristic & Business Information Summary
     private ExSumCharacteristicView exSumCharacteristicView;
@@ -383,11 +383,11 @@ public class ExSummaryView  implements Serializable {
         this.yearInBusinessMonth = yearInBusinessMonth;
     }
 
-    public NewCreditFacilityView getTradeFinance() {
+    public ProposeLineView getTradeFinance() {
         return tradeFinance;
     }
 
-    public void setTradeFinance(NewCreditFacilityView tradeFinance) {
+    public void setTradeFinance(ProposeLineView tradeFinance) {
         this.tradeFinance = tradeFinance;
     }
 

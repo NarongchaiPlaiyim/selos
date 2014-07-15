@@ -1949,7 +1949,7 @@ public class CreditFacExisting extends BaseController {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageRefreshDlg.show()");
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.credit.facility.message.save.failed");
@@ -1969,7 +1969,7 @@ public class CreditFacExisting extends BaseController {
         Cloner cloner = new Cloner();
         List<ExistingCreditDetailView> existingBrwCreditDetailViews = cloner.deepClone(existingCreditFacilityView.getBorrowerComExistingCredit());
         List<ExistingCreditDetailView> existingRelCreditDetailViews = cloner.deepClone(existingCreditFacilityView.getRelatedComExistingCredit());
-        /*if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
+        if(existingBrwCreditDetailViews!=null && existingBrwCreditDetailViews.size()>0){
             for(ExistingCreditDetailView brExistingCreditDetailView : existingBrwCreditDetailViews){
                 if(creditFacExistingControl.isUsedInProposeCredit(brExistingCreditDetailView.getId())){
                     messageHeader = msg.get("app.header.error");
@@ -1989,7 +1989,7 @@ public class CreditFacExisting extends BaseController {
                     return;
                 }
             }
-        }*/
+        }
 
 
         List<CustomerInfoView> customerInfoViews = creditFacExistingControl.getCustomerListByWorkCaseId(workCaseId);
@@ -2001,9 +2001,9 @@ public class CreditFacExisting extends BaseController {
         clearExistingCreditFacilityView();
 
         ExistingCreditFacilityView existingCreditFacilityViewTmp = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        /*existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);*/
-        existingCreditFacilityView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>());
-        existingCreditFacilityView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
+        /*existingCreditFacilityView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>());
+        existingCreditFacilityView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>());*/
 
         existingCreditFacilityView.setBorrowerComExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());
         existingCreditFacilityView.setBorrowerRetailExistingCreditDeleteList(new ArrayList<ExistingCreditDetailView>());

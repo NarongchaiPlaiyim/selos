@@ -114,11 +114,11 @@ public class MortgageDetailControl extends BusinessControl {
 		 ArrayList<CreditDetailSimpleView> rtnDatas = new ArrayList<CreditDetailSimpleView>();
 		 for (MortgageInfoCredit credit : credits) {
 			 CreditDetailSimpleView view = null;
-			 NewCollateralCredit collCredit = credit.getNewCollateralCredit();
+			 ProposeCollateralInfoRelation collCredit = credit.getNewCollateralCredit();
 			 if (collCredit.getExistingCreditDetail() != null) {
 				 view = creditDetailSimpleTransform.transformToSimpleView(collCredit.getExistingCreditDetail());
-			 } else if (collCredit.getNewCreditDetail() != null) {
-				 view = creditDetailSimpleTransform.transformToSimpleView(collCredit.getNewCreditDetail());
+			 } else if (collCredit.getProposeCreditInfo() != null) {
+				 view = creditDetailSimpleTransform.transformToSimpleView(collCredit.getProposeCreditInfo());
 			 } else {
 				 continue;
 			 }

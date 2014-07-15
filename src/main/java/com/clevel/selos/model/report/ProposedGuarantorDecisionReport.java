@@ -1,6 +1,6 @@
 package com.clevel.selos.model.report;
 
-import com.clevel.selos.model.view.ProposeCreditDetailView;
+import com.clevel.selos.model.view.ProposeCreditInfoDetailView;
 import com.clevel.selos.report.ReportModel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,7 +16,7 @@ public class ProposedGuarantorDecisionReport extends ReportModel{
     private String tcgLgNo;
     private String path;
 
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<ProposeCreditInfoDetailView> proposeCreditDetailViewList;
 
     private BigDecimal totalLimitGuaranteeAmount;
 
@@ -25,7 +25,7 @@ public class ProposedGuarantorDecisionReport extends ReportModel{
         count = 0;
         name = "";
         tcgLgNo = "";
-        proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        proposeCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
     }
 
     public int getCount() {
@@ -44,11 +44,11 @@ public class ProposedGuarantorDecisionReport extends ReportModel{
         this.name = name;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
+    public List<ProposeCreditInfoDetailView> getProposeCreditDetailViewList() {
         return proposeCreditDetailViewList;
     }
 
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+    public void setProposeCreditDetailViewList(List<ProposeCreditInfoDetailView> proposeCreditDetailViewList) {
         this.proposeCreditDetailViewList = proposeCreditDetailViewList;
     }
 

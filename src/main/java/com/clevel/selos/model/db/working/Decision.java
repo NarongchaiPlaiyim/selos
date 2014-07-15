@@ -38,9 +38,6 @@ public class Decision implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "save_flag")
-    private int saveFlag;
-
     @Column(name = "tot_appr_credit")
     private BigDecimal totalApproveCredit;
 
@@ -129,14 +126,6 @@ public class Decision implements Serializable {
 
     public void setWorkCase(WorkCase workCase) {
         this.workCase = workCase;
-    }
-
-    public int getSaveFlag() {
-        return saveFlag;
-    }
-
-    public void setSaveFlag(int saveFlag) {
-        this.saveFlag = saveFlag;
     }
 
     public BigDecimal getTotalApproveCredit() {
@@ -260,7 +249,6 @@ public class Decision implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("modifyBy", modifyBy)
                 .append("workCase", workCase)
-                .append("saveFlag", saveFlag)
                 .append("totalApproveCredit", totalApproveCredit)
                 .append("totalApproveCommercial", totalApproveCommercial)
                 .append("totalApproveComAndOBOD", totalApproveComAndOBOD)

@@ -1,26 +1,24 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.InsuranceInfoDAO;
-import com.clevel.selos.dao.working.NewCollateralDAO;
-import com.clevel.selos.dao.working.NewCollateralHeadDAO;
+import com.clevel.selos.dao.working.ProposeCollateralInfoDAO;
+import com.clevel.selos.dao.working.ProposeCollateralInfoHeadDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.InsuranceInfo;
-import com.clevel.selos.model.db.working.NewCollateral;
-import com.clevel.selos.model.db.working.NewCollateralHead;
+import com.clevel.selos.model.db.working.ProposeCollateralInfo;
+import com.clevel.selos.model.db.working.ProposeCollateralInfoHead;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSummaryView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
 import com.clevel.selos.transform.InsuranceInfoTransform;
-import com.clevel.selos.transform.NewCollateralTransform;
-
+import com.clevel.selos.transform.ProposeLineTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +34,10 @@ public class InsuranceInfoControl extends BusinessControl {
 	BPMInterface bpmInterface;
 
 	@Inject
-	NewCollateralDAO newCollateralDAO;
+    ProposeCollateralInfoDAO newCollateralDAO;
 
 	@Inject
-	NewCollateralHeadDAO newCollateralHeadDAO;
+    ProposeCollateralInfoHeadDAO newCollateralHeadDAO;
 
 	@Inject
 	InsuranceInfoDAO insuranceInfoDAO;
@@ -48,7 +46,7 @@ public class InsuranceInfoControl extends BusinessControl {
 	WorkCaseDAO workCaseDAO;
 
 	@Inject
-	NewCollateralTransform newCollateralTransform;
+    ProposeLineTransform proposeLineTransform;
 
 	@Inject
 	InsuranceInfoTransform insuranceInfoTransform;
@@ -70,7 +68,7 @@ public class InsuranceInfoControl extends BusinessControl {
 	}
 
 	public List<InsuranceInfoView> getInsuranceInfo(long workCaseId) {
-		List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
+		List<ProposeCollateralInfo> newCollateralList = new ArrayList<ProposeCollateralInfo>();
 		if (workCaseId > 0) {
 			newCollateralList = newCollateralDAO.findNewCollateralByTypeA(workCaseId);
 		}
@@ -80,14 +78,14 @@ public class InsuranceInfoControl extends BusinessControl {
 	public void saveInsuranceInfo(List<InsuranceInfoView> insuranceInfoViewList, BigDecimal totalPremiumAmount, long workCaseId) {
 		User user = getCurrentUser();
 		for (InsuranceInfoView insuranceInfoView : insuranceInfoViewList) {
-			NewCollateral newCollateral = newCollateralDAO.findById(insuranceInfoView.getNewCollateralView().getId());
+            ProposeCollateralInfo newCollateral = newCollateralDAO.findById(insuranceInfoView.getNewCollateralView().getId());
 			newCollateral.setPremiumAmount(insuranceInfoView.getPremium());
 			newCollateral.setModifyBy(user);
 			newCollateral.setModifyDate(new Date());
 			newCollateralDAO.persist(newCollateral);
 			List<InsuranceInfoSectionView> insuranceInfoSectionViewList = insuranceInfoView.getSectionList();
 			for (InsuranceInfoSectionView infoSectionView : insuranceInfoSectionViewList) {
-				NewCollateralHead newCollateralHead = newCollateralHeadDAO.findById(infoSectionView.getNewCollateralHeadView().getId());
+				ProposeCollateralInfoHead newCollateralHead = newCollateralHeadDAO.findById(infoSectionView.getNewCollateralHeadView().getId());
 				newCollateralHead.setInsuranceCompany(infoSectionView.getCompany());
 				newCollateralHead.setExistingCredit(infoSectionView.getExistingCredit());
 				newCollateralHead.setModifyBy(user);

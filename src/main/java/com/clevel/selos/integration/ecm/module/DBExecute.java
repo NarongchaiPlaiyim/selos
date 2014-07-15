@@ -4,6 +4,7 @@ import com.clevel.selos.exception.ECMInterfaceException;
 import com.clevel.selos.integration.ECM;
 import com.clevel.selos.integration.ecm.db.ECMCAPShare;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
+import com.clevel.selos.integration.ecm.db.ECMTypeName;
 import com.clevel.selos.integration.ecm.tool.DBContext;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -62,6 +63,68 @@ public class DBExecute implements Serializable {
     @Inject
     public DBExecute() {
 
+    }
+
+    public ECMTypeName findByEcmDocId(final String ECM_DOC_ID){
+        log.debug("-- findByEcmDocId.[{}]",ECM_DOC_ID);
+        ECMTypeName ecmTypeName = null;
+        StringBuilder stringBuilder = null;
+
+        stringBuilder = new StringBuilder();
+        if(!Util.isNull(schema) && !Util.isZero(schema.length())){
+            stringBuilder
+                    .append("SELECT ")
+                    .append("DOCUMENTTYPE.TYPE_NAME_TH, ")
+                    .append("DOCUMENTTYPE.TYPE_NAME_EN ")
+                    .append("FROM "+schema+".WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ")
+                    .append("WHERE ")
+                    .append("DOCUMENTTYPE.TYPE_CODE = ?");
+        } else {
+            stringBuilder
+                    .append("SELECT ")
+                    .append("DOCUMENTTYPE.TYPE_NAME_TH, ")
+                    .append("DOCUMENTTYPE.TYPE_NAME_EN ")
+                    .append("FROM WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ")
+                    .append("WHERE ")
+                    .append("DOCUMENTTYPE.TYPE_CODE = ?");
+        }
+
+        try{
+            connection = dbContext.getConnection(connECM, ecmUser, ecmPassword);
+        } catch (ECMInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("open connection.");
+            String sql = stringBuilder.toString();
+            log.debug("-- SQL[{}]", sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, ECM_DOC_ID);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ecmTypeName = new ECMTypeName();
+                ecmTypeName.setTypeNameTH(resultSet.getString(1));
+                ecmTypeName.setTypeNameEN(resultSet.getString(2));
+            }
+
+            if(!Util.isNull(ecmTypeName)){
+                log.debug("-- ECMTypeName : [{}]", ecmTypeName.toString());
+            } else {
+                log.debug("-- ECMTypeName is null.");
+            }
+
+            resultSet.close();
+            connection.close();
+            connection = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new ECMInterfaceException(e, ExceptionMapping.ECM_GETDATA_ERROR, msg.get(ExceptionMapping.ECM_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+        return ecmTypeName;
     }
 
     public List<ECMDetail> findByCANumber(final String caNumber){

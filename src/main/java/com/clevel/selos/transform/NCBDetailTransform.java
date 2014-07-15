@@ -4,11 +4,9 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
 import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
-import com.clevel.selos.model.view.SettlementStatusView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

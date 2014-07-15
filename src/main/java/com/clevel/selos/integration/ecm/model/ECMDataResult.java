@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.ecm.model;
 
 import com.clevel.selos.integration.ecm.db.ECMDetail;
+import com.clevel.selos.integration.ecm.db.ECMTypeName;
 import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,6 +13,7 @@ public class ECMDataResult implements Serializable {
     private ActionResult actionResult;
     private String reason;
     private List<ECMDetail> ecmDetailList;
+    private ECMTypeName ecmTypeName;
 
     public ActionResult getActionResult() {
         return actionResult;
@@ -37,12 +39,21 @@ public class ECMDataResult implements Serializable {
         this.ecmDetailList = ecmDetailList;
     }
 
+    public ECMTypeName getEcmTypeName() {
+        return ecmTypeName;
+    }
+
+    public void setEcmTypeName(ECMTypeName ecmTypeName) {
+        this.ecmTypeName = ecmTypeName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("actionResult", actionResult)
                 .append("reason", reason)
                 .append("ecmDetailList", ecmDetailList)
+                .append("ecmTypeName", ecmTypeName)
                 .toString();
     }
 }

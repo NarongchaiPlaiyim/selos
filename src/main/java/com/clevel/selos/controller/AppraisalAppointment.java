@@ -236,6 +236,18 @@ public class AppraisalAppointment implements Serializable {
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
                 updateContractFlag(appraisalContactDetailView);
+//                if(Util.isNull(appraisalView.getAppraisalDate())){
+//                    appraisalView.setAppraisalDate(DateTime.now().toDate());
+//                    log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
+//                }
+//                if(Util.isNull(appraisalView.getDueDate())){
+//                    appraisalView.setDueDate(DateTime.now().toDate());
+//                    log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
+//                }
+//                if(Util.isNull(appraisalView.getAppointmentDate())){
+//                    appraisalView.setAppointmentDate(DateTime.now().toDate());
+//                    log.debug("--[NEW] AppointmentDate : {}", dateString(appraisalView.getAppointmentDate()));
+//                }
             } else {
                 appraisalView = new AppraisalView();
             }
@@ -565,39 +577,45 @@ public class AppraisalAppointment implements Serializable {
     public void onChangeAppraisalDate(){
         log.info("-- onChangeAppraisalDate()");
         final Date NOW = DateTime.now().toDate();
+        if(Util.isNull(appraisalView.getAppraisalDate())){
+            appraisalView.setAppraisalDate(NOW);
+            log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
+        }
+
+        if(Util.isNull(appraisalView.getDueDate())){
+            appraisalView.setDueDate(NOW);
+            log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
+        }
+
         if(!Util.isNull(appraisalView.getLocationOfProperty())){
+            log.debug("-- AppraisalView[{}]", appraisalView.toString());
             final int LOCATE = appraisalView.getLocationOfProperty().getId();
-            log.info("-- locate code is {}", appraisalView.getLocationOfProperty().getCode());
-
-            if(Util.isNull(appraisalView.getAppraisalDate())){
-                appraisalView.setAppraisalDate(NOW);
-                log.debug("--[NEW] AppraisalDate");
-            }
-
-            if(Util.isNull(appraisalView.getDueDate())){
-                appraisalView.setDueDate(NOW);
-                log.debug("--[NEW] DueDate");
-            }
-
+            log.info("-- locate id is {}", appraisalView.getLocationOfProperty().getId());
             final int BANGKOK_AND_PERIMETER = 3;
             final int COUNTRY = 4;
             final int OTHER_CASE = 6;
             final Date APPRAISAL_DATE = appraisalView.getAppraisalDate();
+            log.debug("-- APPRAISAL_DATE : {}", dateString(APPRAISAL_DATE));
             if(LOCATE == 1){
                 log.info("-- In locate due date +{}.", BANGKOK_AND_PERIMETER);
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             }else if(LOCATE == 2){
                 log.info("-- In locate due date +{}.", COUNTRY);
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, COUNTRY));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             }else if(LOCATE == 3){
                 log.info("-- In locate due date +{}.", OTHER_CASE);
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, OTHER_CASE));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             } else {
                 log.info("-- Other locate");
-                appraisalView.setAppraisalDate(NOW);
-                log.debug("--[NEW] AppraisalDate");
-                appraisalView.setDueDate(NOW);
-                log.debug("--[NEW] DueDate");
+                log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
+                appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
+                log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             }
         } else {
             log.debug("-- AppraisalView.getLocationOfProperty() is null");
@@ -606,9 +624,6 @@ public class AppraisalAppointment implements Serializable {
             appraisalView.setDueDate(NOW);
             log.debug("--[NEW] DueDate");
         }
-
-//        appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());  //Edited by Chai for fixed issue
-//        appraisalView.setAppraisalDate(appraisalView.getAppointmentDate());
     }
 
     public void onChangeAppointmentDate(){
@@ -623,7 +638,10 @@ public class AppraisalAppointment implements Serializable {
 
     public void onChangeLocationOfProperty(){
         log.info("-- onChangeLocationOfProperty()");
-        onChangeAppraisalDate();
+        if(!Util.isNull(appraisalView.getAppraisalDate()) && !Util.isNull(appraisalView.getDueDate())){
+            log.debug("-- AppraisalDate and DuaDate is not null");
+            onChangeAppraisalDate();
+        }
     }
 
     private Date updateDueDate(final Date APPRAISAL_DATE, final int DAY_FOR_DUE_DATE){
@@ -691,7 +709,6 @@ public class AppraisalAppointment implements Serializable {
     }
 
     private String getDayOfWeek(final Date DATE){
-        log.debug("-- getDayOfWeek(Date : {})", dateString(DATE));
         final String DAY_OF_WEEK = DateTimeUtil.getDayOfWeek(DATE);
         log.debug("-- {} is {}.", dateString(DATE), DAY_OF_WEEK);
         return DAY_OF_WEEK;

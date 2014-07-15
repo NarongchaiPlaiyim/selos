@@ -12,13 +12,11 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
-import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;

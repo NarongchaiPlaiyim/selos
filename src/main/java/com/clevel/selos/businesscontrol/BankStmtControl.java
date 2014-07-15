@@ -431,18 +431,23 @@ public class BankStmtControl extends BusinessControl {
                     else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
-                }
-                else if (bankStmtView.getAvgIncomeNetBDM() != null) {
-                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
-                        maxValue = bankStmtView.getAvgIncomeNetBDM();
+                } else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getNetIncomeLastSix(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
+                        maxValue = bankStmtView.getNetIncomeLastSix();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
-                    }
-                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
-                        candidateMaxIncomeNetList.add(bankStmtView);
-                    }
-                }
+                    } //Main OD NetIncome Last Six
+//                else if (bankStmtView.getAvgIncomeNetBDM() != null) {
+//                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
+//                        maxValue = bankStmtView.getAvgIncomeNetBDM();
+//                        candidateMaxIncomeNetList.clear();
+//                        candidateMaxIncomeNetList.add(bankStmtView);
+//                        atId = bankStmtView.getId();
+//                    }
+//                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
+//                        candidateMaxIncomeNetList.add(bankStmtView);
+//                    }
+//                }
             }
 
             if (candidateMaxIncomeNetList.size() == 1) {
@@ -765,15 +770,15 @@ public class BankStmtControl extends BusinessControl {
                 detailView.setTotalTransaction(detailView.getNumberOfCreditTxn() + detailView.getNumberOfDebitTxn());
 
                 // Count number of month Non-OverLimitAmount (overLimitAmount = 0)
-                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
-                    numMonthNonOvrLmtAmt += 1;
-                }
+//                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
+//                    numMonthNonOvrLmtAmt += 1;
+//                }
 
                 // ---------- Summary ---------- //
                 sumGrossCreditBalance = Util.add(sumGrossCreditBalance, detailView.getGrossCreditBalance());
                 sumCreditAmountUW = Util.add(sumCreditAmountUW, detailView.getCreditAmountUW());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
-                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+//                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
             }
 
             sumCreditAmountBDM = null;
@@ -809,15 +814,16 @@ public class BankStmtControl extends BusinessControl {
                 detailView.setTotalTransaction(detailView.getNumberOfCreditTxn() + detailView.getNumberOfDebitTxn());
 
                 // Count number of month Non-OverLimitAmount (overLimitAmount = 0)
-                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
-                    numMonthNonOvrLmtAmt += 1;
-                }
+//                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
+//                    numMonthNonOvrLmtAmt += 1;
+//                }
 
                 // ---------- Summary ---------- //
                 sumGrossCreditBalance = Util.add(sumGrossCreditBalance, detailView.getGrossCreditBalance());
                 sumCreditAmountBDM = Util.add(sumCreditAmountBDM, detailView.getCreditAmountBDM());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
-                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+//                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+                log.debug("--GrossInflowPerLimit.{}",detailView.getGrossInflowPerLimit());
             }
 
             sumCreditAmountUW = null;
@@ -854,9 +860,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(bankStmtDetailViewList)) {
                 sumSwingPctOfLastSixM = Util.add(sumSwingPctOfLastSixM, detailView.getSwingPercent());
                 sumUtilPctOfLastSixM = Util.add(sumUtilPctOfLastSixM, detailView.getUtilizationPercent());
-                sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
+//                sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
 
                 if (isCountIncome) {
+                    sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
                 }
 
@@ -871,7 +878,13 @@ public class BankStmtControl extends BusinessControl {
                     maxOvrLmtDaysOfLastSixM = detailView.getOverLimitDays();
                 }
 
+                // Count number of month Non-OverLimitAmount (overLimitAmount = 0)
+                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
+                    numMonthNonOvrLmtAmt += 1;
+                }
+
                 sumNetUWofLastSixM = Util.add(sumNetUWofLastSixM, detailView.getCreditAmountUW());
+                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
             }
 
             sumNetBDMofLastSixM = null;
@@ -880,9 +893,10 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails(bankStmtDetailViewList)) {
                 sumSwingPctOfLastSixM = Util.add(sumSwingPctOfLastSixM, detailView.getSwingPercent());
                 sumUtilPctOfLastSixM = Util.add(sumUtilPctOfLastSixM, detailView.getUtilizationPercent());
-                sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
+//                sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
 
                 if (isCountIncome) {
+                    sumChqRetAmtOfLastSixM = Util.add(sumChqRetAmtOfLastSixM, detailView.getChequeReturnAmount());
                     sumChqRetAmtCountIncomeOfLastSizM = Util.add(sumChqRetAmtCountIncomeOfLastSizM, detailView.getChequeReturnAmount());
                 }
 
@@ -897,7 +911,13 @@ public class BankStmtControl extends BusinessControl {
                     maxOvrLmtDaysOfLastSixM = detailView.getOverLimitDays();
                 }
 
+                // Count number of month Non-OverLimitAmount (overLimitAmount = 0)
+                if (detailView.getOverLimitAmount() == null || ValidationUtil.isValueCompareToZero(detailView.getOverLimitAmount(), ValidationUtil.CompareMode.EQUAL)) {
+                    numMonthNonOvrLmtAmt += 1;
+                }
+
                 sumNetBDMofLastSixM = Util.add(sumNetBDMofLastSixM, detailView.getCreditAmountBDM());
+                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
             }
 
             sumNetUWofLastSixM = null;
@@ -909,6 +929,7 @@ public class BankStmtControl extends BusinessControl {
 
         // avgGrossInflowPerLimit(%) = ([ SUM(grossCreditBalance) / Limit ] / [ 6 - NumberOfNonODLimit]) x 100
         //BigDecimal avgGrossInflowPerLimit = Util.multiply(Util.divide( Util.divide(sumGrossCreditBalance, limit) , 6 - numMonthNonOvrLmtAmt), Util.ONE_HUNDRED);
+        log.debug("sumGrossInflowPerLimit.{},numMonthNonOvrLmtAmt.{}",sumGrossInflowPerLimit,numMonthNonOvrLmtAmt);
         BigDecimal avgGrossInflowPerLimit = Util.divide(sumGrossInflowPerLimit , (6 - numMonthNonOvrLmtAmt));
         if (avgGrossInflowPerLimit != null) {
             avgGrossInflowPerLimit = avgGrossInflowPerLimit.setScale(2, RoundingMode.HALF_UP);
@@ -917,6 +938,7 @@ public class BankStmtControl extends BusinessControl {
         // trdChequeReturnPercent = [ SUM(trdChequeReturnAmount of Last Six Months) if(count income) / SUM(Net[UW/BDM] of Last Six Months) ] x 100
         // *if(UW is Blank) then use BDM instead
         BigDecimal trdChequeReturnPercent = Util.multiply(Util.divide(sumChqRetAmtCountIncomeOfLastSizM, (isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM)), Util.ONE_HUNDRED);
+        BigDecimal sumNetIncomeLastSix = Util.divide((isRoleUW ? sumNetUWofLastSixM : sumNetBDMofLastSixM),6).setScale(2, RoundingMode.HALF_UP);
         if (trdChequeReturnPercent != null) {
             trdChequeReturnPercent = trdChequeReturnPercent.setScale(2, RoundingMode.HALF_UP);
         }
@@ -935,6 +957,7 @@ public class BankStmtControl extends BusinessControl {
         bankStmtView.setOverLimitTimes(BigDecimal.valueOf(sumOvrLmtTimesOfLastSixM));
         bankStmtView.setOverLimitDays(BigDecimal.valueOf(maxOvrLmtDaysOfLastSixM));
         bankStmtView.setAvgLimit(limit);
+        bankStmtView.setNetIncomeLastSix(sumNetIncomeLastSix);
 
         Bank bank = bankDAO.findById(bankStmtView.getBankView().getCode());
         if (bank != null) {

@@ -90,9 +90,9 @@ public class CreditFacExistingControl extends BusinessControl {
     @Inject
     private PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
     @Inject
-    NewCollateralCreditDAO newCollateralCreditDAO;
+    private ProposeCollateralInfoRelationDAO newCollateralCreditDAO;
     @Inject
-    NewGuarantorRelationDAO newGuarantorRelationDAO;
+    private ProposeGuarantorInfoRelationDAO newGuarantorRelationDAO;
 
 
     @Inject
@@ -694,12 +694,12 @@ public class CreditFacExistingControl extends BusinessControl {
     }
 
     public boolean isUsedInProposeCredit(long id){
-        List<NewCollateralCredit> newCollateralCredits = newCollateralCreditDAO.getListByExistingCreditDetailId(id);
+        List<ProposeCollateralInfoRelation> newCollateralCredits = newCollateralCreditDAO.getListByExistingCreditDetailId(id);
         if(newCollateralCredits!=null && newCollateralCredits.size()>0){
             return true;
         }
 
-        List<NewGuarantorCredit> newGuarantorCredits = newGuarantorRelationDAO.getListByExistingCreditDetailId(id);
+        List<ProposeGuarantorInfoRelation> newGuarantorCredits = newGuarantorRelationDAO.getListByExistingCreditDetailId(id);
         if(newGuarantorCredits!=null && newGuarantorCredits.size()>0){
             return true;
         }

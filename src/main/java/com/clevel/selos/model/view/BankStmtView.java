@@ -52,6 +52,8 @@ public class BankStmtView implements Serializable {
     private String colorChequeReturn;
     private String colorTrdChqRetPercent;
 
+    private BigDecimal netIncomeLastSix;
+
     public BankStmtView() {
         reset();
     }
@@ -400,6 +402,14 @@ public class BankStmtView implements Serializable {
 
     public void setColorTrdChqRetPercent(String colorTrdChqRetPercent) {
         this.colorTrdChqRetPercent = colorTrdChqRetPercent;
+    }
+
+    public BigDecimal getNetIncomeLastSix() {
+        return netIncomeLastSix;
+    }
+
+    public void setNetIncomeLastSix(BigDecimal netIncomeLastSix) {
+        this.netIncomeLastSix = netIncomeLastSix;
     }
 
     @Override

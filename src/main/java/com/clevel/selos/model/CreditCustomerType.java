@@ -9,13 +9,15 @@ package com.clevel.selos.model;
  */
 public enum CreditCustomerType {
 
-    NOT_SELECTED(0, ""), NORMAL(1, "N"), PRIME(2, "P");
+    NOT_SELECTED(0, "", ""), NORMAL(1, "N", "Normal"), PRIME(2, "P", "Prime");
     private final int value;
     private final String brmscode;
+    private final String shortName;
 
-    CreditCustomerType(int value, String brmscode) {
+    CreditCustomerType(int value, String brmscode, String shortName) {
         this.value = value;
         this.brmscode = brmscode;
+        this.shortName = shortName;
     }
 
     public int value() {
@@ -24,6 +26,10 @@ public enum CreditCustomerType {
 
     public String brmsCode(){
         return this.brmscode;
+    }
+
+    public String shortName() {
+        return this.shortName;
     }
 
     public static final CreditCustomerType lookup(int value) {

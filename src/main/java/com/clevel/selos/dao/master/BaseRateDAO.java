@@ -19,14 +19,12 @@ public class BaseRateDAO extends GenericDAO<BaseRate, Integer> {
     }
 
     public BaseRate findByName(String name){
-        log.debug("findByName (name : {})",name);
         BaseRate baseRate = null;
         if (!Util.isEmpty(name)) {
             Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("active", 1));
             criteria.add(Restrictions.eq("name", name));
             baseRate = (BaseRate) criteria.uniqueResult();
-
-            log.debug("findByName. (baseRate: {})", baseRate);
         }
         return baseRate;
     }

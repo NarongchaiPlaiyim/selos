@@ -44,8 +44,6 @@ public class DBRInfo extends BaseController {
 
     @Inject
     DBRControl dbrControl;
-    @Inject
-    CreditFacProposeControl creditFacProposeControl;
 
     @Inject
     LoanAccountTypeControl loanAccountTypeControl;
@@ -54,6 +52,8 @@ public class DBRInfo extends BaseController {
     NCBInfoControl ncbInfoControl;
     @Inject
     ExSummaryControl exSummaryControl;
+    @Inject
+    private ProposeLineControl proposeLineControl;
 
     // message //
     private String messageHeader;
@@ -201,7 +201,7 @@ public class DBRInfo extends BaseController {
                 dbrDetails = dbr.getDbrDetailViews();
             }
             exSummaryControl.calForDBR(workCaseId);
-            creditFacProposeControl.calWC(workCaseId);
+            proposeLineControl.calWC(workCaseId);
         } catch (Exception e) {
 
             if (e.getCause() != null) {

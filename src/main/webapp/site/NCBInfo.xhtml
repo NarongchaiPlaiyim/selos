@@ -221,21 +221,29 @@
                                                             <h:outputText value=" :"/>
                                                         </td>
                                                         <td>
-                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}"
+                                                            <p:inputText id="tdrTMBMonth"
+                                                                         styleClass="medium"
+                                                                         readonly="#{ncbInfo.isDisabled('TMBTDRMonth')}"
+                                                                         value="#{ncbInfo.ncbInfoView.tdrTMBMonthStr}"/>
+                                                            <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}"
                                                                              disabled="#{ncbInfo.isDisabled('TMBTDRMonth')}">
                                                                 <f:selectItem itemLabel="" itemValue="0"/>
                                                                 <f:selectItems value="#{ncbInfo.statMonths}"
                                                                                var="MonthList"
                                                                                itemValue="#{MonthList.value}"
                                                                                itemLabel="#{MonthList.nameTH}"/>
-                                                            </p:selectOneMenu>
+                                                            </p:selectOneMenu>-->
                                                         </td>
                                                         <td>
-                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}"
+                                                            <p:inputText id="tdrTMBYear"
+                                                                         styleClass="small"
+                                                                         readonly="#{ncbInfo.isDisabled('TMBTDRYear')}"
+                                                                         value="#{ncbInfo.ncbInfoView.tdrTMBYear}"/>
+                                                            <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}"
                                                                              disabled="#{ncbInfo.isDisabled('TMBTDRYear')}">
                                                                 <f:selectItem itemLabel="" itemValue="0"/>
                                                                 <f:selectItems value="#{ncbInfo.yearList}"/>
-                                                            </p:selectOneMenu>
+                                                            </p:selectOneMenu>-->
                                                         </td>
                                                         <td>
                                                             <p:spacer width="10px;" height="20px;"/>
@@ -249,21 +257,29 @@
                                                             <h:outputText value=" :"/>
                                                         </td>
                                                         <td>
-                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}"
+                                                            <p:inputText id="tdrOtherMonth"
+                                                                         styleClass="medium"
+                                                                         readonly="#{ncbInfo.isDisabled('OtherTDRMonth')}"
+                                                                         value="#{ncbInfo.ncbInfoView.tdrOtherMonthStr}"/>
+                                                            <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}"
                                                                              disabled="#{ncbInfo.isDisabled('OtherTDRMonth')}">
                                                                 <f:selectItem itemLabel="" itemValue="0"/>
                                                                 <f:selectItems value="#{ncbInfo.statMonths}"
                                                                                var="MonthList"
                                                                                itemValue="#{MonthList.value}"
                                                                                itemLabel="#{MonthList.nameTH}"/>
-                                                            </p:selectOneMenu>
+                                                            </p:selectOneMenu>-->
                                                         </td>
                                                         <td>
-                                                            <p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}"
+                                                            <p:inputText id="tdrOtherYear"
+                                                                         styleClass="small"
+                                                                         readonly="#{ncbInfo.isDisabled('OtherTDRYear')}"
+                                                                         value="#{ncbInfo.ncbInfoView.tdrOtherYear}"/>
+                                                            <!--<p:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}"
                                                                              disabled="#{ncbInfo.isDisabled('OtherTDRYear')}">
                                                                 <f:selectItem itemLabel="" itemValue="0"/>
                                                                 <f:selectItems value="#{ncbInfo.yearList}"/>
-                                                            </p:selectOneMenu>
+                                                            </p:selectOneMenu>-->
                                                         </td>
                                                     </p:panel>
                                                 </tr>

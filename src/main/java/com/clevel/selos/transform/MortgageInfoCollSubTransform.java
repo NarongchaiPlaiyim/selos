@@ -17,18 +17,19 @@ public class MortgageInfoCollSubTransform extends Transform {
 
 		view.setId(model.getId());
 		
-		NewCollateralSub subModel = model.getNewCollateralSub();
+		ProposeCollateralInfoSub subModel = model.getNewCollateralSub();
 		if (subModel == null)
 			return view;
 		view.setNewCollSubId(subModel.getId());
-		view.setJobNo(subModel.getNewCollateralHead().getNewCollateral().getJobID());
-		view.setHcNo(subModel.getNewCollateralHead().getCollID());
-		view.setSubNo(subModel.getCollID());
+		view.setJobNo(subModel.getProposeCollateralHead().getProposeCollateral().getJobID());
+        //todo:this
+//		view.setHcNo(subModel.getProposeCollateralHead().getCollID());
+//		view.setSubNo(subModel.getCollID());
 		
 		StringBuilder builder = new StringBuilder();
-		List<NewCollateralSubOwner> owners = subModel.getNewCollateralSubOwnerList();
+		List<ProposeCollateralSubOwner> owners = subModel.getProposeCollateralSubOwnerList();
 		if (owners != null && !owners.isEmpty()) {
-			for (NewCollateralSubOwner owner : owners) {
+			for (ProposeCollateralSubOwner owner : owners) {
 				Customer customer = owner.getCustomer();
 				if (customer == null)
 					continue;
@@ -47,9 +48,8 @@ public class MortgageInfoCollSubTransform extends Transform {
 			view.setOwner("-");
 		}
 		
-		
-		if (subModel.getCollateralTypeType() != null)
-			builder.append(subModel.getCollateralTypeType().getDescription());
+		if (subModel.getSubCollateralType() != null)
+			builder.append(subModel.getSubCollateralType().getDescription());
 		if (subModel.getSubCollateralType() != null) {
 			if (builder.length() > 0)
 				builder.append(" - ");
@@ -61,14 +61,14 @@ public class MortgageInfoCollSubTransform extends Transform {
 		view.setTitleDeed(subModel.getTitleDeed());
 		view.setMortgageDetail(subModel.getAddress());
 		
-		List<NewCollateralSubRelated> relateds = subModel.getNewCollateralSubRelatedList();
+		List<ProposeCollateralSubRelated> relateds = subModel.getProposeCollateralSubRelatedList();
 		if (relateds != null && !relateds.isEmpty()) {
-			for (NewCollateralSubRelated related : relateds) {
-				NewCollateralSub subRelated = related.getNewCollateralSubRelated();
+			for (ProposeCollateralSubRelated related : relateds) {
+				ProposeCollateralInfoSub subRelated = related.getProposeCollateralSubRelated();
 				if (subRelated == null)
 					continue;
-				if (subRelated.getCollateralTypeType() != null)
-					builder.append(subRelated.getCollateralTypeType().getDescription()).append(" ");
+				if (subRelated.getSubCollateralType() != null)
+					builder.append(subRelated.getSubCollateralType().getDescription()).append(" ");
 				builder.append(subRelated.getTitleDeed());
 				builder.append("<br/>");
 			}

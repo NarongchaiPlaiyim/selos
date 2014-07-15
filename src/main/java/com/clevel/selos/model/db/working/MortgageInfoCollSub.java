@@ -19,7 +19,7 @@ public class MortgageInfoCollSub implements Serializable {
 
     @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "new_coll_sub_id")
-    private NewCollateralSub newCollateralSub;
+    private ProposeCollateralInfoSub newCollateralSub;
     
     @Column(name="is_main",columnDefinition="int default 0")
     private boolean main;
@@ -44,15 +44,15 @@ public class MortgageInfoCollSub implements Serializable {
 		this.mortgageInfo = mortgageInfo;
 	}
 
-	public NewCollateralSub getNewCollateralSub() {
-		return newCollateralSub;
-	}
+    public ProposeCollateralInfoSub getNewCollateralSub() {
+        return newCollateralSub;
+    }
 
-	public void setNewCollateralSub(NewCollateralSub newCollateralSub) {
-		this.newCollateralSub = newCollateralSub;
-	}
+    public void setNewCollateralSub(ProposeCollateralInfoSub newCollateralSub) {
+        this.newCollateralSub = newCollateralSub;
+    }
 
-	public boolean isMain() {
+    public boolean isMain() {
 		return main;
 	}
 

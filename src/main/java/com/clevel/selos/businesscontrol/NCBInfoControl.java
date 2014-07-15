@@ -326,21 +326,21 @@ public class NCBInfoControl extends BusinessControl {
         BigDecimal loanCreditWCTMB = BigDecimal.ZERO;
 
         for(NCBDetail item : ncbDetailList){
-            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1){
+            if(item.getAccountType() != null && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
+                // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
                 loanCredit = loanCredit.add(item.getLimit());
             }
-            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 &&
-                    item.getWcFlag() == RadioValue.YES.value()){
+            if(item.getAccountType() != null && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
+                // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
                 loanCreditWC = loanCreditWC.add(item.getOutstanding());
             }
-            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 &&
-                    item.getAccountTMBFlag() == RadioValue.YES.value()){
-                loanCreditTMB = loanCreditTMB.add(item.getOutstanding());
+            if(item.getAccountType() != null && item.getAccountTMBFlag() == RadioValue.YES.value() && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
+                // วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB
+                loanCreditTMB = loanCreditTMB.add(item.getLimit());
             }
-            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1 &&
-                    item.getAccountTMBFlag() == RadioValue.YES.value() &&
-                    item.getWcFlag() == RadioValue.YES.value()){
-                loanCreditWCTMB = loanCreditWCTMB.add(item.getLimit());
+            if(item.getAccountType() != null && item.getAccountTMBFlag() == RadioValue.YES.value() && ( item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
+                // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+                loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
             }
         }
         ncb.setLoanCreditNCB(loanCredit);
@@ -394,11 +394,13 @@ public class NCBInfoControl extends BusinessControl {
     public List<NCBDetailView> getNCBForCalDBR(long workcaseId){
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
+
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
+
         if(customers == null || customers.size() == 0) return ncbDetailViews;
+
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
-        List<NCBDetail> ncbDetails = new ArrayList<NCBDetail>();
-        ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();
+        List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();
         log.debug("ncbDetails size:{}", ncbDetails.size());
         AccountType accountType;
         AccountStatus accountStatus;

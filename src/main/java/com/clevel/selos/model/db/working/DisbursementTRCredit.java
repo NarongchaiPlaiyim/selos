@@ -18,7 +18,7 @@ public class DisbursementTRCredit {
 
     @OneToOne
     @JoinColumn(name = "new_credit_detail_id")
-    private NewCreditDetail creditDetail;
+    private ProposeCreditInfo creditDetail;
 
     @Column(name = "disburse_amount")
     private BigDecimal disburseAmount;
@@ -31,15 +31,15 @@ public class DisbursementTRCredit {
 		this.disbursementTR = disbursementTR;
 	}
 
-	public NewCreditDetail getCreditDetail() {
-		return creditDetail;
-	}
+    public ProposeCreditInfo getCreditDetail() {
+        return creditDetail;
+    }
 
-	public void setCreditDetail(NewCreditDetail creditDetail) {
-		this.creditDetail = creditDetail;
-	}
+    public void setCreditDetail(ProposeCreditInfo creditDetail) {
+        this.creditDetail = creditDetail;
+    }
 
-	public BigDecimal getDisburseAmount() {
+    public BigDecimal getDisburseAmount() {
 		return disburseAmount;
 	}
 

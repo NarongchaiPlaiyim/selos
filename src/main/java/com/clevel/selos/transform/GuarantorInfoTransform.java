@@ -60,12 +60,12 @@ public class GuarantorInfoTransform extends Transform {
 		}
 		view.setCustomers(customerViews);
 		
-		List<NewGuarantorCredit> credits = model.getNewGuarantorDetail().getNewGuarantorCreditList();
-		for (NewGuarantorCredit credit : credits) {
+		List<ProposeGuarantorInfoRelation> credits = model.getNewGuarantorDetail().getProposeGuarantorInfoRelationList();
+		for (ProposeGuarantorInfoRelation credit : credits) {
 			if (credit.getExistingCreditDetail() != null) {
 				creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getExistingCreditDetail()));
-			} else if (credit.getNewCreditDetail() != null) {
-				creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getNewCreditDetail()));
+			} else if (credit.getProposeCreditInfo() != null) {
+				creditViews.add(creditDetailSimpleTransform.transformToSimpleView(credit.getProposeCreditInfo()));
 			}
 		}
 		view.setCredits(creditViews);
@@ -81,7 +81,7 @@ public class GuarantorInfoTransform extends Transform {
 		if (model.getGuarantorType() != null)
 			view.setGuarantorType(model.getGuarantorType().getMortgage());
 		if (model.getNewGuarantorDetail() != null) {
-			NewGuarantorDetail detail = model.getNewGuarantorDetail();
+			ProposeGuarantorInfo detail = model.getNewGuarantorDetail();
 			if (detail.getTotalLimitGuaranteeAmount() != null)
 				view.setGuarantorAmount(detail.getTotalLimitGuaranteeAmount());
 			if (detail.getGuarantorName() != null) {
