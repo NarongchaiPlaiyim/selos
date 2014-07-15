@@ -288,6 +288,8 @@ public class BRMSControl extends BusinessControl {
                 borrowerGroupIncome = borrowerGroupIncome.add(customer.getApproxIncome());
             }
 
+            customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
+
             if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
                 logger.debug("found guarantor!");
                 if(customer.getReference() != null){
@@ -298,8 +300,6 @@ public class BRMSControl extends BusinessControl {
                     }
                 }
             }
-
-            customerInfoList.add(getBRMSCustomerInfo(customer, checkDate));
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
@@ -434,17 +434,6 @@ public class BRMSControl extends BusinessControl {
         CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
         int numberOfGuarantor = 0;
         for(Customer customer : customerList){
-            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
-                logger.debug("found guarantor!");
-                if(customer.getReference() != null){
-                    logger.debug("customer reference : {}", customer.getReference().getBrmsCode());
-                    if(customer.getReference().getBrmsCode().equalsIgnoreCase("004") || customer.getReference().getBrmsCode().equalsIgnoreCase("005")) {
-                        logger.debug("found guarantor with reference 004/005");
-                        numberOfGuarantor = numberOfGuarantor + 1;
-                    }
-                }
-            }
-
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
             if(customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value() &&
                     customer.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -457,6 +446,17 @@ public class BRMSControl extends BusinessControl {
             }
 
             customerInfoList.add(brmsCustomerInfo);
+
+            if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
+                logger.debug("found guarantor!");
+                if(customer.getReference() != null){
+                    logger.debug("customer reference : {}", customer.getReference().getBrmsCode());
+                    if(customer.getReference().getBrmsCode().equalsIgnoreCase("004") || customer.getReference().getBrmsCode().equalsIgnoreCase("005")) {
+                        logger.debug("found guarantor with reference 004/005");
+                        numberOfGuarantor = numberOfGuarantor + 1;
+                    }
+                }
+            }
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
 
@@ -1422,6 +1422,7 @@ public class BRMSControl extends BusinessControl {
                     mandateDocView = new MandateDocView();
                     mandateDocView.setNumberOfDoc(0);
                 }
+                //TODO : mandateDocView.setEcmDocTypeDesc(
 
                 //1. Set ECM Document Type ID
                 mandateDocView.setEcmDocTypeId(documentDetail.getId());

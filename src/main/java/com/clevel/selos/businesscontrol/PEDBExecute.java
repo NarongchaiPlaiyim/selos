@@ -753,7 +753,7 @@ public class PEDBExecute extends BusinessControl
 
         boolean flag = false;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         searchViewList = new ArrayList<PEInbox>();
 
@@ -1176,12 +1176,6 @@ public class PEDBExecute extends BusinessControl
 
                 log.info("App Numbers :{}",completedCasesAppNoList.size());
 
-                /*completedCasesAppNoList.addAll(completedCasesAppNoListByCitizenId);
-                completedCasesAppNoList.retainAll(completedCasesAppNoListByName);
-                completedCasesAppNoList.retainAll(completedCasesAppNoListByUserId);
-
-                log.info("after :{}",completedCasesAppNoList.size());*/
-
                 if(flag)
                 {
                     if(completedCasesAppNoList.size()> 0)
@@ -1235,13 +1229,11 @@ public class PEDBExecute extends BusinessControl
 
                 }
 
-                //cmpltedwrkcaseitemslist = completedCasesWKItemsDAO.getCompletedCasesWKItems(completedCasesAppNoList,statuscode,date1,date2,date3,date4);
-
                 log.info("cmpletedwrkcaseitemslist is : {}",cmpltedwrkcaseitemslist.size());
 
                 Iterator itr = cmpltedwrkcaseitemslist.iterator();
 
-
+                Date date;
 
                 while(itr.hasNext() == true)
                 {
@@ -1255,11 +1247,9 @@ public class PEDBExecute extends BusinessControl
 
                     if(completedCasesWKItems.getCreatedate()!=null)
                     {
-                        peInbox.setReceiveddate(completedCasesWKItems.getCreatedate().toString());
-                    }
-                    else
-                    {
-                        peInbox.setReceiveddate("");
+                        date = completedCasesWKItems.getCreatedate();
+
+                        peInbox.setReceiveddate(formatter.format(date));
                     }
 
                     if(completedCasesWKItems.getCreateBy()!=null)
@@ -1273,10 +1263,6 @@ public class PEDBExecute extends BusinessControl
                             }
 
                         }
-                    }
-                    else
-                    {
-                        peInbox.setAtuserteam("");
                     }
 
                     peInbox.setApplicationno(completedCasesWKItems.getApplicationNo());
@@ -1311,20 +1297,10 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setProductgroup(productGroupDAO.productGroupNameById(completedCasesWKItems.getProductgroupid()));
                     }
 
-                    else
-                    {
-                        peInbox.setProductgroup("");
-                    }
-
                     if(completedCasesWKItems.getRequesttypeid()!=null)
                     {
                         log.info("in pedbexecute : requesttype id :"+completedCasesWKItems.getRequesttypeid());
                         peInbox.setRequestTypeStr(requestTypeDAO.requestTypeById(completedCasesWKItems.getRequesttypeid()));
-                    }
-
-                    else
-                    {
-                        peInbox.setRequestTypeStr("");
                     }
 
                     Integer stepId = new Integer(StepValue.COMPLETED_STEP.value());
@@ -1338,11 +1314,6 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setStatus(statusDAO.statusNameById(completedCasesWKItems.getStatusid()));
                     }
 
-                    else
-                    {
-                        peInbox.setStatus("");
-                    }
-
                     peInbox.setFromuser(completedCasesWKItems.getFromuserid());
 
                     peInbox.setAtuser(userDAO.getUserNameById(completedCasesWKItems.getCreateBy()));
@@ -1352,19 +1323,9 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setAppointmentdate(completedCasesWKItems.getAppointmentDate().toString().contains(appointmentYear)?"":completedCasesWKItems.getAppointmentDate().toString().trim());
                     }
 
-                    else
-                    {
-                        peInbox.setAppointmentdate("");
-                    }
-
                     if(completedCasesWKItems.getDoalevelid()!=null)
                     {
                         peInbox.setDoalevel(String.valueOf(completedCasesWKItems.getDoalevelid()));
-                    }
-
-                    else
-                    {
-                        peInbox.setDoalevel("");
                     }
 
                     peInbox.setAction("");
@@ -1373,22 +1334,16 @@ public class PEDBExecute extends BusinessControl
 
                     if(completedCasesWKItems.getSlaenddate()!=null)
                     {
-                        peInbox.setSlaenddate(completedCasesWKItems.getSlaenddate().toString());
-                    }
 
-                    else
-                    {
-                        peInbox.setSlaenddate("");
+                        date = completedCasesWKItems.getSlaenddate();
+
+                        peInbox.setSlaenddate(formatter.format(date));
                     }
 
                     if(completedCasesWKItems.getCompletedate()!=null)
                     {
-                        peInbox.setTerminateDate(completedCasesWKItems.getCompletedate().toString());
-                    }
-
-                    else
-                    {
-                        peInbox.setTerminateDate("");
+                        date = completedCasesWKItems.getCompletedate();
+                        peInbox.setTerminateDate(formatter.format(date));
                     }
 
                     peInbox.setTotaltimespentatprocess(completedCasesWKItems.getTotaltimeatprocess());
@@ -1404,8 +1359,6 @@ public class PEDBExecute extends BusinessControl
                     peInbox = null;
 
                 }
-
-
 
             }
             catch (Exception e)
@@ -1591,8 +1544,6 @@ public class PEDBExecute extends BusinessControl
         SearchApplicationNumberList = new ArrayList<String>();
 
         appnumberlistavoidduplicates = new ArrayList<String>();
-
-
 
         log.info("controller in getApplicationNumbers method of pedbexecute java class");
 
@@ -1933,30 +1884,8 @@ public class PEDBExecute extends BusinessControl
 
                 }
 
-
-
-
             }
 
-            /*List<BPMActive> bpmactvelist = new ArrayList<BPMActive>();
-
-            bpmactvelist = bpmActiveDAO.getBPMActiveAppNumbers(bpmactive);
-
-            log.info("bpm active list is : {}",bpmactvelist.size());
-
-            Iterator it = bpmactvelist.iterator();
-
-            while(it.hasNext() == true)
-            {
-                BPMActive bpmActive = new BPMActive();
-
-                bpmActive = (BPMActive)it.next();
-
-                String bpmappnumber = bpmActive.getApplicationnumber();
-
-                SearchApplicationNumberList.add(bpmappnumber);
-
-            }                */
             log.info("appnumberlist size is :::: {}",SearchApplicationNumberList.size());
 
             appnumberlistavoidduplicates =    new ArrayList(new HashSet(SearchApplicationNumberList));

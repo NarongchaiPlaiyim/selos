@@ -44,7 +44,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
     public List<ProposeCollateralInfo> findNewCollateralByTypeP(ProposeLine newCreditFacility) {
         log.info("-- findNewCollateralByTypeP ::: {}", newCreditFacility.toString());
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", ProposeType.P));
         criteria.add(Restrictions.ne("appraisalRequest", 2));
         criteria.addOrder(Order.asc("id"));
@@ -56,7 +56,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
     public List<ProposeCollateralInfo> findNewCollateralByTypeA2(ProposeLine newCreditFacility) {
         log.info("-- findNewCollateralByTypeA2 ::: {}", newCreditFacility.toString());
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", ProposeType.A));    //2
         criteria.add(Restrictions.eq("appraisalRequest", 2));
         criteria.addOrder(Order.asc("id"));
