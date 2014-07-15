@@ -616,7 +616,8 @@ public class ExSummaryControl extends BusinessControl {
     public void calIncomeBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose & DBR & Decision , Pls Call me !!
         log.debug("calIncomeBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
-        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal totalWCTMB = BigDecimal.ZERO;
         BigDecimal odLimit = BigDecimal.ZERO;
@@ -624,11 +625,15 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal adjusted = BigDecimal.ZERO;
         BigDecimal twelve = BigDecimal.valueOf(12);
 
-        if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            totalWCTMB = newCreditFacility.getTotalWCTmb();
-            odLimit = newCreditFacility.getTotalCommercialAndOBOD();
-            loanCoreWC = newCreditFacility.getTotalCommercial();
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
+            totalWCTMB = proposeLine.getTotalWCTmb();
         }
+
+        if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
+            odLimit = decision.getTotalApproveComAndOBOD();
+            loanCoreWC = decision.getTotalApproveCommercial();
+        }
+
         if(dbr != null && dbr.getId() != 0){
             adjusted = dbr.getMonthlyIncomeAdjust();
         }
