@@ -49,6 +49,8 @@ public class NCBDetailView implements Serializable {
     private BigDecimal nplCreditAmount;
     private int tdrFlag;
 
+    private Date accountClosedDate;
+
     public NCBDetailView() {
         reset();
     }
@@ -77,6 +79,7 @@ public class NCBDetailView implements Serializable {
         this.nplFlag = 0;
         this.nplCreditAmount = BigDecimal.ZERO;
         this.tdrFlag = 0;
+        this.accountClosedDate =  null;
     }
 
     public long getId() {
@@ -327,6 +330,14 @@ public class NCBDetailView implements Serializable {
         this.tdrFlag = tdrFlag;
     }
 
+    public Date getAccountClosedDate() {
+        return accountClosedDate;
+    }
+
+    public void setAccountClosedDate(Date accountClosedDate) {
+        this.accountClosedDate = accountClosedDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -356,6 +367,7 @@ public class NCBDetailView implements Serializable {
                 .append("accountName", accountName)
                 .append("loanAccountTypeView", loanAccountTypeView)
                 .append("debtForCalculate", debtForCalculate)
+                .append("accountClosedDate", accountClosedDate)
                 .toString();
     }
 }

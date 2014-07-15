@@ -236,6 +236,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             log.debug("subjectAccountModel.getLastrestructureddate() : {}", subjectAccountModel.getLastrestructureddate());
                                             if (!Util.isEmpty(subjectAccountModel.getLastrestructureddate())) {
                                                 ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate()));
+                                                ncbDetailView.setAccountClosedDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getCloseddate()));
                                                 //get TDR last date
                                                 if (isTMBAccount) {
                                                     isTDRTMB = true;
@@ -1370,6 +1371,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                     if (reStructureDate != null && reStructureDate.length > 0) {
                                                         ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(reStructureDate[0]));
                                                     }
+
+                                                    if(creditInfoModel.getCloseddate()!=null){
+                                                        ncbDetailView.setAccountClosedDate(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getCloseddate()));
+                                                    }
                                                     //get TDR last date
                                                     if (isTMBAccount) {
                                                         isTDRTMB = true;
@@ -1580,6 +1585,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                     String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());
                                                     if (reStructureDate != null && reStructureDate.length > 0) {
                                                         ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(reStructureDate[0]));
+                                                    }
+                                                    if(creditInfoModel.getCloseddate()!=null){
+                                                        ncbDetailView.setAccountClosedDate(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getCloseddate()));
                                                     }
                                                     //get TDR last date
                                                     if (isTMBAccount) {
