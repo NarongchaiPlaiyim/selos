@@ -616,7 +616,7 @@ public class ProposeLineTransform extends Transform {
 
             BigDecimal interest = BigDecimal.ZERO;
             boolean isNegate = false;
-            String baseRate = "As Manual";
+            String baseRate;
             if(!Util.isNull(newPricingIntTier.getSpread())) {
                 if(newPricingIntTier.getSpread().equalsIgnoreCase("-")){
                     isNegate = true;
@@ -634,7 +634,13 @@ public class ProposeLineTransform extends Transform {
             if(!Util.isNull(newPricingIntTier.getRateType()) && !Util.isEmpty(newPricingIntTier.getRateType())) {
                 if(!newPricingIntTier.getRateType().equalsIgnoreCase("null")) {
                     baseRate = newPricingIntTier.getRateType();
+                } else {
+                    newPricingIntTier.setRateType("As Manual");
+                    baseRate = newPricingIntTier.getRateType();
                 }
+            } else {
+                newPricingIntTier.setRateType("As Manual");
+                baseRate = newPricingIntTier.getRateType();
             }
 
             //Standard
