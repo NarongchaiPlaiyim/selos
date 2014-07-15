@@ -33,6 +33,7 @@ public class NCBDetailTransform extends Transform {
             ncbDetail.setNcb(ncb);
 
             ncbDetail.setAccountOpenDate(ncbDetailViewItem.getAccountOpenDate());
+            ncbDetail.setAccountCloseDate(ncbDetailViewItem.getAccountClosedDate());
             ncbDetail.setAccountTMBFlag(ncbDetailViewItem.getTMBAccount());
 
             if(ncbDetailViewItem.getAccountStatus() != null && ncbDetailViewItem.getAccountStatus().getId() != 0){
@@ -88,6 +89,7 @@ public class NCBDetailTransform extends Transform {
         ncbDetailView.setAccountStatus(ncbDetail.getAccountStatus());
         ncbDetailView.setAccountType(ncbDetail.getAccountType());
         ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
+        ncbDetailView.setAccountClosedDate(ncbDetail.getAccountCloseDate());
         ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
         ncbDetailView.setCurrentPayment(settlementStatusTransform.transformToView(ncbDetail.getCurrentPayment()));
         ncbDetailView.setHistoryPayment(settlementStatusTransform.transformToView(ncbDetail.getHistorySixPayment()));

@@ -122,8 +122,9 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
 
             if(statusid != 0)
             {
+                long longStatus = Long.parseLong(Integer.toString(statusid));
 
-                criteriaPreScreen.add(Restrictions.eq("status.id",statusid))  ; //status id
+                criteriaPreScreen.add(Restrictions.eq("status.id",longStatus))  ; //status id
             }
 
 
@@ -207,10 +208,6 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
                     completedCasesWKItems.setWobnumber(workCasePrescreen.getWobNumber());
 
                     completedCasesWKItems.setDoalevelid(workCasePrescreen.getAuthorizationDOA() != null ? workCasePrescreen.getAuthorizationDOA().getDoapriorityorder():null);
-
-                    completedCasesWKItems.setSlaenddate(workCasePrescreen.getCompleteDate());
-
-                    completedCasesWKItems.setFromuserid(workCasePrescreen.getCreateBy().getId());
 
                     completedCasesWKItems.setCreateBy(workCasePrescreen.getCreateBy().getId());
 
