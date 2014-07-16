@@ -100,6 +100,10 @@ public class CheckMandateDocControl extends BusinessControl{
     private final String AAD_COMMITTEE = "AAD COMMITTEE";
     private User user;
 
+    private final int YES = 1;
+    private final int NO = 2;
+    private final int NA = 3;
+
     @Inject
     public CheckMandateDocControl() {
 
@@ -423,17 +427,17 @@ public class CheckMandateDocControl extends BusinessControl{
             if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
                 mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
-                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, 2);
+                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, NO);
                 mandatoryDocumentsList.add(checkMandatoryDocView);
             } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
                 mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
-                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, 2);
+                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, NO);
                 optionalDocumentsList.add(optionalDocView);
             } else {
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
                 mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
-                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, 2);
+                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, NO);
                 otherDocumentsList.add(checkOtherDocView);
             }
         }
@@ -464,7 +468,7 @@ public class CheckMandateDocControl extends BusinessControl{
         for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
             ecmDetailList = Util.safetyList(ECMentry.getValue());
             log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
-            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ECMentry.getKey(), ecmDetailList, 2, userToken);
+            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ECMentry.getKey(), ecmDetailList, NO, userToken);
             checkOtherDocView.readOnly();
             otherDocumentsList.add(checkOtherDocView);
         }
@@ -570,6 +574,8 @@ public class CheckMandateDocControl extends BusinessControl{
         String keyBRMS = null;
         String keyECM = null;
 
+
+
         log.debug("-- checkMap MandateDocViewMap.size[{}]", mandateDocViewMap.size());
         log.debug("-- checkMap ListECMDetailMap.size[{}]", listECMDetailMap.size());
 
@@ -589,13 +595,13 @@ public class CheckMandateDocControl extends BusinessControl{
                     if(!Util.isZero(ecmDetailList.size())){
                         log.debug("-- Size of ecmDetailList more than zero.");
                     }
-                    int isComplete = 2;
+                    int isComplete = NO;
                     try {
                         if(mandateDocView.getNumberOfDoc() == ecmDetailList.size()){
-                            isComplete = 1;
+                            isComplete = YES;
                         }
                     } catch (Exception e){
-                        isComplete = 3;
+                        isComplete = NA;
                     }
                     log.debug("-- The NumberOfDoc of BRMS is {}", mandateDocView.getNumberOfDoc());
                     log.debug("-- The NumberOfDoc of ECM  is {}", ecmDetailList.size());
@@ -604,7 +610,7 @@ public class CheckMandateDocControl extends BusinessControl{
                     if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                         log.debug("-- ECMDocType {} = {}.", keyECM, "Mandatory Documents");
                         checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(keyECM, mandateDocView, ecmDetailList, isComplete, userToken);
-                        if(isComplete == 1){
+                        if(isComplete == YES){
                             checkMandatoryDocView.readOnly();
                             checkMandatoryDocView.setCompleteFlag(true);
                             log.debug("-- CheckMandatoryDocView key[{}] readOnly", keyECM);
@@ -613,7 +619,7 @@ public class CheckMandateDocControl extends BusinessControl{
                     } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                         log.debug("-- ECMDocType {} = {}.", keyECM, "Optional Documents");
                         optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(keyECM, mandateDocView, ecmDetailList, isComplete, userToken);
-                        if(isComplete == 1){
+                        if(isComplete == YES){
                             optionalDocView.readOnly();
                             optionalDocView.setCompleteFlag(true);
                             log.debug("-- OptionalDocView key[{}] readOnly", keyECM);
@@ -622,7 +628,7 @@ public class CheckMandateDocControl extends BusinessControl{
                     } else {
                         log.debug("-- ECMDocType {} = {}.", keyECM, "Other Documents");
                         checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(keyECM, mandateDocView, ecmDetailList, isComplete, userToken);
-                        if(isComplete == 1){
+                        if(isComplete == YES){
                             checkOtherDocView.readOnly();
                             checkOtherDocView.setCompleteFlag(true);
                             log.debug("-- CheckOtherDocView key[{}] readOnly", keyECM);
@@ -653,17 +659,17 @@ public class CheckMandateDocControl extends BusinessControl{
             if(DocMandateType.MANDATE.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Mandatory Documents");
                 mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
-                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, 2);
+                checkMandatoryDocView = checkMandateDocTransform.transformToCheckMandatoryDocView(BRMSentry.getKey(), mandateDocView, NO);
                 mandatoryDocumentsList.add(checkMandatoryDocView);
             } else if(DocMandateType.OPTIONAL.value() == mandateDocView.getDocMandateType().value()){
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Optional Documents");
                 mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
-                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, 2);
+                optionalDocView = checkMandateDocTransform.transformToCheckOptionalDocView(BRMSentry.getKey(), mandateDocView, NO);
                 optionalDocumentsList.add(optionalDocView);
             } else {
                 log.debug("-- BRMSDocType {} = {}.", BRMSentry.getKey(), "Other Documents");
                 mandateDocView.setEcmDocTypeDesc(callECMByECMDocId(mandateDocView.getEcmDocTypeId()));
-                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, 2);
+                checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(BRMSentry.getKey(), mandateDocView, NO);
                 otherDocumentsList.add(checkOtherDocView);
             }
         }
@@ -679,7 +685,7 @@ public class CheckMandateDocControl extends BusinessControl{
         for (Map.Entry<String, List<ECMDetail>> ECMentry : listECMDetailMap.entrySet()) {
             ecmDetailList = Util.safetyList(ECMentry.getValue());
             log.debug("-- ECMDocType {} = {}.", ECMentry.getKey(), "Other Documents");
-            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ECMentry.getKey(), ecmDetailList, 2, userToken);
+            checkOtherDocView = checkMandateDocTransform.transformToCheckOtherDocView(ECMentry.getKey(), ecmDetailList, NO, userToken);
             otherDocumentsList.add(checkOtherDocView);
         }
         checkMandateDocView.setMandatoryDocumentsList(mandatoryDocumentsList);

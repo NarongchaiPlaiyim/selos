@@ -66,9 +66,7 @@
                     </td>
                     <td >
                         <ui:repeat value="#{mandatoryItem.fileNameViewList}" var="fileNmae" varStatus="rowFileNameIndex">
-                            <a href="#{fileNmae.url}" target="_blank">
-                                <p:outputLabel value="#{fileNmae.fileName}"/>
-                            </a>
+                            <h:outputLink value="#{fileNmae.url}" target="_blank">#{fileNmae.fileName}</h:outputLink>
 
                             <h:panelGroup rendered="#{rowFileNameIndex.last}">
                                 <br/>
@@ -127,9 +125,7 @@
                     </td>
                     <td >
                         <ui:repeat value="#{optionalItem.fileNameViewList}" var="optionalFileName" varStatus="rowOptionalFileNameIndex">
-                            <a href="#{optionalFileName.url}" target="_blank">
-                                <p:outputLabel value="#{optionalFileName.fileName}"/>
-                            </a>
+                            <h:outputLink value="#{optionalFileName.url}" target="_blank">#{optionalFileName.fileName}</h:outputLink>
                             <h:panelGroup rendered="#{rowOptionalFileNameIndex.last}">
                                 <br/>
                             </h:panelGroup>
@@ -189,9 +185,7 @@
                     </td>
                     <td >
                         <ui:repeat value="#{otherItem.fileNameViewList}" var="otherFileName" varStatus="rowOtherFileNameIndex">
-                            <a href="#{otherFileName.url}" target="_blank">
-                                <p:outputLabel value="#{otherFileName.fileName}" />
-                            </a>
+                            <h:outputLink value="#{otherFileName.url}" target="_blank">#{otherFileName.fileName}</h:outputLink>
                             <h:panelGroup rendered="#{rowOtherFileNameIndex.last}">
                                 <br/>
                             </h:panelGroup>
