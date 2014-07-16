@@ -1165,7 +1165,7 @@ public class ProposeLineControl extends BusinessControl {
                     TCGCollateralType tcgCollateralType = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getTcgCollateralType().getId())) {
                         for(PotentialColToTCGCol p : proposeCollateralInfoHeadView.getPotentialColToTCGColList()) {
-                            if(p.getId() == proposeCollateralInfoHeadView.getTcgCollateralType().getId()) {
+                            if(!Util.isNull(p.getTcgCollateralType()) && p.getTcgCollateralType().getId() == proposeCollateralInfoHeadView.getTcgCollateralType().getId()) {
                                 tcgCollateralType = p.getTcgCollateralType();
                                 break;
                             }
@@ -1288,7 +1288,7 @@ public class ProposeLineControl extends BusinessControl {
                     TCGCollateralType tcgCollateralType = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getTcgCollateralType().getId())) {
                         for(PotentialColToTCGCol p : proposeCollateralInfoHeadView.getPotentialColToTCGColList()) {
-                            if(p.getId() == proposeCollateralInfoHeadView.getTcgCollateralType().getId()) {
+                            if(!Util.isNull(p.getTcgCollateralType()) && p.getTcgCollateralType().getId() == proposeCollateralInfoHeadView.getTcgCollateralType().getId()) {
                                 tcgCollateralType = p.getTcgCollateralType();
                                 break;
                             }
