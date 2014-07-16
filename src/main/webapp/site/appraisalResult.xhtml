@@ -289,7 +289,7 @@
                                          </td>
                                      </tr>
                                  </table>
-                                 <ui:repeat value="#{collateralDetailView.newCollateralHeadViewList}" var="collateralHeadDetailView">
+                                 <ui:repeat value="#{collateralDetailView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView">
                                      <table style="width: 100%" border="0">
                                          <colgroup>
                                              <col style="width:250px"/>
@@ -334,7 +334,7 @@
                                                  <p:dataTable style="width: auto"
                                                               id="subCollateralDetailViewTable"
                                                               var="subCollateralDetailView"
-                                                              value="#{collateralHeadDetailView.newCollateralSubViewList}"
+                                                              value="#{collateralHeadDetailView.proposeCollateralInfoSubViewList}"
                                                               paginator="false"
                                                               rowKey="#{subCollateralDetailView}"
                                                               rowIndexVar="rowIndex" >
@@ -359,7 +359,7 @@
                                                          <p:outputLabel value="#{subCollateralDetailView.titleDeed}"/> <br/>
                                                      </p:column>
                                                      <p:column styleClass="left" style="width: 250px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.collateralOwner}" />
+                                                         <p:outputLabel value="#{subCollateralDetailView.collateralOwnerUWList}" />
                                                      </p:column>
                                                      <p:column styleClass="right" style="width: 150px">
                                                          <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">

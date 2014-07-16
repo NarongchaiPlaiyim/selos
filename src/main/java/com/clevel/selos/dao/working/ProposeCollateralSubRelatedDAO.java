@@ -40,7 +40,7 @@ public class ProposeCollateralSubRelatedDAO extends GenericDAO<ProposeCollateral
 
     public List<ProposeCollateralSubRelated> findByMainCollSubId(long mainCollSubId){
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCollateralSub.id", mainCollSubId));
+        criteria.add(Restrictions.eq("proposeCollateralSub.id", mainCollSubId));
         List<ProposeCollateralSubRelated> newCollateralSubRelatedList = criteria.list();
         return newCollateralSubRelatedList;
     }
