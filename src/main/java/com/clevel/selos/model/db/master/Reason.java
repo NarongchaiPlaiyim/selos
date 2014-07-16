@@ -26,6 +26,18 @@ public class Reason implements Serializable {
     @Column(name = "active")
     private int active;
 
+    @OneToOne
+    @JoinColumn(name = "step_id")
+    private Step step;
+
+    @OneToOne
+    @JoinColumn(name = "action_id")
+    private Action action;
+
+    @OneToOne
+    @JoinColumn(name = "reject_group_id")
+    private UWRejectGroup uwRejectGroup;
+
     public Reason() {
     }
 
@@ -67,6 +79,30 @@ public class Reason implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public Step getStep() {
+        return step;
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    public UWRejectGroup getUwRejectGroup() {
+        return uwRejectGroup;
+    }
+
+    public void setUwRejectGroup(UWRejectGroup uwRejectGroup) {
+        this.uwRejectGroup = uwRejectGroup;
     }
 
     @Override
