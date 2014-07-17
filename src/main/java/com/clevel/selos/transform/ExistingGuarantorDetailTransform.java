@@ -66,6 +66,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetail.setExistingCreditFacility(existingCreditFacility);
             existingGuarantorDetail.setTotalLimitGuaranteeAmount(existingGuarantorDetailView.getTotalLimitGuaranteeAmount());
             existingGuarantorDetail.setGuarantorCategory(existingGuarantorDetailView.getGuarantorCategory());
+            existingGuarantorDetail.setNo(existingGuarantorDetailView.getNo());
             existingGuarantorDetailList.add(existingGuarantorDetail);
         }
 
