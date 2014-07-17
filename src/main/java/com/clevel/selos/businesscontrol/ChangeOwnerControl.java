@@ -6,6 +6,8 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseOwner;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -58,11 +61,11 @@ public class ChangeOwnerControl extends BusinessControl {
         try
         {
 
-            User user = userDAO.findByUserName(changeUser);
+            User user = userDAO.findById(changeUser);
 
             int newRoleId = user.getRole().getId();
 
-            User user1 = userDAO.findByUserName(currentUser);
+            User user1 = userDAO.findById(currentUser);
 
             int currentRoleId = user1.getRole().getId();
 
@@ -72,6 +75,8 @@ public class ChangeOwnerControl extends BusinessControl {
             {
 
                 WorkCase workCase = workCaseDAO.findByWobNumber(wobNumbers[i]);
+
+                List stepList = new ArrayList();
 
                 if(workCase !=  null)
                 {
@@ -87,9 +92,9 @@ public class ChangeOwnerControl extends BusinessControl {
 
                         WorkCaseOwner workCaseOwner =   (WorkCaseOwner)it.next();
 
-                        workCaseOwner.setUser(userDAO.findById(changeUser));
+                        workCaseOwner.setUser(user);
 
-                        workCaseOwner.setRole(roleDAO.findById(newRoleId));
+                        workCaseOwner.setRole(user.getRole());
 
                         workCaseOwnerDAO.persist(workCaseOwner);
 
@@ -115,9 +120,11 @@ public class ChangeOwnerControl extends BusinessControl {
 
                         log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreen().getId());
 
-                        workCaseOwner.setUser(userDAO.findById(changeUser));
+                        workCaseOwner.setUser(user);
 
-                        workCaseOwner.setRole(roleDAO.findById(newRoleId));
+                        workCaseOwner.setRole(user.getRole());
+
+                        stepList.add(workCaseOwner.getStep().getId());
 
                         log.info("Work Case updated , New User : {}, Role:{}",changeUser, newRoleId);
                         log.info("WorkCaseOwner : {}",workCaseOwner);
@@ -149,13 +156,29 @@ public class ChangeOwnerControl extends BusinessControl {
 
                             log.info("in while workcase owner prescreen : {}, prescreen id : {}",workCaseOwner.getId(),workCaseOwner.getWorkCasePrescreen().getId());
 
-                            workCaseOwner.setUser(userDAO.findById(changeUser));
+                            workCaseOwner.setUser(user);
 
-                            workCaseOwner.setRole(roleDAO.findById(newRoleId));
+                            workCaseOwner.setRole(user.getRole());
+
+                            stepList.add(workCaseOwner.getStep().getId());
 
                             workCaseOwnerDAO.persist(workCaseOwner);
 
                         }
+                    }
+                }
+
+                if(currentRoleId == RoleValue.BDM.id() && !stepList.contains(StepValue.PRESCREEN_CHECKER))
+                {
+                    if(workCase!=null)
+                    {
+                        workCase.setCreateBy(user);
+                        workCaseDAO.persist(workCase);
+                    }
+                    if(workCasePrescreen!=null)
+                    {
+                        workCasePrescreen.setCreateBy(user);
+                        workCasePrescreenDAO.persist(workCasePrescreen);
                     }
                 }
 

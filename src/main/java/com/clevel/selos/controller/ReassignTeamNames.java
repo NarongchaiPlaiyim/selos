@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -63,6 +64,9 @@ public class ReassignTeamNames implements Serializable
 
     @Inject
     StepDAO stepDAO;
+
+    @Inject
+    UserDAO userDAO;
 
     @Inject
     HeaderControl headerControl;
@@ -428,10 +432,54 @@ public class ReassignTeamNames implements Serializable
 
         popupreasignteamnames =  userTeamDAO.popUpUserTeamNames(userDetail.getTeamid(),"Y");
 
+        if(userTeamDAO.findById(userDetail.getTeamid()).getTeam_type()== 2 && reasignteamnames.size()==1)
+        {
+            popupselectedteamname = Integer.toString(reasignteamnames.get(0).getTeamid());
+            selectedTeamName = popupselectedteamname;
+
+            usersIdNameList = new ArrayList<User>();
+
+            if(userDetail.getTeamid() != 0 )
+            {
+
+                teamuserslist = userTeamDAO.getUsers(reasignteamnames.get(0).getTeamid());
+
+                Iterator<String> it = teamuserslist.iterator();
+                while (it.hasNext())
+                {
+                    User user1= new User();
+                    user1.setId(it.next());
+                    if(!user1.getId().equalsIgnoreCase("ALL"))
+                    {
+                        user1.setUserName(userDAO.findById(user1.getId()).getUserName());
+                    }
+                    usersIdNameList.add(user1);
+                    user1 = null;
+                }
+
+
+            }
+            usersIdNameList1 =usersIdNameList;
+
+        }
+
         log.info("popupreasignteamnames size is : {}",popupreasignteamnames.size());
 
         log.info("reasignteamnames ::::::::: {}",reasignteamnames.toString());
 
+    }
+
+    public void resetFields()
+    {
+        if(userTeamDAO.findById(userDetail.getTeamid()).getTeam_type()== 2 && reasignteamnames.size()==1)
+        {
+            popupselectedteamname = "";
+        }
+        else
+        {
+            popupselectedteamname="";
+            popupselectedusername = "";
+        }
     }
 
     public List<User> valueChangeMethod(ValueChangeEvent e)
@@ -458,8 +506,12 @@ public class ReassignTeamNames implements Serializable
             while (it.hasNext())
             {
                 User user1= new User();
-                user1.setUserName(it.next());
-                user1.setId(userTeamDAO.getUserIdByName(user1.getUserName()));
+
+                user1.setId(it.next());
+                if(!user1.getId().equalsIgnoreCase("ALL"))
+                {
+                    user1.setUserName(userDAO.findById(user1.getId()).getUserName());
+                }
                 usersIdNameList.add(user1);
                 user1 = null;
             }
@@ -656,86 +708,6 @@ public class ReassignTeamNames implements Serializable
                 RequestContext.getCurrentInstance().execute("msgBoxErrorDlg3.show()");
             }
 
-            /*if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
-                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-                if(workCasePrescreen != null){
-                    wrkCasePreScreenId = workCasePrescreen.getId();
-                    requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    statusId = workCasePrescreen.getStatus().getId();
-                }
-                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-                session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
-                WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-                if(workCase != null){
-                    wrkCaseId = workCase.getId();
-                    requestAppraisalFlag = workCase.getRequestAppraisal();
-                    session.setAttribute("workCaseId", wrkCaseId);
-                    session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                } else {
-                    WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-                    wrkCasePreScreenId = workCasePrescreen.getId();
-                    requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-                    session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                }
-                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-                if(workCaseAppraisal != null){
-                    statusId = workCaseAppraisal.getStatus().getId();
-                    wrkCaseAppraisalId = workCaseAppraisal.getId();
-                    session.setAttribute("statusId", statusId);
-                    session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
-                }
-            } else {        //For Case in Stage FullApplication
-                WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-                if(workCase != null){
-                    wrkCaseId = workCase.getId();
-                    requestAppraisalFlag = workCase.getRequestAppraisal();
-                    statusId = workCase.getStatus().getId();
-                }
-                session.setAttribute("workCaseId", wrkCaseId);
-                session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNumber",searchViewSelectItem.getFwobnumber());
-            }
-
-            if(Util.isNull(searchViewSelectItem.getFetchType())) {
-                session.setAttribute("fetchType",0);
-            } else {
-                session.setAttribute("fetchType",searchViewSelectItem.getFetchType());
-            }
-
-            if(stepId != 0){
-                Step step = stepDAO.findById(stepId);
-                stageId = step != null ? step.getStage().getId() : 0;
-            }
-
-            session.setAttribute("stepId", stepId);
-            session.setAttribute("stageId", stageId);
-            session.setAttribute("caseOwner",searchViewSelectItem.getAtuser());
-
-            if(Util.isNull(queueName)) {
-                session.setAttribute("queueName", "0");
-            } else {
-                session.setAttribute("queueName", queueName);
-            }
-
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, Util.parseLong(searchViewSelectItem.getStatuscode(), 0), searchViewSelectItem.getFwobnumber());
-            session.setAttribute("appHeaderInfo", appHeaderView);
-
-            String landingPage = inboxControl.getLandingPage(stepId,0);
-
-            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
-
-            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-                FacesUtil.redirect(landingPage);
-                return;
-            } else {
-                //TODO Show dialog
-            }*/
-
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, searchViewSelectItem.getFwobnumber(), e);
             //message = "Another User is Working on this case!! Please Retry Later.";
@@ -773,9 +745,11 @@ public class ReassignTeamNames implements Serializable
         {
 
             User user1 = new User();
-            user1.setUserName(it.next());
-            user1.setId(userTeamDAO.getUserIdByName(user1.getUserName()));
-
+            user1.setId(it.next());
+            if(!user1.getId().equalsIgnoreCase("ALL"))
+            {
+                user1.setUserName(userDAO.findById(user1.getId()).getUserName());
+            }
             usersIdNameList1.add(user1);
 
             user1= null;
@@ -907,6 +881,8 @@ public class ReassignTeamNames implements Serializable
             popupremark = "";
 
             setPopupremark("");
+
+            disableReassign = true;
 
             RequestContext.getCurrentInstance().execute("successDlg.show()");
 
