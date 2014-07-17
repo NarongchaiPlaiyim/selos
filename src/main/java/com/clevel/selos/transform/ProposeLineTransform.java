@@ -1580,10 +1580,8 @@ public class ProposeLineTransform extends Transform {
     public ProposeLine transformDecisionToModel(DecisionView decisionView, WorkCase workCase, User user, ProposeType proposeType) {
         ProposeLine proposeLine = null;
         if(!Util.isNull(decisionView)){
-            proposeLine = new ProposeLine();
-            if (!Util.isZero(decisionView.getId())) {
-                proposeLine = proposeLineDAO.findById(decisionView.getId());
-            } else {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCase.getId());
+            if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
                 proposeLine.setCreateDate(new Date());
                 proposeLine.setCreateBy(user);
             }
