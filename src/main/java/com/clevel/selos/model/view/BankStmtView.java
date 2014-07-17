@@ -54,6 +54,8 @@ public class BankStmtView implements Serializable {
 
     private BigDecimal netIncomeLastSix;
 
+    private BigDecimal totalTransaction;
+
     public BankStmtView() {
         reset();
     }
@@ -412,6 +414,14 @@ public class BankStmtView implements Serializable {
         this.netIncomeLastSix = netIncomeLastSix;
     }
 
+    public BigDecimal getTotalTransaction() {
+        return totalTransaction;
+    }
+
+    public void setTotalTransaction(BigDecimal totalTransaction) {
+        this.totalTransaction = totalTransaction;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -453,6 +463,8 @@ public class BankStmtView implements Serializable {
                 .append("colorOvrLimitDays", colorOvrLimitDays)
                 .append("colorChequeReturn", colorChequeReturn)
                 .append("colorTrdChqRetPercent", colorTrdChqRetPercent)
+                .append("netIncomeLastSix", netIncomeLastSix)
+                .append("totalTransaction", totalTransaction)
                 .toString();
     }
 }

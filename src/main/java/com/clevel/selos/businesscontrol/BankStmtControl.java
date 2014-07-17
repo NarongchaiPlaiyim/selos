@@ -569,7 +569,7 @@ public class BankStmtControl extends BusinessControl {
 
     public void updateMainAccAndHighestInflow(List<BankStmtView> bankStmtViewList) {
 
-        if (bankStmtViewList != null) {
+        if (!Util.isNull(bankStmtViewList)) {
             List<BankStmtView> candidateMaxIncomeNetList = new ArrayList<BankStmtView>();
             BigDecimal maxValue = BigDecimal.ZERO;
             long atId = 0;
@@ -580,7 +580,7 @@ public class BankStmtControl extends BusinessControl {
 
             for (int i=0; i<bankStmtViewList.size(); i++) {
                 BankStmtView bankStmtView = bankStmtViewList.get(i);
-
+                log.debug("--toString. {}",bankStmtView.toString());
                 // find MAX AvgGrossInflowPerLimit
                 if (bankStmtView.getAvgGrossInflowPerLimit() != null
                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgGrossInflowPerLimit(), maxAvgGrossInflowPerLimit, ValidationUtil.CompareMode.GREATER_THAN)) {
@@ -594,29 +594,41 @@ public class BankStmtControl extends BusinessControl {
                     continue;
 
                 // find MAX AvgIncomeNet(UW/BDM)
-                if (bankStmtView.getAvgIncomeNetUW() != null) {
-                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
-                        maxValue = bankStmtView.getAvgIncomeNetUW();
+                if (!Util.isNull(bankStmtView.getNetIncomeLastSix())){
+                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getNetIncomeLastSix(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
+                        maxValue = bankStmtView.getNetIncomeLastSix();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
                     }
-                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
-                        candidateMaxIncomeNetList.add(bankStmtView);
-                    }
-                }
-                else if (bankStmtView.getAvgIncomeNetBDM() != null) {
-                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
-                        maxValue = bankStmtView.getAvgIncomeNetBDM();
-                        candidateMaxIncomeNetList.clear();
-                        candidateMaxIncomeNetList.add(bankStmtView);
-                        atId = bankStmtView.getId();
-                    }
-                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
+                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getNetIncomeLastSix(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
                 }
             }
+//                if (bankStmtView.getAvgIncomeNetUW() != null) {
+//                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
+//                        maxValue = bankStmtView.getAvgIncomeNetUW();
+//                        candidateMaxIncomeNetList.clear();
+//                        candidateMaxIncomeNetList.add(bankStmtView);
+//                        atId = bankStmtView.getId();
+//                    }
+//                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetUW(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
+//                        candidateMaxIncomeNetList.add(bankStmtView);
+//                    }
+//                }
+//                else if (bankStmtView.getAvgIncomeNetBDM() != null) {
+//                    if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
+//                        maxValue = bankStmtView.getAvgIncomeNetBDM();
+//                        candidateMaxIncomeNetList.clear();
+//                        candidateMaxIncomeNetList.add(bankStmtView);
+//                        atId = bankStmtView.getId();
+//                    }
+//                    else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgIncomeNetBDM(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
+//                        candidateMaxIncomeNetList.add(bankStmtView);
+//                    }
+//                }
+//            }
 
             // update isHighestInflow
             if (highestBankStmtView != null) {
@@ -732,6 +744,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal sumCreditAmountUW = BigDecimal.ZERO;
         BigDecimal sumDebitAmount = BigDecimal.ZERO;
         BigDecimal sumGrossInflowPerLimit = BigDecimal.ZERO;
+        BigDecimal totalTransaction = BigDecimal.ZERO;
 
         int numMonthNonOvrLmtAmt = 0;
 
@@ -779,6 +792,9 @@ public class BankStmtControl extends BusinessControl {
                 sumCreditAmountUW = Util.add(sumCreditAmountUW, detailView.getCreditAmountUW());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
 //                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+
+                //----------- Total Transaction -----------//
+                totalTransaction = Util.add(totalTransaction, new BigDecimal(detailView.getTotalTransaction()));
             }
 
             sumCreditAmountBDM = null;
@@ -823,6 +839,9 @@ public class BankStmtControl extends BusinessControl {
                 sumCreditAmountBDM = Util.add(sumCreditAmountBDM, detailView.getCreditAmountBDM());
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
 //                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
+
+                //---------- Total Transaction --------//
+                totalTransaction = Util.add(totalTransaction, new BigDecimal(detailView.getTotalTransaction()));
                 log.debug("--GrossInflowPerLimit.{}",detailView.getGrossInflowPerLimit());
             }
 
@@ -958,6 +977,8 @@ public class BankStmtControl extends BusinessControl {
         bankStmtView.setOverLimitDays(BigDecimal.valueOf(maxOvrLmtDaysOfLastSixM));
         bankStmtView.setAvgLimit(limit);
         bankStmtView.setNetIncomeLastSix(sumNetIncomeLastSix);
+        log.debug("---NetIncomeLastSix. {}",bankStmtView.getNetIncomeLastSix());
+        bankStmtView.setTotalTransaction(totalTransaction);
 
         Bank bank = bankDAO.findById(bankStmtView.getBankView().getCode());
         if (bank != null) {

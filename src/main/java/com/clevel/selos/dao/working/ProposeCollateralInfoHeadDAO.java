@@ -24,7 +24,7 @@ public class ProposeCollateralInfoHeadDAO extends GenericDAO<ProposeCollateralIn
     public List<ProposeCollateralInfoHead> findByCollateralProposeTypeRequestAppraisalType(long newCollateralId, RequestAppraisalValue requestAppraisalValue){
         log.info("---- findByCollateralAndProposeType newCollateralId : [{}], requestAppraisal : [{}]", newCollateralId, requestAppraisalValue);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
+        criteria.add(Restrictions.eq("proposeCollateral.id", newCollateralId));
         criteria.add(Restrictions.eq("proposeType", ProposeType.P));
         criteria.add(Restrictions.ne("appraisalRequest", requestAppraisalValue.value()));
         criteria.addOrder(Order.asc("id"));
@@ -64,7 +64,7 @@ public class ProposeCollateralInfoHeadDAO extends GenericDAO<ProposeCollateralIn
         log.info("---- findByNewCollateral NewCollateral.id[{}]", newCollateralId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeCollateral.id", newCollateralId));
-        criteria.add(Restrictions.eq("proposeType", "P"));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.P));
         criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value()));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfoHead> newCollateralHeadDetails = (List<ProposeCollateralInfoHead>) criteria.list();

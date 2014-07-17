@@ -1422,6 +1422,7 @@ public class BRMSControl extends BusinessControl {
                     mandateDocView = new MandateDocView();
                     mandateDocView.setNumberOfDoc(0);
                 }
+                //TODO : mandateDocView.setEcmDocTypeDesc(
 
                 //1. Set ECM Document Type ID
                 mandateDocView.setEcmDocTypeId(documentDetail.getId());

@@ -219,7 +219,9 @@ public class BankStmtTransform extends Transform {
         for (BankStmtSrcOfCollateralProof srcOfCollateralProof : Util.safetyList(bankStatement.getSrcOfCollateralProofList())) {
             srcCollateralProofList.add(getSrcOfCollateralProofView(srcOfCollateralProof));
         }
+        bankStmtView.setNetIncomeLastSix(bankStatement.getNetIncomeLastSix());
         bankStmtView.setSrcOfCollateralProofViewList(srcCollateralProofList);
+        bankStmtView.setTotalTransaction(bankStatement.getTotalTransaction());
         return bankStmtView;
     }
 
@@ -393,6 +395,7 @@ public class BankStmtTransform extends Transform {
             bankStatement.setSrcOfCollateralProofList(srcOfCollateralProofList);*/
             //set parent
             bankStatement.setBankStatementSummary(bankStatementSummary);
+            bankStatement.setTotalTransaction(bankStmtView.getTotalTransaction());
         }
         return bankStatement;
     }
@@ -467,6 +470,7 @@ public class BankStmtTransform extends Transform {
                 srcOfCollateralProofList.add(getSrcOfCollateralProof(srcOfCollateralProofView, bankStatement));
             }
             bankStatement.setSrcOfCollateralProofList(srcOfCollateralProofList);
+            bankStatement.setTotalTransaction(bankStmtView.getTotalTransaction());
         }
         return bankStatement;
     }

@@ -123,6 +123,8 @@ public class ProposeLineControl extends BusinessControl {
     private FeeTransform feeTransform;
     @Inject
     private CollateralBizTransform collateralBizTransform;
+    @Inject
+    private PotentialCollateralTransform potentialCollateralTransform;
 
     @Inject
     private ProductControl productControl;
@@ -1101,7 +1103,7 @@ public class ProposeLineControl extends BusinessControl {
         return returnMapVal;
     }
 
-    public Map<String, Object> onSaveCollateralInfo(ProposeLineView proposeLineView, ProposeCollateralInfoView proposeCollateralInfoView, Hashtable hashSeqCredit, List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList, int mode, int rowIndex) {  //mode 1 = add , 2 edit
+    public Map<String, Object> onSaveCollateralInfo(ProposeLineView proposeLineView, ProposeCollateralInfoView proposeCollateralInfoView, List<PotentialCollateralView> potentialCollateralViewList, List<CollateralTypeView> collateralTypeViewList, Hashtable hashSeqCredit, List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList, int mode, int rowIndex) {  //mode 1 = add , 2 edit
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
         List<ProposeCreditInfoDetailView> proCreInfDetViewList = new ArrayList<ProposeCreditInfoDetailView>();
@@ -1149,17 +1151,37 @@ public class ProposeLineControl extends BusinessControl {
                 for(ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
                     PotentialCollateral potentialCollateral = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getPotentialCollateral().getId())) {
-                        potentialCollateral = potentialCollateralDAO.findById(proposeCollateralInfoHeadView.getPotentialCollateral().getId());
+                        for(PotentialCollateralView pcv : potentialCollateralViewList) {
+                            if(pcv.getId() == proposeCollateralInfoHeadView.getPotentialCollateral().getId()) {
+                                potentialCollateral = new PotentialCollateral();
+                                potentialCollateral.setId(pcv.getId());
+                                potentialCollateral.setName(pcv.getName());
+                                potentialCollateral.setDescription(pcv.getDescription());
+                                break;
+                            }
+                        }
                     }
 
                     TCGCollateralType tcgCollateralType = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getTcgCollateralType().getId())) {
-                        tcgCollateralType = tcgCollateralTypeDAO.findById(proposeCollateralInfoHeadView.getTcgCollateralType().getId());
+                        for(PotentialColToTCGCol p : proposeCollateralInfoHeadView.getPotentialColToTCGColList()) {
+                            if(!Util.isNull(p.getTcgCollateralType()) && p.getTcgCollateralType().getId() == proposeCollateralInfoHeadView.getTcgCollateralType().getId()) {
+                                tcgCollateralType = p.getTcgCollateralType();
+                                break;
+                            }
+                        }
                     }
 
                     CollateralType collateralType = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getHeadCollType().getId())) {
-                        collateralType = collateralTypeDAO.findById(proposeCollateralInfoHeadView.getHeadCollType().getId());
+                        for(CollateralTypeView ctv : collateralTypeViewList) {
+                            if(ctv.getId() == proposeCollateralInfoHeadView.getHeadCollType().getId()) {
+                                collateralType = new CollateralType();
+                                collateralType.setId(ctv.getId());
+                                collateralType.setDescription(ctv.getDescription());
+                                collateralType.setCode(ctv.getCode());
+                            }
+                        }
                     }
 
                     if(!Util.isNull(potentialCollateral)){
@@ -1204,7 +1226,7 @@ public class ProposeLineControl extends BusinessControl {
         return returnMapVal;
     }
 
-    public Map<String, Object> onSaveCollateralInfo(DecisionView decisionView, ProposeCollateralInfoView proposeCollateralInfoView, Hashtable hashSeqCredit, List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList, int mode, int rowIndex) {  //mode 1 = add , 2 edit
+    public Map<String, Object> onSaveCollateralInfo(DecisionView decisionView, ProposeCollateralInfoView proposeCollateralInfoView, List<PotentialCollateralView> potentialCollateralViewList, List<CollateralTypeView> collateralTypeViewList, Hashtable hashSeqCredit, List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList, int mode, int rowIndex) {  //mode 1 = add , 2 edit
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
         List<ProposeCreditInfoDetailView> proCreInfDetViewList = new ArrayList<ProposeCreditInfoDetailView>();
@@ -1252,17 +1274,37 @@ public class ProposeLineControl extends BusinessControl {
                 for(ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
                     PotentialCollateral potentialCollateral = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getPotentialCollateral().getId())) {
-                        potentialCollateral = potentialCollateralDAO.findById(proposeCollateralInfoHeadView.getPotentialCollateral().getId());
+                        for(PotentialCollateralView pcv : potentialCollateralViewList) {
+                            if(pcv.getId() == proposeCollateralInfoHeadView.getPotentialCollateral().getId()) {
+                                potentialCollateral = new PotentialCollateral();
+                                potentialCollateral.setId(pcv.getId());
+                                potentialCollateral.setName(pcv.getName());
+                                potentialCollateral.setDescription(pcv.getDescription());
+                                break;
+                            }
+                        }
                     }
 
                     TCGCollateralType tcgCollateralType = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getTcgCollateralType().getId())) {
-                        tcgCollateralType = tcgCollateralTypeDAO.findById(proposeCollateralInfoHeadView.getTcgCollateralType().getId());
+                        for(PotentialColToTCGCol p : proposeCollateralInfoHeadView.getPotentialColToTCGColList()) {
+                            if(!Util.isNull(p.getTcgCollateralType()) && p.getTcgCollateralType().getId() == proposeCollateralInfoHeadView.getTcgCollateralType().getId()) {
+                                tcgCollateralType = p.getTcgCollateralType();
+                                break;
+                            }
+                        }
                     }
 
                     CollateralType collateralType = null;
                     if(!Util.isZero(proposeCollateralInfoHeadView.getHeadCollType().getId())) {
-                        collateralType = collateralTypeDAO.findById(proposeCollateralInfoHeadView.getHeadCollType().getId());
+                        for(CollateralTypeView ctv : collateralTypeViewList) {
+                            if(ctv.getId() == proposeCollateralInfoHeadView.getHeadCollType().getId()) {
+                                collateralType = new CollateralType();
+                                collateralType.setId(ctv.getId());
+                                collateralType.setDescription(ctv.getDescription());
+                                collateralType.setCode(ctv.getCode());
+                            }
+                        }
                     }
 
                     if(!Util.isNull(potentialCollateral)){
@@ -1307,12 +1349,14 @@ public class ProposeLineControl extends BusinessControl {
         return returnMapVal;
     }
 
-    public Map<String, Object> onSaveSubCollateralInfo(ProposeCollateralInfoView proposeCollateralInfoView, ProposeCollateralInfoSubView proposeCollateralInfoSubView, List<ProposeCollateralInfoSubView> relateWithList, int mode, int rowHeadCollIndex, int rowSubCollIndex) {  //mode 1 = add , 2 edit
+    public Map<String, Object> onSaveSubCollateralInfo(ProposeCollateralInfoView proposeCollateralInfoView, ProposeCollateralInfoSubView proposeCollateralInfoSubView, List<ProposeCollateralInfoSubView> relateWithList, List<SubCollateralType> subCollateralTypeList, int mode, int rowHeadCollIndex, int rowSubCollIndex) {  //mode 1 = add , 2 edit
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
-        SubCollateralType subCollateralType = subCollateralTypeDAO.findById(proposeCollateralInfoSubView.getSubCollateralType().getId());
-        if(!Util.isNull(subCollateralType)) {
-            proposeCollateralInfoSubView.setSubCollateralType(subCollateralType);
+        for(SubCollateralType subCollateralType : subCollateralTypeList) {
+            if(subCollateralType.getId() == proposeCollateralInfoSubView.getSubCollateralType().getId()) {
+                proposeCollateralInfoSubView.setSubCollateralType(subCollateralType);
+                break;
+            }
         }
 
         if(!Util.isNull(proposeCollateralInfoView)){
