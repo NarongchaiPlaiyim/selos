@@ -233,10 +233,10 @@ public class CreditFacExisting extends BaseController {
                 isUsePCE = false;
 
                 guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
-//                CustomerInfoView customerInfoView = new CustomerInfoView();
-//                customerInfoView.setId(-1);
-//                customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
-//                guarantorList.add(customerInfoView);
+                CustomerInfoView customerInfoView = new CustomerInfoView();
+                customerInfoView.setId(-1);
+                customerInfoView.setFirstNameTh(msg.get("app.select.tcg"));
+                guarantorList.add(customerInfoView);
 
                 existAccountStatusView = new BankAccountStatusView();
                 existProductProgramView = new ProductProgramView();

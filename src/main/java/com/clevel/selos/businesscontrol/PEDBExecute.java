@@ -1254,12 +1254,13 @@ public class PEDBExecute extends BusinessControl
 
                     if(completedCasesWKItems.getCreateBy()!=null)
                     {
-                        if(userDAO.findByUserName(completedCasesWKItems.getCreateBy()) != null)
+                        User user = userDAO.findById(completedCasesWKItems.getCreateBy());
+                        if(user != null)
                         {
                             log.info("Create By : {}",completedCasesWKItems.getCreateBy());
-                            if( userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam() != null )
+                            if( user.getTeam() != null )
                             {
-                                peInbox.setAtuserteam(userTeamDAO.teamNameById(userDAO.findByUserName(completedCasesWKItems.getCreateBy()).getTeam().getId()));
+                                peInbox.setAtuserteam(userTeamDAO.teamNameById(user.getTeam().getId()));
                             }
 
                         }
