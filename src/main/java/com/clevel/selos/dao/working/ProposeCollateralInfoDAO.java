@@ -31,6 +31,15 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         return proposeCollateralInfoList;
     }
 
+    public List<ProposeCollateralInfo> findNewCollateralByProposeLineId(final long proposeLineId) {
+        log.info("-- findNewCollateralByProposeLineId(ProposeLine.id[{}])", proposeLineId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("proposeLine.id", proposeLineId));
+        criteria.addOrder(Order.asc("id"));
+        List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
+        return proposeCollateralInfoList;
+    }
+
     public List<ProposeCollateralInfo> findNewCollateral(long workCaseId, ProposeType proposeType){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
@@ -67,7 +76,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
 
     public boolean isExist(final long id) {
         boolean result;
-        log.debug("-- isExist NewCollateral.id[{}]", id);
+        log.debug("-- isExist ProposeCollateralInfo.id[{}]", id);
         result = isRecordExist(Restrictions.eq("id", id));
         log.debug("-- Result[{}]", result);
         return result;
@@ -93,5 +102,12 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
         return newCollateralDetailList;
+    }
+
+    public void persistAR2PTA(final ProposeCollateralInfo proposeCollateralInfo){
+        log.info("-- persistAR2PTA(ProposeCollateralInfo.id[{}])", proposeCollateralInfo.getId());
+        proposeCollateralInfo.setAppraisalRequest(2);
+        proposeCollateralInfo.setProposeType(ProposeType.A);
+        persist(proposeCollateralInfo);
     }
  }
