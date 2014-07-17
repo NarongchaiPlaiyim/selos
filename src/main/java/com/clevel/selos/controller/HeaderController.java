@@ -1984,6 +1984,7 @@ public class HeaderController extends BaseController {
         boolean success = false;
         HttpSession session = FacesUtil.getSession(false);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        log.debug("onCheckCriteria : workCaseId : {}", workCaseId);
         if(workCaseId != 0){
             try{
                 mandateFieldMessageViewList = null;
