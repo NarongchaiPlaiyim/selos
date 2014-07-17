@@ -355,7 +355,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
     }
 
-    public String getUserIdByName(String userName)
+    /*public String getUserIdByName(String userName)
     {
 
         Criteria criteria1 = getSession().createCriteria(User.class);
@@ -376,7 +376,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
         return userId;
 
-    }
+    }*/
 
     public List<String> getUsers(int teamid)
     {
@@ -386,7 +386,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
             Criteria criteria1 = getSession().createCriteria(User.class);
 
-            criteria1.setProjection(Projections.projectionList().add(Projections.property("userName"), "userName"));
+            criteria1.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
 
             criteria1.add(Restrictions.eq("team.id", teamid)).setResultTransformer(Transformers.aliasToBean(User.class));
 
@@ -400,11 +400,11 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                 user = (User)iterator1.next();
 
-                String username = user.getUserName();
+                String userId = user.getId();
 
-                log.info("username is :::: {}",username);
+                log.info("userId is :::: {}",userId);
 
-                matchedusernames.add(username);
+                matchedusernames.add(userId);
             }
 
             Criteria criteria2 = getSession().createCriteria(RelTeamUserDetails.class);
@@ -427,7 +427,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                 Criteria criteria3 = getSession().createCriteria(User.class);
 
-                criteria3.setProjection(Projections.projectionList().add(Projections.property("userName"),"userName")) ;
+                criteria3.setProjection(Projections.projectionList().add(Projections.property("id"),"id")) ;
 
                 criteria3.add(Restrictions.eq("team.id",teamleadid)).setResultTransformer(Transformers.aliasToBean(User.class));
 
@@ -443,7 +443,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                     user1 = (User)iterator3.next();
 
-                    String teamleadname = user1.getUserName();
+                    String teamleadname = user1.getId();
 
                     log.info("teamlead name is commented place is ::::::{}",teamleadname);
 
@@ -765,7 +765,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
             Criteria criteria1 = getSession().createCriteria(User.class);
 
-            criteria1.setProjection(Projections.projectionList().add(Projections.property("userName"), "userName"));
+            criteria1.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
 
             criteria1.add(Restrictions.eq("team.id", teamnameid)).setResultTransformer(Transformers.aliasToBean(User.class));
 
@@ -779,9 +779,9 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                 user = (User)iterator1.next();
 
-                String username = user.getUserName();
+                String userId = user.getId();
 
-                popUpMatchUserNames.add(username);
+                popUpMatchUserNames.add(userId);
             }
 
             Criteria criteria2 = getSession().createCriteria(RelTeamUserDetails.class);
@@ -804,7 +804,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                 Criteria criteria3 = getSession().createCriteria(User.class);
 
-                criteria3.setProjection(Projections.projectionList().add(Projections.property("userName"),"userName")) ;
+                criteria3.setProjection(Projections.projectionList().add(Projections.property("id"),"id")) ;
 
                 criteria3.add(Restrictions.eq("team.id",teamleadid)).setResultTransformer(Transformers.aliasToBean(User.class));
 
@@ -818,7 +818,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                     user1 = (User)iterator3.next();
 
-                    String teamleadname = user1.getUserName();
+                    String teamleadname = user1.getId();
 
                     popUpMatchUserNames.add(teamleadname);
                 }

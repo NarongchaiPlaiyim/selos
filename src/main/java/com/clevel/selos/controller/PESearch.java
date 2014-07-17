@@ -192,7 +192,7 @@ public class PESearch implements Serializable
 
             userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             log.debug("userDetails  : {}", userDetail);
-            User user = userDAO.findByUserName(userDetail.getUserName());
+            User user = userDAO.findById(userDetail.getUserName());
 
             long stepId = Util.parseLong(searchViewSelectItem.getStepId(), 0);
             long statusId = Util.parseLong(searchViewSelectItem.getStatuscode(), 0);
