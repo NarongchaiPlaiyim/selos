@@ -15,7 +15,7 @@
             <td class="title">Reason Code :</td>
             <td>
                 <p:selectOneMenu id="creditTypeName" value="#{headerController.returnReasonId}"
-                                 size="1" style="max-width: 200px; width: 200px; min-width: 200px;" required="true">
+                                 size="1" style="max-width: 200px; width: 200px; min-width: 200px;" required="#{not empty param[btnReturnBDM.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.reasonList}"
                                    var="reasonItem"
@@ -33,6 +33,7 @@
         <tr>
             <td colspan="2" class="center">
                 <p:commandButton
+                        binding="#{btnReturnBDM}"
                         value="Submit"
                         styleClass="small"
                         actionListener="#{headerController.onReturnToMaker()}"
