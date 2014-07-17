@@ -6,9 +6,12 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ApprovalHistoryView;
+import com.clevel.selos.model.view.RoleView;
+import com.clevel.selos.model.view.UserView;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -99,8 +102,24 @@ public class ApprovalHistoryTransform extends Transform {
         }
         approvalHistoryView.setId(approvalHistory.getId());
         approvalHistoryView.setStepView(stepTransform.transformToView(approvalHistory.getStep()));
+        RoleView roleView = roleTransform.transformRoleToView(approvalHistory.getRole());
+        if(roleView.getId() == RoleValue.ABDM.id()){
+            approvalHistoryView.setAction("Written");
+        }else if(roleView.getId() == RoleValue.BDM.id()){
+            approvalHistoryView.setAction("Produced");
+        }else if(roleView.getId() == RoleValue.ZM.id()){
+            approvalHistoryView.setAction("Endorse CA");
+        }else if(roleView.getId() == RoleValue.RGM.id()){
+            approvalHistoryView.setAction("Endorse CA");
+        }else if(roleView.getId() == RoleValue.GH.id()){
+            approvalHistoryView.setAction("Endorse CA");
+        }else if(roleView.getId() == RoleValue.CSSO.id()){
+            approvalHistoryView.setAction("Endorse CA");
+        }else if(roleView.getId() == RoleValue.UW.id()){
+            approvalHistoryView.setAction("Approve CA");
+        }
         approvalHistoryView.setUserView(userTransform.transformToView(approvalHistory.getUser()));
-        approvalHistoryView.setRoleView(roleTransform.transformRoleToView(approvalHistory.getRole()));
+        approvalHistoryView.setRoleView(roleView);
         approvalHistoryView.setSubmitDate(approvalHistory.getSubmitDate());
         approvalHistoryView.setComments(approvalHistory.getComments());
         approvalHistoryView.setUwDecision(approvalHistory.getApproveDecision() == 1 ? DecisionType.APPROVED : DecisionType.REJECTED);

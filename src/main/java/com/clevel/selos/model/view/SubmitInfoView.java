@@ -17,6 +17,7 @@ public class SubmitInfoView implements Serializable {
     private Step step;
     private Status status;
     private String remark;
+    private String reason;
     private User fromUser;
     private User toUser;
     private Date submitDate;
@@ -96,6 +97,14 @@ public class SubmitInfoView implements Serializable {
 
     public void setSubmitType(int submitType) {
         this.submitType = submitType;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     @Override

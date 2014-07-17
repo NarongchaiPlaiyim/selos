@@ -136,6 +136,10 @@
                 SUBMITTING CASE<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
+            <p:blockUI block="pnl_maincontainer" widgetVar="blockUI">
+                LOADING<br/>
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </p:panel>
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
@@ -162,11 +166,6 @@
                                  oncomplete="msgBoxRedirectDlg.hide()" />
             </p:confirmDialog>
         </p:panel>
-        <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
-                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-                  modal="true" width="380" height="150">
-            <ui:include src="dialog/prescreenReturnDialog.xhtml"/>
-        </p:dialog>
     </h:body>
 </f:view>
 </html>

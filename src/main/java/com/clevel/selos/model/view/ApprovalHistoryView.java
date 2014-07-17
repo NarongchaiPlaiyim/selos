@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class ApprovalHistoryView implements Serializable {
     private long id;
+    private String action;
     private StepView stepView;
     private UserView userView;
     private RoleView roleView;
@@ -24,6 +25,7 @@ public class ApprovalHistoryView implements Serializable {
     }
 
     public void reset() {
+        this.action = "";
         this.stepView = new StepView();
         this.userView = new UserView();
         this.roleView = new RoleView();
@@ -38,6 +40,14 @@ public class ApprovalHistoryView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 
     public StepView getStepView() {

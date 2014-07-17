@@ -10,15 +10,15 @@
         <table class="content_form">
             <tr>
                 <td class="title" style="width:110px;">Return to :</td>
-                <td><h:outputText value="#{prescreenChecker.bdmMakerName}"/></td>
+                <td><h:outputText value="#{headerController.userName}"/></td>
             </tr>
             <tr>
                 <td class="title">Reason Code :</td>
                 <td>
-                    <p:selectOneMenu id="creditTypeName" value="#{prescreenChecker.returnReason.id}"
+                    <p:selectOneMenu id="creditTypeName" value="#{headerController.returnReasonId}"
                                      size="1" style="max-width: 200px; width: 200px; min-width: 200px;" required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{prescreenChecker.reasonList}"
+                        <f:selectItems value="#{headerController.reasonList}"
                                        var="reasonItem"
                                        itemLabel="#{reasonItem.description}"
                                        itemValue="#{reasonItem.id}"/>
@@ -28,7 +28,7 @@
             <tr>
                 <td class="title top">Remark :</td>
                 <td>
-                    <p:inputTextarea cols="30" row="5" value="#{prescreenChecker.remark}"></p:inputTextarea>
+                    <p:inputTextarea cols="30" row="5" value="#{headerController.returnRemark}"></p:inputTextarea>
                 </td>
             </tr>
             <tr>
@@ -36,13 +36,13 @@
                     <p:commandButton
                             value="Submit"
                             styleClass="small"
-                            actionListener="#{prescreenChecker.onSubmitReturnToMaker}"
+                            actionListener="#{headerController.onReturnToMaker()}"
                             process="@form"
-                            update=":returnMakerDlgForm :msgBoxSystemMessagePanel :msgBoxRedirectPanel"
-                            oncomplete="handleReturnMakerDialogRequest(xhr, status, args)"/>
-                    <p:commandButton type="button" value="Cancel" styleClass="small" onclick="returnMakerDlg.hide()"
-                                     update=":returnMakerDlgForm">
-                        <p:resetInput target=":returnMakerDlgForm"/>
+                            update=":frmMain:returnMakerPanel :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                            oncomplete="handleDialogRequest(xhr, status, args, 'returnMakerDlg')"/>
+                    <p:commandButton type="button" value="Cancel" styleClass="small" onclick="PF('returnMakerDlg').hide()"
+                                     update=":frmMain:returnMakerPanel">
+                        <p:resetInput target=":frmMain:returnMakerDlgForm"/>
                     </p:commandButton>
                 </td>
             </tr>

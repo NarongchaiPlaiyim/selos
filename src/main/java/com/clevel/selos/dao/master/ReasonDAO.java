@@ -34,6 +34,21 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         return list;
     }
 
+    public List<Reason> getReasonByStepAction(long stepId, long actionId){
+        log.debug("getList. (stepId: {}, actionId: {})", stepId, actionId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("active", 1));
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("action.id", actionId));
+        criteria.addOrder(Order.asc("id"));
+
+        List<Reason> list = criteria.list();
+        log.debug("getList. (result size: {})", list!=null?null:list.size());
+
+        return list;
+    }
+
     public List<Reason> getCancelList() {
         log.debug("getCancelList");
 
@@ -119,6 +134,22 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         List<Reason> list = criteria.list();
         log.debug("getAppealReasonList. (result size: {})", list.size());
         return list;
+    }
+
+    public int getBRMSReasonId(){
+        int reasonId = 0;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("active", 1));
+        criteria.add(Restrictions.eq("code", "B001"));
+        criteria.addOrder(Order.desc("id"));
+
+        List<Reason> list = criteria.list();
+
+        if(list != null && list.size() > 0) {
+            reasonId = list.get(0).getId();
+        }
+
+        return reasonId;
     }
 
     public List<Reason> getResubmitReasonList()

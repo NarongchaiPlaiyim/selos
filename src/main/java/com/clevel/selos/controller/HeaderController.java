@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.relation.ReasonToStepDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -55,6 +56,8 @@ public class HeaderController extends BaseController {
     BasicInfoDAO basicInfoDAO;
     @Inject
     ReasonDAO reasonDAO;
+    @Inject
+    ReasonToStepDAO reasonToStepDAO;
     @Inject
     UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
     @Inject
@@ -181,6 +184,7 @@ public class HeaderController extends BaseController {
 
     private String messageHeader;
     private String message;
+
     private List<MandateFieldMessageView> mandateFieldMessageViewList;
 
     //UW submit dialog
@@ -222,6 +226,12 @@ public class HeaderController extends BaseController {
     private int timesOfPreScreenCheck;
 
     private int requestAppraisalRequire;
+
+    //Return User Name
+    private String userName;
+
+    //Cancel CA
+    private int cancelReasonId;
 
     public HeaderController() {
     }
@@ -436,9 +446,27 @@ public class HeaderController extends BaseController {
     //---------- Function for Cancel CA -----------//
     public void onOpenCancelCA(){
         log.debug("onOpenCancelCA ::: starting...");
+        _loadSessionVariable();
         cancelRemark = "";
         reasonId = 0;
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        //Check BRMS Result
+        UWRuleResultSummary uwRuleResultSummary = null;
+
+        if(workCasePreScreenId != 0)
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+        else if(workCaseId != 0)
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+
+        if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
+            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
+                reasonList = reasonToStepDAO.getRejectReason(stepId);
+                reasonId = reasonDAO.getBRMSReasonId();
+            }
+        } else {
+            reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
+            reasonId = 0;
+        }
+
         log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());
     }
 
@@ -447,7 +475,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            fullApplicationControl.cancelCAFullApp(queueName, wobNumber, reasonId, cancelRemark);
+            fullApplicationControl.cancelCA(queueName, wobNumber, reasonId, cancelRemark);
             messageHeader =  msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.cancel.success");
             showMessageRedirect();
@@ -2025,6 +2053,50 @@ public class HeaderController extends BaseController {
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
+    //----- Function for Return ---------//
+    public void onOpenReturnToMaker(){
+        _loadSessionVariable();
+        returnReasonId = 0;
+        returnRemark = "";
+        reasonList = new ArrayList<Reason>();
+        //reasonList = reasonDAO.getReasonByStepAction(stepId, ActionCode.RETURN_TO_BDM.getVal());
+        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
+
+        if(reasonList == null){
+            log.debug("onOpenReturnToMaker : reasonList : {}", reasonList);
+            reasonList = new ArrayList<Reason>();
+        }
+
+        userName = prescreenBusinessControl.getBDMMakerName(workCasePreScreenId);
+
+        RequestContext.getCurrentInstance().execute("returnMakerDlg.show()");
+    }
+
+    public void onReturnToMaker(){
+        log.debug("onReturnToMaker ::: starting...");
+        boolean complete;
+        try{
+            if(returnReasonId != 0 && !Integer.toString(returnReasonId).equals("")){
+                prescreenBusinessControl.returnBDM(workCasePreScreenId, queueName, ActionCode.RETURN_TO_BDM.getVal());
+                messageHeader = "Information.";
+                message = "Return to BDM Maker success. Click 'OK' return to inbox.";
+                complete = true;
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+                log.debug("onReturnToMaker ::: success...");
+            } else {
+                complete = false;
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Return to BDM Maker failed. " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            log.error("onReturnToMaker ::: error... : ", ex);
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
+        }
+    }
+    //----- End function for Return -------//
+
     //---- Function for Request Appraisal ( Parallel ) ----//
     public void onRequestParallelAppraisal(){
         HttpSession session = FacesUtil.getSession(false);
@@ -2691,5 +2763,13 @@ public class HeaderController extends BaseController {
 
     public void setSubmitToZM(boolean isSubmitToZM) {
         this.isSubmitToZM = isSubmitToZM;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
