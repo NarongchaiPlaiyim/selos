@@ -44,7 +44,7 @@ public class ProposeCollateralInfoRelationDAO extends GenericDAO<ProposeCollater
     }
 
     public List<ProposeCollateralInfoRelation> findByNewCollateralId(final long newCollateralId) {
-        log.info("-- findByNewCollateral NewCollateral.id[{}]", newCollateralId);
+        log.info("-- findByNewCollateralId NewCollateral.id[{}]", newCollateralId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeCollateral.id", newCollateralId));
         criteria.addOrder(Order.asc("id"));

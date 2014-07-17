@@ -80,4 +80,11 @@ public class ProposeCollateralInfoHeadDAO extends GenericDAO<ProposeCollateralIn
         log.info("newCollateralHeadDetails ::: size : {}", newCollateralHeadDetails.size());
         return newCollateralHeadDetails;
     }*/
+
+    public void persistAR2PTA(final ProposeCollateralInfoHead proposeCollateralInfoHead){
+        log.info("-- persistAR2PTA(ProposeCollateralInfoHead.id[{}])", proposeCollateralInfoHead.getId());
+        proposeCollateralInfoHead.setAppraisalRequest(2);
+        proposeCollateralInfoHead.setProposeType(ProposeType.A);
+        persist(proposeCollateralInfoHead);
+    }
 }
