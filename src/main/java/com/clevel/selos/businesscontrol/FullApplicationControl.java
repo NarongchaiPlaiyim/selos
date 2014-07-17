@@ -12,6 +12,7 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.history.SubmitInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -86,6 +87,8 @@ public class FullApplicationControl extends BusinessControl {
     private BasicInfoDAO basicInfoDAO;
     @Inject
     private StepDAO stepDAO;
+    @Inject
+    private StatusDAO statusDAO;
     @Inject
     private RelTeamUserDetailsDAO relTeamUserDetailsDAO;
     @Inject
@@ -1150,7 +1153,8 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_APPRAISAL.getVal(), getReasonDescription(reasonId), remark);
     }
 
-    public void cancelCAFullApp(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
+    public void cancelCA(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
+        log.info("Cancel CA - queueName : {}, wobNumber : {}, reasonId : {}, remark : {}", queueName, wobNumber, reasonId, remark);
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), getReasonDescription(reasonId), remark);
     }
 
@@ -1500,5 +1504,18 @@ public class FullApplicationControl extends BusinessControl {
         }
 
         return user;
+    }
+
+    public void addSubmitHistoryInfo(String appNumber, long stepId, long statusId, int reasonId, String remark, String toUserId, SubmitType submitType){
+        SubmitInfoHistory submitInfoHistory = new SubmitInfoHistory();
+        submitInfoHistory.setAppNumber(appNumber);
+        submitInfoHistory.setStep(stepId!=0?stepDAO.findById(stepId):null);
+        submitInfoHistory.setStatus(statusId!=0?statusDAO.findById(statusId):null);
+        submitInfoHistory.setReason(reasonId!=0?reasonDAO.findById(reasonId):null);
+        submitInfoHistory.setRemark(remark);
+        submitInfoHistory.setFromUser(getCurrentUser());
+        submitInfoHistory.setToUser(!toUserId.equalsIgnoreCase("")?userDAO.findById(toUserId):null);
+        submitInfoHistory.setSubmitDate(new Date());
+        submitInfoHistory.setSubmitType(submitType.value());
     }
 }

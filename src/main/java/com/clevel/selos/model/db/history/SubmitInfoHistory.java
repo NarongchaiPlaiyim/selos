@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.history;
 
+import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
@@ -28,6 +29,10 @@ public class SubmitInfoHistory implements Serializable {
     @OneToOne
     @JoinColumn(name = "status_id")
     private Status status;
+
+    @OneToOne
+    @JoinColumn(name = "reason_id")
+    private Reason reason;
 
     @Column(name = "remark")
     private String remark;
@@ -121,5 +126,13 @@ public class SubmitInfoHistory implements Serializable {
 
     public void setSubmitType(int submitType) {
         this.submitType = submitType;
+    }
+
+    public Reason getReason() {
+        return reason;
+    }
+
+    public void setReason(Reason reason) {
+        this.reason = reason;
     }
 }

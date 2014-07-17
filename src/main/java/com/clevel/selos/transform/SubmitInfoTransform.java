@@ -39,6 +39,8 @@ public class SubmitInfoTransform extends Transform {
         submitInfoHistory.setToUser((submitInfoView.getToUser() != null && !Util.isEmpty(submitInfoView.getToUser().getId())) ? userDAO.findById(submitInfoView.getToUser().getId()) : null);
         submitInfoHistory.setSubmitDate(new Date());
         submitInfoHistory.setSubmitType(submitInfoView.getSubmitType());
+        submitInfoHistory.setRemark(submitInfoView.getRemark());
+        //submitInfoHistory.setReason(submitInfoView.getReason());
 
         return submitInfoHistory;
     }
@@ -54,6 +56,7 @@ public class SubmitInfoTransform extends Transform {
         submitInfoView.setToUser(submitInfoHistory.getToUser());
         submitInfoView.setSubmitDate(submitInfoHistory.getSubmitDate());
         submitInfoView.setSubmitType(submitInfoHistory.getSubmitType());
+        //submitInfoView.setReason(submitInfoHistory.getReason());
 
         return submitInfoView;
     }
