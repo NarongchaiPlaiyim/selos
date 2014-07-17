@@ -219,6 +219,7 @@ public class BankStmtTransform extends Transform {
         for (BankStmtSrcOfCollateralProof srcOfCollateralProof : Util.safetyList(bankStatement.getSrcOfCollateralProofList())) {
             srcCollateralProofList.add(getSrcOfCollateralProofView(srcOfCollateralProof));
         }
+        bankStmtView.setNetIncomeLastSix(bankStatement.getNetIncomeLastSix());
         bankStmtView.setSrcOfCollateralProofViewList(srcCollateralProofList);
         bankStmtView.setTotalTransaction(bankStatement.getTotalTransaction());
         return bankStmtView;
