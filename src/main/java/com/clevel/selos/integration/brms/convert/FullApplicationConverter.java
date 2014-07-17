@@ -206,13 +206,13 @@ public class FullApplicationConverter extends Converter{
             borrowerAttributeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_ID, customerInfo.getSpousePersonalID()));
             borrowerAttributeList.add(getAttributeType(BRMSFieldAttributes.SPOUSE_RELATIONSHIP_TYPE, customerInfo.getSpouseRelationType()));
 
-            if(customerInfo.isIndividual()){
-                IndividualType individualType = new IndividualType();
-                individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
-                individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
-                individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
-                borrowerType.setIndividual(individualType);
-            }
+
+            IndividualType individualType = new IndividualType();
+            individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
+            individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
+            individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
+            borrowerType.setIndividual(individualType);
+
 
             //7. Convert Acc/TMB Acc information//
             List<BRMSTMBAccountInfo> brmsTMBAccountInfoList = customerInfo.getTmbAccountInfoList();
