@@ -1581,6 +1581,10 @@ public class ProposeLineTransform extends Transform {
         ProposeLine proposeLine = null;
         if(!Util.isNull(decisionView)){
             proposeLine = proposeLineDAO.findByWorkCaseId(workCase.getId());
+            if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
+                proposeLine.setCreateDate(new Date());
+                proposeLine.setCreateBy(user);
+            }
             proposeLine.setModifyDate(new Date());
             proposeLine.setModifyBy(user);
 
