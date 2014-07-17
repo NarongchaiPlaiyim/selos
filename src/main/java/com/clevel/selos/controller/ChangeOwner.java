@@ -402,9 +402,29 @@ public class ChangeOwner implements Serializable {
         teamNamesForChangeOwerTo =new ArrayList<ChangeOwnerView>();
         teamNamesForChangeOwerTo = userDAO.getTeamUserForChangeOwner(teamId);
 
+        if(userTeamDAO.findById(teamId).getTeam_type()== 2 && teamNamesForChangeOwerTo.size()==1)
+        {
+            selectTeamNameChangeOwner = teamNamesForChangeOwerTo.get(0).getId();
+            selectTeam =selectTeamNameChangeOwner;
+
+            rolSet = userDAO.getRoleList(Integer.parseInt(selectTeam), Integer.parseInt(selectTeam));
+        }
+
         log.info("teamTypeName::::" + teamTypeName);
 
+    }
 
+    public void resetFields()
+    {
+        if(userTeamDAO.findById(teamId).getTeam_type()== 2 && teamNamesForChangeOwerTo.size()==1)
+        {
+            selectUserChangeOwner = "";
+        }
+        else
+        {
+            selectTeamNameChangeOwner="";
+            selectUserChangeOwner = "";
+        }
     }
 
     public List<ChangeOwnerView> getRoleNameForSelectedTeam(ValueChangeEvent event)
@@ -449,10 +469,13 @@ public class ChangeOwner implements Serializable {
                 while (it.hasNext())
                 {
                     User user1= new User();
-                    user1.setUserName(it.next());
-                    user1.setId(userDAO.getUserIdByName(user1.getUserName()));
+
+                    user1.setId(it.next());
+                    user1.setUserName(userDAO.findById(user1.getId()).getUserName());
                     usersIdNameList.add(user1);
                 }
+
+                usersIdNameList1 = usersIdNameList;
 
             }
 
@@ -534,8 +557,8 @@ public class ChangeOwner implements Serializable {
             while (it.hasNext())
             {
                 User user1= new User();
-                user1.setUserName(it.next());
-                user1.setId(userDAO.getUserIdByName(user1.getUserName()));
+                user1.setId(it.next());
+                user1.setUserName(userDAO.findById(user1.getId()).getUserName());
                 usersIdNameList1.add(user1);
             }
             log.info("userNamesForChangeOwnerList:::::::::::"+userNamesForChangeOwnerList);
@@ -631,6 +654,8 @@ public class ChangeOwner implements Serializable {
             remark = "";
 
             setRemark("");
+
+            disableReassign = true;
 
             RequestContext.getCurrentInstance().execute("successDlg.show()");
 
@@ -733,86 +758,6 @@ public class ChangeOwner implements Serializable {
                 message = "Can not find landing page for step [" + stepId + "]";
                 RequestContext.getCurrentInstance().execute("msgBoxErrorDlg3.show()");
             }
-
-           /* if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
-                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-                if(workCasePrescreen != null){
-                    wrkCasePreScreenId = workCasePrescreen.getId();
-                    requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    statusId = workCasePrescreen.getStatus().getId();
-                }
-                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-                session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNumber",rosterViewSelectItem.getF_WobNum());
-            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
-                WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-                if(workCase != null){
-                    wrkCaseId = workCase.getId();
-                    requestAppraisalFlag = workCase.getRequestAppraisal();
-                    session.setAttribute("workCaseId", wrkCaseId);
-                    session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                } else {
-                    WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-                    wrkCasePreScreenId = workCasePrescreen.getId();
-                    requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-                    session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                }
-                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-                if(workCaseAppraisal != null){
-                    statusId = workCaseAppraisal.getStatus().getId();
-                    wrkCaseAppraisalId = workCaseAppraisal.getId();
-                    session.setAttribute("statusId", statusId);
-                    session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
-                }
-            } else {        //For Case in Stage FullApplication
-                WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-                if(workCase != null){
-                    wrkCaseId = workCase.getId();
-                    requestAppraisalFlag = workCase.getRequestAppraisal();
-                    statusId = workCase.getStatus().getId();
-                }
-                session.setAttribute("workCaseId", wrkCaseId);
-                session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                session.setAttribute("statusId", statusId);
-                session.setAttribute("wobNumber",rosterViewSelectItem.getF_WobNum());
-            }
-
-            if(Util.isNull(rosterViewSelectItem.getFetchType())) {
-                session.setAttribute("fetchType",0);
-            } else {
-                session.setAttribute("fetchType",rosterViewSelectItem.getFetchType());
-            }
-
-            if(stepId != 0){
-                Step step = stepDAO.findById(stepId);
-                stageId = step != null ? step.getStage().getId() : 0;
-            }
-
-            session.setAttribute("stepId", stepId);
-            session.setAttribute("stageId", stageId);
-            session.setAttribute("caseOwner",rosterViewSelectItem.getAtUser());
-
-            if(Util.isNull(queueName)) {
-                session.setAttribute("queueName", "0");
-            } else {
-                session.setAttribute("queueName", queueName);
-            }
-
-            AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, rosterViewSelectItem.getAppNumber());
-            session.setAttribute("appHeaderInfo", appHeaderView);
-
-            String landingPage = inboxControl.getLandingPage(stepId,0);
-
-            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
-
-            if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-                FacesUtil.redirect(landingPage);
-                return;
-            } else {
-                //TODO Show dialog
-            }*/
 
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, wobNumber : {}",queueName, rosterViewSelectItem.getFwobnumber(), e);

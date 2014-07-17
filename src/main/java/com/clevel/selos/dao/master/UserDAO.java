@@ -173,7 +173,7 @@ public class UserDAO extends GenericDAO<User,String> {
 
     }
 
-    public String getUserIdByName(String userName)
+    /*public String getUserIdByName(String userName)
     {
 
         Criteria criteria1 = getSession().createCriteria(User.class);
@@ -194,13 +194,14 @@ public class UserDAO extends GenericDAO<User,String> {
 
         return userId;
 
-    }
+    }*/
 
     public User findByUserName(String userName) {
 
         //log.debug("findByUserName. (userName: {})",userName);
         return findOneByCriteria(Restrictions.eq("userName",userName));
     }
+
     public List<User> findBDMChecker(User user){
         //log.debug("findBDMChecker. BDM Maker : {}", user);
 
@@ -524,11 +525,10 @@ public class UserDAO extends GenericDAO<User,String> {
         int selectRoleId = Integer.parseInt(selectedRoleId);
 
         try {
-
-
+            log.debug("In getUserNames: team id:{},roleid:{}",selectedTeamId,selectedRoleId);
 
             Criteria criteria1 = getSession().createCriteria(User.class);
-            criteria1.setProjection(Projections.projectionList().add(Projections.property("userName"), "userName"));
+            criteria1.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
             criteria1.add(Restrictions.eq("team.id", selectedTeamId)).add(Restrictions.eq("role.id",selectRoleId)).setResultTransformer(Transformers.aliasToBean(User.class));
             List usernamebasedteamid = criteria1.list();
             Iterator iterator1 = usernamebasedteamid.iterator();
@@ -536,8 +536,8 @@ public class UserDAO extends GenericDAO<User,String> {
             {
                 User user = new User();
                 user = (User)iterator1.next();
-                String username = user.getUserName();
-                listOfAllUsers.add(username);
+                String userId = user.getId();
+                listOfAllUsers.add(userId);
                 user = null;
             }
 
@@ -553,7 +553,7 @@ public class UserDAO extends GenericDAO<User,String> {
                 relTeamUserDetails = (RelTeamUserDetails)iterator2.next();
                 int teamleadid = relTeamUserDetails.getTlThId();
                 Criteria criteria3 = getSession().createCriteria(User.class);
-                criteria3.setProjection(Projections.projectionList().add(Projections.property("userName"),"userName")) ;
+                criteria3.setProjection(Projections.projectionList().add(Projections.property("id"),"id")) ;
                 criteria3.add(Restrictions.eq("team.id",teamleadid)).add(Restrictions.eq("role.id", selectRoleId)).setResultTransformer(Transformers.aliasToBean(User.class));
                 List teamLeadUsersList = criteria3.list();
 
@@ -562,14 +562,14 @@ public class UserDAO extends GenericDAO<User,String> {
                 {
                     User user1 = new User();
                     user1 = (User)iterator3.next();
-                    String teamleadname = user1.getUserName();
+                    String teamleadname = user1.getId();
                     listOfAllUsers.add(teamleadname);
                     user1 = null;
                 }
                 relTeamUserDetails= null;
             }
             userTeam = null;
-
+            log.debug("All Users :{}",listOfAllUsers.toString());
         }
         catch (Exception exeception)
         {
@@ -611,12 +611,37 @@ public class UserDAO extends GenericDAO<User,String> {
         try {
 
 
-            if (selectUserName.equalsIgnoreCase("All") && userList != null) {
-                Criteria criteriaForId = getSession().createCriteria(User.class)
-                        .setProjection(Projections.projectionList()
-                                .add(Projections.property("id"), "id"))
-                        .add(Restrictions.in("userName", userList))
-                        .setResultTransformer(Transformers.aliasToBean(User.class));
+            if (selectUserName.equalsIgnoreCase("All") && userList != null)
+            {
+                /*Criteria criteriaForId = getSession().createCriteria(User.class)
+                                                     .setProjection(Projections.projectionList()
+                                                     .add(Projections.property("id"), "id"))
+                                                     .add(Restrictions.in("userName", userList))
+                                                     .setResultTransformer(Transformers.aliasToBean(User.class));
+
+                usersIdsList = criteriaForId.list();
+
+                Iterator iterator = usersIdsList.iterator();
+
+                while (iterator.hasNext())
+                {
+                    User user = new User();
+                    user = (User) iterator.next();
+                    userId = user.getId();
+                    uIdsList.add(userId);
+                    user = null;
+                }*/
+                uIdsList.addAll(userList);
+
+            }
+
+            else
+            {
+                /*Criteria criteriaForId = getSession().createCriteria(User.class)
+                                                     .setProjection(Projections.projectionList()
+                                                     .add(Projections.property("id"), "id"))
+                                                     .add(Restrictions.eq("userName", selectUserName))
+                                                     .setResultTransformer(Transformers.aliasToBean(User.class));
 
                 usersIdsList = criteriaForId.list();
                 Iterator iterator = usersIdsList.iterator();
@@ -627,24 +652,8 @@ public class UserDAO extends GenericDAO<User,String> {
                     uIdsList.add(userId);
                     user = null;
                 }
-
-            } else {
-                Criteria criteriaForId = getSession().createCriteria(User.class)
-                        .setProjection(Projections.projectionList()
-                                .add(Projections.property("id"), "id"))
-                        .add(Restrictions.eq("userName", selectUserName))
-                        .setResultTransformer(Transformers.aliasToBean(User.class));
-
-                usersIdsList = criteriaForId.list();
-                Iterator iterator = usersIdsList.iterator();
-                while (iterator.hasNext()) {
-                    User user = new User();
-                    user = (User) iterator.next();
-                    userId = user.getId();
-                    uIdsList.add(userId);
-                    user = null;
-                }
-
+                */
+                uIdsList.add(selectUserName);
             }
 
 
@@ -654,6 +663,8 @@ public class UserDAO extends GenericDAO<User,String> {
             if(uIdsList != null )
             {
                 criteriaForWorkCaseId.setProjection(Projections.projectionList().add(Projections.property("workCase"), "workCase").add(Projections.property("workCasePrescreen"), "workCasePrescreen")).add(Restrictions.eq("role.id", selectedRoleId)).add(Restrictions.in("user.id", uIdsList)).setResultTransformer(Transformers.aliasToBean(WorkCaseOwner.class));
+
+                log.debug("Criteria to get change owner workitems :{}",criteriaForWorkCaseId.toString());
 
                 workCaseIdList = criteriaForWorkCaseId.list();
             }
