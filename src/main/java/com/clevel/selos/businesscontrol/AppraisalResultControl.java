@@ -61,11 +61,8 @@ public class AppraisalResultControl extends BusinessControl {
 
     private ProposeLine newCreditFacility;
     private WorkCase workCase;
-    private WorkCasePrescreen workCasePrescreen;
 
     private List<ProposeCollateralInfo> newCollateralList;
-    private List<ProposeCollateralInfoHead> newCollateralHeadList;
-    private List<ProposeCollateralInfoSub> newCollateralSubList;
 
     private List<ProposeCollateralInfoView> newCollateralViewList;
 
@@ -84,7 +81,6 @@ public class AppraisalResultControl extends BusinessControl {
         }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-            workCasePrescreen = newCreditFacility.getWorkCasePrescreen();
             log.debug("-- getAppraisalResult ::: findByWorkCasePreScreenId :{}", workCasePreScreenId);
         }
 
@@ -123,20 +119,11 @@ public class AppraisalResultControl extends BusinessControl {
         return appraisalView;
     }
 
-
-
-
-
-
-
-
-
-
     public void onSaveAppraisalResult(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
         log.debug("onSaveAppraisalResult ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
 
-        if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getRemoveCollListId())){
+        /*if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getRemoveCollListId())){
             for(Long proposeCollateralInfoId : appraisalView.getRemoveCollListId()){
                 final ProposeCollateralInfo proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoId);
                 if(!Util.isNull(proposeCollateralInfo)){
@@ -144,11 +131,67 @@ public class AppraisalResultControl extends BusinessControl {
                     proposeCollateralInfoDAO.delete(proposeCollateralInfo);
                 }
             }
+        }*/
+
+        if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getRemoveCollListId())){
+            for(Long proposeCollateralInfoId : appraisalView.getRemoveCollListId()){
+                ProposeCollateralInfo proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoId);
+
+                List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = proposeCollateralInfoRelationDAO.findByNewCollateralId(proposeCollateralInfoId);
+                if(!Util.isNull(proposeCollateralInfoRelationList) && !Util.isZero(proposeCollateralInfoRelationList.size())) {
+                    proposeCollateralInfoRelationDAO.delete(proposeCollateralInfoRelationList);
+                }
+
+                for (ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
+                    if(!Util.isNull(proposeCollateralInfoHead) && !Util.isZero(proposeCollateralInfoHead.getId())) {
+                        for (ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoHead.getProposeCollateralInfoSubList()) {
+                            if(!Util.isNull(proposeCollateralInfoSub) && !Util.isZero(proposeCollateralInfoSub.getId())) {
+                                List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList = proposeCollateralSubOwnerDAO.findByNewCollateralSubId(proposeCollateralInfoSub.getId());
+                                if(!Util.isNull(proposeCollateralSubOwnerList) && !Util.isZero(proposeCollateralSubOwnerList.size())) {
+                                    proposeCollateralSubOwnerDAO.delete(proposeCollateralSubOwnerList);
+                                }
+                                List<ProposeCollateralSubMortgage> proposeCollateralSubMortgageList = proposeCollateralSubMortgageDAO.findByNewCollateralSubId(proposeCollateralInfoSub.getId());
+                                if(!Util.isNull(proposeCollateralSubMortgageList) && !Util.isZero(proposeCollateralSubMortgageList.size())) {
+                                    proposeCollateralSubMortgageDAO.delete(proposeCollateralSubMortgageList);
+                                }
+                                List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = proposeCollateralSubRelatedDAO.findByNewCollateralSubId(proposeCollateralInfoSub.getId());
+                                if(!Util.isNull(proposeCollateralSubRelatedList) && !Util.isZero(proposeCollateralSubRelatedList.size())) {
+                                    proposeCollateralSubRelatedDAO.delete(proposeCollateralSubRelatedList);
+                                }
+                                proposeCollateralInfoSubDAO.delete(proposeCollateralInfoSub);
+                            }
+                        }
+                        proposeCollateralInfoHeadDAO.delete(proposeCollateralInfoHead);
+                    }
+                }
+                proposeCollateralInfoDAO.delete(proposeCollateralInfo);
+            }
         }
 
-        if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
+        /*if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
             List<ProposeCollateralInfoView> newCollateralViewList = appraisalView.getNewCollateralViewList();
             insertToDB(newCollateralViewList, currentUser);
+        }*/
+
+        //Save
+        if(!Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())) {
+            for(ProposeCollateralInfoView proposeCollateralInfoView : appraisalView.getNewCollateralViewList()) {
+                ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, newCreditFacility, proposeCollateralInfoView, currentUser, ProposeType.A);
+                proposeCollateralInfoDAO.persist(proposeCollateralInfo);
+                if(!Util.isNull(proposeCollateralInfo) && !Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && !Util.isZero(proposeCollateralInfo.getProposeCollateralInfoHeadList().size())) {
+                    for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
+                        proposeCollateralInfoHeadDAO.persist(proposeCollateralInfoHead);
+                        if(!Util.isNull(proposeCollateralInfoHead) && !Util.isNull(proposeCollateralInfoHead.getProposeCollateralInfoSubList()) && !Util.isZero(proposeCollateralInfoHead.getProposeCollateralInfoSubList().size())) {
+                            for(ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoHead.getProposeCollateralInfoSubList()) {
+                                proposeCollateralInfoSubDAO.persist(proposeCollateralInfoSub);
+                                if(!Util.isNull(proposeCollateralInfoSub) && !Util.isNull(proposeCollateralInfoSub.getProposeCollateralSubOwnerList()) && !Util.isZero(proposeCollateralInfoSub.getProposeCollateralSubOwnerList().size())) {
+                                    proposeCollateralSubOwnerDAO.persist(proposeCollateralInfoSub.getProposeCollateralSubOwnerList());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -176,31 +219,7 @@ public class AppraisalResultControl extends BusinessControl {
                 log.debug("-- id[{}] updated", model.getId());
             }
         }
-
-//        for(final ProposeCollateralInfo newCollateral : newCollateralList){
-//            List<ProposeCollateralInfoHead> newCollateralHeadList = Util.safetyList(newCollateral.getProposeCollateralInfoHeadList());
-//            for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
-//                newCollateralHead.setProposeCollateral(newCollateral);
-//                newCollateralHead.setProposeType(ProposeType.P);
-//                newCollateralHead.setAppraisalRequest(2);
-//                List<ProposeCollateralInfoSub> newCollateralSubList = Util.safetyList(newCollateralHead.getProposeCollateralInfoSubList());
-//                for(ProposeCollateralInfoSub newCollateralSub : newCollateralSubList){
-//                    newCollateralSub.setProposeCollateralHead(newCollateralHead);
-//                }
-//                if(!Util.isZero(newCollateralSubList.size())){
-//                    log.debug("-- persist newCollateralSubList.size()[{}]", newCollateralSubList.size());
-//                    proposeCollateralInfoSubDAO.persist(newCollateralSubList);
-//                    log.debug("-- newCollateralSubList[{}]", newCollateralSubList);
-//                }
-//            }
-//            if(!Util.isZero(newCollateralHeadList.size())){
-//                log.debug("-- persist newCollateralHeadList.size()[{}]", newCollateralHeadList.size());
-//                proposeCollateralInfoHeadDAO.persist(newCollateralHeadList);
-//                log.debug("-- newCollateralHeadList[{}]", newCollateralHeadList);
-//            }
-//        }
     }
-
 
     private void insertProposeCollateralInfo(final ProposeCollateralInfo proposeCollateralInfo){
         proposeCollateralInfoDAO.persistAR2PTA(proposeCollateralInfo);
@@ -249,8 +268,8 @@ public class AppraisalResultControl extends BusinessControl {
     }
     private void clearProposeCollateralInfo(final ProposeCollateralInfo proposeCollateralInfo){
         log.debug("-- clearProposeCollateralInfo()");
-        clearProposeCollateralInfoHead(proposeCollateralInfo);
         clearProposeCollateralInfoRelation(proposeCollateralInfo);
+        clearProposeCollateralInfoHead(proposeCollateralInfo);
     }
     private void clearProposeCollateralInfoHead(final ProposeCollateralInfo proposeCollateralInfo){
         log.debug("-- clearProposeCollateralInfoHead()");
