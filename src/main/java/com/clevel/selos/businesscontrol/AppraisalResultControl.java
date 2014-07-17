@@ -29,6 +29,8 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     private WorkCaseDAO workCaseDAO;
     @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
     private AppraisalDAO appraisalDAO;
     @Inject
     private ProposeLineDAO proposeLineDAO;
@@ -122,6 +124,14 @@ public class AppraisalResultControl extends BusinessControl {
     public void onSaveAppraisalResult(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
         log.debug("onSaveAppraisalResult ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
+        WorkCase workCase = null;
+        ProposeLine proposeLine = new ProposeLine();
+        if(!Util.isZero(workCaseId)){
+            workCase = workCaseDAO.findById(workCaseId);
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        } else if(!Util.isZero(workCasePreScreenId)) {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCasePreScreenId);
+        }
 
         /*if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getRemoveCollListId())){
             for(Long proposeCollateralInfoId : appraisalView.getRemoveCollListId()){
@@ -176,7 +186,7 @@ public class AppraisalResultControl extends BusinessControl {
         //Save
         if(!Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())) {
             for(ProposeCollateralInfoView proposeCollateralInfoView : appraisalView.getNewCollateralViewList()) {
-                ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, newCreditFacility, proposeCollateralInfoView, currentUser, ProposeType.A);
+                ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, proposeLine, proposeCollateralInfoView, currentUser, ProposeType.A);
                 proposeCollateralInfoDAO.persist(proposeCollateralInfo);
                 if(!Util.isNull(proposeCollateralInfo) && !Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && !Util.isZero(proposeCollateralInfo.getProposeCollateralInfoHeadList().size())) {
                     for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
