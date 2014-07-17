@@ -896,12 +896,13 @@ public class Decision extends BaseController {
 
     // ---------- Decision - Action ---------- //
     public void onSaveDecision() {
-        log.debug("onSaveDecision()");
+        log.debug("onSaveDecision");
         try {
+            log.debug("roleId :: {}", roleId);
             if (roleId == RoleValue.UW.id()) {
+                log.debug("Save Decision Role UW");
                 // Delete List
-//                decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
-
+                //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit);
                 // Calculate Total Approve
@@ -945,8 +946,7 @@ public class Decision extends BaseController {
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Decision data success.";
             severity = MessageDialogSeverity.INFO.severity();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.debug("", e);
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
