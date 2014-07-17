@@ -45,8 +45,18 @@ public class AppraisalTransform extends Transform {
         if(!Util.isZero(appraisalView.getId())){
             appraisal = appraisalDAO.findById(appraisalView.getId());
         }else{
-            appraisal.setWorkCase(workCase);
-            appraisal.setWorkCasePrescreen(workCasePrescreen);
+            if(!Util.isNull(workCase) && !Util.isZero(workCase.getId())){
+                appraisal.setWorkCase(workCase);
+            } else {
+                log.debug("-- appraisal.WorkCase[null]");
+                appraisal.setWorkCase(null);
+            }
+            if(!Util.isNull(workCasePrescreen) && !Util.isZero(workCasePrescreen.getId())){
+                appraisal.setWorkCasePrescreen(workCasePrescreen);
+            } else {
+                log.debug("-- appraisal.workCasePrescreen[null]");
+                appraisal.setWorkCasePrescreen(null);
+            }
             appraisal.setCreateBy(user);
             appraisal.setCreateDate(DateTime.now().toDate());
         }

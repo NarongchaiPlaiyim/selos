@@ -173,23 +173,24 @@ public class AppraisalResultControl extends BusinessControl {
     private void insertToDB(final List<ProposeCollateralInfoView> newCollateralViewList, final User user, long workCaseId, long workCasePreScreenId){
         log.debug("-- insertIntoDB ::: newCollateralViewList ::: {} ", newCollateralViewList);
         ProposeLine newCreditFacility = new ProposeLine();
+        WorkCase workCase = null;
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+            log.debug("-- WorkCaseId[{}]", workCaseId);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            workCase = newCreditFacility.getWorkCase();
+            log.debug("-- WorkCase.id[{}]", workCase.getId());
         } else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         }
         log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
-
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         List<ProposeCollateralInfo> newCollateralList = new ArrayList<ProposeCollateralInfo>();
         for(ProposeCollateralInfoView proposeCollateralInfoView : newCollateralViewList) {
             newCollateralList.add(proposeLineTransform.transformProposeCollateralToModel(workCase, newCreditFacility, proposeCollateralInfoView, user, ProposeType.A));
         }
 
-        for (ProposeCollateralInfo newCollateral : newCollateralList) {
-            log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
-
+        for (final ProposeCollateralInfo newCollateral : newCollateralList) {
+            log.debug("-- NewCollateral[{}]", newCollateral);
             if(!newCollateralDAO.isExist(newCollateral.getId())){
                 log.debug("-- Insert into new record of NewCollateral");
                 log.debug("-- processing one step...");
@@ -211,7 +212,8 @@ public class AppraisalResultControl extends BusinessControl {
                 log.debug("-- id[{}] updated", model.getId());
             }
         }
-        for(ProposeCollateralInfo newCollateral : newCollateralList){
+
+        for(final ProposeCollateralInfo newCollateral : newCollateralList){
             List<ProposeCollateralInfoHead> newCollateralHeadList = Util.safetyList(newCollateral.getProposeCollateralInfoHeadList());
             for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
                 newCollateralHead.setProposeCollateral(newCollateral);
@@ -221,9 +223,17 @@ public class AppraisalResultControl extends BusinessControl {
                 for(ProposeCollateralInfoSub newCollateralSub : newCollateralSubList){
                     newCollateralSub.setProposeCollateralHead(newCollateralHead);
                 }
-                newCollateralSubDAO.persist(newCollateralSubList);
+                if(!Util.isZero(newCollateralSubList.size())){
+                    log.debug("-- persist newCollateralSubList.size()[{}]", newCollateralSubList.size());
+                    newCollateralSubDAO.persist(newCollateralSubList);
+                    log.debug("-- newCollateralSubList[{}]", newCollateralSubList);
+                }
             }
-            newCollateralHeadDAO.persist(newCollateralHeadList);
+            if(!Util.isZero(newCollateralHeadList.size())){
+                log.debug("-- persist newCollateralHeadList.size()[{}]", newCollateralHeadList.size());
+                newCollateralHeadDAO.persist(newCollateralHeadList);
+                log.debug("-- newCollateralHeadList[{}]", newCollateralHeadList);
+            }
         }
     }
 

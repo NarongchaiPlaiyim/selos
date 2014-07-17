@@ -67,7 +67,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
 
     public boolean isExist(final long id) {
         boolean result;
-        log.debug("-- isExist NewCollateral.id[{}]", id);
+        log.debug("-- isExist ProposeCollateralInfo.id[{}]", id);
         result = isRecordExist(Restrictions.eq("id", id));
         log.debug("-- Result[{}]", result);
         return result;

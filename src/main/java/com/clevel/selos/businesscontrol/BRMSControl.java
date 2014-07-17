@@ -1444,10 +1444,11 @@ public class BRMSControl extends BusinessControl {
                         customerInfoSimpleViewList = new ArrayList<CustomerInfoSimpleView>();
 
                     CustomerInfoSimpleView customerInfoSimpleView = null;
+                    logger.debug("------------------------------------------ customerInfoSimpleViewList[{}]", customerInfoSimpleViewList);
                     for(CustomerInfoSimpleView _customerInfoSimpleView : customerInfoSimpleViewList){
                         if(_customerInfoSimpleView.getId() == _customerId){
                             customerInfoSimpleView = _customerInfoSimpleView;
-                            logger.debug("Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
+                            logger.debug("------------------------------------------ Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
                             break;
                         }
                     }
