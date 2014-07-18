@@ -83,8 +83,8 @@ public class ProposeCollateralInfoHeadDAO extends GenericDAO<ProposeCollateralIn
 
     public void persistAR2PTA(final ProposeCollateralInfoHead proposeCollateralInfoHead){
         log.info("-- persistAR2PTA(ProposeCollateralInfoHead.id[{}])", proposeCollateralInfoHead.getId());
-        proposeCollateralInfoHead.setAppraisalRequest(2);
-        proposeCollateralInfoHead.setProposeType(ProposeType.A);
+        proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+        proposeCollateralInfoHead.setProposeType(ProposeType.P);
         persist(proposeCollateralInfoHead);
     }
 }

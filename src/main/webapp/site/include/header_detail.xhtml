@@ -685,12 +685,19 @@
 </p:panel>
 
 <p:panel id="checkMandatePanel" styleClass="panel">
-    <p:dialog id="checkMandateDialog" widgetVar="checkMandateDlg" header="Check MandateDoc"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="1024" height="500" closable="false" maximizable="">
+    <p:dialog id="checkMandateDialog"
+              widgetVar="checkMandateDlg"
+              header="Check MandateDoc"
+
+              resizable="false"
+              modal="true" width="1024" height="500" closable="false"
+              maximizable="">
         <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<!--onShow="hideWindowsScrollBar()"-->
+<!--onHide="showWindowsScrollBar()"-->
 
 <p:panel id="addReturnInfoPanel" styleClass="panel">
     <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"

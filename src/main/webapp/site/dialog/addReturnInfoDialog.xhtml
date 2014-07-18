@@ -5,6 +5,16 @@
         xmlns:p="http://primefaces.org/ui">
 
 <p:panel id="addReturnInfoDlgPanel" styleClass="panel-dialog">
+    <style>
+        .ui-selectonemenu-items-wraper{
+            height: 200px;
+            width: 234px !important;
+        }
+        .ui-selectonemenu-items{
+            height: 200px;
+            width: 234px !important;
+        }
+    </style>
     <table class="content_form">
         <tr>
             <td class="title right" style="min-width: 140px; width: 80px;">Return Code :</td>
@@ -15,6 +25,7 @@
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.returnReason}"
                                    var="reasonItem"
+                                   itemDescription="#{reasonItem.code} - #{reasonItem.description}"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
                                    itemValue="#{reasonItem.id}"/>
                     <p:ajax event="change" update="@this"/>
