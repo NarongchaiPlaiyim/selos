@@ -15,6 +15,7 @@
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.returnReason}"
                                    var="reasonItem"
+                                   itemDescription="#{reasonItem.code} - #{reasonItem.description}"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
                                    itemValue="#{reasonItem.id}"/>
                     <p:ajax event="change" update="@this"/>
