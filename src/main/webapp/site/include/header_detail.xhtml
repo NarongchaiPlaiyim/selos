@@ -29,8 +29,9 @@
     <!-- Assign To Checker-->
     <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" title="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Assign to Checker')}" disabled="#{prescreenMaker.disableAssignButton}"
+                     onclick="PF('blockUI').show()"
                      actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}" process="@this"
-                     oncomplete="assignCheckerDlg.show()"
+                     oncomplete="blockUI.hide(), assignCheckerDlg.show()"
                      update=":assignCheckerDlgForm">
         <p:resetInput target=":assignCheckerDlgForm"/>
     </p:commandButton>
