@@ -295,7 +295,8 @@
                                         </td>
                                         <td colspan="3">
                                             <p:inputText styleClass="large" id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}"
-                                                         onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
                                                          required="#{not empty param[addBizInfoSummary.clientId]}"
                                                          readonly="#{bizInfoSummary.isDisabled('bizLocation.phoneNo')}">
                                                 <p:ajax event="blur" update=":frmMain:phoneNo"/>
@@ -308,7 +309,9 @@
                                             <h:outputText value=" :"/>
 
                                             <p:spacer width="20" height="5"/>
-                                            <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
+                                            <p:inputText styleClass="smaller" id="extension"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.extension}"
                                                          readonly="#{bizInfoSummary.isDisabled('bizLocation.extension')}">
                                                 <p:ajax event="blur" update=":frmMain:extension"/>

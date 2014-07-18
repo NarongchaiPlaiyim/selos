@@ -221,17 +221,19 @@ public class DBRControl extends BusinessControl {
     public ActionResult updateValueOfDBR(long workCaseId){
         log.debug("Begin updateValueOfDBR");
         DBRView dbrView =  getDBRByWorkCase(workCaseId);
-        if(dbrView != null){
-            if(dbrView.getId() == 0){
-                return ActionResult.FAILED;
-            }
+//        DBRView dbrView = new DBRView();
+        if(!Util.isNull(dbrView)){
+//            if(dbrView.getId() == 0){
+//                return ActionResult.FAILED;
+//            }
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
-            if(bankStatementSummary != null){
+            if(!Util.isNull(bankStatementSummary)){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+                dbrView.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
             }
-            if(bizInfoSummary != null){
+            if(!Util.isNull(bizInfoSummary)){
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
