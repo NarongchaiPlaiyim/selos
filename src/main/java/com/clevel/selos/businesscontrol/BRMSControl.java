@@ -1212,8 +1212,10 @@ public class BRMSControl extends BusinessControl {
                     Customer spouse = customerDAO.findById(customer.getSpouseId());
                     Individual spouseIndv = spouse.getIndividual();
                     customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+
                     if(spouse.getRelation() != null)
-                        customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+                        customerInfo.setSpouseRelationType(spouse.getRelation().getBrmsCode());
+                        //customerInfo.setRelation(spouse.getRelation().getBrmsCode());   //REMOVE BECAUSE IT'S OVERIDE MAIN CUSTOMER RELATION
                 }
             }
         }

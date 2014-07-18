@@ -384,11 +384,15 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorCha.currentDBR}"/>
+                                            <h:outputText value="#{itemBorCha.currentDBR}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorCha.finalDBR}"/>
+                                            <h:outputText value="#{itemBorCha.finalDBR}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">

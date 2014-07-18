@@ -6,6 +6,7 @@ import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -187,9 +188,12 @@ public class AppraisalResultControl extends BusinessControl {
         if(!Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())) {
             for(ProposeCollateralInfoView proposeCollateralInfoView : appraisalView.getNewCollateralViewList()) {
                 ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, proposeLine, proposeCollateralInfoView, currentUser, ProposeType.A);
+                proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
                 proposeCollateralInfoDAO.persist(proposeCollateralInfo);
                 if(!Util.isNull(proposeCollateralInfo) && !Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && !Util.isZero(proposeCollateralInfo.getProposeCollateralInfoHeadList().size())) {
                     for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
+                        proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                        proposeCollateralInfoHead.setProposeType(ProposeType.P);
                         proposeCollateralInfoHeadDAO.persist(proposeCollateralInfoHead);
                         if(!Util.isNull(proposeCollateralInfoHead) && !Util.isNull(proposeCollateralInfoHead.getProposeCollateralInfoSubList()) && !Util.isZero(proposeCollateralInfoHead.getProposeCollateralInfoSubList().size())) {
                             for(ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoHead.getProposeCollateralInfoSubList()) {
