@@ -948,5 +948,5 @@ table table.ui-selectoneradio tr {
 }
 
 .ui-selectonemenu-items-wrapper{
-    width: 420px !important;
+    max-width: 420px !important;
 }
