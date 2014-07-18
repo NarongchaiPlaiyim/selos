@@ -221,11 +221,9 @@ public class DBRControl extends BusinessControl {
     public ActionResult updateValueOfDBR(long workCaseId){
         log.debug("Begin updateValueOfDBR");
         DBRView dbrView =  getDBRByWorkCase(workCaseId);
-//        DBRView dbrView = new DBRView();
+
         if(!Util.isNull(dbrView)){
-//            if(dbrView.getId() == 0){
-//                return ActionResult.FAILED;
-//            }
+
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
