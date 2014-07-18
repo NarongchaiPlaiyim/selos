@@ -187,10 +187,10 @@ public class AppraisalResultControl extends BusinessControl {
         if(!Util.isNull(appraisalView.getNewCollateralViewList()) && !Util.isZero(appraisalView.getNewCollateralViewList().size())) {
             for(ProposeCollateralInfoView proposeCollateralInfoView : appraisalView.getNewCollateralViewList()) {
                 ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, proposeLine, proposeCollateralInfoView, currentUser, ProposeType.A);
-                proposeCollateralInfoDAO.persist(proposeCollateralInfo);
+                proposeCollateralInfoDAO.persistAR2PTA(proposeCollateralInfo);
                 if(!Util.isNull(proposeCollateralInfo) && !Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && !Util.isZero(proposeCollateralInfo.getProposeCollateralInfoHeadList().size())) {
                     for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
-                        proposeCollateralInfoHeadDAO.persist(proposeCollateralInfoHead);
+                        proposeCollateralInfoHeadDAO.persistAR2PTA(proposeCollateralInfoHead);
                         if(!Util.isNull(proposeCollateralInfoHead) && !Util.isNull(proposeCollateralInfoHead.getProposeCollateralInfoSubList()) && !Util.isZero(proposeCollateralInfoHead.getProposeCollateralInfoSubList().size())) {
                             for(ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoHead.getProposeCollateralInfoSubList()) {
                                 proposeCollateralInfoSubDAO.persist(proposeCollateralInfoSub);
