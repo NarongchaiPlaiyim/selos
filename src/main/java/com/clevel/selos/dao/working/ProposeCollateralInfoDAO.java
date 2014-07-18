@@ -3,6 +3,7 @@ package com.clevel.selos.dao.working;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.ProposeCollateralInfo;
 import com.clevel.selos.model.db.working.ProposeLine;
 import org.hibernate.Criteria;
@@ -106,7 +107,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
 
     public void persistAR2PTA(final ProposeCollateralInfo proposeCollateralInfo){
         log.info("-- persistAR2PTA(ProposeCollateralInfo.id[{}])", proposeCollateralInfo.getId());
-        proposeCollateralInfo.setAppraisalRequest(2);
+        proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
         proposeCollateralInfo.setProposeType(ProposeType.A);
         persist(proposeCollateralInfo);
     }

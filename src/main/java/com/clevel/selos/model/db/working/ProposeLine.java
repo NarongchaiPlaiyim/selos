@@ -3,6 +3,8 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -742,5 +744,76 @@ public class ProposeLine implements Serializable {
 
     public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
         this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
+                .append("wcNeed", wcNeed)
+                .append("totalWCTmb", totalWCTmb)
+                .append("wcNeedDiffer", wcNeedDiffer)
+                .append("totalWCDebit", totalWCDebit)
+                .append("totalLoanWCTMB", totalLoanWCTMB)
+                .append("case1WCLimit", case1WCLimit)
+                .append("case1WCMinLimit", case1WCMinLimit)
+                .append("case1WC50CoreWC", case1WC50CoreWC)
+                .append("case1WCDebitCoreWC", case1WCDebitCoreWC)
+                .append("case2WCLimit", case2WCLimit)
+                .append("case2WCMinLimit", case2WCMinLimit)
+                .append("case2WC50CoreWC", case2WC50CoreWC)
+                .append("case2WCDebitCoreWC", case2WCDebitCoreWC)
+                .append("case3WCLimit", case3WCLimit)
+                .append("case3WCMinLimit", case3WCMinLimit)
+                .append("case3WC50CoreWC", case3WC50CoreWC)
+                .append("case3WCDebitCoreWC", case3WCDebitCoreWC)
+                .append("creditCustomerType", creditCustomerType)
+                .append("loanRequestType", loanRequestType)
+                .append("investedCountry", investedCountry)
+                .append("existingSMELimit", existingSMELimit)
+                .append("maximumSMELimit", maximumSMELimit)
+                .append("contactName", contactName)
+                .append("contactPhoneNo", contactPhoneNo)
+                .append("interService", interService)
+                .append("currentAddress", currentAddress)
+                .append("registeredAddress", registeredAddress)
+                .append("importMail", importMail)
+                .append("exportMail", exportMail)
+                .append("depositBranchCode", depositBranchCode)
+                .append("ownerBranchCode", ownerBranchCode)
+                .append("intFeeDOA", intFeeDOA)
+                .append("frontendFeeDOA", frontendFeeDOA)
+                .append("guarantorBA", guarantorBA)
+                .append("reasonForReduction", reasonForReduction)
+                .append("relatedTMBLending", relatedTMBLending)
+                .append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending)
+                .append("singleLendingLimit", singleLendingLimit)
+                .append("totalPropose", totalPropose)
+                .append("totalCommercial", totalCommercial)
+                .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
+                .append("totalExposure", totalExposure)
+                .append("totalGuaranteeAmount", totalGuaranteeAmount)
+                .append("totalProposeLoanDBR", totalProposeLoanDBR)
+                .append("totalProposeNonLoanDBR", totalProposeNonLoanDBR)
+                .append("totalNumberOfNewOD", totalNumberOfNewOD)
+                .append("totalNumberProposeCreditFac", totalNumberProposeCreditFac)
+                .append("totalNumberContingenPropose", totalNumberContingenPropose)
+                .append("totalNumberOfCoreAsset", totalNumberOfCoreAsset)
+                .append("totalNumberOfNonCoreAsset", totalNumberOfNonCoreAsset)
+                .append("totalMortgageValue", totalMortgageValue)
+                .append("totalTCGGuaranteeAmount", totalTCGGuaranteeAmount)
+                .append("totalIndvGuaranteeAmount", totalIndvGuaranteeAmount)
+                .append("totalJurisGuaranteeAmount", totalJurisGuaranteeAmount)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("proposeCreditInfoList", proposeCreditInfoList)
+                .append("proposeConditionInfoList", proposeConditionInfoList)
+                .append("proposeGuarantorInfoList", proposeGuarantorInfoList)
+                .append("proposeCollateralInfoList", proposeCollateralInfoList)
+                .toString();
     }
 }

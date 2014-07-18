@@ -109,7 +109,7 @@ public class DBRControl extends BusinessControl {
             }
 
             if(dbr.getMonthlyIncomeAdjust() == null){
-                dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+                dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
             }
         } else {
             dbr = new DBR();
@@ -121,7 +121,7 @@ public class DBRControl extends BusinessControl {
             }
             dbr.setDbrBeforeRequest(BigDecimal.ZERO);
             // MonthlyIncomeAdjust default from MonthlyIncome
-            dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+            dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
             //MonthlyIncomePerMonth Default = 0
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
         }
@@ -229,7 +229,6 @@ public class DBRControl extends BusinessControl {
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
             if(!Util.isNull(bankStatementSummary)){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
-                dbrView.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
             }
             if(!Util.isNull(bizInfoSummary)){
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
