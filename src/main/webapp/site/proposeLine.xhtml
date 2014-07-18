@@ -550,7 +550,7 @@
                                             styleClass="small"
                                             process="@form"
                                             actionListener="#{proposeLine.onAddCreditInfo}"
-                                            update=":creditInfoDlgForm,:msgBoxSystemMessagePanel,:creditCustomerTypeValue"
+                                            update=":creditInfoDlgForm,:msgBoxSystemMessagePanel,:frmMain:creditCustomerTypeValue"
                                             disabled="#{proposeLine.isDisabled('addProposeCreditButton')}">
                                         <p:resetInput target=":creditInfoDlgForm"/>
                                     </p:commandButton>
