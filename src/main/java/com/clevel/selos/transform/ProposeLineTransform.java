@@ -1071,8 +1071,6 @@ public class ProposeLineTransform extends Transform {
                 proposeCollateralInfo.setWorkCase(workCase);
             } else {
                 proposeCollateralInfo.setWorkCase(workCase);
-//                log.debug("-- proposeCollateralInfo.WorkCase[null]");
-//                proposeCollateralInfo.setWorkCase(null);
             }
 
             proposeCollateralInfo.setAppraisalRequest(proposeCollateralInfoView.getAppraisalRequest());
