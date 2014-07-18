@@ -663,6 +663,7 @@ public class CustomerInfoJuristic extends BaseController {
         reqRegId = true;
         reqTitTh = true;
         reqStNameTh = true;
+        reqKYCLev = true;
         Reference reference = new Reference();
         reference.setId(referenceId);
         customerInfoView.setReference(reference);
