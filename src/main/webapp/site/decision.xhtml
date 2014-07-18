@@ -1717,13 +1717,13 @@
                                                 <ui:repeat value="#{proposeCredit.proposeCreditInfoTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.standardPrice}"/>
+                                                            <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
                                                         </td>
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.suggestPrice}"/>
+                                                            <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
                                                         </td>
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
+                                                            <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.installment}">
