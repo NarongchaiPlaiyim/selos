@@ -20,7 +20,8 @@ public class FieldsControlTransform extends Transform {
         }
 
         fieldsControlView.setId(fieldsControl.getId());
-        fieldsControlView.setFieldName(fieldsControl.getFieldName());
+        if (fieldsControl.getFieldName()  != null)
+        	fieldsControlView.setFieldName(fieldsControl.getFieldName().trim());
 
         if(fieldsControl.getMandate() == 1){
             fieldsControlView.setMandate(true);
