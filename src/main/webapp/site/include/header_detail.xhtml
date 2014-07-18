@@ -458,6 +458,14 @@
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
+    <!-- Check Mandate Doc [ For ABDM ]-->
+    <p:commandButton id="btnCheckMandate_ABDM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2023}"
+                     actionListener="#{headerController.onCheckMandateForABDM()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
+    </p:commandButton>
     <!-- Check Mandate Doc [ For STEP CHECK DOC ]-->
     <p:commandButton id="btnCheckMandate_CheckDoc" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 3008}"
@@ -688,16 +696,12 @@
     <p:dialog id="checkMandateDialog"
               widgetVar="checkMandateDlg"
               header="Check MandateDoc"
-
               resizable="false"
               modal="true" width="1024" height="500" closable="false"
               maximizable="">
         <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
     </p:dialog>
 </p:panel>
-
-<!--onShow="hideWindowsScrollBar()"-->
-<!--onHide="showWindowsScrollBar()"-->
 
 <p:panel id="addReturnInfoPanel" styleClass="panel">
     <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"

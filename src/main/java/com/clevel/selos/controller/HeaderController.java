@@ -1511,6 +1511,18 @@ public class HeaderController extends BaseController {
         log.debug("onCheckMandateForFullApp ::: stop...");
     }
 
+    //ABDM
+    public void onCheckMandateForABDM(){
+        log.debug("onCheckMandateForABDM ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+
     //AAD Committee
     public void onCheckMandateForStepCheckDoc(){
         log.debug("onCheckMandateForStepCheckDoc ::: start...");
