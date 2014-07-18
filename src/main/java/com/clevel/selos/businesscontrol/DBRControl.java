@@ -121,7 +121,7 @@ public class DBRControl extends BusinessControl {
             }
             dbr.setDbrBeforeRequest(BigDecimal.ZERO);
             // MonthlyIncomeAdjust default from MonthlyIncome
-            dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
+            dbr.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
             //MonthlyIncomePerMonth Default = 0
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
         }
@@ -223,13 +223,17 @@ public class DBRControl extends BusinessControl {
         DBRView dbrView =  getDBRByWorkCase(workCaseId);
 
         if(!Util.isNull(dbrView)){
-
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+
             if(!Util.isNull(bankStatementSummary)){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+                if (Util.isNull(dbrView.getMonthlyIncomeAdjust())){
+                    dbrView.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
+                }
             }
+
             if(!Util.isNull(bizInfoSummary)){
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
