@@ -621,6 +621,8 @@ public class PrescreenMaker extends BaseController {
 
     }
 
+
+
     public void onCloseSale() {
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try {
