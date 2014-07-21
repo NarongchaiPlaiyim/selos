@@ -356,11 +356,8 @@ public class BizInfoDetailControl extends BusinessControl {
             }
 
             bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
-            log.info("bizProduct size {}",bizInfoDetailView.getBizProductDetailViewList().size());
             bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-            log.info("supplier size {}",bizInfoDetailView.getSupplierDetailList().size());
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-            log.info("buyer size {}",bizInfoDetailView.getBuyerDetailList().size());
 
             //for hidden field on status below UW
             if(statusId >= StatusValue.REVIEW_CA.value()){
