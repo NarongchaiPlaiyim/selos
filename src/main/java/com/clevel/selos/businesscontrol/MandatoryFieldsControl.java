@@ -68,8 +68,10 @@ public class MandatoryFieldsControl extends BusinessControl {
     	WorkCase workCase = workCaseDAO.findById(workCaseId);
     	Status status = workCase.getStatus();
     	long stepId = workCase.getStep().getId();
+    	log.debug("get Field control for screen "+screen+ " ,Workcase="+workCaseId+" ,stepId="+stepId+" ,role="+user.getRole());
     	List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControlByScreenRoleStepStatus(screen.value(), user.getRole(), status, stepId);
         List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+        log.debug("Result fields control = "+fieldsControlViewList.size());
         return fieldsControlViewList;
     }
 

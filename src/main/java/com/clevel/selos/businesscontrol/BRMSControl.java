@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.MandateDocumentDAO;
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -88,6 +89,8 @@ public class BRMSControl extends BusinessControl {
 
     @Inject
     private MandateDocumentDAO mandateDocumentDAO;
+    @Inject
+    private StepDAO stepDAO;
 
     @Inject
     private CustomerTransform customerTransform;
@@ -1028,7 +1031,13 @@ public class BRMSControl extends BusinessControl {
         if(!Util.isNull(docCustomerResponse)){
             logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
             if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
+                Step step =  workCase.getStep();
+                if(step!=null){
+                    if(step.getId() == StepValue.FULLAPP_ABDM.value()){//2023
+                        step = stepDAO.findById(Util.parseLong(StepValue.FULLAPP_BDM_SSO_ABDM.value(), 1));
+                    }
+                }
+                Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, step);
                 mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                 mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
             } else {
@@ -1212,8 +1221,10 @@ public class BRMSControl extends BusinessControl {
                     Customer spouse = customerDAO.findById(customer.getSpouseId());
                     Individual spouseIndv = spouse.getIndividual();
                     customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+
                     if(spouse.getRelation() != null)
-                        customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+                        customerInfo.setSpouseRelationType(spouse.getRelation().getBrmsCode());
+                        //customerInfo.setRelation(spouse.getRelation().getBrmsCode());   //REMOVE BECAUSE IT'S OVERIDE MAIN CUSTOMER RELATION
                 }
             }
         }
@@ -1444,10 +1455,11 @@ public class BRMSControl extends BusinessControl {
                         customerInfoSimpleViewList = new ArrayList<CustomerInfoSimpleView>();
 
                     CustomerInfoSimpleView customerInfoSimpleView = null;
+                    logger.debug("------------------------------------------ customerInfoSimpleViewList[{}]", customerInfoSimpleViewList);
                     for(CustomerInfoSimpleView _customerInfoSimpleView : customerInfoSimpleViewList){
                         if(_customerInfoSimpleView.getId() == _customerId){
                             customerInfoSimpleView = _customerInfoSimpleView;
-                            logger.debug("Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
+                            logger.debug("------------------------------------------ Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
                             break;
                         }
                     }

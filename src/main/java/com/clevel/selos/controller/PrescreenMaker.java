@@ -2018,8 +2018,10 @@ public class PrescreenMaker extends BaseController {
                                 if(searchSpouse) {
                                     tmpSearchSpouseInfo.setDocumentType(documentTypeDAO.findById(1));
                                     tmpSearchSpouseInfo.setSearchBy(1);
+                                    tmpSearchSpouseInfo.setSearchId(tmpSearchSpouseInfo.getCitizenId());
+                                    log.debug("tmpSearchSpouseInfo : {}", tmpSearchSpouseInfo);
                                     CustomerInfoResultView spouseCustomerResultView = prescreenBusinessControl.getCustomerInfoFromRM(tmpSearchSpouseInfo, user);
-
+                                    log.debug("spouseCustomerResultView : {}", spouseCustomerResultView);
                                     if(spouseCustomerResultView.getActionResult() == ActionResult.SUCCESS) {
                                         CustomerInfoView tmpSpouseInfo = spouseCustomerResultView.getCustomerInfoView();
                                         borrowerInfo.setSpouse(tmpSpouseInfo);

@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -713,5 +715,86 @@ public class DecisionView implements Serializable {
 
     public void setDeleteCollateralIdList(List<Long> deleteCollateralIdList) {
         this.deleteCollateralIdList = deleteCollateralIdList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+//                append("extConditionComCreditList", extConditionComCreditList).
+//                append("extBorrowerComCreditList", extBorrowerComCreditList).
+//                append("extBorrowerRetailCreditList", extBorrowerRetailCreditList).
+//                append("extBorrowerAppInRLOSList", extBorrowerAppInRLOSList).
+//                append("extRelatedComCreditList", extRelatedComCreditList).
+//                append("extRelatedRetailCreditList", extRelatedRetailCreditList).
+//                append("extRelatedAppInRLOSList", extRelatedAppInRLOSList).
+//                append("extBorrowerCollateralList", extBorrowerCollateralList).
+//                append("extRelatedCollateralList", extRelatedCollateralList).
+//                append("extGuarantorList", extGuarantorList).
+//                append("extBorrowerTotalComLimit", extBorrowerTotalComLimit).
+//                append("extBorrowerTotalRetailLimit", extBorrowerTotalRetailLimit).
+//                append("extBorrowerTotalAppInRLOSLimit", extBorrowerTotalAppInRLOSLimit).
+//                append("extBorrowerTotalCommercial", extBorrowerTotalCommercial).
+//                append("extBorrowerTotalComAndOBOD", extBorrowerTotalComAndOBOD).
+//                append("extBorrowerTotalExposure", extBorrowerTotalExposure).
+//                append("extRelatedTotalComLimit", extRelatedTotalComLimit).
+//                append("extRelatedTotalRetailLimit", extRelatedTotalRetailLimit).
+//                append("extRelatedTotalAppInRLOSLimit", extRelatedTotalAppInRLOSLimit).
+//                append("extRelatedTotalCommercial", extRelatedTotalCommercial).
+//                append("extRelatedTotalComAndOBOD", extRelatedTotalComAndOBOD).
+//                append("extRelatedTotalExposure", extRelatedTotalExposure).
+//                append("extGroupTotalCommercial", extGroupTotalCommercial).
+//                append("extGroupTotalComAndOBOD", extGroupTotalComAndOBOD).
+//                append("extGroupTotalExposure", extGroupTotalExposure).
+//                append("extBorrowerTotalAppraisalValue", extBorrowerTotalAppraisalValue).
+//                append("extBorrowerTotalMortgageValue", extBorrowerTotalMortgageValue).
+//                append("extRelatedTotalAppraisalValue", extRelatedTotalAppraisalValue).
+//                append("extRelatedTotalMortgageValue", extRelatedTotalMortgageValue).
+//                append("extTotalGuaranteeAmount", extTotalGuaranteeAmount).
+//                append("proposeCreditList", proposeCreditList).
+//                append("proposeCollateralList", proposeCollateralList).
+//                append("proposeGuarantorList", proposeGuarantorList).
+//                append("proposeTotalCreditLimit", proposeTotalCreditLimit).
+//                append("proposeTotalGuaranteeAmt", proposeTotalGuaranteeAmt).
+                append("creditCustomerType", creditCustomerType).
+                append("loanRequestType", loanRequestType).
+                append("investedCountry", investedCountry).
+                append("existingSMELimit", existingSMELimit).
+                append("maximumSMELimit", maximumSMELimit).
+//                append("approveCreditList", approveCreditList).
+//                append("approveCollateralList", approveCollateralList).
+//                append("approveGuarantorList", approveGuarantorList).
+                append("approveTotalCreditLimit", approveTotalCreditLimit).
+                append("approveBrwTotalCommercial", approveBrwTotalCommercial).
+                append("approveBrwTotalComAndOBOD", approveBrwTotalComAndOBOD).
+                append("approveTotalExposure", approveTotalExposure).
+                append("approveTotalODLimit", approveTotalODLimit).
+                append("approveTotalNumOfNewOD", approveTotalNumOfNewOD).
+                append("approveTotalNumProposeCreditFac", approveTotalNumProposeCreditFac).
+                append("approveTotalNumContingentPropose", approveTotalNumContingentPropose).
+                append("approveTotalGuaranteeAmt", approveTotalGuaranteeAmt).
+                append("grandTotalNumOfCoreAsset", grandTotalNumOfCoreAsset).
+                append("grandTotalNumOfNonCoreAsset", grandTotalNumOfNonCoreAsset).
+                append("approveTotalTCGGuaranteeAmt", approveTotalTCGGuaranteeAmt).
+                append("approveTotalIndvGuaranteeAmt", approveTotalIndvGuaranteeAmt).
+                append("approveTotalJurisGuaranteeAmt", approveTotalJurisGuaranteeAmt).
+//                append("decisionFollowConditionViewList", decisionFollowConditionViewList).
+                append("intFeeDOA", intFeeDOA).
+                append("frontendFeeDOA", frontendFeeDOA).
+                append("guarantorBA", guarantorBA).
+                append("reasonForReduction", reasonForReduction).
+//                append("approvalHistoryList", approvalHistoryList).
+                append("newCreditFacilityViewId", newCreditFacilityViewId).
+//                append("createDate", createDate).
+//                append("modifyDate", modifyDate).
+//                append("createBy", createBy).
+//                append("modifyBy", modifyBy).
+//                append("approveFeeDetailViewList", approveFeeDetailViewList).
+//                append("approveFeeDetailViewOriginalList", approveFeeDetailViewOriginalList).
+//                append("deleteCreditIdList", deleteCreditIdList).
+//                append("deleteFollowConditionIdList", deleteFollowConditionIdList).
+//                append("deleteGuarantorIdList", deleteGuarantorIdList).
+//                append("deleteCollateralIdList", deleteCollateralIdList).
+                toString();
     }
 }

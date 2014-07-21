@@ -109,7 +109,7 @@ public class DBRControl extends BusinessControl {
             }
 
             if(dbr.getMonthlyIncomeAdjust() == null){
-                dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+                dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
             }
         } else {
             dbr = new DBR();
@@ -121,7 +121,7 @@ public class DBRControl extends BusinessControl {
             }
             dbr.setDbrBeforeRequest(BigDecimal.ZERO);
             // MonthlyIncomeAdjust default from MonthlyIncome
-            dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+            dbr.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
             //MonthlyIncomePerMonth Default = 0
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
         }
@@ -221,17 +221,20 @@ public class DBRControl extends BusinessControl {
     public ActionResult updateValueOfDBR(long workCaseId){
         log.debug("Begin updateValueOfDBR");
         DBRView dbrView =  getDBRByWorkCase(workCaseId);
-        if(dbrView != null){
-            if(dbrView.getId() == 0){
-                return ActionResult.FAILED;
-            }
+
+        if(!Util.isNull(dbrView)){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
-            if(bankStatementSummary != null){
+
+            if(!Util.isNull(bankStatementSummary)){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+                if (Util.isNull(dbrView.getMonthlyIncomeAdjust())){
+                    dbrView.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
+                }
             }
-            if(bizInfoSummary != null){
+
+            if(!Util.isNull(bizInfoSummary)){
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);

@@ -798,25 +798,8 @@
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px">
-                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>
-                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountReceivable')}" styleClass="require-field"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText styleClass="right" style="width: 95%;"
-                                                         id="standardAccountReceivable"
-                                                         readonly="#{bizInfoDetail.isDisabled('standardAccountReceivable')}"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}"
-                                                         onkeydown="return onKeyDownNumber(event);"
-                                                         onkeypress="return onKeyPressNumber(event);"
-                                                         onfocus="removeComma(this)"
-                                                         maxlength="14">
-                                                <f:convertNumber pattern="#,##0" />
-                                                <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
-                                            </p:inputText>
-                                        </td>
-                                        <td style="line-height: 15px">
                                             <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountPayable')}"/>
-                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountPayable')}" styleClass="require-field"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountReceivable')}" styleClass="require-field"/>
                                         </td>
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;"
@@ -829,6 +812,23 @@
                                                          maxlength="14">
                                                 <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
+                                            </p:inputText>
+                                        </td>
+                                        <td style="line-height: 15px">
+                                            <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>
+                                            <h:outputText value="#{bizInfoDetail.mandate('standardAccountPayable')}" styleClass="require-field"/>
+                                        </td>
+                                        <td>
+                                            <p:inputText styleClass="right" style="width: 95%;"
+                                                         id="standardAccountReceivable"
+                                                         readonly="#{bizInfoDetail.isDisabled('standardAccountReceivable')}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onfocus="removeComma(this)"
+                                                         maxlength="14">
+                                                <f:convertNumber pattern="#,##0" />
+                                                <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px">

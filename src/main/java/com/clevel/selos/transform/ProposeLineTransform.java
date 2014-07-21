@@ -120,7 +120,15 @@ public class ProposeLineTransform extends Transform {
             proposeLine.setModifyDate(new Date());
             proposeLine.setModifyBy(user);
 
-            proposeLine.setWorkCase(workCase);
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeLine.setWorkCase(workCase);
+                } else {
+                    proposeLine.setWorkCase(null);
+                }
+            } else {
+                proposeLine.setWorkCase(workCase);
+            }
 
             proposeLine.setWcNeed(proposeLineView.getWcNeed());
             proposeLine.setTotalWCTmb(proposeLineView.getTotalWCTmb());
@@ -313,7 +321,16 @@ public class ProposeLineTransform extends Transform {
             proposeCreditInfo.setModifyDate(new Date());
             proposeCreditInfo.setModifyBy(user);
 
-            proposeCreditInfo.setWorkCase(workCase);
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeCreditInfo.setWorkCase(workCase);
+                } else {
+                    proposeCreditInfo.setWorkCase(null);
+                }
+            } else {
+                proposeCreditInfo.setWorkCase(workCase);
+            }
+
             proposeCreditInfo.setProposeType(proposeType);
             proposeCreditInfo.setProposeLine(proposeLine);
 
@@ -880,7 +897,16 @@ public class ProposeLineTransform extends Transform {
             proposeFeeDetail.setProposeType(proposeType);
             proposeFeeDetail.setFeeType(feeType);
             proposeFeeDetail.setPaymentMethod(feePaymentMethod);
-            proposeFeeDetail.setWorkCase(workCase);
+
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeFeeDetail.setWorkCase(workCase);
+                } else {
+                    proposeFeeDetail.setWorkCase(null);
+                }
+            } else {
+                proposeFeeDetail.setWorkCase(workCase);
+            }
 
             proposeFeeDetailList.add(proposeFeeDetail);
         }
@@ -901,7 +927,16 @@ public class ProposeLineTransform extends Transform {
             proposeFeeDetail.setProposeType(proposeType);
             proposeFeeDetail.setFeeType(feeType);
             proposeFeeDetail.setPaymentMethod(feePaymentMethod);
-            proposeFeeDetail.setWorkCase(workCase);
+
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeFeeDetail.setWorkCase(workCase);
+                } else {
+                    proposeFeeDetail.setWorkCase(null);
+                }
+            } else {
+                proposeFeeDetail.setWorkCase(workCase);
+            }
 
             proposeFeeDetailList.add(proposeFeeDetail);
         }
@@ -922,7 +957,16 @@ public class ProposeLineTransform extends Transform {
             proposeFeeDetail.setProposeType(proposeType);
             proposeFeeDetail.setFeeType(feeType);
             proposeFeeDetail.setPaymentMethod(feePaymentMethod);
-            proposeFeeDetail.setWorkCase(workCase);
+
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeFeeDetail.setWorkCase(workCase);
+                } else {
+                    proposeFeeDetail.setWorkCase(null);
+                }
+            } else {
+                proposeFeeDetail.setWorkCase(workCase);
+            }
 
             proposeFeeDetailList.add(proposeFeeDetail);
         }
@@ -943,7 +987,16 @@ public class ProposeLineTransform extends Transform {
             proposeFeeDetail.setProposeType(proposeType);
             proposeFeeDetail.setFeeType(feeType);
             proposeFeeDetail.setPaymentMethod(feePaymentMethod);
-            proposeFeeDetail.setWorkCase(workCase);
+
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeFeeDetail.setWorkCase(workCase);
+                } else {
+                    proposeFeeDetail.setWorkCase(null);
+                }
+            } else {
+                proposeFeeDetail.setWorkCase(workCase);
+            }
 
             proposeFeeDetailList.add(proposeFeeDetail);
         }
@@ -964,7 +1017,16 @@ public class ProposeLineTransform extends Transform {
             proposeFeeDetail.setProposeType(proposeType);
             proposeFeeDetail.setFeeType(feeType);
             proposeFeeDetail.setPaymentMethod(feePaymentMethod);
-            proposeFeeDetail.setWorkCase(workCase);
+
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeFeeDetail.setWorkCase(workCase);
+                } else {
+                    proposeFeeDetail.setWorkCase(null);
+                }
+            } else {
+                proposeFeeDetail.setWorkCase(workCase);
+            }
 
             proposeFeeDetailList.add(proposeFeeDetail);
         }
@@ -1067,7 +1129,15 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfo.setProposeType(proposeType);
             proposeCollateralInfo.setProposeLine(proposeLine);
-            proposeCollateralInfo.setWorkCase(workCase);
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeCollateralInfo.setWorkCase(workCase);
+                } else {
+                    proposeCollateralInfo.setWorkCase(null);
+                }
+            } else {
+                proposeCollateralInfo.setWorkCase(workCase);
+            }
 
             proposeCollateralInfo.setAppraisalRequest(proposeCollateralInfoView.getAppraisalRequest());
             proposeCollateralInfo.setComs(Util.isTrue(proposeCollateralInfoView.isComs()));
@@ -1179,7 +1249,15 @@ public class ProposeLineTransform extends Transform {
     public ProposeCollateralSubOwner transformProposeCollateralSubOwnerToModel(WorkCase workCase, ProposeCollateralInfoSub proposeCollateralInfoSub, CustomerInfoView customerInfoView, ProposeType proposeType) {
         ProposeCollateralSubOwner proposeCollateralSubOwner = new ProposeCollateralSubOwner();
 
-        proposeCollateralSubOwner.setWorkCase(workCase);
+        if(!Util.isNull(workCase)){
+            if(!Util.isZero(workCase.getId())) {
+                proposeCollateralSubOwner.setWorkCase(workCase);
+            } else {
+                proposeCollateralSubOwner.setWorkCase(null);
+            }
+        } else {
+            proposeCollateralSubOwner.setWorkCase(workCase);
+        }
         proposeCollateralSubOwner.setProposeType(proposeType);
         proposeCollateralSubOwner.setProposeCollateralSub(proposeCollateralInfoSub);
         proposeCollateralSubOwner.setCustomer(customerDAO.findById(customerInfoView.getId()));
@@ -1201,7 +1279,15 @@ public class ProposeLineTransform extends Transform {
     public ProposeCollateralSubMortgage transformProposeCollateralSubMortgageToModel(WorkCase workCase, ProposeCollateralInfoSub proposeCollateralInfoSub, MortgageTypeView mortgageTypeView, ProposeType proposeType) {
         ProposeCollateralSubMortgage proposeCollateralSubMortgage = new ProposeCollateralSubMortgage();
 
-        proposeCollateralSubMortgage.setWorkCase(workCase);
+        if(!Util.isNull(workCase)){
+            if(!Util.isZero(workCase.getId())) {
+                proposeCollateralSubMortgage.setWorkCase(workCase);
+            } else {
+                proposeCollateralSubMortgage.setWorkCase(null);
+            }
+        } else {
+            proposeCollateralSubMortgage.setWorkCase(workCase);
+        }
         proposeCollateralSubMortgage.setProposeType(proposeType);
         proposeCollateralSubMortgage.setProposeCollateralSub(proposeCollateralInfoSub);
         proposeCollateralSubMortgage.setMortgageType(mortgageTypeDAO.findById(mortgageTypeView.getId()));
@@ -1223,7 +1309,16 @@ public class ProposeLineTransform extends Transform {
     public ProposeCollateralSubRelated transformProposeCollateralSubRelatedToModel(WorkCase workCase, ProposeCollateralInfoSub proposeCollateralInfoSub, ProposeCollateralInfoSub proposeCollateralInfoSubRelated, ProposeType proposeType) {
         ProposeCollateralSubRelated proposeCollateralSubRelated = new ProposeCollateralSubRelated();
 
-        proposeCollateralSubRelated.setWorkCase(workCase);
+        if(!Util.isNull(workCase)){
+            if(!Util.isZero(workCase.getId())) {
+                proposeCollateralSubRelated.setWorkCase(workCase);
+            } else {
+                proposeCollateralSubRelated.setWorkCase(null);
+            }
+        } else {
+            proposeCollateralSubRelated.setWorkCase(workCase);
+        }
+
         proposeCollateralSubRelated.setProposeType(proposeType);
         proposeCollateralSubRelated.setProposeCollateralSub(proposeCollateralInfoSub);
         proposeCollateralSubRelated.setProposeCollateralSubRelated(proposeCollateralInfoSubRelated);
@@ -1580,17 +1675,23 @@ public class ProposeLineTransform extends Transform {
     public ProposeLine transformDecisionToModel(DecisionView decisionView, WorkCase workCase, User user, ProposeType proposeType) {
         ProposeLine proposeLine = null;
         if(!Util.isNull(decisionView)){
-            proposeLine = new ProposeLine();
-            if (!Util.isZero(decisionView.getId())) {
-                proposeLine = proposeLineDAO.findById(decisionView.getId());
-            } else {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCase.getId());
+            if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
                 proposeLine.setCreateDate(new Date());
                 proposeLine.setCreateBy(user);
             }
             proposeLine.setModifyDate(new Date());
             proposeLine.setModifyBy(user);
 
-            proposeLine.setWorkCase(workCase);
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeLine.setWorkCase(workCase);
+                } else {
+                    proposeLine.setWorkCase(null);
+                }
+            } else {
+                proposeLine.setWorkCase(workCase);
+            }
 
             proposeLine.setCreditCustomerType(decisionView.getCreditCustomerType().value());
             proposeLine.setLoanRequestType(creditRequestTypeTransform.transformSelectToModel(decisionView.getLoanRequestType()));
