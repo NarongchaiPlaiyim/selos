@@ -5,16 +5,11 @@
         xmlns:p="http://primefaces.org/ui">
 
 <p:panel id="addReturnInfoDlgPanel" styleClass="panel-dialog">
-    <style>
-        .ui-selectonemenu-items-wrapper{
-            width: 234px !important;
-        }
-    </style>
     <table class="content_form">
         <tr>
             <td class="title right" style="min-width: 140px; width: 80px;">Return Code :</td>
             <td>
-                <p:selectOneMenu id="reasonId" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                <p:selectOneMenu id="reasonId" styleClass="reasonitem" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                  value="#{headerController.reasonId}"
                                  required="#{not empty param[btnSubmitAddReturnInfo.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
