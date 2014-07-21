@@ -181,16 +181,10 @@ public class AppraisalResultControl extends BusinessControl {
                     }
                 }
             }
-
-
             save(proposeCollateralInfoList);
             save2(proposeCollateralInfoList);
             save3(proposeCollateralInfoList);
-
-
             log.debug("-- DONE");
-
-
 //            insertToDB(newCollateralViewList, currentUser);
         }
     }
