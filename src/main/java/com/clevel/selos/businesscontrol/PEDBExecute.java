@@ -467,6 +467,8 @@ public class PEDBExecute extends BusinessControl
             log.info("controller entered in to getResultSetExecution method of pedbexcecute class");
             log.info("connection url from properties file :{}",connPE);
 
+            userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
             conn = dbContext.getConnection(connPE, peUser, pePassword);
 
             log.info("connection is : {}", conn.toString());
@@ -544,7 +546,7 @@ public class PEDBExecute extends BusinessControl
 
                     User user = userDAO.findUserByID(rs.getString("CurrentUser"));
                     int roleId = user.getRole().getId();
-                    if(roleId == RoleValue.BDM.id() || roleId == RoleValue.ABDM.id())
+                    if( ( roleId == RoleValue.BDM.id() || roleId == RoleValue.ABDM.id() ) && userDetail.getRoleId()==RoleValue.UW.id())
                     {
                         peInbox.setBdmFlag("Y");
                     }
