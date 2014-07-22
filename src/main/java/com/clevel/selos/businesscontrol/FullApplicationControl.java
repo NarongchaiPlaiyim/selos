@@ -950,52 +950,54 @@ public class FullApplicationControl extends BusinessControl {
                     if(proposeCreditInfo.getRequestType() == RequestTypes.NEW.value()) {
                         if(proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1){
                             //Check for Final Price first...
-                            if(finalPrice != null){
-                                for(ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
-                                    if(proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
-                                        tmpFinalPrice = proposeCreditInfoTierDetail.getFinalInterest().add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
+                            if(proposeCreditInfo.getProposeCreditInfoTierDetailList() != null) {
+                                if (finalPrice != null) {
+                                    for (ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
+                                        if (proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
+                                            tmpFinalPrice = proposeCreditInfoTierDetail.getFinalInterest().add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
+                                        }
+                                    }
+                                    tmpStandardPrice = proposeCreditInfo.getStandardInterest().add(proposeCreditInfo.getStandardBasePrice().getValue());
+                                    tmpSuggestPrice = proposeCreditInfo.getSuggestInterest().add(proposeCreditInfo.getSuggestBasePrice().getValue());
+
+                                    if (tmpStandardPrice.compareTo(tmpSuggestPrice) > 0) {
+                                        tmpBigDecimal = tmpStandardPrice;
+                                    } else {
+                                        tmpBigDecimal = tmpSuggestPrice;
+                                    }
+
+                                    if (reducePricing == 1) {
+                                        tmpFinalPrice = tmpBigDecimal.subtract(priceReduceDOA);
+                                    }
+                                    if (tmpFinalPrice.compareTo(finalPrice) > 0) {
+                                        finalPrice = tmpFinalPrice;
+                                        standardPrice = tmpStandardPrice;
+                                        suggestPrice = tmpSuggestPrice;
+                                    }
+                                } else {
+                                    for (ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
+                                        if (proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
+                                            finalPrice = proposeCreditInfoTierDetail.getFinalInterest().add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
+                                        }
+                                    }
+                                    standardPrice = proposeCreditInfo.getStandardInterest().add(proposeCreditInfo.getStandardBasePrice().getValue());
+                                    suggestPrice = proposeCreditInfo.getSuggestInterest().add(proposeCreditInfo.getSuggestBasePrice().getValue());
+
+                                    if (standardPrice.compareTo(suggestPrice) > 0) {
+                                        tmpBigDecimal = standardPrice;
+                                    } else {
+                                        tmpBigDecimal = suggestPrice;
+                                    }
+
+                                    if (reducePricing == 1) {
+                                        finalPrice = tmpBigDecimal.subtract(priceReduceDOA);
                                     }
                                 }
-                                tmpStandardPrice = proposeCreditInfo.getStandardInterest().add(proposeCreditInfo.getStandardBasePrice().getValue());
-                                tmpSuggestPrice = proposeCreditInfo.getSuggestInterest().add(proposeCreditInfo.getSuggestBasePrice().getValue());
 
-                                if(tmpStandardPrice.compareTo(tmpSuggestPrice) > 0){
-                                    tmpBigDecimal = tmpStandardPrice;
-                                }else{
-                                    tmpBigDecimal = tmpSuggestPrice;
+                                if(finalPrice.compareTo(suggestPrice) < 0){
+                                    exceptionalFlow = true;
+                                    break;
                                 }
-
-                                if(reducePricing == 1){
-                                    tmpFinalPrice = tmpBigDecimal.subtract(priceReduceDOA);
-                                }
-                                if(tmpFinalPrice.compareTo(finalPrice) > 0){
-                                    finalPrice = tmpFinalPrice;
-                                    standardPrice = tmpStandardPrice;
-                                    suggestPrice = tmpSuggestPrice;
-                                }
-                            }else{
-                                for(ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
-                                    if(proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
-                                        finalPrice = proposeCreditInfoTierDetail.getFinalInterest().add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
-                                    }
-                                }
-                                standardPrice = proposeCreditInfo.getStandardInterest().add(proposeCreditInfo.getStandardBasePrice().getValue());
-                                suggestPrice = proposeCreditInfo.getSuggestInterest().add(proposeCreditInfo.getSuggestBasePrice().getValue());
-
-                                if(standardPrice.compareTo(suggestPrice) > 0){
-                                    tmpBigDecimal = standardPrice;
-                                }else{
-                                    tmpBigDecimal = suggestPrice;
-                                }
-
-                                if(reducePricing == 1){
-                                    finalPrice = tmpBigDecimal.subtract(priceReduceDOA);
-                                }
-                            }
-
-                            if(finalPrice.compareTo(suggestPrice) < 0){
-                                exceptionalFlow = true;
-                                break;
                             }
                         }
                     }
