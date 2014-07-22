@@ -370,8 +370,10 @@ public class ProposeLineTransform extends Transform {
     }
 
     public ProposeCreditInfoDetailView transformProposeCreditToView(ProposeCreditInfo proposeCreditInfo, ProposeType proposeType) {
-        ProposeCreditInfoDetailView proposeCreditInfoDetailView = new ProposeCreditInfoDetailView();
+        ProposeCreditInfoDetailView proposeCreditInfoDetailView = null;
         if(!Util.isNull(proposeCreditInfo) && !Util.isZero(proposeCreditInfo.getId()) && proposeCreditInfo.getProposeType() == proposeType){
+            proposeCreditInfoDetailView = new ProposeCreditInfoDetailView();
+
             proposeCreditInfoDetailView.setId(proposeCreditInfo.getId());
 
             proposeCreditInfoDetailView.setRequestType(proposeCreditInfo.getRequestType());
@@ -426,7 +428,9 @@ public class ProposeLineTransform extends Transform {
         if (!Util.isNull(proposeCreditInfoList)) {
             for (ProposeCreditInfo proCredit : proposeCreditInfoList) {
                 ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToView(proCredit, proposeType);
-                proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
+                if(!Util.isNull(proposeCreditInfoDetailView)) {
+                    proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
+                }
             }
         }
         return proposeCreditInfoDetailViewList;
@@ -786,8 +790,10 @@ public class ProposeLineTransform extends Transform {
     }
 
     public ProposeGuarantorInfoView transformProposeGuarantorToView(ProposeGuarantorInfo proposeGuarantorInfo, ProposeType proposeType) {
-        ProposeGuarantorInfoView proposeGuarantorInfoView = new ProposeGuarantorInfoView();
+        ProposeGuarantorInfoView proposeGuarantorInfoView = null;
         if(!Util.isNull(proposeGuarantorInfo) && !Util.isZero(proposeGuarantorInfo.getId()) && proposeGuarantorInfo.getProposeType() == proposeType){
+            proposeGuarantorInfoView = new ProposeGuarantorInfoView();
+
             proposeGuarantorInfoView.setId(proposeGuarantorInfo.getId());
 
             proposeGuarantorInfoView.setTcgLgNo(proposeGuarantorInfo.getTcgLgNo());
@@ -830,7 +836,9 @@ public class ProposeLineTransform extends Transform {
         if (!Util.isNull(proposeGuarantorInfoList)) {
             for (ProposeGuarantorInfo proGuarantor : proposeGuarantorInfoList) {
                 ProposeGuarantorInfoView proposeGuarantorInfoView = transformProposeGuarantorToView(proGuarantor, proposeType);
-                proposeGuarantorViewList.add(proposeGuarantorInfoView);
+                if(!Util.isNull(proposeGuarantorInfoView)) {
+                    proposeGuarantorViewList.add(proposeGuarantorInfoView);
+                }
             }
         }
         return proposeGuarantorViewList;
@@ -1424,7 +1432,7 @@ public class ProposeLineTransform extends Transform {
             for (ProposeCollateralInfoRelation proposeCollateralInfoRelation : proposeCollateralInfoRelations) {
                 if(!Util.isNull(proposeCollateralInfoRelation)){
                     if(!Util.isNull(proposeCollateralInfoRelation.getProposeCreditInfo())) {
-                        ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToView(proposeCollateralInfoRelation.getProposeCreditInfo(), null);
+                        ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToViewScreen(proposeCollateralInfoRelation.getProposeCreditInfo(), null);
                         proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
                     } else if(!Util.isNull(proposeCollateralInfoRelation.getExistingCreditDetail())) {
                         ProposeCreditInfoDetailView existingCreditDetailView = transformProposeCreditToViewByExisting(proposeCollateralInfoRelation.getExistingCreditDetail(), null);
