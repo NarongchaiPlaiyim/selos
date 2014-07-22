@@ -463,6 +463,14 @@
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
+    <!-- Check Mandate Doc [ For ZONE ]-->
+    <p:commandButton id="btnCheckMandate_ZONE" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2002}"
+                     actionListener="#{headerController.onCheckMandateForZONE()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
+    </p:commandButton>
     <!-- Submit to AAD Committee [ From AAD Admin ]-->
     <p:commandButton id="btnSubmitAADC_AADM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}"

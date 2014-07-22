@@ -91,10 +91,10 @@ public class ProposeCollateralInfo implements Serializable {
     @JoinColumn(name = "new_credit_facility_id")
     private ProposeLine proposeLine;
 
-    @OneToMany(mappedBy = "proposeCollateral"/*, cascade = CascadeType.ALL*/)
+    @OneToMany(mappedBy = "proposeCollateral", cascade = CascadeType.ALL)
     private List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList;
 
-    @OneToMany(mappedBy = "proposeCollateral"/*, cascade = CascadeType.ALL*/)
+    @OneToMany(mappedBy = "proposeCollateral", cascade = CascadeType.ALL)
     private List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList;
 
     /*** For Post - Insurance Premium Quote Process ***/

@@ -1541,6 +1541,18 @@ public class HeaderController extends BaseController {
         log.debug("onCheckMandateForStepCheckDoc ::: stop...");
     }
 
+    // ZONE
+    public void onCheckMandateForZONE(){
+        log.debug("onCheckMandateForZONE ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+
     private void callFullApp() throws Exception{
         HttpSession session = FacesUtil.getSession(false);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);

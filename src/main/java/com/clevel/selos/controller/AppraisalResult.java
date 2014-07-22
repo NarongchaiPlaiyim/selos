@@ -204,6 +204,7 @@ public class AppraisalResult implements Serializable {
             }
 
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
+//            appraisalView = appraisalResultControl.getAppraisalResult(10, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
             if(!Util.isNull(appraisalView)){
                 newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
@@ -339,10 +340,14 @@ public class AppraisalResult implements Serializable {
             log.debug("-- Flag {}", ModeForButton.ADD);
             complete=true;
             String jobID = newCollateralView.getJobID();
+            messageHeader = "Retrieve Appraisal.";
             if(!Util.isNull(jobID) && !Util.equals(jobID, "")){
                 if(saveAndEditFlag){
                     newCollateralViewList.add(newCollateralView);
                     log.info("-- NewCollateralView.jobID[{}] added to NewCollateralViewList[{}]", newCollateralView.getJobID(), newCollateralViewList.size()+1);
+                    message = ActionResult.SUCCESS.toString();
+                } else {
+                    message = ActionResult.FAILED.toString();
                 }
             }
         }else if(ModeForButton.EDIT.equals(modeForButton)){
@@ -351,9 +356,13 @@ public class AppraisalResult implements Serializable {
             if(saveAndEditFlag){
                 newCollateralViewList.set(rowCollateral, newCollateralView);
                 log.info("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
+                message = ActionResult.SUCCESS.toString();
+            } else {
+                message = ActionResult.FAILED.toString();
             }
         }
 
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
     }
@@ -382,10 +391,11 @@ public class AppraisalResult implements Serializable {
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
             appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, workCasePreScreenId);
+
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");
-            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
