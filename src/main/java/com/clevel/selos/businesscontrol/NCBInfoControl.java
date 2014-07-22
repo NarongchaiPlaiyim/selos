@@ -354,7 +354,7 @@ public class NCBInfoControl extends BusinessControl {
         BigDecimal loanCreditWCTMB = BigDecimal.ZERO;
 
         for(NCBDetail item : ncbDetailList){
-            if(item.getAccountType() != null && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
+            /*if(item.getAccountType() != null && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
                 // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
                 loanCredit = loanCredit.add(item.getLimit());
             }
@@ -369,6 +369,22 @@ public class NCBInfoControl extends BusinessControl {
             if(item.getAccountType() != null && item.getAccountTMBFlag() == RadioValue.YES.value() && ( item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
                 // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
                 loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
+            }*/
+
+            if(!Util.isNull(item.getAccountStatus()) && !Util.isZero(item.getAccountStatus().getDbrFlag()) && item.getAccountType() != null) {
+                if(item.getAccountType().getWcFlag() == 1){
+                    loanCredit = loanCredit.add(item.getLimit());
+                    if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
+                        loanCreditTMB = loanCreditTMB.add(item.getLimit());
+                    }
+                } else if(item.getAccountType().getWcFlag() == 0) {
+                    if(item.getWcFlag() == RadioValue.YES.value()) {
+                        loanCreditWC = loanCreditWC.add(item.getOutstanding());
+                        if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
+                            loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
+                        }
+                    }
+                }
             }
         }
         ncb.setLoanCreditNCB(loanCredit);
