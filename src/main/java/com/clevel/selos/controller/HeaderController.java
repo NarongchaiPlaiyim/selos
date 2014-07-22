@@ -306,6 +306,12 @@ public class HeaderController extends BaseController {
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canCloseSale = true;
                     canRequestAppraisal = true;
+                }else{
+                    if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
+                            || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                        canCloseSale = true;
+                        canRequestAppraisal = true;
+                    }
                 }
             } else {
                 canRequestAppraisal = false;
