@@ -1324,7 +1324,7 @@ public class HeaderController extends BaseController {
                                 message = Util.getMessageException(ex);
                             }
                             messageHeader = "Information.";
-                            message = "Request for Check Pre-Screen success";
+                            message = "Request for Check Pre-Screen and Save data success.";
                             success = true;
                         }else {
                             messageHeader = "Exception.";
@@ -2141,6 +2141,7 @@ public class HeaderController extends BaseController {
     public void onOpenCloseSales(){
         //Check SLA Over or not?
         _loadSessionVariable();
+        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
         if(submitOverSLA == 1){
             //Show Close sales dialog with SLA Reason
             reasonId = 0;
@@ -2160,6 +2161,7 @@ public class HeaderController extends BaseController {
         String tmpRemark = "";
         try{
             int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+            log.debug("modifyFlag : {}", modifyFlag);
             if (modifyFlag == 1) {
                 messageHeader = "Exception";
                 message = "Some of data has been changed. Please Retrive Interface before Closesale.";
@@ -2178,9 +2180,11 @@ public class HeaderController extends BaseController {
                     tmpRemark = submitRemark;
                     complete = true;
                 }
-
+                log.debug("complete : {}", complete);
                 if (complete) {
+                    log.debug("complete true : starting duplicate data ");
                     prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
+                    log.debug("Duplicate data complete and submit complete.");
                     messageHeader = "Information.";
                     message = "Close Sales Complete. Click 'OK' return Inbox.";
                     showMessageRedirect();

@@ -81,7 +81,7 @@
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
                      onclick="PF('blockUI').show()"
-                     actionListener="#{headerController.onOpenCloseSales()"
+                     actionListener="#{headerController.onOpenCloseSales()}"
                      oncomplete="blockUI.hide()"
                      update=":frmMain:closeSalesPanel"
                      disabled="#{not headerController.canCloseSale or not headerController.canCheckPreScreen}"/>
