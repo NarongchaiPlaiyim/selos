@@ -1254,7 +1254,7 @@
                                                                          update=":collateralDlgForm"
                                                                          process="@form"
                                                                          oncomplete="collateralInfoDlg.show();"
-                                                                         disabled="#{proposeLine.isDisabled('collateral.editButton') or (proposeLine.workCaseRequestAppraisal and proposeCollView.headCollAppraisal)}">
+                                                                         disabled="#{proposeLine.isDisabled('collateral.editButton') or proposeCollView.appraisalRequest != 0}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                             <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
                                                             <p:resetInput target=":collateralDlgForm"/>
@@ -1263,7 +1263,7 @@
                                                         <p:commandButton value="Remove"
                                                                          process="@form" styleClass="small"
                                                                          oncomplete="confirmDeleteCollateralInfoDlg.show()"
-                                                                         disabled="#{proposeLine.isDisabled('collateral.deleteButton') or (proposeLine.workCaseRequestAppraisal and proposeCollView.headCollAppraisal)}">
+                                                                         disabled="#{proposeLine.isDisabled('collateral.deleteButton') or proposeCollView.appraisalRequest != 0}}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                         </p:commandButton>
                                                     </td>

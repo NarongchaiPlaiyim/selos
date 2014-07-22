@@ -1085,6 +1085,15 @@ public class NCBBizTransform extends BusinessTransform {
                                             ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
+                                            if(isTMBAccount){
+                                                if(lastNPLDateTMB!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMDDtoDateFormat(lastNPLDateTMB));
+                                                }
+                                            } else {
+                                                if(lastNPLDateOther!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMDDtoDateFormat(lastNPLDateOther));
+                                                }
+                                            }
 
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
@@ -1538,6 +1547,16 @@ public class NCBBizTransform extends BusinessTransform {
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
+                                            if(isTMBAccount){
+                                                if(lastNPLDateTMB!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateTMB));
+                                                }
+                                            } else {
+                                                if(lastNPLDateOther!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateOther));
+                                                }
+                                            }
+
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
                                             ncbDetailViews.add(ncbDetailView);
@@ -1752,6 +1771,16 @@ public class NCBBizTransform extends BusinessTransform {
                                             ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
+
+                                            if(isTMBAccount){
+                                                if(lastNPLDateTMB!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateTMB));
+                                                }
+                                            } else {
+                                                if(lastNPLDateOther!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateOther));
+                                                }
+                                            }
 
                                             //add ncbDetailView to ncbDetailViewList
                                             ncbDetailViews.add(ncbDetailView);
