@@ -1251,6 +1251,8 @@ public class PEDBExecute extends BusinessControl
                     {
                         date = completedCasesWKItems.getCreatedate();
 
+                        peInbox.setLongReceivedTime(date.getTime());
+
                         peInbox.setReceiveddate(formatter.format(date));
                     }
 
@@ -1340,12 +1342,15 @@ public class PEDBExecute extends BusinessControl
 
                         date = completedCasesWKItems.getSlaenddate();
 
+                        peInbox.setLongSLAEndTime(date.getTime());
+
                         peInbox.setSlaenddate(formatter.format(date));
                     }
 
                     if(completedCasesWKItems.getCompletedate()!=null)
                     {
                         date = completedCasesWKItems.getCompletedate();
+                        peInbox.setLongTerminateDate(date.getTime());
                         peInbox.setTerminateDate(formatter.format(date));
                     }
 
