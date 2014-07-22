@@ -163,7 +163,7 @@ public class BasicInfo implements Serializable {
     @Column(name = "premium_quote", columnDefinition = "int default 0")
     private int premiumQuote;
 
-    @Column(name = "tcgFlage", columnDefinition = "int default 0")
+    @Column(name = "tcg_flag", columnDefinition = "int default 0")
     private int tcgFlag;
 
 

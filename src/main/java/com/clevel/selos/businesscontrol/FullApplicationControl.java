@@ -904,20 +904,20 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
 
-    public void calculateApprovedPricingDOA(long workCaseId){
+    public void calculateApprovedPricingDOA(long workCaseId, ProposeType proposeType){
         ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        workCase = calculatePricingDOA(workCase, newCreditFacility);
+        workCase = calculatePricingDOA(workCase, newCreditFacility, proposeType);
         workCaseDAO.persist(workCase);
     }
 
-    public WorkCase calculatePricingDOA(WorkCase workCase, ProposeLine newCreditFacility){
+    public WorkCase calculatePricingDOA(WorkCase workCase, ProposeLine newCreditFacility, ProposeType proposeType){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
 
         if(newCreditFacility != null){
             //List of Credit detail
-            List<ProposeCreditInfo> newCreditDetailList = newCreditFacility.getProposeCreditInfoList();
+            List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCase.getId(), proposeType);
             //List of Credit tier ( find by Credit detail )
             BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
             BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
