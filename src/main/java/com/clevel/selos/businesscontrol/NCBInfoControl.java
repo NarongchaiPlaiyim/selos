@@ -180,20 +180,28 @@ public class NCBInfoControl extends BusinessControl {
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
-                                    if(lastNPLDateTMB.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateTMB.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             } else {
                                 isNPLOther = true;
                                 if(lastNPLDateOther!=null){
-                                    if(lastNPLDateOther.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateOther.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             }
                         }
@@ -207,20 +215,28 @@ public class NCBInfoControl extends BusinessControl {
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
-                                    if(lastNPLDateTMB.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateTMB.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             } else {
                                 isNPLOther = true;
                                 if(lastNPLDateOther!=null){
-                                    if(lastNPLDateOther.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateOther.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             }
                         }
@@ -278,24 +294,28 @@ public class NCBInfoControl extends BusinessControl {
                 calTmp.setTime(new Date());
                 ncbInfoView.setNplFlag(2);
                 ncbInfoView.setNplTMBFlag(false);
-                ncbInfoView.setNplTMBMonth(calTmp.get(Calendar.MONTH) + 1);
-                ncbInfoView.setNplTMBYear(calTmp.get(Calendar.YEAR));
+                ncbInfoView.setNplTMBMonth(0);
+                ncbInfoView.setNplTMBYear(0);
                 ncbInfoView.setNplOtherFlag(false);
-                ncbInfoView.setNplOtherMonth(calTmp.get(Calendar.MONTH) + 1);
-                ncbInfoView.setNplOtherYear(calTmp.get(Calendar.YEAR));
+                ncbInfoView.setNplOtherMonth(0);
+                ncbInfoView.setNplOtherYear(0);
                 if(isNPLTMB){
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(lastNPLDateTMB);
                     ncbInfoView.setNplTMBFlag(true);
-                    ncbInfoView.setNplTMBMonth(cal.get(Calendar.MONTH) + 1);
-                    ncbInfoView.setNplTMBYear(cal.get(Calendar.YEAR));
+                    if(lastNPLDateTMB!=null){
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(lastNPLDateTMB);
+                        ncbInfoView.setNplTMBMonth(cal.get(Calendar.MONTH) + 1);
+                        ncbInfoView.setNplTMBYear(cal.get(Calendar.YEAR));
+                    }
                 }
                 if(isNPLOther){
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(lastNPLDateOther);
                     ncbInfoView.setNplOtherFlag(true);
-                    ncbInfoView.setNplOtherMonth(cal.get(Calendar.MONTH) + 1);
-                    ncbInfoView.setNplOtherYear(cal.get(Calendar.YEAR));
+                    if(lastNPLDateOther!=null){
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(lastNPLDateOther);
+                        ncbInfoView.setNplOtherMonth(cal.get(Calendar.MONTH) + 1);
+                        ncbInfoView.setNplOtherYear(cal.get(Calendar.YEAR));
+                    }
                 }
             } else {
                 ncbInfoView.setNplFlag(1);
