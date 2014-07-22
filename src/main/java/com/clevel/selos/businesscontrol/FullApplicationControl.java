@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
@@ -132,6 +133,9 @@ public class FullApplicationControl extends BusinessControl {
 
     @Inject
     private BPMExecutor bpmExecutor;
+
+    @Inject
+    private STPExecutor stpExecutor;
 
     public List<User> getABDMUserList(){
         User currentUser = getCurrentUser();
@@ -1519,5 +1523,13 @@ public class FullApplicationControl extends BusinessControl {
         submitInfoHistory.setToUser(!toUserId.equalsIgnoreCase("")?userDAO.findById(toUserId):null);
         submitInfoHistory.setSubmitDate(new Date());
         submitInfoHistory.setSubmitType(submitType.value());
+    }
+
+    public void duplicateFacilityData(long workCaseId){
+        try {
+            stpExecutor.duplicateFacilityData(workCaseId);
+        }catch (Exception ex){
+            log.error("Exception while duplicateFacilityData : ", ex);
+        }
     }
 }

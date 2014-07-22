@@ -498,6 +498,7 @@ public class HeaderController extends BaseController {
         try{
             if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
                 requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                fullApplicationControl.duplicateFacilityData(workCaseId);
                 if(requestPricing){
                     pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
                     if(pricingDOALevel != 0){
