@@ -1404,8 +1404,10 @@ public class ProposeLineTransform extends Transform {
 
     //View
     public ProposeCollateralInfoView transformProposeCollateralToView(ProposeCollateralInfo proposeCollateralInfo, ProposeType proposeType) {
-        ProposeCollateralInfoView proposeCollateralInfoView = new ProposeCollateralInfoView();
-        if(!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId())){
+        ProposeCollateralInfoView proposeCollateralInfoView = null;
+        if(!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId()) && proposeCollateralInfo.getProposeType() == proposeType){
+            proposeCollateralInfoView = new ProposeCollateralInfoView();
+
             proposeCollateralInfoView.setId(proposeCollateralInfo.getId());
 
             proposeCollateralInfoView.setAppraisalRequest(proposeCollateralInfo.getAppraisalRequest());
@@ -1466,7 +1468,9 @@ public class ProposeLineTransform extends Transform {
         if (!Util.isNull(proposeCollateralInfoList)) {
             for (ProposeCollateralInfo proCollateral : proposeCollateralInfoList) {
                 ProposeCollateralInfoView proposeCollateralInfoView = transformProposeCollateralToView(proCollateral, proposeType);
-                proposeCollateralInfoViewList.add(proposeCollateralInfoView);
+                if(!Util.isNull(proposeCollateralInfoView)) {
+                    proposeCollateralInfoViewList.add(proposeCollateralInfoView);
+                }
             }
         }
         return proposeCollateralInfoViewList;
