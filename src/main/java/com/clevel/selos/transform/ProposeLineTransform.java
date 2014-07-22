@@ -277,14 +277,14 @@ public class ProposeLineTransform extends Transform {
             proposeLineView.setTotalIndvGuaranteeAmount(proposeLine.getTotalIndvGuaranteeAmount());
             proposeLineView.setTotalJurisGuaranteeAmount(proposeLine.getTotalJurisGuaranteeAmount());
 
-            proposeLineView.setProposeCreditInfoDetailViewList(transformProposeCreditToViewList(proposeLine.getProposeCreditInfoList()));
+            proposeLineView.setProposeCreditInfoDetailViewList(transformProposeCreditToViewList(proposeLine.getProposeCreditInfoList(), proposeType));
 
-            proposeLineView.setProposeConditionInfoViewList(transformProposeConditionToViewList(proposeLine.getProposeConditionInfoList()));
+            proposeLineView.setProposeConditionInfoViewList(transformProposeConditionToViewList(proposeLine.getProposeConditionInfoList(), proposeType));
 
             proposeLineView.setProposeGuarantorInfoViewList(transformProposeGuarantorToViewList(proposeLine.getProposeGuarantorInfoList(), proposeType));
 
             List<ProposeFeeDetail> proposeFeeDetailList = proposeFeeDetailDAO.findByWorkCaseId(proposeLine.getWorkCase().getId(), proposeType);
-            List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList);
+            List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList, proposeType);
             List<ProposeFeeDetailView> proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
 
             Map<String, ProposeFeeDetailView> proposeFeeDetailViewMap = new HashMap<String, ProposeFeeDetailView>();
@@ -369,9 +369,9 @@ public class ProposeLineTransform extends Transform {
         return proposeCreditInfo;
     }
 
-    public ProposeCreditInfoDetailView transformProposeCreditToView(ProposeCreditInfo proposeCreditInfo) {
+    public ProposeCreditInfoDetailView transformProposeCreditToView(ProposeCreditInfo proposeCreditInfo, ProposeType proposeType) {
         ProposeCreditInfoDetailView proposeCreditInfoDetailView = new ProposeCreditInfoDetailView();
-        if(!Util.isNull(proposeCreditInfo) && !Util.isZero(proposeCreditInfo.getId())){
+        if(!Util.isNull(proposeCreditInfo) && !Util.isZero(proposeCreditInfo.getId()) && proposeCreditInfo.getProposeType() == proposeType){
             proposeCreditInfoDetailView.setId(proposeCreditInfo.getId());
 
             proposeCreditInfoDetailView.setRequestType(proposeCreditInfo.getRequestType());
@@ -421,11 +421,11 @@ public class ProposeLineTransform extends Transform {
         return proposeCreditInfoList;
     }
 
-    public List<ProposeCreditInfoDetailView> transformProposeCreditToViewList(List<ProposeCreditInfo> proposeCreditInfoList) {
+    public List<ProposeCreditInfoDetailView> transformProposeCreditToViewList(List<ProposeCreditInfo> proposeCreditInfoList, ProposeType proposeType) {
         List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
         if (!Util.isNull(proposeCreditInfoList)) {
             for (ProposeCreditInfo proCredit : proposeCreditInfoList) {
-                ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToView(proCredit);
+                ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToView(proCredit, proposeType);
                 proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
             }
         }
@@ -433,7 +433,7 @@ public class ProposeLineTransform extends Transform {
     }
 
     //for only show in screen
-    public ProposeCreditInfoDetailView transformProposeCreditToView(ProposeCreditInfo proposeCreditInfo, BigDecimal guaranteeAmount) {
+    public ProposeCreditInfoDetailView transformProposeCreditToViewScreen(ProposeCreditInfo proposeCreditInfo, BigDecimal guaranteeAmount) {
         ProposeCreditInfoDetailView proposeCreditInfoDetailView = new ProposeCreditInfoDetailView();
         if(!Util.isNull(proposeCreditInfo) && !Util.isZero(proposeCreditInfo.getId())){
             proposeCreditInfoDetailView.setId(proposeCreditInfo.getId());
@@ -718,9 +718,9 @@ public class ProposeLineTransform extends Transform {
         return proposeConditionInfo;
     }
 
-    public ProposeConditionInfoView transformProposeConditionToView(ProposeConditionInfo proposeConditionInfo) {
+    public ProposeConditionInfoView transformProposeConditionToView(ProposeConditionInfo proposeConditionInfo, ProposeType proposeType) {
         ProposeConditionInfoView proposeConditionInfoView = new ProposeConditionInfoView();
-        if(!Util.isNull(proposeConditionInfo) && !Util.isZero(proposeConditionInfo.getId())){
+        if(!Util.isNull(proposeConditionInfo) && !Util.isZero(proposeConditionInfo.getId()) && proposeConditionInfo.getProposeType() == proposeType){
             proposeConditionInfoView.setId(proposeConditionInfo.getId());
 
             proposeConditionInfoView.setLoanType(proposeConditionInfo.getLoanType());
@@ -741,11 +741,11 @@ public class ProposeLineTransform extends Transform {
         return proposeConditionInfoList;
     }
 
-    public List<ProposeConditionInfoView> transformProposeConditionToViewList(List<ProposeConditionInfo> proposeConditionInfoList) {
+    public List<ProposeConditionInfoView> transformProposeConditionToViewList(List<ProposeConditionInfo> proposeConditionInfoList, ProposeType proposeType) {
         List<ProposeConditionInfoView> proposeConditionInfoViewList = new ArrayList<ProposeConditionInfoView>();
         if (!Util.isNull(proposeConditionInfoList)) {
             for (ProposeConditionInfo proCondition : proposeConditionInfoList) {
-                ProposeConditionInfoView proposeConditionInfoView = transformProposeConditionToView(proCondition);
+                ProposeConditionInfoView proposeConditionInfoView = transformProposeConditionToView(proCondition, proposeType);
                 proposeConditionInfoViewList.add(proposeConditionInfoView);
             }
         }
@@ -787,7 +787,7 @@ public class ProposeLineTransform extends Transform {
 
     public ProposeGuarantorInfoView transformProposeGuarantorToView(ProposeGuarantorInfo proposeGuarantorInfo, ProposeType proposeType) {
         ProposeGuarantorInfoView proposeGuarantorInfoView = new ProposeGuarantorInfoView();
-        if(!Util.isNull(proposeGuarantorInfo) && !Util.isZero(proposeGuarantorInfo.getId())){
+        if(!Util.isNull(proposeGuarantorInfo) && !Util.isZero(proposeGuarantorInfo.getId()) && proposeGuarantorInfo.getProposeType() == proposeType){
             proposeGuarantorInfoView.setId(proposeGuarantorInfo.getId());
 
             proposeGuarantorInfoView.setTcgLgNo(proposeGuarantorInfo.getTcgLgNo());
@@ -810,7 +810,7 @@ public class ProposeLineTransform extends Transform {
             for (ProposeGuarantorInfoRelation proposeGuarantorInfoRelation : proposeGuarantorInfoRelationList) {
                 if(!Util.isNull(proposeGuarantorInfoRelation)){
                     if(!Util.isNull(proposeGuarantorInfoRelation.getProposeCreditInfo())) {
-                        ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToView(proposeGuarantorInfoRelation.getProposeCreditInfo(), proposeGuarantorInfoRelation.getGuaranteeAmount());
+                        ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToViewScreen(proposeGuarantorInfoRelation.getProposeCreditInfo(), proposeGuarantorInfoRelation.getGuaranteeAmount());
                         proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
                     } else if(!Util.isNull(proposeGuarantorInfoRelation.getExistingCreditDetail())) {
                         ProposeCreditInfoDetailView existingCreditDetailView = transformProposeCreditToViewByExisting(proposeGuarantorInfoRelation.getExistingCreditDetail(), proposeGuarantorInfoRelation.getGuaranteeAmount());
@@ -1049,7 +1049,7 @@ public class ProposeLineTransform extends Transform {
         return proposeFeeDetailList;
     }
 
-    public List<ProposeFeeDetailView> transformProposeFeeToViewList(List<ProposeFeeDetail> proposeFeeDetailList) {
+    public List<ProposeFeeDetailView> transformProposeFeeToViewList(List<ProposeFeeDetail> proposeFeeDetailList, ProposeType proposeType) {
         List<ProposeFeeDetailView> proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
         if (!Util.isNull(proposeFeeDetailList)) {
             Map<Long, ProposeFeeDetailView> newFeeDetailViewMap = new HashMap<Long, ProposeFeeDetailView>();
@@ -1066,7 +1066,7 @@ public class ProposeLineTransform extends Transform {
 
                     ProposeCreditInfo proposeCreditInfo = proposeFeeDetail.getProposeCreditInfo();
                     if (!Util.isNull(proposeCreditInfo)) {
-                        proposeFeeDetailView.setProposeCreditInfoDetailView(transformProposeCreditToView(proposeCreditInfo));
+                        proposeFeeDetailView.setProposeCreditInfoDetailView(transformProposeCreditToView(proposeCreditInfo, proposeType));
                         if (!Util.isNull(proposeCreditInfo.getProductProgram())) {
                             proposeFeeDetailView.setProductProgram(proposeCreditInfo.getProductProgram().getName());
                         }
@@ -1655,7 +1655,7 @@ public class ProposeLineTransform extends Transform {
         //For Decision
         // Approve data already been recorded
         List<ProposeCreditInfo> approveCreditList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
-        decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList));
+        decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList, ProposeType.A));
 
         List<ProposeCollateralInfo> approveCollateralList = proposeCollateralInfoDAO.findNewCollateral(workCaseId, ProposeType.A);
         decisionView.setApproveCollateralList(transformProposeCollateralToViewList(approveCollateralList, ProposeType.A));
@@ -1689,7 +1689,7 @@ public class ProposeLineTransform extends Transform {
 
             //Fee Info.
             List<ProposeFeeDetail> proposeFeeDetailList = proposeFeeDetailDAO.findByWorkCaseId(decision.getWorkCase().getId(), ProposeType.A);
-            List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList);
+            List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList, ProposeType.A);
             List<ProposeFeeDetailView> proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
 
             Map<String, ProposeFeeDetailView> proposeFeeDetailViewMap = new HashMap<String, ProposeFeeDetailView>();

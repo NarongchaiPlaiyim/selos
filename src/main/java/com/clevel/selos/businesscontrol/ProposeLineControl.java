@@ -361,7 +361,7 @@ public class ProposeLineControl extends BusinessControl {
 
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
-                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo);
+                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
                                 proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
                                 ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
                                 if (!Util.isNull(productProgram)) {
@@ -454,7 +454,7 @@ public class ProposeLineControl extends BusinessControl {
 
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
-                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo);
+                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
                                 proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
                                 ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
                                 if (!Util.isNull(productProgram)) {
