@@ -723,8 +723,10 @@ public class ProposeLineTransform extends Transform {
     }
 
     public ProposeConditionInfoView transformProposeConditionToView(ProposeConditionInfo proposeConditionInfo, ProposeType proposeType) {
-        ProposeConditionInfoView proposeConditionInfoView = new ProposeConditionInfoView();
+        ProposeConditionInfoView proposeConditionInfoView = null;
         if(!Util.isNull(proposeConditionInfo) && !Util.isZero(proposeConditionInfo.getId()) && proposeConditionInfo.getProposeType() == proposeType){
+            proposeConditionInfoView = new ProposeConditionInfoView();
+
             proposeConditionInfoView.setId(proposeConditionInfo.getId());
 
             proposeConditionInfoView.setLoanType(proposeConditionInfo.getLoanType());
@@ -750,7 +752,9 @@ public class ProposeLineTransform extends Transform {
         if (!Util.isNull(proposeConditionInfoList)) {
             for (ProposeConditionInfo proCondition : proposeConditionInfoList) {
                 ProposeConditionInfoView proposeConditionInfoView = transformProposeConditionToView(proCondition, proposeType);
-                proposeConditionInfoViewList.add(proposeConditionInfoView);
+                if(!Util.isNull(proposeConditionInfoView)) {
+                    proposeConditionInfoViewList.add(proposeConditionInfoView);
+                }
             }
         }
         return proposeConditionInfoViewList;
@@ -1664,7 +1668,7 @@ public class ProposeLineTransform extends Transform {
             decisionView.setInvestedCountry(new CountryView());
         }
 
-        //For Decision
+        //For Decision ----------------------------------------------------------------------
         // Approve data already been recorded
         List<ProposeCreditInfo> approveCreditList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
         decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList, ProposeType.A));
@@ -1673,6 +1677,7 @@ public class ProposeLineTransform extends Transform {
         decisionView.setApproveCollateralList(transformProposeCollateralToViewList(approveCollateralList, ProposeType.A));
 
         List<ProposeGuarantorInfo> approveGuarantorList = proposeGuarantorInfoDAO.findNewGuarantorByNewCreditFacId(proposeLineView.getId(), ProposeType.A);
+        log.debug("######### approveGuarantorList ::: {}", approveGuarantorList);
         decisionView.setApproveGuarantorList(transformProposeGuarantorToViewList(approveGuarantorList, ProposeType.A));
 
         if(!Util.isNull(decision) && !Util.isZero(decision.getId())) {
