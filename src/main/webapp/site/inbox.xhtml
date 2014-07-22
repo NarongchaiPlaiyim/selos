@@ -139,6 +139,9 @@
                                                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" rendered="#{item.bdmFlag == 'Y'}" title="Restart" action="#{peInbox.onRestartCase}" onclick="blockInbox.show()" >
                                                     <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
                                                 </p:commandButton>
+                                                <p:commandButton icon="ui-icon-pencil" rendered="#{item.bdmFlag == 'N'}" title="View" action="#{peInbox.onSelectInbox}" onclick="blockInbox.show()" >
+                                                    <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
+                                                </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
 
