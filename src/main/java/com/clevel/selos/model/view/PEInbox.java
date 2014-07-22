@@ -42,6 +42,15 @@ public class PEInbox implements Serializable
     private long longReceivedTime;
     private long longAppointmentDate;
     private long longSLAEndTime;
+    private long longTerminateDate;
+
+    public long getLongTerminateDate() {
+        return longTerminateDate;
+    }
+
+    public void setLongTerminateDate(long longTerminateDate) {
+        this.longTerminateDate = longTerminateDate;
+    }
 
     public long getLongReceivedTime() {
         return longReceivedTime;
