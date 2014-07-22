@@ -70,7 +70,7 @@ public class CustomerInfoIndividual implements Serializable {
     @Inject
     private OccupationDAO occupationDAO;
     @Inject
-    private BusinessSubTypeDAO businessSubTypeDAO;
+    private BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
     private MaritalStatusDAO maritalStatusDAO;
     @Inject
@@ -108,7 +108,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<Nationality> sndNationalityList;
     private List<Education> educationList;
     private List<Occupation> occupationList;
-    private List<BusinessSubType> businessTypeList;
+    private List<BusinessDescription> businessTypeList;
     private List<MaritalStatus> maritalStatusList;
 
     private List<Province> provinceForm1List;
@@ -390,7 +390,7 @@ public class CustomerInfoIndividual implements Serializable {
         sndNationalityList = nationalityDAO.findAll();
         educationList = educationDAO.findAll();
         occupationList = occupationDAO.findAll();
-        businessTypeList = businessSubTypeDAO.findAll();
+        businessTypeList = businessDescriptionDAO.findAll();
         maritalStatusList = maritalStatusDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -2320,11 +2320,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.occupationList = occupationList;
     }
 
-    public List<BusinessSubType> getBusinessTypeList() {
+    public List<BusinessDescription> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessSubType> businessTypeList) {
+    public void setBusinessTypeList(List<BusinessDescription> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 
