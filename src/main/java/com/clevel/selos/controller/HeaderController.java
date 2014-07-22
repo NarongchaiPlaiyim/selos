@@ -1298,41 +1298,47 @@ public class HeaderController extends BaseController {
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         if(workCasePreScreenId != 0){
             try{
-                mandateFieldMessageViewList = null;
-                prescreenBusinessControl.updateCSIData(workCasePreScreenId);
-                UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
-                log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
-                if(uwRuleResponseView != null){
-                    if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
-                        UWRuleResultSummaryView uwRuleResultSummaryView = null;
-                        try{
-                            uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
-                            uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
-                            uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
-                            //TODO: wait to confirm spec
-                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
-                                canCheckPreScreen = false;
-                            } else {
-                                canCheckPreScreen = true;
+                int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+                if (modifyFlag == 0) {
+                    mandateFieldMessageViewList = null;
+                    prescreenBusinessControl.updateCSIData(workCasePreScreenId);
+                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
+                    log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
+                    if(uwRuleResponseView != null){
+                        if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
+                            UWRuleResultSummaryView uwRuleResultSummaryView = null;
+                            try{
+                                uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
+                                uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
+                                uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                                //TODO: wait to confirm spec
+                                if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
+                                    canCheckPreScreen = false;
+                                } else {
+                                    canCheckPreScreen = true;
+                                }
+                                headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
+                            }catch (Exception ex){
+                                log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
+                                messageHeader = "Exception.";
+                                message = Util.getMessageException(ex);
                             }
-                            headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
-                        }catch (Exception ex){
-                            log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
+                            messageHeader = "Information.";
+                            message = "Request for Check Pre-Screen and Save data success.";
+                            success = true;
+                        }else {
                             messageHeader = "Exception.";
-                            message = Util.getMessageException(ex);
+                            message = uwRuleResponseView.getReason();
+                            mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
                         }
+                    } else {
+                        uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
                         messageHeader = "Information.";
-                        message = "Request for Check Pre-Screen success";
-                        success = true;
-                    }else {
-                        messageHeader = "Exception.";
-                        message = uwRuleResponseView.getReason();
-                        mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
+                        message = "There is no data returned from getPrescreen. Please contact system administrator";
                     }
                 } else {
-                    uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
-                    messageHeader = "Information.";
-                    message = "There is no data returned from getPrescreen. Please contact system administrator";
+                    messageHeader = "Warning.";
+                    message = "Cannot Check Prescreen. Some of data has been modified. Please Retrieve Interface Info and Save.";
                 }
             } catch (Exception ex){
                 log.error("Exception while getPrescreenResult : ", ex);
@@ -1511,6 +1517,18 @@ public class HeaderController extends BaseController {
         log.debug("onCheckMandateForFullApp ::: stop...");
     }
 
+    //ABDM
+    public void onCheckMandateForABDM(){
+        log.debug("onCheckMandateForABDM ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
+    }
+
     //AAD Committee
     public void onCheckMandateForStepCheckDoc(){
         log.debug("onCheckMandateForStepCheckDoc ::: start...");
@@ -1521,6 +1539,18 @@ public class HeaderController extends BaseController {
             log.error("-- Exception : ", e);
         }
         log.debug("onCheckMandateForStepCheckDoc ::: stop...");
+    }
+
+    // ZONE
+    public void onCheckMandateForZONE(){
+        log.debug("onCheckMandateForZONE ::: start...");
+        try{
+            callFullApp();
+            log.debug("stop...");
+        } catch (Exception e) {
+            log.error("-- Exception : ", e);
+        }
+        log.debug("onCheckMandateForFullApp ::: stop...");
     }
 
     private void callFullApp() throws Exception{
@@ -2117,6 +2147,68 @@ public class HeaderController extends BaseController {
             message = "Exception while request parallel appraisal, " + Util.getMessageException(ex);
             showMessageBox();
         }
+    }
+
+    //----- Function for Close Sale -------//
+    public void onOpenCloseSales(){
+        //Check SLA Over or not?
+        _loadSessionVariable();
+        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+        if(submitOverSLA == 1){
+            //Show Close sales dialog with SLA Reason
+            reasonId = 0;
+            reasonList = reasonToStepDAO.getOverSLAReason(stepId);
+            slaRemark = "";
+        }else{
+            submitRemark = "";
+        }
+
+        RequestContext.getCurrentInstance().execute("closeSalesDlg.show()");
+    }
+
+    public void onCloseSales(){
+        _loadSessionVariable();
+        log.debug("onCloseSale ::: queueName : {}", queueName);
+        boolean complete = false;
+        String tmpRemark = "";
+        try{
+            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+            log.debug("modifyFlag : {}", modifyFlag);
+            if (modifyFlag == 1) {
+                messageHeader = "Exception";
+                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else if (modifyFlag == 2) {
+                messageHeader = "Exception";
+                message = "Could not get data for PreScreen.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                if (submitOverSLA == 1) {
+                    if (reasonId != 0 && !Integer.toString(reasonId).equals("")) {
+                        complete = true;
+                        tmpRemark = slaRemark;
+                    }
+                } else {
+                    tmpRemark = submitRemark;
+                    complete = true;
+                }
+                log.debug("complete : {}", complete);
+                if (complete) {
+                    log.debug("complete true : starting duplicate data ");
+                    prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
+                    log.debug("Duplicate data complete and submit complete.");
+                    messageHeader = "Information.";
+                    message = "Close Sales Complete. Click 'OK' return Inbox.";
+                    showMessageRedirect();
+                }
+            }
+        }catch (Exception ex){
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            log.error("onCloseSales error : ", ex);
+            showMessageBox();
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
     public boolean checkAccessStage(String stageString){

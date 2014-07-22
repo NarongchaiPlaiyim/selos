@@ -68,6 +68,8 @@ public class ProposeLine extends BaseController {
     private CustomerInfoControl customerInfoControl;
     @Inject
     private CreditFacExistingControl creditFacExistingControl;
+    @Inject
+    private FullApplicationControl fullApplicationControl;
 
     @Inject
     private CreditRequestTypeTransform creditRequestTypeTransform;
@@ -170,7 +172,6 @@ public class ProposeLine extends BaseController {
     private int lastSeq;
     private Hashtable hashSeqCredit; // seq , usage
     private Hashtable hashSeqCreditTmp;
-    private boolean workCaseRequestAppraisal;
 
     //Mode
     private boolean isModeEdit;
@@ -282,19 +283,7 @@ public class ProposeLine extends BaseController {
             proposeCollateralInfoViewTmp = new ProposeCollateralInfoView();
             potentialCollViewList = potentialCollateralTransform.transformToView(potentialCollateralDAO.findAll());
 
-            if(!Util.isNull(workCase) && !Util.isZero(workCase.getId())) {
-                if(!Util.isZero(workCase.getRequestAppraisal())) {
-                    workCaseRequestAppraisal = true;
-                } else {
-                    workCaseRequestAppraisal = false;
-                }
-            }
-
-            if(workCaseRequestAppraisal) {
-                headCollTypeViewList = collateralTypeTransform.transformToView(collateralTypeDAO.findByAppraisal(0));
-            } else {
-                headCollTypeViewList = collateralTypeTransform.transformToView(collateralTypeDAO.findAll());
-            }
+            headCollTypeViewList = collateralTypeTransform.transformToView(collateralTypeDAO.findAll());
 
             //Sub Collateral
             proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
@@ -646,6 +635,8 @@ public class ProposeLine extends BaseController {
 
         modeSubColl = Mode.EDIT;
 
+        subCollateralTypeList = subCollateralTypeDAO.findByCollateralTypeId(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowIndex).getHeadCollType().getId());
+
         if(!Util.isNull(relateWithList) && !Util.isZero(relateWithList.size())){
             for(ProposeCollateralInfoSubView proCollInfSubView : relateWithList){
                 if(proCollInfSubView.getSubId().equalsIgnoreCase(proposeCollateralInfoSubView.getSubId())){
@@ -821,6 +812,7 @@ public class ProposeLine extends BaseController {
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
             proposeLineControl.calWC(workCaseId);
             exSummaryControl.calForCreditFacility(workCaseId);
+            fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P);
 
             onCreation();
 
@@ -1094,13 +1086,5 @@ public class ProposeLine extends BaseController {
 
     public void setRowHeadCollIndex(int rowHeadCollIndex) {
         this.rowHeadCollIndex = rowHeadCollIndex;
-    }
-
-    public boolean isWorkCaseRequestAppraisal() {
-        return workCaseRequestAppraisal;
-    }
-
-    public void setWorkCaseRequestAppraisal(boolean workCaseRequestAppraisal) {
-        this.workCaseRequestAppraisal = workCaseRequestAppraisal;
     }
 }

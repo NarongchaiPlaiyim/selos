@@ -80,23 +80,12 @@
     <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
-                     disabled="#{not headerController.canCloseSale or not headerController.canCheckPreScreen}"
-                     type="button"
-                     onclick="confrmCloseSaleCA.show()"/>
-    <p:confirmDialog header="Confirmation" message="#{msg.get('app.header.confirm.closeSale')}" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confrmCloseSaleCA" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Close Sales')}">
-        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
-                         process="@this" widgetVar="closeSaleSaveBtn"
-                         actionListener="#{prescreenMaker.onCloseSale()}"
-                         update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
-                         oncomplete="confrmCloseSaleCA.hide();closeSaleSaveBtn.enable();closeSaleCancelBtn.enable()"
-                         onclick="closeSaleSaveBtn.disable();closeSaleCancelBtn.disable()"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="ui-confirmdialog-no"
-                         process="@this" widgetVar="closeSaleCancelBtn"
-                         onclick="confrmCloseSaleCA.hide()"/>
-    </p:confirmDialog>
+                     onclick="PF('blockUI').show()"
+                     actionListener="#{headerController.onOpenCloseSales()}"
+                     oncomplete="blockUI.hide()"
+                     update=":frmMain:closeSalesPanel"
+                     disabled="#{not headerController.canCloseSale or not headerController.canCheckPreScreen}"/>
+
 </p:panel>
 <!--############ Stage for FullApplication ############-->
 <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
@@ -458,10 +447,26 @@
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
+    <!-- Check Mandate Doc [ For ABDM ]-->
+    <p:commandButton id="btnCheckMandate_ABDM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2023}"
+                     actionListener="#{headerController.onCheckMandateForABDM()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
+    </p:commandButton>
     <!-- Check Mandate Doc [ For STEP CHECK DOC ]-->
     <p:commandButton id="btnCheckMandate_CheckDoc" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 3008}"
                      actionListener="#{headerController.onCheckMandateForStepCheckDoc()}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
+    </p:commandButton>
+    <!-- Check Mandate Doc [ For ZONE ]-->
+    <p:commandButton id="btnCheckMandate_ZONE" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2002}"
+                     actionListener="#{headerController.onCheckMandateForZONE()}"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -688,16 +693,12 @@
     <p:dialog id="checkMandateDialog"
               widgetVar="checkMandateDlg"
               header="Check MandateDoc"
-
               resizable="false"
               modal="true" width="1024" height="500" closable="false"
               maximizable="">
         <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
     </p:dialog>
 </p:panel>
-
-<!--onShow="hideWindowsScrollBar()"-->
-<!--onHide="showWindowsScrollBar()"-->
 
 <p:panel id="addReturnInfoPanel" styleClass="panel">
     <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"
@@ -794,4 +795,13 @@
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+<p:panel id="closeSalesPanel" styleClass="panel"
+         rendered="#{headerController.checkButton('Close Sales')}">
+    <p:dialog id="closeSalesDialog" header="Close Sales" widgetVar="closeSalesDlg"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
+              modal="true" width="380" height="150">
+        <ui:include src="/site/dialog/closeSalesDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 </ui:composition>

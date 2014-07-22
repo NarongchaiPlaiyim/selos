@@ -42,6 +42,15 @@ public class ReasonToStepDAO extends GenericDAO<ReasonToStep, Long> {
         return reasonList;
     }
 
+    public List<Reason> getOverSLAReason(long stepId){
+        List<Reason> reasonList = new ArrayList<Reason>();
+        log.info("getOverSLAReason ::: stepId : {}", stepId);
+        String query = "SELECT reason FROM ReasonToStep reasonToStep WHERE reasonToStep.reason.reasonType.id = " + ReasonTypeValue.OVER_SLA_REASON.value() + " AND reasonToStep.step.id = " + stepId + " AND reasonToStep.active = 1 order by reasonToStep.reason.code asc";
+        reasonList = (List<Reason>) getSession().createQuery(query).list();
+
+        return reasonList;
+    }
+
     public List<Reason> getRejectReason(long stepId){
         List<Reason> reasonList = new ArrayList<Reason>();
         log.info("getCancelReason ::: stepId : {}", stepId);

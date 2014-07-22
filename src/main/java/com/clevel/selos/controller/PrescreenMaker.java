@@ -621,7 +621,9 @@ public class PrescreenMaker extends BaseController {
 
     }
 
-    public void onCloseSale() {
+
+
+    /*public void onCloseSale() {
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try {
             //TODO Check Modified flag
@@ -650,7 +652,7 @@ public class PrescreenMaker extends BaseController {
             log.error("onCloseSale failed : ", ex);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-    }
+    }*/
 
     // *** Function For Facility *** //
     public void onAddFacility() {

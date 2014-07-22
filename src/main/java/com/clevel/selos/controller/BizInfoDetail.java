@@ -167,13 +167,8 @@ public class BizInfoDetail extends BaseController {
                         productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
                     }
                 } else {
-//                    if(bizInfoSummaryView.getCirculationAmount() == null){
                         circulationAmount = 0;
-//                    }
-//                    if(bizInfoSummaryView.getProductionCostsAmount() == null){
                         productionCostsAmount = 0;
-
-//                    }
                 }
 
                 double x = (circulationAmount/365)*30;
@@ -213,12 +208,15 @@ public class BizInfoDetail extends BaseController {
                         buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
                     }
 
-                    if(!Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
-                        bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
-                        log.info("setBizDocExpiryDate :",bizInfoDetailView.getBizDocExpiryDate());
-                    } else {
-                        bizInfoDetailView.setBizDocExpiryDate(null);
-                    }
+//                    if (Util.equals("Y",bizInfoDetailView.getBizPermission())){
+//                        if(!Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
+//                            bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
+//                            log.info("setBizDocExpiryDate :",bizInfoDetailView.getBizDocExpiryDate());
+//                        } else {
+//                            bizInfoDetailView.setBizDocExpiryDate(null);
+//                        }
+//                    }
+
 
                     onChangeBusinessGroupInitial();
                     onChangeBusinessDesc();
@@ -302,11 +300,11 @@ public class BizInfoDetail extends BaseController {
         bizInfoDetailView.setBizComment(businessDesc.getComment());
         bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
 
-        if(Util.equals("Y",businessDesc.getBusinessPermission())) {
-            bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
-        } else {
-            bizInfoDetailView.setBizPermission("N");
-        }
+//        if(Util.equals("Y",businessDesc.getBusinessPermission())) {
+//            bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
+//        } else {
+//            bizInfoDetailView.setBizPermission("N");
+//        }
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAp());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAr());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());

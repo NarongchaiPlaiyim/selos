@@ -6,6 +6,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -339,17 +340,13 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setNoOfEmployee(bizInfoSummary.getNoOfEmployee());
 
-        bizInfoSummaryView.setSumIncomeAmount(bizInfoSummary.getSumIncomeAmount());
-        bizInfoSummaryView.setSumIncomePercent(bizInfoSummary.getSumIncomePercent());
-        bizInfoSummaryView.setSumWeightAR(bizInfoSummary.getSumWeightAR());
-//        log.debug("--SumWeightAR. {}",bizInfoSummaryView.getSumWeightAR());
-        bizInfoSummaryView.setSumWeightAP(bizInfoSummary.getSumWeightAP());
-//        log.debug("--SumWeightAP. {}",bizInfoSummaryView.getSumWeightAP());
-        bizInfoSummaryView.setSumWeightINV(bizInfoSummary.getSumWeightINV());
-//        log.debug("--SumWeightINV. {}",bizInfoSummaryView.getSumWeightINV());
-        bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
-        log.debug("--SumWeightInterviewedIncomeFactorPercent. {}",bizInfoSummaryView.getSumWeightInterviewedIncomeFactorPercent());
-        bizInfoSummaryView.setWeightIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
+        bizInfoSummaryView.setSumIncomeAmount(Util.isNull(bizInfoSummary.getSumIncomeAmount()) ? BigDecimal.ZERO : bizInfoSummary.getSumIncomeAmount());
+        bizInfoSummaryView.setSumIncomePercent(Util.isNull(bizInfoSummary.getSumIncomePercent()) ? BigDecimal.ZERO : bizInfoSummary.getSumIncomePercent());
+        bizInfoSummaryView.setSumWeightAR(Util.isNull(bizInfoSummary.getSumWeightAR()) ? BigDecimal.ZERO : bizInfoSummary.getSumWeightAR());
+        bizInfoSummaryView.setSumWeightAP(Util.isNull(bizInfoSummary.getSumWeightAP()) ? BigDecimal.ZERO : bizInfoSummary.getSumWeightAP());
+        bizInfoSummaryView.setSumWeightINV(Util.isNull(bizInfoSummary.getSumWeightINV()) ? BigDecimal.ZERO : bizInfoSummary.getSumWeightINV());
+        bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(Util.isNull(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent()) ? BigDecimal.ZERO : bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+        bizInfoSummaryView.setWeightIncomeFactor(Util.isNull(bizInfoSummary.getWeightIncomeFactor()) ? BigDecimal.ZERO : bizInfoSummary.getWeightIncomeFactor());
 
         return bizInfoSummaryView;
     }
