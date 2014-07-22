@@ -2307,7 +2307,7 @@ public class ProposeLineControl extends BusinessControl {
                                 if(proposeCreditInfoDetailView.isExistingCredit()) {
                                     existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditInfoDetailView.getId());
                                 } else { // can't find by id coz propose credit id is zero
-                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine);
+                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine, proposeType);
                                 }
                                 ProposeGuarantorInfoRelation proposeGuarantorInfoRelation = proposeLineTransform.transformProposeGuarantorRelationToModel(proposeLine, proposeGuarantorInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser, proposeCreditInfoDetailView.getGuaranteeAmount());
 
@@ -2446,7 +2446,7 @@ public class ProposeLineControl extends BusinessControl {
                                 if(proposeCreditInfoDetailView.isExistingCredit()) {
                                     existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditInfoDetailView.getId());
                                 } else { // can't find by id coz propose credit id is zero
-                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine);
+                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine, proposeType);
                                 }
                                 ProposeCollateralInfoRelation proposeCollateralInfoRelation = proposeLineTransform.transformProposeCollateralRelationToModel(proposeLine, proposeCollateralInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser);
 

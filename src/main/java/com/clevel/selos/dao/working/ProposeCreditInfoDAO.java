@@ -22,10 +22,11 @@ public class ProposeCreditInfoDAO extends GenericDAO<ProposeCreditInfo, Long> {
     public ProposeCreditInfoDAO() {
     }
 
-    public ProposeCreditInfo findBySeqAndPropose(int seq, ProposeLine proposeLine) {
+    public ProposeCreditInfo findBySeqAndPropose(int seq, ProposeLine proposeLine, ProposeType proposeType) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("seq", seq));
         criteria.add(Restrictions.eq("proposeLine", proposeLine));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         ProposeCreditInfo proposeCreditInfo = (ProposeCreditInfo) criteria.uniqueResult();
 
         return proposeCreditInfo;
