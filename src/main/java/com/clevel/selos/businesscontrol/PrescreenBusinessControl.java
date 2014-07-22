@@ -21,10 +21,8 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.Relation;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
@@ -126,6 +124,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     CustomerOblAccountInfoDAO customerOblAccountInfoDAO;
     @Inject
     WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
+    ReasonDAO reasonDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -1106,12 +1106,39 @@ public class PrescreenBusinessControl extends BusinessControl {
         workCasePrescreenDAO.persist(workCasePrescreen);
 
         log.debug("savePreScreenInitial ::: saving prescreen data...");
+        if(customerEntity.getId() == BorrowerType.JURISTIC.value()) {
+            Date tmpDateOfRegister = calculateDateOfRegister(customerInfoViewList);
+            prescreenView.setRegisterDate(tmpDateOfRegister);
+        }
         savePreScreenData(prescreenView, facilityViewList, null, null, workCasePrescreen);
         log.debug("savePreScreenInitial ::: saving prescreen data success...");
 
         log.debug("savePreScreenInitial ::: saving customer data...");
         saveCustomerData(customerInfoDeleteList, customerInfoViewList, workCasePrescreen);
         log.debug("savePreScreenInitial ::: saving customer data success...");
+    }
+
+    private Date calculateDateOfRegister(List<CustomerInfoView> customerInfoViewList){
+        log.debug("calculateDateOfRegister");
+        Date dateOfRegister = null;
+
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()
+                    && customerInfoView.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                log.debug("dateOfRegister : {}", dateOfRegister);
+                if(dateOfRegister == null){
+                    dateOfRegister = customerInfoView.getDateOfRegister();
+                } else {
+                    log.debug("customerInfoView.getDateOfRegister : {} ,,, dateOfRegister : {}", customerInfoView.getDateOfRegister(), dateOfRegister);
+                    if(DateTimeUtil.compareDate(dateOfRegister, customerInfoView.getDateOfRegister()) < 0){
+                        dateOfRegister = customerInfoView.getDateOfRegister();
+                    }
+                    log.debug("After compare dateOfRegister : {}", dateOfRegister);
+                }
+            }
+        }
+
+        return dateOfRegister;
     }
 
     public int getModifyValue(long workCasePreScreenId){
@@ -1357,9 +1384,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }*/
 
-    public void duplicateData(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
+    public void duplicateData(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, int reasonId, String remark) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
-        closeSale(workCasePreScreenId, queueName, actionCode);
+        closeSale(queueName, wobNumber, actionCode, workCasePreScreenId, getReasonDescription(reasonId), remark);
     }
 
     // *** Function for BPM *** //
@@ -1371,7 +1398,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         bpmExecutor.cancelCase(queueName, wobNumber, actionCode, reason, remark);
     }
 
-    public void closeSale(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
+    public void closeSale(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, String reason, String remark) throws Exception {
         bpmExecutor.closeSales(workCasePreScreenId, queueName, actionCode);
     }
 
@@ -1381,6 +1408,23 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void submitBDM(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
         bpmExecutor.submitMaker(workCasePreScreenId, queueName, actionCode);
+    }
+
+    public String getReasonDescription(int reasonId){
+        String reasonDescription = "";
+        if(!Util.isZero(reasonId)){
+            try {
+                Reason reason = reasonDAO.findById(reasonId);
+                if (!Util.isNull(reason)) {
+                    reasonDescription = reason.getCode() != null ? reason.getCode() : "";
+                    reasonDescription = reason.getDescription() != null ? reasonDescription.concat(" - ").concat(reason.getDescription()) : reasonDescription;
+                }
+            } catch (Exception ex) {
+                log.error("Exception while get reason description : ", ex);
+            }
+        }
+
+        return reasonDescription;
     }
 
     /*public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){

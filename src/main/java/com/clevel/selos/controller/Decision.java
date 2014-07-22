@@ -912,7 +912,7 @@ public class Decision extends BaseController {
 
                 exSummaryControl.calForDecision(workCaseId);
 
-                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId());
+                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A);
             }
 
             //Check valid step to Save Approval

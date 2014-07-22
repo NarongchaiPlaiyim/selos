@@ -68,6 +68,8 @@ public class ProposeLine extends BaseController {
     private CustomerInfoControl customerInfoControl;
     @Inject
     private CreditFacExistingControl creditFacExistingControl;
+    @Inject
+    private FullApplicationControl fullApplicationControl;
 
     @Inject
     private CreditRequestTypeTransform creditRequestTypeTransform;
@@ -810,6 +812,7 @@ public class ProposeLine extends BaseController {
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
             proposeLineControl.calWC(workCaseId);
             exSummaryControl.calForCreditFacility(workCaseId);
+            fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P);
 
             onCreation();
 
