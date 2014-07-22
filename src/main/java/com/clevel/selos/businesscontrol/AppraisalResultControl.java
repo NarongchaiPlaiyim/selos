@@ -65,6 +65,7 @@ public class AppraisalResultControl extends BusinessControl {
 
     private ProposeLine newCreditFacility;
     private WorkCase workCase;
+    private WorkCasePrescreen workCasePrescreen;
 
     private List<ProposeCollateralInfo> newCollateralList;
 
@@ -85,6 +86,7 @@ public class AppraisalResultControl extends BusinessControl {
         }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            workCasePrescreen = newCreditFacility.getWorkCasePrescreen();
             log.debug("-- getAppraisalResult ::: findByWorkCasePreScreenId :{}", workCasePreScreenId);
         }
 
@@ -181,8 +183,13 @@ public class AppraisalResultControl extends BusinessControl {
         log.debug("-- insertIntoDB(ProposeCollateralInfoViewList.size()[{}])", newCollateralViewList.size());
         final List<ProposeCollateralInfo> proposeCollateralInfoList = new ArrayList<ProposeCollateralInfo>();
         log.debug("-- User.id[{}]", user.getId());
-        log.debug("-- WorkCase.id[{}]", workCase.getId());
+        if(!Util.isNull(workCase)){
+            log.debug("-- WorkCase.id[{}]", workCase.getId());
+        } else if(!Util.isNull(workCasePrescreen)){
+            log.debug("-- WorkCasePrescreen.id[{}]", workCasePrescreen.getId());
+        }
         log.debug("-- ProposeLine.id[{}]", newCreditFacility.getId());
+
         for(final ProposeCollateralInfoView proposeCollateralInfoView : newCollateralViewList) {
             proposeCollateralInfoList.add(proposeLineTransform.transformProposeCollateralToModel(workCase, newCreditFacility, proposeCollateralInfoView, user, ProposeType.A));
         }

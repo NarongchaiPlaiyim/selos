@@ -340,10 +340,14 @@ public class AppraisalResult implements Serializable {
             log.debug("-- Flag {}", ModeForButton.ADD);
             complete=true;
             String jobID = newCollateralView.getJobID();
+            messageHeader = "Retrieve Appraisal.";
             if(!Util.isNull(jobID) && !Util.equals(jobID, "")){
                 if(saveAndEditFlag){
                     newCollateralViewList.add(newCollateralView);
                     log.info("-- NewCollateralView.jobID[{}] added to NewCollateralViewList[{}]", newCollateralView.getJobID(), newCollateralViewList.size()+1);
+                    message = ActionResult.SUCCESS.toString();
+                } else {
+                    message = ActionResult.FAILED.toString();
                 }
             }
         }else if(ModeForButton.EDIT.equals(modeForButton)){
@@ -352,9 +356,13 @@ public class AppraisalResult implements Serializable {
             if(saveAndEditFlag){
                 newCollateralViewList.set(rowCollateral, newCollateralView);
                 log.info("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
+                message = ActionResult.SUCCESS.toString();
+            } else {
+                message = ActionResult.FAILED.toString();
             }
         }
 
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
     }
