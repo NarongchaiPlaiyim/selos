@@ -1369,7 +1369,7 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
 
-            if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
+            /*if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
                 for(ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
                     if(!Util.isNull(proposeCollateralInfoHeadView) && !Util.isNull(proposeCollateralInfoHeadView.getHeadCollType())) {
                         if(proposeCollateralInfoHeadView.getHeadCollType().getAppraisalRequire() != 0) {
@@ -1379,7 +1379,7 @@ public class ProposeLineTransform extends Transform {
                         }
                     }
                 }
-            }
+            }*/
         }
 
         return proposeCollateralInfoView;
