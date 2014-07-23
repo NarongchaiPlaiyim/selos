@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,6 +29,16 @@ public class NCBDetailDAO extends GenericDAO<NCBDetail, Long> {
         criteria.addOrder(Order.asc("id"));
         List<NCBDetail> ncbDetailList = (List<NCBDetail>) criteria.list();
         log.info("ncbDetailList ::: size : {}", ncbDetailList.size());
+        return ncbDetailList;
+    }
+
+    public List<NCBDetail> getNCBForDBRList(long workCaseId){
+        log.debug("getNCBForDBRList : workCaseId : {}", workCaseId);
+        List<NCBDetail> ncbDetailList;
+
+        String query = "SELECT ncbDetail FROM NCBDetail ncbDetail WHERE ncbDetail.ncb in ( SELECT ncb FROM NCB ncb WHERE ncb.customer in ( SELECT customer FROM Customer customer WHERE customer.workCase.id = " + workCaseId + "))";
+        ncbDetailList = (List<NCBDetail>) getSession().createQuery(query).list();
+
         return ncbDetailList;
     }
 }

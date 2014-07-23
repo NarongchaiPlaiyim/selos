@@ -208,9 +208,9 @@ public class NCBBizTransform extends BusinessTransform {
                                             AccountType accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
                                             ncbDetailView.setAccountType(accountType);
                                             //set tmb account
-                                            ncbDetailView.setTMBAccount(0);
+                                            ncbDetailView.setTMBAccount(RadioValue.NO.value());
                                             if (subjectAccountModel.getShortname().equals(TMB_BANK)) { //todo: change to master
-                                                ncbDetailView.setTMBAccount(1);
+                                                ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                 isTMBAccount = true;
                                             }
                                             //set account status
@@ -1085,6 +1085,15 @@ public class NCBBizTransform extends BusinessTransform {
                                             ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
+                                            if(isTMBAccount){
+                                                if(lastNPLDateTMB!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMDDtoDateFormat(lastNPLDateTMB));
+                                                }
+                                            } else {
+                                                if(lastNPLDateOther!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMDDtoDateFormat(lastNPLDateOther));
+                                                }
+                                            }
 
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
@@ -1336,9 +1345,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                 AccountType accountType = accountTypeDAO.getJuristicByName(creditInfoModel.getCredittype());
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
-                                                ncbDetailView.setTMBAccount(0);
+                                                ncbDetailView.setTMBAccount(RadioValue.NO.value());
                                                 if (creditInfoModel.getCreditortype() != null && creditInfoModel.getCreditortype().trim().equals(TMB_BANK_THAI)) {
-                                                    ncbDetailView.setTMBAccount(1);
+                                                    ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                     isTMBAccount = true;
                                                 }
                                                 //set account status
@@ -1538,6 +1547,16 @@ public class NCBBizTransform extends BusinessTransform {
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
+                                            if(isTMBAccount){
+                                                if(lastNPLDateTMB!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateTMB));
+                                                }
+                                            } else {
+                                                if(lastNPLDateOther!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateOther));
+                                                }
+                                            }
+
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
                                             ncbDetailViews.add(ncbDetailView);
@@ -1552,9 +1571,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                 AccountType accountType = accountTypeDAO.getJuristicByName(creditInfoModel.getCredittype());
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
-                                                ncbDetailView.setTMBAccount(0);
+                                                ncbDetailView.setTMBAccount(RadioValue.NO.value());
                                                 if (creditInfoModel.getCreditortype() != null && creditInfoModel.getCreditortype().trim().equals(TMB_BANK_THAI)) {
-                                                    ncbDetailView.setTMBAccount(1);
+                                                    ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                     isTMBAccount = true;
                                                 }
                                                 //set account status
@@ -1752,6 +1771,16 @@ public class NCBBizTransform extends BusinessTransform {
                                             ncbDetailView.setNoOfOutstandingPaymentIn12months(numberOfOutStandingPayment);
                                             //set number of over limit
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
+
+                                            if(isTMBAccount){
+                                                if(lastNPLDateTMB!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateTMB));
+                                                }
+                                            } else {
+                                                if(lastNPLDateOther!=null){
+                                                    ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateOther));
+                                                }
+                                            }
 
                                             //add ncbDetailView to ncbDetailViewList
                                             ncbDetailViews.add(ncbDetailView);

@@ -117,7 +117,7 @@ public class CollateralBizTransform extends BusinessTransform {
 
             List<HeadCollateralData> headCollateralDataList = appraisalData.getHeadCollateralDataList();
             List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
-            if(!Util.isNull(headCollateralDataList) && headCollateralDataList.size()>0){
+            if(!Util.isNull(headCollateralDataList) && headCollateralDataList.size() > 0){
                 for(HeadCollateralData headCollateralData: headCollateralDataList){
                     ProposeCollateralInfoHeadView proposeCollateralInfoHeadView = new ProposeCollateralInfoHeadView();
                     proposeCollateralInfoHeadView.setTitleDeed(headCollateralData.getTitleDeed());
@@ -161,6 +161,8 @@ public class CollateralBizTransform extends BusinessTransform {
                     }
                     proposeCollateralInfoHeadViewList.add(proposeCollateralInfoHeadView);
                 }
+            } else {
+                proposeCollateralInfoHeadViewList.add(new ProposeCollateralInfoHeadView());
             }
             proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(proposeCollateralInfoHeadViewList);
             proposeCollateralInfoView.setComs(true);
