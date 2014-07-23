@@ -6,6 +6,8 @@
         xmlns:p="http://primefaces.org/ui">
 
 <p:panel id="submitCADlgPanel" styleClass="panel-dialog">
+    <h:outputText value="request pricing = #{headerController.requestPricing}"/>
+    <h:outputText value=" pricing level = #{headerController.pricingDOALevel}"/>
     <p:panel id="submitCA_Endorse" rendered="#{not headerController.requestPricing}" styleClass="panel">
         <table class="content_table_form">
             <tr>
@@ -16,7 +18,7 @@
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{headerController.zmUserId}"
-                                     required="#{not empty param[btnSubmitCaseZM.clientId]}">
+                                     required="#{not empty param[btnSubmitFullApplication.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{headerController.zmUserList}"
                                        var="zmItem"
@@ -40,68 +42,67 @@
     </p:panel>
     <p:panel id="submitCA_Pricing" rendered="#{headerController.requestPricing}" styleClass="panel">
         <table class="content_table_form">
-            <h:panelGroup rendered="#{headerController.submitPricingLevel >= 1}">
+            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 1}">
                 <tr>
                     <td colspan="2" class="title left">Price Reduction Approval</td>
                 </tr>
                 <tr>
                     <td class="title left">Zone Manager :</td>
                     <td>
-                        <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                        <p:selectOneMenu id="submitFullAppZmUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                          value="#{headerController.zmUserId}"
-                                         required="#{not empty param[btnSubmitCaseZMPricing.clientId]}">
+                                         required="#{not empty param[btnSubmitFullApplication.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{headerController.zmUserList}"
                                            var="zmItem"
                                            itemLabel="#{zmItem.id} - #{zmItem.userName}"
                                            itemValue="#{zmItem.id}"/>
-
-                            <p:ajax event="change" listener="#{headerController.onSelectedZM()}" process="@form" update=":frmMain:rgmUserSelect"/>
+                            <p:ajax event="change" listener="#{headerController.onSelectedZM()}" process="@form" update=":frmMain:submitFullAppRgmUserSelect"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
             </h:panelGroup>
-            <h:panelGroup rendered="#{headerController.submitPricingLevel >= 1}">
+            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 1}">
                 <tr>
                     <td class="title left">Regional Manager :</td>
                     <td>
-                        <p:selectOneMenu id="rgmUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                        <p:selectOneMenu id="submitFullAppRgmUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                          value="#{headerController.rgmUserId}"
-                                         required="#{not empty param[btnSubmitCaseZMPricing.clientId] and headerController.submitToRGM}">
+                                         required="#{not empty param[btnSubmitFullApplication.clientId] and headerController.submitToRGM}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{headerController.rgmUserList}"
                                            var="rmItem"
                                            itemLabel="#{rmItem.id} - #{rmItem.userName}"
                                            itemValue="#{rmItem.id}"/>
-                            <p:ajax event="change" listener="#{headerController.onSelectedRM()}" process="@form" update=":frmMain:ghUserSelect"/>
+                            <p:ajax event="change" listener="#{headerController.onSelectedRM()}" process="@form" update=":frmMain:submitFullAppGhUserSelect"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
             </h:panelGroup>
-            <h:panelGroup rendered="#{headerController.submitPricingLevel >= 2}">
+            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 3}">
                 <tr>
                     <td class="title left">Group Head :</td>
                     <td>
-                        <p:selectOneMenu id="ghUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                        <p:selectOneMenu id="submitFullAppGhUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                          value="#{headerController.ghmUserId}"
-                                         required="#{not empty param[btnSubmitCaseZMPricing.clientId] and headerController.submitToGHM}">
+                                         required="#{not empty param[btnSubmitFullApplication.clientId] and headerController.submitToGHM}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{headerController.ghmUserList}"
                                            var="ghItem"
                                            itemLabel="#{ghItem.id} - #{ghItem.userName}"
                                            itemValue="#{ghItem.id}"/>
-                            <p:ajax event="change" listener="#{headerController.onSelectedGH()}" process="@form" update=":frmMain:cssoUserSelect"/>
+                            <p:ajax event="change" listener="#{headerController.onSelectedGH()}" process="@form" update=":frmMain:submitFullAppCssoUserSelect"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
             </h:panelGroup>
-            <h:panelGroup rendered="#{headerController.submitPricingLevel >= 3}">
+            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 4}">
                 <tr>
                     <td class="title left">Chief SME :</td>
                     <td>
-                        <p:selectOneMenu id="cssoUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                        <p:selectOneMenu id="submitFullAppCssoUserSelect" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                          value="#{headerController.cssoUserId}"
-                                         required="#{not empty param[btnSubmitCaseZMPricing.clientId] and headerController.submitToCSSO}">
+                                         required="#{not empty param[btnSubmitFullApplication.clientId] and headerController.submitToCSSO}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{headerController.cssoUserList}"
                                            var="cssoItem"
@@ -123,7 +124,7 @@
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                  value="#{headerController.zmEndorseUserId}"
-                                 required="#{not empty param[btnSubmitCaseZM.clientId]}">
+                                 required="#{not empty param[btnSubmitFullApplication.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.zmUserList}"
                                    var="zmItem"
@@ -146,19 +147,19 @@
     </p:panel>
     <p:panel id="submitCA_Button">
         <p:commandButton id="dlgSubmitCABtn"
-                         binding="#{btnSubmitCA}"
+                         binding="#{btnSubmitFullApplication}"
                          value="#{msg.get('app.button.submit')}"
                          styleClass="small"
-                         actionListener="#{headerController.onSubmitZM()}"
-                         oncomplete="handleSubmitZMDialogRequest(xhr, status, args)"
+                         actionListener="#{headerController.onSubmitFullApplication()}"
+                         oncomplete="handleDialogRequest(xhr, status, args, 'submitFullAppDlg')"
                          process="@form"
-                         update=":frmMain:submitCaseDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                         update=":frmMain:submitCADlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                         styleClass="small" onclick="submitZMDlg.hide()"/>
+                         styleClass="small" onclick="PF('submitFullAppDlg').hide()"/>
     </p:panel>
 </p:panel>
-<p:blockUI widgetVar="blockSubmitCaseDlgPanel" block="submitCaseDlgPanel"
-           trigger=":frmMain:dlgSubmitCaseZMPricingBtn">
+<p:blockUI widgetVar="blocksubmitCADlgPanel" block="submitCADlgPanel"
+           trigger=":frmMain:dlgSubmitCABtn">
     <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

@@ -121,7 +121,7 @@ public class NCB implements Serializable {
     @Column(name = "modify_date")
     private Date modifyDate;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "create_user_id")
     private User createBy;
 
