@@ -1103,6 +1103,7 @@ public class BRMSControl extends BusinessControl {
         accountStmtInfo.setAvgUtilizationPercent(bankStatement.getAvgUtilizationPercent());
         accountStmtInfo.setAvgSwingPercent(bankStatement.getAvgSwingPercent());
         accountStmtInfo.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
+        accountStmtInfo.setAvgGrossInflowPerLimit(bankStatement.getAvgGrossInflowPerLimit());
         accountStmtInfo.setTotalTransaction(bankStatement.getTotalTransaction());
         accountStmtInfo.setMainAccount(getRadioBoolean(bankStatement.getMainAccount()));
         accountStmtInfo.setHighestInflow(toBoolean(bankStatement.getHighestInflow()));

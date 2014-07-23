@@ -180,20 +180,28 @@ public class NCBInfoControl extends BusinessControl {
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
-                                    if(lastNPLDateTMB.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateTMB.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             } else {
                                 isNPLOther = true;
                                 if(lastNPLDateOther!=null){
-                                    if(lastNPLDateOther.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateOther.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             }
                         }
@@ -207,20 +215,28 @@ public class NCBInfoControl extends BusinessControl {
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
-                                    if(lastNPLDateTMB.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateTMB.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateTMB = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateTMB = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             } else {
                                 isNPLOther = true;
                                 if(lastNPLDateOther!=null){
-                                    if(lastNPLDateOther.before(ncbDetailView.getDateOfInfo())){
-                                        lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        if(lastNPLDateOther.before(ncbDetailView.getNplInfoDate())){
+                                            lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                        }
                                     }
                                 } else {
-                                    lastNPLDateOther = ncbDetailView.getDateOfInfo();
+                                    if(ncbDetailView.getNplInfoDate()!=null){
+                                        lastNPLDateOther = ncbDetailView.getNplInfoDate();
+                                    }
                                 }
                             }
                         }
@@ -278,24 +294,28 @@ public class NCBInfoControl extends BusinessControl {
                 calTmp.setTime(new Date());
                 ncbInfoView.setNplFlag(2);
                 ncbInfoView.setNplTMBFlag(false);
-                ncbInfoView.setNplTMBMonth(calTmp.get(Calendar.MONTH) + 1);
-                ncbInfoView.setNplTMBYear(calTmp.get(Calendar.YEAR));
+                ncbInfoView.setNplTMBMonth(0);
+                ncbInfoView.setNplTMBYear(0);
                 ncbInfoView.setNplOtherFlag(false);
-                ncbInfoView.setNplOtherMonth(calTmp.get(Calendar.MONTH) + 1);
-                ncbInfoView.setNplOtherYear(calTmp.get(Calendar.YEAR));
+                ncbInfoView.setNplOtherMonth(0);
+                ncbInfoView.setNplOtherYear(0);
                 if(isNPLTMB){
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(lastNPLDateTMB);
                     ncbInfoView.setNplTMBFlag(true);
-                    ncbInfoView.setNplTMBMonth(cal.get(Calendar.MONTH) + 1);
-                    ncbInfoView.setNplTMBYear(cal.get(Calendar.YEAR));
+                    if(lastNPLDateTMB!=null){
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(lastNPLDateTMB);
+                        ncbInfoView.setNplTMBMonth(cal.get(Calendar.MONTH) + 1);
+                        ncbInfoView.setNplTMBYear(cal.get(Calendar.YEAR));
+                    }
                 }
                 if(isNPLOther){
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(lastNPLDateOther);
                     ncbInfoView.setNplOtherFlag(true);
-                    ncbInfoView.setNplOtherMonth(cal.get(Calendar.MONTH) + 1);
-                    ncbInfoView.setNplOtherYear(cal.get(Calendar.YEAR));
+                    if(lastNPLDateOther!=null){
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(lastNPLDateOther);
+                        ncbInfoView.setNplOtherMonth(cal.get(Calendar.MONTH) + 1);
+                        ncbInfoView.setNplOtherYear(cal.get(Calendar.YEAR));
+                    }
                 }
             } else {
                 ncbInfoView.setNplFlag(1);
@@ -334,7 +354,7 @@ public class NCBInfoControl extends BusinessControl {
         BigDecimal loanCreditWCTMB = BigDecimal.ZERO;
 
         for(NCBDetail item : ncbDetailList){
-            if(item.getAccountType() != null && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
+            /*if(item.getAccountType() != null && (item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
                 // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
                 loanCredit = loanCredit.add(item.getLimit());
             }
@@ -349,6 +369,22 @@ public class NCBInfoControl extends BusinessControl {
             if(item.getAccountType() != null && item.getAccountTMBFlag() == RadioValue.YES.value() && ( item.getAccountType().getWcFlag() == 1 || item.getWcFlag() == RadioValue.YES.value())){
                 // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
                 loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
+            }*/
+
+            if(!Util.isNull(item.getAccountStatus()) && !Util.isZero(item.getAccountStatus().getDbrFlag()) && item.getAccountType() != null) {
+                if(item.getAccountType().getWcFlag() == 1){
+                    loanCredit = loanCredit.add(item.getLimit());
+                    if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
+                        loanCreditTMB = loanCreditTMB.add(item.getLimit());
+                    }
+                } else if(item.getAccountType().getWcFlag() == 0) {
+                    if(item.getWcFlag() == RadioValue.YES.value()) {
+                        loanCreditWC = loanCreditWC.add(item.getOutstanding());
+                        if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
+                            loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
+                        }
+                    }
+                }
             }
         }
         ncb.setLoanCreditNCB(loanCredit);
@@ -403,61 +439,62 @@ public class NCBInfoControl extends BusinessControl {
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
 
-        List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
+        /*List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
 
         if(customers == null || customers.size() == 0) return ncbDetailViews;
 
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
-        List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();
-        log.debug("ncbDetails size:{}", ncbDetails.size());
+        List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();*/
+        List<NCBDetail> ncbDetailList = ncbDetailDAO.getNCBForDBRList(workcaseId);
+        log.debug("ncbDetails size:{}", ncbDetailList.size());
         AccountType accountType;
         AccountStatus accountStatus;
         StringBuilder accountName = new StringBuilder();
-            for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
-                Customer customer = ncbDetail.getNcb().getCustomer();
-                accountType = ncbDetail.getAccountType();
-                accountStatus = ncbDetail.getAccountStatus();
-                if(accountStatus == null || accountType == null) continue;
+        for(NCBDetail ncbDetail : Util.safetyList(ncbDetailList)){
+            Customer customer = ncbDetail.getNcb().getCustomer();
+            accountType = ncbDetail.getAccountType();
+            accountStatus = ncbDetail.getAccountStatus();
+            if(accountStatus == null || accountType == null) continue;
 
-                if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
-                    NCBDetailView ncbDetailView = new NCBDetailView();
-                    ncbDetailView.setId(ncbDetail.getId());
-                    ncbDetailView.setLimit(ncbDetail.getLimit());
-                    ncbDetailView.setInstallment(ncbDetail.getInstallment());
-                    BigDecimal debtForCalculate = BigDecimal.ZERO;
+            if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
+                NCBDetailView ncbDetailView = new NCBDetailView();
+                ncbDetailView.setId(ncbDetail.getId());
+                ncbDetailView.setLimit(ncbDetail.getLimit());
+                ncbDetailView.setInstallment(ncbDetail.getInstallment());
+                BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                    BigDecimal dbrInterest = getDBRInterest();
-                    switch (accountType.getCalculateType()){
-                        case 1:
-                            if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
-                                debtForCalculate = Util.multiply(ncbDetail.getLimit(), dbrInterest);
-                                debtForCalculate = Util.divide(debtForCalculate, 100);
-                                debtForCalculate = Util.divide(debtForCalculate, 12);
-                            }else{
-                                debtForCalculate = ncbDetail.getInstallment();
-                            }
-                            break;
-                        case 2: //5%
-                            debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(5));
+                BigDecimal dbrInterest = getDBRInterest();
+                switch (accountType.getCalculateType()){
+                    case 1:
+                        if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
+                            debtForCalculate = Util.multiply(ncbDetail.getLimit(), dbrInterest);
                             debtForCalculate = Util.divide(debtForCalculate, 100);
-                            break;
-                        case 3: //10 %
-                            debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(10));
-                            debtForCalculate = Util.divide(debtForCalculate, 100);
-                            break;
-                        default:
-                            break;
-                    }
-                ncbDetailView.setDebtForCalculate(debtForCalculate);
-                accountName.setLength(0);
-                accountName.append(customer.getTitle().getTitleTh())
-                        .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
-                        .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
-                ncbDetailView.setAccountName(accountName.toString());
-                ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
-                ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
-                ncbDetailViews.add(ncbDetailView);
-            }
+                            debtForCalculate = Util.divide(debtForCalculate, 12);
+                        }else{
+                            debtForCalculate = ncbDetail.getInstallment();
+                        }
+                        break;
+                    case 2: //5%
+                        debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(5));
+                        debtForCalculate = Util.divide(debtForCalculate, 100);
+                        break;
+                    case 3: //10 %
+                        debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(10));
+                        debtForCalculate = Util.divide(debtForCalculate, 100);
+                        break;
+                    default:
+                        break;
+                }
+            ncbDetailView.setDebtForCalculate(debtForCalculate);
+            accountName.setLength(0);
+            accountName.append(customer.getTitle().getTitleTh())
+                    .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
+                    .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
+            ncbDetailView.setAccountName(accountName.toString());
+            ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+            ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
+            ncbDetailViews.add(ncbDetailView);
+        }
 
         }
         return ncbDetailViews;

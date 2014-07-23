@@ -119,7 +119,7 @@ public class DocCustomerConverter extends Converter{
             individualType.setCitizenID(getValueForInterface(customerInfo.getPersonalID()));
             individualType.setAge(getValueForInterface(customerInfo.getAgeMonths()));
             individualType.setMaritalStatus(getValueForInterface(customerInfo.getMarriageStatus()));
-
+            borrowerType.setIndividual(individualType);
 
             borrowerTypeList.add(borrowerType);
         }

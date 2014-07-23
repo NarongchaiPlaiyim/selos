@@ -908,8 +908,11 @@
                                                     <h:outputText value="#{proposeLine.mandate('trade.contactPhoneNo')}" styleClass="require-field"/>
                                                     <h:outputText value=" :"/>
                                                     <p:spacer width="5" height="0"/>
-                                                    <p:inputMask value="#{proposeLine.proposeLineView.contactPhoneNo}" mask="(999)999-9999"
-                                                                 readonly="#{proposeLine.isDisabled('trade.contactPhoneNo')}"/>
+                                                    <p:inputText value="#{proposeLine.proposeLineView.contactPhoneNo}"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 readonly="#{proposeLine.isDisabled('trade.contactPhoneNo')}"
+                                                                 maxlength="10"/>
 
                                                     <p:spacer width="10" height="0"/>
                                                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.interService')}"/>
@@ -1254,7 +1257,7 @@
                                                                          update=":collateralDlgForm"
                                                                          process="@form"
                                                                          oncomplete="collateralInfoDlg.show();"
-                                                                         disabled="#{proposeLine.isDisabled('collateral.editButton') or (proposeLine.workCaseRequestAppraisal and proposeCollView.headCollAppraisal)}">
+                                                                         disabled="#{proposeLine.isDisabled('collateral.editButton') or proposeCollView.appraisalRequest != 0}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                             <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
                                                             <p:resetInput target=":collateralDlgForm"/>
@@ -1263,7 +1266,7 @@
                                                         <p:commandButton value="Remove"
                                                                          process="@form" styleClass="small"
                                                                          oncomplete="confirmDeleteCollateralInfoDlg.show()"
-                                                                         disabled="#{proposeLine.isDisabled('collateral.deleteButton') or (proposeLine.workCaseRequestAppraisal and proposeCollView.headCollAppraisal)}">
+                                                                         disabled="#{proposeLine.isDisabled('collateral.deleteButton') or proposeCollView.appraisalRequest != 0}}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                         </p:commandButton>
                                                     </td>

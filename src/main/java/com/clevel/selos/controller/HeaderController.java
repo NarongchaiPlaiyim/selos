@@ -306,6 +306,12 @@ public class HeaderController extends BaseController {
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canCloseSale = true;
                     canRequestAppraisal = true;
+                }else{
+                    if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
+                            || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                        canCloseSale = true;
+                        canRequestAppraisal = true;
+                    }
                 }
             } else {
                 canRequestAppraisal = false;
@@ -498,6 +504,7 @@ public class HeaderController extends BaseController {
         try{
             if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
                 requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                fullApplicationControl.duplicateFacilityData(workCaseId);
                 if(requestPricing){
                     pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
                     if(pricingDOALevel != 0){

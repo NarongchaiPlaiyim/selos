@@ -361,7 +361,7 @@ public class ProposeLineControl extends BusinessControl {
 
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
-                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo);
+                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
                                 proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
                                 ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
                                 if (!Util.isNull(productProgram)) {
@@ -454,7 +454,7 @@ public class ProposeLineControl extends BusinessControl {
 
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
-                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo);
+                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
                                 proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
                                 ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
                                 if (!Util.isNull(productProgram)) {
@@ -2307,7 +2307,7 @@ public class ProposeLineControl extends BusinessControl {
                                 if(proposeCreditInfoDetailView.isExistingCredit()) {
                                     existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditInfoDetailView.getId());
                                 } else { // can't find by id coz propose credit id is zero
-                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine);
+                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine, proposeType);
                                 }
                                 ProposeGuarantorInfoRelation proposeGuarantorInfoRelation = proposeLineTransform.transformProposeGuarantorRelationToModel(proposeLine, proposeGuarantorInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser, proposeCreditInfoDetailView.getGuaranteeAmount());
 
@@ -2391,15 +2391,24 @@ public class ProposeLineControl extends BusinessControl {
 
             //Save Collateral
             if(!Util.isNull(proposeLineView.getProposeCollateralInfoViewList()) && !Util.isZero(proposeLineView.getProposeCollateralInfoViewList().size())) {
+                log.debug("Propose Collateral Size ::: {}", proposeLineView.getProposeCollateralInfoViewList().size());
                 for(ProposeCollateralInfoView proposeCollateralInfoView : proposeLineView.getProposeCollateralInfoViewList()) {
                     ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, proposeLine, proposeCollateralInfoView, currentUser, proposeType);
                     proposeCollateralInfoDAO.persist(proposeCollateralInfo);
+                    log.debug("Coll ID ::: {}", proposeCollateralInfoView.getId());
+                    log.debug("Coll ID ::: {}", proposeCollateralInfo.getId());
+                    if(!Util.isZero(proposeCollateralInfoView.getId())) {
+                        proposeCollateralInfoView.setId(proposeCollateralInfo.getId());
+                    }
                     if(!Util.isNull(proposeCollateralInfo) && !Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && !Util.isZero(proposeCollateralInfo.getProposeCollateralInfoHeadList().size())) {
                         for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
                             proposeCollateralInfoHeadDAO.persist(proposeCollateralInfoHead);
+                            log.debug("Coll Head ID ::: {}", proposeCollateralInfoHead.getId());
                             if(!Util.isNull(proposeCollateralInfoHead) && !Util.isNull(proposeCollateralInfoHead.getProposeCollateralInfoSubList()) && !Util.isZero(proposeCollateralInfoHead.getProposeCollateralInfoSubList().size())) {
                                 for(ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoHead.getProposeCollateralInfoSubList()) {
                                     proposeCollateralInfoSubDAO.persist(proposeCollateralInfoSub);
+                                    log.debug("Coll Sub ID ::: {}", proposeCollateralInfoSub.getId());
+                                    log.debug("Coll Sub ( Sub ID ) ::: {}", proposeCollateralInfoSub.getSubId());
                                     if(!Util.isNull(proposeCollateralInfoSub) && !Util.isNull(proposeCollateralInfoSub.getProposeCollateralSubOwnerList()) && !Util.isZero(proposeCollateralInfoSub.getProposeCollateralSubOwnerList().size())) {
                                         proposeCollateralSubOwnerDAO.persist(proposeCollateralInfoSub.getProposeCollateralSubOwnerList());
                                     }
@@ -2437,7 +2446,7 @@ public class ProposeLineControl extends BusinessControl {
                                 if(proposeCreditInfoDetailView.isExistingCredit()) {
                                     existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditInfoDetailView.getId());
                                 } else { // can't find by id coz propose credit id is zero
-                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine);
+                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), proposeLine, proposeType);
                                 }
                                 ProposeCollateralInfoRelation proposeCollateralInfoRelation = proposeLineTransform.transformProposeCollateralRelationToModel(proposeLine, proposeCollateralInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser);
 
@@ -2454,10 +2463,15 @@ public class ProposeLineControl extends BusinessControl {
                             if (!Util.isNull(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) && !Util.isZero(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList().size())) {
                                 for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) {
                                     ProposeCollateralInfoSub mainCollSub = proposeCollateralInfoSubDAO.findBySubId(proposeCollateralInfoSubView.getSubId());
+                                    log.debug("Main Coll Sub :: {}", mainCollSub);
+                                    log.debug("Main Coll Sub ( Sub ID ) :: {}", mainCollSub != null ? mainCollSub.getSubId() : "NULL");
                                     if (!Util.isNull(proposeCollateralInfoSubView.getRelatedWithList()) && !Util.isZero(proposeCollateralInfoSubView.getRelatedWithList().size())) {
                                         for (ProposeCollateralInfoSubView relatedCollSubView : proposeCollateralInfoSubView.getRelatedWithList()) {
                                             ProposeCollateralInfoSub relatedCollSub = proposeCollateralInfoSubDAO.findBySubId(relatedCollSubView.getSubId());
+                                            log.debug("Related Coll Sub :: {}", relatedCollSub);
+                                            log.debug("Related Coll Sub ( Sub ID ) :: {}", relatedCollSub != null ? relatedCollSub.getSubId() : "NULL");
                                             ProposeCollateralSubRelated proposeCollateralSubRelated = proposeLineTransform.transformProposeCollateralSubRelatedToModel(workCase, mainCollSub, relatedCollSub, proposeType);
+                                            log.debug("Propose Coll Sub Related :::: {}", proposeCollateralSubRelated);
                                             proposeCollateralSubRelatedDAO.persist(proposeCollateralSubRelated);
                                         }
                                     }

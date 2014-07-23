@@ -38,7 +38,7 @@
                         styleClass="small"
                         actionListener="#{headerController.onReturnToMaker()}"
                         process="@form"
-                        update=":frmMain:returnMakerPanel :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                        update=":frmMain:returnMakerPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel"
                         oncomplete="handleDialogRequest(xhr, status, args, 'returnMakerDlg')"/>
                 <p:commandButton type="button" value="Cancel" styleClass="small" onclick="PF('returnMakerDlg').hide()"
                                  update=":frmMain:returnMakerPanel">

@@ -71,7 +71,7 @@ public class CustomerTransform extends Transform {
     @Inject
     private BusinessTypeDAO businessTypeDAO;
     @Inject
-    private BusinessSubTypeDAO businessSubTypeDAO;
+    private BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
     private WarningCodeDAO warningCodeDAO;
     @Inject
@@ -137,9 +137,9 @@ public class CustomerTransform extends Transform {
             customerInfoView.setBusinessType(new BusinessType());
         }
 
-        customerInfoView.setBusinessSubType(customer.getBusinessSubType());
-        if(customerInfoView.getBusinessSubType() == null){
-            customerInfoView.setBusinessSubType(new BusinessSubType());
+        customerInfoView.setBusinessDescription(customer.getBusinessDescription());
+        if(customerInfoView.getBusinessDescription() == null){
+            customerInfoView.setBusinessDescription(new BusinessDescription());
         }
 
         customerInfoView.setRelation(customer.getRelation());
@@ -496,10 +496,10 @@ public class CustomerTransform extends Transform {
             customer.setBusinessType(null);
         }
 
-        if(customerInfoView.getBusinessSubType() != null && customerInfoView.getBusinessSubType().getId() != 0){
-            customer.setBusinessSubType(businessSubTypeDAO.findById(customerInfoView.getBusinessSubType().getId()));
+        if(customerInfoView.getBusinessDescription() != null && customerInfoView.getBusinessDescription().getId() != 0){
+            customer.setBusinessDescription(businessDescriptionDAO.findById(customerInfoView.getBusinessDescription().getId()));
         } else {
-            customer.setBusinessSubType(null);
+            customer.setBusinessDescription(null);
         }
 
         if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){
