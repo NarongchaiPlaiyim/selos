@@ -1449,6 +1449,8 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
 
+            log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
             proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
 
             /*if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
@@ -1673,9 +1675,12 @@ public class ProposeLineTransform extends Transform {
         List<ProposeCreditInfo> approveCreditList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
         decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList, ProposeType.A));
 
+        log.debug("###################### WorkCase ID :::: {}" , workCaseId);
         List<ProposeCollateralInfo> approveCollateralList = proposeCollateralInfoDAO.findNewCollateral(workCaseId, ProposeType.A);
+        log.debug("###################### approveCollateralList :::: {}", approveCollateralList);
         decisionView.setApproveCollateralList(transformProposeCollateralToViewList(approveCollateralList, ProposeType.A));
 
+        log.debug("########################### ProposeLineView ID :::: {}", proposeLineView.getId());
         List<ProposeGuarantorInfo> approveGuarantorList = proposeGuarantorInfoDAO.findNewGuarantorByNewCreditFacId(proposeLineView.getId(), ProposeType.A);
         log.debug("######### approveGuarantorList ::: {}", approveGuarantorList);
         decisionView.setApproveGuarantorList(transformProposeGuarantorToViewList(approveGuarantorList, ProposeType.A));
