@@ -1491,7 +1491,7 @@ public class BRMSControl extends BusinessControl {
                         logger.debug("Document is Mandate for this step {}.", step);
                         mandateDocView.setDocMandateType(DocMandateType.MANDATE);
                     } else {
-                        logger.debug("Document is Mandate for this ");
+                        logger.debug("Document is Optional for this ");
                         mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
                     }
                     mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());

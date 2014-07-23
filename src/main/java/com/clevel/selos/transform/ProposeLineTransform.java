@@ -1464,6 +1464,47 @@ public class ProposeLineTransform extends Transform {
                     }
                 }
             }*/
+        } else if (!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId()) && ProposeType.BOTH == proposeType) {
+            proposeCollateralInfoView = new ProposeCollateralInfoView();
+
+            proposeCollateralInfoView.setId(proposeCollateralInfo.getId());
+
+            proposeCollateralInfoView.setAppraisalRequest(proposeCollateralInfo.getAppraisalRequest());
+            proposeCollateralInfoView.setComs(Util.isTrue(proposeCollateralInfo.getComs()));
+            proposeCollateralInfoView.setJobID(proposeCollateralInfo.getJobID());
+            proposeCollateralInfoView.setAppraisalDate(proposeCollateralInfo.getAppraisalDate());
+            proposeCollateralInfoView.setNumberMonthsFromApprDate(proposeCollateralInfo.getNumberMonthsFromApprDate());
+            proposeCollateralInfoView.setAadDecision(proposeCollateralInfo.getAadDecision());
+            proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
+            proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
+            proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
+            proposeCollateralInfoView.setTypeOfUsage(proposeCollateralInfo.getTypeOfUsage());
+            proposeCollateralInfoView.setUwRemark(proposeCollateralInfo.getUwRemark());
+            proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
+            proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
+            proposeCollateralInfoView.setBdmComments(proposeCollateralInfo.getBdmComments());
+
+            proposeCollateralInfoView.setUwDecision(proposeCollateralInfo.getUwDecision());
+
+            List<ProposeCollateralInfoRelation> proposeCollateralInfoRelations = proposeCollateralInfoRelationDAO.findByCollateralId(proposeCollateralInfo.getId(), proposeType);
+
+            List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
+
+            for (ProposeCollateralInfoRelation proposeCollateralInfoRelation : proposeCollateralInfoRelations) {
+                if(!Util.isNull(proposeCollateralInfoRelation)){
+                    if(!Util.isNull(proposeCollateralInfoRelation.getProposeCreditInfo())) {
+                        ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToViewScreen(proposeCollateralInfoRelation.getProposeCreditInfo(), null);
+                        proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
+                    } else if(!Util.isNull(proposeCollateralInfoRelation.getExistingCreditDetail())) {
+                        ProposeCreditInfoDetailView existingCreditDetailView = transformProposeCreditToViewByExisting(proposeCollateralInfoRelation.getExistingCreditDetail(), null);
+                        proposeCreditInfoDetailViewList.add(existingCreditDetailView);
+                    }
+                }
+            }
+
+            proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
+
+            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
         }
 
         return proposeCollateralInfoView;

@@ -115,7 +115,7 @@ public class AppraisalResultControl extends BusinessControl {
                     newCollateral.setProposeCollateralInfoHeadList(proposeCollateralInfoHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
                     tempNewCollateralList.add(newCollateral);
                 }
-                newCollateralViewList = proposeLineTransform.transformProposeCollateralToViewList(tempNewCollateralList, null);
+                newCollateralViewList = proposeLineTransform.transformProposeCollateralToViewList(tempNewCollateralList, ProposeType.BOTH);
                 appraisalView.setNewCollateralViewList(newCollateralViewList);
             } else {
                 log.debug("-- NewCreditFacility = null");
