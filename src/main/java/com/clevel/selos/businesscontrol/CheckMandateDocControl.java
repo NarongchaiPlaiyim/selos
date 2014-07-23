@@ -610,7 +610,8 @@ public class CheckMandateDocControl extends BusinessControl{
                     }
                     int isComplete = NO;
                     try {
-                        if(mandateDocView.getNumberOfDoc() == ecmDetailList.size()){
+//                        if(mandateDocView.getNumberOfDoc() == ecmDetailList.size()){      //Created long time ago.
+                        if(true){                                                           //07/23/2014
                             isComplete = YES;
                         }
                     } catch (Exception e){
