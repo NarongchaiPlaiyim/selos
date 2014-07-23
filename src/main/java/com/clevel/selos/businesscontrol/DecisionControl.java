@@ -137,10 +137,16 @@ public class DecisionControl extends BusinessControl {
         log.debug("findDecisionViewByWorkCaseId :: workCaseId :: {}", workCaseId);
 
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
 
-        DecisionView decisionView = proposeLineTransform.transformToDecisionView(existingCreditFacilityView, proposeLineView, decision, workCaseId);
+        ProposeLine proposeLine = null;
+        if(!Util.isZero(workCaseId)) {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }
+        ProposeLineView proposeLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.P);
+        ProposeLineView approveLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.A);
+
+        DecisionView decisionView = proposeLineTransform.transformToDecisionView(existingCreditFacilityView, proposeLineView, approveLineView, decision, workCaseId);
 
         return decisionView;
     }

@@ -1449,6 +1449,8 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
 
+            log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
             proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
 
             /*if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
@@ -1462,6 +1464,47 @@ public class ProposeLineTransform extends Transform {
                     }
                 }
             }*/
+        } else if (!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId()) && ProposeType.BOTH == proposeType) {
+            proposeCollateralInfoView = new ProposeCollateralInfoView();
+
+            proposeCollateralInfoView.setId(proposeCollateralInfo.getId());
+
+            proposeCollateralInfoView.setAppraisalRequest(proposeCollateralInfo.getAppraisalRequest());
+            proposeCollateralInfoView.setComs(Util.isTrue(proposeCollateralInfo.getComs()));
+            proposeCollateralInfoView.setJobID(proposeCollateralInfo.getJobID());
+            proposeCollateralInfoView.setAppraisalDate(proposeCollateralInfo.getAppraisalDate());
+            proposeCollateralInfoView.setNumberMonthsFromApprDate(proposeCollateralInfo.getNumberMonthsFromApprDate());
+            proposeCollateralInfoView.setAadDecision(proposeCollateralInfo.getAadDecision());
+            proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
+            proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
+            proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
+            proposeCollateralInfoView.setTypeOfUsage(proposeCollateralInfo.getTypeOfUsage());
+            proposeCollateralInfoView.setUwRemark(proposeCollateralInfo.getUwRemark());
+            proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
+            proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
+            proposeCollateralInfoView.setBdmComments(proposeCollateralInfo.getBdmComments());
+
+            proposeCollateralInfoView.setUwDecision(proposeCollateralInfo.getUwDecision());
+
+            List<ProposeCollateralInfoRelation> proposeCollateralInfoRelations = proposeCollateralInfoRelationDAO.findByCollateralId(proposeCollateralInfo.getId(), proposeType);
+
+            List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
+
+            for (ProposeCollateralInfoRelation proposeCollateralInfoRelation : proposeCollateralInfoRelations) {
+                if(!Util.isNull(proposeCollateralInfoRelation)){
+                    if(!Util.isNull(proposeCollateralInfoRelation.getProposeCreditInfo())) {
+                        ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToViewScreen(proposeCollateralInfoRelation.getProposeCreditInfo(), null);
+                        proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
+                    } else if(!Util.isNull(proposeCollateralInfoRelation.getExistingCreditDetail())) {
+                        ProposeCreditInfoDetailView existingCreditDetailView = transformProposeCreditToViewByExisting(proposeCollateralInfoRelation.getExistingCreditDetail(), null);
+                        proposeCreditInfoDetailViewList.add(existingCreditDetailView);
+                    }
+                }
+            }
+
+            proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
+
+            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
         }
 
         return proposeCollateralInfoView;
@@ -1596,7 +1639,7 @@ public class ProposeLineTransform extends Transform {
 
     //-------------------------------------------------------- Decision --------------------------------------------------------//
 
-    public DecisionView transformToDecisionView(ExistingCreditFacilityView existingCreditFacilityView, ProposeLineView proposeLineView, Decision decision, long workCaseId) {
+    public DecisionView transformToDecisionView(ExistingCreditFacilityView existingCreditFacilityView, ProposeLineView proposeLineView, ProposeLineView approveLineView, Decision decision, long workCaseId) {
         DecisionView decisionView = new DecisionView();
 
         if (!Util.isNull(existingCreditFacilityView) && !Util.isZero(existingCreditFacilityView.getId())) {
@@ -1670,15 +1713,17 @@ public class ProposeLineTransform extends Transform {
 
         //For Decision ----------------------------------------------------------------------
         // Approve data already been recorded
-        List<ProposeCreditInfo> approveCreditList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
-        decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList, ProposeType.A));
+//        List<ProposeCreditInfo> approveCreditList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+//        decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList, ProposeType.A));
+        decisionView.setApproveCreditList(approveLineView.getProposeCreditInfoDetailViewList());
 
-        List<ProposeCollateralInfo> approveCollateralList = proposeCollateralInfoDAO.findNewCollateral(workCaseId, ProposeType.A);
-        decisionView.setApproveCollateralList(transformProposeCollateralToViewList(approveCollateralList, ProposeType.A));
+//        List<ProposeCollateralInfo> approveCollateralList = proposeCollateralInfoDAO.findNewCollateral(workCaseId, ProposeType.A);
+//        decisionView.setApproveCollateralList(transformProposeCollateralToViewList(approveCollateralList, ProposeType.A));
+        decisionView.setApproveCollateralList(approveLineView.getProposeCollateralInfoViewList());
 
-        List<ProposeGuarantorInfo> approveGuarantorList = proposeGuarantorInfoDAO.findNewGuarantorByNewCreditFacId(proposeLineView.getId(), ProposeType.A);
-        log.debug("######### approveGuarantorList ::: {}", approveGuarantorList);
-        decisionView.setApproveGuarantorList(transformProposeGuarantorToViewList(approveGuarantorList, ProposeType.A));
+//        List<ProposeGuarantorInfo> approveGuarantorList = proposeGuarantorInfoDAO.findNewGuarantorByNewCreditFacId(proposeLineView.getId(), ProposeType.A);
+//        decisionView.setApproveGuarantorList(transformProposeGuarantorToViewList(approveGuarantorList, ProposeType.A));
+        decisionView.setApproveGuarantorList(approveLineView.getProposeGuarantorInfoViewList());
 
         if(!Util.isNull(decision) && !Util.isZero(decision.getId())) {
             decisionView.setId(decision.getId());
