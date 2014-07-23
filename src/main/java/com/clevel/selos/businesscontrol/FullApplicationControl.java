@@ -954,7 +954,7 @@ public class FullApplicationControl extends BusinessControl {
                     if(proposeCreditInfo.getRequestType() == RequestTypes.NEW.value()) {
                         if(proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1){
                             //Check for Final Price first...
-                            if(proposeCreditInfo.getProposeCreditInfoTierDetailList() != null) {
+                            if(proposeCreditInfo.getProposeCreditInfoTierDetailList() != null && proposeCreditInfo.getProposeCreditInfoTierDetailList().size() > 0) {
                                 if (finalPrice != null) {
                                     for (ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) {
                                         if (proposeCreditInfoTierDetail.getBrmsFlag() == 1) {
