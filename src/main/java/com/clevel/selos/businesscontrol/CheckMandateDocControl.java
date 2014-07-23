@@ -276,22 +276,35 @@ public class CheckMandateDocControl extends BusinessControl{
         log.debug("-- createMapByECM(EcmDetailList.size.[{}])", ecmDetailList.size());
         Map<String,List<ECMDetail>> listECMDetailMap = new HashMap<String, List<ECMDetail>>();
         for (ECMDetail ecmDetail : ecmDetailList) {
-            log.debug("-- ECMDtail.EcmDocId[{}]", ecmDetail.getEcmDocId());
+//            log.debug("-- ECMDtail.EcmDocId[{}]", ecmDetail.getEcmDocId());   //Created long time ago.
+            log.debug("-- ECMDtail.TypeCode[{}]", ecmDetail.getTypeCode());     //07/23/2014
             List<ECMDetail> ecmListTmp = null;
-            if(!listECMDetailMap.containsKey(ecmDetail.getEcmDocId())){
-                log.debug("-- add key {} to map", ecmDetail.getEcmDocId());
+//            if(!listECMDetailMap.containsKey(ecmDetail.getEcmDocId())){       //Created long time ago.
+//                log.debug("-- add key {} to map", ecmDetail.getEcmDocId());   //Created long time ago.
+            if(!listECMDetailMap.containsKey(ecmDetail.getTypeCode())){         //07/23/2014
+                log.debug("-- add key {} to map", ecmDetail.getTypeCode());     //07/23/2014
                 ecmListTmp = new ArrayList<ECMDetail>();
                 ecmListTmp.add(ecmDetail);
-                listECMDetailMap.put(ecmDetail.getEcmDocId(), ecmListTmp);
+//                listECMDetailMap.put(ecmDetail.getEcmDocId(), ecmListTmp);    //Created long time ago.
+                listECMDetailMap.put(ecmDetail.getTypeCode(), ecmListTmp);      //07/23/2014
             } else {
-                ecmListTmp = listECMDetailMap.get(ecmDetail.getEcmDocId());
-                log.debug("-- get value from key {}", ecmDetail.getEcmDocId());
+//                ecmListTmp = listECMDetailMap.get(ecmDetail.getEcmDocId());   //Created long time ago.
+//                log.debug("-- get value from key {}", ecmDetail.getEcmDocId());
+//                ecmListTmp.add(ecmDetail);
+//                log.debug("-- add data to {}", ecmListTmp.size());
+//                listECMDetailMap.remove(ecmDetail.getEcmDocId());
+//                log.debug("-- remove value form map {}", ecmDetail.getEcmDocId());
+//                listECMDetailMap.put(ecmDetail.getEcmDocId(), ecmListTmp);
+//                log.debug("-- added key {} to map", ecmDetail.getEcmDocId());
+
+                ecmListTmp = listECMDetailMap.get(ecmDetail.getTypeCode());
+                log.debug("-- get value from key {}", ecmDetail.getTypeCode());
                 ecmListTmp.add(ecmDetail);
                 log.debug("-- add data to {}", ecmListTmp.size());
-                listECMDetailMap.remove(ecmDetail.getEcmDocId());
-                log.debug("-- remove value form map {}", ecmDetail.getEcmDocId());
-                listECMDetailMap.put(ecmDetail.getEcmDocId(), ecmListTmp);
-                log.debug("-- added key {} to map", ecmDetail.getEcmDocId());
+                listECMDetailMap.remove(ecmDetail.getTypeCode());
+                log.debug("-- remove value form map {}", ecmDetail.getTypeCode());
+                listECMDetailMap.put(ecmDetail.getTypeCode(), ecmListTmp);
+                log.debug("-- added key {} to map", ecmDetail.getTypeCode());
             }
         }
         log.debug("-- ListECMDetailMap.size()[{}]", listECMDetailMap.size());
