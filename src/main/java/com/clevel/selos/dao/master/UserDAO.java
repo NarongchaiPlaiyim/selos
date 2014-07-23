@@ -613,50 +613,13 @@ public class UserDAO extends GenericDAO<User,String> {
 
             if (selectUserName.equalsIgnoreCase("All") && userList != null)
             {
-                /*Criteria criteriaForId = getSession().createCriteria(User.class)
-                                                     .setProjection(Projections.projectionList()
-                                                     .add(Projections.property("id"), "id"))
-                                                     .add(Restrictions.in("userName", userList))
-                                                     .setResultTransformer(Transformers.aliasToBean(User.class));
-
-                usersIdsList = criteriaForId.list();
-
-                Iterator iterator = usersIdsList.iterator();
-
-                while (iterator.hasNext())
-                {
-                    User user = new User();
-                    user = (User) iterator.next();
-                    userId = user.getId();
-                    uIdsList.add(userId);
-                    user = null;
-                }*/
                 uIdsList.addAll(userList);
-
             }
 
             else
             {
-                /*Criteria criteriaForId = getSession().createCriteria(User.class)
-                                                     .setProjection(Projections.projectionList()
-                                                     .add(Projections.property("id"), "id"))
-                                                     .add(Restrictions.eq("userName", selectUserName))
-                                                     .setResultTransformer(Transformers.aliasToBean(User.class));
-
-                usersIdsList = criteriaForId.list();
-                Iterator iterator = usersIdsList.iterator();
-                while (iterator.hasNext()) {
-                    User user = new User();
-                    user = (User) iterator.next();
-                    userId = user.getId();
-                    uIdsList.add(userId);
-                    user = null;
-                }
-                */
                 uIdsList.add(selectUserName);
             }
-
-
 
             Criteria criteriaForWorkCaseId = getSession().createCriteria(WorkCaseOwner.class);
             // criteriaForWorkCaseId.setProjection(Projections.projectionList().add(Projections.property("workCaseId"), "workCaseId")).add(Restrictions.eq("roleid",roleId)).add(Restrictions.in("userid", uIdsList)).setResultTransformer(Transformers.aliasToBean(WorkCaseOwner.class));
@@ -695,21 +658,26 @@ public class UserDAO extends GenericDAO<User,String> {
             }
             log.info("WorkCaseList is ::::::" + WorkCaseList.size());
 
+            Iterator iterator;
+
             Criteria criteriaForAppNumber = getSession().createCriteria(WorkCase.class);
 
             // criteriaForWorkCaseId.setProjection(Projections.projectionList().add(Projections.property("workCaseId"), "workCaseId")).add(Restrictions.eq("roleid",roleId)).add(Restrictions.in("roleId", roleIdlist)).setResultTransformer(Transformers.aliasToBean(WorkCaseOwner.class));
-            if (WorkCaseList.size() !=0) {
+            if (WorkCaseList.size() !=0)
+            {
                 criteriaForAppNumber.setProjection(Projections.projectionList().add(Projections.property("appNumber"), "appNumber")).add(Restrictions.in("id", WorkCaseList)).add(Restrictions.eq("bpmActive", 1)).setResultTransformer(Transformers.aliasToBean(WorkCase.class));
                 appNumberList = criteriaForAppNumber.list();
-            }
-            Iterator iterator = appNumberList.iterator();
-            while (iterator.hasNext()) {
-                WorkCase workCase = new WorkCase();
-                workCase = (WorkCase) iterator.next();
-                appNumber = workCase.getAppNumber();
-                modifiedAppNo = "'" + appNumber + "'";
-                applicationNoList.add(modifiedAppNo);
-                workCase = null;
+
+                iterator = appNumberList.iterator();
+                while (iterator.hasNext()) {
+                    WorkCase workCase = new WorkCase();
+                    workCase = (WorkCase) iterator.next();
+                    appNumber = workCase.getAppNumber();
+                    modifiedAppNo = "'" + appNumber + "'";
+                    applicationNoList.add(modifiedAppNo);
+                    workCase = null;
+                }
+
             }
 
             log.info("WorkCasePrescreenList is ::::::" + WorkCasePrescreenList.size());
@@ -720,15 +688,17 @@ public class UserDAO extends GenericDAO<User,String> {
             if (WorkCasePrescreenList.size() !=0) {
                 criteriaForAppNumber.setProjection(Projections.projectionList().add(Projections.property("appNumber"), "appNumber")).add(Restrictions.in("id", WorkCasePrescreenList)).add(Restrictions.eq("bpmActive", 1)).setResultTransformer(Transformers.aliasToBean(WorkCasePrescreen.class));
                 appNumberList = criteriaForAppNumber.list();
-            }
-            iterator = appNumberList.iterator();
-            while (iterator.hasNext()) {
-                WorkCasePrescreen workCasePrescreen = new WorkCasePrescreen();
-                workCasePrescreen = (WorkCasePrescreen) iterator.next();
-                appNumber = workCasePrescreen.getAppNumber();
-                modifiedAppNo = "'" + appNumber + "'";
-                applicationNoList.add(modifiedAppNo);
-                workCasePrescreen = null;
+
+                iterator = appNumberList.iterator();
+                while (iterator.hasNext()) {
+                    WorkCasePrescreen workCasePrescreen = new WorkCasePrescreen();
+                    workCasePrescreen = (WorkCasePrescreen) iterator.next();
+                    appNumber = workCasePrescreen.getAppNumber();
+                    modifiedAppNo = "'" + appNumber + "'";
+                    applicationNoList.add(modifiedAppNo);
+                    workCasePrescreen = null;
+                }
+
             }
 
             log.info("App Number :"+applicationNoList.size());
