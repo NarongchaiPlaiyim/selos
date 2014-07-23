@@ -2628,8 +2628,7 @@
                                                              update=":collateralDlgForm"
                                                              process="@form"
                                                              oncomplete="proposeCollateralDlg.show();"
-                                                             disabled="#{decision.isDisabled('collateral.editButton')
-                                                                       or (decision.workCaseRequestAppraisal and approveCollView.headCollAppraisal)}">
+                                                             disabled="#{decision.isDisabled('collateral.editButton') or approveCollView.appraisalRequest != 0}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                                 <f:setPropertyActionListener value="#{collIndex.index}" target="#{decision.rowIndex}"/>
                                                 <p:resetInput target=":collateralDlgForm"/>
@@ -2639,8 +2638,7 @@
                                                              value="#{msg.get('app.button.delete')}"
                                                              process="@form" styleClass="small"
                                                              oncomplete="confirmDeleteAppProCollateralDlg.show()"
-                                                             disabled="#{decision.isDisabled('collateral.deleteButton')
-                                                                       or (proposeLine.workCaseRequestAppraisal and approveCollView.headCollAppraisal)}">
+                                                             disabled="#{decision.isDisabled('collateral.deleteButton') or approveCollView.appraisalRequest != 0}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                             </p:commandButton>
                                         </td>
