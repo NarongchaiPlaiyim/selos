@@ -378,6 +378,78 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
     }*/
 
+    public List<Integer> getUsersTeamId(int teamid)
+    {
+
+        List teamIds = new ArrayList<Integer>();
+
+        log.info("controller entered in to getUsers method of UserTeamDAO class : {}",teamid);
+
+        Criteria criteria1 = getSession().createCriteria(User.class);
+
+        criteria1.add(Restrictions.eq("team.id", teamid));
+
+        List usernamebasedteamid = criteria1.list();
+
+        log.debug("user of team : {}",usernamebasedteamid.toString());
+
+        Iterator iterator1 = usernamebasedteamid.iterator();
+
+        while(iterator1.hasNext() == true)
+        {
+            User user = (User)iterator1.next();
+
+            int userTeamId = user.getTeam().getId();
+
+            log.info("teamId is :::: {}",userTeamId);
+
+            teamIds.add(userTeamId);
+        }
+
+        Criteria criteria2 = getSession().createCriteria(RelTeamUserDetails.class);
+
+        criteria2.add(Restrictions.eq("team_Id",teamid));
+
+        List teamleadusernamesidlist = criteria2.list();
+
+        log.debug("teamleade users : {}",teamleadusernamesidlist.toString());
+
+        Iterator iterator2 = teamleadusernamesidlist.iterator();
+
+        while(iterator2.hasNext() == true)
+        {
+
+            RelTeamUserDetails relTeamUserDetails = (RelTeamUserDetails)iterator2.next();
+
+            int teamleadid = relTeamUserDetails.getTlThId();
+
+            Criteria criteria3 = getSession().createCriteria(User.class);
+
+            criteria3.add(Restrictions.eq("team.id",teamleadid));
+
+            List teamleadusernameslist = criteria3.list();
+
+            log.info("teamleadusernameslist in commented place is ::::::: {}",teamleadusernameslist.size());
+
+            Iterator iterator3 = teamleadusernameslist.iterator();
+
+            while(iterator3.hasNext() == true)
+            {
+                User user1 = new User();
+
+                user1 = (User)iterator3.next();
+
+                Integer userTeamId= user1.getTeam().getId();
+
+                log.info("teamlead id is commented place is ::::::{}",userTeamId);
+
+                teamIds.add(userTeamId);
+            }
+        }
+
+        return teamIds;
+    }
+
     public List<String> getUsers(int teamid)
     {
         matchedusernames = new ArrayList<String>();
