@@ -229,8 +229,8 @@ public class DBRControl extends BusinessControl {
 
             if(!Util.isNull(bankStatementSummary)){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
-                if (Util.isNull(dbrView.getMonthlyIncomeAdjust())){
-                    dbrView.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
+                if (Util.isNull(dbrView.getMonthlyIncomeAdjust()) || Util.isZero(dbrView.getMonthlyIncomeAdjust())){
+                    dbrView.setMonthlyIncomeAdjust(dbrView.getMonthlyIncome());
                 }
             }
 
