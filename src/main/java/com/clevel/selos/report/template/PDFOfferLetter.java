@@ -46,6 +46,9 @@ public class PDFOfferLetter implements Serializable {
     @Inject private MortgageInfoDAO mortgageInfoDAO;
     @Inject private MortgageDetailControl mortgageDetailControl;
     @Inject private IndividualDAO individualDAO;
+    @Inject private DisbursementMCDAO disbursementMCDAO;
+    @Inject private DisbursementTRDAO disbursementTRDAO;
+    @Inject private DisbursementBahtnetDAO disbursementBahtnetDAO;
 
     private DecisionView decisionView;
     private AppHeaderView appHeaderView;
@@ -343,48 +346,60 @@ public class PDFOfferLetter implements Serializable {
 
         if (!Util.isNull(disbursement)) {
             disbursementInfoView.setDisburseMcList(disbursementControl.getDisbursementMcDetailView(disbursement.getId()));
+            List<DisbursementMC> disbursementMCList = disbursementMCDAO.findByDisbursementId(disbursement.getId());
 
-            for (DisbursementMcDetailView mc : disbursementInfoView.getDisburseMcList()){
+            for (DisbursementMC name : disbursementMCList){
                 DisbursementOfferLetterReport disbursementOfferLetterReport = new DisbursementOfferLetterReport();
-                disbursementOfferLetterReport.setName(msg.get("app.disbursement.detail.mc"));  //34
-                disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(mc.getTotalAmount()));  //32
+                disbursementOfferLetterReport.setLimit(name.getPayeeName().getName());  //35
 
-                StringBuilder name = new StringBuilder();
-                name = name.append(mc.getPayeeName());
-                disbursementOfferLetterReport.setLimit(name.toString());  //35
+                for (DisbursementMcDetailView mc : disbursementInfoView.getDisburseMcList()){
+                    disbursementOfferLetterReport.setName(msg.get("app.disbursement.detail.mc"));  //34
+                    disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(mc.getTotalAmount()));  //32
 
-                for (DisbursementCreditTypeView mcDetail : mc.getDisbursementCreditTypeView()){
-                    disbursementOfferLetterReport.setProductProgram(Util.checkNullString(mcDetail.getProductProgram()));  //32
+                    for (DisbursementCreditTypeView mcDetail : mc.getDisbursementCreditTypeView()){
+                        disbursementOfferLetterReport.setProductProgram(Util.checkNullString(mcDetail.getProductProgram()));  //32
+                    }
+                    disbursementOfferLetterReports.add(disbursementOfferLetterReport);
                 }
-                disbursementOfferLetterReports.add(disbursementOfferLetterReport);
             }
 
             disbursementInfoView.setDisburseDepositList(disbursementControl.getDisbursementDepositBaDetailView(disbursement.getId()));
+            List<DisbursementTR> disbursementTRList = disbursementTRDAO.findByDisbursementId(disbursement.getId());
 
-            for (DisbursementDepositBaDetailView deposit : disbursementInfoView.getDisburseDepositList()){
+            for (DisbursementTR tr : disbursementTRList){
                 DisbursementOfferLetterReport disbursementOfferLetterReport = new DisbursementOfferLetterReport();
-                disbursementOfferLetterReport.setName(msg.get("app.disbursement.detail.deposit"));  //34
-                disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(deposit.getTotalAmount()));  //32
-                disbursementOfferLetterReport.setLimit(Util.checkNullString(deposit.getAccountName()));  //35
-
-                for (DisbursementCreditTypeView depositDetail : deposit.getDisbursementCreditTypeView()){
-                    disbursementOfferLetterReport.setProductProgram(Util.checkNullString(depositDetail.getProductProgram()));  //32
+                List<OpenAccountName> openAccountNameList = tr.getOpenAccount().getOpenAccountNameList();
+                for (OpenAccountName accountName : openAccountNameList){
+                    disbursementOfferLetterReport.setLimit(Util.checkNullString(accountName.getCustomer().getNameEn()));  //35
                 }
-                disbursementOfferLetterReports.add(disbursementOfferLetterReport);
+
+                for (DisbursementDepositBaDetailView deposit : disbursementInfoView.getDisburseDepositList()){
+                    disbursementOfferLetterReport.setName(msg.get("app.disbursement.detail.deposit"));  //34
+                    disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(deposit.getTotalAmount()));  //32
+
+                    for (DisbursementCreditTypeView depositDetail : deposit.getDisbursementCreditTypeView()){
+                        disbursementOfferLetterReport.setProductProgram(Util.checkNullString(depositDetail.getProductProgram()));  //32
+                    }
+                    disbursementOfferLetterReports.add(disbursementOfferLetterReport);
+                }
             }
 
             disbursementInfoView.setDisbursementBahtnetList(disbursementControl.getDisbursementBahtnetDetailView(disbursement.getId()));
+            List<DisbursementBahtnet> disbursementBahtnetList = disbursementBahtnetDAO.findByDisbursementId(disbursement.getId());
 
-            for (DisbursementBahtnetDetailView bahtnet : disbursementInfoView.getDisbursementBahtnetList()){
+            for (DisbursementBahtnet disbursementBahtnet : disbursementBahtnetList){
                 DisbursementOfferLetterReport disbursementOfferLetterReport = new DisbursementOfferLetterReport();
-                disbursementOfferLetterReport.setName(msg.get("app.disbursement.detail.bahtnet"));  //34
-                disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(bahtnet.getTotalAmount()));  //32
-                disbursementOfferLetterReport.setLimit(Util.checkNullString(bahtnet.getAccountNumber()));  //35
+                disbursementOfferLetterReport.setLimit(Util.checkNullString(disbursementBahtnet.getBeneficiaryName()));  //35
 
-                for (DisbursementCreditTypeView bahtnetDetail : bahtnet.getDisbursementCreditTypeView()){
-                    disbursementOfferLetterReport.setProductProgram(Util.checkNullString(bahtnetDetail.getProductProgram()));  //32
+                for (DisbursementBahtnetDetailView bahtnet : disbursementInfoView.getDisbursementBahtnetList()){
+                    disbursementOfferLetterReport.setName(msg.get("app.disbursement.detail.bahtnet"));  //34
+                    disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(bahtnet.getTotalAmount()));  //32
+
+                    for (DisbursementCreditTypeView bahtnetDetail : bahtnet.getDisbursementCreditTypeView()){
+                        disbursementOfferLetterReport.setProductProgram(Util.checkNullString(bahtnetDetail.getProductProgram()));  //32
+                    }
+                    disbursementOfferLetterReports.add(disbursementOfferLetterReport);
                 }
-                disbursementOfferLetterReports.add(disbursementOfferLetterReport);
             }
         } else {
             DisbursementOfferLetterReport disbursementOfferLetterReport = new DisbursementOfferLetterReport();
