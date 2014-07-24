@@ -128,6 +128,8 @@ public class PDFRejectLetter implements Serializable {
     public RejectLetterReport typeReport(){
         log.debug("--On typeReport.");
         uwRuleResultSummary = new UWRuleResultSummary();
+        RejectLetterReport rejectLetterReport = new RejectLetterReport();
+
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         } else if (!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
@@ -136,21 +138,22 @@ public class PDFRejectLetter implements Serializable {
         log.debug("--uwRuleResultSummary. {}",uwRuleResultSummary);
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
-        uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
-        log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
+        if (!Util.isNull(uwRuleResultSummary)){
+            uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
+            log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
 
-        RejectLetterReport rejectLetterReport = new RejectLetterReport();
-        for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
-            if (!Util.isNull(ruleResultDetail.getRejectGroup())){
-                if (ruleResultDetail.getRejectGroup().getId() == 1){
-                    rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
-                } else if (ruleResultDetail.getRejectGroup().getId() == 2){
-                    rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
-                } else if (ruleResultDetail.getRejectGroup().getId() == 3){
-                    rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+            for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
+                if (!Util.isNull(ruleResultDetail.getRejectGroup())){
+                    if (ruleResultDetail.getRejectGroup().getId() == 1){
+                        rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
+                    } else if (ruleResultDetail.getRejectGroup().getId() == 2){
+                        rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
+                    } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+                        rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+                    }
+                } else {
+                    log.debug("--RejectGroup is Null.");
                 }
-            } else {
-                log.debug("--RejectGroup is Null.");
             }
         }
         log.debug("--rejectLetterReport. {}",rejectLetterReport);
