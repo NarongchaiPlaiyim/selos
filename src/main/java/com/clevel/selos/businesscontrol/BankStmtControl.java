@@ -755,6 +755,8 @@ public class BankStmtControl extends BusinessControl {
         // ========== Calculate from All of Months ==========
         if (isRoleUW) {
             for (BankStmtDetailView detailView : bankStmtDetailViewList) {
+                // ---------- CreditAmountNet(BDM) ---------- //
+                detailView.setCreditAmountBDM(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListBDM(), detailView.getChequeReturnAmount()));
                 // ---------- CreditAmountNet(UW) ---------- //
                 detailView.setCreditAmountUW(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListUW(), detailView.getChequeReturnAmount()));
 
@@ -804,6 +806,8 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : bankStmtDetailViewList) {
                 // ---------- CreditAmountNet(BDM) ---------- //
                 detailView.setCreditAmountBDM(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListBDM(), detailView.getChequeReturnAmount()));
+                // ---------- CreditAmountNet(UW) ---------- //
+                detailView.setCreditAmountUW(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListUW(), detailView.getChequeReturnAmount()));
 
                 // ---------- Swing & Utilization (%) ---------- //
                 // overLimitAmount = 0 -> Swing & Utilization (%) = 0

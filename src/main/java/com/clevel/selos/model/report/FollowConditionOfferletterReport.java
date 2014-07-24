@@ -11,8 +11,6 @@ public class FollowConditionOfferletterReport extends ReportModel {
     private String name;
 
     public FollowConditionOfferletterReport() {
-        name = getDefaultString();
-        count = getDefaultInteger();
     }
 
     public String getName() {
