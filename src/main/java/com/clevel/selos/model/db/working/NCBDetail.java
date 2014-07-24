@@ -94,6 +94,9 @@ public class NCBDetail implements Serializable {
     @Column(name = "can_edit")
     private boolean canToEdit;
 
+    @Column(name = "npl_info_date")
+    private Date nplInfoDate;
+
     public long getId() {
         return id;
     }
@@ -286,6 +289,14 @@ public class NCBDetail implements Serializable {
         this.canToEdit = canToEdit;
     }
 
+    public Date getNplInfoDate() {
+        return nplInfoDate;
+    }
+
+    public void setNplInfoDate(Date nplInfoDate) {
+        this.nplInfoDate = nplInfoDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -313,6 +324,7 @@ public class NCBDetail implements Serializable {
                 .append("tdrFlag", tdrFlag)
                 .append("wcFlag", wcFlag)
                 .append("canToEdit", canToEdit)
+                .append("nplInfoDate", nplInfoDate)
                 .toString();
     }
 }

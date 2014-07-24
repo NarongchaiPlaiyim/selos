@@ -32,8 +32,6 @@ public class ProposeCollateralInfoView implements Serializable {
 
     private int appraisalRequest;
 
-    private boolean headCollAppraisal;
-
     private List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList;
     private List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList;
 
@@ -63,7 +61,6 @@ public class ProposeCollateralInfoView implements Serializable {
         this.proposeCollateralInfoHeadViewList.add(proposeCollateralInfoHeadView);
         this.proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
         this.appraisalRequest = 0;
-        this.headCollAppraisal = false;
     }
 
     public long getId() {
@@ -226,14 +223,6 @@ public class ProposeCollateralInfoView implements Serializable {
         this.appraisalRequest = appraisalRequest;
     }
 
-    public boolean isHeadCollAppraisal() {
-        return headCollAppraisal;
-    }
-
-    public void setHeadCollAppraisal(boolean headCollAppraisal) {
-        this.headCollAppraisal = headCollAppraisal;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -255,7 +244,6 @@ public class ProposeCollateralInfoView implements Serializable {
                 append("proposeType", proposeType).
                 append("coms", coms).
                 append("appraisalRequest", appraisalRequest).
-                append("headCollAppraisal", headCollAppraisal).
                 append("proposeCollateralInfoHeadViewList", proposeCollateralInfoHeadViewList).
                 append("proposeCreditInfoDetailViewList", proposeCreditInfoDetailViewList).
                 toString();

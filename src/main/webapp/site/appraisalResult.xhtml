@@ -421,11 +421,15 @@
         <ui:include src="include/footer.xhtml" />
         <!-- End Footer -->
     </div>
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </h:form>
 </p:panel>
 
 <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-          modal="true" width="700" height="500" closable="false">
+          modal="true" width="900" height="700" closable="false">
     <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
 </p:dialog>
 
@@ -440,6 +444,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     closable="false"
                      header="#{appraisalResult.messageHeader}" >
         <f:facet name="message">
             <h:outputText value="#{appraisalResult.message}" escape="false"/>
@@ -473,11 +478,6 @@
                          oncomplete="msgBoxNoRequestMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-    LOADING<br />
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 
 </h:body>
 </f:view>

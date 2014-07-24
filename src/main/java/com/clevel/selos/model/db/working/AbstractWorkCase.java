@@ -32,7 +32,7 @@ public class AbstractWorkCase implements Serializable{
     @JoinColumn(name = "from_user_id")
     protected User fromUser;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "at_user_id")
     protected User atUser;
 
@@ -75,7 +75,7 @@ public class AbstractWorkCase implements Serializable{
     @Column(name = "create_date")
     protected Date createDate;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "create_by")
     protected User createBy;
 
@@ -87,7 +87,7 @@ public class AbstractWorkCase implements Serializable{
     @Column(name = "modify_date")
     protected Date modifyDate;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "modify_by")
     protected User modifyBy;
 

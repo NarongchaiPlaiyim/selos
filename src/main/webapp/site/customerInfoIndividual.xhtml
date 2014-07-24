@@ -507,13 +507,13 @@
                                     </td>
                                     <td>
                                         <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                         value="#{custInfoSumIndi.customerInfoView.businessSubType.id}" id="businessType"
+                                                         value="#{custInfoSumIndi.customerInfoView.businessDescription.id}" id="businessType"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}">
                                             <!--required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndBizType}"-->
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
                                                            var="busType"
-                                                           itemLabel="#{busType.mainCode}#{busType.extendCode} - #{busType.description}"
+                                                           itemLabel="#{busType.tmbCode} - #{busType.description}"
                                                            itemValue="#{busType.id}"/>
                                         </p:selectOneMenu>
                                     </td>
@@ -1812,7 +1812,7 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
                                                                                var="busType"
-                                                                               itemLabel="#{busType.mainCode}#{busType.extendCode} - #{busType.description}"
+                                                                               itemLabel="#{busType.tmbCode} - #{busType.description}"
                                                                                itemValue="#{busType.id}"/>
                                                             </p:selectOneMenu>
                                                         </td>

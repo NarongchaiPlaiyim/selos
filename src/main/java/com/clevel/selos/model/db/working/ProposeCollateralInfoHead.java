@@ -57,7 +57,7 @@ public class ProposeCollateralInfoHead implements Serializable {
     @JoinColumn(name = "new_collateral_id")
     private ProposeCollateralInfo proposeCollateral;
 
-    @OneToMany(mappedBy = "proposeCollateralHead"/*, cascade = CascadeType.ALL*/)
+    @OneToMany(mappedBy = "proposeCollateralHead", cascade = CascadeType.ALL)
     private List<ProposeCollateralInfoSub> proposeCollateralInfoSubList;
 
     @Temporal(TemporalType.TIMESTAMP)

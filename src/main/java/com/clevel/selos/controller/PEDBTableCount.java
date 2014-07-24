@@ -1,16 +1,13 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PEDBExecute;
-import com.clevel.selos.dao.master.DoaPriorityUserNamesDAO;
-import com.clevel.selos.dao.master.FetchQueueNameDAO;
-import com.clevel.selos.dao.master.InboxTableNameDAO;
-import com.clevel.selos.dao.master.QueueNameIdDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.tool.SQLDBConnection;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
-import com.clevel.selos.model.db.master.DoaPriorityUserNames;
-import com.clevel.selos.model.db.master.QueueNameId;
+import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.ReassignTeamNameId;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import org.slf4j.Logger;
@@ -21,10 +18,7 @@ import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @ManagedBean(name = "peDBCount")
 public class PEDBTableCount
@@ -82,6 +76,11 @@ public class PEDBTableCount
     @Inject
     DoaPriorityUserNamesDAO doaPriorityUserNamesDAO;
 
+    @Inject
+    UserTeamDAO userTeamDAO;
+    
+    @Inject
+    UserDAO userDAO;
 
     public PEDBTableCount()
     {
@@ -236,7 +235,7 @@ public class PEDBTableCount
 
                 doaprioritystringvalue = String.valueOf(doapriority);
 
-                log.info("doaprioritystringvalue value is :::::::::::::::: : {} ",doaprioritystringvalue);
+                log.debug("doaprioritystringvalue value is :::::::::::::::: : {} ", doaprioritystringvalue);
             }
 
             String  sqlpequery1 = "select " + peCount + " from ";
@@ -273,6 +272,47 @@ public class PEDBTableCount
                 }
                 else if(filterstring.contains("LOGGEDINUSERTEAMNAME"))
                 {
+
+                    User user = userDAO.findById(userDetail.getUserName());
+
+                    if(userDetail.getRoleId()== RoleValue.UW.id())
+                    {
+
+                        if(user.getTeam().getTeam_type()>1)
+                        {
+
+                            List<ReassignTeamNameId> teams = userTeamDAO.getUserteams(userDetail.getTeamid(),"Y");
+
+                            log.debug("Team List : {} , Teams : {}",teams.size(), teams.toString());
+
+                            Set<ReassignTeamNameId> set = new HashSet(teams);
+
+                            for(ReassignTeamNameId  team : set)
+                            {
+
+                                List<Integer> users = userTeamDAO.getUsersTeamId(team.getTeamid());
+
+                                log.debug("users for team {} : {}", team.getTeamid(), users.toString());
+
+                                Set<Integer> setTeamIds = new HashSet(users);
+
+                                for(Integer userTeam : setTeamIds)
+                                {
+                                    TeamName = TeamName+","+userTeam;
+
+                                    log.debug("TeamNames ***  : {}",TeamName);
+                                }
+
+                            }
+
+                            //TeamName = TeamName.substring(0,TeamName.lastIndexOf(","));
+
+                            log.debug("team name id for Pool Box Filter *** : {}",TeamName);
+                            
+                        }
+                                
+                    }
+
                     filterstring1 = filterstring.replaceAll("LOGGEDINUSERTEAMNAME",TeamName);
 
                     log.info("filter string  in loop when filtercondition is LOGGEDINUSERTEAMNAME(count) :::::::::::::: {}",filterstring1);

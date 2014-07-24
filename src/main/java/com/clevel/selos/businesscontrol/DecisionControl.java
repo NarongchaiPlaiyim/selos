@@ -137,10 +137,16 @@ public class DecisionControl extends BusinessControl {
         log.debug("findDecisionViewByWorkCaseId :: workCaseId :: {}", workCaseId);
 
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
 
-        DecisionView decisionView = proposeLineTransform.transformToDecisionView(existingCreditFacilityView, proposeLineView, decision, workCaseId);
+        ProposeLine proposeLine = null;
+        if(!Util.isZero(workCaseId)) {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }
+        ProposeLineView proposeLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.P);
+        ProposeLineView approveLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.A);
+
+        DecisionView decisionView = proposeLineTransform.transformToDecisionView(existingCreditFacilityView, proposeLineView, approveLineView, decision, workCaseId);
 
         return decisionView;
     }
@@ -387,7 +393,7 @@ public class DecisionControl extends BusinessControl {
                                 if(proposeCreditInfoDetailView.isExistingCredit()) {
                                     existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditInfoDetailView.getId());
                                 } else { // can't find by id coz propose credit id is zero
-                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), decision);
+                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), decision, proposeType);
                                 }
                                 ProposeGuarantorInfoRelation proposeGuarantorInfoRelation = proposeLineTransform.transformProposeGuarantorRelationToModel(decision, proposeGuarantorInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser, proposeCreditInfoDetailView.getGuaranteeAmount());
 
@@ -516,7 +522,7 @@ public class DecisionControl extends BusinessControl {
                                 if(proposeCreditInfoDetailView.isExistingCredit()) {
                                     existingCreditDetail = existingCreditDetailDAO.findById(proposeCreditInfoDetailView.getId());
                                 } else { // can't find by id coz propose credit id is zero
-                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), decision);
+                                    proposeCreditInfo = proposeCreditInfoDAO.findBySeqAndPropose(proposeCreditInfoDetailView.getSeq(), decision, proposeType);
                                 }
                                 ProposeCollateralInfoRelation proposeCollateralInfoRelation = proposeLineTransform.transformProposeCollateralRelationToModel(decision, proposeCollateralInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser);
 

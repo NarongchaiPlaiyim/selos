@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -76,7 +77,7 @@ public class ApproveDetailInformationControl extends BusinessControl {
 			List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
 			List<ProposeCreditInfoDetailView> newCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
 			for (ProposeCreditInfo newCreditDetail : newCreditDetailList) {
-                ProposeCreditInfoDetailView newCreditDetailView = proposeLineTransform.transformProposeCreditToView(newCreditDetail);
+                ProposeCreditInfoDetailView newCreditDetailView = proposeLineTransform.transformProposeCreditToView(newCreditDetail, ProposeType.A);
 				newCreditDetailViewList.add(newCreditDetailView);
 				totalApprovedLimit = totalApprovedLimit.add(newCreditDetail.getLimit());
 			}

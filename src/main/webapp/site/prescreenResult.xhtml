@@ -426,7 +426,10 @@
                                 </tr>
                                 <tr>
                                     <td style="width: 200px;" class="title">Final Application Result:</td>
-                                    <td class="left"><span style="height:30px; line-height: 30px; width: 200px;" class="result #{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor.resultClass}">#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor}</span></td>
+                                    <td class="left">
+                                        <span style="height:30px; line-height: 30px; width: 200px;" class="result #{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor.resultClass}">#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor}</span>
+                                        <p:spacer width="5" height="5" rendered="#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor == 'RED'}"/><h:outputText value="#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwDeviationFlagView.description}" rendered="#{prescreenResult.prescreenResultView.uwRuleResultSummaryView.uwResultColor == 'RED'}"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td  class="title top">Group Result:</td>

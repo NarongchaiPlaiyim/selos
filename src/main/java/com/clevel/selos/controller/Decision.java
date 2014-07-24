@@ -718,6 +718,8 @@ public class Decision extends BaseController {
 
         modeSubColl = Mode.EDIT;
 
+        subCollateralTypeList = subCollateralTypeDAO.findByCollateralTypeId(approveCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getHeadCollType().getId());
+
         if(!Util.isNull(relateWithList) && !Util.isZero(relateWithList.size())){
             for(ProposeCollateralInfoSubView proCollInfSubView : relateWithList){
                 if(proCollInfSubView.getSubId().equalsIgnoreCase(approveCollateralInfoSubView.getSubId())){
@@ -912,7 +914,7 @@ public class Decision extends BaseController {
 
                 exSummaryControl.calForDecision(workCaseId);
 
-                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId());
+                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A);
             }
 
             //Check valid step to Save Approval

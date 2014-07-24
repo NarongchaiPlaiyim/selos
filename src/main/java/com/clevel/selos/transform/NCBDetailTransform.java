@@ -72,6 +72,7 @@ public class NCBDetailTransform extends Transform {
             ncbDetail.setWcFlag(ncbDetailViewItem.getWcCheck() == true ? 2:1);
             ncbDetail.setOverLimit(ncbDetailViewItem.getNoOfOverLimit());
             ncbDetail.setCanToEdit(ncbDetailViewItem.isCanToEdit());
+            ncbDetail.setNplInfoDate(ncbDetailViewItem.getNplInfoDate());
 
             //Add new 2 flag for BRMS//
             ncbDetail.setTdrFlag(ncb.getTdrFlag());
@@ -103,6 +104,7 @@ public class NCBDetailTransform extends Transform {
         ncbDetailView.setWcFlag(ncbDetail.getWcFlag());
         ncbDetailView.setNoOfOverLimit(ncbDetail.getOverLimit());
         ncbDetailView.setCanToEdit(ncbDetail.isCanToEdit());
+        ncbDetailView.setNplInfoDate(ncbDetail.getNplInfoDate());
 
         //SET VALUE FOR CHECKBOX
         if(ncbDetail.getAccountTMBFlag() == RadioValue.YES.value()){

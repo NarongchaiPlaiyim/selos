@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.dao.master.AppraisalDivisionDAO;
 import com.clevel.selos.dao.master.LocationPropertyDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.relation.ReasonToStepDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DayOff;
 import com.clevel.selos.model.StepValue;
@@ -65,6 +66,8 @@ public class AppraisalAppointment implements Serializable {
     private LocationPropertyDAO locationPropertyDAO;
     @Inject
     private ReasonDAO reasonDAO;
+    @Inject
+    private ReasonToStepDAO reasonToStepDAO;
 
     @Inject
     private AppraisalAppointmentControl appraisalAppointmentControl;
@@ -211,7 +214,7 @@ public class AppraisalAppointment implements Serializable {
                 workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             }
 
-            reasons = reasonDAO.findAll();
+            reasons = reasonToStepDAO.getAppraisalReason();
 
             contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
 

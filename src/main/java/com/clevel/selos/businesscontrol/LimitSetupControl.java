@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.ProposeCreditInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.ProposeCreditInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.LimitSetupView;
@@ -48,7 +49,7 @@ public class LimitSetupControl extends BusinessControl {
     	List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCaseId);
     	List<ProposeCreditInfoDetailView> newCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
     	for (ProposeCreditInfo newCreditDetail : newCreditDetailList){
-            ProposeCreditInfoDetailView newCreditDetailView = newCreditDetailTransform.transformProposeCreditToView(newCreditDetail);
+            ProposeCreditInfoDetailView newCreditDetailView = newCreditDetailTransform.transformProposeCreditToView(newCreditDetail, ProposeType.A);
     		newCreditDetailViewList.add(newCreditDetailView);
     	}
     	limitSetupView.setNewCreditDetailViewList(newCreditDetailViewList);
