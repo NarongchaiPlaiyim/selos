@@ -170,12 +170,12 @@
 </p:commandButton>
 <!--_________ Submit Case ___________ -->
 <!-- Submit Generic for BU -->
-<!--<p:commandButton id="btnSubmitCaseFullApplication" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+<p:commandButton id="btnSubmitCaseFullApplication" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA')}"
                  disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                  action="#{headerController.onOpenSubmitFullApplication()}"
                  update=":frmMain:submitFullAppPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
-</p:commandButton>-->
+</p:commandButton>
 <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
 <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2001 || headerController.stepId == 2018 )}"
@@ -638,6 +638,7 @@
         <ui:include src="/site/dialog/printReportDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
 <p:panel id="assignABDMPanel" styleClass="panel">
     <p:dialog id="assignABDMDialog" widgetVar="assignABDMDlg" header="Assign To ABDM"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -654,13 +655,13 @@
     </p:dialog>
 </p:panel>
 
-<!--<p:panel id="submitFullAppPanel" styleClass="panel">
+<p:panel id="submitFullAppPanel" styleClass="panel">
     <p:dialog id="submitFullAppDialog" widgetVar="submitFullAppDlg" header="Submit CA"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="550" height="450">
         <ui:include src="/site/dialog/submitCADialog.xhtml"/>
     </p:dialog>
-</p:panel>-->
+</p:panel>
 
 <p:panel id="submitUWPanel" styleClass="panel">
     <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit to UW"
@@ -721,7 +722,7 @@
     </p:dialog>
 </p:panel>
 
-<p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal')}">
+<p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="1210" closable="false">
@@ -729,7 +730,7 @@
     </p:dialog>
 </p:panel>
 
-<p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal')}">
+<p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDetailDialog" widgetVar="reqApprDetailDlg" header="Appraisal Detail Information"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="500" height="200" closable="false">
@@ -791,7 +792,6 @@
     </p:dialog>
 </p:panel>
 
-
 <p:panel id="cancelRequestPriceReducePanel" styleClass="panel"
          rendered="#{headerController.checkButton('Cancel Request')}">
     <p:dialog id="cancelRequestPriceReduceDialog" header="Cancel Request Price Reduction" widgetVar="cancelRequestPriceReduceDlg"
@@ -800,6 +800,7 @@
         <ui:include src="/site/dialog/cancelRequestPriceReduceDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
 <p:panel id="returnMakerPanel" styleClass="panel"
         rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 1002}">
     <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
@@ -808,6 +809,7 @@
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
 <p:panel id="closeSalesPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Close Sales')}">
     <p:dialog id="closeSalesDialog" header="Close Sales" widgetVar="closeSalesDlg"

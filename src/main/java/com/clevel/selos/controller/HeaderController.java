@@ -559,9 +559,10 @@ public class HeaderController extends BaseController {
 
     public void onSubmitFullApplication(){
         _loadSessionVariable();
-        HttpSession session = FacesUtil.getSession(false);
         boolean complete = false;
-        String slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");     //If SLA is R
+
+        //Submit case by Step Id
+        //if()
 
     }
     //---------- End of Function for Submit CA ----------//

@@ -177,6 +177,7 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.assignToABDM(queueName, wobNumber, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
+    //------ Function for Submit Case ------//
     public void submitToZM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, long workCaseId) throws Exception {
         WorkCase workCase = null;
         String productGroup = "";

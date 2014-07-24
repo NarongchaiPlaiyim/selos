@@ -155,7 +155,7 @@
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
-                                                             required="#{not empty param[addAppraisalRequsest.clientId] }"
+                                                             required="#{not empty param[btnAddAppraisalRequsest.clientId] }"
                                                              onkeydown="return onKeyDownName(event);"
                                                              onkeypress="return onKeyPressName(event);" maxlength="50"
                                                              counterTemplate="{0} characters remaining." autoResize="false"/>
@@ -163,7 +163,7 @@
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
-                                                             required="#{not empty param[addAppraisalRequsest.clientId] }"
+                                                             required="#{not empty param[btnAddAppraisalRequsest.clientId] }"
                                                              onkeydown="return onKeyDownTelNo(event);"
                                                              onkeypress="return onKeyPressTelNo(event);" />
                                                 <!--style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
@@ -235,7 +235,7 @@
                             <tr>
                                 <td class="center" colspan="2">
                                     <p:commandButton id="btnSave"
-                                                     binding = "#{addAppraisalRequsest}"
+                                                     binding = "#{btnAddAppraisalRequsest}"
                                                      value="#{msg.get('app.button.save')}"
                                                      styleClass="medium"
                                                      process="@form"
@@ -253,6 +253,7 @@
                             </tr>
                             </table>
                         </div>
+
                     </div>
                     <div class="bottom_line"><!-- --></div>
                 </div>
