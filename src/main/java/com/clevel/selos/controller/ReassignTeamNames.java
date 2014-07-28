@@ -544,7 +544,7 @@ public class ReassignTeamNames implements Serializable
 
             String all = "ALL";
 
-            usernameslist =  userTeamDAO.getUsers(changedteamid);
+            usernameslist =  userTeamDAO.getUsers(Integer.parseInt(selectedTeamName));
 
             if(usernameslist.contains(all))
             {
