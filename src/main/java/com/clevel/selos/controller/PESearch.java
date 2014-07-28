@@ -339,7 +339,11 @@ public class PESearch implements Serializable
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
             if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-                FacesUtil.redirect(landingPage);
+                if(searchViewSelectItem.getWorkCaseId() != 0) {
+                    FacesUtil.redirect(landingPage);
+                }else{
+                    FacesUtil.redirect("/site/prescreenMaker.jsf");
+                }
                 return;
             } else {
                 log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");

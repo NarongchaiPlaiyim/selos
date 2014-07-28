@@ -17,14 +17,6 @@ public class ApprovedGuarantorOfferLetterReport extends ReportModel{
         totalLimitGuaranteeAmount = getDefaultBigDecimal();
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("guarantorName", guarantorName)
-                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
-                .toString();
-    }
-
     public BigDecimal getTotalLimitGuaranteeAmount() {
         return totalLimitGuaranteeAmount;
     }
@@ -40,5 +32,13 @@ public class ApprovedGuarantorOfferLetterReport extends ReportModel{
 
     public void setGuarantorName(String guarantorName) {
         this.guarantorName = guarantorName;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("guarantorName", guarantorName)
+                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
+                .toString();
     }
 }

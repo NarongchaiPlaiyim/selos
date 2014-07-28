@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApprovedCollateralOfferLetterReport extends ReportModel {
@@ -14,7 +15,7 @@ public class ApprovedCollateralOfferLetterReport extends ReportModel {
     private String subCollateralTypeName;
     private String titleDeed;
     private String collateralOwnerUW;
-    private String mortgageList;
+    private String mortgage;
     private BigDecimal mortgageValue;
     private String address;
 
@@ -24,9 +25,10 @@ public class ApprovedCollateralOfferLetterReport extends ReportModel {
         subCollateralTypeName = getDefaultString();
         titleDeed = getDefaultString();
         collateralOwnerUW = getDefaultString();
-        mortgageList = getDefaultString();
+        mortgage = getDefaultString();
         mortgageValue = getDefaultBigDecimal();
         address = getDefaultString();
+        approvedGuarantorOfferLetterReport = new ArrayList<ApprovedGuarantorOfferLetterReport>();
     }
 
     public String getSubCollateralTypeName() {
@@ -53,12 +55,12 @@ public class ApprovedCollateralOfferLetterReport extends ReportModel {
         this.collateralOwnerUW = collateralOwnerUW;
     }
 
-    public String getMortgageList() {
-        return mortgageList;
+    public String getMortgage() {
+        return mortgage;
     }
 
-    public void setMortgageList(String mortgageList) {
-        this.mortgageList = mortgageList;
+    public void setMortgage(String mortgage) {
+        this.mortgage = mortgage;
     }
 
     public BigDecimal getMortgageValue() {
@@ -100,7 +102,7 @@ public class ApprovedCollateralOfferLetterReport extends ReportModel {
                 .append("subCollateralTypeName", subCollateralTypeName)
                 .append("titleDeed", titleDeed)
                 .append("collateralOwnerUW", collateralOwnerUW)
-                .append("mortgageList", mortgageList)
+                .append("mortgage", mortgage)
                 .append("mortgageValue", mortgageValue)
                 .append("address", address)
                 .append("approvedGuarantorOfferLetterReport", approvedGuarantorOfferLetterReport)

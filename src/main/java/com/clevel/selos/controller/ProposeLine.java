@@ -635,7 +635,7 @@ public class ProposeLine extends BaseController {
 
         modeSubColl = Mode.EDIT;
 
-        subCollateralTypeList = subCollateralTypeDAO.findByCollateralTypeId(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowIndex).getHeadCollType().getId());
+        subCollateralTypeList = subCollateralTypeDAO.findByCollateralTypeId(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getHeadCollType().getId());
 
         if(!Util.isNull(relateWithList) && !Util.isZero(relateWithList.size())){
             for(ProposeCollateralInfoSubView proCollInfSubView : relateWithList){

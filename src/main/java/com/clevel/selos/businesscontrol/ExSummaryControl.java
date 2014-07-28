@@ -625,11 +625,17 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal adjusted = BigDecimal.ZERO;
         BigDecimal twelve = BigDecimal.valueOf(12);
 
+        User user = getCurrentUser();
+
         if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
             totalWCTMB = proposeLine.getTotalWCTmb();
+            if(user.getRole().getId() != RoleValue.UW.id()) {
+                odLimit = proposeLine.getTotalCommercialAndOBOD();
+                loanCoreWC = proposeLine.getTotalCommercial();
+            }
         }
 
-        if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
+        if(!Util.isNull(decision) && !Util.isZero(decision.getId()) && user.getRole().getId() == RoleValue.UW.id()){
             odLimit = decision.getTotalApproveComAndOBOD();
             loanCoreWC = decision.getTotalApproveCommercial();
         }

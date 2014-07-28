@@ -2155,6 +2155,10 @@ public class ProposeLineControl extends BusinessControl {
         log.debug("onSaveProposeLine :: workCaseId :: {}, proposeType :: {}, proposeLineView :: {}",workCaseId, proposeType, proposeLineView);
         User currentUser = getCurrentUser();
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(!Util.isNull(workCase)){
+            workCase.setCaseUpdateFlag(1);
+            workCaseDAO.persist(workCase);
+        }
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         int specialProgramId = 0;
         int applyTCG = 0;

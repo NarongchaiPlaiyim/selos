@@ -17,6 +17,8 @@ public class ApprovedCreditOfferLetterReport extends ReportModel {
     private String purpose;
     private BigDecimal approveTotalCreditLimit;
 
+    private String installmentType;
+
     public ApprovedCreditOfferLetterReport() {
         productProgramName = getDefaultString();
         creditTypeName = getDefaultString();
@@ -92,6 +94,14 @@ public class ApprovedCreditOfferLetterReport extends ReportModel {
         this.finalPriceLabel = finalPriceLabel;
     }
 
+    public String getInstallmentType() {
+        return installmentType;
+    }
+
+    public void setInstallmentType(String installmentType) {
+        this.installmentType = installmentType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -103,6 +113,7 @@ public class ApprovedCreditOfferLetterReport extends ReportModel {
                 .append("tenor", tenor)
                 .append("purpose", purpose)
                 .append("approveTotalCreditLimit", approveTotalCreditLimit)
+                .append("installmentType", installmentType)
                 .toString();
     }
 }

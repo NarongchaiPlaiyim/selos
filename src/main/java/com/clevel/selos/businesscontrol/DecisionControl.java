@@ -137,10 +137,16 @@ public class DecisionControl extends BusinessControl {
         log.debug("findDecisionViewByWorkCaseId :: workCaseId :: {}", workCaseId);
 
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
 
-        DecisionView decisionView = proposeLineTransform.transformToDecisionView(existingCreditFacilityView, proposeLineView, decision, workCaseId);
+        ProposeLine proposeLine = null;
+        if(!Util.isZero(workCaseId)) {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }
+        ProposeLineView proposeLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.P);
+        ProposeLineView approveLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.A);
+
+        DecisionView decisionView = proposeLineTransform.transformToDecisionView(existingCreditFacilityView, proposeLineView, approveLineView, decision, workCaseId);
 
         return decisionView;
     }
@@ -355,7 +361,7 @@ public class DecisionControl extends BusinessControl {
             // ------------------------------------------ Guarantor ------------------------------------------- //
             //Remove All Guarantor Relation By Propose Line
             if(!Util.isNull(decisionView) && !Util.isZero(decisionView.getId())){
-                List<ProposeGuarantorInfoRelation> proposeGuarantorInfoRelationList = proposeGuarantorInfoRelationDAO.findByProposeLine(decisionView.getId(), proposeType);
+                List<ProposeGuarantorInfoRelation> proposeGuarantorInfoRelationList = proposeGuarantorInfoRelationDAO.findByProposeLine(decision.getId(), proposeType);
                 if(!Util.isNull(proposeGuarantorInfoRelationList) && !Util.isZero(proposeGuarantorInfoRelationList.size())) {
                     proposeGuarantorInfoRelationDAO.delete(proposeGuarantorInfoRelationList);
                 }
@@ -411,7 +417,7 @@ public class DecisionControl extends BusinessControl {
             // ------------------------------------------ Collateral ------------------------------------------- //
             //Remove All Collateral Relation By Propose Line
             if(!Util.isNull(decisionView) && !Util.isZero(decisionView.getId())){
-                List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = proposeCollateralInfoRelationDAO.findByProposeLine(decisionView.getId(), proposeType);
+                List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = proposeCollateralInfoRelationDAO.findByProposeLine(decision.getId(), proposeType);
                 if(!Util.isNull(proposeCollateralInfoRelationList) && !Util.isZero(proposeCollateralInfoRelationList.size())) {
                     proposeCollateralInfoRelationDAO.delete(proposeCollateralInfoRelationList);
                 }

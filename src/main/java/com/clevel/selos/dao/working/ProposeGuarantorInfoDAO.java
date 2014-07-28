@@ -64,14 +64,4 @@ public class ProposeGuarantorInfoDAO extends GenericDAO<ProposeGuarantorInfo, Lo
         }
         return rtnData;
     }
-
-    public List<ProposeGuarantorInfo> findNewGuarantorByNewCreditFacId(long newCreditFacId, ProposeType proposeType) {
-        Criteria criteria = createCriteria();
-        criteria.createAlias("guarantorName", "cus");
-        criteria.createAlias("cus.workCase", "wrk");
-        criteria.add(Restrictions.eq("proposeLine.id", newCreditFacId));
-        criteria.add(Restrictions.eq("proposeType",proposeType));
-        criteria.addOrder(Order.asc("id"));
-        return criteria.list();
-    }
 }

@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["D:/ProjectSELOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
 	</parameter>
 	<field name="subCollateralTypeName" class="java.lang.String">
 		<fieldDescription><![CDATA[subCollateralTypeName]]></fieldDescription>
@@ -15,8 +15,8 @@
 	<field name="collateralOwnerUW" class="java.lang.String">
 		<fieldDescription><![CDATA[collateralOwnerUW]]></fieldDescription>
 	</field>
-	<field name="mortgageList" class="java.lang.String">
-		<fieldDescription><![CDATA[mortgageList]]></fieldDescription>
+	<field name="mortgage" class="java.lang.String">
+		<fieldDescription><![CDATA[mortgage]]></fieldDescription>
 	</field>
 	<field name="mortgageValue" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[mortgageValue]]></fieldDescription>
@@ -160,7 +160,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{mortgageList}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{mortgage}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="f9a5555f-9ce0-423a-a891-ca36cfb0de1b" mode="Opaque" x="191" y="0" width="91" height="13" backcolor="#FFFFFF"/>
@@ -237,7 +237,7 @@
 			<subreport>
 				<reportElement uuid="8f642151-cafe-4ebd-8a3b-9d0f0c97d193" x="0" y="0" width="555" height="13"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{approvedGuarantorOfferLetterReport})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$F{path} + "OfferLetterReport_Guarantor_ApprovedGuarantor.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "OfferLetterReport_Guarantor_ApprovedGuarantor.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

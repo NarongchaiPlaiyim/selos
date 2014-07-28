@@ -309,6 +309,9 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillGuarantor",pdfOfferLetter.fillGuarantor(pathsub));
         map.put("fillFollowCondition",pdfOfferLetter.fillFollowCondition());
         map.put("fillMasterOfferLetter",pdfOfferLetter.fillMasterOfferLetter());
+        map.put("fillFeecalculationAgreement",pdfOfferLetter.fillFeecalculationAgreement());
+        map.put("fillFeecalculationNonAgreement",pdfOfferLetter.fillFeecalculationNonAgreement());
+        map.put("fillDisbursment",pdfOfferLetter.fillDisbursment());
 
         generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter(),null);
     }

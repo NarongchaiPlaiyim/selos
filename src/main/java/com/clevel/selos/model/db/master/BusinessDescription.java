@@ -82,7 +82,7 @@ public class BusinessDescription implements Serializable {
     @Column(name = "create_date")
     private Date createDate;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "create_by")
     private User createBy;
 
@@ -90,7 +90,7 @@ public class BusinessDescription implements Serializable {
     @Column(name = "modify_date")
     private Date modifyDate;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "modify_by")
     private User modifyBy;
 
