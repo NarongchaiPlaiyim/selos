@@ -30,4 +30,13 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription, Inte
         log.info("getListByBusinessGroup. (result size: {})", businessDescriptions.size());
         return businessDescriptions;
     }
+
+    public List<BusinessDescription> getListOrderByTMBCode() {
+        log.info("getListOrderByTMBCode");
+        Criteria criteria = createCriteria();
+        criteria.addOrder(Order.asc("tmbCode"));
+        List<BusinessDescription> businessDescriptions = criteria.list();
+        log.info("getListOrderByTMBCode. (result size: {})", businessDescriptions.size());
+        return businessDescriptions;
+    }
 }
