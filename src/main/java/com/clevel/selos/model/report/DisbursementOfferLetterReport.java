@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 public class DisbursementOfferLetterReport extends ReportModel {
 
+    private String loanPurPose;
     private String productProgram;
     private BigDecimal total;
     private String limit;
@@ -18,6 +19,14 @@ public class DisbursementOfferLetterReport extends ReportModel {
         total = getDefaultBigDecimal();
         limit = getDefaultString();
         name = getDefaultString();
+    }
+
+    public String getLoanPurPose() {
+        return loanPurPose;
+    }
+
+    public void setLoanPurPose(String loanPurPose) {
+        this.loanPurPose = loanPurPose;
     }
 
     public String getProductProgram() {
@@ -55,6 +64,7 @@ public class DisbursementOfferLetterReport extends ReportModel {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("loanPurPose", loanPurPose)
                 .append("productProgram", productProgram)
                 .append("total", total)
                 .append("limit", limit)
