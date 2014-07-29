@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.report.OfferLetterDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.report.OfferLetter;
@@ -41,7 +40,6 @@ public class PDFOfferLetter implements Serializable {
     @Inject private OfferLetterDAO offerLetterDAO;
     @Inject private MortgageSummaryDAO mortgageSummaryDAO;
     @Inject private AgreementInfoDAO agreementInfoDAO;
-//    @Inject private PostCustomerInfoJurisControl postCustomerInfoJurisControl;
     @Inject private CustomerDAO customerDAO;
     @Inject private MortgageInfoDAO mortgageInfoDAO;
     @Inject private MortgageDetailControl mortgageDetailControl;
@@ -374,7 +372,6 @@ public class PDFOfferLetter implements Serializable {
                     }
                 }
             }
-
             List<DisbursementTR> disbursementTRList = disbursementTRDAO.findByDisbursementId(disbursement.getId());
             if (Util.safetyList(disbursementTRList).size() > 0){
                 log.debug("--disbursementTRList. {}",disbursementTRList);
@@ -402,26 +399,7 @@ public class PDFOfferLetter implements Serializable {
                         }
                     }
                 }
-//                    if (Util.safetyList(tr.getOpenAccount().getOpenAccountNameList()).size() > 0){
-//                        for (OpenAccountName accountName : tr.getOpenAccount().getOpenAccountNameList()){
-//                            disbursementOfferLetterReport.setLimit(Util.checkNullString(accountName.getCustomer().getNameEn()));  //35
-//                        }
-//                    }
-//                }
-//            }
-//                for (DisbursementDepositBaDetailView deposit : disbursementInfoView.getDisburseDepositList()){
-//                    disbursementOfferLetterReport.setName(msg.get("report.offerletter.tr"));  //34
-//                    disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(deposit.getTotalAmount()));  //33
-//
-//                    for (DisbursementCreditTypeView depositDetail : deposit.getDisbursementCreditTypeView()){
-//                        disbursementOfferLetterReport.setProductProgram(Util.checkNullString(depositDetail.getProductProgram()));  //32
-//                    }
-//                    disbursementOfferLetterReports.add(disbursementOfferLetterReport);
-//                }
-//            }
-
-//            disbursementInfoView.setDisbursementBahtnetList(disbursementControl.getDisbursementBahtnetDetailView(disbursement.getId()));
-
+            }
             List<DisbursementBahtnet> disbursementBahtnetList = disbursementBahtnetDAO.findByDisbursementId(disbursement.getId());
             if (Util.safetyList(disbursementBahtnetList).size() > 0){
                 log.debug("--disbursementBahtnetList. {}",disbursementBahtnetList);
@@ -446,21 +424,6 @@ public class PDFOfferLetter implements Serializable {
 
                 }
             }
-
-//            for (DisbursementBahtnet disbursementBahtnet : disbursementBahtnetList){
-//                DisbursementOfferLetterReport disbursementOfferLetterReport = new DisbursementOfferLetterReport();
-//                disbursementOfferLetterReport.setLimit(Util.checkNullString(disbursementBahtnet.getBeneficiaryName()));  //35
-//
-//                for (DisbursementBahtnetDetailView bahtnet : disbursementInfoView.getDisbursementBahtnetList()){
-//                    disbursementOfferLetterReport.setName(msg.get("report.offerletter.bahtnet"));  //34
-//                    disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(bahtnet.getTotalAmount()));  //33
-//
-//                    for (DisbursementCreditTypeView bahtnetDetail : bahtnet.getDisbursementCreditTypeView()){
-//                        disbursementOfferLetterReport.setProductProgram(Util.checkNullString(bahtnetDetail.getProductProgram()));  //32
-//                    }
-//                    disbursementOfferLetterReports.add(disbursementOfferLetterReport);
-//                }
-            }
         } else {
             DisbursementOfferLetterReport disbursementOfferLetterReport = new DisbursementOfferLetterReport();
             disbursementOfferLetterReports.add(disbursementOfferLetterReport);
@@ -474,11 +437,11 @@ public class PDFOfferLetter implements Serializable {
         OfferLetterReport report = new OfferLetterReport();
         BigDecimal sumTotalAmt = BigDecimal.ZERO;
         BigDecimal sumTotalNonAmt = BigDecimal.ZERO;
-        String loanDate = SPACE;
-        String loanTime = SPACE;
-        String mortgageDate = SPACE;
-        String mortgageTime = SPACE;
-        String mortCustomerName = SPACE;
+        String loanDate;
+        String loanTime;
+        String mortgageDate;
+        String mortgageTime;
+        String mortCustomerName;
         StringBuilder customerName = new StringBuilder();
         long mortgageId = -1;
         StringBuilder customerAuthorized = new StringBuilder();
@@ -567,7 +530,6 @@ public class PDFOfferLetter implements Serializable {
         }
 
         if (workCaseId > 0){
-//            MortgageSummary mortgage = mortgageSummaryDAO.findByWorkCaseId(workCaseId);
             AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCaseId);
             customerId = Util.parseLong(FacesUtil.getFlash().get("customerId"),-1L);
 
@@ -635,14 +597,12 @@ public class PDFOfferLetter implements Serializable {
             log.debug("--mortgageId. {}",mortgageId);
 
             List<MortgageInfoCollSubView> collSubViews = mortgageDetailControl.getMortgageInfoCollSubList(mortgageId);
-//            log.debug("--MortgageInfoCollSubView. {}",collSubViews.size());
             if (Util.safetyList(collSubViews).size() > 0) {
                 mortCustomerName = Util.checkNullString(collSubViews.get(1).getOwner());
                 report.setMortgageCustomerName(mortCustomerName); //30.2
             }
 
             List<Customer> customers = customerDAO.findCustomerCanBePOA(workCaseId);
-//            if (Util.isSafetyList(customers) && Util.safetyList(customers).size() > 0) {
             if (Util.isSafetyList(customers)) {
                 log.debug("--customers findCustomerCanBePOA.{}",customers);
                 for (Customer view : customers) {
