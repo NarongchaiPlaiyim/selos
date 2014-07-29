@@ -390,7 +390,7 @@ public class CustomerInfoIndividual implements Serializable {
         sndNationalityList = nationalityDAO.findAll();
         educationList = educationDAO.findAll();
         occupationList = occupationDAO.findAll();
-        businessTypeList = businessDescriptionDAO.findAll();
+        businessTypeList = businessDescriptionDAO.getListOrderByTMBCode();
         maritalStatusList = maritalStatusDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");

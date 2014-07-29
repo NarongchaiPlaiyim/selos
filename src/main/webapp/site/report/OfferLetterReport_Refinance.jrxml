@@ -7,6 +7,7 @@
 	<field name="total" class="java.math.BigDecimal"/>
 	<field name="limit" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
+	<field name="loanPurPose" class="java.lang.String"/>
 	<variable name="sumTotal" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
@@ -84,7 +85,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{productProgram}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{productProgram} + "เพื่อ" + $F{loanPurPose}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="4bcece24-28ad-4d2b-8711-79eca1067af7" mode="Opaque" x="88" y="0" width="179" height="13" backcolor="#FFFFFF"/>
