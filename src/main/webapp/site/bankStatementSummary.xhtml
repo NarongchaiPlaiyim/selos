@@ -288,8 +288,7 @@
                                                         <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditTmbBankStmt()}"
-                                                                         onclick="blockUI.show()"
-                                                                         onsuccess="blockUI.hide()"
+                                                                         onclick="PF('blockUI').show()"
                                                                          disabled="#{bankStatementSummary.isDisabled('TMBstmt.actionLists')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
@@ -504,8 +503,7 @@
                                                         <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditOthBankStmt()}"
-                                                                         onclick="blockUI.show()"
-                                                                         onsuccess="blockUI.hide()"
+                                                                         onclick="PF('blockUI').show()"
                                                                          disabled="#{bankStatementSummary.isDisabled('otherstmt.actionLists')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
