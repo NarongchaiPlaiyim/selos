@@ -46,7 +46,7 @@
     <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM')}"
                      actionListener="#{headerController.onOpenReturnToMaker}" process="@this"
-                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:returnMakerPanel"/>
+                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:returnMakerPanel"/>
     <!-- Check PreScreen (BRMS)-->
     <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"

@@ -182,6 +182,7 @@ public class HeaderController extends BaseController {
     private String queueName;
     private String wobNumber;
     private String slaStatus;
+    private String currentUserId;
 
     private String messageHeader;
     private String message;
@@ -231,6 +232,9 @@ public class HeaderController extends BaseController {
     //Return User Name
     private String userName;
 
+    //Over SLA Reason List
+    private List<Reason> slaReasonList;
+
     //Cancel CA
     private int cancelReasonId;
 
@@ -249,7 +253,7 @@ public class HeaderController extends BaseController {
         log.debug("HeaderController ::: find active button");
 
         //Get all action from Database By Step and Status and Role
-        stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+        stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId, currentUserId);
         log.debug("HeaderController ::: stepStatusMap : {}", stepStatusMap);
 
         //FOR Appraisal Request Dialog
@@ -377,6 +381,7 @@ public class HeaderController extends BaseController {
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
         slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");
+        currentUserId = Util.parseString(session.getAttribute("caseOwner"), "");
     }
 
     public boolean checkButton(String buttonName){
@@ -542,6 +547,11 @@ public class HeaderController extends BaseController {
                     RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
                 }
 
+                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                if(submitOverSLA == 1){
+                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                }
+
             } else {
                 //----Case is updated please check criteria before submit----
                 messageHeader = msg.get("app.messageHeader.exception");
@@ -553,8 +563,6 @@ public class HeaderController extends BaseController {
             message = Util.getMessageException(ex);
             showMessageBox();
         }
-        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-
     }
 
     public void onSubmitFullApplication(){
@@ -562,7 +570,18 @@ public class HeaderController extends BaseController {
         boolean complete = false;
 
         //Submit case by Step Id
-        //if()
+        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+            //Submit case from BDM to ZM ( Step 2001 )
+            //fullApplicationControl.submitCAByZM();
+        }else if(stepId == StepValue.FULLAPP_ZM.value()){
+            //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 )
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_RGM.value()){
+            //Submit case from RGM to GH or UW ( DOA Level ) ( Step 2020 )
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+            //Submit case from GH to CSSO or UW ( DOA Level ) ( Step 2021 )
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+            //Submit case from CSSO to UW ( DOA Level ) ( Step 2022 )
+        }
 
     }
     //---------- End of Function for Submit CA ----------//
@@ -2889,5 +2908,13 @@ public class HeaderController extends BaseController {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public List<Reason> getSlaReasonList() {
+        return slaReasonList;
+    }
+
+    public void setSlaReasonList(List<Reason> slaReasonList) {
+        this.slaReasonList = slaReasonList;
     }
 }

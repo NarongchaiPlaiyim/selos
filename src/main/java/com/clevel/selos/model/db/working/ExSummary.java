@@ -251,7 +251,7 @@ public class ExSummary implements Serializable {
     ///////////////////////////////////////////////////////////////
 
     //UW Comment
-    @Column(name = "uw_comment", length = 500)
+    @Column(name = "uw_comment", length = 2000)
     private String uwComment;
     ///////////////////////////////////////////////////////////////
 

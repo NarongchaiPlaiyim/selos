@@ -2021,6 +2021,7 @@ body .ui-tooltip {
     padding: 5px 5px!important;
     text-align: left;
     white-space: nowrap;
+    max-width: 450px;
 }
 /*
 .ui-selectonemenu .ui-selectonemenu-trigger {
