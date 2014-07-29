@@ -20,6 +20,11 @@
 
             <!--<h:link value="link text" outcome="https://www.google.co.th/"  />-->
             <p:panel header="AppraisalTestHeader">
+
+                <p:inputText value="#{TestNCRS.appNumber}"
+                             onkeydown="return onKeyDownTelNo(event);"
+                             onkeypress="return onKeyPressTelNo(event);" />
+
                 <h:panelGrid columns="2">
                     <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
                                     value="#{TestNCRS.appraisalDate}"
