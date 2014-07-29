@@ -698,6 +698,8 @@ public class ChangeOwner implements Serializable {
 
         try {
 
+            caseOwner = (caseOwner.contains("-")?caseOwner.substring(0,caseOwner.indexOf("-")).trim():caseOwner);
+
             try{
                 //Try to Lock case
                 log.info("locking case queue: {}, wobNumber : {}, fetchtype: {}",queueName, rosterViewSelectItem.getF_WobNum(),rosterViewSelectItem.getFetchType());
