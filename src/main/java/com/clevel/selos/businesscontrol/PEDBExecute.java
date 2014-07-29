@@ -1979,9 +1979,11 @@ public class PEDBExecute extends BusinessControl
 
         String sqlquery2 = "select "+peBDMReturnQuery+" from "+inboxNames[1];
 
-        peSqlQuery[0] = sqlquery1 + " where lower(CurrentUser) = lower("+username+") ";
+        username = username.toLowerCase();
 
-        peSqlQuery[1] = sqlquery2 + " where lower(CurrentUser) = lower("+username+") ";
+        peSqlQuery[0] = sqlquery1 + " where lower(CurrentUser) in ("+username+") ";
+
+        peSqlQuery[1] = sqlquery2 + " where lower(CurrentUser) in ("+username+") ";
 
         log.info("sqlquery is ::::::::::::: {}",peSqlQuery[0]);
         log.info("sqlquery is ::::::::::::: {}",peSqlQuery[1]);
