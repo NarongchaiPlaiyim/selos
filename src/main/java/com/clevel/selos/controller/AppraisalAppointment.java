@@ -240,6 +240,7 @@ public class AppraisalAppointment implements Serializable {
 
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
+                appraisalView.setZoneLocation(appraisalAppointmentControl.getZoneLocation()); //Zone from user
                 updateContractFlag(appraisalContactDetailView);
 //                if(Util.isNull(appraisalView.getAppraisalDate())){
 //                    appraisalView.setAppraisalDate(DateTime.now().toDate());

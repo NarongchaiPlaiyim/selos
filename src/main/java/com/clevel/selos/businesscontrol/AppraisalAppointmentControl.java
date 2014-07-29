@@ -94,6 +94,14 @@ public class AppraisalAppointmentControl extends BusinessControl {
         return appraisalCompanyDAO.findAllASC();
     }
 
+    public String getZoneLocation(){
+        try {
+            return getCurrentUser().getZone().getName();
+        } catch (Exception e){
+            return "";
+        }
+    }
+
     public boolean isHoliday(final Date holiday){
         try {
             return holidayDAO.isHoliday(holiday);
