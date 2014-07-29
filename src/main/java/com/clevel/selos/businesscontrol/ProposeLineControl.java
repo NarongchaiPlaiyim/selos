@@ -1778,6 +1778,7 @@ public class ProposeLineControl extends BusinessControl {
         BigDecimal thirtyFive = BigDecimal.valueOf(35);
         BigDecimal fifty = BigDecimal.valueOf(50);
         BigDecimal oneHundred = BigDecimal.valueOf(100);
+        BigDecimal two = BigDecimal.valueOf(2);
 
         // ยอดขาย/รายได้
         BigDecimal adjustDBR = BigDecimal.ZERO;
@@ -1885,7 +1886,7 @@ public class ProposeLineControl extends BusinessControl {
         //case1WcLimit - totalWcDebit
         case1WcMinLimit = Util.subtract(case1WcLimit, totalWcDebit);
         //ไม่เกิน 50% ของ case1WcLimit และไม่เกิน case1WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case1Wc50CoreWc = Util.compareToFindLower(Util.divide(case1WcLimit, fifty), case1WcMinLimit);
+        case1Wc50CoreWc = Util.compareToFindLower(Util.divide(case1WcLimit, two), case1WcMinLimit);
         //case1WcMinLimit - case1Wc50CoreWc
         case1WcDebitCoreWc = Util.subtract(case1WcMinLimit, case1Wc50CoreWc);
 
@@ -1896,7 +1897,7 @@ public class ProposeLineControl extends BusinessControl {
         //case2WcLimit - totalWcDebit
         case2WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
         //ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case2Wc50CoreWc = Util.compareToFindLower(Util.divide(case2WcLimit, fifty), case2WcMinLimit);
+        case2Wc50CoreWc = Util.compareToFindLower(Util.divide(case2WcLimit, two), case2WcMinLimit);
         //case2WcMinLimit - case2Wc50CoreWc
         case2WcDebitCoreWc = Util.subtract(case2WcMinLimit, case2Wc50CoreWc);
 
@@ -1907,7 +1908,7 @@ public class ProposeLineControl extends BusinessControl {
         //case3WcLimit - totalWcDebit
         case3WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
         //ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case3Wc50CoreWc = Util.compareToFindLower(Util.divide(case3WcLimit, fifty), case3WcMinLimit);
+        case3Wc50CoreWc = Util.compareToFindLower(Util.divide(case3WcLimit, two), case3WcMinLimit);
         //case3WcMinLimit - case3Wc50CoreWc
         case3WcDebitCoreWc = Util.subtract(case3WcMinLimit, case3Wc50CoreWc);
 
