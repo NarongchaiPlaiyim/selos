@@ -544,7 +544,7 @@ public class ReassignTeamNames implements Serializable
 
             String all = "ALL";
 
-            usernameslist =  userTeamDAO.getUsers(changedteamid);
+            usernameslist =  userTeamDAO.getUsers(Integer.parseInt(selectedTeamName));
 
             if(usernameslist.contains(all))
             {
@@ -646,6 +646,8 @@ public class ReassignTeamNames implements Serializable
         String caseOwner = Util.parseString(searchViewSelectItem.getAtuser(), "");
 
         try {
+
+            caseOwner = (caseOwner.contains("-")?caseOwner.substring(0,caseOwner.indexOf("-")).trim():caseOwner);
 
             try{
             //Try to Lock case

@@ -208,6 +208,8 @@ public class PESearch implements Serializable
             String caseOwner = Util.parseString(searchViewSelectItem.getAtuser(), "");
             String createBy = "";
 
+            caseOwner = (caseOwner.contains("-")?caseOwner.substring(0,caseOwner.indexOf("-")).trim():caseOwner);
+
             boolean accessAuthorize = false;
 
             WorkCase workCase = workCaseDAO.findByAppNumber(searchViewSelectItem.getApplicationno());

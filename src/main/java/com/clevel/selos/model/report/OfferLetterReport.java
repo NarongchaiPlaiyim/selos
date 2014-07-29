@@ -16,6 +16,8 @@ public class OfferLetterReport extends ReportModel{
     private BigDecimal valueMLR;
     private BigDecimal valueMOR;
     private BigDecimal valueMRR;
+    private String dateValue;
+
     private String bdmName;
     private String tel;
     private String zone;
@@ -248,6 +250,14 @@ public class OfferLetterReport extends ReportModel{
         this.mortgageAuthorized = mortgageAuthorized;
     }
 
+    public String getDateValue() {
+        return dateValue;
+    }
+
+    public void setDateValue(String dateValue) {
+        this.dateValue = dateValue;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -257,6 +267,7 @@ public class OfferLetterReport extends ReportModel{
                 .append("valueMLR", valueMLR)
                 .append("valueMOR", valueMOR)
                 .append("valueMRR", valueMRR)
+                .append("dateValue", dateValue)
                 .append("bdmName", bdmName)
                 .append("tel", tel)
                 .append("zone", zone)

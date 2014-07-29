@@ -354,7 +354,7 @@
                                 </td>
                                 <td >
                                     <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"
-                                                 required="true"
+                                                 required="#{not empty param[saveButton.clientId]}"
                                                  maxlength="50" />
                                 </td>
                             </tr>

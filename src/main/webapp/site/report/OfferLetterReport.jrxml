@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetterReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7807b48b-7db8-442b-aba7-a40737540d02">
 	<property name="ireport.zoom" value="1.331000000000011"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="596"/>
+	<property name="ireport.y" value="116"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
 	</parameter>
@@ -150,10 +150,11 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$P{fillMasterOfferLetter}.getDateValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="062dd23f-054a-4f2c-8371-235fab1ac81e" x="38" y="44" width="33" height="13"/>

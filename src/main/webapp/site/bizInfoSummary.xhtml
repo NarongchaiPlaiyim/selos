@@ -793,8 +793,8 @@
 
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit" process="@this"
-                                                         action = "#{bizInfoSummary.onCheckEdit}">
-                                                         <!--disabled="#{bizInfoSummary.isDisabled('saveButton')}">-->
+                                                         action = "#{bizInfoSummary.onCheckEdit}"
+                                                         disabled="#{bizInfoSummary.isDisabled('business.editButton')}">
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                             <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
                                         </p:commandButton>
@@ -803,7 +803,7 @@
                                                          title="Remove" process="@this"
                                                          oncomplete="confirmDeleteBizInfoDetailDlg.show();"
                                                          update = ":frmMain"
-                                                         disabled="#{bizInfoSummary.isDisabled('business.actionList')}">
+                                                         disabled="#{bizInfoSummary.isDisabled('business.delectButton')}">
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                         </p:commandButton>
                                     </p:column>
