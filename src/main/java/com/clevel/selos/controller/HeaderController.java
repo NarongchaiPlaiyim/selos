@@ -10,6 +10,7 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
@@ -306,6 +307,12 @@ public class HeaderController extends BaseController {
                 if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
                     canCloseSale = true;
                     canRequestAppraisal = true;
+                }else{
+                    if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
+                            || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                        canCloseSale = true;
+                        canRequestAppraisal = true;
+                    }
                 }
             } else {
                 canRequestAppraisal = false;
@@ -443,6 +450,122 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
+    //---------- Function for Submit CA -----------//
+    public void onOpenSubmitFullApplication(){
+        _loadSessionVariable();
+        log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
+        try{
+            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
+                //Check for Request Pricing
+                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
+                if(requestPricing){
+                    //Check for Pricing DOA Level
+                    pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                    log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
+                    if(pricingDOALevel != 0) {
+                        zmEndorseUserId = "";
+                        zmUserId = "";
+                        rgmUserId = "";
+                        ghmUserId = "";
+                        cssoUserId = "";
+
+                        zmEndorseRemark = "";
+                        submitRemark = "";
+                        slaRemark = "";
+
+                        isSubmitToZM = false;
+                        isSubmitToRGM = false;
+                        isSubmitToGHM = false;
+                        isSubmitToCSSO = false;
+
+                        if(stepId <= StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
+                            zmUserList = fullApplicationControl.getUserList(user);
+                            log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
+                            isSubmitToZM = true;
+                        }
+
+                        //TO GET LIST FOR REGION
+                        if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            //Check Pricing DOA more than ZM level or not
+                            if(pricingDOALevel >= 1) {
+                                //Get User Zone from WorkCaseOwner
+                                User zmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.ZM.id());
+                                log.debug("onOpenSubmitFullApplication ::: zmUser : {}", zmUser);
+                                if (!Util.isNull(zmUser)) {
+                                    zmUserId = zmUser.getId();
+                                    onSelectedZM();
+                                }
+                                isSubmitToZM = true;
+                                isSubmitToRGM = true;
+                            }
+                        }
+
+                        //TO GET LIST FOR GROUP HEAD
+                        if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                            //Check Pricing DOA more than RM level or not
+                            if(pricingDOALevel >= 2) {
+                                //Get User Region from WorkCaseOwner
+                                User rmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.RGM.id());
+                                log.debug("onOpenSubmitFullApplication ::: rmUser : {}", rmUser);
+                                if (!Util.isNull(rmUser)) {
+                                    rgmUserId = rmUser.getId();
+                                    onSelectedRM();
+                                }
+                                isSubmitToGHM = true;
+                            }
+                        }
+
+                        //TO GET LIST FOR CHIEF
+                        if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+                            //Check Pricing DOA more than GH level or not
+                            if(pricingDOALevel >= 3) {
+                                //Get User Group Head from WorkCaseOwner
+                                User ghUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.GH.id());
+                                log.debug("onOpenSubmitFullApplication ::: ghUser : {}", ghUser);
+                                if (!Util.isNull(ghUser)) {
+                                    ghmUserId = ghUser.getId();
+                                    onSelectedGH();
+                                }
+                                isSubmitToCSSO = true;
+                            }
+                        }
+                        RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
+                    } else {
+                        messageHeader = msg.get("app.messageHeader.exception");
+                        message = msg.get("app.message.dialog.doapricing.notfound");
+                        showMessageBox();
+                    }
+                } else {
+                    zmUserList = fullApplicationControl.getUserList(user);
+                    log.debug("onOpenSubmitZM ::: No pricing request");
+                    RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
+                }
+
+            } else {
+                //----Case is updated please check criteria before submit----
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "CA information is updated, please Check Criteria before submit.";
+                showMessageBox();
+            }
+        }catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+
+    }
+
+    public void onSubmitFullApplication(){
+        _loadSessionVariable();
+        HttpSession session = FacesUtil.getSession(false);
+        boolean complete = false;
+        String slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");     //If SLA is R
+
+    }
+    //---------- End of Function for Submit CA ----------//
+
     //---------- Function for Cancel CA -----------//
     public void onOpenCancelCA(){
         log.debug("onOpenCancelCA ::: starting...");
@@ -498,6 +621,7 @@ public class HeaderController extends BaseController {
         try{
             if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
                 requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                fullApplicationControl.duplicateFacilityData(workCaseId);
                 if(requestPricing){
                     pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
                     if(pricingDOALevel != 0){
@@ -583,22 +707,38 @@ public class HeaderController extends BaseController {
     }
 
     public void onSelectedZM(){
+        log.debug("onSelectedZM : pricingDOALevel : {}", pricingDOALevel);
         if(pricingDOALevel >= PricingDOAValue.RGM_DOA.value()){
             rgmUserId = "";
-            User userZm = userDAO.findById(zmUserId);
-            rgmUserList = fullApplicationControl.getUserList(userZm);
+            log.debug("onSelectedZM : zmUserId : {}", zmUserId);
+            if(!Util.isEmpty(zmUserId)) {
+                User userZm = userDAO.findById(zmUserId);
+                rgmUserList = fullApplicationControl.getUserList(userZm);
+            }else{
+                rgmUserList = new ArrayList<User>();
+                ghmUserList = new ArrayList<User>();
+                cssoUserList = new ArrayList<User>();
+            }
         }
     }
 
     public void onSelectedRM(){
+        log.debug("onSelectedRM : pricingDOALevel : {}", pricingDOALevel);
         if(pricingDOALevel >= PricingDOAValue.GH_DOA.value()){
             ghmUserId = "";
-            User userRm = userDAO.findById(rgmUserId);
-            ghmUserList = fullApplicationControl.getUserList(userRm);
+            log.debug("onSelectedRM : rgmUserId : {}", rgmUserId);
+            if(!Util.isEmpty(rgmUserId)) {
+                User userRm = userDAO.findById(rgmUserId);
+                ghmUserList = fullApplicationControl.getUserList(userRm);
+            }else{
+                ghmUserList = new ArrayList<User>();
+                cssoUserList = new ArrayList<User>();
+            }
         }
     }
 
     public void onSelectedGH(){
+        log.debug("onSelectedGH : pricingDOALevel : {}", pricingDOALevel);
         if(pricingDOALevel >= PricingDOAValue.CSSO_DOA.value()){
             cssoUserId = "";
             User userGh = userDAO.findById(ghmUserId);
@@ -843,124 +983,6 @@ public class HeaderController extends BaseController {
         }
         sendCallBackParam(complete);
     }
-
-    /*public void onCancelCA(){
-        fullApplicationControl.getUserList(user);
-    }*/
-
-    //--------- Submit CA for Generic function ( use for all step ) --------//
-    public void onOpenSubmitFullApplication(){
-        _loadSessionVariable();
-        log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
-        try{
-            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
-                //Check for Request Pricing
-                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-                log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
-                if(requestPricing){
-                    //Check for Pricing DOA Level
-                    pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                    log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
-                    if(pricingDOALevel != 0) {
-                        zmEndorseUserId = "";
-                        zmUserId = "";
-                        rgmUserId = "";
-                        ghmUserId = "";
-                        cssoUserId = "";
-
-                        zmEndorseRemark = "";
-                        submitRemark = "";
-                        slaRemark = "";
-
-                        isSubmitToZM = false;
-                        isSubmitToRGM = false;
-                        isSubmitToGHM = false;
-                        isSubmitToCSSO = false;
-
-                        if(stepId <= StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
-                            zmUserList = fullApplicationControl.getUserList(user);
-                            log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
-                            isSubmitToZM = true;
-                        }
-
-                        //TO GET LIST FOR REGION
-                        if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            //Check Pricing DOA more than ZM level or not
-                            if(pricingDOALevel >= 1) {
-                                //Get User Zone from WorkCaseOwner
-                                User zmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.ZM.id());
-                                log.debug("onOpenSubmitFullApplication ::: zmUser : {}", zmUser);
-                                if (!Util.isNull(zmUser)) {
-                                    zmUserId = zmUser.getId();
-                                    onSelectedZM();
-                                }
-                                isSubmitToZM = true;
-                                isSubmitToRGM = true;
-                            }
-                        }
-
-                        //TO GET LIST FOR GROUP HEAD
-                        if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
-                            //Check Pricing DOA more than RM level or not
-                            if(pricingDOALevel >= 2) {
-                                //Get User Region from WorkCaseOwner
-                                User rmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.RGM.id());
-                                log.debug("onOpenSubmitFullApplication ::: rmUser : {}", rmUser);
-                                if (!Util.isNull(rmUser)) {
-                                    rgmUserId = rmUser.getId();
-                                    onSelectedRM();
-                                }
-                                isSubmitToGHM = true;
-                            }
-                        }
-
-                        //TO GET LIST FOR CHIEF
-                        if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-                            //Check Pricing DOA more than GH level or not
-                            if(pricingDOALevel >= 3) {
-                                //Get User Group Head from WorkCaseOwner
-                                User ghUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.GH.id());
-                                log.debug("onOpenSubmitFullApplication ::: ghUser : {}", ghUser);
-                                if (!Util.isNull(ghUser)) {
-                                    ghmUserId = ghUser.getId();
-                                    onSelectedGH();
-                                }
-                                isSubmitToCSSO = true;
-                            }
-                        }
-                    } else {
-                        messageHeader = msg.get("app.messageHeader.exception");
-                        message = msg.get("app.message.dialog.doapricing.notfound");
-                        showMessageBox();
-                    }
-                } else {
-                    zmUserList = fullApplicationControl.getUserList(user);
-                    log.debug("onOpenSubmitZM ::: No pricing request");
-                    RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
-                }
-            } else {
-                //----Case is updated please check criteria before submit----
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = "CA information is updated, please Check Criteria before submit.";
-                showMessageBox();
-            }
-        }catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-        }
-        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-
-    }
-
-    public void onSubmitFullApplication(){
-        _loadSessionVariable();
-        HttpSession session = FacesUtil.getSession(false);
-        boolean complete = false;
-        String slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");     //If SLA is R
-
-    }
-
 
     //---------- Submit CA ( UW2 [End Case] ) -----------//
     public void onSubmitCA(){ //Submit From UW2
@@ -1358,7 +1380,9 @@ public class HeaderController extends BaseController {
 
     public void onOpenReturnBDMByAAD(){
         //TODO Get BDM Name
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        //reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        _loadSessionVariable();
+        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
         returnRemark = "";
         RequestContext.getCurrentInstance().execute("returnBDM_AADAdminDlg.show()");
     }
@@ -1602,14 +1626,14 @@ public class HeaderController extends BaseController {
 
     public void onOpenReturnBDMDialog(){
         log.debug("onOpenReturnBDM ::: starting...");
-        HttpSession session = FacesUtil.getSession(false);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
         returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
 
         //set return code master
-        returnReason = returnControl.getReturnReasonList();
+        //returnReason = returnControl.getReturnReasonList();
+        returnReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
         returnRemark = "";
 
         log.debug("onOpenReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList.size());

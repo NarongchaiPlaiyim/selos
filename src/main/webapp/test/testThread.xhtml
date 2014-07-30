@@ -1,0 +1,39 @@
+<!DOCTYPE >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Welcome to test page</title>
+    </h:head>
+    <h:body>
+        <h:form id="workCaseTest">
+            <p:panel header="Work Case">
+                <h:panelGrid columns="2">
+                    <h:outputText value="Work Case ID : "/>
+                    <p:inputText value="#{testThread.workCaseId}"/>
+                    <h:outputText value=""/>
+                    <p:commandButton id="onSubmitGetWorkCase" value="Submit" update="@form"
+                                     action="#{testThread.onSubmitGetWorkCase()}"/>
+                    <h:outputText value="Result : "/>
+                    <p:inputTextarea value="#{testThread.resultOfWorkCase}" rows="50" cols="100"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form id="workCasePreScreenTest">
+            <p:panel header="Work Case Pre Screen">
+                <h:panelGrid columns="2">
+                    <h:outputText value="Work Case Pre Screen ID : "/>
+                    <p:inputText value="#{testThread.workCasePreScreenId}"/>
+                    <p:commandButton id="onSubmitGetWorkCase" value="Submit" update="@form"
+                                     action="#{testThread.onSubmitGetWorkCasePreScreen()}"/>
+                    <h:outputText value="Result : "/>
+                    <p:inputTextarea value="#{testThread.resultOfWorkCasePreScreen}" rows="50" cols="100"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </h:body>
+</f:view>
+</html>

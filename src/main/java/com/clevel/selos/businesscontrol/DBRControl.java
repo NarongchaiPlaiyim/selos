@@ -229,8 +229,8 @@ public class DBRControl extends BusinessControl {
 
             if(!Util.isNull(bankStatementSummary)){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
-                if (Util.isNull(dbrView.getMonthlyIncomeAdjust())){
-                    dbrView.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
+                if (Util.isNull(dbrView.getMonthlyIncomeAdjust()) || Util.isZero(dbrView.getMonthlyIncomeAdjust())){
+                    dbrView.setMonthlyIncomeAdjust(dbrView.getMonthlyIncome());
                 }
             }
 
@@ -284,4 +284,27 @@ public class DBRControl extends BusinessControl {
         return monthlyIncome;
     }
 
+    public void updateAdjustIncome(long workCaseId){
+        DBRView dbrView =  getDBRByWorkCase(workCaseId);
+
+        if(!Util.isNull(dbrView)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+            List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
+            if (!Util.isNull(dbrView)){
+                if(!Util.isNull(bankStatementSummary)){
+                    dbrView.setMonthlyIncome(BigDecimal.ZERO);
+                    dbrView.setMonthlyIncomeAdjust(BigDecimal.ZERO);
+                }
+            }
+
+            DBR dbr = null;
+            try {
+                dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+                dbrDAO.persist(dbr);
+            } catch (Exception e) {
+                log.debug("Exception updateValueOfDBR", e);
+            }
+        }
+    }
 }

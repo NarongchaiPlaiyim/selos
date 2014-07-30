@@ -4,12 +4,10 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "mst_base_rate")
@@ -23,6 +21,9 @@ public class BaseRate implements Serializable {
     private BigDecimal value;
     @Column(name = "active")
     private int active;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "add_of_date")
+    private Date addOfDate;
 
     public int getId() {
         return id;
@@ -56,6 +57,14 @@ public class BaseRate implements Serializable {
         this.active = active;
     }
 
+    public Date getAddOfDate() {
+        return addOfDate;
+    }
+
+    public void setAddOfDate(Date addOfDate) {
+        this.addOfDate = addOfDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -63,6 +72,7 @@ public class BaseRate implements Serializable {
                 .append("name", name)
                 .append("value", value)
                 .append("active", active)
+                .append("addOfDate", addOfDate)
                 .toString();
     }
 }

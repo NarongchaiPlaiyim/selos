@@ -45,9 +45,7 @@
     <!-- Return to Maker -->
     <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM')}"
-
                      actionListener="#{headerController.onOpenReturnToMaker}" process="@this"
-
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:returnMakerPanel"/>
     <!-- Check PreScreen (BRMS)-->
     <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
@@ -171,6 +169,13 @@
 
 </p:commandButton>
 <!--_________ Submit Case ___________ -->
+<!-- Submit Generic for BU -->
+<!--<p:commandButton id="btnSubmitCaseFullApplication" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+                 rendered="#{headerController.checkButton('Submit CA')}"
+                 disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
+                 action="#{headerController.onOpenSubmitFullApplication()}"
+                 update=":frmMain:submitFullAppPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
+</p:commandButton>-->
 <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
 <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2001 || headerController.stepId == 2018 )}"
@@ -648,6 +653,14 @@
         <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<!--<p:panel id="submitFullAppPanel" styleClass="panel">
+    <p:dialog id="submitFullAppDialog" widgetVar="submitFullAppDlg" header="Submit CA"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="550" height="450">
+        <ui:include src="/site/dialog/submitCADialog.xhtml"/>
+    </p:dialog>
+</p:panel>-->
 
 <p:panel id="submitUWPanel" styleClass="panel">
     <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit to UW"

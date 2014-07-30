@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.model.view.PERoster;
+import com.clevel.selos.model.view.ReassignTeamNameId;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -412,6 +413,46 @@ public class PEDBExecute extends BusinessControl
                 }
                 else if(filterstring.contains("LOGGEDINUSERTEAMNAME"))
                 {
+                    User user = userDAO.findById(userDetail.getUserName());
+
+                    if(userDetail.getRoleId()== RoleValue.UW.id())
+                    {
+
+                        if(user.getTeam().getTeam_type()>1)
+                        {
+
+                            List<ReassignTeamNameId> teams = userTeamDAO.getUserteams(userDetail.getTeamid(),"Y");
+
+                            log.debug("Team List : {} , Teams : {}",teams.size(), teams.toString());
+
+                            Set<ReassignTeamNameId> set = new HashSet(teams);
+
+                            for(ReassignTeamNameId  team : set)
+                            {
+
+                                List<Integer> users = userTeamDAO.getUsersTeamId(team.getTeamid());
+
+                                log.debug("users for team {} : {}", team.getTeamid(), users.toString());
+
+                                Set<Integer> setTeamIds = new HashSet(users);
+
+                                for(Integer userTeam : setTeamIds)
+                                {
+                                    TeamName = TeamName+","+userTeam;
+
+                                    log.debug("TeamNames ***  : {}",TeamName);
+                                }
+
+                            }
+
+                            //TeamName = TeamName.substring(0,TeamName.lastIndexOf(","));
+
+                            log.debug("team name id for Pool Box Filter *** : {}",TeamName);
+
+                        }
+
+                    }
+
                     filterstring1 = filterstring.replaceAll("LOGGEDINUSERTEAMNAME",TeamName);
 
                     log.info("filter string  in loop when filtercondition is LOGGEDINUSERTEAMNAME :::::::::::::: {}",filterstring1);
@@ -1938,13 +1979,11 @@ public class PEDBExecute extends BusinessControl
 
         String sqlquery2 = "select "+peBDMReturnQuery+" from "+inboxNames[1];
 
-        /*peSqlQuery[0] = sqlquery1 + " where TeamName = '"+teamname+"'  AND CurrentUser IN ( "+username+ " ) ";
+        username = username.toLowerCase();
 
-        peSqlQuery[1] = sqlquery2 + " where TeamName = '"+teamname+"'  AND CurrentUser IN ( "+username+ ") ";*/
+        peSqlQuery[0] = sqlquery1 + " where lower(CurrentUser) in ("+username+") ";
 
-        peSqlQuery[0] = sqlquery1 + " where CurrentUser IN ( "+username+ " ) ";
-
-        peSqlQuery[1] = sqlquery2 + " where CurrentUser IN ( "+username+ ") ";
+        peSqlQuery[1] = sqlquery2 + " where lower(CurrentUser) in ("+username+") ";
 
         log.info("sqlquery is ::::::::::::: {}",peSqlQuery[0]);
         log.info("sqlquery is ::::::::::::: {}",peSqlQuery[1]);

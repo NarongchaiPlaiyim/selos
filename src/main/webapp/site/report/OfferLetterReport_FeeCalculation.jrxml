@@ -63,7 +63,7 @@
 					<font size="8" isBold="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<text><![CDATA[ค่าธรรมเนียมการใช้สินเชื่อของธนาคาร]]></text>
+				<text><![CDATA[ค่าธรรมเนียมการใช้สินเชื่อของธนาคาร/ค่าเบี้ยปประกันชำระ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="59cfb87b-d0a5-4e6f-b881-c88c082fa32e" mode="Opaque" x="0" y="0" width="26" height="13" backcolor="#FFFFFF"/>

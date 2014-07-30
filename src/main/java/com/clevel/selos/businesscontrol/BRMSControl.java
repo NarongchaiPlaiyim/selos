@@ -1103,6 +1103,7 @@ public class BRMSControl extends BusinessControl {
         accountStmtInfo.setAvgUtilizationPercent(bankStatement.getAvgUtilizationPercent());
         accountStmtInfo.setAvgSwingPercent(bankStatement.getAvgSwingPercent());
         accountStmtInfo.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
+        accountStmtInfo.setAvgGrossInflowPerLimit(bankStatement.getAvgGrossInflowPerLimit());
         accountStmtInfo.setTotalTransaction(bankStatement.getTotalTransaction());
         accountStmtInfo.setMainAccount(getRadioBoolean(bankStatement.getMainAccount()));
         accountStmtInfo.setHighestInflow(toBoolean(bankStatement.getHighestInflow()));
@@ -1490,7 +1491,7 @@ public class BRMSControl extends BusinessControl {
                         logger.debug("Document is Mandate for this step {}.", step);
                         mandateDocView.setDocMandateType(DocMandateType.MANDATE);
                     } else {
-                        logger.debug("Document is Mandate for this ");
+                        logger.debug("Document is Optional for this ");
                         mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
                     }
                     mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());

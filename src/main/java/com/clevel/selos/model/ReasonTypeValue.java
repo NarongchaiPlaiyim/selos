@@ -8,7 +8,8 @@ public enum ReasonTypeValue {
     APPEAL_REASON(5),
     DEVIATE_REASON(6),
     OVER_SLA_REASON(7),
-    PENDING_REASON(8);
+    PENDING_REASON(8),
+    APPRAISAL_REASON(9);
 
     int value;
 

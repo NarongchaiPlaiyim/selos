@@ -24,7 +24,7 @@ public class Util implements Serializable {
     public static String createDateStringTH(Date date, String format){
         Locale defaultLocaleTH = new Locale("th","TH");
         SimpleDateFormat sdf = new SimpleDateFormat(format, defaultLocaleTH);
-        return sdf.format(date);
+        return Util.checkNullString(sdf.format(date));
     }
 
     public static String replaceStringToBlank(String str, String replaceValue) {
@@ -51,6 +51,10 @@ public class Util implements Serializable {
 
     public static String createDateTh(Date date) {
         return createDateStringTH(date, "dd/MM/yyyy");
+    }
+
+    public static String createTime(Date date) {
+        return createDateStringTH(date, "HH:mm");
     }
 
     public static String createDateAndTimeTh(Date date) {

@@ -94,7 +94,7 @@ public class Customer implements Serializable {
 
     @OneToOne
     @JoinColumn(name="business_sub_type_id")
-    private BusinessSubType businessSubType;
+    private BusinessDescription businessDescription;
 
     @OneToOne
     @JoinColumn(name="relation_id")
@@ -658,12 +658,12 @@ public class Customer implements Serializable {
         this.customerAccountNameList = customerAccountNameList;
     }
 
-    public BusinessSubType getBusinessSubType() {
-        return businessSubType;
+    public BusinessDescription getBusinessDescription() {
+        return businessDescription;
     }
 
-    public void setBusinessSubType(BusinessSubType businessSubType) {
-        this.businessSubType = businessSubType;
+    public void setBusinessDescription(BusinessDescription businessDescription) {
+        this.businessDescription = businessDescription;
     }
 
     public List<CustomerOblAccountInfo> getCustomerOblAccountInfoList() {
@@ -700,7 +700,7 @@ public class Customer implements Serializable {
                 append("juristic", juristic != null ? juristic.getId() : "null").
                 append("addressesList size", addressesList != null ? addressesList.size() : "null").
                 append("businessType", businessType != null ? businessType.getId() : "null").
-                append("businessSubType", businessSubType != null ? businessSubType.getId() : "null").
+                append("businessDescription", businessDescription != null ? businessDescription.getId() : "null").
                 append("relation", relation != null ? relation.getId() : "null").
                 append("reference", reference != null ? reference.getId() : "null").
                 append("ncb", ncb != null ? ncb.getId() : "null").

@@ -73,39 +73,6 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         }
         criteria.add(Restrictions.eq("relation.id", RelationValue.BORROWER.value()));
         criteria.addOrder(Order.asc("id"));
-        /*criteria.setFetchMode("workCase", FetchMode.SELECT);
-        criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
-        criteria.setFetchMode("documentType.customerEntity", FetchMode.SELECT);
-        criteria.setFetchMode("businessType", FetchMode.SELECT);
-        criteria.setFetchMode("relation", FetchMode.SELECT);
-        criteria.setFetchMode("reference.customerEntity", FetchMode.SELECT);
-        criteria.setFetchMode("reference.borrowerType", FetchMode.SELECT);
-        criteria.setFetchMode("kycLevel", FetchMode.SELECT);
-        criteria.setFetchMode("mailingAddressType", FetchMode.SELECT);
-        criteria.setFetchMode("sourceIncome", FetchMode.SELECT);
-        criteria.setFetchMode("countryIncome", FetchMode.SELECT);
-        criteria.setFetchMode("customerOblInfo", FetchMode.SELECT);
-        criteria.setFetchMode("createBy", FetchMode.SELECT);
-        criteria.setFetchMode("modifyBy", FetchMode.SELECT);
-        criteria.setFetchMode("individual.customer", FetchMode.SELECT);
-        criteria.setFetchMode("individual.customerAttorney", FetchMode.SELECT);
-        criteria.setFetchMode("individual.citizenCountry", FetchMode.SELECT);
-        criteria.setFetchMode("individual.nationality", FetchMode.SELECT);
-        criteria.setFetchMode("individual.sndNationality", FetchMode.SELECT);
-        criteria.setFetchMode("individual.race", FetchMode.SELECT);
-        criteria.setFetchMode("individual.occupation", FetchMode.SELECT);
-        criteria.setFetchMode("individual.education", FetchMode.SELECT);
-        criteria.setFetchMode("individual.maritalStatus", FetchMode.SELECT);
-        criteria.setFetchMode("individual.fatherTitle", FetchMode.SELECT);
-        criteria.setFetchMode("individual.motherTitle", FetchMode.SELECT);
-        criteria.setFetchMode("individual.modifyBy", FetchMode.SELECT);
-        criteria.setFetchMode("individual.createBy", FetchMode.SELECT);
-        criteria.setFetchMode("juristic.customer", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.customer", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.tdrCondition", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.createBy", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.modifyBy", FetchMode.SELECT);*/
-
         List<Customer> customerList = (List<Customer>) criteria.list();
         log.info("getBorrowerByWorkCaseId ::: size : {}", customerList.size());
         return customerList;

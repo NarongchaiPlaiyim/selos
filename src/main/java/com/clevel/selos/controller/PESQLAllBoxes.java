@@ -219,8 +219,12 @@ public class PESQLAllBoxes implements Serializable
             session.setAttribute("fetchType",inboxViewSelectItem.getFetchType());
         }
 
+        String caseOwner = inboxViewSelectItem.getAtuser();
+
+        caseOwner = (caseOwner.contains("-")?caseOwner.substring(0,caseOwner.indexOf("-")).trim():caseOwner);
+
         AppHeaderView appHeaderView = headerControl.getHeaderInformation(inboxViewSelectItem.getStepId(), Util.parseLong(inboxViewSelectItem.getStatuscode(), 0), inboxViewSelectItem.getFwobnumber());
-        session.setAttribute("caseOwner",inboxViewSelectItem.getAtuser());
+        session.setAttribute("caseOwner",caseOwner);
 
         try
         {

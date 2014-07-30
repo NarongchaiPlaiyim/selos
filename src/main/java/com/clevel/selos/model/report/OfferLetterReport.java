@@ -16,9 +16,29 @@ public class OfferLetterReport extends ReportModel{
     private BigDecimal valueMLR;
     private BigDecimal valueMOR;
     private BigDecimal valueMRR;
+    private String dateValue;
+
     private String bdmName;
     private String tel;
     private String zone;
+
+    private BigDecimal sumFeecalculation;
+    private BigDecimal sumNonFeecalculation;
+
+    private String teamName;
+    private String telPhone;
+    private String telFax;
+
+    private String loanDate;
+    private String loanTime;
+    private String loanLocation;
+    private String loanCustomerName;
+
+    private String mortgageDate;
+    private String mortgageTime;
+    private String mortgageLocation;
+    private String mortgageCustomerName;
+    private String mortgageAuthorized;
 
     public OfferLetterReport() {
         borrowName = getDefaultString();
@@ -30,6 +50,20 @@ public class OfferLetterReport extends ReportModel{
         bdmName = getDefaultString();
         tel = getDefaultString();
         zone = getDefaultString();
+        sumFeecalculation = getDefaultBigDecimal();
+        sumNonFeecalculation = getDefaultBigDecimal();
+        teamName = getDefaultString();
+        telPhone = getDefaultString();
+        telFax = getDefaultString();
+        loanDate = getDefaultString();
+        loanTime = getDefaultString();
+        loanLocation = getDefaultString();
+        loanCustomerName = getDefaultString();
+        mortgageDate = getDefaultString();
+        mortgageTime = getDefaultString();
+        mortgageLocation = getDefaultString();
+        mortgageCustomerName = getDefaultString();
+        mortgageAuthorized = getDefaultString();
     }
 
     public String getBorrowName() {
@@ -104,6 +138,126 @@ public class OfferLetterReport extends ReportModel{
         this.zone = zone;
     }
 
+    public BigDecimal getSumFeecalculation() {
+        return sumFeecalculation;
+    }
+
+    public void setSumFeecalculation(BigDecimal sumFeecalculation) {
+        this.sumFeecalculation = sumFeecalculation;
+    }
+
+    public BigDecimal getSumNonFeecalculation() {
+        return sumNonFeecalculation;
+    }
+
+    public void setSumNonFeecalculation(BigDecimal sumNonFeecalculation) {
+        this.sumNonFeecalculation = sumNonFeecalculation;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getTelPhone() {
+        return telPhone;
+    }
+
+    public void setTelPhone(String telPhone) {
+        this.telPhone = telPhone;
+    }
+
+    public String getTelFax() {
+        return telFax;
+    }
+
+    public void setTelFax(String telFax) {
+        this.telFax = telFax;
+    }
+
+    public String getLoanDate() {
+        return loanDate;
+    }
+
+    public void setLoanDate(String loanDate) {
+        this.loanDate = loanDate;
+    }
+
+    public String getLoanTime() {
+        return loanTime;
+    }
+
+    public void setLoanTime(String loanTime) {
+        this.loanTime = loanTime;
+    }
+
+    public String getMortgageDate() {
+        return mortgageDate;
+    }
+
+    public void setMortgageDate(String mortgageDate) {
+        this.mortgageDate = mortgageDate;
+    }
+
+    public String getMortgageTime() {
+        return mortgageTime;
+    }
+
+    public void setMortgageTime(String mortgageTime) {
+        this.mortgageTime = mortgageTime;
+    }
+
+    public String getLoanLocation() {
+        return loanLocation;
+    }
+
+    public void setLoanLocation(String loanLocation) {
+        this.loanLocation = loanLocation;
+    }
+
+    public String getLoanCustomerName() {
+        return loanCustomerName;
+    }
+
+    public void setLoanCustomerName(String loanCustomerName) {
+        this.loanCustomerName = loanCustomerName;
+    }
+
+    public String getMortgageLocation() {
+        return mortgageLocation;
+    }
+
+    public void setMortgageLocation(String mortgageLocation) {
+        this.mortgageLocation = mortgageLocation;
+    }
+
+    public String getMortgageCustomerName() {
+        return mortgageCustomerName;
+    }
+
+    public void setMortgageCustomerName(String mortgageCustomerName) {
+        this.mortgageCustomerName = mortgageCustomerName;
+    }
+
+    public String getMortgageAuthorized() {
+        return mortgageAuthorized;
+    }
+
+    public void setMortgageAuthorized(String mortgageAuthorized) {
+        this.mortgageAuthorized = mortgageAuthorized;
+    }
+
+    public String getDateValue() {
+        return dateValue;
+    }
+
+    public void setDateValue(String dateValue) {
+        this.dateValue = dateValue;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -113,9 +267,24 @@ public class OfferLetterReport extends ReportModel{
                 .append("valueMLR", valueMLR)
                 .append("valueMOR", valueMOR)
                 .append("valueMRR", valueMRR)
+                .append("dateValue", dateValue)
                 .append("bdmName", bdmName)
                 .append("tel", tel)
                 .append("zone", zone)
+                .append("sumFeecalculation", sumFeecalculation)
+                .append("sumNonFeecalculation", sumNonFeecalculation)
+                .append("teamName", teamName)
+                .append("telPhone", telPhone)
+                .append("telFax", telFax)
+                .append("loanDate", loanDate)
+                .append("loanTime", loanTime)
+                .append("loanLocation", loanLocation)
+                .append("loanCustomerName", loanCustomerName)
+                .append("mortgageDate", mortgageDate)
+                .append("mortgageTime", mortgageTime)
+                .append("mortgageLocation", mortgageLocation)
+                .append("mortgageCustomerName", mortgageCustomerName)
+                .append("mortgageAuthorized", mortgageAuthorized)
                 .toString();
     }
 }

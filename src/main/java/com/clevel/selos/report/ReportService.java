@@ -36,12 +36,12 @@ public class ReportService implements Serializable {
 
         log.info("parameters: {}",parameters);
 
-        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
-        if(dataSource != null && reportList != null && reportList.size() > 0){
-            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-        } else {
+//        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
+//        if(dataSource != null && reportList != null && reportList.size() > 0){
+//            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+//        } else {
              print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-        }
+//        }
         log.debug("--Pring report.");
 
         try {

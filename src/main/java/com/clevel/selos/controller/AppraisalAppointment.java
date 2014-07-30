@@ -5,7 +5,7 @@ import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.dao.master.AppraisalDivisionDAO;
 import com.clevel.selos.dao.master.LocationPropertyDAO;
-import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.relation.ReasonToStepDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DayOff;
 import com.clevel.selos.model.StepValue;
@@ -63,8 +63,10 @@ public class AppraisalAppointment implements Serializable {
     private AppraisalDivisionDAO appraisalDivisionDAO;
     @Inject
     private LocationPropertyDAO locationPropertyDAO;
+//    @Inject
+//    private ReasonDAO reasonDAO;
     @Inject
-    private ReasonDAO reasonDAO;
+    private ReasonToStepDAO reasonToStepDAO;
 
     @Inject
     private AppraisalAppointmentControl appraisalAppointmentControl;
@@ -211,7 +213,10 @@ public class AppraisalAppointment implements Serializable {
                 workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             }
 
-            reasons = reasonDAO.findAll();
+            reasons = reasonToStepDAO.getAppraisalReason();
+            if(Util.isSafetyList(reasons)){
+                log.debug("-- ReasonList.size()[{}]", reasons);
+            }
 
             contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
 
@@ -235,6 +240,7 @@ public class AppraisalAppointment implements Serializable {
 
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
+                appraisalView.setZoneLocation(appraisalAppointmentControl.getZoneLocation()); //Zone from user
                 updateContractFlag(appraisalContactDetailView);
 //                if(Util.isNull(appraisalView.getAppraisalDate())){
 //                    appraisalView.setAppraisalDate(DateTime.now().toDate());

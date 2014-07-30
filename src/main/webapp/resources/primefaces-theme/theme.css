@@ -2008,8 +2008,12 @@ body .ui-tooltip {
 }
 
 .ui-selectonemenu-items-wrapper {
+    max-width: 450px;
     overflow-x: hidden !important;
     overflow-y: auto !important;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list{
+    padding: 0!important;
 }
 
 /*
