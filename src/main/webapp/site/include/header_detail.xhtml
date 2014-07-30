@@ -737,6 +737,15 @@
     </p:dialog>
 </p:panel>
 
+<ui:include src="/site/dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteAppraisalDetailViewDialog"/>
+    <ui:param name="name" value="confirmDeleteAppraisalDetailViewDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteAppraisalDetailView"/>
+    <ui:param name="controller" value="#{headerController}"/>
+    <ui:param name="action" value="onDeleteAppraisalDetailView"/>
+    <ui:param name="update" value=":frmMain:appraisalDetailViewDialogTable"/>
+</ui:include>
+
 <p:panel id="pendingDecisionPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Pending for Decision')}">
     <p:dialog id="pendingDecisionDialog" widgetVar="pendingDecisionDlg" header="Pending Decision Information"
@@ -816,5 +825,6 @@
         <ui:include src="/site/dialog/closeSalesDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
 
 </ui:composition>
