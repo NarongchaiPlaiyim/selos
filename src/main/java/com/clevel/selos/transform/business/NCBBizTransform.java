@@ -1454,7 +1454,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 if (isOutStandingPayment(creditHistModel.getDaypastdue())) {
                                                                     numberOfOutStandingPayment++;
                                                                 }
-                                                                if (isNPLIndividual(creditHistModel.getDaypastdue())) {
+                                                                if (isNPLJuristic(creditHistModel.getDaypastdue())) {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1505,7 +1505,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 if (isOutStandingPayment(creditHistModel.getDaypastdue())) {
                                                                     numberOfOutStandingPayment++;
                                                                 }
-                                                                if (isNPLIndividual(creditHistModel.getDaypastdue())) {
+                                                                if (isNPLJuristic(creditHistModel.getDaypastdue())) {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1681,7 +1681,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 if (isOutStandingPayment(creditHistModel.getDaypastdue())) {
                                                                     numberOfOutStandingPayment++;
                                                                 }
-                                                                if (isNPLIndividual(creditHistModel.getDaypastdue())) {
+                                                                if (isNPLJuristic(creditHistModel.getDaypastdue())) {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1730,7 +1730,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 if (isOutStandingPayment(creditHistModel.getDaypastdue())) {
                                                                     numberOfOutStandingPayment++;
                                                                 }
-                                                                if (isNPLIndividual(creditHistModel.getDaypastdue())) {
+                                                                if (isNPLJuristic(creditHistModel.getDaypastdue())) {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -2148,7 +2148,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isNPLIndividual(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 3) {
+            if (value >= 6) {
                 return true;
             }
         }
@@ -2158,7 +2158,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isNPLJuristic(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 4) {
+            if (value >= 7) {
                 return true;
             }
         }
