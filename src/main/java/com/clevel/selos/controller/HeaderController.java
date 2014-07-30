@@ -294,6 +294,8 @@ public class HeaderController extends BaseController {
             }
         }
 
+
+
         user = (User) session.getAttribute("user");
         if (user == null) {
             UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -301,6 +303,8 @@ public class HeaderController extends BaseController {
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
         }
+
+
 
         //check pre-screen result
         canCloseSale = false;
@@ -1898,6 +1902,13 @@ public class HeaderController extends BaseController {
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+
+        try{
+            appraisalView.setZoneLocation(user.getZone().getName());
+        } catch (Exception e) {
+            appraisalView.setZoneLocation("");
+        }
+
     }
 
     public void onSubmitRequestAppraisal(){
