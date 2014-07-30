@@ -608,7 +608,7 @@ public class BankStatementSummary extends BaseController {
                     if (tmbBankStmtView.getId() != 0) {
                         try {
                             bankStmtControl.deleteBankStmtById(tmbBankStmtView.getId());
-                            dbrControl.updateAdjustIncome(workCaseId);
+//                            dbrControl.updateAdjustIncome(workCaseId);
                         } catch (Exception e) {
                             log.debug("", e);
                             messageHeader = msg.get("app.messageHeader.error");
@@ -631,7 +631,7 @@ public class BankStatementSummary extends BaseController {
                     if (othBankStmtView.getId() != 0) {
                         try {
                             bankStmtControl.deleteBankStmtById(othBankStmtView.getId());
-                            dbrControl.updateAdjustIncome(workCaseId);
+//                            dbrControl.updateAdjustIncome(workCaseId);
                         } catch (Exception e) {
                             log.debug("", e);
                             messageHeader = msg.get("app.messageHeader.error");
@@ -670,7 +670,7 @@ public class BankStatementSummary extends BaseController {
                     if (tmbBankStmtView.getId() != 0) {
                         try {
                             bankStmtControl.deleteBankStmtById(tmbBankStmtView.getId());
-                            dbrControl.updateAdjustIncome(workCaseId);
+//                            dbrControl.updateAdjustIncome(workCaseId);
                         } catch (Exception e) {
                             log.debug("", e);
                             messageHeader = msg.get("app.messageHeader.error");
@@ -693,7 +693,7 @@ public class BankStatementSummary extends BaseController {
                     if (othBankStmtView.getId() != 0) {
                         try {
                             bankStmtControl.deleteBankStmtById(othBankStmtView.getId());
-                            dbrControl.updateAdjustIncome(workCaseId);
+//                            dbrControl.updateAdjustIncome(workCaseId);
                         } catch (Exception e) {
                             log.debug("", e);
                             messageHeader = msg.get("app.messageHeader.error");

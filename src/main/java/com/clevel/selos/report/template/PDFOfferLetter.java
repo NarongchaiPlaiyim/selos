@@ -243,7 +243,7 @@ public class PDFOfferLetter implements Serializable {
             log.debug("--Approved Collateral is Null. [{}],Approved Guarantor is Null. [{}]",collateralViews,guarantorDetailViews);
             ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
             reports.add(collateralAndGuarantorOfferLetterReport);
-            log.debug("-----------. {}",approvedGuarantorOfferLetterReports.toString());
+            log.debug("--approvedGuarantorOfferLetterReports. {}",approvedGuarantorOfferLetterReports.toString());
         }
 
         log.debug("--Data fillGuarantor. {}",reports);
@@ -304,7 +304,6 @@ public class PDFOfferLetter implements Serializable {
             detailsAgreement.add(calculationOfferLetterReport);
             log.debug("--fillFeecalculationAgreement is Null. {}",detailsAgreement);
         }
-
 
         return detailsAgreement;
     }
