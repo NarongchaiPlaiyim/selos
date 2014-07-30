@@ -699,13 +699,22 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setTotalNumberOfNonCoreAsset(newCreditFacility.getTotalNumberOfNonCoreAsset());
         }
 
-
+        //set characteristic for f-cash program
+        //if requestConstructionFlag not select ,, application set default flag = Y
         if(basicInfo!=null){
-            applicationInfo.setAbleToGettingGuarantorJob(Util.isTrue(basicInfo.getAbleToGettingGuarantorJob()));
-            applicationInfo.setNoClaimLGHistory(Util.isTrue(basicInfo.getNoClaimLGHistory()));
-            applicationInfo.setNoRevokedLicense(Util.isTrue(basicInfo.getNoRevokedLicense()));
-            applicationInfo.setNoLateWorkDelivery(Util.isTrue(basicInfo.getNoLateWorkDelivery()));
-            applicationInfo.setAdequateOfCapital(Util.isTrue(basicInfo.getAdequateOfCapitalResource()));
+            if(Util.isTrue(basicInfo.getConstructionRequestLG())) {
+                applicationInfo.setAbleToGettingGuarantorJob(Util.isTrue(basicInfo.getAbleToGettingGuarantorJob()));
+                applicationInfo.setNoClaimLGHistory(Util.isTrue(basicInfo.getNoClaimLGHistory()));
+                applicationInfo.setNoRevokedLicense(Util.isTrue(basicInfo.getNoRevokedLicense()));
+                applicationInfo.setNoLateWorkDelivery(Util.isTrue(basicInfo.getNoLateWorkDelivery()));
+                applicationInfo.setAdequateOfCapital(Util.isTrue(basicInfo.getAdequateOfCapitalResource()));
+            } else {
+                applicationInfo.setAbleToGettingGuarantorJob(true);
+                applicationInfo.setNoClaimLGHistory(true);
+                applicationInfo.setNoRevokedLicense(true);
+                applicationInfo.setNoLateWorkDelivery(true);
+                applicationInfo.setAdequateOfCapital(true);
+            }
         }
 
 
