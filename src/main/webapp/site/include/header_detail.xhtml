@@ -737,16 +737,15 @@
         <ui:include src="/site/dialog/reqApprDetailDialog.xhtml"/>
     </p:dialog>
 </p:panel>
-
-<ui:include src="/site/dialog/confirmDeleteDlg.xhtml">
-    <ui:param name="id" value="confirmDeleteAppraisalDetailViewDialog"/>
-    <ui:param name="name" value="confirmDeleteAppraisalDetailViewDlg"/>
-    <ui:param name="formId" value="frmConfirmDeleteAppraisalDetailView"/>
-    <ui:param name="controller" value="#{headerController}"/>
-    <ui:param name="action" value="onDeleteAppraisalDetailView"/>
-    <ui:param name="update" value=":frmMain:appraisalDetailViewDialogTable"/>
-</ui:include>
-
+<p:confirmDialog id="confirmDeleteAppraisalDetailViewDialog" header="#{msg.get('app.messageHeader.info')}" message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="250"
+                 severity="alert" widgetVar="confirmDeleteAppraisalDetailViewDlg">
+    <div class="onRight">
+        <p:commandButton value="#{msg.get('app.button.ok')}" update=":frmMain:appraisalDetailViewDialogTable" oncomplete="confirmDeleteAppraisalDetailViewDlg.hide()"
+                         action="#{headerController.onDeleteAppraisalDetailView}"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="PF('confirmDeleteAppraisalDetailViewDlg').hide()"/>
+    </div>
+</p:confirmDialog>
 <p:panel id="pendingDecisionPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Pending for Decision')}">
     <p:dialog id="pendingDecisionDialog" widgetVar="pendingDecisionDlg" header="Pending Decision Information"

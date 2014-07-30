@@ -62,7 +62,7 @@
                              value="#{headerController.appraisalDetailView.numberOfDocuments}"
                              style = "#{headerController.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                              maxlength="3">
-                    <p:ajax event="blur" update=":frmMain:reqApprDetailDialogPanel"/>
+                    <!--<p:ajax event="blur" update=":frmMain:reqApprDetailDialogPanel"/>-->
                     <!--<p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>-->
                 </p:inputText>
                 <h:outputText value="     #{msg.get('app.appraisal.appraisalDetail.dialog.copy')}"/>
