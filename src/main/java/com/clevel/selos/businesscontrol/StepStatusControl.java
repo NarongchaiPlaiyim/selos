@@ -20,7 +20,7 @@ import java.util.List;
 public class StepStatusControl extends BusinessControl {
     @Inject
     @SELOS
-    private Logger logger;
+    private Logger log;
 
     @Inject
     private StepToStatusDAO stepToStatusDAO;
@@ -39,16 +39,19 @@ public class StepStatusControl extends BusinessControl {
 
     }
 
-    public HashMap<String, Integer> getStepStatusByStepStatusRole(long stepId, long statusId){
+    public HashMap<String, Integer> getStepStatusByStepStatusRole(long stepId, long statusId, String currentUserId){
         User user = getCurrentUser();
+        log.debug("getStepStatusByStepStatusRole ::: stepId : {}, statusId : {}, currentUserId : {}, logonUserId : {}", stepId, statusId, currentUserId, user.getId());
         List<StepToStatus> stepToStatusList = stepToStatusDAO.getActionListByRole(stepId, statusId, user.getRole().getId());
         HashMap<String, Integer> stepToStatusMap = new HashMap<String, Integer>();
 
-        if(stepToStatusList != null){
-            for(StepToStatus item : stepToStatusList){
-                stepToStatusMap.put(item.getAction().getName(), 1);
+        //if(user.getId().toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {      //To Check Correct User And Correct Step
+            if (stepToStatusList != null) {
+                for (StepToStatus item : stepToStatusList) {
+                    stepToStatusMap.put(item.getAction().getName(), 1);
+                }
             }
-        }
+        //}
 
         return stepToStatusMap;
     }

@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.controller.Qualitative;
 import com.clevel.selos.dao.master.MandateDocumentDAO;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.*;
@@ -91,6 +92,10 @@ public class BRMSControl extends BusinessControl {
     private MandateDocumentDAO mandateDocumentDAO;
     @Inject
     private StepDAO stepDAO;
+    @Inject
+    private QualitativeADAO qualitativeADAO;
+    @Inject
+    private QualitativeBDAO qualitativeBDAO;
 
     @Inject
     private CustomerTransform customerTransform;
@@ -435,6 +440,16 @@ public class BRMSControl extends BusinessControl {
         actionValidationControl.validate(basicInfo, BasicInfo.class);
 
         CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
+        String newQualitativeClass = "";
+        int qualitativeType = basicInfo != null ? basicInfo.getQualitativeType() : 0;
+        if(qualitativeType == 1){
+            QualitativeA qualitativeA = qualitativeADAO.findByWorkCaseId(workCaseId);
+            newQualitativeClass = qualitativeA != null ? qualitativeA.getQualityResult() : "";
+        } else if (qualitativeType == 2){
+            QualitativeB qualitativeB = qualitativeBDAO.findByWorkCaseId(workCaseId);
+            newQualitativeClass = qualitativeB != null ? qualitativeB.getQualityResult() : "";
+        }
+
         int numberOfGuarantor = 0;
         for(Customer customer : customerList){
             BRMSCustomerInfo brmsCustomerInfo = getBRMSCustomerInfo(customer, checkDate);
@@ -447,7 +462,8 @@ public class BRMSControl extends BusinessControl {
                 if(juristic.getShareHolderRatio() != null)
                     shareHolderRatio = shareHolderRatio.add(juristic.getShareHolderRatio());
             }
-
+            //To set New_Qualitative for All Customer
+            brmsCustomerInfo.setQualitativeClass(newQualitativeClass);
             customerInfoList.add(brmsCustomerInfo);
 
             if(customer.getRelation().getId() == RelationValue.GUARANTOR.value()){
@@ -1267,7 +1283,7 @@ public class BRMSControl extends BusinessControl {
         }
         customerInfo.setCsiFullyMatchCode(warningFullMatchList);
         customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
-        customerInfo.setQualitativeClass("P");
+        customerInfo.setQualitativeClass("P");      //Default for PreScreen
 
             /*Start setting TMB Account for each customer*/
         List<CustomerOblAccountInfo> oblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());
