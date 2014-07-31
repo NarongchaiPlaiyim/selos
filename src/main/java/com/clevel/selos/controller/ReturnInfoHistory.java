@@ -9,6 +9,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -46,6 +47,7 @@ public class ReturnInfoHistory implements Serializable {
     ReturnControl returnControl;
 
     private long workCaseId;
+    private long workCasePreScreenId;
 
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
@@ -65,14 +67,18 @@ public class ReturnInfoHistory implements Serializable {
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+            if(session.getAttribute("workCasePreScreenId") != null){
+                workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            } else {
+                //TODO return to inbox
+                log.info("preRender ::: workCaseId is null.");
+                try {
+                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                    return;
+                } catch (Exception ex) {
+                    log.info("Exception :: {}", ex);
+                }
             }
         }
     }
@@ -98,13 +104,13 @@ public class ReturnInfoHistory implements Serializable {
 
     public void initialResultView(){
         returnInfoHistoryViewList = new ArrayList<ReturnInfoView>();
-        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId, MAX_RESULT_HISTORY);
+        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,workCasePreScreenId, MAX_RESULT_HISTORY);
     }
 
     public void onViewHistoryAll(){
         log.debug("onViewHistoryAll.");
         returnInfoHistoryViewList = new ArrayList<ReturnInfoView>();
-        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,0);
+        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,workCasePreScreenId,0);
 
         log.debug("onViewHistoryAll. returnInfoHistoryViewList size: {}",returnInfoHistoryViewList.size());
     }

@@ -43,6 +43,19 @@ public class MandateDocDAO extends GenericDAO<MandateDoc, Long>{
 
     }
 
+    public List<MandateDoc> findByWorkCasePrescreenIdAndRoleForReturn(long workCasePrescreenId, int roleId) {
+        log.info("--findByWorkCasePrescreenId : {}", workCasePrescreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.add(Restrictions.eq("role.id", roleId));
+        criteria.add(Restrictions.eq("mandateType", DocMandateType.MANDATE.value()));
+        criteria.add(Restrictions.eq("isCompleted", 2));
+        criteria.addOrder(Order.asc("ecmDocType"));
+        List<MandateDoc> mandateDocList = criteria.list();
+        return mandateDocList;
+
+    }
+
     public List<MandateDoc> findByWorkCaseIdAndRole(long workCaseId, int roleId) {
         log.info("--findByWorkCaseId : {}, roleId : {}", workCaseId, roleId);
         Criteria criteria = createCriteria();
