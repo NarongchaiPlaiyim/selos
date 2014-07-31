@@ -344,7 +344,7 @@ public class PESearch implements Serializable
                 if(searchViewSelectItem.getWorkCaseId() != 0) {
                     FacesUtil.redirect(landingPage);
                 }else{
-                    FacesUtil.redirect("/site/prescreenMaker.jsf");
+                    FacesUtil.redirect("/site/prescreen.jsf");
                 }
                 return;
             } else {
