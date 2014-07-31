@@ -23,20 +23,20 @@
             </td>
             <td id="checkBox" style = "#{headerController.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
                 <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeReviewAppraisalB}">
-                    <p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"
-                            listener="#{headerController.checkAppraisalDialog()}"/>
+                    <!--<p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"-->
+                            <!--listener="#{headerController.checkAppraisalDialog()}"/>-->
                 </h:selectBooleanCheckbox>
                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" />
                 <br/>
                 <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeNewAppraisalB}">
-                    <p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"
-                            listener="#{headerController.checkAppraisalDialog()}"/>
+                    <!--<p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"-->
+                            <!--listener="#{headerController.checkAppraisalDialog()}"/>-->
                 </h:selectBooleanCheckbox>
                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" />
                 <br/>
                 <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeReviewBuildingB}" >
-                    <p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"
-                            listener="#{headerController.checkAppraisalDialog()}"/>
+                    <!--<p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"-->
+                            <!--listener="#{headerController.checkAppraisalDialog()}"/>-->
                 </h:selectBooleanCheckbox>
                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}" />
             </td>
@@ -62,7 +62,8 @@
                              value="#{headerController.appraisalDetailView.numberOfDocuments}"
                              style = "#{headerController.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                              maxlength="3">
-                    <p:ajax event="blur" process="@form" update=":frmMain:reqApprDetailDialogPanel"/>
+                    <!--<p:ajax event="blur" update=":frmMain:reqApprDetailDialogPanel"/>-->
+                    <!--<p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>-->
                 </p:inputText>
                 <h:outputText value="     #{msg.get('app.appraisal.appraisalDetail.dialog.copy')}"/>
             </td>

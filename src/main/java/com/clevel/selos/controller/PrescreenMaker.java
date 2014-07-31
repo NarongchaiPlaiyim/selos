@@ -264,6 +264,8 @@ public class PrescreenMaker extends BaseController {
                     FacesUtil.redirect("/site/prescreenMaker.jsf");
                 } else if (stepId == StepValue.PRESCREEN_CHECKER.value() && page.equals("prescreen.jsf")) {
                     FacesUtil.redirect("/site/prescreenChecker.jsf");
+                } else if (stepId == StepValue.COMPLETED_STEP.value() && page.equals("prescreen.jsf")){
+                    FacesUtil.redirect("/site/prescreenMaker.jsf");
                 } else {
                     FacesUtil.redirect("/site/inbox.jsf");
                 }

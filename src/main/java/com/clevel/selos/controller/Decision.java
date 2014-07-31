@@ -921,8 +921,9 @@ public class Decision extends BaseController {
             HttpSession session = FacesUtil.getSession(true);
             long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
             long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+            String currentUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+            HashMap<String, Integer> stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId, currentUserId);
 
             if(stepStatusMap != null){
                 if(stepStatusMap.containsKey("Submit CA") || stepStatusMap.containsKey("Submit to UW1")

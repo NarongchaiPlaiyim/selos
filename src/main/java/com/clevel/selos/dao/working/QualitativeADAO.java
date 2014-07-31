@@ -27,4 +27,13 @@ public class QualitativeADAO extends GenericDAO<QualitativeA, Long> {
 
         return qualitativeA;
     }
+
+    public QualitativeA findByWorkCaseId(long workCaseId) {
+        log.info("findByWorkCaseId ::: workCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        QualitativeA qualitativeA = (QualitativeA) criteria.uniqueResult();
+
+        return qualitativeA;
+    }
 }
