@@ -456,6 +456,8 @@ public class PESQLInbox implements Serializable
         String queueName = inboxViewSelectItem.getQueuename();
         String wobNumber = inboxViewSelectItem.getFwobnumber();
 
+        WorkCase workCase = workCaseDAO.findByWobNumber(wobNumber);
+
         log.debug("onRestartCase ::: inboxViewSelectItem : {}", inboxViewSelectItem);
         HashMap<String,String> fieldsMap = new HashMap<String, String>();
         try {
@@ -469,7 +471,10 @@ public class PESQLInbox implements Serializable
 
                 log.info("restart successful.... ");
 
-                returnControl.saveReturnHistory(inboxViewSelectItem.getWorkCaseId(),0);
+                if(workCase!=null){
+                    returnControl.saveReturnHistory(workCase.getId(),0);
+                }
+
                 onCreation();
             }
 

@@ -158,6 +158,7 @@ public class ReturnControl extends BusinessControl {
     }
 
     public List<ReturnInfoView> getReturnReplyInfoViewListForSaveHistory(long workCaseId, long workCasePrescreenId){
+        log.debug("getReturnReplyInfoViewListForSaveHistory (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         if(workCaseId!=0 || workCasePrescreenId!=0){
             List<ReturnInfo> returnInfoList;
@@ -173,6 +174,7 @@ public class ReturnControl extends BusinessControl {
             }
         }
 
+        log.debug("getReturnReplyInfoViewListForSaveHistory (returnInfoViews size: {})",returnInfoViews.size());
         return returnInfoViews;
     }
 
@@ -215,6 +217,7 @@ public class ReturnControl extends BusinessControl {
     }
 
     public void saveReturnHistory(long workCaseId, long workCasePrescreenId) throws Exception{
+        log.debug("saveReturnHistory (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
         User user = getCurrentUser();
         List<ReturnInfoView> returnInfoViews = getReturnReplyInfoViewListForSaveHistory(workCaseId,workCasePrescreenId);
         if(returnInfoViews!=null && returnInfoViews.size()>0){
