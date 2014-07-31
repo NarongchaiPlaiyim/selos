@@ -477,8 +477,15 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitUW1(long workCaseId, String queueName, long actionCode) throws Exception{
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+    /*public void submitCase(long workCaseId, long workCasePrescreenId, String queueName, long actionCode) throws Exception{
+        WorkCase workCase = null;
+        WorkCasePrescreen workCasePrescreen = null;
+        if(workCaseId!=0){
+            workCase = workCaseDAO.findById(workCaseId);
+        } else {
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+        }
+
         Action action = actionDAO.findById(actionCode);
 
         if(action != null){
@@ -490,13 +497,15 @@ public class BPMExecutor implements Serializable {
 
             if (workCase != null) {
                 execute(queueName, workCase.getWobNumber(), fields);
+            } else if (workCasePrescreen!=null){
+                execute(queueName, workCasePrescreen.getWobNumber(), fields);
             } else {
                 throw new Exception("An exception occurred, Can not find WorkCase.");
             }
         } else {
             throw new Exception("An exception occurred, Can not find Action.");
         }
-    }
+    }*/
 
     public void submitCustomerAcceptance(String queueName, String wobNumber, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);

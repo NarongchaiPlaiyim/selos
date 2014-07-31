@@ -298,7 +298,7 @@
                  rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017)}">
     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                     actionListener="#{headerController.onSubmitReturnUW1()}"
+                     actionListener="#{headerController.onSubmitReply()}"
                      process="@this" widgetVar="subUW1SaveBtn"
                      oncomplete="confirmSubmitSubmitUW1.hide();subUW1SaveBtn.enable();subUW1CancelBtn.enable()"
                      onclick="subUW1SaveBtn.disable();subUW1CancelBtn.disable()"/>

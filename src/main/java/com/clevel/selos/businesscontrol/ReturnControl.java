@@ -214,7 +214,8 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public void saveReturnHistory(long workCaseId, long workCasePrescreenId, User user) throws Exception{
+    public void saveReturnHistory(long workCaseId, long workCasePrescreenId) throws Exception{
+        User user = getCurrentUser();
         List<ReturnInfoView> returnInfoViews = getReturnReplyInfoViewListForSaveHistory(workCaseId,workCasePrescreenId);
         if(returnInfoViews!=null && returnInfoViews.size()>0){
             List<ReturnInfoView> returnInfoViewHistoryList = transformReturnInfoToHistoryView(returnInfoViews);
@@ -251,6 +252,8 @@ public class ReturnControl extends BusinessControl {
                     ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView,null,workCasePrescreen,user);
                     returnInfoList.add(returnInfo);
                 }
+
+                returnInfoDAO.delete(returnInfoList);
             }
         }
     }
@@ -271,7 +274,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId,user);
+            saveReturnHistory(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -338,7 +341,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId,user);
+            saveReturnHistory(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -415,8 +418,14 @@ public class ReturnControl extends BusinessControl {
         }
     }
 
-    public void submitReturnUW1(long workCaseId, String queueName) throws Exception {
-        List<ReturnInfo> returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+    public void submitReply(long workCaseId, long workCasePrescreenId, String queueName) throws Exception {
+        List<ReturnInfo> returnInfoList;
+        if(workCaseId!=0){
+            returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+        } else {
+            returnInfoList = returnInfoDAO.findReturnListPrescreen(workCasePrescreenId);
+        }
+
         if(returnInfoList!=null && returnInfoList.size()>0){
             Date replyDate = new Date();
             for(int i=0; i<returnInfoList.size(); i++){
@@ -426,6 +435,17 @@ public class ReturnControl extends BusinessControl {
             returnInfoDAO.persist(returnInfoList);
         }
 
-        bpmExecutor.submitUW1(workCaseId, queueName, ActionCode.SUBMIT_CA.getVal());
+        String wobNumber = "";
+        WorkCase workCase = null;
+        WorkCasePrescreen workCasePrescreen = null;
+        if(workCaseId!=0){
+            workCase = workCaseDAO.findById(workCaseId);
+            wobNumber = workCase.getWobNumber();
+        } else {
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            wobNumber = workCasePrescreen.getWobNumber();
+        }
+
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
 }
