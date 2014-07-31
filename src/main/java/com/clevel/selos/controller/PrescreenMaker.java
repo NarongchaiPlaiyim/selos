@@ -255,6 +255,8 @@ public class PrescreenMaker extends BaseController {
                 checkPage = true;
             } else if (stepId == StepValue.PRESCREEN_MAKER.value() && page.equals("prescreenMaker.jsf")) {
                 checkPage = true;
+            } else if (stepId == StepValue.COMPLETED_STEP.value() && page.equals("prescreenMaker.jsf")) {
+                checkPage = true;
             }
 
             if (!checkPage) {
