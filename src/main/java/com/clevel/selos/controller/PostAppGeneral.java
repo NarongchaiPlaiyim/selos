@@ -151,7 +151,7 @@ public class PostAppGeneral implements Serializable  {
 	
 	public void onOpenReturnDialog() {
 		//loading prelist
-		returnList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+		returnList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,0);
 		if (returnList == null)
 			returnList = new ArrayList<ReturnInfoView>();
 		return01_Remark = "";

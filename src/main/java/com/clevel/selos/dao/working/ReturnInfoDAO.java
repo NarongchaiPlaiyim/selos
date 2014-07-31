@@ -32,6 +32,19 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
         return returnInfoList;
     }
 
+    public List<ReturnInfo> findReturnListPrescreen(long workCasePrescreenId) {
+        log.info("findReturnListPrescreen : {}", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findReturnListPrescreen result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
     public List<ReturnInfo> findByNotAcceptList(long workCaseId) {
         log.info("findByNotAcceptList : {}", workCaseId);
 
@@ -43,6 +56,21 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
         List<ReturnInfo> returnInfoList = criteria.list();
 
         log.info("findByNotAcceptList result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
+    public List<ReturnInfo> findByNotAcceptListPreScreen(long workCasePrescreenId) {
+        log.info("findByNotAcceptListPreScreen : {}", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.add(Restrictions.eq("challenge", 2));
+        criteria.add(Restrictions.eq("acceptChallenge", 1));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findByNotAcceptListPreScreen result size : {}", returnInfoList.size());
 
         return returnInfoList;
     }
@@ -61,11 +89,40 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
         return returnInfoList;
     }
 
+    public List<ReturnInfo> findByNotReplyListPrescreen(long workCasePrescreenId) {
+        log.info("findByNotReplyListPrescreen : {}", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.add(Restrictions.eq("challenge", 0));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findByNotReplyListPrescreen result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
     public List<ReturnInfo> findByNotReviewList(long workCaseId) {
         log.info("findByNotAcceptList : {}", workCaseId);
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.ne("challenge", 2));
+        criteria.add(Restrictions.ne("acceptChallenge", 0));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findByNotAcceptList result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
+    public List<ReturnInfo> findByNotReviewListPrescreen(long workCasePrescreenId) {
+        log.info("findByNotReviewListPrescreen : {}", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
         criteria.add(Restrictions.ne("challenge", 2));
         criteria.add(Restrictions.ne("acceptChallenge", 0));
         criteria.addOrder(Order.asc("id"));
@@ -86,6 +143,20 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
         List<ReturnInfo> returnInfoList = criteria.list();
 
         log.info("findByNotAcceptList result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
+    public List<ReturnInfo> findReturnReplyListPrescreen(long workCasePrescreenId) {
+        log.info("findReturnReplyListPrescreen : {}", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.add(Restrictions.ne("challenge", 0));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findReturnReplyListPrescreen result size : {}", returnInfoList.size());
 
         return returnInfoList;
     }

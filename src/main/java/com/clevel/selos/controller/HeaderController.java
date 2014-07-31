@@ -974,17 +974,17 @@ public class HeaderController extends BaseController {
     }
 
     public boolean canSubmitWithoutReturn() throws Exception{
-        List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+        List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId,workCasePreScreenId);
 
         if(returnInfoViews!=null && returnInfoViews.size()>0){
             return  false;
         } else {
             //check if have return not accept
-            List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+            List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
             if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
                 return false;
             } else {
-                returnControl.saveReturnHistory(workCaseId,user);
+                returnControl.saveReturnHistory(workCaseId,workCasePreScreenId,user);
                 return true;
             }
         }
@@ -1653,7 +1653,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1669,7 +1669,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1725,12 +1725,12 @@ public class HeaderController extends BaseController {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             try{
                 HttpSession session = FacesUtil.getSession(false);
-                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                //long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 String queueName = session.getAttribute("queueName").toString();
                 User user = (User) session.getAttribute("user");
                 long stepId = Long.parseLong(session.getAttribute("stepId").toString());
 
-                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId,workCasePreScreenId);
 
                 if(returnInfoViews!=null && returnInfoViews.size()>0){
                     messageHeader = "Information.";
@@ -1739,7 +1739,7 @@ public class HeaderController extends BaseController {
 
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
-                    returnControl.submitReturnBDM(workCaseId, queueName, user, stepId, returnInfoViewList);
+                    returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList);
                     messageHeader = "Information.";
                     message = "Return to BDM success.";
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -1775,7 +1775,7 @@ public class HeaderController extends BaseController {
                 User user = (User) session.getAttribute("user");
                 long stepId = Long.parseLong(session.getAttribute("stepId").toString());
 
-                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId,workCasePreScreenId);
 
                 if(returnInfoViews!=null && returnInfoViews.size()>0){
                     messageHeader = "Information.";
@@ -1784,7 +1784,7 @@ public class HeaderController extends BaseController {
 
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
-                    returnControl.submitReturnAADAdmin(workCaseId, queueName, user, stepId, returnInfoViewList);
+                    returnControl.submitReturnAADAdmin(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList);
                     messageHeader = "Information.";
                     message = "Return to BDM success.";
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -1842,7 +1842,7 @@ public class HeaderController extends BaseController {
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
             long stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReplyList(workCaseId);
+            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,0);
 
             if(returnInfoViews!=null && returnInfoViews.size()>0){
                 messageHeader = "Information.";

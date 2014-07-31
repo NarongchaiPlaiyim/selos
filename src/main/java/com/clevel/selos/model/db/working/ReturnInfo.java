@@ -23,6 +23,10 @@ public class ReturnInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
+    @OneToOne
+    @JoinColumn(name = "workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
     @Column(name = "date_return")
     private Date dateOfReturn;
 
@@ -94,6 +98,14 @@ public class ReturnInfo implements Serializable {
 
     public void setWorkCase(WorkCase workCase) {
         this.workCase = workCase;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
     }
 
     public Date getDateOfReturn() {
@@ -237,6 +249,7 @@ public class ReturnInfo implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("dateOfReturn", dateOfReturn)
                 .append("returnFromUser", returnFromUser)
                 .append("returnFromStep", returnFromStep)
