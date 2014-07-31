@@ -680,7 +680,8 @@
                                                                              action="#{proposeLine.onEditCreditInfo()}"
                                                                              process="@this"
                                                                              update=":creditInfoDlgForm"
-                                                                             oncomplete="creditInfoDlg.show();">
+                                                                             oncomplete="creditInfoDlg.show();"
+                                                                             disabled="#{proposeLine.isDisabled('propose.actionList')}">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}" target="#{proposeLine.proposeCreditInfoDetailView}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}" target="#{proposeLine.rowIndex}"/>
                                                                 <p:resetInput target=":creditInfoDlgForm"/>
@@ -688,7 +689,8 @@
 
                                                             <p:commandButton icon="ui-icon-trash"
                                                                              process="@this"
-                                                                             onsuccess="confirmDeleteCreditInfoDlg.show();">
+                                                                             onsuccess="confirmDeleteCreditInfoDlg.show();"
+                                                                             disabled="#{proposeLine.isDisabled('propose.actionList')}">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}" target="#{proposeLine.proposeCreditInfoDetailView}"/>
                                                             </p:commandButton>
                                                         </td>
@@ -1640,6 +1642,7 @@
                                                 value="#{msg.get('app.button.add')}"
                                                 styleClass="small"
                                                 actionListener="#{proposeLine.onAddGuarantorInfo()}"
+                                                disabled="#{proposeLine.isDisabled('addGuarantorButton')}"
                                                 process="@form"
                                                 update=":guarantorDlgForm">
                                             <p:resetInput target=":guarantorDlgForm"/>
@@ -1726,7 +1729,8 @@
                                                                  action="#{proposeLine.onEditGuarantorInfo()}"
                                                                  update=":guarantorDlgForm"
                                                                  process="@form"
-                                                                 oncomplete="guarantorInfoDlg.show();">
+                                                                 oncomplete="guarantorInfoDlg.show();"
+                                                                 disabled="#{proposeLine.isDisabled('guarantor.actionList')}">
                                                     <f:setPropertyActionListener value="#{proposeGuarantorView}" target="#{proposeLine.proposeGuarantorInfoView}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}" target="#{proposeLine.rowIndex}"/>
                                                     <p:resetInput target=":guarantorDlgForm"/>
@@ -1823,7 +1827,8 @@
                                             <p:column styleClass="top center">
                                                 <p:commandButton icon="ui-icon-trash"
                                                                  process="@this"
-                                                                 onsuccess="confirmDeleteConditionInfoDlg.show();">
+                                                                 onsuccess="confirmDeleteConditionInfoDlg.show();"
+                                                                 disabled="#{proposeLine.isDisabled('condition.actionList')}">
                                                     <f:setPropertyActionListener value="#{conditionInfoItem}" target="#{proposeLine.proposeConditionInfoView}"/>
                                                 </p:commandButton>
                                             </p:column>
