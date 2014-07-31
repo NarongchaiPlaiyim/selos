@@ -301,7 +301,7 @@
                                                              oncomplete="dbrDetailDialog.show()"
                                                              process="@this"
                                                              update=":dbrDetailDlgForm"
-                                                             disabled="#{dbrInfo.isDisabled('related.actionLists')}">
+                                                             disabled="#{dbrInfo.isDisabled('related.editButton')}">
                                                 <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
                                                 <f:setPropertyActionListener value="true" target="#{dbrInfo.update}"/>
@@ -310,7 +310,7 @@
                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteDBRInfoDlg.show()"
-                                                             disabled="#{dbrInfo.isDisabled('related.actionLists')}">
+                                                             disabled="#{dbrInfo.isDisabled('related.deleteButton')}">
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
                                             </p:commandButton>
                                         </p:column>
