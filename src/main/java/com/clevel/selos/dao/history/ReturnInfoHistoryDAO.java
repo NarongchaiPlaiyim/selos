@@ -32,6 +32,19 @@ public class ReturnInfoHistoryDAO extends GenericDAO<ReturnInfoHistory, Long> {
         return returnInfoList;
     }
 
+    public List<ReturnInfoHistory> findReturnHistoryListPrescreen(long workCasePrescreenId) {
+        log.info("findReturnHistoryListPrescreen (workCasePrescreenId:{})", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.addOrder(Order.desc("dateOfReturn")).addOrder(Order.asc("id"));
+        List<ReturnInfoHistory> returnInfoList = criteria.list();
+
+        log.info("findReturnHistoryListPrescreen result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
     public List<ReturnInfoHistory> findReturnHistoryLimitList(long workCaseId, int maxResult) {
         log.info("findReturnHistoryLimitList  (workCaseId:{}, maxResult:{})", workCaseId,maxResult);
 
@@ -42,6 +55,20 @@ public class ReturnInfoHistoryDAO extends GenericDAO<ReturnInfoHistory, Long> {
         List<ReturnInfoHistory> returnInfoList = criteria.list();
 
         log.info("findReturnHistoryLimitList result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
+    public List<ReturnInfoHistory> findReturnHistoryLimitListPrescreen(long workCasePrescreenId, int maxResult) {
+        log.info("findReturnHistoryLimitListPrescreen  (workCasePrescreenId:{}, maxResult:{})", workCasePrescreenId,maxResult);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.addOrder(Order.desc("dateOfReturn")).addOrder(Order.asc("id"));
+        criteria.setMaxResults(maxResult);
+        List<ReturnInfoHistory> returnInfoList = criteria.list();
+
+        log.info("findReturnHistoryLimitListPrescreen result size : {}", returnInfoList.size());
 
         return returnInfoList;
     }

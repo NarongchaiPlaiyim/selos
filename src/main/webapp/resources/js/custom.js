@@ -637,9 +637,9 @@ function handleCancelFullAppDialogRequest(xhr, status, args) {
     }
 }
 
-function handleReturnBDMDialogRequest(xhr, status, args) {
+function handleReturnInfoDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
-        returnBDMDlg.hide();
+        returnInfoDlg.hide();
     }
 }
 

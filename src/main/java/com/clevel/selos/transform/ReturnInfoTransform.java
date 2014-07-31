@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.ReturnInfoView;
 import org.slf4j.Logger;
 
@@ -38,8 +39,8 @@ public class ReturnInfoTransform extends Transform {
     public ReturnInfoTransform() {
     }
 
-    public ReturnInfo transformToModel(ReturnInfoView returnInfoView, WorkCase workCase, User user){
-        log.info("Start - transformToModel ::: returnInfoView : {}, workCase : {}, user : {}", returnInfoView,workCase,user);
+    public ReturnInfo transformToModel(ReturnInfoView returnInfoView, WorkCase workCase, WorkCasePrescreen workCasePrescreen, User user){
+        log.info("Start - transformToModel ::: returnInfoView : {}, workCase : {}, workCasePrescreen : {}, user : {}", returnInfoView,workCase,workCasePrescreen,user);
         ReturnInfo returnInfo = new ReturnInfo();
 
         if(returnInfoView.getId() != 0){
@@ -48,6 +49,7 @@ public class ReturnInfoTransform extends Transform {
             returnInfo.setCreateDate(new Date());
             returnInfo.setCreateBy(user);
             returnInfo.setWorkCase(workCase);
+            returnInfo.setWorkCasePrescreen(workCasePrescreen);
         }
         returnInfo.setModifyDate(new Date());
         returnInfo.setModifyBy(user);
@@ -77,13 +79,14 @@ public class ReturnInfoTransform extends Transform {
         return returnInfo;
     }
 
-    public ReturnInfoHistory transformToModelHistory(ReturnInfoView returnInfoView, WorkCase workCase){
-        log.info("Start - transformToModelHistory ::: returnInfoView : {}, workCase : {}", returnInfoView,workCase);
+    public ReturnInfoHistory transformToModelHistory(ReturnInfoView returnInfoView, WorkCase workCase, WorkCasePrescreen workCasePrescreen){
+        log.info("Start - transformToModelHistory ::: returnInfoView : {}, workCase : {}, workCasePrescreen : {} ", returnInfoView,workCase,workCasePrescreen);
         ReturnInfoHistory returnInfo = new ReturnInfoHistory();
 
         returnInfo.setCreateDate(returnInfoView.getCreateDate());
         returnInfo.setCreateBy(returnInfoView.getCreateBy());
         returnInfo.setWorkCase(workCase);
+        returnInfo.setWorkCasePrescreen(workCasePrescreen);
         returnInfo.setModifyDate(returnInfoView.getModifyDate());
         returnInfo.setModifyBy(returnInfoView.getModifyBy());
 

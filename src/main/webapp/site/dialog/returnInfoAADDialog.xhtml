@@ -4,12 +4,12 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="returnBDMDlgPanel" styleClass="panel-dialog">
+<p:panel id="returnInfoAADDlgPanel" styleClass="panel-dialog">
         <table class="content_form" style="width: 100%">
             <tr>
                 <td>
-                    <p:commandButton id="btnReturnBDMDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
-                                     action="#{headerController.onOpenAddReturnInfo()}"
+                    <p:commandButton id="btnReturnInfoAADDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
+                                     action="#{headerController.onOpenReturnAADInfoDialog()}"
                                      oncomplete="addReturnInfoDlg.show()"
                                      update=":frmMain:reasonId, :frmMain:remark">
                         <p:resetInput target=":frmMain:reasonId, :frmMain:remark"/>
@@ -18,9 +18,9 @@
             </tr>
             <tr>
                 <td>
-                    <p:dataTable id="returnResult" var="returnInfo"
+                    <p:dataTable id="returnAADResult" var="returnInfoAAD"
                                  value="#{headerController.returnInfoViewList}"
-                                 rowKey="#{returnInfo.id}" rowIndexVar="rowIndex" style="width: 100%">
+                                 rowKey="#{returnInfoAAD.id}" rowIndexVar="rowIndex" style="width: 100%">
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column style="width:15%;"
@@ -36,30 +36,30 @@
                         </p:columnGroup>
 
                         <p:column styleClass="center">
-                            <h:outputText value="#{returnInfo.returnCode}"/>
+                            <h:outputText value="#{returnInfoAAD.returnCode}"/>
                         </p:column>
                         <p:column styleClass="left">
-                            <h:outputText value="#{returnInfo.description}"/>
+                            <h:outputText value="#{returnInfoAAD.description}"/>
                         </p:column>
                         <p:column styleClass="left">
-                            <h:outputText value="#{returnInfo.reason}"/>
+                            <h:outputText value="#{returnInfoAAD.reason}"/>
                         </p:column>
                         <p:column styleClass="left">
-                            <h:outputText value="#{returnInfo.reasonDetail}"/>
+                            <h:outputText value="#{returnInfoAAD.reasonDetail}"/>
                         </p:column>
                         <p:column styleClass="center">
                             <p:commandButton title="Edit" process="@form"
                                              icon="ui-icon-pencil"
-                                             rendered="#{returnInfo.canEdit}"
+                                             rendered="#{returnInfoAAD.canEdit}"
                                              actionListener="#{headerController.onEditReturnInfo(rowIndex)}"
                                              oncomplete="addReturnInfoDlg.show()"
                                              update=":frmMain:reasonId, :frmMain:remark">
                             </p:commandButton>
                             <p:commandButton title="Remove" process="@form"
                                              icon="ui-icon-trash"
-                                             rendered="#{returnInfo.canEdit}"
+                                             rendered="#{returnInfoAAD.canEdit}"
                                              action="#{headerController.onDeleteReturnInfo(rowIndex)}"
-                                             update=":frmMain:returnBDMDlgPanel">
+                                             update=":frmMain:returnInfoAADDlgPanel">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -67,22 +67,22 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <p:commandButton id="btnSubmitReturnSummary"
-                                     binding="#{btnSubmitReturnSummary}"
+                    <p:commandButton id="btnSubmitReturnAADSummary"
+                                     binding="#{btnSubmitReturnAADSummary}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
-                                     actionListener="#{headerController.onSubmitReturnBDM()}"
-                                     oncomplete="handleReturnBDMDialogRequest(xhr, status, args)"
+                                     actionListener="#{headerController.onSubmitReturnAADInfo()}"
+                                     oncomplete="handleReturnInfoDialogRequest(xhr, status, args)"
                                      process="@form"
-                                     update=":frmMain:returnBDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                                     update=":frmMain:returnInfoAADDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                     styleClass="small" onclick="returnBDMDlg.hide()"/>
+                                     styleClass="small" onclick="returnInfoAADDlg.hide()"/>
                 </td>
             </tr>
         </table>
 </p:panel>
 
-<p:blockUI widgetVar="blockReturnInfoDlg" block="returnBDMDlgPanel" trigger=":frmMain:btnSubmitReturnSummary">
+<p:blockUI widgetVar="blockReturnInfoAADDlg" block="returnInfoAADDlgPanel" trigger=":frmMain:btnSubmitReturnAADSummary">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
