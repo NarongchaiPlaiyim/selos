@@ -1891,7 +1891,7 @@ public class HeaderController extends BaseController {
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
             fullApplicationControl.restartCase(queueName,wobNumber);
-            returnControl.saveReturnHistory(workCaseId,workCasePreScreenId);
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
 
             messageHeader = "Information.";
             message = "Restart Success";
