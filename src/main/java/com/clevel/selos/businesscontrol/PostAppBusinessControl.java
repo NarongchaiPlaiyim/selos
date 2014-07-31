@@ -177,7 +177,7 @@ public class PostAppBusinessControl extends BusinessControl {
 			if (view.getReturnCode() != null) {
 				returnCodeSet.add(view.getReturnCode());
 			}
-			models.add(returnInfoTransform.transformToModel(view, workCase, getCurrentUser()));
+			models.add(returnInfoTransform.transformToModel(view, workCase, null, getCurrentUser()));
 		}
 		returnInfoDAO.persist(models);
 		

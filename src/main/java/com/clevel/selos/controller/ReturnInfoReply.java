@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "returnBDM")
-public class ReturnInfoBDM implements Serializable {
+@ManagedBean(name = "returnReply")
+public class ReturnInfoReply implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -48,6 +48,7 @@ public class ReturnInfoBDM implements Serializable {
     ReturnControl returnControl;
 
     private long workCaseId;
+    private long workCasePreScreenId;
 
     private ReturnInfoView returnInfoHeaderView;
     private List<ReturnInfoView> returnInfoViewList;
@@ -64,7 +65,7 @@ public class ReturnInfoBDM implements Serializable {
     private String message;
     private String messageHeader;
 
-    public ReturnInfoBDM() {
+    public ReturnInfoReply() {
 
     }
 
@@ -75,21 +76,25 @@ public class ReturnInfoBDM implements Serializable {
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+            if(session.getAttribute("workCasePreScreenId") != null){
+                workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            } else {
+                //TODO return to inbox
+                log.info("preRender ::: workCaseId is null.");
+                try {
+                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                    return;
+                } catch (Exception ex) {
+                    log.info("Exception :: {}", ex);
+                }
             }
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("ReturnInfoBDM ::: onCreation");
+        log.info("ReturnInfoReply ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
 
         if (session.getAttribute("workCaseId") != null) {
@@ -104,7 +109,7 @@ public class ReturnInfoBDM implements Serializable {
         returnInfoViewList = new ArrayList<ReturnInfoView>();
         returnInfoHistoryViewList = new ArrayList<ReturnInfoView>();
 
-        returnInfoViewList = returnControl.getReturnInfoViewList(workCaseId);
+        returnInfoViewList = returnControl.getReturnInfoViewList(workCaseId,workCasePreScreenId);
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             returnInfoHeaderView = returnInfoViewList.get(0);
         }
@@ -118,11 +123,11 @@ public class ReturnInfoBDM implements Serializable {
         log.info("Start onSave {}", returnInfoViewList);
         try{
             HttpSession session = FacesUtil.getSession(false);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            //long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
 
-            returnControl.saveReturnInformation(workCaseId, queueName, user, returnInfoViewList);
+            returnControl.saveReturnInformation(workCaseId,workCasePreScreenId, queueName, user, returnInfoViewList);
             messageHeader = "Information.";
             message = "Save Return Information Success.";
             log.debug("onReturnBDMSubmit ::: success.");
@@ -141,7 +146,7 @@ public class ReturnInfoBDM implements Serializable {
         isViewHistory = true;
         isViewAll = false;
         returnInfoHistoryViewList = new ArrayList<ReturnInfoView>();
-        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId, MAX_RESULT_HISTORY);
+        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,workCasePreScreenId, MAX_RESULT_HISTORY);
 
         log.debug("onViewHistory. returnInfoHistoryViewList size: {}",returnInfoHistoryViewList.size());
     }
@@ -151,7 +156,7 @@ public class ReturnInfoBDM implements Serializable {
         isViewHistory = true;
         isViewAll = true;
         returnInfoHistoryViewList = new ArrayList<ReturnInfoView>();
-        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,0);
+        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,workCasePreScreenId,0);
 
         log.debug("onViewHistoryAll. returnInfoHistoryViewList size: {}",returnInfoHistoryViewList.size());
     }
