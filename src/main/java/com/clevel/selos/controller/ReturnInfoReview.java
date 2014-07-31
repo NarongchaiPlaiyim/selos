@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "returnBDM")
-public class ReturnInfoBDM implements Serializable {
+@ManagedBean(name = "returnReview")
+public class ReturnInfoReview implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -53,8 +53,8 @@ public class ReturnInfoBDM implements Serializable {
     private List<ReturnInfoView> returnInfoViewList;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
-    private boolean isViewHistory;
-    private boolean isViewAll;
+    boolean isViewHistory;
+    boolean isViewAll;
 
     private static final int MAX_RESULT_HISTORY = 20;
 
@@ -64,7 +64,7 @@ public class ReturnInfoBDM implements Serializable {
     private String message;
     private String messageHeader;
 
-    public ReturnInfoBDM() {
+    public ReturnInfoReview() {
 
     }
 
@@ -89,7 +89,7 @@ public class ReturnInfoBDM implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("ReturnInfoBDM ::: onCreation");
+        log.info("ReturnInfoReply ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
 
         if (session.getAttribute("workCaseId") != null) {
@@ -141,7 +141,7 @@ public class ReturnInfoBDM implements Serializable {
         isViewHistory = true;
         isViewAll = false;
         returnInfoHistoryViewList = new ArrayList<ReturnInfoView>();
-        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId, MAX_RESULT_HISTORY);
+        returnInfoHistoryViewList = returnControl.getReturnInfoHistoryViewList(workCaseId,MAX_RESULT_HISTORY);
 
         log.debug("onViewHistory. returnInfoHistoryViewList size: {}",returnInfoHistoryViewList.size());
     }

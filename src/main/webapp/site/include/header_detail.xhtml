@@ -125,10 +125,10 @@
 <!--Return to BDM -->
 <p:commandButton id="btnReturnBDM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Return to BDM')}"
-                 actionListener="#{headerController.onOpenReturnBDMDialog()}"
-                 oncomplete="returnBDMDlg.show()"
-                 update=":frmMain:returnBDMPanel">
-    <p:resetInput target=":frmMain:returnBDMPanel"/>
+                 actionListener="#{headerController.onOpenReturnInfoDialog()}"
+                 oncomplete="returnInfoDlg.show()"
+                 update=":frmMain:returnInfoPanel">
+    <p:resetInput target=":frmMain:returnInfoPanel"/>
 </p:commandButton>
 <!--Request Appraisal Fullapp-->
 <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
@@ -157,8 +157,10 @@
 <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                  title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                  rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and (headerController.requestAppraisalRequire == 1 or headerController.requestAppraisal == 1)}"
-                 actionListener="#{headerController.onOpenReturnAADMByUW2()}"
-                 update=":frmMain:returnAADM_UW2Panel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
+                 actionListener="#{headerController.onOpenReturnInfoDialog()}"
+                 oncomplete="returnInfoAADDlg.show()"
+                 update=":frmMain:returnInfoAADPanel">
+    <p:resetInput target=":frmMain:returnInfoAADPanel"/>
 </p:commandButton>
 <!--Revise CA ( Return from BU ) -->
 <p:commandButton id="btnReturnBDM_BU" value="#{msg.get('app.header.button.reviseCA')}"
@@ -694,11 +696,19 @@
     </p:dialog>
 </p:panel>
 
-<p:panel id="returnBDMPanel" styleClass="panel">
-    <p:dialog id="returnBDMDialog" widgetVar="returnBDMDlg" header="Return Summary"
+<p:panel id="returnInfoPanel" styleClass="panel">
+    <p:dialog id="returnInfoDialog" widgetVar="returnInfoDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="800" height="500" closable="false">
-        <ui:include src="/site/dialog/returnBDMDialog.xhtml"/>
+        <ui:include src="/site/dialog/returnInfoDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="returnInfoAADPanel" styleClass="panel">
+    <p:dialog id="returnInfoAADDialog" widgetVar="returnInfoAADDlg" header="Return Summary"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="800" height="500" closable="false">
+        <ui:include src="/site/dialog/returnInfoAADDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

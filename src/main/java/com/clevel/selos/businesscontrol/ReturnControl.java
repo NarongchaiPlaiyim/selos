@@ -219,6 +219,8 @@ public class ReturnControl extends BusinessControl {
             Step step = stepDAO.findById(stepId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
             Date returnDate = new Date();
+            String reason = "";
+            String remark = "";
             for(ReturnInfoView returnInfoView: returnInfoViewList){
                 //Set Return User and Return Step
                 returnInfoView.setReturnFromUser(userTransform.transformToView(user));
@@ -231,10 +233,85 @@ public class ReturnControl extends BusinessControl {
                 }
                 ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, user);
                 returnInfoList.add(returnInfo);
+
+                if(reason.trim().equalsIgnoreCase("")){
+                    reason = returnInfoView.getReason();
+                    if(reason==null){
+                        reason = "";
+                    }
+                } else {
+                    if(returnInfoView.getReason()!=null){
+                        reason = reason+","+returnInfoView.getReason();
+                    }
+                }
+
+                if(remark.trim().equalsIgnoreCase("")){
+                    remark = returnInfoView.getReasonDetail();
+                } else {
+                    remark = remark+","+returnInfoView.getReasonDetail();
+                }
+
             }
 
             returnInfoDAO.persist(returnInfoList);
-            bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
+
+            if(step!=null && step.getId()==2003){
+                bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
+            } else {
+                bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.RETURN_TO_BDM.getVal());
+            }
+        }
+    }
+
+    public void submitReturnAADAdmin(long workCaseId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+        if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            boolean hasRG001 = false;
+
+            //Move Return Info in Working to History
+            saveReturnHistory(workCaseId,user);
+
+            //Save new to Return Info working
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            Step step = stepDAO.findById(stepId);
+            List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
+            Date returnDate = new Date();
+            String reason = "";
+            String remark = "";
+            for(ReturnInfoView returnInfoView: returnInfoViewList){
+                //Set Return User and Return Step
+                returnInfoView.setReturnFromUser(userTransform.transformToView(user));
+                returnInfoView.setReturnFromStep(stepTransform.transformToView(step));
+                returnInfoView.setDateOfReturn(returnDate);
+                returnInfoView.setChallenge(0); //not selected
+                returnInfoView.setAcceptChallenge(0); //not selected
+                if(returnInfoView.getReturnCode()!=null && returnInfoView.getReturnCode().equalsIgnoreCase("RG001")){
+                    hasRG001 = true;
+                }
+                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, user);
+                returnInfoList.add(returnInfo);
+
+                if(reason.trim().equalsIgnoreCase("")){
+                    reason = returnInfoView.getReason();
+                    if(reason==null){
+                        reason = "";
+                    }
+                } else {
+                    if(returnInfoView.getReason()!=null){
+                        reason = reason+","+returnInfoView.getReason();
+                    }
+                }
+
+                if(remark.trim().equalsIgnoreCase("")){
+                    remark = returnInfoView.getReasonDetail();
+                } else {
+                    remark = remark+","+returnInfoView.getReasonDetail();
+                }
+
+            }
+
+            returnInfoDAO.persist(returnInfoList);
+
+            bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
         }
     }
 
