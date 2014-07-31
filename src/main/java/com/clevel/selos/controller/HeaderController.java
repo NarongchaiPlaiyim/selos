@@ -937,33 +937,19 @@ public class HeaderController extends BaseController {
             User user = (User) session.getAttribute("user");
 
             if(selectedUW2User != null && !selectedUW2User.equals("")){
-                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
-
-                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                if(canSubmitWithoutReturn()){
+                    fullApplicationControl.submitToUW2(selectedUW2User, selectedDOALevel, submitRemark, queueName, workCaseId);
+                    messageHeader = "Information.";
+                    message = "Submit case success";
+                    showMessageRedirect();
+                    log.debug("onSubmitUW2 ::: success.");
+                } else {
                     messageHeader = "Information.";
                     message = "Submit case fail. Please check return information before submit again.";
                     showMessageBox();
                     log.error("onSubmitUW2 ::: fail.");
-                } else {
-                    //check if have return not accept
-                    List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
-                    if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
-                        messageHeader = "Information.";
-                        message = "Submit case fail. Please check return information before submit again.";
-                        showMessageBox();
-                        log.error("onSubmitUW2 ::: fail.");
-                    } else {
-                        returnControl.saveReturnHistory(workCaseId,user);
-
-                        fullApplicationControl.submitToUW2(selectedUW2User, selectedDOALevel, submitRemark, queueName, workCaseId);
-
-                        messageHeader = "Information.";
-                        message = "Submit case success";
-                        showMessageRedirect();
-
-                        log.debug("onSubmitUW2 ::: success.");
-                    }
                 }
+
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
                 showMessageRedirect();
@@ -985,6 +971,23 @@ public class HeaderController extends BaseController {
         }
 
         sendCallBackParam(complete);
+    }
+
+    public boolean canSubmitWithoutReturn() throws Exception{
+        List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+        if(returnInfoViews!=null && returnInfoViews.size()>0){
+            return  false;
+        } else {
+            //check if have return not accept
+            List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+            if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
+                return false;
+            } else {
+                returnControl.saveReturnHistory(workCaseId,user);
+                return true;
+            }
+        }
     }
 
     public void onSubmitFCashZM(){
@@ -1017,28 +1020,18 @@ public class HeaderController extends BaseController {
             User user = (User) session.getAttribute("user");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+            if(canSubmitWithoutReturn()){
+                fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
 
-            if(returnInfoViews!=null && returnInfoViews.size()>0){
+                messageHeader = "Information.";
+                message = "Submit case success";
+                complete = true;
+            } else {
                 messageHeader = "Information.";
                 message = "Submit case fail. Please check return information before submit again.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
                 log.error("onSubmitCA ::: fail.");
-            } else {
-                //check if have return not accept
-                List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
-                if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
-                    messageHeader = "Information.";
-                    message = "Submit case fail. Please check return information before submit again.";
-                } else {
-                    returnControl.saveReturnHistory(workCaseId,user);
-                    fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
-
-                    messageHeader = "Information.";
-                    message = "Submit case success";
-                    complete = true;
-                }
             }
 
             if(complete) {
@@ -1142,11 +1135,19 @@ public class HeaderController extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+            if(canSubmitWithoutReturn()){
+                fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
 
-            messageHeader = "Information.";
-            message = "Request for appraisal success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                messageHeader = "Information.";
+                message = "Request for appraisal success.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            } else {
+                messageHeader = "Information.";
+                message = "Submit case fail. Please check return information before submit again.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                log.error("onSubmitAADCommittee ::: fail.");
+            }
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -1647,8 +1648,8 @@ public class HeaderController extends BaseController {
 
     }
 
-    public void onOpenReturnBDMDialog(){
-        log.debug("onOpenReturnBDM ::: starting...");
+    public void onOpenReturnInfoDialog(){
+        log.debug("onOpenReturnInfoDialog ::: starting...");
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
@@ -1658,8 +1659,25 @@ public class HeaderController extends BaseController {
         //returnReason = returnControl.getReturnReasonList();
         returnReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
         returnRemark = "";
+        resetAddReturnInfo();
 
-        log.debug("onOpenReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList.size());
+        log.debug("onOpenReturnInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
+    }
+
+    public void onOpenReturnAADInfoDialog(){
+        log.debug("onOpenReturnInfoDialog ::: starting...");
+        _loadSessionVariable();
+
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId);
+
+        //set return code master
+        //returnReason = returnControl.getReturnReasonList();
+        returnReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+        returnRemark = "";
+        resetAddReturnInfo();
+
+        log.debug("onOpenReturnInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
     }
 
     public void resetAddReturnInfo(){
@@ -1701,7 +1719,7 @@ public class HeaderController extends BaseController {
         log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
-    public void onSubmitReturnBDM(){ //Submit return from UW1 to BDM
+    public void onSubmitReturnInfo(){ //Submit return to BDM
         log.debug("onSubmitReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
@@ -1722,6 +1740,51 @@ public class HeaderController extends BaseController {
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
                     returnControl.submitReturnBDM(workCaseId, queueName, user, stepId, returnInfoViewList);
+                    messageHeader = "Information.";
+                    message = "Return to BDM success.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                    complete = true;
+                    log.debug("onReturnBDMSubmit ::: success.");
+                }
+            } catch (Exception ex){
+                messageHeader = "Information.";
+                message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                complete = false;
+                log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
+            }
+        } else {
+            messageHeader = "Information.";
+            message = "Return to BDM failed, have no reason to return.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSubmitReturnAADInfo(){ //Submit return to BDM
+        log.debug("onSubmitReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList);
+        boolean complete = false;
+        if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            try{
+                HttpSession session = FacesUtil.getSession(false);
+                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                String queueName = session.getAttribute("queueName").toString();
+                User user = (User) session.getAttribute("user");
+                long stepId = Long.parseLong(session.getAttribute("stepId").toString());
+
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId);
+
+                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit return again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitReviewReturn ::: fail.");
+                } else {
+                    returnControl.submitReturnAADAdmin(workCaseId, queueName, user, stepId, returnInfoViewList);
                     messageHeader = "Information.";
                     message = "Return to BDM success.";
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");

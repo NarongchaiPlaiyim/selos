@@ -79,7 +79,7 @@ public class ReturnInfoHistory implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("ReturnInfoBDM ::: onCreation");
+        log.info("ReturnInfoReply ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
         modifyBy = new User();
 

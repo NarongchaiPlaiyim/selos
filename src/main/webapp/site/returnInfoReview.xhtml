@@ -25,7 +25,7 @@
 </h:head>
 
 <h:body>
-<f:event type="preRenderView" listener="#{returnBDM.preRender()}" />
+<f:event type="preRenderView" listener="#{returnUW.preRender()}" />
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
     <h:form id="frmMain">
         <div id="main_container">
@@ -42,7 +42,7 @@
             <div id="content_name"><h:outputText value="#{msg.get('app.return.result.contentName')}"/></div>
             <div id="content">
                 <div id="content_info">
-                    <div id="content_lastupdate">Last update by <h:outputText value="#{returnBDM.returnInfoHeaderView.modifyBy.userName}"/>, <h:outputText value="#{returnBDM.returnInfoHeaderView.modifyDate}"><f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/></h:outputText></div>
+                    <div id="content_lastupdate">Last update by <h:outputText value="#{returnReview.returnInfoHeaderView.modifyBy.userName}"/>, <h:outputText value="#{returnReview.returnInfoHeaderView.modifyDate}"><f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/></h:outputText></div>
                 </div>
                 <div id="content_form">
                     <p:panel styleClass="panel" id="returnHeaderInfoPanel">
@@ -51,7 +51,7 @@
                         <td class="title" style="width: 150px;"><h:outputText value="#{msg.get('app.return.head.label.dateOfReturn')}"/></td>
                         <td class="left">
                             <p:inputText title="#{msg.get('app.return.head.label.dateOfReturn')}" styleClass="left" readonly="true"
-                                         value="#{returnBDM.returnInfoHeaderView.dateOfReturn}" style="width: 250px;">
+                                         value="#{returnReview.returnInfoHeaderView.dateOfReturn}" style="width: 250px;">
                                 <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
                             </p:inputText>
                         </td>
@@ -59,20 +59,20 @@
                     <tr>
                         <td class="title"><h:outputText value="#{msg.get('app.return.head.label.returnFrom')}"/></td>
                         <td class="left"><p:inputText title="#{msg.get('app.return.head.label.returnFrom')}" styleClass="left" readonly="true"
-                                         value="#{returnBDM.returnInfoHeaderView.returnFromUser.userName}" style="width: 250px;"/></td>
+                                         value="#{returnReview.returnInfoHeaderView.returnFromUser.userName}" style="width: 250px;"/></td>
                     </tr>
                     <tr>
                         <td class="title"><h:outputText value="#{msg.get('app.return.head.label.returnStep')}"/></td>
                         <td class="left">
                             <p:inputText title="#{msg.get('app.return.head.label.returnStep')}" styleClass="left" readonly="true"
-                                         value="#{returnBDM.returnInfoHeaderView.returnFromStep.description}" style="width: 250px;"/>
+                                         value="#{returnReview.returnInfoHeaderView.returnFromStep.description}" style="width: 250px;"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="title"><h:outputText value="#{msg.get('app.return.head.label.dateOfReply')}"/></td>
                         <td class="left">
                             <p:inputText title="#{msg.get('app.return.head.label.dateOfReply')}" styleClass="left" readonly="true"
-                                         value="#{returnBDM.returnInfoHeaderView.dateOfReply}" style="width: 250px;">
+                                         value="#{returnReview.returnInfoHeaderView.dateOfReply}" style="width: 250px;">
                                 <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
                             </p:inputText>
                         </td>
@@ -84,7 +84,7 @@
                         <td colspan="2">
                             <div id="content_table">
                                 <p:dataTable id="resultReturnInfoList" var="returnInfoVar"
-                                             value="#{returnBDM.returnInfoViewList}"
+                                             value="#{returnReview.returnInfoViewList}"
                                              paginator="false" rowKey="#{returnInfo.id}" rowIndexVar="returnInfo">
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -94,6 +94,7 @@
                                             <p:column headerText="#{msg.get('app.return.table.header.reasonDetail')}" style="width: 250px;"/>
                                             <p:column headerText="#{msg.get('app.return.table.header.replyDetail')}" style="width: 250px;"/>
                                             <p:column headerText="#{msg.get('app.return.table.header.challenge')}" style="width:150px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.acceptChallenge')}" style="width:150px;"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -110,18 +111,21 @@
                                         <h:outputText value="#{returnInfoVar.reasonDetail}"/>
                                     </p:column>
                                     <p:column styleClass="left middle" style="width: 250px;">
-                                        <p:inputTextarea cols="40"
-                                                         rows="2"
-                                                         id="replyDetail" autoResize="false"
-                                                         value="#{returnInfoVar.replyDetail}">
-                                        </p:inputTextarea>
+                                        <h:outputText value="#{returnInfoVar.replyDetail}"/>
                                     </p:column>
                                     <p:column styleClass="center top" style="width:150px;">
-                                        <p:selectOneRadio id="radioChal" value="#{returnInfoVar.challenge}"
+                                        <p:selectOneRadio id="radioChal" value="#{returnInfoVar.challenge}" disabled="true"
                                                           required="#{not empty param[saveBtn.clientId]}" styleClass="normal_table">
                                             <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
-                                            <p:ajax update="radioChal" event="click"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                    <p:column styleClass="center top" style="width:150px;">
+                                        <p:selectOneRadio id="radioAcptChal" value="#{returnInfoVar.acceptChallenge}" disabled="#{returnInfoVar.challenge==1?true:false}"
+                                                          required="#{not empty param[saveBtn.clientId]}" styleClass="normal_table">
+                                            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
+                                            <p:ajax update="radioAcptChal" event="click"/>
                                         </p:selectOneRadio>
                                     </p:column>
                                 </p:dataTable>
@@ -139,17 +143,17 @@
                                              value="View Return History"
                                              binding="#{btnViewHistory}"
                                              styleClass="larger"
-                                             action="#{returnBDM.onViewHistory()}"
+                                             action="#{returnReview.onViewHistory()}"
                                              update=":frmMain"/>
                         </td>
                         <td class="right">
-                            <p:panel id="history_btn" rendered="#{returnBDM.viewHistory}" style="padding: 0; background: none" styleClass="normal_table">
-                                <p:commandLink id="viewAllBtn" value="View All" rendered="#{not returnBDM.viewAll}"
-                                               action="#{returnBDM.onViewHistoryAll()}"
+                            <p:panel id="history_btn" rendered="#{returnReview.viewHistory}" style="padding: 0; background: none" styleClass="normal_table">
+                                <p:commandLink id="viewAllBtn" value="View All" rendered="#{not returnReview.viewAll}"
+                                               action="#{returnReview.onViewHistoryAll()}"
                                                style="color: blue; text-decoration: underline;"
                                                update=":frmMain:history_btn, :frmMain:history_panel"/>
-                                <p:commandLink id="viewLessBtn" value="View Less" rendered="#{returnBDM.viewAll}"
-                                               action="#{returnBDM.onViewHistory()}"
+                                <p:commandLink id="viewLessBtn" value="View Less" rendered="#{returnReview.viewAll}"
+                                               action="#{returnReview.onViewHistory()}"
                                                style="color: blue; text-decoration: underline;"
                                                update=":frmMain:history_btn, :frmMain:history_panel"/>
                             </p:panel>
@@ -159,10 +163,10 @@
                     <tr>
                         <td colspan="2">
                             <div id="content_table2">
-                                <p:panel id="history_panel" rendered="#{returnBDM.viewHistory}" style="padding: 0">
+                                <p:panel id="history_panel" rendered="#{returnReview.viewHistory}" style="padding: 0">
                                     <p:dataTable id="resultReturnInfoHistoryList" var="returnInfoHistoryVar"
-                                                 value="#{returnBDM.returnInfoHistoryViewList}"
-                                                 paginator="false" rowKey="#{returnHistoryInfo.id}" rowIndexVar="returnHistoryInfo" rendered="#{returnBDM.viewHistory}">
+                                                 value="#{returnReview.returnInfoHistoryViewList}"
+                                                 paginator="false" rowKey="#{returnHistoryInfo.id}" rowIndexVar="returnHistoryInfo">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column headerText="" style="width: 22px;"/>
@@ -234,10 +238,11 @@
                     <tr>
                         <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
                     </tr>
+
                     </table>
                     </p:panel>
 
-                    <p:panel styleClass="panel" id="returnInfoBDMPanel">
+                    <p:panel styleClass="panel" id="returnInfoUWPanel">
                         <table class="content_table_form">
                             <tr>
                                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
@@ -253,14 +258,14 @@
                                     <p:commandButton id="saveBtn"
                                                      binding="#{saveBtn}"
                                                      value="#{msg.get('app.button.save')}"
-                                                     action="#{returnBDM.onSave()}"
+                                                     action="#{returnReview.onSave()}"
                                                      update=":frmMain :msgBoxSystemMessagePanel"
                                                      styleClass="medium"/>
                                     <p:commandButton id="cancelBtn"
                                                      binding="#{cancelBtn}"
                                                      value="#{msg.get('app.button.cancel')}"
                                                      styleClass="medium"
-                                                     action="#{returnBDM.initialResultView()}"
+                                                     action="#{returnReview.initialResultView()}"
                                                      update=":frmMain"/>
                                 </td>
                             </tr>
@@ -283,9 +288,9 @@
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
-                     header="#{returnBDM.messageHeader}">
+                     header="#{returnReview.messageHeader}">
         <f:facet name="message">
-            <h:outputText value="#{returnBDM.message}" escape="false"/>
+            <h:outputText value="#{returnReview.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          process="@this"
@@ -295,9 +300,9 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
-                     header="#{returnBDM.messageHeader}">
+                     header="#{returnReview.messageHeader}">
         <f:facet name="message">
-            <h:outputText value="#{returnBDM.message}" escape="false"/>
+            <h:outputText value="#{returnReview.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          action="#{headerController.onGoToInbox}"
@@ -306,7 +311,6 @@
                          oncomplete="msgBoxRedirectDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-
 </h:body>
 </f:view>
 </html>

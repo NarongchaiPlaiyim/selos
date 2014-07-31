@@ -37,7 +37,7 @@
                                  value="#{msg.get('app.button.save')}"
                                  actionListener="#{headerController.onSaveReturnInfo()}"
                                  process="@form"
-                                 update=":frmMain:returnBDMDlgPanel, :frmMain:addReturnInfoDlgPanel"
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADDlgPanel, :frmMain:addReturnInfoDlgPanel"
                                  oncomplete="handleReturnBDMAddDialogRequest(xhr, status, args)"/>
                 <p:commandButton id="dlgCancelReturnInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
@@ -45,7 +45,7 @@
                                  action="#{headerController.resetAddReturnInfo()}"
                                  oncomplete="addReturnInfoDlg.hide()"
                                  process="@form"
-                                 update=":frmMain:returnBDMDlgPanel"/>
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADDlgPanel"/>
             </td>
         </tr>
     </table>
