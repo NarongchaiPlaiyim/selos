@@ -326,9 +326,9 @@ public class ReturnControl extends BusinessControl {
             returnInfoDAO.persist(returnInfoList);
 
             if(step!=null && step.getId()==2003){
-                //bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
+                bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
             } else {
-                //bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.RETURN_TO_BDM.getVal());
+                bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.RETURN_TO_BDM.getVal());
             }
         }
     }
@@ -392,7 +392,7 @@ public class ReturnControl extends BusinessControl {
 
             returnInfoDAO.persist(returnInfoList);
 
-            //bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
+            bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
         }
     }
 
