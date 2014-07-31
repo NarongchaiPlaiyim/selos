@@ -472,7 +472,7 @@ public class PESQLInbox implements Serializable
                 log.info("restart successful.... ");
 
                 if(workCase!=null){
-                    returnControl.saveReturnHistory(workCase.getId(),0);
+                    returnControl.saveReturnHistoryForRestart(workCase.getId(),0);
                 }
 
                 onCreation();
