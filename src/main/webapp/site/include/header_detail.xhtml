@@ -43,10 +43,17 @@
                      oncomplete="blockUICheckCustomer.hide()"
                      update=":frmMain :msgBoxSystemMessagePanel"/>
     <!-- Return to Maker -->
-    <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM')}"
                      actionListener="#{headerController.onOpenReturnToMaker}" process="@this"
-                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:returnMakerPanel"/>
+                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:returnMakerPanel"/>-->
+    <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Return to BDM')}"
+                     actionListener="#{headerController.onOpenReturnInfoDialog()}"
+                     oncomplete="returnInfoDlg.show()"
+                     update=":frmMain:returnInfoPanel">
+        <p:resetInput target=":frmMain:returnInfoPanel"/>
+    </p:commandButton>
     <!-- Check PreScreen (BRMS)-->
     <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
@@ -433,10 +440,17 @@
                          widgetVar="conRetAADMCancelBtn"/>
     </p:confirmDialog>
     <!-- Return to BDM [ From AAD Admin ]-->
-    <p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
                      update=":frmMain:returnBDM_AADAdminPanel"
                      rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
                      actionListener="#{headerController.onOpenReturnBDMByAAD()}">
+    </p:commandButton>-->
+    <p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
+                     actionListener="#{headerController.onOpenReturnInfoDialog()}"
+                     oncomplete="returnInfoDlg.show()"
+                     update=":frmMain:returnInfoPanel">
+        <p:resetInput target=":frmMain:returnInfoPanel"/>
     </p:commandButton>
     <!-- Check Mandate Doc [ For AAD Admin ]-->
     <p:commandButton id="btnCheckMandate_AADM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
