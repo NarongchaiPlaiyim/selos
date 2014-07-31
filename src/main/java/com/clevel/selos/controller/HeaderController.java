@@ -181,6 +181,7 @@ public class HeaderController extends BaseController {
     private String queueName;
     private String wobNumber;
     private String slaStatus;
+    private String currentUserId;
 
     private String messageHeader;
     private String message;
@@ -230,6 +231,9 @@ public class HeaderController extends BaseController {
     //Return User Name
     private String userName;
 
+    //Over SLA Reason List
+    private List<Reason> slaReasonList;
+
     //Cancel CA
     private int cancelReasonId;
 
@@ -248,7 +252,7 @@ public class HeaderController extends BaseController {
         log.debug("HeaderController ::: find active button");
 
         //Get all action from Database By Step and Status and Role
-        stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId);
+        stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId, currentUserId);
         log.debug("HeaderController ::: stepStatusMap : {}", stepStatusMap);
 
         //FOR Appraisal Request Dialog
@@ -290,6 +294,8 @@ public class HeaderController extends BaseController {
             }
         }
 
+
+
         user = (User) session.getAttribute("user");
         if (user == null) {
             UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -297,6 +303,8 @@ public class HeaderController extends BaseController {
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
         }
+
+
 
         //check pre-screen result
         canCloseSale = false;
@@ -376,6 +384,7 @@ public class HeaderController extends BaseController {
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
         slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");
+        currentUserId = Util.parseString(session.getAttribute("caseOwner"), "");
     }
 
     public boolean checkButton(String buttonName){
@@ -541,6 +550,11 @@ public class HeaderController extends BaseController {
                     RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
                 }
 
+                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                if(submitOverSLA == 1){
+                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                }
+
             } else {
                 //----Case is updated please check criteria before submit----
                 messageHeader = msg.get("app.messageHeader.exception");
@@ -552,15 +566,25 @@ public class HeaderController extends BaseController {
             message = Util.getMessageException(ex);
             showMessageBox();
         }
-        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-
     }
 
     public void onSubmitFullApplication(){
         _loadSessionVariable();
-        HttpSession session = FacesUtil.getSession(false);
         boolean complete = false;
-        String slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");     //If SLA is R
+
+        //Submit case by Step Id
+        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+            //Submit case from BDM to ZM ( Step 2001 )
+            //fullApplicationControl.submitCAByZM();
+        }else if(stepId == StepValue.FULLAPP_ZM.value()){
+            //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 )
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_RGM.value()){
+            //Submit case from RGM to GH or UW ( DOA Level ) ( Step 2020 )
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+            //Submit case from GH to CSSO or UW ( DOA Level ) ( Step 2021 )
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+            //Submit case from CSSO to UW ( DOA Level ) ( Step 2022 )
+        }
 
     }
     //---------- End of Function for Submit CA ----------//
@@ -1941,6 +1965,13 @@ public class HeaderController extends BaseController {
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+
+        try{
+            appraisalView.setZoneLocation(user.getZone().getName());
+        } catch (Exception e) {
+            appraisalView.setZoneLocation("");
+        }
+
     }
 
     public void onSubmitRequestAppraisal(){
@@ -2083,6 +2114,12 @@ public class HeaderController extends BaseController {
         } catch (Exception ex){
             log.error("Exception occur when clone appraisalDetailView.");
         }
+    }
+
+    public void onDeleteAppraisalDetailView() {
+        log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
+        appraisalDetailViewList.remove(rowIndex);
+        log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
     }
 
     public void onAddAppraisalDetail(){
@@ -2950,5 +2987,13 @@ public class HeaderController extends BaseController {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public List<Reason> getSlaReasonList() {
+        return slaReasonList;
+    }
+
+    public void setSlaReasonList(List<Reason> slaReasonList) {
+        this.slaReasonList = slaReasonList;
     }
 }

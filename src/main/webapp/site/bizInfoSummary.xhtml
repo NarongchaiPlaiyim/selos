@@ -803,7 +803,7 @@
                                                          title="Remove" process="@this"
                                                          oncomplete="confirmDeleteBizInfoDetailDlg.show();"
                                                          update = ":frmMain"
-                                                         disabled="#{bizInfoSummary.isDisabled('business.delectButton')}">
+                                                         disabled="#{bizInfoSummary.isDisabled('business.deleteButton')}">
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                         </p:commandButton>
                                     </p:column>

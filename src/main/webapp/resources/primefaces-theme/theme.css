@@ -2015,7 +2015,14 @@ body .ui-tooltip {
 .ui-selectonemenu-panel .ui-selectonemenu-list{
     padding: 0!important;
 }
-
+.ui-selectonemenu-panel .ui-selectonemenu-list-item{
+    border: 0px none;
+    margin: 1px 0;
+    padding: 5px 5px!important;
+    text-align: left;
+    white-space: nowrap;
+    max-width: 450px;
+}
 /*
 .ui-selectonemenu .ui-selectonemenu-trigger {
     border-right: 1px solid!important;
