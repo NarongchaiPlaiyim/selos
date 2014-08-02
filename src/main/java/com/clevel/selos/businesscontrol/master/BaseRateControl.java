@@ -2,6 +2,7 @@ package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.BaseRateDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BaseRateConfig;
 import com.clevel.selos.model.db.master.BaseRate;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ public class BaseRateControl extends BusinessControl{
     public BaseRateDAO baseRateDAO;
 
     @Inject
+    @SELOS
     Logger logger;
 
     public BigDecimal getBaseRateValue(BaseRateConfig _baseRate){
