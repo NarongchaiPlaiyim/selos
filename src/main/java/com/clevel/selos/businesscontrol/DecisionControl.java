@@ -1,6 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.businesscontrol.admin.BaseRateControl;
+import com.clevel.selos.businesscontrol.master.BaseRateControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;

@@ -1,6 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.businesscontrol.admin.BaseRateControl;
+import com.clevel.selos.businesscontrol.master.BaseRateControl;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
@@ -22,7 +22,6 @@ import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
