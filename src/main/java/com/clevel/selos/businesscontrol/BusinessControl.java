@@ -16,9 +16,6 @@ public abstract class BusinessControl implements Serializable {
     @Inject
     protected UserDAO userDAO;
 
-    @Inject
-    protected BaseRateDAO baseRateDAO;
-
     protected String getCurrentUserID() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetail != null)
@@ -32,40 +29,6 @@ public abstract class BusinessControl implements Serializable {
         } catch (Exception ex) {
             return null;
         }
-    }
-    protected BigDecimal getMRRValue(){
-        try{
-            BaseRate baseRate = baseRateDAO.findById(BaseRateConfig.MRR.value());
-            if(baseRate == null) return BigDecimal.ZERO;
-            return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
-        }catch (Exception e){
-            return BigDecimal.ZERO;
-        }
-    }
-
-    protected BigDecimal getMLRValue(){
-        try{
-            BaseRate baseRate = baseRateDAO.findById(BaseRateConfig.MLR.value());
-            if(baseRate == null) return BigDecimal.ZERO;
-            return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
-        }catch (Exception e){
-            return BigDecimal.ZERO;
-        }
-    }
-
-    protected BigDecimal getMORValue(){
-        try{
-            BaseRate baseRate = baseRateDAO.findById(BaseRateConfig.MOR.value());
-            if(baseRate == null) return BigDecimal.ZERO;
-            return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
-        }catch (Exception e){
-            return BigDecimal.ZERO;
-        }
-    }
-
-    protected BigDecimal getDBRInterest(){
-        // plus 6% MRR
-        return getMRRValue().add(BigDecimal.valueOf(6));
     }
 
     protected BigDecimal getMinBigDecimal(BigDecimal value1, BigDecimal value2){

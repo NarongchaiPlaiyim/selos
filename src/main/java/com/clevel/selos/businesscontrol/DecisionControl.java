@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.admin.BaseRateControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
@@ -127,6 +128,8 @@ public class DecisionControl extends BusinessControl {
     private BasicInfoControl basicInfoControl;
     @Inject
     private TCGInfoControl tcgInfoControl;
+    @Inject
+    private BaseRateControl baseRateControl;
 
     @Inject
     public DecisionControl() {
@@ -960,15 +963,15 @@ public class DecisionControl extends BusinessControl {
 
     //Get value pass to PDFOfferLetter by Bird
     public BigDecimal getMRRValue(){
-        return Util.convertNullToZERO(super.getMRRValue());
+        return Util.convertNullToZERO(baseRateControl.getMRRValue());
     }
 
     public BigDecimal getMLRValue(){
-        return Util.convertNullToZERO(super.getMLRValue());
+        return Util.convertNullToZERO(baseRateControl.getMLRValue());
     }
 
     public BigDecimal getMORValue(){
-        return Util.convertNullToZERO(super.getMORValue());
+        return Util.convertNullToZERO(baseRateControl.getMORValue());
     }
 
     public String getCurrentUserID(){

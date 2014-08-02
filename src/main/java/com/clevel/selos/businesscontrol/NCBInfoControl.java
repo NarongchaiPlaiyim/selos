@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.admin.BaseRateControl;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
@@ -50,6 +51,8 @@ public class NCBInfoControl extends BusinessControl {
     SettlementStatusDAO settlementStatusDAO;
     @Inject
     private CustomerDAO customerDAO;
+    @Inject
+    private BaseRateControl baseRateControl;
 
     @Inject
     NCBDetailTransform ncbDetailTransform;
@@ -463,7 +466,7 @@ public class NCBInfoControl extends BusinessControl {
                 ncbDetailView.setInstallment(ncbDetail.getInstallment());
                 BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                BigDecimal dbrInterest = getDBRInterest();
+                BigDecimal dbrInterest = baseRateControl.getDBRInterest();
                 switch (accountType.getCalculateType()){
                     case 1:
                         if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
