@@ -314,8 +314,8 @@ public class ProposeLineControl extends BusinessControl {
         if(!Util.isNull(proposeCreditInfoDetailView)) {
             ProposeCreditInfoTierDetailView creditTierDetailAdd = new ProposeCreditInfoTierDetailView();
             creditTierDetailAdd.setFinalInterest(BigDecimal.ZERO);
-            BaseRate baseRate = baseRateControl.getBaseRate(BaseRateConfig.MLR);
-            creditTierDetailAdd.setFinalBasePrice(baseRateTransform.transformToView(baseRate));
+            BaseRateView baseRateView = baseRateControl.getBaseRate(BaseRateConfig.MLR);
+            creditTierDetailAdd.setFinalBasePrice(baseRateView);
             creditTierDetailAdd.setNo(proposeCreditInfoDetailView.getLastNo()+1);
             proposeCreditInfoDetailView.setLastNo(proposeCreditInfoDetailView.getLastNo()+1);
 

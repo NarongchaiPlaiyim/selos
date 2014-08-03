@@ -7,6 +7,9 @@ import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.transform.UserSysParameterTransform;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -30,17 +33,10 @@ public class UserSysParameterControl extends BusinessControl{
 
     @Inject
     public UserSysParameterControl(){
-    }
 
-    public void initialUserSysParameter(){
-        if(userSysParameterViewMap == null){
-            logger.debug("loadUserSysParameter");
-            loadUserSysParameter();
-        }
     }
 
     public UserSysParameterView getSysParameterValue(String key){
-        initialUserSysParameter();
         if(userSysParameterViewMap != null && userSysParameterViewMap.containsKey(key)){
             return userSysParameterViewMap.get(key);
         }
@@ -59,6 +55,17 @@ public class UserSysParameterControl extends BusinessControl{
         return null;
     }*/
 
+    public void loadData(){
+        logger.debug("loadUserSysParameter");
+        if(userSysParameterViewMap == null){
+            synchronized (_mutexLock){
+                if(userSysParameterViewMap == null)
+                    userSysParameterViewMap = new HashMap<String, UserSysParameterView>();
+            }
+        }
+        loadUserSysParameter();
+    }
+
     private boolean loadUserSysParameter(){
         logger.debug("-- begin loadUserSysParameter {}", userSysParameterViewMap);
         try{
@@ -71,7 +78,7 @@ public class UserSysParameterControl extends BusinessControl{
 
             if(_tmpUserSysParameterMap.size() > 0){
                 synchronized (_mutexLock){
-                    userSysParameterViewMap = _tmpUserSysParameterMap;
+                    userSysParameterViewMap.putAll(_tmpUserSysParameterMap);
                 }
             }
         } catch (Exception ex){

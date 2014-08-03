@@ -1,9 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.model.BaseRateConfig;
-import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.security.UserDetail;
 import org.springframework.security.core.context.SecurityContextHolder;
