@@ -48,12 +48,8 @@ public class BaseRateControl extends BusinessControl{
     }
 
     public BaseRateView getBaseRate(BaseRateConfig _baseRate){
-        for(BaseRateView baseRateView : baseRateViewMap.values()){
-            if(baseRateView.getId() == _baseRate.value()){
-                return baseRateView;
-            }
-        }
-        return null;
+        BaseRateView baseRateView = baseRateViewMap.get(_baseRate.value());
+        return baseRateView;
     }
 
     public BigDecimal getDBRInterest(){
@@ -83,10 +79,7 @@ public class BaseRateControl extends BusinessControl{
                     baseRateViewMap = new HashMap<Integer, BaseRateView>();
             }
         }
-        loadBaseRate();
-    }
 
-    private void loadBaseRate(){
         try{
             Map<Integer, BaseRateView> _tmpMap = new HashMap<Integer, BaseRateView>();
 

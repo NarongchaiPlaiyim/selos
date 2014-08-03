@@ -1,6 +1,7 @@
 package com.clevel.selos.controller.admin;
 
 import com.clevel.selos.businesscontrol.UserSysParameterControl;
+import com.clevel.selos.businesscontrol.master.BankAccountTypeControl;
 import com.clevel.selos.businesscontrol.master.BaseRateControl;
 import com.clevel.selos.integration.SELOS;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ public class ApplicationCacheLoader implements Serializable{
     private BaseRateControl baseRateControl;
     @Inject
     private UserSysParameterControl userSysParameterControl;
+    @Inject
+    private BankAccountTypeControl bankAccountTypeControl;
 
     public enum State {INITIAL, START, STOP};
 
@@ -44,7 +47,7 @@ public class ApplicationCacheLoader implements Serializable{
     private void loadCacheDB(){
         baseRateControl.loadData();
         userSysParameterControl.loadData();
-
+        bankAccountTypeControl.loadData();
     }
 
     @PreDestroy

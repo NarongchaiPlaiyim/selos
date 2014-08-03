@@ -37,10 +37,9 @@ public class UserSysParameterControl extends BusinessControl{
     }
 
     public UserSysParameterView getSysParameterValue(String key){
-        if(userSysParameterViewMap != null && userSysParameterViewMap.containsKey(key)){
-            return userSysParameterViewMap.get(key);
-        }
-        return null;
+        if(userSysParameterViewMap == null)
+            loadData();
+        return userSysParameterViewMap.get(key);
     }
 
     /*public List<String> getSysParameterValue(String key){
@@ -63,11 +62,6 @@ public class UserSysParameterControl extends BusinessControl{
                     userSysParameterViewMap = new HashMap<String, UserSysParameterView>();
             }
         }
-        loadUserSysParameter();
-    }
-
-    private boolean loadUserSysParameter(){
-        logger.debug("-- begin loadUserSysParameter {}", userSysParameterViewMap);
         try{
             Map<String, UserSysParameterView> _tmpUserSysParameterMap = new HashMap<String, UserSysParameterView>();
             List<UserSysParameter> userSysParameterList = userSysParameterDAO.findActiveAll();
@@ -84,7 +78,6 @@ public class UserSysParameterControl extends BusinessControl{
         } catch (Exception ex){
             logger.error("Cannot Load User Sys Parameter. Please Check the system", ex);
         }
-        logger.debug("-- end loadUserSysParameter {}", userSysParameterViewMap);
-        return true;
+
     }
 }
