@@ -48,6 +48,8 @@ public class BaseRateControl extends BusinessControl{
     }
 
     public BaseRateView getBaseRate(BaseRateConfig _baseRate){
+        if(baseRateViewMap == null)
+            loadData();
         BaseRateView baseRateView = baseRateViewMap.get(_baseRate.value());
         return baseRateView;
     }
