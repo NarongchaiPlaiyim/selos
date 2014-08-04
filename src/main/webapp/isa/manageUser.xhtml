@@ -274,6 +274,7 @@
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
             <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             closable="false"
                              header="#{isa.messageHeader}" message="#{isa.message}" >
                 <p:commandButton value="OK"
                                  process="@this"
