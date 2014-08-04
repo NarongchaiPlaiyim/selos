@@ -804,6 +804,18 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
     }
 }
 
+function handleDialogValidation(args, widgetVarName) {
+    if (isValidateComplete(args)) {
+        var name = widgetVarName;
+        PF(name).hide();
+    }
+    else
+    {
+        var name = widgetVarName;
+        PF(name).show();
+    }
+}
+
 function handleDialogOpen(xhr, status, args, widgetVarName) {
     if (args.functionComplete) {
         var name = widgetVarName;

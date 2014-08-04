@@ -75,11 +75,12 @@
             <tr>
                 <td colspan="100%" class="title"><h2>Search Case from Owner</h2></td>
             </tr>
+            <h:messages style="color:red;margin:8px;" />
             <tr>
                 <td class="title">Team Lead Unit Name:</td>
                 <td > <h:selectOneMenu id="teamId" style="width: 220px;" class="largest"
                                       label="TeamId"
-                                      value="#{change.selectTeam}" valueChangeListener="#{change.getRoleNameForSelectedTeam}">
+                                      value="#{change.selectTeam}" valueChangeListener="#{change.getRoleNameForSelectedTeam}" requiredMessage="Please select team" required="true">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
                     <f:selectItems value="#{change.teamTypeName}" var="teamName" itemValue="#{teamName.id}" itemLabel="#{teamName.id} - #{teamName.user}"/>
                     <p:ajax event="change" update="@form" />
@@ -89,7 +90,7 @@
                 <td class="title"> Role:</td>
                 <td> <h:selectOneMenu id="roleId" style="width: 220px;"   class="largest"
                                       label="role"
-                                      value="#{change.selectRole}" valueChangeListener="#{change.getAllUserNames}">
+                                      value="#{change.selectRole}" valueChangeListener="#{change.getAllUserNames}" requiredMessage="Please select role" required="true">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
                     <f:selectItems value="#{change.rolSet}" var="roleItem" itemLabel="#{roleItem.roleName}" itemValue="#{roleItem.roleNumber}"/>
                     <p:ajax event="change" update="@form" />
@@ -99,7 +100,7 @@
                 <td class="title"> User Name: </td>
                 <td><h:selectOneMenu id="userList"  style="width: 220px;"
                                      label="UserList"
-                                     value="#{change.selectuser}">
+                                     value="#{change.selectuser}" requiredMessage="Please select user" required="true">
                     <f:selectItem itemValue="" itemLabel="--Please Select--"/>
                     <f:selectItems value="#{change.usersIdNameList}" id="ALL" var="username1" itemValue="#{username1.id}" itemLabel="#{username1.id} - #{username1.userName}"/>
                 </h:selectOneMenu>
@@ -294,51 +295,13 @@
                          update="frmMain"
                          oncomplete="msgBoxErrorDlg.hide()"/>
     </p:confirmDialog>
-</p:panel>
+</p:panel>                                                                                                  N
 <!-- Start Footer -->
-<p:dialog id="changeOwnerDialog" header="Change Owner Information" widgetVar="changeOwnerDlg" modal="true">
 
-        <table class="content_form" style="width: 600px;">
-            <tr>
-                <td>
-                    <h:panelGrid columns="2">
-                        <tr>
-                        <td class="title" style="width: 220px;">Team Lead UnitName: </td>
-                        <td><h:selectOneMenu id="teamIdChangeOwner" style="width: 220px;"
-                                         label="teamIdChangeOwner"
-                                         value="#{change.selectTeamNameChangeOwner}">
-                            <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                            <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.id} - #{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
-                            <f:ajax listener="#{change.userNamesForChangeTo}" render="userListChangeOwner" execute="@this"/>
-                        </h:selectOneMenu> </td>
-                        </tr>
-                        <tr>
-                        <td class="title" style="width: 220px;">Change Owner To :</td>
-                       <td> <h:selectOneMenu id="userListChangeOwner" style="width: 220px;"
-                                         label="UserListChangeOwner"
-                                         value="#{change.selectUserChangeOwner}">
-                            <f:selectItem itemValue="" itemLabel="--Please Select--"/>
-                            <f:selectItems id="selectednames" value="#{change.usersIdNameList1}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.id}"/>
-                        </h:selectOneMenu> </td>
-                        </tr>
-
-                        <tr>
-                            <td class="title" >Remark :</td>
-                            <td> <h:inputTextarea value="#{change.remark}" cols="50" rows="3" /></td>
-                        </tr>
-                    </h:panelGrid>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">
-                    <p:commandButton value="Submit" styleClass="small" action="#{change.onReassignBulk}" update=":frmMain"/>
-                    <p:commandButton value="Cancel" styleClass="small" onclick="changeOwnerDlg.close();"/>
-                </td>
-            </tr>
-        </table>
-
-
+<p:dialog id="changeOwnerDialog" widgetVar="changeOwnerDlg" header="Change Owner Information" modal="true">
+    <ui:include src="/site/dialog/changeOwnerDialog.xhtml"/>
 </p:dialog>
+
 <ui:include src="include/footer_inbox.xhtml" />
 <!-- End Footer -->
 </div>
