@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.MandateDocDAO;
 import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
@@ -16,6 +17,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.MandateDoc;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
@@ -34,6 +36,8 @@ public class ReturnControl extends BusinessControl {
 
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     ReasonDAO reasonDAO;
     @Inject
@@ -63,10 +67,16 @@ public class ReturnControl extends BusinessControl {
         return reasons;
     }
 
-    public List<ReturnInfoView> getReturnInfoViewList(long workCaseId){
+    public List<ReturnInfoView> getReturnInfoViewList(long workCaseId, long workCasePrescreenId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        if(workCaseId!=0){
-            List<ReturnInfo> returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findReturnListPrescreen(workCasePrescreenId);
+            }
+
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView = returnInfoTransform.transformToView(returnInfo);
                 returnInfoViews.add(returnInfoView);
@@ -76,14 +86,22 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getReturnInfoHistoryViewList(long workCaseId, int maxResult){
+    public List<ReturnInfoView> getReturnInfoHistoryViewList(long workCaseId, long workCasePrescreenId, int maxResult){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        if(workCaseId!=0){
-            List<ReturnInfoHistory> returnInfoList = new ArrayList<ReturnInfoHistory>();
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfoHistory> returnInfoList;
             if(maxResult>0){
-                returnInfoList = returnInfoHistoryDAO.findReturnHistoryLimitList(workCaseId,maxResult);
+                if(workCaseId!=0){
+                    returnInfoList = returnInfoHistoryDAO.findReturnHistoryLimitList(workCaseId,maxResult);
+                } else {
+                    returnInfoList = returnInfoHistoryDAO.findReturnHistoryLimitListPrescreen(workCasePrescreenId, maxResult);
+                }
             } else {
-                returnInfoList = returnInfoHistoryDAO.findReturnHistoryList(workCaseId);
+                if(workCaseId!=0){
+                    returnInfoList = returnInfoHistoryDAO.findReturnHistoryList(workCaseId);
+                } else {
+                    returnInfoList = returnInfoHistoryDAO.findReturnHistoryListPrescreen(workCasePrescreenId);
+                }
             }
 
             for(ReturnInfoHistory returnInfo: returnInfoList){
@@ -95,13 +113,21 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getReturnInfoViewListFromMandateDocAndNoAccept(long workCaseId){
+    public List<ReturnInfoView> getReturnInfoViewListFromMandateDocAndNoAccept(long workCaseId, long workCasePrescreenId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         List<MandateDoc> mandateDocList;
         User user = getCurrentUser();
         Map<String, ReturnInfoView> returnInfoViewMap = new HashMap<String, ReturnInfoView>();
-        if(workCaseId!=0 && user!=null){
-            mandateDocList = mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
+        if((workCaseId!=0 || workCasePrescreenId!=0) && user!=null){
+            List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
+            if(workCaseId!=0) {
+                mandateDocList = mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
+                returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
+            } else {
+                mandateDocList = mandateDocDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
+                returnInfoList = returnInfoDAO.findByNotAcceptListPreScreen(workCasePrescreenId);
+            }
+
             if(mandateDocList!=null && mandateDocList.size()>0){
                 for(MandateDoc mandateDoc: mandateDocList){
                     ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(mandateDoc);
@@ -109,7 +135,6 @@ public class ReturnControl extends BusinessControl {
                 }
             }
 
-            List<ReturnInfo> returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView;
                 if(returnInfoViewMap.containsKey(returnInfo.getReturnCode())){
@@ -132,23 +157,58 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getReturnReplyInfoViewListForSaveHistory(long workCaseId){
+    public List<ReturnInfoView> getReturnReplyInfoViewListForSaveHistory(long workCaseId, long workCasePrescreenId){
+        log.debug("getReturnReplyInfoViewListForSaveHistory (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        if(workCaseId!=0){
-            List<ReturnInfo> returnInfoList = returnInfoDAO.findReturnReplyList(workCaseId);
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findReturnReplyList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findReturnReplyListPrescreen(workCasePrescreenId);
+            }
+
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView = returnInfoTransform.transformToView(returnInfo);
                 returnInfoViews.add(returnInfoView);
             }
         }
 
+        log.debug("getReturnReplyInfoViewListForSaveHistory (returnInfoViews size: {})",returnInfoViews.size());
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getReturnNoReplyList(long workCaseId){
+    public List<ReturnInfoView> getReturnReplyInfoViewListForSaveHistoryForRestart(long workCaseId, long workCasePrescreenId){
+        log.debug("getReturnReplyInfoViewListForSaveHistory (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        if(workCaseId!=0){
-            List<ReturnInfo> returnInfoList = returnInfoDAO.findByNotReplyList(workCaseId);
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findReturnListPrescreen(workCasePrescreenId);
+            }
+
+            for(ReturnInfo returnInfo: returnInfoList){
+                ReturnInfoView returnInfoView = returnInfoTransform.transformToView(returnInfo);
+                returnInfoViews.add(returnInfoView);
+            }
+        }
+
+        log.debug("getReturnReplyInfoViewListForSaveHistory (returnInfoViews size: {})",returnInfoViews.size());
+        return returnInfoViews;
+    }
+
+    public List<ReturnInfoView> getReturnNoReplyList(long workCaseId, long workCasePrescreenId){
+        List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findByNotReplyList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findByNotReplyListPrescreen(workCasePrescreenId);
+            }
+
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
                 returnInfoViews.add(returnInfoView);
@@ -158,10 +218,16 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getReturnNoReviewList(long workCaseId){
+    public List<ReturnInfoView> getReturnNoReviewList(long workCaseId, long workCasePrescreenId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        if(workCaseId!=0){
-            List<ReturnInfo> returnInfoList = returnInfoDAO.findByNotReviewList(workCaseId);
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findByNotReviewList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findByNotReviewListPrescreen(workCasePrescreenId);
+            }
+
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
                 returnInfoViews.add(returnInfoView);
@@ -171,28 +237,93 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public void saveReturnHistory(long workCaseId, User user) throws Exception{
-        List<ReturnInfoView> returnInfoViews = getReturnReplyInfoViewListForSaveHistory(workCaseId);
+    public void saveReturnHistory(long workCaseId, long workCasePrescreenId) throws Exception{
+        log.debug("saveReturnHistory (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
+        User user = getCurrentUser();
+        List<ReturnInfoView> returnInfoViews = getReturnReplyInfoViewListForSaveHistory(workCaseId,workCasePrescreenId);
         if(returnInfoViews!=null && returnInfoViews.size()>0){
             List<ReturnInfoView> returnInfoViewHistoryList = transformReturnInfoToHistoryView(returnInfoViews);
             List<ReturnInfoHistory> returnInfoHistoryList = new ArrayList<ReturnInfoHistory>();
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
 
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            if(returnInfoViewHistoryList!=null && returnInfoViewHistoryList.size()>0){
-                for(ReturnInfoView returnInfoView: returnInfoViewHistoryList){
-                    ReturnInfoHistory returnInfoHistory = returnInfoTransform.transformToModelHistory(returnInfoView, workCase);
-                    returnInfoHistoryList.add(returnInfoHistory);
+            if(workCaseId!=0){
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                if(returnInfoViewHistoryList!=null && returnInfoViewHistoryList.size()>0){
+                    for(ReturnInfoView returnInfoView: returnInfoViewHistoryList){
+                        ReturnInfoHistory returnInfoHistory = returnInfoTransform.transformToModelHistory(returnInfoView, workCase, null);
+                        returnInfoHistoryList.add(returnInfoHistory);
+                    }
+                    returnInfoHistoryDAO.persist(returnInfoHistoryList);
                 }
-                returnInfoHistoryDAO.persist(returnInfoHistoryList);
-            }
 
-            for(ReturnInfoView returnInfoView: returnInfoViews){
-                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView,workCase,user);
-                returnInfoList.add(returnInfo);
-            }
+                for(ReturnInfoView returnInfoView: returnInfoViews){
+                    ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView,workCase,null,user);
+                    returnInfoList.add(returnInfo);
+                }
 
-            returnInfoDAO.delete(returnInfoList);
+                returnInfoDAO.delete(returnInfoList);
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+                if(returnInfoViewHistoryList!=null && returnInfoViewHistoryList.size()>0){
+                    for(ReturnInfoView returnInfoView: returnInfoViewHistoryList){
+                        ReturnInfoHistory returnInfoHistory = returnInfoTransform.transformToModelHistory(returnInfoView, null, workCasePrescreen);
+                        returnInfoHistoryList.add(returnInfoHistory);
+                    }
+                    returnInfoHistoryDAO.persist(returnInfoHistoryList);
+                }
+
+                for(ReturnInfoView returnInfoView: returnInfoViews){
+                    ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView,null,workCasePrescreen,user);
+                    returnInfoList.add(returnInfo);
+                }
+
+                returnInfoDAO.delete(returnInfoList);
+            }
+        }
+    }
+
+    public void saveReturnHistoryForRestart(long workCaseId, long workCasePrescreenId) throws Exception{
+        log.debug("saveReturnHistory (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
+        User user = getCurrentUser();
+        List<ReturnInfoView> returnInfoViews = getReturnReplyInfoViewListForSaveHistoryForRestart(workCaseId,workCasePrescreenId);
+        if(returnInfoViews!=null && returnInfoViews.size()>0){
+            List<ReturnInfoView> returnInfoViewHistoryList = transformReturnInfoToHistoryView(returnInfoViews);
+            List<ReturnInfoHistory> returnInfoHistoryList = new ArrayList<ReturnInfoHistory>();
+            List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
+
+            if(workCaseId!=0){
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                if(returnInfoViewHistoryList!=null && returnInfoViewHistoryList.size()>0){
+                    for(ReturnInfoView returnInfoView: returnInfoViewHistoryList){
+                        ReturnInfoHistory returnInfoHistory = returnInfoTransform.transformToModelHistory(returnInfoView, workCase, null);
+                        returnInfoHistoryList.add(returnInfoHistory);
+                    }
+                    returnInfoHistoryDAO.persist(returnInfoHistoryList);
+                }
+
+                for(ReturnInfoView returnInfoView: returnInfoViews){
+                    ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView,workCase,null,user);
+                    returnInfoList.add(returnInfo);
+                }
+
+                returnInfoDAO.delete(returnInfoList);
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+                if(returnInfoViewHistoryList!=null && returnInfoViewHistoryList.size()>0){
+                    for(ReturnInfoView returnInfoView: returnInfoViewHistoryList){
+                        ReturnInfoHistory returnInfoHistory = returnInfoTransform.transformToModelHistory(returnInfoView, null, workCasePrescreen);
+                        returnInfoHistoryList.add(returnInfoHistory);
+                    }
+                    returnInfoHistoryDAO.persist(returnInfoHistoryList);
+                }
+
+                for(ReturnInfoView returnInfoView: returnInfoViews){
+                    ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView,null,workCasePrescreen,user);
+                    returnInfoList.add(returnInfo);
+                }
+
+                returnInfoDAO.delete(returnInfoList);
+            }
         }
     }
 
@@ -207,18 +338,26 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public void submitReturnBDM(long workCaseId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnBDM(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,user);
+            saveReturnHistory(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            WorkCase workCase = null;
+            WorkCasePrescreen workCasePrescreen = null;
+            if(workCaseId!=0){
+                workCase = workCaseDAO.findById(workCaseId);
+            } else {
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            }
             Step step = stepDAO.findById(stepId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
             Date returnDate = new Date();
+            String reason = "";
+            String remark = "";
             for(ReturnInfoView returnInfoView: returnInfoViewList){
                 //Set Return User and Return Step
                 returnInfoView.setReturnFromUser(userTransform.transformToView(user));
@@ -229,21 +368,118 @@ public class ReturnControl extends BusinessControl {
                 if(returnInfoView.getReturnCode()!=null && returnInfoView.getReturnCode().equalsIgnoreCase("RG001")){
                     hasRG001 = true;
                 }
-                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, user);
+                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, workCasePrescreen, user);
                 returnInfoList.add(returnInfo);
+
+                if(reason.trim().equalsIgnoreCase("")){
+                    reason = returnInfoView.getReason();
+                    if(reason==null){
+                        reason = "";
+                    }
+                } else {
+                    if(returnInfoView.getReason()!=null){
+                        reason = reason+","+returnInfoView.getReason();
+                    }
+                }
+
+                if(remark.trim().equalsIgnoreCase("")){
+                    remark = returnInfoView.getReasonDetail();
+                    if(remark==null){
+                        remark = "";
+                    }
+                } else {
+                    if(returnInfoView.getReasonDetail()!=null){
+                        remark = remark+","+returnInfoView.getReasonDetail();
+                    }
+                }
+
             }
 
             returnInfoDAO.persist(returnInfoList);
-            bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
+
+            if(step!=null && step.getId()==2003){
+                bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
+            } else {
+                bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.RETURN_TO_BDM.getVal());
+            }
         }
     }
 
-    public void saveReturnInformation(long workCaseId, String queueName, User user, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnAADAdmin(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            boolean hasRG001 = false;
+
+            //Move Return Info in Working to History
+            saveReturnHistory(workCaseId,workCasePrescreenId);
+
+            //Save new to Return Info working
+            WorkCase workCase = null;
+            WorkCasePrescreen workCasePrescreen = null;
+            if(workCaseId!=0){
+                workCase = workCaseDAO.findById(workCaseId);
+            } else {
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            }
+            Step step = stepDAO.findById(stepId);
+            List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
+            Date returnDate = new Date();
+            String reason = "";
+            String remark = "";
+            for(ReturnInfoView returnInfoView: returnInfoViewList){
+                //Set Return User and Return Step
+                returnInfoView.setReturnFromUser(userTransform.transformToView(user));
+                returnInfoView.setReturnFromStep(stepTransform.transformToView(step));
+                returnInfoView.setDateOfReturn(returnDate);
+                returnInfoView.setChallenge(0); //not selected
+                returnInfoView.setAcceptChallenge(0); //not selected
+                if(returnInfoView.getReturnCode()!=null && returnInfoView.getReturnCode().equalsIgnoreCase("RG001")){
+                    hasRG001 = true;
+                }
+                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, workCasePrescreen, user);
+                returnInfoList.add(returnInfo);
+
+                if(reason.trim().equalsIgnoreCase("")){
+                    reason = returnInfoView.getReason();
+                    if(reason==null){
+                        reason = "";
+                    }
+                } else {
+                    if(returnInfoView.getReason()!=null){
+                        reason = reason+","+returnInfoView.getReason();
+                    }
+                }
+
+                if(remark.trim().equalsIgnoreCase("")){
+                    remark = returnInfoView.getReasonDetail();
+                    if(remark==null){
+                        remark = "";
+                    }
+                } else {
+                    if(returnInfoView.getReasonDetail()!=null){
+                        remark = remark+","+returnInfoView.getReasonDetail();
+                    }
+                }
+
+            }
+
+            returnInfoDAO.persist(returnInfoList);
+
+            bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
+        }
+    }
+
+    public void saveReturnInformation(long workCaseId, long workCasePrescreenId, String queueName, User user, List<ReturnInfoView> returnInfoViewList) throws Exception {
+        if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            WorkCase workCase = null;
+            WorkCasePrescreen workCasePrescreen = null;
+            if(workCaseId!=0){
+                workCase = workCaseDAO.findById(workCaseId);
+            } else {
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            }
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
             for(ReturnInfoView returnInfoView: returnInfoViewList){
-                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, user);
+                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, workCasePrescreen, user);
                 returnInfoList.add(returnInfo);
             }
 
@@ -251,8 +487,14 @@ public class ReturnControl extends BusinessControl {
         }
     }
 
-    public void submitReturnUW1(long workCaseId, String queueName) throws Exception {
-        List<ReturnInfo> returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+    public void submitReply(long workCaseId, long workCasePrescreenId, String queueName) throws Exception {
+        List<ReturnInfo> returnInfoList;
+        if(workCaseId!=0){
+            returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+        } else {
+            returnInfoList = returnInfoDAO.findReturnListPrescreen(workCasePrescreenId);
+        }
+
         if(returnInfoList!=null && returnInfoList.size()>0){
             Date replyDate = new Date();
             for(int i=0; i<returnInfoList.size(); i++){
@@ -262,6 +504,17 @@ public class ReturnControl extends BusinessControl {
             returnInfoDAO.persist(returnInfoList);
         }
 
-        bpmExecutor.submitUW1(workCaseId, queueName, ActionCode.SUBMIT_CA.getVal());
+        String wobNumber = "";
+        WorkCase workCase = null;
+        WorkCasePrescreen workCasePrescreen = null;
+        if(workCaseId!=0){
+            workCase = workCaseDAO.findById(workCaseId);
+            wobNumber = workCase.getWobNumber();
+        } else {
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            wobNumber = workCasePrescreen.getWobNumber();
+        }
+
+        bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
 }

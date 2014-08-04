@@ -1,3 +1,21 @@
+$(document).unbind('keydown').bind('keydown', function (event) {
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+        var d = event.srcElement || event.target;
+        if ((d.tagName.toUpperCase() === 'INPUT' && (d.type.toUpperCase() === 'TEXT' || d.type.toUpperCase() === 'PASSWORD' || d.type.toUpperCase() === 'FILE' || d.type.toUpperCase() === 'EMAIL' ))
+            || d.tagName.toUpperCase() === 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else {
+            doPrevent = true;
+        }
+    }
+
+    if (doPrevent) {
+        event.preventDefault();
+    }
+});
+
 PrimeFaces.locales ['th_TH'] = {
     closeText: 'ปิด',
     prevText: 'ย้อนกลับ',
@@ -445,7 +463,8 @@ function onKeyPressTelNo(evt){
     if( keyCode == 33 || keyCode == 34 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 ||
         keyCode == 40 || keyCode == 41 || keyCode == 42 || keyCode == 47 || keyCode == 58 || keyCode == 59 ||
         keyCode == 60 || keyCode == 62 || keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 ||
-        keyCode == 94 || keyCode == 95 || keyCode == 123 || keyCode == 125){
+        keyCode == 94 || keyCode == 95 || keyCode == 123 || keyCode == 125
+        ){
         return false;
     }
 
@@ -455,7 +474,20 @@ function onKeyPressTelNo(evt){
 function onKeyDownTelNo(evt){
 
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
-    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
+    if( keyCode == 8 ||
+        keyCode == 9 ||
+        keyCode == 35 ||
+        keyCode == 36 ||
+        keyCode == 37 ||
+        keyCode == 38 ||
+        keyCode == 39 ||
+        keyCode == 40 ||
+        keyCode == 46 ||
+        keyCode == 57 || //3605   ต
+        keyCode == 74 || //3656    ่
+        keyCode == 86 || //3629    อ
+        keyCode == 144 ||
+        keyCode == 110){
         return true;
     }
     /** ALLOW NUMBER **/
@@ -605,9 +637,9 @@ function handleCancelFullAppDialogRequest(xhr, status, args) {
     }
 }
 
-function handleReturnBDMDialogRequest(xhr, status, args) {
+function handleReturnInfoDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
-        returnBDMDlg.hide();
+        returnInfoDlg.hide();
     }
 }
 

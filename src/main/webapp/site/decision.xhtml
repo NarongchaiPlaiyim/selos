@@ -3450,7 +3450,6 @@
                                                         <tr>
                                                             <td class="center">
                                                                 <p:selectOneRadio value="#{decision.approvalHistoryView.uwDecision}"
-                                                                                  required="#{decision.endorseDecisionDialog and not empty param[saveDecisionBtn.clientId]}"
                                                                                   styleClass="ovr-border">
                                                                     <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>
@@ -3539,7 +3538,6 @@
                                                     <tr>
                                                         <td class="center">
                                                             <p:selectOneRadio value="#{decision.approvalHistoryPricingView.uwDecision}"
-                                                                              required="#{not empty param[saveDecisionBtn.clientId]}"
                                                                               styleClass="ovr-border">
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                                                                 <f:selectItem itemLabel="#{msg.get('app.button.reject')}" itemValue="#{decision.decisionREJECTED}"/>

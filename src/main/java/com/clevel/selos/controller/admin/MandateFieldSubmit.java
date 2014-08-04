@@ -1,6 +1,6 @@
 package com.clevel.selos.controller.admin;
 
-import com.clevel.selos.businesscontrol.admin.MandateFieldControl;
+import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependType;

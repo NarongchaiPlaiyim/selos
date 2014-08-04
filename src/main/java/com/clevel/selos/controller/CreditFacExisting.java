@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.CreditFacExistingControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.ExistingCreditControl;
+import com.clevel.selos.businesscontrol.ProposeLineControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -170,6 +171,8 @@ public class CreditFacExisting extends BaseController {
     private BaseRateTransform baseRateTransform;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    private ProposeLineControl proposeLineControl;
 
 
     public CreditFacExisting(){
@@ -1947,6 +1950,7 @@ public class CreditFacExisting extends BaseController {
         onSetInUsed();
         try {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
+            proposeLineControl.calculateTotalProposeAmountForExisting(existingCreditFacilityView, workCaseId, user);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageRefreshDlg.show()");

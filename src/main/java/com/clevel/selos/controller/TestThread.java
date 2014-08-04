@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -10,6 +11,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "testThread")
@@ -35,6 +38,19 @@ public class TestThread implements Serializable {
     @PostConstruct
     public void init(){
         log.debug("-- init()");
+    }
+
+
+    public static void main(String[] args) {
+        List<String> stringList = null;
+//        System.out.println(Util.isSafetyList(stringList));
+
+        stringList = new ArrayList<String>();
+//        System.out.println(Util.isSafetyList(stringList));
+
+        stringList = Util.safetyList(null);
+//        System.out.println(Util.isSafetyList(stringList));
+
     }
 
     public void onSubmitGetWorkCase(){

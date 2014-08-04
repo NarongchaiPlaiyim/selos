@@ -1807,7 +1807,7 @@
                                                         <td>
                                                             <p:selectOneMenu size="1" id="businessTypeSpouse"
                                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                                             value="#{custInfoSumIndi.customerInfoView.spouse.businessSubType.id}"
+                                                                             value="#{custInfoSumIndi.customerInfoView.spouse.businessDescription.id}"
                                                                              disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
@@ -2542,18 +2542,18 @@
                                         <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave"
                                                          process="@form"
                                                          update=":frmMain:relation,:frmMain:reference,:frmMain:docType,:frmMain:citiId,:frmMain:gender,
-                                                                 :frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:maritalStatus,
+                                                                 :frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:maritalStatus,:frmMain:kycLv,
                                                                  :frmMain:relationSpouse,:frmMain:referenceSpouse,:frmMain:docTypeSpouse,
-                                                                 :frmMain:citiIdSpouse,:frmMain:titleThSpouse,:frmMain:firstNameThSpouse,:frmMain:lastNameThSpouse,
+                                                                 :frmMain:citiIdSpouse,:frmMain:titleThSpouse,:frmMain:firstNameThSpouse,:frmMain:lastNameThSpouse,:frmMain:kycLvSpouse,
                                                                  :msgBoxSystemMessagePanel"
                                                          actionListener="#{custInfoSumIndi.onSave}" binding="#{saveCustomer}"
                                                          rendered="#{not custInfoSumIndi.fromJuristic}"
                                                          disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                         <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave2"
                                                          process="@form" update=":frmMain:relation,:frmMain:reference,:frmMain:docType,:frmMain:citiId,:frmMain:gender,
-                                                                 :frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:maritalStatus,
+                                                                 :frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:maritalStatus,:frmMain:kycLv,
                                                                  :frmMain:relationSpouse,:frmMain:referenceSpouse,:frmMain:docTypeSpouse,
-                                                                 :frmMain:citiIdSpouse,:frmMain:titleThSpouse,:frmMain:firstNameThSpouse,:frmMain:lastNameThSpouse,
+                                                                 :frmMain:citiIdSpouse,:frmMain:titleThSpouse,:frmMain:firstNameThSpouse,:frmMain:lastNameThSpouse,:frmMain:kycLvSpouse,
                                                                  :msgBoxSystemMessagePanel"
                                                          action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                          rendered="#{custInfoSumIndi.fromJuristic}"
