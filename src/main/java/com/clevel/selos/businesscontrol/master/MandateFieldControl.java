@@ -1,4 +1,4 @@
-package com.clevel.selos.businesscontrol.admin;
+package com.clevel.selos.businesscontrol.master;
 
 
 import com.clevel.selos.businesscontrol.BusinessControl;
