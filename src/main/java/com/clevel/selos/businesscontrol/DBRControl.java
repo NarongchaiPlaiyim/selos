@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.master.BaseRateControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
@@ -47,6 +48,8 @@ public class DBRControl extends BusinessControl {
 
     @Inject
     NCBInfoControl ncbInfoControl;
+    @Inject
+    BaseRateControl baseRateControl;
 
     @Inject
     public DBRControl() {
@@ -126,7 +129,7 @@ public class DBRControl extends BusinessControl {
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
         }
 
-        dbr.setDbrInterest(getDBRInterest());
+        dbr.setDbrInterest(baseRateControl.getDBRInterest());
 
         DBRView dbrView = dbrTransform.transformToView(dbr);
 

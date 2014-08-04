@@ -122,8 +122,10 @@ function resetter()
 
                             <tr>
                                 <td class="title" style="width: 150px;">Step:</td>
-                                <td>
-                                    <h:selectOneMenu id="stepNameId"  class="largest" value="#{peSearch.step}" onchange="submit()" readonly="#{peSearch.statusType eq 'CompletedCases'}" disabled="#{peSearch.statusType eq 'CompletedCases' or statusname.searchType eq 'CompletedCases'}"  valueChangeListener="#{statusname.valueChangeMethod}"  >
+                                <td style="width: 600px; max-width: 600px; min-width: 600px;">
+                                    <h:selectOneMenu id="stepNameId"
+                                                     style="width: 575px; max-width: 575px; min-width: 575px;"
+                                                     class="largest" value="#{peSearch.step}" onchange="submit()" readonly="#{peSearch.statusType eq 'CompletedCases'}" disabled="#{peSearch.statusType eq 'CompletedCases' or statusname.searchType eq 'CompletedCases'}"  valueChangeListener="#{statusname.valueChangeMethod}"  >
                                         <f:selectItem itemValue="" itemLabel="-Please Select-" />
                                         <f:selectItems value="#{stepid.stepnameidlist}"
                                                        var="stepItem"
@@ -247,11 +249,14 @@ function resetter()
                             <tr>
                                 <td class="title" ></td> <td class="title" style="width: 350px;"></td>
                                 <td class="title">
-                                    <p:commandButton value="Reset" update="pnl_maincontainer" process="@this" ajax="false" action="#{peSearch.resetSearchFields()}" >
+                                    <p:commandButton value="Reset"
+                                                     styleClass="medium"
+                                                     update="pnl_maincontainer" process="@this" ajax="false" action="#{peSearch.resetSearchFields()}" >
                                         <p:resetInput target="pnl_maincontainer" />
                                     </p:commandButton>
                                 </td>
-                                <td class="title"> <p:commandButton id="name1"  value="Search" ajax="false" styleClass="medium" action="#{peSearch.search()}">  </p:commandButton></td>
+                                <td class="title"> <p:commandButton id="name1"  value="Search" ajax="false"
+                                                                    styleClass="medium" action="#{peSearch.search()}">  </p:commandButton></td>
                             </tr>
 
                         </table>

@@ -86,8 +86,10 @@ public class UserTransform extends Transform {
             if(!Util.isNull(view.getRole())){
                 model.setRole(view.getRole());
             }
-            if(!Util.isNull(view.getUserTeam())){
+            if(!Util.isNull(view.getUserTeam()) && !Util.isZero(view.getUserTeam().getId())){
                 model.setTeam(view.getUserTeam());
+            } else {
+                model.setTeam(null);
             }
             if(!Util.isNull(view.getUserDepartment())){
                 model.setDepartment(view.getUserDepartment());
