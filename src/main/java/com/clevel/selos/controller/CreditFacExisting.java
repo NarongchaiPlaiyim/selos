@@ -1950,7 +1950,7 @@ public class CreditFacExisting extends BaseController {
         onSetInUsed();
         try {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
-            proposeLineControl.calculateTotalProposeAmountForExisting(existingCreditFacilityView, workCaseId, user);
+            proposeLineControl.calculateTotalProposeAmountForExisting(existingCreditFacilityView, workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageRefreshDlg.show()");
