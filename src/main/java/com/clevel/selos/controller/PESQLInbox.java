@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
+import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -62,6 +63,8 @@ public class PESQLInbox implements Serializable
     InboxControl inboxControl;
     @Inject
     HeaderControl headerControl;
+    @Inject
+    ReturnControl returnControl;
 
     private List<PEInbox> inboxViewList;
     private PEInbox inboxViewSelectItem;
@@ -452,6 +455,9 @@ public class PESQLInbox implements Serializable
 
         String queueName = inboxViewSelectItem.getQueuename();
         String wobNumber = inboxViewSelectItem.getFwobnumber();
+
+        WorkCase workCase = workCaseDAO.findByWobNumber(wobNumber);
+
         log.debug("onRestartCase ::: inboxViewSelectItem : {}", inboxViewSelectItem);
         HashMap<String,String> fieldsMap = new HashMap<String, String>();
         try {
@@ -464,6 +470,10 @@ public class PESQLInbox implements Serializable
                 bpmInterfaceImpl.dispatchCase(queueName,wobNumber,fieldsMap);
 
                 log.info("restart successful.... ");
+
+                if(workCase!=null){
+                    returnControl.saveReturnHistoryForRestart(workCase.getId(),0);
+                }
 
                 onCreation();
             }

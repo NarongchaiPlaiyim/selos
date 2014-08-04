@@ -984,7 +984,7 @@ public class HeaderController extends BaseController {
             if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
                 return false;
             } else {
-                returnControl.saveReturnHistory(workCaseId,workCasePreScreenId,user);
+                returnControl.saveReturnHistory(workCaseId,workCasePreScreenId);
                 return true;
             }
         }
@@ -1833,31 +1833,29 @@ public class HeaderController extends BaseController {
 
     }
 
-    public void onSubmitReturnUW1(){ //Submit Reply From BDM to UW1
+    public void onSubmitReply(){ //Submit Reply From BDM to UW1
         log.debug("onSubmitReturnUW1");
 
         try{
             HttpSession session = FacesUtil.getSession(false);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            //long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             String queueName = session.getAttribute("queueName").toString();
             User user = (User) session.getAttribute("user");
             long stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,0);
 
-            if(returnInfoViews!=null && returnInfoViews.size()>0){
-                messageHeader = "Information.";
-                message = "Submit Return fail. Please check return information again.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-                log.error("onSubmitReturnUW1 ::: fail.");
-            } else {
-                returnControl.submitReturnUW1(workCaseId, queueName);
-
+            if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)) {
+                returnControl.submitReply(workCaseId,workCasePreScreenId,queueName);
                 messageHeader = "Information.";
                 message = "Submit Return success";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
 
                 log.debug("onReturnBDMSubmit ::: success.");
+            } else {
+                messageHeader = "Information.";
+                message = "Submit Return fail. Please check return information again.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                log.error("onSubmitReturnUW1 ::: fail.");
             }
         } catch (Exception ex){
             messageHeader = "Information.";
@@ -1865,6 +1863,21 @@ public class HeaderController extends BaseController {
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
 
             log.error("onSubmitReturnUW1 ::: exception occurred : ", ex);
+        }
+    }
+
+    public boolean canSubmitWithoutReply(long workCaseId, long workCasePreScreenId) throws Exception{
+        List<ReturnInfoView> returnInfoViews;
+        if(workCaseId!=0) {
+            returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,0);
+        } else {
+            returnInfoViews = returnControl.getReturnNoReplyList(0,workCasePreScreenId);
+        }
+
+        if(returnInfoViews!=null && returnInfoViews.size()>0){
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -1878,6 +1891,7 @@ public class HeaderController extends BaseController {
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
             fullApplicationControl.restartCase(queueName,wobNumber);
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
 
             messageHeader = "Information.";
             message = "Restart Success";

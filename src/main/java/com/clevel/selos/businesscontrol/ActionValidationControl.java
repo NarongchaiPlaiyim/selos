@@ -1,6 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.businesscontrol.admin.MandateFieldControl;
+import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;

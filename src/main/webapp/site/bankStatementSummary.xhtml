@@ -289,14 +289,14 @@
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditTmbBankStmt()}"
                                                                          onclick="PF('blockUI').show()"
-                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.actionLists')}">
+                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.editButton')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                          icon="ui-icon-trash"
                                                                          oncomplete="confirmDeleteBankStmtDlg.show()"
-                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.actionLists')}">
+                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.editButton')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
@@ -504,7 +504,7 @@
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditOthBankStmt()}"
                                                                          onclick="PF('blockUI').show()"
-                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.actionLists')}">
+                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.editButton')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
@@ -512,7 +512,7 @@
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                          icon="ui-icon-trash"
                                                                          oncomplete="confirmDeleteBankStmtDlg.show()"
-                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.actionLists')}">
+                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.deleteButton')}">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>

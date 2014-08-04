@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.master.BaseRateControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
@@ -144,6 +145,8 @@ public class ProposeLineControl extends BusinessControl {
     private BRMSControl brmsControl;
     @Inject
     private CreditFacExistingControl creditFacExistingControl;
+    @Inject
+    private BaseRateControl baseRateControl;
 
     @Inject
     private COMSInterface comsInterface;
@@ -311,8 +314,8 @@ public class ProposeLineControl extends BusinessControl {
         if(!Util.isNull(proposeCreditInfoDetailView)) {
             ProposeCreditInfoTierDetailView creditTierDetailAdd = new ProposeCreditInfoTierDetailView();
             creditTierDetailAdd.setFinalInterest(BigDecimal.ZERO);
-            BaseRate baseRate = baseRateDAO.findById(1);
-            creditTierDetailAdd.setFinalBasePrice(baseRateTransform.transformToView(baseRate));
+            BaseRateView baseRateView = baseRateControl.getBaseRate(BaseRateConfig.MLR);
+            creditTierDetailAdd.setFinalBasePrice(baseRateView);
             creditTierDetailAdd.setNo(proposeCreditInfoDetailView.getLastNo()+1);
             proposeCreditInfoDetailView.setLastNo(proposeCreditInfoDetailView.getLastNo()+1);
 
