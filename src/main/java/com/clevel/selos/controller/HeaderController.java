@@ -2356,11 +2356,11 @@ public class HeaderController extends BaseController {
         long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
-        if("PRESCREEN".equalsIgnoreCase(stageString)){
+        if("PRESCREEN".equalsIgnoreCase(stageString) && workCasePreScreenId != 0){
             if(stageId == 101){
                 accessible = true;
             }
-        } else if ("FULLAPP".equalsIgnoreCase(stageString)){
+        } else if ("FULLAPP".equalsIgnoreCase(stageString) && workCaseId != 0){
             if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207 || stageId == 208){
                 accessible = true;
             }
