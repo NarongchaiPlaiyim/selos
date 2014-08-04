@@ -2610,7 +2610,7 @@ public class ProposeLineControl extends BusinessControl {
         return sumTotalLoanDbr;
     }
 
-    public void calculateTotalProposeAmountForExisting(ExistingCreditFacilityView existingCreditFacilityView, long workCaseId, User user) {
+    public void calculateTotalProposeAmountForExisting(ExistingCreditFacilityView existingCreditFacilityView, long workCaseId) {
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         if (!Util.isNull(proposeLine)) {
             BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
@@ -2644,7 +2644,8 @@ public class ProposeLineControl extends BusinessControl {
 
                     for (ProposeCreditInfo proposeCreditInfo : proposeCreditInfoList) {
                         if (!Util.isNull(proposeCreditInfo.getProductProgram()) && !Util.isZero(proposeCreditInfo.getProductProgram().getId()) &&
-                                !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId())) {
+                                !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId()) &&
+                                proposeCreditInfo.getProposeType() == ProposeType.P) {
                             productProgram = proposeCreditInfo.getProductProgram();
                             creditType = proposeCreditInfo.getCreditType();
 
@@ -2672,7 +2673,6 @@ public class ProposeLineControl extends BusinessControl {
                                             sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getPceAmount());
                                         }
                                     }
-
                                     sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
 
                                     //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
@@ -2691,23 +2691,20 @@ public class ProposeLineControl extends BusinessControl {
                             }
                         }
                     }
-
                     sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
                     sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
                     sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
                 }
-
             }
-
             proposeLine.setTotalPropose(sumTotalPropose);                 //sumTotalPropose All Credit in this case
             proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);          //sumTotalLoanDbr
             proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);    //sumTotalNonLoanDbr
             proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);               //sum Commercial of Existing and Propose
             proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD); //sum Commercial and OBOD of Existing and Propose
             proposeLine.setTotalExposure(sumTotalGroupExposure);
-        }
 
-        proposeLineDAO.persist(proposeLine);
+            proposeLineDAO.persist(proposeLine);
+        }
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYearForExisting(ProposeCreditInfo proposeCreditInfo, BigDecimal dbrSpread) {

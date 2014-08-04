@@ -85,10 +85,11 @@
                         <tr>
                             <td colspan="100%" class="title"><h2>Search On Hand Case</h2></td>
                         </tr>
+                        <h:messages style="color:red;margin:8px;" />
                        <tr>
                                            <td class="title" style="width: 150px;"> Team Lead Unit Name </td>
                                            <td>
-                                                <h:selectOneMenu id="teamnameselectbox" class="largest" value="#{reassignteamnames.selectedTeamName}"  valueChangeListener="#{reassignteamnames.valueChangeMethod}" >
+                                                <h:selectOneMenu id="teamnameselectbox" class="largest" value="#{reassignteamnames.selectedTeamName}"  valueChangeListener="#{reassignteamnames.valueChangeMethod}" requiredMessage="Please select team" required="true">
                                                     <f:selectItem itemValue="" itemLabel="-Please Select-"  />
                                                     <f:selectItems value="#{reassignteamnames.reasignteamnames}" var="reassign" itemValue="#{reassign.teamid}" itemLabel="#{reassign.teamid} - #{reassign.teamname}"/>
                                                     <p:ajax event="change" update="@form" />
@@ -101,7 +102,7 @@
 
                                         <td class="title" style="width: 150px;"> User Name </td>
                                         <td>
-                                            <h:selectOneMenu id="usernameselectbox" class="largest" value="#{reassignteamnames.selectedUserName}" >
+                                            <h:selectOneMenu id="usernameselectbox" class="largest" value="#{reassignteamnames.selectedUserName}"  requiredMessage="Please select user" required="true">
                                                 <f:selectItem itemValue="" itemLabel="-Please Select-" />
                                                 <f:selectItems value="#{reassignteamnames.usersIdNameList}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.id}" />
 
@@ -313,52 +314,10 @@
                 </p:confirmDialog>
             </p:panel>
 
-            <p:dialog id="reassignDialog" header="Reassign Information" widgetVar="reassignDlg" modal="true" >
+                <p:dialog id="reassignDialog" header="Reassign Information" widgetVar="reassignDlg" modal="true" >
+                    <ui:include src="/site/dialog/reassignDialog.xhtml"/>
+                </p:dialog>
 
-                    <table class="content_form" style="width: 600px;">
-                    <tr>
-                        <td>
-                          <h:panelGrid columns="2">
-                                <tr>
-                                    <td class="title" style="width: 220px;"> Team Lead Unit Name : </td>
-                                    <td>
-                                        <h:selectOneMenu class="largest" id="teamNameReassign" label="teamNameReassign" value="#{reassignteamnames.popupselectedteamname}" >
-                                            <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                            <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamid} - #{popupreassign.teamname}"/>
-                                            <f:ajax listener="#{reassignteamnames.changeUserNameBasedOnTeamName}" render="userNameReassign" execute="@this"/>
-                                        </h:selectOneMenu>
-                                    </td>
-                                </tr>
-
-                                <tr>
-
-                                    <td class="title" style="width: 220px;"> Assign To : </td>
-                                    <td>
-                                        <h:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign" value="#{reassignteamnames.popupselectedusername}">
-                                            <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                            <f:selectItems value="#{reassignteamnames.usersIdNameList1}" var="username1" itemLabel="#{username1.id} - #{username1.userName}" itemValue="#{username1.id}"/>
-                                        </h:selectOneMenu>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">Remark : </td>
-                                    <td><h:inputTextarea cols="50" rows="3" value="#{reassignteamnames.popupremark}" ></h:inputTextarea></td>
-                                 </tr>
-
-                            </h:panelGrid>
-
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2" align="center">
-                            <p:commandButton value="Submit" styleClass="small" actionListener="#{reassignteamnames.reassignDisptchRecords()}" update=":frmMain"/>
-                            <p:commandButton value="Cancel" styleClass="small" onclick="reassignDlg.close();"/>
-                        </td>
-                    </tr>
-                </table>
-
-            </p:dialog>
             <!-- Start Footer -->
             <ui:include src="include/footer_inbox.xhtml" />
             <!-- End Footer -->
