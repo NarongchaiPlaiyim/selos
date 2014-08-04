@@ -2627,11 +2627,8 @@ public class ProposeLineControl extends BusinessControl {
 
             if (existingCreditFacilityView != null) {
                 borrowerComOBOD = existingCreditFacilityView.getTotalBorrowerComOBOD();
-                log.debug("borrowerComOBOD :: {}", borrowerComOBOD);
                 borrowerCom = existingCreditFacilityView.getTotalBorrowerCom();
-                log.debug("borrowerCom :: {}", borrowerCom);
                 groupExposure = existingCreditFacilityView.getTotalBorrowerExposure();
-                log.debug("groupExposure :: {}", groupExposure);
             }
 
             BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
@@ -2647,7 +2644,8 @@ public class ProposeLineControl extends BusinessControl {
 
                     for (ProposeCreditInfo proposeCreditInfo : proposeCreditInfoList) {
                         if (!Util.isNull(proposeCreditInfo.getProductProgram()) && !Util.isZero(proposeCreditInfo.getProductProgram().getId()) &&
-                                !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId())) {
+                                !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId()) &&
+                                proposeCreditInfo.getProposeType() == ProposeType.P) {
                             productProgram = proposeCreditInfo.getProductProgram();
                             creditType = proposeCreditInfo.getCreditType();
 
@@ -2657,94 +2655,53 @@ public class ProposeLineControl extends BusinessControl {
                                         prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
                                 if (productFormula != null) {
                                     if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
-                                        log.debug("Cash In");
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                             sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
-                                            log.debug("sumTotalOBOD 1 :: {}", sumTotalOBOD);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfo.getLimit());
-                                            log.debug("sumTotalOBOD 2 :: {}", sumTotalOBOD);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
                                             sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfo.getPceAmount());
-                                            log.debug("sumTotalOBOD 3 :: {}", sumTotalOBOD);
                                         }
                                     } else {
-                                        log.debug("Not Cash In");
                                         //ExposureMethod for check to use limit or limit*PCE%
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                             sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
-                                            log.debug("sumTotalCommercial 1 :: {}", sumTotalCommercial);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getLimit());
-                                            log.debug("sumTotalCommercial 2 :: {}", sumTotalCommercial);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
                                             sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getPceAmount());
-                                            log.debug("sumTotalCommercial 3 :: {}", sumTotalCommercial);
                                         }
                                     }
-                                    log.debug("sumTotalOBOD :: {} , sumTotalCommercial :: {}", sumTotalOBOD, sumTotalCommercial);
-
                                     sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
-                                    log.debug("sumTotalPropose :: {}", sumTotalPropose);
 
                                     //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
-                                    log.debug("DBR Cal :: {}", productFormula.getDbrCalculate());
                                     if (productFormula.getDbrCalculate() == 1) {// No
-                                        log.debug("DBR Cal = NO");
                                         sumTotalNonLoanDbr = BigDecimal.ZERO;
-                                        log.debug("sumTotalNonLoanDbr :: {}", sumTotalNonLoanDbr);
                                     } else if (productFormula.getDbrCalculate() == 2) {// Yes
-                                        log.debug("DBR Cal = Yes");
                                         if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
-                                            log.debug("sumTotalLoanDbr 1 :: {}", sumTotalLoanDbr);
                                         } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(proposeCreditInfo.getInstallment());
-                                            log.debug("sumTotalLoanDbr 2 :: {}", sumTotalLoanDbr);
                                         } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
                                             sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYearForExisting(proposeCreditInfo, productFormula.getDbrSpread()));
-                                            log.debug("sumTotalLoanDbr 3 :: {}", sumTotalLoanDbr);
                                         }
                                     }
                                 }
                             }
                         }
                     }
-
                     sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
                     sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
                     sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
-
-                    log.debug("#############################################################################");
-                    log.debug("borrowerComOBOD :: {}", borrowerComOBOD);
-                    log.debug("sumTotalPropose :: {}", sumTotalPropose);
-                    log.debug("sumTotalBorrowerCommercialAndOBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
-                    log.debug("#############################################################################");
-                    log.debug("borrowerCom :: {}", borrowerCom);
-                    log.debug("sumTotalCommercial :: {}", sumTotalCommercial);
-                    log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
-                    log.debug("#############################################################################");
-                    log.debug("groupExposure :: {}", groupExposure);
-                    log.debug("sumTotalBorrowerCommercialAndOBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
-                    log.debug("sumTotalGroupExposure :: {}", sumTotalGroupExposure);
-                    log.debug("#############################################################################");
                 }
             }
-
             proposeLine.setTotalPropose(sumTotalPropose);                 //sumTotalPropose All Credit in this case
             proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);          //sumTotalLoanDbr
             proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);    //sumTotalNonLoanDbr
             proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);               //sum Commercial of Existing and Propose
             proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD); //sum Commercial and OBOD of Existing and Propose
             proposeLine.setTotalExposure(sumTotalGroupExposure);
-
-            log.debug("TotalPropose :: {}", proposeLine.getTotalPropose());
-            log.debug("TotalProposeLoanDBR :: {}", proposeLine.getTotalProposeLoanDBR());
-            log.debug("TotalProposeNonLoanDBR :: {}", proposeLine.getTotalProposeNonLoanDBR());
-            log.debug("TotalCommercial :: {}", proposeLine.getTotalCommercial());
-            log.debug("TotalCommercialAndOBOD :: {}", proposeLine.getTotalCommercialAndOBOD());
-            log.debug("TotalExposure :: {}", proposeLine.getTotalExposure());
 
             proposeLineDAO.persist(proposeLine);
         }
