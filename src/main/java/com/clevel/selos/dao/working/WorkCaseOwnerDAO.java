@@ -189,4 +189,46 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
         }
         return "";
     }
+
+    public List<Integer> getWorkCaseRolesByWorkCaseId(long workCaseId){
+        Criteria criteria = createCriteria();
+
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+
+        List<WorkCaseOwner> workCaseOwnerList = criteria.list();
+
+        Iterator<WorkCaseOwner> it = workCaseOwnerList.iterator();
+
+        List roleList = new ArrayList();
+
+        while (it.hasNext())
+        {
+            WorkCaseOwner workCaseOwner = it.next();
+            roleList.add(workCaseOwner.getRole().getId());
+        }
+
+        return roleList;
+    }
+
+    public List<Integer> getWorkCaseRolesByWorkCasePreScreenId(long workCasePreScreenId)
+    {
+
+        Criteria criteria = createCriteria();
+
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+
+        List<WorkCaseOwner> workCaseOwnerList = criteria.list();
+
+        Iterator<WorkCaseOwner> it = workCaseOwnerList.iterator();
+
+        List roleList = new ArrayList();
+
+        while (it.hasNext())
+        {
+            WorkCaseOwner workCaseOwner = it.next();
+            roleList.add(workCaseOwner.getRole().getId());
+        }
+
+        return roleList;
+    }
 }

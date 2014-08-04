@@ -1,0 +1,49 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+    <p:panel>
+        <table class="content_form" style="width: 600px;">
+            <tr>
+                <td>
+                    <h:messages style="color:red;margin:8px;" />
+                    <h:panelGrid columns="2">
+                        <tr>
+                            <td class="title" style="width: 220px;">Team Lead UnitName: </td>
+                            <td><h:selectOneMenu id="teamIdChangeOwner" style="width: 220px;"
+                                                 label="teamIdChangeOwner"
+                                                 value="#{change.selectTeamNameChangeOwner}" required="#{not empty param[validateChangeOwner.clientId]}" requiredMessage="Please Select Team">
+                                <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                                <f:selectItems value="#{change.teamNamesForChangeOwerTo}" var="teamNamesChangeOwner" itemLabel="#{teamNamesChangeOwner.id} - #{teamNamesChangeOwner.user}" itemValue="#{teamNamesChangeOwner.id}"/>
+                                <f:ajax listener="#{change.userNamesForChangeTo}" render="userListChangeOwner" execute="@this"/>
+                            </h:selectOneMenu> </td>
+                        </tr>
+                        <tr>
+                            <td class="title" style="width: 220px;">Change Owner To :</td>
+                            <td> <h:selectOneMenu id="userListChangeOwner" style="width: 220px;"
+                                                  label="UserListChangeOwner"
+                                                  value="#{change.selectUserChangeOwner}" required="#{not empty param[validateChangeOwner.clientId]}" requiredMessage="Please Select User">
+                                <f:selectItem itemValue="" itemLabel="--Please Select--"/>
+                                <f:selectItems id="selectednames" value="#{change.usersIdNameList1}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.id}"/>
+                            </h:selectOneMenu> </td>
+                        </tr>
+
+                        <tr>
+                            <td class="title" >Remark :</td>
+                            <td> <h:inputTextarea value="#{change.remark}" cols="50" rows="3" /></td>
+                        </tr>
+                    </h:panelGrid>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <p:commandButton value="Submit" styleClass="small" binding="#{validateChangeOwner}" action="#{change.onReassignBulk}" oncomplete="handleDialogValidation( args,'changeOwnerDlg')" update=":frmMain"/>
+                    <p:commandButton value="Cancel" styleClass="small" onclick="changeOwnerDlg.close();"/>
+                </td>
+            </tr>
+        </table>
+
+    </p:panel>
+</ui:composition>

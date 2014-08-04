@@ -190,6 +190,7 @@ function resetter()
                                                     value="#{peSearch.date1}"
                                                     requiredMessage="Please Enter From Date"
                                                     required="#{not empty param['frmMain:userIdId']}"
+                                                    converterMessage="Invalid from date"
                                                     >
                                     </clv:BECalendar>
                                 </td>
@@ -203,6 +204,7 @@ function resetter()
                                                     value="#{peSearch.date2}"
                                                     requiredMessage="Please Enter To Date"
                                                     required="#{not empty param['frmMain:userIdId']}"
+                                                    converterMessage="Invalid to date"
                                                     >
                                     </clv:BECalendar>
                                 </td>
@@ -221,8 +223,8 @@ function resetter()
                                                     maxdate="#{peSearch.currentDateDDMMYY}"
                                                     pattern="dd/MM/yyyy"
                                                     value="#{peSearch.date3}"
-
-                                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
+                                                    readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}"
+                                                    converterMessage="Invalid terminate from date">
                                     </clv:BECalendar>
                                 </td>
                                 <td class="title">To :</td>
@@ -233,13 +235,11 @@ function resetter()
                                                     maxdate="#{peSearch.currentDateDDMMYY}"
                                                     pattern="dd/MM/yyyy"
                                                     value="#{peSearch.date4}"
-
+                                                    converterMessage="Invalid terminate to date"
                                                     readonly="#{peSearch.statusType eq 'InprocessCases'}" disabled="#{peSearch.statusType eq 'InprocessCases'}">
                                     </clv:BECalendar>
                                 </td>
                             </tr>
-
-
 
                             <tr>
                                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
