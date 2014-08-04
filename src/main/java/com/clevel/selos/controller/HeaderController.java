@@ -1135,7 +1135,7 @@ public class HeaderController extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            if(canSubmitWithoutReturn()){
+            if(canSubmitWithoutReply(workCaseId, workCasePreScreenId)){
                 fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
 
                 messageHeader = "Information.";
