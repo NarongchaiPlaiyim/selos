@@ -354,7 +354,7 @@ public class HeaderController extends BaseController {
                     }
                 }
             } else {
-                canRequestAppraisal = false;
+                canRequestAppraisal = true;
             }
 
             timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
@@ -1056,8 +1056,10 @@ public class HeaderController extends BaseController {
     }
 
     public void onOpenReturnBDMByBU(){
+        _loadSessionVariable();
         log.debug("onOpenReturnBDMByZM ( return to BDM by BU [ Open dialog ] )");
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        //reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.REVISE_CA.getVal());
         returnRemark = "";
 
         RequestContext.getCurrentInstance().execute("returnBDM_BUDlg.show()");

@@ -208,6 +208,12 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setApproveType(basicInfo.getApproveType());
         basicInfoView.setApproveResult(basicInfo.getApproveResult());
 
+        if(basicInfo.getAppealResubmitReason() != null) {
+            basicInfoView.setAppealResubmitReason(basicInfo.getAppealResubmitReason());
+        }else{
+            basicInfoView.setAppealResubmitReason(new Reason());
+        }
+
         log.info("End - transformToView ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;
     }
