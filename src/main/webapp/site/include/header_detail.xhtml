@@ -349,12 +349,12 @@
 </p:confirmDialog>
 <!--Submit to BDM [ From ABDM return case to BDM ]-->
 <p:commandButton id="btnSubmitCaseToBDM_ABDM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
-                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}"
+                 rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2023 || headerController.stepId == 2024 || headerController.stepId == 2027 )}"
                  onclick="confirmSubmitBDM_ABDM.show()"/>
 <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                  icon="ui-icon-alert"
                  widgetVar="confirmSubmitBDM_ABDM" global="false" showEffect="fade"
-                 rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2023}">
+                 rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2023 || headerController.stepId == 2024 || headerController.stepId == 2027 )}">
     <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                      actionListener="#{headerController.onSubmitToBDM()}"
