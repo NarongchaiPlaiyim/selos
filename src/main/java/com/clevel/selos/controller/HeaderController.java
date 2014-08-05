@@ -2009,12 +2009,20 @@ public class HeaderController extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            messageHeader = "Information.";
-            message = "Return to AAD Admin success.";
+            if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)) {
+                messageHeader = "Information.";
+                message = "Return to AAD Admin success.";
 
-            fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+                fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
 
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            } else {
+                messageHeader = "Information.";
+                message = "Submit Return fail. Please check return information again.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                log.error("onReturnToAADAdminByBDM ::: fail.");
+            }
         } catch (Exception ex) {
             log.debug("Exception while Return to AAD Admin : ", ex);
             messageHeader = "Exception.";
