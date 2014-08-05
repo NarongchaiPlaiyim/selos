@@ -28,12 +28,12 @@
     </p:commandButton>
     <!-- Assign To Checker-->
     <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" title="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Assign to Checker')}" disabled="#{prescreenMaker.disableAssignButton}"
+                     rendered="#{headerController.checkButton('Assign to Checker')}"
                      onclick="PF('blockUI').show()"
                      actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}" process="@this"
                      oncomplete="blockUI.hide(), assignCheckerDlg.show()"
-                     update=":assignCheckerDlgForm">
-        <p:resetInput target=":assignCheckerDlgForm"/>
+                     update=":frmMain:assignCheckerPanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:assignCheckerPanel"/>
     </p:commandButton>
     <!-- Check NCB -->
     <p:commandButton id="btnChkNCB" value="#{msg.get('app.header.button.checkNCB')}" title="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton"
@@ -857,6 +857,15 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
               modal="true" width="380" height="150">
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="assignCheckerPanel" styleClass="panel"
+         rendered="#{headerController.checkButton('Assign to Checker')}">
+    <p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" header="Check NCB - Assign to BDM Checker"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false" closable="false"
+              modal="true" width="360" height="160">
+        <ui:include src="dialog/prescreenAssignChecker.xhtml"/>
     </p:dialog>
 </p:panel>
 
