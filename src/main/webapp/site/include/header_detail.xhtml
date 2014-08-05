@@ -740,6 +740,14 @@
     </p:dialog>
 </p:panel>
 
+<p:panel id="addReturnAADInfoPanel" styleClass="panel">
+    <p:dialog id="addReturnAADInfoDialog" widgetVar="addReturnAADInfoDlg" header="Add Return Information"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/addReturnAADInfoDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 <p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
