@@ -649,6 +649,12 @@ function handleReturnBDMAddDialogRequest(xhr, status, args) {
     }
 }
 
+function handleReturnAADAddDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        addReturnAADInfoDlg.hide();
+    }
+}
+
 function handleDisbursementMcDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         mcDisbursementDialog.hide();

@@ -137,12 +137,15 @@ public class HeaderController extends BaseController {
     private List<Reason> cancelReason;
     private String cancelRemark;
     private int reasonId;
+    private int reasonAADId;
 
     //Return BDM Dialog
     private List<ReturnInfoView> returnInfoViewList;
     private List<Reason> returnReason;
+    private List<Reason> returnAADReason;
     private String returnRemark;
     private int editRecordNo;
+    private int editAADRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     //Request Appraisal
@@ -1675,9 +1678,9 @@ public class HeaderController extends BaseController {
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
-        returnReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
-        returnRemark = "";
-        resetAddReturnInfo();
+        returnAADReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+        returnAADRemark = "";
+        resetAddReturnAADInfo();
 
         log.debug("onOpenReturnInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
     }
@@ -1686,6 +1689,12 @@ public class HeaderController extends BaseController {
         returnRemark = "";
         reasonId = 0;
         editRecordNo = -1;
+    }
+
+    public void resetAddReturnAADInfo(){
+        returnAADRemark = "";
+        reasonAADId = 0;
+        editAADRecordNo = -1;
     }
 
     public void onOpenAddReturnInfo(){
@@ -1710,6 +1719,34 @@ public class HeaderController extends BaseController {
             returnInfoView.setReasonDetail(returnRemark);
             returnInfoView.setCanEdit(true);
             returnInfoView.setReasonId(reasonId);
+
+            returnInfoViewList.add(returnInfoView);
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+
+        resetAddReturnInfo();
+
+        log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
+    }
+
+    public void onSaveReturnAADInfo(){
+        log.debug("onSaveReturnAADInfo ::: starting... (reasonAADId: {})",reasonAADId);
+        Reason reason = reasonDAO.findById(reasonAADId);
+
+        if(editAADRecordNo>-1){
+            returnInfoViewList.get(editAADRecordNo).setReturnCode(reason.getCode());
+            returnInfoViewList.get(editAADRecordNo).setDescription(reason.getDescription());
+            returnInfoViewList.get(editAADRecordNo).setReasonDetail(returnAADRemark);
+            returnInfoViewList.get(editAADRecordNo).setCanEdit(true);
+            returnInfoViewList.get(editAADRecordNo).setReasonId(reasonAADId);
+        } else {
+            ReturnInfoView returnInfoView = new ReturnInfoView();
+            returnInfoView.setReturnCode(reason.getCode());
+            returnInfoView.setDescription(reason.getDescription());
+            returnInfoView.setReasonDetail(returnAADRemark);
+            returnInfoView.setCanEdit(true);
+            returnInfoView.setReasonId(reasonAADId);
 
             returnInfoViewList.add(returnInfoView);
         }
@@ -2593,6 +2630,14 @@ public class HeaderController extends BaseController {
         this.reasonId = reasonId;
     }
 
+    public int getReasonAADId() {
+        return reasonAADId;
+    }
+
+    public void setReasonAADId(int reasonAADId) {
+        this.reasonAADId = reasonAADId;
+    }
+
     public String getReturnRemark() {
         return returnRemark;
     }
@@ -2607,6 +2652,14 @@ public class HeaderController extends BaseController {
 
     public void setReturnReason(List<Reason> returnReason) {
         this.returnReason = returnReason;
+    }
+
+    public List<Reason> getReturnAADReason() {
+        return returnAADReason;
+    }
+
+    public void setReturnAADReason(List<Reason> returnAADReason) {
+        this.returnAADReason = returnAADReason;
     }
 
     public List<ReturnInfoView> getReturnInfoViewList() {
