@@ -292,7 +292,7 @@
                      oncomplete="blockUI.hide()"
                      update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
     <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
-    <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
+    <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017)}"
                      onclick="confirmSubmitSubmitUW1.show()"/>
     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"

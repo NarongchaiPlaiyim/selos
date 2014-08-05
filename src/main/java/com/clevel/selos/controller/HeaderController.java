@@ -1834,21 +1834,21 @@ public class HeaderController extends BaseController {
                 } else {
                     returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
-                    message = "Return to BDM success.";
+                    message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
                     complete = true;
                     log.debug("onReturnBDMSubmit ::: success.");
                 }
             } catch (Exception ex){
                 messageHeader = "Information.";
-                message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
+                message = "Return case failed, cause : " + Util.getMessageException(ex);
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 complete = false;
                 log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
             }
         } else {
             messageHeader = "Information.";
-            message = "Return to BDM failed, have no reason to return.";
+            message = "Return case failed, have no reason to return.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
             log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
@@ -1879,21 +1879,21 @@ public class HeaderController extends BaseController {
                 } else {
                     returnControl.submitReturnAADAdmin(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
-                    message = "Return to BDM success.";
+                    message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
                     complete = true;
                     log.debug("onReturnBDMSubmit ::: success.");
                 }
             } catch (Exception ex){
                 messageHeader = "Information.";
-                message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
+                message = "Return case failed, cause : " + Util.getMessageException(ex);
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 complete = false;
                 log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
             }
         } else {
             messageHeader = "Information.";
-            message = "Return to BDM failed, have no reason to return.";
+            message = "Return case failed, have no reason to return.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
             log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
