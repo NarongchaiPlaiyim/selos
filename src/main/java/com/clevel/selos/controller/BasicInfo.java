@@ -200,8 +200,9 @@ public class BasicInfo extends BaseController {
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.BASIC_INFO);
+            loadFieldControl(workCaseId, Screen.BASIC_INFO, ownerCaseUserId);
             fieldsControlInitial();
 
             basicInfoView = new BasicInfoView();

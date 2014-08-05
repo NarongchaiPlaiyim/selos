@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -114,8 +115,9 @@ public class DBRInfo extends BaseController {
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.DBR_INFO);
+            loadFieldControl(workCaseId, Screen.DBR_INFO, ownerCaseUserId);
 
             selectedItem = new DBRDetailView();
 

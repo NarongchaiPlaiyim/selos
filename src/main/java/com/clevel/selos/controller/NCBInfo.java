@@ -26,6 +26,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.SettlementStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -240,8 +241,8 @@ public class NCBInfo extends BaseController {
 
                 yearList = DateTimeUtil.getPreviousHundredYearTH();
             }
-
-            loadFieldControl(workCaseId, Screen.NCB_DETAIL);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.NCB_DETAIL, ownerCaseUserId);
         }
     }
 

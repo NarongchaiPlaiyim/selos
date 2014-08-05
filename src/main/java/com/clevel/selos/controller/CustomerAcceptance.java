@@ -265,8 +265,10 @@ public class CustomerAcceptance implements Serializable {
 	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
 	private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
 	private void _loadFieldControl() {
-		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.ContactRecord);
-		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.CallingRecordDialog);
+        HttpSession session = FacesUtil.getSession(false);
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.ContactRecord, ownerCaseUserId);
+		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.CallingRecordDialog, ownerCaseUserId);
 		fieldMap.clear();
 		dialogFieldMap.clear();
 		for (FieldsControlView field : fields) {

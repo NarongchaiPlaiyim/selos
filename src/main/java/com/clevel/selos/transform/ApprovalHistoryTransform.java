@@ -5,7 +5,9 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.ApprovalHistoryDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.PricingDOAValue;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.working.ApprovalHistory;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -104,6 +106,7 @@ public class ApprovalHistoryTransform extends Transform {
         if(approvalHistory == null) {
             return approvalHistoryView;
         }
+        int pricingDoaLevel= approvalHistory.getWorkCase().getPricingDoaLevel();
         approvalHistoryView.setId(approvalHistory.getId());
         approvalHistoryView.setStepView(stepTransform.transformToView(approvalHistory.getStep()));
         RoleView roleView = roleTransform.transformRoleToView(approvalHistory.getRole());
@@ -112,13 +115,45 @@ public class ApprovalHistoryTransform extends Transform {
         }else if(roleView.getId() == RoleValue.BDM.id()){
             approvalHistoryView.setAction("Produced");
         }else if(roleView.getId() == RoleValue.ZM.id()){
-            approvalHistoryView.setAction("Endorse CA");
+            if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
+                approvalHistoryView.setAction("Endorse CA");
+            } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
+                if(pricingDoaLevel == PricingDOAValue.ZM_DOA.value()) {
+                    approvalHistoryView.setAction("Approve Pricing");
+                }else{
+                    approvalHistoryView.setAction("Endorse Pricing");
+                }
+            }
         }else if(roleView.getId() == RoleValue.RGM.id()){
-            approvalHistoryView.setAction("Endorse CA");
+            if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
+                approvalHistoryView.setAction("Endorse CA");
+            } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
+                if(pricingDoaLevel == PricingDOAValue.RGM_DOA.value()) {
+                    approvalHistoryView.setAction("Approve Pricing");
+                }else{
+                    approvalHistoryView.setAction("Endorse Pricing");
+                }
+            }
         }else if(roleView.getId() == RoleValue.GH.id()){
-            approvalHistoryView.setAction("Endorse CA");
+            if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
+                approvalHistoryView.setAction("Endorse CA");
+            } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
+                if(pricingDoaLevel == PricingDOAValue.GH_DOA.value()) {
+                    approvalHistoryView.setAction("Approve Pricing");
+                }else{
+                    approvalHistoryView.setAction("Endorse Pricing");
+                }
+            }
         }else if(roleView.getId() == RoleValue.CSSO.id()){
-            approvalHistoryView.setAction("Endorse CA");
+            if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
+                approvalHistoryView.setAction("Endorse CA");
+            } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
+                if(pricingDoaLevel == PricingDOAValue.CSSO_DOA.value()) {
+                    approvalHistoryView.setAction("Approve Pricing");
+                }else{
+                    approvalHistoryView.setAction("Endorse Pricing");
+                }
+            }
         }else if(roleView.getId() == RoleValue.UW.id()){
             approvalHistoryView.setAction("Approve CA");
         }

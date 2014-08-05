@@ -96,7 +96,8 @@ public class TCGInfo extends BaseController {
         if(checkSession(session)){
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             TCGView = tcgInfoControl.getTCGView(workCaseId);
-            loadFieldControl(workCaseId, Screen.TCG_INFO);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.TCG_INFO, ownerCaseUserId);
             if(TCGView != null){
                 TCGDetailViewList = tcgInfoControl.getTcgDetailViewList(TCGView);
                 modeForDB = ModeForDB.EDIT_DB;

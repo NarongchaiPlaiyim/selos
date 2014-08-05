@@ -449,8 +449,10 @@ public class AccountInfo implements Serializable {
 	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
 	private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
 	private void _loadFieldControl() {
-		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AccountInfo);
-		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AddAccountInfoDialog);
+        HttpSession session = FacesUtil.getSession(false);
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AccountInfo, ownerCaseUserId);
+		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AddAccountInfoDialog, ownerCaseUserId);
 		
 		fieldMap.clear();
 		dialogFieldMap.clear();

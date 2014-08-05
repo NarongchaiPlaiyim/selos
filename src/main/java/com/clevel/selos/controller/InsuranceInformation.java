@@ -203,7 +203,9 @@ public class InsuranceInformation implements Serializable {
 
 	private void _loadFieldControl() {
 		if (workCaseId > 0) {
-			List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.InsuranceInfo);
+            HttpSession session = FacesUtil.getSession(false);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+			List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.InsuranceInfo, ownerCaseUserId);
 			fieldMap.clear();
 
 			for (FieldsControlView field : fields) {
