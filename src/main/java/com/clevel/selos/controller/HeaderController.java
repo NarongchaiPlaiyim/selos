@@ -1778,7 +1778,7 @@ public class HeaderController extends BaseController {
 
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
-                    returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList);
+                    returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
                     message = "Return to BDM success.";
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -1823,7 +1823,7 @@ public class HeaderController extends BaseController {
 
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
-                    returnControl.submitReturnAADAdmin(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList);
+                    returnControl.submitReturnAADAdmin(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
                     message = "Return to BDM success.";
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");

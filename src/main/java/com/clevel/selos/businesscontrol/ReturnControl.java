@@ -338,7 +338,7 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public void submitReturnBDM(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnBDM(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList, String wobNumber) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             boolean hasRG001 = false;
 
@@ -348,13 +348,10 @@ public class ReturnControl extends BusinessControl {
             //Save new to Return Info working
             WorkCase workCase = null;
             WorkCasePrescreen workCasePrescreen = null;
-            String wobNumber = "";
             if(workCaseId!=0){
                 workCase = workCaseDAO.findById(workCaseId);
-                wobNumber = workCase.getWobNumber();
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
-                wobNumber = workCasePrescreen.getWobNumber();
             }
             Step step = stepDAO.findById(stepId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
@@ -408,7 +405,7 @@ public class ReturnControl extends BusinessControl {
         }
     }
 
-    public void submitReturnAADAdmin(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnAADAdmin(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList, String wobNumber) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             boolean hasRG001 = false;
 
@@ -418,13 +415,10 @@ public class ReturnControl extends BusinessControl {
             //Save new to Return Info working
             WorkCase workCase = null;
             WorkCasePrescreen workCasePrescreen = null;
-            String wobNumber = "";
             if(workCaseId!=0){
                 workCase = workCaseDAO.findById(workCaseId);
-                wobNumber = workCase.getWobNumber();
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
-                wobNumber = workCasePrescreen.getWobNumber();
             }
             Step step = stepDAO.findById(stepId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
@@ -470,7 +464,7 @@ public class ReturnControl extends BusinessControl {
 
             returnInfoDAO.persist(returnInfoList);
 
-            bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
+            bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_AAD_ADMIN.getVal());
         }
     }
 
