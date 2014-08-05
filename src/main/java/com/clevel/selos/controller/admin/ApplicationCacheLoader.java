@@ -39,7 +39,7 @@ public class ApplicationCacheLoader implements Serializable{
         state = State.INITIAL;
         logger.info("begin onStartUp server state {}", state);
 
-        loadCacheDB();
+        //loadCacheDB();
         state = State.START;
         logger.info("end onStartUp server state {}", state);
     }

@@ -219,6 +219,8 @@ public class FullApplicationControl extends BusinessControl {
                 bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
 
                 //Insert Approval History
+                //Check if exist or not
+                //ApprovalHistory approvalHistory = approvalHistoryDAO.findExistingApprovalHistory(workCase.getId(), user.getId())
                 log.debug("submitCAByBDM : add approval History into ApprovalHistory");
                 ApprovalHistory approvalHistory = new ApprovalHistory();
                 approvalHistory.setComments(submitRemark);

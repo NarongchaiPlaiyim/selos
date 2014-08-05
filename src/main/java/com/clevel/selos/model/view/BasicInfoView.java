@@ -57,6 +57,7 @@ public class BasicInfoView implements Serializable {
     private ApproveType approveType;
     private ApproveResult approveResult;
     private List<Long> deleteTmpList;
+    private Reason appealResubmitReason;
 
     public BasicInfoView() {
         reset();
@@ -416,6 +417,15 @@ public class BasicInfoView implements Serializable {
     public void setApproveType(ApproveType approveType) {
 		this.approveType = approveType;
 	}
+
+    public Reason getAppealResubmitReason() {
+        return appealResubmitReason;
+    }
+
+    public void setAppealResubmitReason(Reason appealResubmitReason) {
+        this.appealResubmitReason = appealResubmitReason;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).

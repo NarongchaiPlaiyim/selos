@@ -166,6 +166,10 @@ public class BasicInfo implements Serializable {
     @Column(name = "tcg_flag", columnDefinition = "int default 0")
     private int tcgFlag;
 
+    @OneToOne
+    @JoinColumn(name = "appeal_resubmit_reason_id")
+    private Reason appealResubmitReason;
+
 
     public long getId() {
         return id;
@@ -516,6 +520,14 @@ public class BasicInfo implements Serializable {
 
     public void setTcgFlag(int tcgFlag) {
         this.tcgFlag = tcgFlag;
+    }
+
+    public Reason getAppealResubmitReason() {
+        return appealResubmitReason;
+    }
+
+    public void setAppealResubmitReason(Reason appealResubmitReason) {
+        this.appealResubmitReason = appealResubmitReason;
     }
 
     @Override

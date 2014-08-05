@@ -43,10 +43,6 @@
                      oncomplete="blockUICheckCustomer.hide()"
                      update=":frmMain :msgBoxSystemMessagePanel"/>
     <!-- Return to Maker -->
-    <!--<p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Return to BDM')}"
-                     actionListener="#{headerController.onOpenReturnToMaker}" process="@this"
-                     update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:returnMakerPanel"/>-->
     <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM')}"
                      actionListener="#{headerController.onOpenReturnInfoDialog()}"
@@ -440,11 +436,6 @@
                          widgetVar="conRetAADMCancelBtn"/>
     </p:confirmDialog>
     <!-- Return to BDM [ From AAD Admin ]-->
-    <!--<p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
-                     update=":frmMain:returnBDM_AADAdminPanel"
-                     rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
-                     actionListener="#{headerController.onOpenReturnBDMByAAD()}">
-    </p:commandButton>-->
     <p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
                      actionListener="#{headerController.onOpenReturnInfoDialog()}"
@@ -499,10 +490,13 @@
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
     </p:commandButton>
     <!-- Return to AAD Admin [ FROM AAD Committee ]-->
-    <p:commandButton id="btnReturnAADM_AADC" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
+    <p:commandButton id="btnReturnAADM_AADC" value="#{msg.get('app.header.button.returnToAADAdmin')}"
+                     title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2008}"
-                     actionListener="#{headerController.onOpenReturnAADAdmin()}"
-                     update=":frmMain:returnAADM_AADCPanel">
+                     actionListener="#{headerController.onOpenReturnAADInfoDialog()}"
+                     oncomplete="returnInfoAADDlg.show()"
+                     update=":frmMain:returnInfoAADPanel">
+        <p:resetInput target=":frmMain:returnInfoAADPanel"/>
     </p:commandButton>
     <!-- Submit to UW [ Complete Appraisal Flow - AAD Committee ]-->
     <p:commandButton id="btnSubmit_AADC" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
