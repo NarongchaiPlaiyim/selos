@@ -68,6 +68,7 @@ public class ReturnControl extends BusinessControl {
     }
 
     public List<ReturnInfoView> getReturnInfoViewList(long workCaseId, long workCasePrescreenId){
+        log.debug("getReturnInfoViewList (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         if(workCaseId!=0 || workCasePrescreenId!=0){
             List<ReturnInfo> returnInfoList;
