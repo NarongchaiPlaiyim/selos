@@ -201,8 +201,9 @@ public class CreditFacExisting extends BaseController {
         if(checkSession(session)){
             try{
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-                loadFieldControl(workCaseId, Screen.CREDIT_FACILITY_EXISTING);
+                loadFieldControl(workCaseId, Screen.CREDIT_FACILITY_EXISTING, ownerCaseUserId);
 
                 user = (User) session.getAttribute("user");
 

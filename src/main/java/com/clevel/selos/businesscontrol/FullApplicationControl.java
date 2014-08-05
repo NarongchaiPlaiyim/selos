@@ -359,7 +359,11 @@ public class FullApplicationControl extends BusinessControl {
                 requestType = workCase.getRequestType().getId();
                 appraisalRequestRequire = workCase.getRequestAppraisalRequire();
 
-                //TODO: get total com and retail
+                ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+                if(proposeLine != null) {
+                    totalCommercial = proposeLine.getTotalExposure();
+                    totalRetail = proposeLine.getTotalPropose();
+                }
 
                 UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
                 if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
@@ -378,14 +382,28 @@ public class FullApplicationControl extends BusinessControl {
                 bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
 
                 //Insert Approval History
-                ApprovalHistory approvalHistory = new ApprovalHistory();
-                approvalHistory.setComments(submitRemark);
-                approvalHistory.setRole(user.getRole());
-                approvalHistory.setStep(workCase.getStep());
-                approvalHistory.setSubmit(1);
-                approvalHistory.setSubmitDate(new Date());
-                approvalHistory.setUser(user);
-                approvalHistory.setWorkCase(workCase);
+                log.debug("submitCAByBDM : add approval History into ApprovalHistory");
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId());
+                if(approvalHistory == null) {
+                    log.debug("submitZM : add new Approval History");
+                    approvalHistory = new ApprovalHistory();
+                    approvalHistory.setComments(submitRemark);
+                    approvalHistory.setRole(user.getRole());
+                    approvalHistory.setStep(workCase.getStep());
+                    approvalHistory.setSubmit(1);
+                    approvalHistory.setSubmitDate(new Date());
+                    approvalHistory.setUser(user);
+                    approvalHistory.setWorkCase(workCase);
+                } else {
+                    log.debug("submitZM : replace existing Approval History");
+                    approvalHistory.setComments(submitRemark);
+                    approvalHistory.setRole(user.getRole());
+                    approvalHistory.setStep(workCase.getStep());
+                    approvalHistory.setSubmit(1);
+                    approvalHistory.setSubmitDate(new Date());
+                    approvalHistory.setUser(user);
+                    approvalHistory.setWorkCase(workCase);
+                }
                 approvalHistoryDAO.persist(approvalHistory);
             }
         } else {

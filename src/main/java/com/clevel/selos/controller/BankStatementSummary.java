@@ -133,8 +133,9 @@ public class BankStatementSummary extends BaseController {
 
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_SUMMARY);
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_SUMMARY, ownerCaseUserId);
 
             // Check Role (ABDM/BDM)
             int roleId = bankStmtControl.getUserRoleId();

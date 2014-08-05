@@ -161,8 +161,8 @@ public class ExecutiveSummary extends BaseController {
             } else {
                 reasonList = new ArrayList<Reason>();
             }
-
-            loadFieldControl(workCaseId, Screen.EXECUTIVE_SUMMARY);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.EXECUTIVE_SUMMARY, ownerCaseUserId);
             onChangeRM008();
             onChangeRM020();
             onChangeRM204();

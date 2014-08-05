@@ -161,7 +161,8 @@ public class Qualitative extends BaseController {
             }
 
             onLoadSelectList();
-            loadFieldControl(workCaseId, Screen.QUALITATIVE);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.QUALITATIVE, ownerCaseUserId);
         }
     }
 

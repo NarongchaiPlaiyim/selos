@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.StepToStatus;
@@ -58,8 +59,6 @@ public class InboxControl extends BusinessControl {
 
     public static final String RETURN_REPLY_PAGE = "/site/returnInfoReply.jsf";
     public static final String RETURN_REVIEW_PAGE = "/site/returnInfoReview.jsf";
-    public static final String ROLE_BDM = "SYSTEM_BDM";
-    public static final String ROLE_UW = "SYSTEM_UW";
 
     @Inject
     public InboxControl(){
@@ -70,25 +69,25 @@ public class InboxControl extends BusinessControl {
         User user = getCurrentUser();
         if(user!=null){
             if(stepId==2004 && status==20006){
-                if(user.getRole().getSystemName()==ROLE_BDM){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }
 
             if(stepId==2026 && status==20006){
-                if(user.getRole().getSystemName()==ROLE_BDM){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }
 
             if(stepId==2017 && status==20015){
-                if(user.getRole().getSystemName()==ROLE_BDM){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }
 
             if(stepId==2030 && status==20015){
-                if(user.getRole().getSystemName()==ROLE_BDM){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }

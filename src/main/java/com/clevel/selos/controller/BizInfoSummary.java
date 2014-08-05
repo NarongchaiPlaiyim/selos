@@ -145,8 +145,9 @@ public class BizInfoSummary extends BaseController {
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY);
+            loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY, ownerCaseUserId);
 
             setDisabledValue("ownerName",false);
             setDisabledValue("expiryDate",true);

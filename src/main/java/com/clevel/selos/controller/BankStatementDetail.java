@@ -149,8 +149,9 @@ public class BankStatementDetail extends BaseController {
         if (checkSession(session)) {
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL);
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL, ownerCaseUserId);
 
             if (FacesUtil.getSessionMapValue("bankStmtSumView") != null &&
                 FacesUtil.getSessionMapValue("isTmbBank") != null &&

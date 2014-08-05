@@ -45,13 +45,13 @@ public class StepStatusControl extends BusinessControl {
         List<StepToStatus> stepToStatusList = stepToStatusDAO.getActionListByRole(stepId, statusId, user.getRole().getId());
         HashMap<String, Integer> stepToStatusMap = new HashMap<String, Integer>();
 
-        //if(user.getId().toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {      //To Check Correct User And Correct Step
+        if(user.getId().toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {      //To Check Correct User And Correct Step
             if (stepToStatusList != null) {
                 for (StepToStatus item : stepToStatusList) {
                     stepToStatusMap.put(item.getAction().getName(), 1);
                 }
             }
-        //}
+        }
 
         return stepToStatusMap;
     }
