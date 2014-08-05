@@ -96,7 +96,8 @@ public class ReturnInfoReview implements Serializable {
     public void onCreation() {
         log.info("ReturnInfoReply ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
-
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         initialResultView();
     }
 
