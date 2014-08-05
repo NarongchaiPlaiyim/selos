@@ -438,10 +438,10 @@
     <!-- Return to BDM [ From AAD Admin ]-->
     <p:commandButton id="btnReturnBDM_AADM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 2006}"
-                     actionListener="#{headerController.onOpenReturnInfoDialog()}"
-                     oncomplete="returnInfoDlg.show()"
-                     update=":frmMain:returnInfoPanel">
-        <p:resetInput target=":frmMain:returnInfoPanel"/>
+                     actionListener="#{headerController.onOpenReturnBDMInfoDialog()}"
+                     oncomplete="returnInfoBDMDlg.show()"
+                     update=":frmMain:returnInfoBDMPanel">
+        <p:resetInput target=":frmMain:returnInfoBDMPanel"/>
     </p:commandButton>
     <!-- Check Mandate Doc [ For AAD Admin ]-->
     <p:commandButton id="btnCheckMandate_AADM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
@@ -721,6 +721,14 @@
     </p:dialog>
 </p:panel>
 
+<p:panel id="returnInfoBDMPanel" styleClass="panel">
+    <p:dialog id="returnInfoBDMDialog" widgetVar="returnInfoBDMDlg" header="Return Summary"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="800" height="500" closable="false">
+        <ui:include src="/site/dialog/returnInfoBDMDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 <p:panel id="checkMandatePanel" styleClass="panel">
     <p:dialog id="checkMandateDialog"
               widgetVar="checkMandateDlg"
@@ -745,6 +753,14 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="460" height="160" closable="false">
         <ui:include src="/site/dialog/addReturnAADInfoDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="addReturnBDMInfoPanel" styleClass="panel">
+    <p:dialog id="addReturnBDMInfoDialog" widgetVar="addReturnBDMInfoDlg" header="Add Return Information"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/addReturnBDMInfoDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

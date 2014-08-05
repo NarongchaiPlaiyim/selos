@@ -138,14 +138,17 @@ public class HeaderController extends BaseController {
     private String cancelRemark;
     private int reasonId;
     private int reasonAADId;
+    private int reasonBDMId;
 
     //Return BDM Dialog
     private List<ReturnInfoView> returnInfoViewList;
     private List<Reason> returnReason;
     private List<Reason> returnAADReason;
+    private List<Reason> returnBDMReason;
     private String returnRemark;
     private int editRecordNo;
     private int editAADRecordNo;
+    private int editBDMRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     //Request Appraisal
@@ -207,6 +210,7 @@ public class HeaderController extends BaseController {
     //Return AAD Admin ( UW2 )
     private int returnReasonId;
     private String returnAADRemark;
+    private String returnBDMRemark;
 
     //Check Pre-Screen Result
     private boolean canCloseSale;
@@ -1685,6 +1689,22 @@ public class HeaderController extends BaseController {
         log.debug("onOpenReturnInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
     }
 
+    public void onOpenReturnBDMInfoDialog(){
+        log.debug("onOpenReturnBDMInfoDialog ::: starting...");
+        _loadSessionVariable();
+
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+
+        //set return code master
+        //returnReason = returnControl.getReturnReasonList();
+        returnBDMReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
+        returnBDMRemark = "";
+        resetAddReturnBDMInfo();
+
+        log.debug("onOpenReturnBDMInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
+    }
+
     public void resetAddReturnInfo(){
         returnRemark = "";
         reasonId = 0;
@@ -1695,6 +1715,12 @@ public class HeaderController extends BaseController {
         returnAADRemark = "";
         reasonAADId = 0;
         editAADRecordNo = -1;
+    }
+
+    public void resetAddReturnBDMInfo(){
+        returnBDMRemark = "";
+        reasonBDMId = 0;
+        editBDMRecordNo = -1;
     }
 
     public void onOpenAddReturnInfo(){
@@ -1756,6 +1782,34 @@ public class HeaderController extends BaseController {
         resetAddReturnInfo();
 
         log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
+    }
+
+    public void onSaveReturnBDMInfo(){
+        log.debug("onSaveReturnBDMInfo ::: starting... (reasonAADId: {})",reasonBDMId);
+        Reason reason = reasonDAO.findById(reasonBDMId);
+
+        if(editBDMRecordNo>-1){
+            returnInfoViewList.get(editBDMRecordNo).setReturnCode(reason.getCode());
+            returnInfoViewList.get(editBDMRecordNo).setDescription(reason.getDescription());
+            returnInfoViewList.get(editBDMRecordNo).setReasonDetail(returnBDMRemark);
+            returnInfoViewList.get(editBDMRecordNo).setCanEdit(true);
+            returnInfoViewList.get(editBDMRecordNo).setReasonId(reasonBDMId);
+        } else {
+            ReturnInfoView returnInfoView = new ReturnInfoView();
+            returnInfoView.setReturnCode(reason.getCode());
+            returnInfoView.setDescription(reason.getDescription());
+            returnInfoView.setReasonDetail(returnBDMRemark);
+            returnInfoView.setCanEdit(true);
+            returnInfoView.setReasonId(reasonBDMId);
+
+            returnInfoViewList.add(returnInfoView);
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+
+        resetAddReturnInfo();
+
+        log.debug("onSaveReturnBDMInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
     public void onSubmitReturnInfo(){ //Submit return to BDM
@@ -2002,11 +2056,45 @@ public class HeaderController extends BaseController {
         log.debug("onEditReturnInfo ::: end");
     }
 
+    public void onEditReturnAADInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonAADId = returnInfoView.getReasonId();
+        returnAADRemark = returnInfoView.getReasonDetail();
+        editAADRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onEditReturnBDMInfo(int rowOnTable) {
+        log.debug("onEditReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonBDMId = returnInfoView.getReasonId();
+        returnBDMRemark = returnInfoView.getReasonDetail();
+        editBDMRecordNo = rowOnTable;
+        log.debug("onEditReturnBDMInfo ::: end");
+    }
+
     public void onDeleteReturnInfo(int rowOnTable) {
         log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
         returnInfoViewList.remove(rowOnTable);
 
         resetAddReturnInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnAADInfo(int rowOnTable) {
+        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnAADInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnBDMInfo(int rowOnTable) {
+        log.debug("onDeleteReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnBDMInfo();
         log.debug("onDeleteReturnInfo ::: end");
     }
 
@@ -2660,6 +2748,46 @@ public class HeaderController extends BaseController {
 
     public void setReturnAADReason(List<Reason> returnAADReason) {
         this.returnAADReason = returnAADReason;
+    }
+
+    public int getReasonBDMId() {
+        return reasonBDMId;
+    }
+
+    public void setReasonBDMId(int reasonBDMId) {
+        this.reasonBDMId = reasonBDMId;
+    }
+
+    public List<Reason> getReturnBDMReason() {
+        return returnBDMReason;
+    }
+
+    public void setReturnBDMReason(List<Reason> returnBDMReason) {
+        this.returnBDMReason = returnBDMReason;
+    }
+
+    public int getEditAADRecordNo() {
+        return editAADRecordNo;
+    }
+
+    public void setEditAADRecordNo(int editAADRecordNo) {
+        this.editAADRecordNo = editAADRecordNo;
+    }
+
+    public int getEditBDMRecordNo() {
+        return editBDMRecordNo;
+    }
+
+    public void setEditBDMRecordNo(int editBDMRecordNo) {
+        this.editBDMRecordNo = editBDMRecordNo;
+    }
+
+    public String getReturnBDMRemark() {
+        return returnBDMRemark;
+    }
+
+    public void setReturnBDMRemark(String returnBDMRemark) {
+        this.returnBDMRemark = returnBDMRemark;
     }
 
     public List<ReturnInfoView> getReturnInfoViewList() {
