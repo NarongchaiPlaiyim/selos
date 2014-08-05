@@ -348,10 +348,13 @@ public class ReturnControl extends BusinessControl {
             //Save new to Return Info working
             WorkCase workCase = null;
             WorkCasePrescreen workCasePrescreen = null;
+            String wobNumber = "";
             if(workCaseId!=0){
                 workCase = workCaseDAO.findById(workCaseId);
+                wobNumber = workCase.getWobNumber();
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+                wobNumber = workCasePrescreen.getWobNumber();
             }
             Step step = stepDAO.findById(stepId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
@@ -400,7 +403,7 @@ public class ReturnControl extends BusinessControl {
             if(step!=null && step.getId()==2003){
                 bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
             } else {
-                bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.RETURN_TO_BDM.getVal());
+                bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_BDM.getVal());
             }
         }
     }
@@ -415,10 +418,13 @@ public class ReturnControl extends BusinessControl {
             //Save new to Return Info working
             WorkCase workCase = null;
             WorkCasePrescreen workCasePrescreen = null;
+            String wobNumber = "";
             if(workCaseId!=0){
                 workCase = workCaseDAO.findById(workCaseId);
+                wobNumber = workCase.getWobNumber();
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+                wobNumber = workCasePrescreen.getWobNumber();
             }
             Step step = stepDAO.findById(stepId);
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
@@ -464,7 +470,7 @@ public class ReturnControl extends BusinessControl {
 
             returnInfoDAO.persist(returnInfoList);
 
-            bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
+            bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
         }
     }
 
