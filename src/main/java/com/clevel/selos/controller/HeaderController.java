@@ -354,7 +354,7 @@ public class HeaderController extends BaseController {
                     }
                 }
             } else {
-                canRequestAppraisal = false;
+                canRequestAppraisal = true;
             }
 
             timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
@@ -1056,8 +1056,10 @@ public class HeaderController extends BaseController {
     }
 
     public void onOpenReturnBDMByBU(){
+        _loadSessionVariable();
         log.debug("onOpenReturnBDMByZM ( return to BDM by BU [ Open dialog ] )");
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        //reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
+        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.REVISE_CA.getVal());
         returnRemark = "";
 
         RequestContext.getCurrentInstance().execute("returnBDM_BUDlg.show()");
@@ -2356,11 +2358,11 @@ public class HeaderController extends BaseController {
         long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
-        if("PRESCREEN".equalsIgnoreCase(stageString)){
+        if("PRESCREEN".equalsIgnoreCase(stageString) && workCasePreScreenId != 0){
             if(stageId == 101){
                 accessible = true;
             }
-        } else if ("FULLAPP".equalsIgnoreCase(stageString)){
+        } else if ("FULLAPP".equalsIgnoreCase(stageString) && workCaseId != 0){
             if(stageId == 201 || stageId == 202 || stageId == 204 || stageId == 206 || stageId == 207 || stageId == 208){
                 accessible = true;
             }

@@ -155,7 +155,7 @@
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
-                                                             required="#{not empty param[addAppraisalRequsest.clientId] }"
+                                                             required="#{not empty param[submitAppraisalRequsest.clientId] }"
                                                              onkeydown="return onKeyDownName(event);"
                                                              onkeypress="return onKeyPressName(event);" maxlength="50"
                                                              counterTemplate="{0} characters remaining." autoResize="false"/>
@@ -163,7 +163,7 @@
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
-                                                             required="#{not empty param[addAppraisalRequsest.clientId] }"  />
+                                                             required="#{not empty param[submitAppraisalRequsest.clientId] }"  />
                                                              <!--onkeydown="return onKeyDownTelNo(event);"-->
                                                              <!--onkeypress="return onKeyPressTelNo(event);" />-->
                                                 <!--style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
@@ -232,10 +232,11 @@
                                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                                 </td>
                             </tr>
+                            <tr></tr>
                             <tr>
                                 <td class="center" colspan="2">
-                                    <p:commandButton id="btnSave"
-                                                     binding = "#{addAppraisalRequsest}"
+                                    <p:commandButton id="btnSaveAppraisalRequsest"
+                                                     binding = "#{submitAppraisalRequsest}"
                                                      value="#{msg.get('app.button.save')}"
                                                      styleClass="medium"
                                                      process="@form"
@@ -301,6 +302,7 @@
     </p:panel>
     <p:panel id="msgBoxRedirectPanel" styleClass="panel">
         <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                         closable="false"
                          header="#{appraisalRequest.messageHeader}" >
             <f:facet name="message">
                 <h:outputText value="#{appraisalRequest.message}" escape="false"/>
@@ -310,7 +312,7 @@
                              action="#{headerController.onGoToInbox}"/>
         </p:confirmDialog>
     </p:panel>
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSaveAppraisalRequsest">
         LOADING<br />
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
