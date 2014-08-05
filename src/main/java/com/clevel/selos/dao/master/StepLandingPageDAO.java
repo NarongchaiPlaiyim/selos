@@ -27,6 +27,18 @@ public class StepLandingPageDAO extends GenericDAO<StepLandingPage, Long> {
         return stepLandingPage;
     }
 
+    public StepLandingPage findByStepStatus(long stepId, long statusId) {
+        StepLandingPage stepLandingPage;
+        log.info("findByStepId : {}", stepId);
+        log.info("findByStatusId : {}", statusId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("status.id",statusId));
+        stepLandingPage = (StepLandingPage)criteria.uniqueResult();
+
+        return stepLandingPage;
+    }
+
     public StepLandingPage findByStepStatusAndRole(long stepId, long statusId, int roleId) {
         StepLandingPage stepLandingPage;
         log.info("findByStepId : {}", stepId);

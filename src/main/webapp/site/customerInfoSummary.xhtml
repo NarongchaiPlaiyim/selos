@@ -224,7 +224,7 @@
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
                                                      action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="PF('blockUI').show()"
-                                                     disabled="#{custInfoSummary.isDisabled('borrower.actionList')}">
+                                                     disabled="#{custInfoSummary.isDisabled('borrower.editButton')}">
                                         <f:setPropertyActionListener value="#{item}"
                                                                      target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
                                     </p:commandButton>
@@ -389,7 +389,7 @@
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
                                                      action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="PF('blockUI').show()"
-                                                     disabled="#{custInfoSummary.isDisabled('guarantor.actionList')}">
+                                                     disabled="#{custInfoSummary.isDisabled('guarantor.editButton')}">
                                         <f:setPropertyActionListener value="#{item2}"
                                                                      target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                     </p:commandButton>
@@ -397,7 +397,7 @@
                                                      icon="ui-icon-trash" onclick="PF('blockUI').show()"
                                                      oncomplete="confirmDeleteGuarantorDlg.show()"
                                                      update=":frmMain,:msgBoxSystemMessagePanel"
-                                                     disabled="#{custInfoSummary.isDisabled('guarantor.actionList')}">
+                                                     disabled="#{custInfoSummary.isDisabled('guarantor.deleteButton')}">
                                         <f:setPropertyActionListener value="#{item2}"
                                                                      target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                     </p:commandButton>
@@ -562,7 +562,7 @@
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
                                                      action="#{custInfoSummary.onLinkToEditRelated()}" onclick="PF('blockUI').show()"
-                                                     disabled="#{custInfoSummary.isDisabled('related.actionList')}">
+                                                     disabled="#{custInfoSummary.isDisabled('related.editButton')}">
                                         <f:setPropertyActionListener value="#{item3}"
                                                                      target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                     </p:commandButton>
@@ -570,7 +570,7 @@
                                                      icon="ui-icon-trash" onclick="PF('blockUI').show()"
                                                      oncomplete="confirmDeleteRelatedDlg.show()"
                                                      update=":frmMain,:msgBoxSystemMessagePanel"
-                                                     disabled="#{custInfoSummary.isDisabled('related.actionList')}">
+                                                     disabled="#{custInfoSummary.isDisabled('related.deleteButton')}">
                                         <f:setPropertyActionListener value="#{item3}"
                                                                      target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                     </p:commandButton>

@@ -22,10 +22,11 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
     }
 
     @SuppressWarnings("unchecked")
-    public List<PrdProgramToCreditType> getListPrdProByPrdprogram(ProductProgram productProgram) {
-        log.info("getListPrdProByPrdprogram. (ProductProgram: {})", productProgram);
+    public List<PrdProgramToCreditType> getListPrdProByPrdProgram(ProductProgram productProgram) {
+        log.info("getListPrdProByPrdProgram. (ProductProgram: {})", productProgram);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("productProgram", productProgram));
+        criteria.add(Restrictions.eq("addExistingCredit", 0));
         criteria.addOrder(Order.asc("creditType.id"));
         List<PrdProgramToCreditType> list = criteria.list();
 
