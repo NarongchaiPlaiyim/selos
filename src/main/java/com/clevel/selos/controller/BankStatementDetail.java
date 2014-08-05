@@ -178,7 +178,8 @@ public class BankStatementDetail extends BaseController {
         if (bankStmtView != null) {
             log.debug("Edit Bank statement.");
             if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
-                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
+                bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+//                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
 //                Date tmpDate;
 //                for (int i=(numberOfMonths-1), j=0; i>=0; i--, j++) {
 //                    BankStmtDetailView bankStmtDetailView = bankStmtView.getBankStmtDetailViewList().get(j);
