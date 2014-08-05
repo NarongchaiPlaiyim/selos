@@ -684,7 +684,7 @@ public class PrescreenMaker extends BaseController {
         ProductProgram productProgram = selectFacilityItem.getProductProgram();
         CreditType creditType = selectFacilityItem.getCreditType();
         BigDecimal requestAmount = selectFacilityItem.getRequestAmount();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(productProgram);
 
         facility.setProductProgram(productProgram);
         facility.setCreditType(creditType);
@@ -2654,7 +2654,7 @@ public class PrescreenMaker extends BaseController {
         ProductProgram productProgram = productProgramDAO.findById(facility.getProductProgram().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(productProgram);
         if (prdProgramToCreditTypeList == null) {
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         }
@@ -2754,7 +2754,7 @@ public class PrescreenMaker extends BaseController {
                 + facilityViewList.get(rowNumber).getRequestAmount());
 
         selectProductProgram = facilityViewList.get(rowNumber).getProductProgram();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(selectProductProgram);
         selectCreditType = facilityViewList.get(rowNumber).getCreditType();
         facility.setProductProgram(selectProductProgram);
         facility.setCreditType(selectCreditType);
