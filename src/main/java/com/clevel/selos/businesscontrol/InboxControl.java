@@ -75,7 +75,7 @@ public class InboxControl extends BusinessControl {
                 }
             }
 
-            if(stepId==2027 && status==20006){
+            if(stepId==2026 && status==20006){
                 if(user.getRole().getSystemName()==ROLE_BDM){
                     return RETURN_REPLY_PAGE;
                 }
