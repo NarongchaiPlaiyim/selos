@@ -12,7 +12,7 @@
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                  value="#{prescreenMaker.prescreenView.checkerId}"
-                                 required="true">
+                                 required="#{not empty param[submitAssignCheckerBtn.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{prescreenMaker.bdmCheckerList}"
                                    var="bdmCheckerItem"
@@ -31,6 +31,7 @@
         <tr>
             <td colspan="2" class="center">
                 <p:commandButton id="dlgSubmitCheckerBtn"
+                                 binding="${submitAssignCheckerBtn}"
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
                                  actionListener="#{prescreenMaker.onAssignToChecker}"
