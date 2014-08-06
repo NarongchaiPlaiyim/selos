@@ -238,7 +238,7 @@ public class PESearch implements Serializable
 
             log.debug("Current user : "+currentUser);
 
-            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id())) {
+            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.UW.id())) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
@@ -276,6 +276,18 @@ public class PESearch implements Serializable
                     accessAuthorize = true;
                 log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
+
+            if(!accessAuthorize && !(user.getRole().getId()==RoleValue.BDM.id()) && !(user.getRole().getId()==RoleValue.ABDM.id()))
+            {
+
+                if(checkAuthorizeRole(wrkCasePreScreenId, wrkCaseId, user))
+                {
+                    accessAuthorize = true;
+                }
+                log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwnerRole");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+
             }
 
             if(!accessAuthorize){
@@ -352,11 +364,28 @@ public class PESearch implements Serializable
             } else {
                 log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
                 message = "Can not find landing page for step [" + stepId + "]";
-                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlgLanding.show()");
             }
         } catch (Exception e) {
             log.error("Error while opening case",e);
         }
+    }
+
+    public boolean checkAuthorizeRole(long workCasePreScreenId, long workCaseId, User user)
+    {
+
+        List<Integer> workCaseOwnerRoles = new ArrayList<Integer>();
+        if(workCasePreScreenId != 0)
+            workCaseOwnerRoles = workCaseOwnerDAO.getWorkCaseRolesByWorkCasePreScreenId(workCasePreScreenId);
+        else if(workCaseId != 0)
+            workCaseOwnerRoles = workCaseOwnerDAO.getWorkCaseRolesByWorkCaseId(workCaseId);
+
+        log.debug("workCaseOwner List : {}", workCaseOwnerRoles.toString());
+
+        if(workCaseOwnerRoles.contains(user.getRole().getId()))
+            return true;
+
+        return false;
     }
 
     public boolean checkAuthorizeTeam(long workCasePreScreenId, long workCaseId, User user){
