@@ -88,7 +88,7 @@
 	                                        <td colspan="5" class="left">
 	                                             <p:selectOneRadio disabled="#{customerAcceptance.isDisabled('cusaccept.approveResult')}" value="#{customerAcceptance.approveResult}">
 	                                             	<f:selectItems value="#{enumGeneralControl.approveResults}" var="approveResult"
-	                                             		itemLabel="#{msg.get(approveResult.msgKey)}" itemValue="approveResult" 
+	                                             		itemLabel="#{msg.get(approveResult.msgKey)}" itemValue="#{approveResult}" 
 	                                             		/>
 	                                             </p:selectOneRadio>
 	                                        </td>
