@@ -238,6 +238,8 @@ public class PESearch implements Serializable
 
             log.debug("Current user : "+currentUser);
 
+            log.debug("User Role IsNull : {}, User :{},  Role : {}",!Util.isNull(user.getRole()) ,user,user.getRole().getId());
+
             if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.UW.id())) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
@@ -373,6 +375,8 @@ public class PESearch implements Serializable
 
     public boolean checkAuthorizeRole(long workCasePreScreenId, long workCaseId, User user)
     {
+
+        log.info("in Check Authorize Role : User :{}",user);
 
         List<Integer> workCaseOwnerRoles = new ArrayList<Integer>();
         if(workCasePreScreenId != 0)
