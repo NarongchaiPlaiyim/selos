@@ -106,8 +106,20 @@ public class CustomerAcceptanceControl extends BusinessControl {
 
 		if (result == null)
 			return new CustomerAcceptanceView();
-		else
-			return customerAcceptanceTransform.transformToView(result);
+		else {
+			CustomerAcceptanceView view = customerAcceptanceTransform.transformToView(result);
+			//add zonemgr info
+            Role zmRole = roleDAO.findRoleByName("ZM");
+            if (zmRole != null) {
+            	WorkCaseOwner owner = workCaseOwnerDAO.getLatestWorkCaseOwnerByRole(workCaseId, zmRole.getId());
+            	if (owner != null) {
+	            	view.setZoneMgrName(owner.getUser().getDisplayName());
+	            	view.setZoneMgrEmail(owner.getUser().getEmailAddress());
+	            	view.setZoneMgrTel(owner.getUser().getPhoneNumber());
+            	}
+            }
+            return view;
+		}
 	}
 
     public CustomerAcceptanceView getCustomerAcceptanceView(long workCaseId, long workCasePreScreenId) {

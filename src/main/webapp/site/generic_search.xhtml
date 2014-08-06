@@ -305,7 +305,7 @@ function resetter()
 
                                                      rowIndexVar="rowIndex">
 
-                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel"
                                                     listener="#{peSearch.onSelectInbox}" onstart="blockInbox.show()"/>
 
                                             <p:column headerText="" styleClass="center" style="width:22px;">
@@ -379,7 +379,7 @@ function resetter()
                                             </p:column>
 
                                             <p:column headerText="">
-                                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" onclick="blockInbox.show()">
+                                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" update=":frmMain:msgBoxErrorPanel" onclick="blockInbox.show()">
                                                     <f:setPropertyActionListener value="#{item}" target="#{peSearch.inboxViewSelectItem}"/>
                                                 </p:commandButton>
                                             </p:column>
@@ -420,6 +420,17 @@ function resetter()
                                          process="@this"
                                          update="frmMain"
                                          oncomplete="msgBoxErrorDlg.hide()"/>
+                    </p:confirmDialog>
+                    <p:confirmDialog id="msgBoxErrorDialogLanding" widgetVar="msgBoxErrorDlgLanding" styleClass="messageDialog"
+                                     closable="false"
+                                     header="Exception.">
+                        <f:facet name="message">
+                            <h:outputText value="#{peSearch.message}" escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="#{msg.get('app.button.ok')}"
+                                         process="@this"
+                                         update="frmMain"
+                                         oncomplete="msgBoxErrorDlgLanding.hide()"/>
                     </p:confirmDialog>
                 </p:panel>
                 <!-- Start Footer -->
