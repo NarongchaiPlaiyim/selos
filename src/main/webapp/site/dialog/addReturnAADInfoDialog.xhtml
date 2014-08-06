@@ -4,16 +4,16 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="addReturnInfoDlgPanel" styleClass="panel-dialog">
+<p:panel id="addReturnAADInfoDlgPanel" styleClass="panel-dialog">
     <table class="content_form">
         <tr>
             <td class="title right" style="min-width: 140px; width: 80px;">Return Code :</td>
             <td>
-                <p:selectOneMenu id="reasonId" styleClass="reasonitem" style="min-width: 234px; width: 234px; max-width: 234px;!important;" size="1"
-                                 value="#{headerController.reasonId}"
-                                 required="#{not empty param[btnSubmitAddReturnInfo.clientId]}">
+                <p:selectOneMenu id="reasonAADId" styleClass="reasonitem" style="min-width: 234px; width: 234px; max-width: 234px;!important;" size="1"
+                                 value="#{headerController.reasonAADId}"
+                                 required="#{not empty param[btnSubmitAddReturnAADInfo.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{headerController.returnReason}"
+                    <f:selectItems value="#{headerController.returnAADReason}"
                                    var="reasonItem"
                                    itemDescription="#{reasonItem.code} - #{reasonItem.description}"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
@@ -25,25 +25,25 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea id="remark" value="#{headerController.returnRemark}" autoResize="false" cols="35"
+                <p:inputTextarea id="remarkAAD" value="#{headerController.returnAADRemark}" autoResize="false" cols="35"
                                  rows="5"></p:inputTextarea>
             </td>
         </tr>
         <tr>
             <td colspan="2" class="center">
-                <p:commandButton id="btnSubmitAddReturnInfo"
+                <p:commandButton id="btnSubmitAddReturnAADInfo"
                                  styleClass="small"
-                                 binding="#{btnSubmitAddReturnInfo}"
+                                 binding="#{btnSubmitAddReturnAADInfo}"
                                  value="#{msg.get('app.button.save')}"
-                                 actionListener="#{headerController.onSaveReturnInfo()}"
+                                 actionListener="#{headerController.onSaveReturnAADInfo()}"
                                  process="@form"
-                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADDlgPanel, :frmMain:addReturnInfoDlgPanel"
-                                 oncomplete="handleReturnAddDialogRequest(xhr, status, args)"/>
-                <p:commandButton id="dlgCancelReturnInfoBtn"
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADDlgPanel, :frmMain:addReturnAADInfoDlgPanel"
+                                 oncomplete="handleReturnAADAddDialogRequest(xhr, status, args)"/>
+                <p:commandButton id="dlgCancelReturnAADInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"
-                                 action="#{headerController.resetAddReturnInfo()}"
-                                 oncomplete="addReturnInfoDlg.hide()"
+                                 action="#{headerController.resetAddReturnAADInfo()}"
+                                 oncomplete="addReturnAADInfoDlg.hide()"
                                  process="@form"
                                  update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADDlgPanel"/>
             </td>
@@ -51,7 +51,7 @@
     </table>
 </p:panel>
 
-<p:blockUI widgetVar="blockAddReturnInfoDlg" block="addReturnInfoDlgPanel" trigger=":frmMain:btnSubmitAddReturnInfo">
+<p:blockUI widgetVar="blockAddReturnAADInfoDlg" block="addReturnAADInfoDlgPanel" trigger=":frmMain:btnSubmitAddReturnAADInfo">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

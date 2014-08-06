@@ -296,7 +296,9 @@ public class Decision extends BaseController {
     @PostConstruct
     public void onCreation() {
         initial();
-        loadFieldControl(workCaseId, Screen.DECISION);
+        HttpSession session = FacesUtil.getSession(false);
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+        loadFieldControl(workCaseId, Screen.DECISION, ownerCaseUserId);
 
         decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
 

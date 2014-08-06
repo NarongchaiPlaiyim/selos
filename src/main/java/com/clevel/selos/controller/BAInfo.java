@@ -459,9 +459,11 @@ public class BAInfo implements Serializable {
 	private final HashMap<String, FieldsControlView> dialogBAFieldMap = new HashMap<String, FieldsControlView>();
 	private final HashMap<String, FieldsControlView> dialogBAPAFieldMap = new HashMap<String, FieldsControlView>();
 	private void _loadFieldControl() {
-		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.BAInfo);
-		List<FieldsControlView> dialogBAFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.applyBAinfoDialog);
-		List<FieldsControlView> dialogBAPAFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.addBAPAInfoDialog);
+        HttpSession session = FacesUtil.getSession(false);
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.BAInfo, ownerCaseUserId);
+		List<FieldsControlView> dialogBAFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.applyBAinfoDialog, ownerCaseUserId);
+		List<FieldsControlView> dialogBAPAFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.addBAPAInfoDialog, ownerCaseUserId);
 		fieldMap.clear();
 		dialogBAFieldMap.clear();
 		dialogBAPAFieldMap.clear();

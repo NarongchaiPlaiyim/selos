@@ -149,8 +149,9 @@ public class BankStatementDetail extends BaseController {
         if (checkSession(session)) {
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL);
+            loadFieldControl(workCaseId, Screen.BANK_STATEMENT_DETAIL, ownerCaseUserId);
 
             if (FacesUtil.getSessionMapValue("bankStmtSumView") != null &&
                 FacesUtil.getSessionMapValue("isTmbBank") != null &&
@@ -177,7 +178,8 @@ public class BankStatementDetail extends BaseController {
         if (bankStmtView != null) {
             log.debug("Edit Bank statement.");
             if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
-                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
+                bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+//                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
 //                Date tmpDate;
 //                for (int i=(numberOfMonths-1), j=0; i>=0; i--, j++) {
 //                    BankStmtDetailView bankStmtDetailView = bankStmtView.getBankStmtDetailViewList().get(j);

@@ -357,7 +357,7 @@ public class CustomerTransform extends Transform {
             if(juristic != null){
                 customerInfoView.setCapital(juristic.getCapital());
                 customerInfoView.setPaidCapital(juristic.getPaidCapital());
-                if(!Util.isZero(customerInfoView.getFinancialYear()))
+                if(!Util.isZero(juristic.getFinancialYear()))
                 customerInfoView.setFinancialYear(juristic.getFinancialYear() + 543);
 
                 customerInfoView.setDateOfRegister(juristic.getRegisterDate());

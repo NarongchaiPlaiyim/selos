@@ -80,6 +80,54 @@ public class EndPoint implements Serializable {
     private String appraisalAddress;
 
     @Inject
+    @Config(name = "interface.brms.log.prescreen.request")
+    private String logPreScreenRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.prescreen.response")
+    private String logPreScreenResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.fullapp.request")
+    private String logFullAppRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.fullapp.response")
+    private String logFullAppResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.pricing.request")
+    private String logPricingRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.pricing.response")
+    private String logPricingResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.fee.request")
+    private String logFeeRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.fee.response")
+    private String logFeeResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.document.request")
+    private String logDocRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.document.response")
+    private String logDocResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.appraisaldocument.request")
+    private String logAppraisalDocRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.appraisaldocument.response")
+    private String logAppraisalDocResponse;
+
+    @Inject
     public EndPoint() {
     }
 
@@ -92,8 +140,8 @@ public class EndPoint implements Serializable {
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/prescreenUnderwritingRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/prescreenUnderwritingRulesResponse.xml";
+            String requestFile = logPreScreenRequest;//"/home/slosdev/clevel/brms/prescreenUnderwritingRulesRequest.xml";
+            String responseFile = logPreScreenResponse;//"/home/slosdev/clevel/brms/prescreenUnderwritingRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -138,8 +186,8 @@ public class EndPoint implements Serializable {
         DecisionServiceSEFullApplicationUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesResponse.xml";
+            String requestFile = logFullAppRequest; //"/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesRequest.xml";
+            String responseFile = logFullAppResponse; //"/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -184,8 +232,8 @@ public class EndPoint implements Serializable {
         DecisionServiceResponse response = null;
         try {
 
-            String requestFile = "/home/slosdev/clevel/brms/standardPricingInterestRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/standardPricingInterestRulesResponse.xml";
+            String requestFile = logPricingRequest; //"/home/slosdev/clevel/brms/standardPricingInterestRulesRequest.xml";
+            String responseFile = logPricingResponse; //"/home/slosdev/clevel/brms/standardPricingInterestRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -230,8 +278,8 @@ public class EndPoint implements Serializable {
         DecisionServiceSEStandardPricingFeeFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/standardPricingFeeRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/standardPricingFeeRulesResponse.xml";
+            String requestFile = logFeeRequest; //"/home/slosdev/clevel/brms/standardPricingFeeRulesRequest.xml";
+            String responseFile = logFeeResponse; //"/home/slosdev/clevel/brms/standardPricingFeeRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -276,8 +324,8 @@ public class EndPoint implements Serializable {
         DecisionServiceSEDocumentCustomerFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/documentCustomerRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/documentCustomerRulesResponse.xml";
+            String requestFile = logDocRequest; //"/home/slosdev/clevel/brms/documentCustomerRulesRequest.xml";
+            String responseFile = logDocResponse; //"/home/slosdev/clevel/brms/documentCustomerRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -321,8 +369,8 @@ public class EndPoint implements Serializable {
         DecisionServiceSEDocumentAppraisalFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/documentAppraisalRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/documentAppraisalRulesResponse.xml";
+            String requestFile = logAppraisalDocRequest; //"/home/slosdev/clevel/brms/documentAppraisalRulesRequest.xml";
+            String responseFile = logAppraisalDocResponse; //"/home/slosdev/clevel/brms/documentAppraisalRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

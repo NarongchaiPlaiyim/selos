@@ -323,8 +323,10 @@ public class PledgeDetail implements Serializable {
 	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
 	private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
 	private void _loadFieldControl() {
-		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PledgeDetail);
-		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AddDepInfoDialog);
+        HttpSession session = FacesUtil.getSession(false);
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PledgeDetail, ownerCaseUserId);
+		List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.AddDepInfoDialog, ownerCaseUserId);
 		fieldMap.clear();
 		dialogFieldMap.clear();
 		for (FieldsControlView field : fields) {

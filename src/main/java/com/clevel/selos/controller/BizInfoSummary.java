@@ -145,8 +145,9 @@ public class BizInfoSummary extends BaseController {
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY);
+            loadFieldControl(workCaseId, Screen.BUSINESS_INFO_SUMMARY, ownerCaseUserId);
 
             setDisabledValue("ownerName",false);
             setDisabledValue("expiryDate",true);
@@ -303,27 +304,51 @@ public class BizInfoSummary extends BaseController {
         earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
 
         if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
-            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
-            onCalSummaryTable();
-            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
-            message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            if(profitMarginAmount.compareTo(BigDecimal.ZERO) > 0) {
+                bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
+                onCalSummaryTable();
+                messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+                message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                bizInfoSummaryView.setOperatingExpenseAmount(profitMarginAmount);
+                onCalSummaryTable();
+                messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+                message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         }
 
         if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
-            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
-            onCalSummaryTable();
-            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
-            message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            if(earningsBeforeTaxAmount.compareTo(BigDecimal.ZERO) > 0) {
+                bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
+                onCalSummaryTable();
+                messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+                message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                bizInfoSummaryView.setReduceInterestAmount(earningsBeforeTaxAmount);
+                onCalSummaryTable();
+                messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+                message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         }
 
         if(reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
-            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
-            onCalSummaryTable();
-            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
-            message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            if(earningsBeforeTaxAmount.compareTo(BigDecimal.ZERO) > 0) {
+                bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
+                onCalSummaryTable();
+                messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+                message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                bizInfoSummaryView.setReduceTaxAmount(earningsBeforeTaxAmount);
+                onCalSummaryTable();
+                messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+                message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         }
 
         if((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0){

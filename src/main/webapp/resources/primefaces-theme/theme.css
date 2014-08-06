@@ -2006,9 +2006,10 @@ body .ui-tooltip {
 .ui-radiobutton-box.ui-state-error {
     border: 1px solid #cd0a0a !important;
 }
-
 .ui-selectonemenu-items-wrapper {
-    max-width: 450px;
+    max-width: 450px!important;
+}
+.ui-selectonemenu-items-wrapper {
     overflow-x: hidden !important;
     overflow-y: auto !important;
 }
@@ -2021,7 +2022,9 @@ body .ui-tooltip {
     padding: 5px 5px!important;
     text-align: left;
     white-space: nowrap;
-    max-width: 450px;
+}
+.ui-selectonemenu-panel{
+    max-width: 450px!important;
 }
 /*
 .ui-selectonemenu .ui-selectonemenu-trigger {

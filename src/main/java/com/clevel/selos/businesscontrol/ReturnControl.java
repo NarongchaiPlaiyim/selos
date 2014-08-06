@@ -68,6 +68,7 @@ public class ReturnControl extends BusinessControl {
     }
 
     public List<ReturnInfoView> getReturnInfoViewList(long workCaseId, long workCasePrescreenId){
+        log.debug("getReturnInfoViewList (workCaseId: {}, workCasePrescreenId: {})",workCaseId,workCasePrescreenId);
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         if(workCaseId!=0 || workCasePrescreenId!=0){
             List<ReturnInfo> returnInfoList;
@@ -338,7 +339,7 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public void submitReturnBDM(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnBDM(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList, String wobNumber) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             boolean hasRG001 = false;
 
@@ -400,12 +401,12 @@ public class ReturnControl extends BusinessControl {
             if(step!=null && step.getId()==2003){
                 bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
             } else {
-                bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.RETURN_TO_BDM.getVal());
+                bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_BDM.getVal());
             }
         }
     }
 
-    public void submitReturnAADAdmin(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList) throws Exception {
+    public void submitReturnAADAdmin(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList, String wobNumber) throws Exception {
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             boolean hasRG001 = false;
 
@@ -464,7 +465,7 @@ public class ReturnControl extends BusinessControl {
 
             returnInfoDAO.persist(returnInfoList);
 
-            bpmExecutor.returnCase(queueName,workCase.getWobNumber(),remark,reason,ActionCode.REPLY_TO_AAD_ADMIN.getVal());
+            bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_AAD_ADMIN.getVal());
         }
     }
 

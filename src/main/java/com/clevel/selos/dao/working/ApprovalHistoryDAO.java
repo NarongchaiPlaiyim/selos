@@ -29,6 +29,23 @@ public class ApprovalHistoryDAO extends GenericDAO<ApprovalHistory, Long> {
         return criteria.list();
     }
 
+    public ApprovalHistory findExistHistoryByUser(long workCaseId, String userId) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("user.id", userId));
+        ApprovalHistory approvalHistory = (ApprovalHistory)criteria.uniqueResult();
+        return approvalHistory;
+    }
+
+    public ApprovalHistory findExistHistoryByApprovalType(long workCaseId, String userId, int approveType){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("user.id", userId));
+        criteria.add(Restrictions.eq("approveType", approveType));
+        ApprovalHistory approvalHistory = (ApprovalHistory)criteria.uniqueResult();
+        return approvalHistory;
+    }
+
     public ApprovalHistory findByWorkCaseAndUserForSubmit(long workCaseId, String userId, int approveType) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));

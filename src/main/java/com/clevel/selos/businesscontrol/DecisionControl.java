@@ -363,7 +363,7 @@ public class DecisionControl extends BusinessControl {
 
             // ------------------------------------------ Guarantor ------------------------------------------- //
             //Remove All Guarantor Relation By Propose Line
-            if(!Util.isNull(decisionView) && !Util.isZero(decisionView.getId())){
+            if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
                 List<ProposeGuarantorInfoRelation> proposeGuarantorInfoRelationList = proposeGuarantorInfoRelationDAO.findByProposeLine(decision.getId(), proposeType);
                 if(!Util.isNull(proposeGuarantorInfoRelationList) && !Util.isZero(proposeGuarantorInfoRelationList.size())) {
                     proposeGuarantorInfoRelationDAO.delete(proposeGuarantorInfoRelationList);
@@ -419,7 +419,7 @@ public class DecisionControl extends BusinessControl {
 
             // ------------------------------------------ Collateral ------------------------------------------- //
             //Remove All Collateral Relation By Propose Line
-            if(!Util.isNull(decisionView) && !Util.isZero(decisionView.getId())){
+            if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
                 List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = proposeCollateralInfoRelationDAO.findByProposeLine(decision.getId(), proposeType);
                 if(!Util.isNull(proposeCollateralInfoRelationList) && !Util.isZero(proposeCollateralInfoRelationList.size())) {
                     proposeCollateralInfoRelationDAO.delete(proposeCollateralInfoRelationList);

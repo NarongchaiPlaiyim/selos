@@ -65,7 +65,7 @@
                                                     <h:outputText value="#{basicInfo.mandate('applicationNo')}" styleClass="require-field"/>
                                                     <h:outputText value=" :"/>
                                                 </td>
-                                                <td style="width: 200px;">
+                                                <td style="width: 200px;" colspan="2">
                                                     <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger"
                                                                  readonly="#{basicInfo.isDisabled('applicationNo')}"
                                                                  required="#{basicInfo.reqApplicationNo}"/>
@@ -82,11 +82,13 @@
                                                                  readonly="#{basicInfo.isDisabled('refAppNo')}"
                                                                  required="#{basicInfo.reqRefApplicationNo}"/>
                                                 </td>
-                                                <td class="title" style="width: 300px; padding-left: 30px;">
-                                                    <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}"/>
-                                                    <h:outputText value="#{basicInfo.mandate('caNo')}" styleClass="require-field"/>
-                                                    <h:outputText value=" : "/>
-                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger"
+                                                <td class="title" style="width: 450px; padding-left: 30px;">
+                                                    <div style="width: 85px; float: left; text-align: right;">
+                                                        <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}"/>
+                                                        <h:outputText value="#{basicInfo.mandate('caNo')}" styleClass="require-field"/>
+                                                        <h:outputText value=" : "/>
+                                                    </div>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger" style="float:left;"
                                                                  readonly="#{basicInfo.isDisabled('caNo')}"
                                                                  required="#{basicInfo.reqCaNo}"/>
                                                 </td>
@@ -107,7 +109,17 @@
                                                                        var="requestType"
                                                                        itemLabel="#{requestType.name}"
                                                                        itemValue="#{requestType.id}"/>
+                                                        <p:ajax update=":frmMain:pnlAppealReason"/>
                                                     </p:selectOneMenu>
+                                                </td>
+                                                <td class="title" style="width: 300px; padding-left: 30px;">
+                                                    <h:panelGroup id="pnlAppealReason" styleClass="panel">
+                                                        <div style="width: 85px; float: left; text-align: right;">
+                                                            <h:outputText value="Reason" rendered="#{basicInfo.basicInfoView.requestType.id != 1}"/>
+                                                            <h:outputText value=" : " rendered="#{basicInfo.basicInfoView.requestType.id != 1}"/>
+                                                        </div>
+                                                        <p:inputText id="appealReason" value="#{basicInfo.basicInfoView.appealResubmitReason.description}" rendered="#{basicInfo.basicInfoView.requestType.id != 1}" required="false" readonly="true" style="float:left; width: 290px;"/>
+                                                    </h:panelGroup>
                                                 </td>
                                             </tr>
                                             <tr>
