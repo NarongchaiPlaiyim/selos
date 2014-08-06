@@ -36,24 +36,48 @@ public class EndPoint implements Serializable {
     private String prescreenServiceName;
 
     @Inject
+    @Config(name = "interface.brms.prescreen.service.port.name")
+    private String prescreenServicePortName;
+
+    @Inject
     @Config(name = "interface.brms.fullapp.service.name")
     private String fullAppServiceName;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.interest.service.name")
+    @Config(name = "interface.brms.fullapp.service.port.name")
+    private String fullAppServicePortName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.pricing.interest.service.name")
     private String interestServiceName;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.fee.service.name")
+    @Config(name = "interface.brms.standard.pricing.interest.service.port.name")
+    private String interestServicePortName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.pricing.fee.service.name")
     private String feeServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.pricing.fee.service.port.name")
+    private String feeServicePortName;
 
     @Inject
     @Config(name = "interface.brms.customer.service.name")
     private String customerServiceName;
 
     @Inject
+    @Config(name = "interface.brms.customer.service.port.name")
+    private String customerServicePortName;
+
+    @Inject
     @Config(name = "interface.brms.appraisal.service.name")
     private String appraisalServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.appraisal.service.port.name")
+    private String appraisalServicePortName;
 
     @Inject
     @Config(name = "interface.brms.prescreen.address")
@@ -135,7 +159,9 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callPrescreenUnderwritingRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", prescreenServiceName);
+        logger.debug("Service Port Name : {}", prescreenServicePortName);
         logger.debug("Service Address : {}", prescreenAddress);
+
         DecisionServiceSEPrescreenUWSFlow_Service service = null;
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
@@ -151,7 +177,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, prescreenServiceName);
 
             service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, prescreenServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -181,6 +207,7 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callFullApplicationUnderwritingRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", fullAppServiceName);
+        logger.debug("Service Port Name : {}", fullAppServicePortName);
         logger.debug("Service Address : {}", fullAppAddress);
         DecisionServiceSEFullApplicationUWSFlow_Service service = null;
         DecisionServiceSEFullApplicationUWSFlow port = null;
@@ -197,7 +224,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, fullAppServiceName);
             service = new DecisionServiceSEFullApplicationUWSFlow_Service(url, qname);
 
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, fullAppServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -227,6 +254,7 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callStandardPricingInterestRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", interestServiceName);
+        logger.debug("Service Port Name : {}", interestServicePortName);
         logger.debug("Service Address : {}", interestAddress);DecisionServiceSEStandardPricingInterestFlow_Service service = null;
         DecisionServiceSEStandardPricingInterestFlow port = null;
         DecisionServiceResponse response = null;
@@ -243,7 +271,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, interestServiceName);
 
             service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, interestServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -273,6 +301,7 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callStandardPricingFeeRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", feeServiceName);
+        logger.debug("Service Port Name : {}", feeServicePortName);
         logger.debug("Service Address : {}", feeAddress);
         DecisionServiceSEStandardPricingFeeFlow_Service service = null;
         DecisionServiceSEStandardPricingFeeFlow port = null;
@@ -289,7 +318,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, feeServiceName);
 
             service = new DecisionServiceSEStandardPricingFeeFlow_Service(wsdlUrl, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, feeServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -319,6 +348,7 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callDocumentCustomerRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", customerServiceName);
+        logger.debug("Service Port Name : {}", customerServicePortName);
         logger.debug("Service Address : {}", customerAddress);
         DecisionServiceSEDocumentCustomerFlow_Service service = null;
         DecisionServiceSEDocumentCustomerFlow port = null;
@@ -334,7 +364,7 @@ public class EndPoint implements Serializable {
             URL wsdlUrl = new URL(customerAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, customerServiceName);
             service = new DecisionServiceSEDocumentCustomerFlow_Service(wsdlUrl, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, customerServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -364,6 +394,7 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callDocumentAppraisalRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", appraisalServiceName);
+        logger.debug("Service Port Name : {}", appraisalServicePortName);
         logger.debug("Service Address : {}", appraisalAddress);
         DecisionServiceSEDocumentAppraisalFlow_Service service = null;
         DecisionServiceSEDocumentAppraisalFlow port = null;
@@ -379,7 +410,7 @@ public class EndPoint implements Serializable {
             URL wsdlUrl = new URL(appraisalAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, appraisalServiceName);
             service = new DecisionServiceSEDocumentAppraisalFlow_Service(wsdlUrl, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, appraisalServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
