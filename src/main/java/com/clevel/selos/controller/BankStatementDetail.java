@@ -178,26 +178,24 @@ public class BankStatementDetail extends BaseController {
     private void initViewFormAndSelectItems() {
         if (bankStmtView != null) {
             log.debug("Edit Bank statement.");
-            if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
-//                bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
-//                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
-                List<BankStmtDetailView> bankStmtDetailViews = new ArrayList<BankStmtDetailView>();
-                Date tmpDate;
-                log.debug("--numberOfMonths. {}",numberOfMonths);
-                for (int i=(numberOfMonths-1), j=0; i>=0; i--, j++) {
-                    BankStmtDetailView bankStmtDetailView = bankStmtView.getBankStmtDetailViewList().get(j);
-                    if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
-                        tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
-                        bankStmtDetailView.setAsOfDate(tmpDate);
-                        bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
-                        bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
-                    }
-                    bankStmtDetailViews.add(bankStmtDetailView);
+            if (bankStmtView != null) {
+                log.debug("Edit Bank statement.");
+                if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
+                    numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
+//                Date tmpDate;
+//                for (int i=(numberOfMonths-1), j=0; i>=0; i--, j++) {
+//                    BankStmtDetailView bankStmtDetailView = bankStmtView.getBankStmtDetailViewList().get(j);
+//                    if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
+//                        tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+//                        bankStmtDetailView.setAsOfDate(tmpDate);
+//                        bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+//                        bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+//                    }
+//                }
                 }
-                log.debug("--bankStmtDetailViews Size. {},--bankStmtDetailViews. {}",bankStmtDetailViews.size(),bankStmtDetailViews);
-                log.debug("--BankStatement Size {}",bankStmtView.getBankStmtDetailViewList().size());
-                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
-                log.debug("--getBankStmtDetailViewList. {}",bankStmtView.getBankStmtDetailViewList());
+                else {
+                    bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+                }
             }
             else {
                 bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
