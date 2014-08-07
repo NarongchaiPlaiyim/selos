@@ -2,6 +2,8 @@ package com.clevel.selos.report;
 
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.PDFAppraisalAppointment;
@@ -84,7 +86,10 @@ public class GenPDF extends ReportService implements Serializable {
     private ReportView reportView;
 
     long workCaseId;
-    private boolean type;
+    private boolean rejectType;
+    private User user;
+    private boolean readonlyIsUW;
+    private boolean readonlyIsBDM;
 
     @Inject
     private STPExecutor stpExecutor;
@@ -114,32 +119,43 @@ public class GenPDF extends ReportService implements Serializable {
     private void onCreation(){
         init();
         reportView = new ReportView();
+        HttpSession session = FacesUtil.getSession(false);
+        user = (User)session.getAttribute("user");
         log.debug("GenPDF onCreation and New ReportView");
+    }
+
+    private void onCheckRole(){
+        readonlyIsUW = user.getRole().getId() != RoleValue.UW.id();
+        readonlyIsBDM = user.getRole().getId() != RoleValue.BDM.id();
+    }
+
+    private void logicPrintReject(){
+
     }
 
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
         String date = Util.createDateTime(new Date());
-        type = false;
+        rejectType = false;
 
         if(!Util.isNull(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
             String appNumber = workCase.getAppNumber();
 
-            StringBuilder nameOpShect =new StringBuilder();
+            StringBuilder nameOpShect = new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
 
-            StringBuilder nameExSum =new StringBuilder();
+            StringBuilder nameExSum = new StringBuilder();
             nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
 
-            StringBuilder nameRejectLetter =new StringBuilder();
+            StringBuilder nameRejectLetter = new StringBuilder();
             nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
 
-            StringBuilder nameAppraisal =new StringBuilder();
+            StringBuilder nameAppraisal = new StringBuilder();
             nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest.pdf");
 
-            StringBuilder nameOfferLetter =new StringBuilder();
+            StringBuilder nameOfferLetter = new StringBuilder();
             nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
 
             reportView.setNameReportOpShect(nameOpShect.toString());
@@ -151,7 +167,7 @@ public class GenPDF extends ReportService implements Serializable {
             if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
                 reportView.setNameReportRejectLetter("-");
-                type = true;
+                rejectType = true;
             } else {
                 reportView.setNameReportRejectLetter(nameRejectLetter.toString());
             }
@@ -324,11 +340,11 @@ public class GenPDF extends ReportService implements Serializable {
         this.reportView = reportView;
     }
 
-    public boolean isType() {
-        return type;
+    public boolean isRejectType() {
+        return rejectType;
     }
 
-    public void setType(boolean type) {
-        this.type = type;
+    public void setRejectType(boolean rejectType) {
+        this.rejectType = rejectType;
     }
 }
