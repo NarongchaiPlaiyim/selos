@@ -57,7 +57,7 @@ public class LDAPInterfaceImpl implements LDAPInterface {
                     attributes.get("memberOf"));
         } catch (NamingException e) {
             log.error("", e);
-            throw new LDAPInterfaceException(e, ExceptionMapping.LDAP_AUTHENTICATION_FAILED, msg.get(ExceptionMapping.LDAP_AUTHENTICATION_FAILED, getLDAPErrorCode(e.getMessage())));
+            throw new LDAPInterfaceException(e, ExceptionMapping.LDAP_AUTHENTICATION_FAILED, msg.get(ExceptionMapping.LDAP_AUTHENTICATION_FAILED, getMessageByLDAPErrorCode(getLDAPErrorCode(e.getMessage()))));
         }
         log.debug("authentication success. (userName: {})", userName);
     }
@@ -101,4 +101,17 @@ public class LDAPInterfaceImpl implements LDAPInterface {
         }
     }
 
+    private String getMessageByLDAPErrorCode(final String LDAPErrorCode){
+        String result = "";
+        if ("525".equals(LDAPErrorCode)) {
+            result = msg.get(ExceptionMapping.USER_OR_PASS_INCORRECT);
+        } else if ("52e".equals(LDAPErrorCode)) {
+            result = msg.get(ExceptionMapping.USER_OR_PASS_INCORRECT);
+        } else if ("775".equals(LDAPErrorCode)) {
+            result = msg.get(ExceptionMapping.USER_LOCKED);
+        } else {
+            result = LDAPErrorCode;
+        }
+        return result;
+    }
 }

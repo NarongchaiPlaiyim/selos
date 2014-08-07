@@ -339,16 +339,19 @@ public class IsaReport implements Serializable {
             map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom));
             map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo));
             ResultSet rs = stpExecutor.getViolation(map);
+            int i = 1;
 
             if (!Util.isNull(rs)){
                 while (rs.next()){
                     ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setRow(i++);
                     viewReport.setUserId(rs.getString("USER_ID"));
+                    viewReport.setUserName(rs.getString("USER_NAME"));
                     viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
                     viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
                     viewReport.setStatus(rs.getString("STATUS"));
-                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
                     viewReportList.add(viewReport);
+                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
                 }
                 generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
             } else {
