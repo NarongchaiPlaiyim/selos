@@ -88,11 +88,11 @@ public class EndPoint implements Serializable {
     private String fullAppAddress;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.interest.address")
+    @Config(name = "interface.brms.standard.pricing.interest.address")
     private String interestAddress;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.fee.address")
+    @Config(name = "interface.brms.standard.pricing.fee.address")
     private String feeAddress;
 
     @Inject

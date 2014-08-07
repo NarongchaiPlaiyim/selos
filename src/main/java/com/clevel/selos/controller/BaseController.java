@@ -31,8 +31,10 @@ public class BaseController implements Serializable {
 
     protected void loadFieldControl(long workCaseId, Screen screenId, String ownerCaseUserId) {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId, 0, 0, ownerCaseUserId);
-        List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId, ownerCaseUserId);
+        HttpSession session = FacesUtil.getSession(false);
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
+        //List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
         fieldMap.clear();
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
@@ -40,9 +42,9 @@ public class BaseController implements Serializable {
             //log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
 
-        for (FieldsControlView field : dialogFields) {
+        /*for (FieldsControlView field : dialogFields) {
             dialogFieldMap.put(field.getFieldName(), field);
-        }
+        }*/
 
     }
 

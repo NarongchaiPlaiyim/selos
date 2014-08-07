@@ -62,9 +62,9 @@ public class MandatoryFieldsControl extends BusinessControl {
         return fieldsControlViewList;
     }
     
-    public List<FieldsControlView> getFieldsControlView(long workCaseId,Screen screen, String caseOwnerUserId) {
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
-        if(caseOwnerUserId.equalsIgnoreCase(currentUserId)) {
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
             if (workCaseId <= 0 || screen == null)
                 return Collections.emptyList();
             User user = getCurrentUser();
@@ -81,17 +81,35 @@ public class MandatoryFieldsControl extends BusinessControl {
         }
     }
 
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, long stepId, Screen screen, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (stepId <= 0 || workCaseId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            int productGroupId = workCase.getProductGroup().getId();
+            log.debug("get Field control for screen : {}, stepId : {}, role : {}", screen, stepId, user.getRole());
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
+            List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+            log.debug("Result fields control : {} ", fieldsControlViewList.size());
+            return fieldsControlViewList;
+        }else{
+            return Collections.emptyList();
+        }
+    }
+
     public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
-        if(caseOwnerUserId.equalsIgnoreCase(currentUserId)) {
+        log.debug("getFieldsControlView : caseOwnerUserId : {}, currentUserId : {}", caseOwnerUserId, currentUserId);
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
             if (workCaseId <= 0 || screen == null)
                 return Collections.emptyList();
             User user = getCurrentUser();
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             long stepId = workCase.getStep().getId();
             int productGroupId = workCase.getProductGroup().getId();
-            Status status = workCase.getStatus();
-            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, productProgramId, specialTypeId, status);
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, specialTypeId);
             List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
             return fieldsControlViewList;
         }else{
