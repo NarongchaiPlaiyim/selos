@@ -305,7 +305,7 @@ function resetter()
 
                                                      rowIndexVar="rowIndex">
 
-                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                            <p:ajax event="rowSelect" update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel"
                                                     listener="#{peSearch.onSelectInbox}" onstart="blockInbox.show()"/>
 
                                             <p:column headerText="" styleClass="center" style="width:22px;">
@@ -379,7 +379,7 @@ function resetter()
                                             </p:column>
 
                                             <p:column headerText="">
-                                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" onclick="blockInbox.show()">
+                                                <p:commandButton icon="ui-icon-search" title="View" action="#{peSearch.onSelectInbox}" update=":frmMain:msgBoxErrorPanel" onclick="blockInbox.show()">
                                                     <f:setPropertyActionListener value="#{item}" target="#{peSearch.inboxViewSelectItem}"/>
                                                 </p:commandButton>
                                             </p:column>

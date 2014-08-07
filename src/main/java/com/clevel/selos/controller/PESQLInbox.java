@@ -316,43 +316,6 @@ public class PESQLInbox implements Serializable
                 RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
             }
 
-            /*if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {     //For Case in Stage PreScreen
-                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-                if(workCasePrescreen != null){
-                    wrkCasePreScreenId = workCasePrescreen.getId();
-                    requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                }
-                session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-                session.setAttribute("requestAppraisal", requestAppraisalFlag);
-
-            } else if (stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value()) {     //For Case in Stage Parallel Appraisal
-                WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-                if(workCase != null){
-                    wrkCaseId = workCase.getId();
-                    requestAppraisalFlag = workCase.getRequestAppraisal();
-                    session.setAttribute("workCaseId", wrkCaseId);
-                    session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                } else {
-                    WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-                    wrkCasePreScreenId = workCasePrescreen.getId();
-                    requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
-                    session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
-                    session.setAttribute("requestAppraisal", requestAppraisalFlag);
-                }
-                WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-                if(workCaseAppraisal != null){
-                    wrkCaseAppraisalId = workCaseAppraisal.getId();
-                    session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
-                }
-            } else {        //For Case in Stage FullApplication
-                WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-                if(workCase != null){
-                    wrkCaseId = workCase.getId();
-                    requestAppraisalFlag = workCase.getRequestAppraisal();
-                }
-                session.setAttribute("workCaseId", wrkCaseId);
-                session.setAttribute("requestAppraisal", requestAppraisalFlag);
-            }*/
         } catch (Exception e) {
             //log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, inboxViewSelectItem.getFwobnumber(), e);
             //message = "Another User is Working on this case!! Please Retry Later.";
@@ -368,12 +331,19 @@ public class PESQLInbox implements Serializable
     public void onPickUpCase(){
         try{
             //TODO dispatch for Select case
+            HttpSession session = FacesUtil.getSession(false);
+
+            userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
             String queueName = inboxViewSelectItem.getQueuename();
             String wobNumber = inboxViewSelectItem.getFwobnumber();
             log.debug("onPickUpCase ::: inboxViewSelectItem : {}", inboxViewSelectItem);
             inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
             //TODO Reload all value for Inbox Select
             inboxViewSelectItem = inboxControl.getNextStep(inboxViewSelectItem, ActionCode.ASSIGN_TO_ME.getVal());
+            inboxViewSelectItem.setFetchType(2);
+            inboxViewSelectItem.setAtuser(userDetail.getUserName());
+            inboxViewSelectItem.setQueuename("Inbox(0)");
             log.debug("onPickUpCase ::: find next step : {}", inboxViewSelectItem);
             onSelectInbox();
         } catch (Exception ex){
