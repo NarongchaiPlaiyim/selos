@@ -1210,14 +1210,14 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(customerModifyFlag > 0){
             prescreenView.setModifyFlag(1);
             modifyFlag = true;
-
-            //Remove PreScreen Result Data
-            log.debug("savePreScreen ::: remove UWResultSummary data...");
-            uwRuleResultControl.deleteUWRuleResult(workCasePreScreenId, 0);
         }else{
             prescreenView.setModifyFlag(0);
             modifyFlag = false;
         }
+        //Remove PreScreen Result Data
+        log.debug("savePreScreen ::: remove UWResultSummary data...");
+        uwRuleResultControl.deleteUWRuleResult(workCasePreScreenId, 0);
+
         log.debug("savePreScreen ::: saving prescreen data...");
         savePreScreenData(prescreenView, facilityViewList, bizInfoViewList, prescreenCollateralViewList, workCasePrescreen);
         log.debug("savePreScreen ::: saving prescreen data success...");
