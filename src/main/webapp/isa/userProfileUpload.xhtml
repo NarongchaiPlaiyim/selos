@@ -9,15 +9,16 @@
     <h:head>
         <title>ManageUser</title>
         <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="jquery.numeric.js"/>
         <h:outputScript library="js" name="custom.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer">
             <div id="main_container">
-                <ui:include src="../site/include/header_logo.xhtml"/>
-                <ui:include src="../site/include/menubar_isa.xhtml"/>
                 <div id="content_container">
                     <h:form id="useruploadForm" >
+                        <ui:include src="../site/include/header_logo.xhtml"/>
+                        <ui:include src="../site/include/menubar_isa.xhtml"/>
                         <!-- L pane-->
                         <div class="body_lpane">
                             <label class="subject">Manage User</label>

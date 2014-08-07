@@ -18,8 +18,18 @@ public class CSVModel extends ValidationImp implements Serializable {
     private String region;
     private String team;
     private String title;
-    private String status;
+//    private String status;
 
+
+    private String Seq;
+    private String EmployeeID;
+    private String EmployeeName;
+    private String TeamID;
+    private String TeamName;
+    private String CreateDate;
+    private String LastSignOnDate;
+    private String Status;
+    private String NumberOfDays;
 
     public CSVModel() {
 
@@ -105,13 +115,13 @@ public class CSVModel extends ValidationImp implements Serializable {
         this.title = title;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
     public String valid(CommandType commandType) {
         return super.valid(this, commandType);
@@ -130,7 +140,79 @@ public class CSVModel extends ValidationImp implements Serializable {
                 .append("region", region)
                 .append("team", team)
                 .append("title", title)
-                .append("status", status)
+//                .append("status", status)
                 .toString();
+    }
+
+    public String getSeq() {
+        return Seq;
+    }
+
+    public void setSeq(String seq) {
+        Seq = seq;
+    }
+
+    public String getEmployeeID() {
+        return EmployeeID;
+    }
+
+    public void setEmployeeID(String employeeID) {
+        EmployeeID = employeeID;
+    }
+
+    public String getEmployeeName() {
+        return EmployeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        EmployeeName = employeeName;
+    }
+
+    public String getTeamID() {
+        return TeamID;
+    }
+
+    public void setTeamID(String teamID) {
+        TeamID = teamID;
+    }
+
+    public String getTeamName() {
+        return TeamName;
+    }
+
+    public void setTeamName(String teamName) {
+        TeamName = teamName;
+    }
+
+    public String getCreateDate() {
+        return CreateDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        CreateDate = createDate;
+    }
+
+    public String getLastSignOnDate() {
+        return LastSignOnDate;
+    }
+
+    public void setLastSignOnDate(String lastSignOnDate) {
+        LastSignOnDate = lastSignOnDate;
+    }
+
+    public String getNumberOfDays() {
+        return NumberOfDays;
+    }
+
+    public void setNumberOfDays(String numberOfDays) {
+        NumberOfDays = numberOfDays;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }
