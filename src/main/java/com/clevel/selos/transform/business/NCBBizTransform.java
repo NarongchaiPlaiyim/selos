@@ -2099,7 +2099,8 @@ public class NCBBizTransform extends BusinessTransform {
             endCalendar.setTime(compareDate);
             int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-            if (diffMonth <= numberMonth) {
+            log.debug("diffMonth : {}", diffMonth);
+            if (diffMonth < numberMonth) {
                 log.debug("return : true");
                 return true;
             }

@@ -192,6 +192,7 @@ public class DBRInfo extends BaseController {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
             dbrControl.saveDBRInfo(dbr, ncbDetails);
+
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.dbr.message.save");
 
@@ -199,18 +200,16 @@ public class DBRInfo extends BaseController {
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
             dbrDetails = new ArrayList<DBRDetailView>();
+
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
             }
+
             exSummaryControl.calForDBR(workCaseId);
             proposeLineControl.calWC(workCaseId);
         } catch (Exception e) {
-
-            if (e.getCause() != null) {
-                message = exceptionMsg.get("001");
-            } else {
-                message = exceptionMsg.get("001");
-            }
+            messageHeader = "Exception.";
+            message = Util.getMessageException(e);
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
