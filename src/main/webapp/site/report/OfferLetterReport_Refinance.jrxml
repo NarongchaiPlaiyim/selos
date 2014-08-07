@@ -88,7 +88,7 @@
 				<textFieldExpression><![CDATA[$F{productProgram} + "เพื่อ" + $F{loanPurPose}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="4bcece24-28ad-4d2b-8711-79eca1067af7" mode="Opaque" x="88" y="0" width="179" height="13" backcolor="#FFFFFF"/>
+				<reportElement uuid="4bcece24-28ad-4d2b-8711-79eca1067af7" stretchType="RelativeToBandHeight" mode="Opaque" x="88" y="0" width="179" height="13" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -102,7 +102,7 @@
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="c262842e-7cb8-4e73-871e-bf9af84ace92" mode="Opaque" x="267" y="0" width="128" height="13" backcolor="#FFFFFF"/>
+				<reportElement uuid="c262842e-7cb8-4e73-871e-bf9af84ace92" stretchType="RelativeToBandHeight" mode="Opaque" x="267" y="0" width="128" height="13" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -116,7 +116,7 @@
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="b771f58f-89d5-4277-8859-75d03c0b53f7" mode="Opaque" x="395" y="0" width="160" height="13" backcolor="#FFFFFF"/>
+				<reportElement uuid="b771f58f-89d5-4277-8859-75d03c0b53f7" stretchType="RelativeToBandHeight" mode="Opaque" x="395" y="0" width="160" height="13" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
