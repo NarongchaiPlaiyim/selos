@@ -238,7 +238,9 @@ public class PESearch implements Serializable
 
             log.debug("Current user : "+currentUser);
 
-            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id())) {
+            log.debug("User Role IsNull : {}, User :{},  Role : {}",!Util.isNull(user.getRole()) ,user,user.getRole().getId());
+
+            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.UW.id())) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
@@ -276,6 +278,18 @@ public class PESearch implements Serializable
                     accessAuthorize = true;
                 log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwner");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+            }
+
+            if(!accessAuthorize && !(user.getRole().getId()==RoleValue.BDM.id()) && !(user.getRole().getId()==RoleValue.ABDM.id()))
+            {
+
+                if(checkAuthorizeRole(wrkCasePreScreenId, wrkCaseId, user))
+                {
+                    accessAuthorize = true;
+                }
+                log.debug("onSelectSearch ::: after checkAuthorizeWorkCaseOwnerRole");
+                log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
+
             }
 
             if(!accessAuthorize){
@@ -336,27 +350,50 @@ public class PESearch implements Serializable
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, searchViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
+            String landingPage = inboxControl.getLandingPage(stepId, statusId);
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
             if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-                if(wrkCaseId != 0) {
-                    session.setAttribute("stepId", 2001L);
-                    FacesUtil.redirect(landingPage);
+                if(stepId == 1) {
+                    if (wrkCaseId != 0) {
+                        session.setAttribute("stepId", 2001L);
+                        FacesUtil.redirect("/site/basicInfo.jsf");
+                    } else {
+                        session.setAttribute("stepId", 1003L);
+                        FacesUtil.redirect("/site/prescreenMaker.jsf");
+                    }
                 }else{
-                    session.setAttribute("stepId", 1003L);
-                    FacesUtil.redirect("/site/prescreenMaker.jsf");
+                    FacesUtil.redirect(landingPage);
                 }
                 return;
             } else {
                 log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
-                message = "Can not find landing page for step [" + stepId + "]";
-                RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+                message = "Can not find landing page for step [" + stepId + "], status ["+statusId+"]";
+                RequestContext.getCurrentInstance().execute("msgBoxErrorDlgLanding.show()");
             }
         } catch (Exception e) {
             log.error("Error while opening case",e);
         }
+    }
+
+    public boolean checkAuthorizeRole(long workCasePreScreenId, long workCaseId, User user)
+    {
+
+        log.info("in Check Authorize Role : User :{}",user);
+
+        List<Integer> workCaseOwnerRoles = new ArrayList<Integer>();
+        if(workCasePreScreenId != 0)
+            workCaseOwnerRoles = workCaseOwnerDAO.getWorkCaseRolesByWorkCasePreScreenId(workCasePreScreenId);
+        else if(workCaseId != 0)
+            workCaseOwnerRoles = workCaseOwnerDAO.getWorkCaseRolesByWorkCaseId(workCaseId);
+
+        log.debug("workCaseOwner List : {}", workCaseOwnerRoles.toString());
+
+        if(workCaseOwnerRoles.contains(user.getRole().getId()))
+            return true;
+
+        return false;
     }
 
     public boolean checkAuthorizeTeam(long workCasePreScreenId, long workCaseId, User user){

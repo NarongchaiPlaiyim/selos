@@ -1375,7 +1375,7 @@
                                                      styleClass="small" process="@form"
                                                      action="#{executiveSummary.onAddReason()}"
                                                      update=":frmMain"
-                                                     disabled="#{executiveSummary.isDisabled('add Deviate Code Reject Code')}"/>
+                                                     disabled="#{executiveSummary.isDisabled('addDeviateCodeRejectCode')}"/>
                                 </td>
                             </tr>
 
@@ -1410,7 +1410,7 @@
                                                              oncomplete="confirmDeleteDeviateDlg.show()"
                                                              update=":frmMain:deviateTable"
                                                              process="@form"
-                                                             disabled="#{executiveSummary.isDisabled('add Deviate Code Reject Code')}">
+                                                             disabled="#{executiveSummary.isDisabled('addDeviateCodeRejectCode')}">
                                                 <f:setPropertyActionListener value="#{itemUWDecision}"
                                                                              target="#{executiveSummary.selectDeviate}"/>
                                             </p:commandButton>

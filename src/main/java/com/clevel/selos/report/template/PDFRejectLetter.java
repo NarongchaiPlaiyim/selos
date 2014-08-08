@@ -101,18 +101,6 @@ public class PDFRejectLetter implements Serializable {
             }
         }
 
-//        if(session.getAttribute("workCaseId") != null){
-//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//            log.debug("workCaseId. {}",workCaseId);
-//        }else{
-//            log.debug("workCaseId is null.");
-//            try{
-//                FacesUtil.redirect("/site/inbox.jsf");
-//            }catch (Exception ex){
-//                log.error("Exception :: {}",ex);
-//            }
-//        }
-
         if (!Util.isNull(workCaseId)){
             customerInfoView = new ArrayList<CustomerInfoView>();
             customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
@@ -120,10 +108,6 @@ public class PDFRejectLetter implements Serializable {
 
         }
     }
-
-//    public static void main(String[] args) {
-//         System.out.println(new RejectLetterReport());
-//    }
 
     public RejectLetterReport typeReport(){
         log.debug("--On typeReport.");

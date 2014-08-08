@@ -21,7 +21,7 @@ public class FieldsControlDAO extends GenericDAO<FieldsControl, Long> {
     public FieldsControlDAO() {
     }
 
-    public List<FieldsControl> findFieldControlByScreenRoleStepStatus(int screenId,Role role,Status status,long stepId) {
+    public List<FieldsControl> findFieldControlByScreenRoleStepStatus(int screenId, Role role, Status status, long stepId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("screenId", screenId));
         criteria.add(Restrictions.eq("role", role));
@@ -32,17 +32,26 @@ public class FieldsControlDAO extends GenericDAO<FieldsControl, Long> {
         return fieldsControlList;
     }
 
-    public List<FieldsControl> findFieldControl(int screenId, Role role, long stepId, int productGroupId, int productProgramId, int specialTypeId, Status status) {
+    public List<FieldsControl> findFieldControlByScreenRoleStep(int screenId, Role role, long stepId) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("screenId", screenId));
+        criteria.add(Restrictions.eq("role", role));
+        criteria.add(Restrictions.eq("step.id", stepId));
+        List<FieldsControl> fieldsControlList = criteria.list();
+
+        return fieldsControlList;
+    }
+
+    public List<FieldsControl> findFieldControl(int screenId, Role role, long stepId, int productGroupId, int specialTypeId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("screenId", screenId));
         criteria.add(Restrictions.eq("role", role));
         criteria.add(Restrictions.eq("step.id", stepId));
         criteria.add(Restrictions.eq("specialTypeId", specialTypeId));
-//        criteria.add(Restrictions.eq("status", status));
 
         if(productGroupId != 0) criteria.add(Restrictions.eq("productGroup.id", productGroupId));
 
-        if(productProgramId != 0) criteria.add(Restrictions.eq("productProgram.id", productProgramId));
+        //if(productProgramId != 0) criteria.add(Restrictions.eq("productProgram.id", productProgramId));
 
         List<FieldsControl> fieldsControlList = criteria.list();
 

@@ -28,12 +28,12 @@
     </p:commandButton>
     <!-- Assign To Checker-->
     <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" title="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Assign to Checker')}" disabled="#{prescreenMaker.disableAssignButton}"
+                     rendered="#{headerController.checkButton('Assign to Checker')}"
                      onclick="PF('blockUI').show()"
-                     actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}" process="@this"
-                     oncomplete="blockUI.hide(), assignCheckerDlg.show()"
-                     update=":assignCheckerDlgForm">
-        <p:resetInput target=":assignCheckerDlgForm"/>
+                     actionListener="#{headerController.onOpenAssignCheckerDialog()}" process="@this"
+                     oncomplete="blockUI.hide()"
+                     update=":frmMain:assignCheckerPanel, :frmMain:msgBoxBaseMessagePanel">
+        <p:resetInput target=":frmMain:assignCheckerPanel"/>
     </p:commandButton>
     <!-- Check NCB -->
     <p:commandButton id="btnChkNCB" value="#{msg.get('app.header.button.checkNCB')}" title="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton"
@@ -292,13 +292,13 @@
                      oncomplete="blockUI.hide()"
                      update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
     <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
-    <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitToUW1')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017)}"
+    <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017 || headerController.stepId == 2026 || headerController.stepId == 2030)}"
                      onclick="confirmSubmitSubmitUW1.show()"/>
     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                      icon="ui-icon-alert"
                      widgetVar="confirmSubmitSubmitUW1" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017)}">
+                     rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017 || headerController.stepId == 2026 || headerController.stepId == 2030)}">
         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                          actionListener="#{headerController.onSubmitReply()}"
@@ -857,6 +857,15 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
               modal="true" width="380" height="150">
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="assignCheckerPanel" styleClass="panel"
+         rendered="#{headerController.checkButton('Assign to Checker')}">
+    <p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" header="Check NCB - Assign to BDM Checker"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false" closable="false"
+              modal="true" width="360" height="160">
+        <ui:include src="/site/dialog/prescreenAssignChecker.xhtml"/>
     </p:dialog>
 </p:panel>
 

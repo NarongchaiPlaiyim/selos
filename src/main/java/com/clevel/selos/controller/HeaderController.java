@@ -96,6 +96,7 @@ public class HeaderController extends BaseController {
 
     private int qualitativeType;
     private int pricingDOALevel;
+    private List<User> bdmCheckerList;
     private List<User> abdmUserList;
     private List<User> zmUserList;
     private List<User> rgmUserList;
@@ -109,6 +110,7 @@ public class HeaderController extends BaseController {
 
     private String aadCommitteeId;
 
+    private String bdmCheckerId;
     private String abdmUserId;
     private String assignRemark;
 
@@ -1834,21 +1836,21 @@ public class HeaderController extends BaseController {
                 } else {
                     returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
-                    message = "Return to BDM success.";
+                    message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
                     complete = true;
                     log.debug("onReturnBDMSubmit ::: success.");
                 }
             } catch (Exception ex){
                 messageHeader = "Information.";
-                message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
+                message = "Return case failed, cause : " + Util.getMessageException(ex);
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 complete = false;
                 log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
             }
         } else {
             messageHeader = "Information.";
-            message = "Return to BDM failed, have no reason to return.";
+            message = "Return case failed, have no reason to return.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
             log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
@@ -1879,21 +1881,21 @@ public class HeaderController extends BaseController {
                 } else {
                     returnControl.submitReturnAADAdmin(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
-                    message = "Return to BDM success.";
+                    message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
                     complete = true;
                     log.debug("onReturnBDMSubmit ::: success.");
                 }
             } catch (Exception ex){
                 messageHeader = "Information.";
-                message = "Return to BDM failed, cause : " + Util.getMessageException(ex);
+                message = "Return case failed, cause : " + Util.getMessageException(ex);
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 complete = false;
                 log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
             }
         } else {
             messageHeader = "Information.";
-            message = "Return to BDM failed, have no reason to return.";
+            message = "Return case failed, have no reason to return.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
             log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
@@ -2481,6 +2483,45 @@ public class HeaderController extends BaseController {
             showMessageBox();
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onOpenAssignCheckerDialog() {
+        try {
+            bdmCheckerList = userDAO.findBDMChecker(user);
+            bdmCheckerId = "";
+            assignRemark = "";
+            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
+            RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
+        } catch (Exception ex) {
+            messageHeader = "Exception.";
+            message = "Exception while open Assign to Checker dialog. Please try again.";
+            showMessageBox();
+        }
+    }
+
+    public void onAssignToChecker() {
+        log.debug("onAssignToChecker ::: starting...");
+        boolean complete = false;
+        try {
+            if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
+                prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
+                complete = true;
+                messageHeader = "Information.";
+                message = "Assign to checker complete.";
+                showMessageRedirect();
+            } else {
+                complete = false;
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+            log.debug("onAssignToChecker ::: complete");
+        } catch (Exception ex) {
+            messageHeader = "Assign to checker failed.";
+            message = "Assign to checker failed. Cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+
+            log.error("onAssignToChecker ::: exception : {}", ex);
+        }
     }
 
     public boolean checkAccessStage(String stageString){
@@ -3200,5 +3241,21 @@ public class HeaderController extends BaseController {
 
     public void setSlaReasonList(List<Reason> slaReasonList) {
         this.slaReasonList = slaReasonList;
+    }
+
+    public List<User> getBdmCheckerList() {
+        return bdmCheckerList;
+    }
+
+    public void setBdmCheckerList(List<User> bdmCheckerList) {
+        this.bdmCheckerList = bdmCheckerList;
+    }
+
+    public String getBdmCheckerId() {
+        return bdmCheckerId;
+    }
+
+    public void setBdmCheckerId(String bdmCheckerId) {
+        this.bdmCheckerId = bdmCheckerId;
     }
 }

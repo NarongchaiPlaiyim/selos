@@ -12,6 +12,7 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.ECMInterface;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.brms.BRMSInterfaceImpl;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.ecm.db.ECMDetail;
 import com.clevel.selos.integration.ecm.model.ECMDataResult;
@@ -78,6 +79,9 @@ public class TestNCRS implements Serializable {
     private ECMInterface ecmInterface;
     @Inject
     private BRMSInterface brmsInterface;
+    @Inject
+    private BRMSInterfaceImpl brmsInterfaceImpl;
+
     private long workCaseId = 481;
     private String currentDateDDMMYY;
     @Inject
@@ -181,6 +185,8 @@ public class TestNCRS implements Serializable {
         if(!Util.isSafetyList(appraisalCompanyList)){
             appraisalCompanyList = new ArrayList<AppraisalCompany>();
         }
+
+        brmsInterface = test();
     }
 
     public List<AppraisalCompany> getAppraisalCompanyList() {
@@ -654,6 +660,10 @@ public class TestNCRS implements Serializable {
             System.err.println("Exception = "+e);
             result = e.getMessage();
         }
+    }
+
+    private BRMSInterfaceImpl test(){
+        return brmsInterfaceImpl;
     }
 
 
