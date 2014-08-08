@@ -96,6 +96,7 @@ public class HeaderController extends BaseController {
 
     private int qualitativeType;
     private int pricingDOALevel;
+    private List<User> bdmCheckerList;
     private List<User> abdmUserList;
     private List<User> zmUserList;
     private List<User> rgmUserList;
@@ -109,6 +110,7 @@ public class HeaderController extends BaseController {
 
     private String aadCommitteeId;
 
+    private String bdmCheckerId;
     private String abdmUserId;
     private String assignRemark;
 
@@ -2483,6 +2485,45 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
+    public void onOpenAssignCheckerDialog() {
+        try {
+            bdmCheckerList = userDAO.findBDMChecker(user);
+            bdmCheckerId = "";
+            assignRemark = "";
+            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
+            RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
+        } catch (Exception ex) {
+            messageHeader = "Exception.";
+            message = "Exception while open Assign to Checker dialog. Please try again.";
+            showMessageBox();
+        }
+    }
+
+    public void onAssignToChecker() {
+        log.debug("onAssignToChecker ::: starting...");
+        boolean complete = false;
+        try {
+            if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
+                prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
+                complete = true;
+                messageHeader = "Information.";
+                message = "Assign to checker complete.";
+                showMessageRedirect();
+            } else {
+                complete = false;
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+            log.debug("onAssignToChecker ::: complete");
+        } catch (Exception ex) {
+            messageHeader = "Assign to checker failed.";
+            message = "Assign to checker failed. Cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+
+            log.error("onAssignToChecker ::: exception : {}", ex);
+        }
+    }
+
     public boolean checkAccessStage(String stageString){
         boolean accessible = false;
         HttpSession session = FacesUtil.getSession(false);
@@ -3200,5 +3241,21 @@ public class HeaderController extends BaseController {
 
     public void setSlaReasonList(List<Reason> slaReasonList) {
         this.slaReasonList = slaReasonList;
+    }
+
+    public List<User> getBdmCheckerList() {
+        return bdmCheckerList;
+    }
+
+    public void setBdmCheckerList(List<User> bdmCheckerList) {
+        this.bdmCheckerList = bdmCheckerList;
+    }
+
+    public String getBdmCheckerId() {
+        return bdmCheckerId;
+    }
+
+    public void setBdmCheckerId(String bdmCheckerId) {
+        this.bdmCheckerId = bdmCheckerId;
     }
 }

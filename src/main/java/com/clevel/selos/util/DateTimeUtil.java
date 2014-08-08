@@ -35,13 +35,24 @@ public class DateTimeUtil implements Serializable {
         log.debug("compareDate() targetDate: {}, referenceDate: {}", targetDate, referenceDate);
         DateTime referenceDateTime = new DateTime(getOnlyDate(referenceDate));
         DateTime targetDateTime = new DateTime(getOnlyDate(targetDate));
-        return targetDateTime.compareTo(referenceDateTime);
+        int compareDate = targetDateTime.compareTo(referenceDateTime);
+        log.debug("compareDate() : {}", compareDate);
+        return compareDate;
     }
 
     public static Date checkMaxDate(Date targetDate){
         Date maxDate = DateTime.now().toDate();
         if(compareDate(targetDate, maxDate) > 0){
             return maxDate;
+        } else {
+            return targetDate;
+        }
+    }
+
+    public static Date checkMinDate(Date targetDate){
+        Date minDate = DateTime.now().toDate();
+        if(compareDate(targetDate, minDate) < 0){
+            return minDate;
         } else {
             return targetDate;
         }

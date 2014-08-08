@@ -350,22 +350,26 @@ public class PESearch implements Serializable
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, searchViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(searchViewSelectItem.getStatuscode(), 0));
+            String landingPage = inboxControl.getLandingPage(stepId, statusId);
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 
             if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
-                if(wrkCaseId != 0) {
-                    session.setAttribute("stepId", 2001L);
-                    FacesUtil.redirect(landingPage);
+                if(stepId == 1) {
+                    if (wrkCaseId != 0) {
+                        session.setAttribute("stepId", 2001L);
+                        FacesUtil.redirect("/site/basicInfo.jsf");
+                    } else {
+                        session.setAttribute("stepId", 1003L);
+                        FacesUtil.redirect("/site/prescreenMaker.jsf");
+                    }
                 }else{
-                    session.setAttribute("stepId", 1003L);
-                    FacesUtil.redirect("/site/prescreenMaker.jsf");
+                    FacesUtil.redirect(landingPage);
                 }
                 return;
             } else {
                 log.debug("onSelectInbox :: LANDING_PAGE_NOT_FOUND");
-                message = "Can not find landing page for step [" + stepId + "]";
+                message = "Can not find landing page for step [" + stepId + "], status ["+statusId+"]";
                 RequestContext.getCurrentInstance().execute("msgBoxErrorDlgLanding.show()");
             }
         } catch (Exception e) {

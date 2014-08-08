@@ -9,7 +9,7 @@ import com.clevel.selos.dao.working.UWRuleResultSummaryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.UWRuleType;
-import com.clevel.selos.model.db.master.AuthorizationDOA;
+import com.clevel.selos.model.db.master.ApprovalAuthority;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.UWRuleName;
 import com.clevel.selos.model.db.master.User;
@@ -114,7 +114,7 @@ public class ExSummaryTransform extends Transform {
         //UW Decision and Explanation
         exSummaryView.setApproveAuthority(exSummary.getApproveAuthority());
         if (exSummaryView.getApproveAuthority() == null) {
-            exSummaryView.setApproveAuthority(new AuthorizationDOA());
+            exSummaryView.setApproveAuthority(new ApprovalAuthority());
         }
 
         exSummaryView.setDecision(exSummary.getDecision());

@@ -51,9 +51,10 @@ public class DecisionServiceSEDocumentCustomerFlow_Service
      * @return
      *     returns DecisionServiceSEDocumentCustomerFlow
      */
-    @WebEndpoint(name = "DecisionServiceSOAPstmbrmsred1")
-    public DecisionServiceSEDocumentCustomerFlow getDecisionServiceSOAPstmbrmsred1() {
-        return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEDocumentCustomerFlow.class);
+    @WebEndpoint(name = "DecisionServiceSOAP")
+    public DecisionServiceSEDocumentCustomerFlow getDecisionServiceSOAP(String serviceUrl, String servicePortName) {
+        //return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEDocumentCustomerFlow.class);
+        return super.getPort(new QName(serviceUrl, servicePortName), DecisionServiceSEDocumentCustomerFlow.class);
     }
 
     /**

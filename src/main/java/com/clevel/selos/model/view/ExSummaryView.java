@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.UWResultColor;
+import com.clevel.selos.model.db.master.ApprovalAuthority;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -65,7 +66,7 @@ public class ExSummaryView  implements Serializable {
     private String rm020Remark;
 
     //UW Decision and Explanation
-    private AuthorizationDOA approveAuthority;
+    private ApprovalAuthority approveAuthority;
     private String uwCode;                          //wo transform
     private int decision;    //radio                //wo transform
     private List<ExSumReasonView> deviateCode;
@@ -327,11 +328,11 @@ public class ExSummaryView  implements Serializable {
         this.exSumCollateralView = exSumCollateralView;
     }
 
-    public AuthorizationDOA getApproveAuthority() {
+    public ApprovalAuthority getApproveAuthority() {
         return approveAuthority;
     }
 
-    public void setApproveAuthority(AuthorizationDOA approveAuthority) {
+    public void setApproveAuthority(ApprovalAuthority approveAuthority) {
         this.approveAuthority = approveAuthority;
     }
 
