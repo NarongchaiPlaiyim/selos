@@ -1,4 +1,4 @@
-package com.clevel.selos.controller.admin;
+package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.businesscontrol.UserSysParameterControl;
 import com.clevel.selos.businesscontrol.master.BankAccountTypeControl;
@@ -35,6 +35,7 @@ public class ApplicationCacheLoader implements Serializable{
     private State state;
 
     @PostConstruct
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void onStartUp(){
         state = State.INITIAL;
         logger.info("begin onStartUp server state {}", state);
