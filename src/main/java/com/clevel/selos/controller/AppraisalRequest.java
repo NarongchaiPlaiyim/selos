@@ -149,6 +149,7 @@ public class AppraisalRequest extends BaseController {
                 log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
             } else {
                 appraisalView = new AppraisalView();
+                appraisalView.setZoneLocation(appraisalRequestControl.getZoneLocation());
                 log.debug("-- AppraisalView[New] created");
                 appraisalContactDetailView = new AppraisalContactDetailView();
                 log.debug("-- AppraisalContactDetailView[New] created");

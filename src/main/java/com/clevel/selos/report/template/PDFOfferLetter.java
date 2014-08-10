@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -54,12 +55,12 @@ public class PDFOfferLetter implements Serializable {
 
     private DecisionView decisionView;
     private AppHeaderView appHeaderView;
-    private List<ApprovedGuarantorOfferLetterReport> approvedGuarantorOfferLetterReports;
     private List<BaseRate> baseRateList;
     private List<FeeCollectionDetail> feeCollectionDetails;
     private long customerId = -1;
     private long workCaseId;
     private final String SPACE = " ";
+    private int firstIndex = 0;
 
     @Inject
     @NormalMessage
@@ -153,12 +154,12 @@ public class PDFOfferLetter implements Serializable {
         log.debug("--fillGuarantor");
         List<ApprovedCollateralOfferLetterReport> reports = new ArrayList<ApprovedCollateralOfferLetterReport>();
         List<ProposeCollateralInfoView> collateralViews = decisionView.getApproveCollateralList();
-        StringBuilder collOwnerUW = null;
-        StringBuilder guarantorName = null;
+        StringBuilder collOwnerUW;
+        StringBuilder guarantorName;
 
         //Approved Guarantor
         List<ProposeGuarantorInfoView> guarantorDetailViews = decisionView.getApproveGuarantorList();
-        approvedGuarantorOfferLetterReports = new ArrayList<ApprovedGuarantorOfferLetterReport>();
+        List<ApprovedGuarantorOfferLetterReport> approvedGuarantorOfferLetterReports = new ArrayList<ApprovedGuarantorOfferLetterReport>();
 
         // Approved Collateral
         if (Util.safetyList(collateralViews).size() > 0){
@@ -195,18 +196,24 @@ public class PDFOfferLetter implements Serializable {
                         if (Util.safetyList(guarantorDetailViews).size() > 0){
                         log.debug("--Approved Guarantor Size. {}",collateralViews.size());
                             for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
-                                ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
+                                if (!Util.isSafetyList(guarantorDetailView.getProposeCreditInfoDetailViewList())){
+                                    log.debug("--Propose Credit Size. {}",guarantorDetailView.getProposeCreditInfoDetailViewList());
+                                    for (ProposeCreditInfoDetailView detailView : guarantorDetailView.getProposeCreditInfoDetailViewList()){
+                                        ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
 
-                                guarantorName = new StringBuilder();
-                                guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh())
-                                        .append(guarantorDetailView.getGuarantorName().getFirstNameTh())
-                                        .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
+                                        guarantorName = new StringBuilder();
+                                        guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh())
+                                                .append(guarantorDetailView.getGuarantorName().getFirstNameTh())
+                                                .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
 
-                                approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
-                                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getGuaranteeAmount()));
-                                approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
+                                        approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
+                                        approvedGuarantorOfferLetterReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
+                                        approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getGuaranteeAmount()));
+                                        approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
 
-                                collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+                                        collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+                                    }
+                                }
                             }
                         } else {
                             log.debug("--Approved Guarantor is Null. [{}]",guarantorDetailViews);
@@ -223,20 +230,26 @@ public class PDFOfferLetter implements Serializable {
             if (Util.safetyList(guarantorDetailViews).size() > 0){
             log.debug("--Approved Guarantor Size. {}",guarantorDetailViews.size());
 
-            for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
-                ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
-                ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
-                guarantorName = new StringBuilder();
-                guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh()).append(guarantorDetailView.getGuarantorName().getFirstNameTh())
-                        .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
+                for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
+                    if (!Util.isSafetyList(guarantorDetailView.getProposeCreditInfoDetailViewList())){
+                        log.debug("--Propose Credit Size. {}",guarantorDetailView.getProposeCreditInfoDetailViewList());
+                        for (ProposeCreditInfoDetailView detailView : guarantorDetailView.getProposeCreditInfoDetailViewList()){
+                            ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
+                            ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
 
-                approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
-                approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getGuaranteeAmount()));
-                approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
+                            guarantorName = new StringBuilder();
+                            guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh()).append(guarantorDetailView.getGuarantorName().getFirstNameTh())
+                                    .append(SPACE).append(guarantorDetailView.getGuarantorName().getLastNameTh());
 
-                collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+                            approvedGuarantorOfferLetterReport.setGuarantorName(Util.checkNullString(guarantorName.toString()));
+                            approvedGuarantorOfferLetterReport.setAccountName(Util.checkNullString(detailView.getAccountName()));
+                            approvedGuarantorOfferLetterReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(guarantorDetailView.getGuaranteeAmount()));
+                            approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
 
-                reports.add(collateralAndGuarantorOfferLetterReport);
+                            collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
+                            reports.add(collateralAndGuarantorOfferLetterReport);
+                        }
+                    }
                 }
             }
         } else {
@@ -279,24 +292,44 @@ public class PDFOfferLetter implements Serializable {
     public List<FeeCalculationOfferLetterReport> fillFeecalculationAgreement(){
         List<FeeCalculationOfferLetterReport> detailsAgreement = new ArrayList<FeeCalculationOfferLetterReport>();
         String PaymentMethod = "";
+        String type;
+        String feeDecrition;
         int i = 1;
+        HashSet paymentName = new HashSet();
 
         if (Util.isSafetyList(feeCollectionDetails)){
             for (FeeCollectionDetail detail : feeCollectionDetails){
-                FeeCalculationOfferLetterReport calculationOfferLetterReport = new FeeCalculationOfferLetterReport();
-
                 if (detail.getPaymentMethod().getId() == 1){
+                    FeeCalculationOfferLetterReport calculationOfferLetterReport = new FeeCalculationOfferLetterReport();
                     calculationOfferLetterReport.setId(i++);
-                    if (detail.getPaymentMethod().getDescription().indexOf(PaymentMethod) == -1) {
-                        calculationOfferLetterReport.setPaymentMethod(msg.get("report.offerletter.paymentmethod"));
-                    } else {
-                        calculationOfferLetterReport.setPaymentMethod(SPACE);
-                    }
-                    calculationOfferLetterReport.setPaymentType(Util.checkNullString(detail.getFeeType().getDescription()));
-                    calculationOfferLetterReport.setAmount(Util.convertNullToZERO(detail.getAmount()));
-                }
+                    calculationOfferLetterReport.setPaymentMethod(!PaymentMethod.equals(detail.getPaymentMethod().getDescription()) ?
+                            msg.get("report.offerletter.paymentnonmethod") : SPACE);
 
-                detailsAgreement.add(calculationOfferLetterReport);
+                    if (detail.getFeeType().getId() == 1){
+                        type = msg.get("report.offerletter.frontendfee");
+                        feeDecrition = msg.get("report.offerletter.oneagreement");
+                    } else if (detail.getFeeType().getId() == 7){
+                        type = msg.get("report.offerletter.dutystamp");
+                        feeDecrition = msg.get("report.offerletter.oneagreement");
+                    } else if (detail.getFeeType().getId() == 10){
+                        type = msg.get("report.offerletter.mrtgageservice");
+                        feeDecrition = msg.get("report.offerletter.oneagreement");
+                    } else if (detail.getFeeType().getId() == 12){
+                        type = msg.get("report.offerletter.insurance");
+                        feeDecrition = msg.get("report.offerletter.firstagreement");
+                    } else if (detail.getFeeType().getId() == 13){
+                        type = msg.get("report.offerletter.ba");
+                        feeDecrition = msg.get("report.offerletter.firstagreement");
+                    } else {
+                        type = SPACE;
+                        feeDecrition = SPACE;
+                    }
+                    calculationOfferLetterReport.setPaymentType(type);
+                    calculationOfferLetterReport.setFeeType(feeDecrition);
+                    calculationOfferLetterReport.setAmount(Util.convertNullToZERO(detail.getAmount()));
+
+                    detailsAgreement.add(calculationOfferLetterReport);
+                }
             }
             log.debug("--fillFeecalculationAgreement. {}",detailsAgreement);
         } else {
@@ -313,23 +346,32 @@ public class PDFOfferLetter implements Serializable {
         List<FeeCalculationOfferLetterReport> detailsAgreement = new ArrayList<FeeCalculationOfferLetterReport>();
         String PaymentMethod = "";
         int i = 1;
+        String type = "";
+        String feeDecrition;
 
         if (Util.isSafetyList(feeCollectionDetails)) {
             for (FeeCollectionDetail detail : feeCollectionDetails){
-                FeeCalculationOfferLetterReport calculationOfferLetterReport = new FeeCalculationOfferLetterReport();
-
                 if (detail.getPaymentMethod().getId() == 3){
+                    FeeCalculationOfferLetterReport calculationOfferLetterReport = new FeeCalculationOfferLetterReport();
                     calculationOfferLetterReport.setId(i++);
-                    if (detail.getPaymentMethod().getDescription().indexOf(PaymentMethod) == -1) {
-                        calculationOfferLetterReport.setPaymentMethod(msg.get("report.offerletter.paymentnonmethod"));
-                    } else {
-                        calculationOfferLetterReport.setPaymentMethod(SPACE);
-                    }
-                    calculationOfferLetterReport.setPaymentType(Util.checkNullString(detail.getFeeType().getDescription()));
-                    calculationOfferLetterReport.setAmount(Util.convertNullToZERO(detail.getAmount()));
-                }
+                    calculationOfferLetterReport.setPaymentMethod(!PaymentMethod.equals(detail.getPaymentMethod().getDescription()) ?
+                            msg.get("report.offerletter.paymentnonmethod") : SPACE);
 
-                detailsAgreement.add(calculationOfferLetterReport);
+                    if (detail.getFeeType().getId() == 9){
+                        type = msg.get("report.offerletter.mortgageregistrationfee");
+                        feeDecrition = msg.get("report.offerletter.onemortgage");
+                    } else if (detail.getFeeType().getId() == 6){
+                        type = msg.get("report.offerletter.tcgfee");
+                        feeDecrition = msg.get("report.offerletter.beforeoneagreement");
+                    }  else {
+                        type = SPACE;
+                        feeDecrition = SPACE;
+                    }
+                    calculationOfferLetterReport.setPaymentType(type);
+                    calculationOfferLetterReport.setFeeType(feeDecrition);
+                    calculationOfferLetterReport.setAmount(Util.convertNullToZERO(detail.getAmount()));
+                    detailsAgreement.add(calculationOfferLetterReport);
+                }
             }
             log.debug("--fillFeecalculationNonAgreement. {}",detailsAgreement);
         } else {
@@ -483,11 +525,11 @@ public class PDFOfferLetter implements Serializable {
         //14
         baseRateList = baseRateDAO.findAll();
         log.debug("--baseRateList. {}",baseRateList.size());
-        for (int i = 1;i < baseRateList.size();i++){
+        for (int i = 0;i < baseRateList.size();i++){
             switch (i){
-                case 1 : report.setValueMLR(baseRateList.get(i).getValue()); break;
-                case 2 : report.setValueMOR(baseRateList.get(i).getValue()); break;
-                case 3 : report.setValueMRR(baseRateList.get(i).getValue()); break;
+                case 0 : report.setValueMLR(baseRateList.get(i).getValue()); break;
+                case 1 : report.setValueMOR(baseRateList.get(i).getValue()); break;
+                case 2 : report.setValueMRR(baseRateList.get(i).getValue()); break;
             }
         }
 
@@ -566,8 +608,8 @@ public class PDFOfferLetter implements Serializable {
             log.debug("Customer findCustomerByCommitteeId. {}",list);
 
             if (Util.isSafetyList(list)){
-                customerName = customerName.append(Util.checkNullString(list.get(1).getTitle().getTitleTh()))
-                        .append(Util.checkNullString(list.get(1).getNameTh())).append(Util.checkNullString(list.get(1).getLastNameTh()));
+                customerName = customerName.append(Util.checkNullString(list.get(firstIndex).getTitle().getTitleTh()))
+                        .append(Util.checkNullString(list.get(firstIndex).getNameTh())).append(Util.checkNullString(list.get(firstIndex).getLastNameTh()));
                 report.setLoanCustomerName(Util.checkNullString(customerName.toString()));
             } else {
                 log.debug("Customer findCustomerByCommitteeId. {}",list);
@@ -576,16 +618,16 @@ public class PDFOfferLetter implements Serializable {
             List<MortgageInfo> mortgageInfoList = mortgageInfoDAO.findAllByWorkCaseId(workCaseId);
             log.debug("--mortgageInfoList. {}",mortgageInfoList.size());
             if (Util.isSafetyList(mortgageInfoList)){
-                if (!Util.isNull(mortgageInfoList.get(1).getMortgageSigningDate())) {
-                    mortgageDate = Util.checkNullString(Util.createDateTh(mortgageInfoList.get(1).getMortgageSigningDate()));
+                if (!Util.isNull(mortgageInfoList.get(firstIndex).getMortgageSigningDate())) {
+                    mortgageDate = Util.checkNullString(Util.createDateTh(mortgageInfoList.get(firstIndex).getMortgageSigningDate()));
                     report.setMortgageDate(mortgageDate); //27.2
                 }
 
-                if (!Util.isNull(mortgageInfoList.get(1).getMortgageSigningDate())) {
-                    mortgageTime = Util.checkNullString(Util.createTime(mortgageInfoList.get(1).getMortgageSigningDate()));
+                if (!Util.isNull(mortgageInfoList.get(firstIndex).getMortgageSigningDate())) {
+                    mortgageTime = Util.checkNullString(Util.createTime(mortgageInfoList.get(firstIndex).getMortgageSigningDate()));
                     report.setMortgageTime(mortgageTime); //28.2
                 }
-                report.setMortgageLocation(Util.checkNullString(mortgageInfoList.get(1).getMortgageLandOffice().getName())); //29.2
+                report.setMortgageLocation(Util.checkNullString(mortgageInfoList.get(firstIndex).getMortgageLandOffice().getName())); //29.2
             }
 
             Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");

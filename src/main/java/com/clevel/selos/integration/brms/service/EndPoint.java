@@ -36,24 +36,48 @@ public class EndPoint implements Serializable {
     private String prescreenServiceName;
 
     @Inject
+    @Config(name = "interface.brms.prescreen.service.port.name")
+    private String prescreenServicePortName;
+
+    @Inject
     @Config(name = "interface.brms.fullapp.service.name")
     private String fullAppServiceName;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.interest.service.name")
+    @Config(name = "interface.brms.fullapp.service.port.name")
+    private String fullAppServicePortName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.pricing.interest.service.name")
     private String interestServiceName;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.fee.service.name")
+    @Config(name = "interface.brms.standard.pricing.interest.service.port.name")
+    private String interestServicePortName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.pricing.fee.service.name")
     private String feeServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.standard.pricing.fee.service.port.name")
+    private String feeServicePortName;
 
     @Inject
     @Config(name = "interface.brms.customer.service.name")
     private String customerServiceName;
 
     @Inject
+    @Config(name = "interface.brms.customer.service.port.name")
+    private String customerServicePortName;
+
+    @Inject
     @Config(name = "interface.brms.appraisal.service.name")
     private String appraisalServiceName;
+
+    @Inject
+    @Config(name = "interface.brms.appraisal.service.port.name")
+    private String appraisalServicePortName;
 
     @Inject
     @Config(name = "interface.brms.prescreen.address")
@@ -64,11 +88,11 @@ public class EndPoint implements Serializable {
     private String fullAppAddress;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.interest.address")
+    @Config(name = "interface.brms.standard.pricing.interest.address")
     private String interestAddress;
 
     @Inject
-    @Config(name = "interface.brms.standard.paricing.fee.address")
+    @Config(name = "interface.brms.standard.pricing.fee.address")
     private String feeAddress;
 
     @Inject
@@ -80,6 +104,54 @@ public class EndPoint implements Serializable {
     private String appraisalAddress;
 
     @Inject
+    @Config(name = "interface.brms.log.prescreen.request")
+    private String logPreScreenRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.prescreen.response")
+    private String logPreScreenResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.fullapp.request")
+    private String logFullAppRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.fullapp.response")
+    private String logFullAppResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.pricing.request")
+    private String logPricingRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.pricing.response")
+    private String logPricingResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.fee.request")
+    private String logFeeRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.fee.response")
+    private String logFeeResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.document.request")
+    private String logDocRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.document.response")
+    private String logDocResponse;
+
+    @Inject
+    @Config(name = "interface.brms.log.appraisaldocument.request")
+    private String logAppraisalDocRequest;
+
+    @Inject
+    @Config(name = "interface.brms.log.appraisaldocument.response")
+    private String logAppraisalDocResponse;
+
+    @Inject
     public EndPoint() {
     }
 
@@ -87,13 +159,15 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callPrescreenUnderwritingRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", prescreenServiceName);
+        logger.debug("Service Port Name : {}", prescreenServicePortName);
         logger.debug("Service Address : {}", prescreenAddress);
+
         DecisionServiceSEPrescreenUWSFlow_Service service = null;
         DecisionServiceSEPrescreenUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/prescreenUnderwritingRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/prescreenUnderwritingRulesResponse.xml";
+            String requestFile = logPreScreenRequest;//"/home/slosdev/clevel/brms/prescreenUnderwritingRulesRequest.xml";
+            String responseFile = logPreScreenResponse;//"/home/slosdev/clevel/brms/prescreenUnderwritingRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -103,7 +177,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, prescreenServiceName);
 
             service = new DecisionServiceSEPrescreenUWSFlow_Service(url, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, prescreenServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -133,13 +207,14 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callFullApplicationUnderwritingRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", fullAppServiceName);
+        logger.debug("Service Port Name : {}", fullAppServicePortName);
         logger.debug("Service Address : {}", fullAppAddress);
         DecisionServiceSEFullApplicationUWSFlow_Service service = null;
         DecisionServiceSEFullApplicationUWSFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesResponse.xml";
+            String requestFile = logFullAppRequest; //"/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesRequest.xml";
+            String responseFile = logFullAppResponse; //"/home/slosdev/clevel/brms/fullApplicationUnderwritingRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -149,7 +224,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, fullAppServiceName);
             service = new DecisionServiceSEFullApplicationUWSFlow_Service(url, qname);
 
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, fullAppServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -179,13 +254,14 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callStandardPricingInterestRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", interestServiceName);
+        logger.debug("Service Port Name : {}", interestServicePortName);
         logger.debug("Service Address : {}", interestAddress);DecisionServiceSEStandardPricingInterestFlow_Service service = null;
         DecisionServiceSEStandardPricingInterestFlow port = null;
         DecisionServiceResponse response = null;
         try {
 
-            String requestFile = "/home/slosdev/clevel/brms/standardPricingInterestRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/standardPricingInterestRulesResponse.xml";
+            String requestFile = logPricingRequest; //"/home/slosdev/clevel/brms/standardPricingInterestRulesRequest.xml";
+            String responseFile = logPricingResponse; //"/home/slosdev/clevel/brms/standardPricingInterestRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -195,7 +271,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, interestServiceName);
 
             service = new DecisionServiceSEStandardPricingInterestFlow_Service(url, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, interestServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -225,13 +301,14 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callStandardPricingFeeRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", feeServiceName);
+        logger.debug("Service Port Name : {}", feeServicePortName);
         logger.debug("Service Address : {}", feeAddress);
         DecisionServiceSEStandardPricingFeeFlow_Service service = null;
         DecisionServiceSEStandardPricingFeeFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/standardPricingFeeRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/standardPricingFeeRulesResponse.xml";
+            String requestFile = logFeeRequest; //"/home/slosdev/clevel/brms/standardPricingFeeRulesRequest.xml";
+            String responseFile = logFeeResponse; //"/home/slosdev/clevel/brms/standardPricingFeeRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -241,7 +318,7 @@ public class EndPoint implements Serializable {
             QName qname = new QName(brmsServiceURL, feeServiceName);
 
             service = new DecisionServiceSEStandardPricingFeeFlow_Service(wsdlUrl, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, feeServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -271,13 +348,14 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callDocumentCustomerRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", customerServiceName);
+        logger.debug("Service Port Name : {}", customerServicePortName);
         logger.debug("Service Address : {}", customerAddress);
         DecisionServiceSEDocumentCustomerFlow_Service service = null;
         DecisionServiceSEDocumentCustomerFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/documentCustomerRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/documentCustomerRulesResponse.xml";
+            String requestFile = logDocRequest; //"/home/slosdev/clevel/brms/documentCustomerRulesRequest.xml";
+            String responseFile = logDocResponse; //"/home/slosdev/clevel/brms/documentCustomerRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -286,7 +364,7 @@ public class EndPoint implements Serializable {
             URL wsdlUrl = new URL(customerAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, customerServiceName);
             service = new DecisionServiceSEDocumentCustomerFlow_Service(wsdlUrl, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, customerServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;
@@ -316,13 +394,14 @@ public class EndPoint implements Serializable {
         logger.debug("-- begin Sending Request to callDocumentAppraisalRulesService()");
         logger.debug("Service URL : {}", brmsServiceURL);
         logger.debug("Service Name : {}", appraisalServiceName);
+        logger.debug("Service Port Name : {}", appraisalServicePortName);
         logger.debug("Service Address : {}", appraisalAddress);
         DecisionServiceSEDocumentAppraisalFlow_Service service = null;
         DecisionServiceSEDocumentAppraisalFlow port = null;
         DecisionServiceResponse response = null;
         try {
-            String requestFile = "/home/slosdev/clevel/brms/documentAppraisalRulesRequest.xml";
-            String responseFile = "/home/slosdev/clevel/brms/documentAppraisalRulesResponse.xml";
+            String requestFile = logAppraisalDocRequest; //"/home/slosdev/clevel/brms/documentAppraisalRulesRequest.xml";
+            String responseFile = logAppraisalDocResponse; //"/home/slosdev/clevel/brms/documentAppraisalRulesResponse.xml";
             JAXBContext requestContext = JAXBContext.newInstance(DecisionServiceRequest.class);
             Marshaller mRequest = requestContext.createMarshaller();
             mRequest.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -331,7 +410,7 @@ public class EndPoint implements Serializable {
             URL wsdlUrl = new URL(appraisalAddress + this.WSDL);
             QName qname = new QName(brmsServiceURL, appraisalServiceName);
             service = new DecisionServiceSEDocumentAppraisalFlow_Service(wsdlUrl, qname);
-            port = service.getDecisionServiceSOAPstmbrmsred1();
+            port = service.getDecisionServiceSOAP(brmsServiceURL, appraisalServicePortName);
             int timeout = 60000;
             try{
                 timeout=Integer.parseInt(brmsRequestTimeout)*1000;

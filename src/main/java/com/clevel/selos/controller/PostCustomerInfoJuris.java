@@ -315,7 +315,9 @@ public class PostCustomerInfoJuris  implements Serializable {
 	@Inject MandatoryFieldsControl mandatoryFieldsControl;
 	private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
 	private void _loadFieldControl() {
-		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PostCustomerInfoJuris);
+        HttpSession session = FacesUtil.getSession(false);
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+		List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, Screen.PostCustomerInfoJuris, ownerCaseUserId);
 		fieldMap.clear();
 		for (FieldsControlView field : fields) {
 			fieldMap.put(field.getFieldName(), field);

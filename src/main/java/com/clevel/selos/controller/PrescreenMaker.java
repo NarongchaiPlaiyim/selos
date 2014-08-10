@@ -255,6 +255,8 @@ public class PrescreenMaker extends BaseController {
                 checkPage = true;
             } else if (stepId == StepValue.PRESCREEN_MAKER.value() && page.equals("prescreenMaker.jsf")) {
                 checkPage = true;
+            } else if (stepId == StepValue.COMPLETED_STEP.value() && page.equals("prescreenMaker.jsf")) {
+                checkPage = true;
             }
 
             if (!checkPage) {
@@ -330,7 +332,7 @@ public class PrescreenMaker extends BaseController {
 
     public void onCheckMaxDate(String type) {
         if (type.equalsIgnoreCase("dateOfexpected")) {
-            prescreenView.setExpectedSubmitDate(DateTimeUtil.checkMaxDate(prescreenView.getExpectedSubmitDate()));
+            prescreenView.setExpectedSubmitDate(DateTimeUtil.checkMinDate(prescreenView.getExpectedSubmitDate()));
         } else if (type.equalsIgnoreCase("dateOfregister")) {
             prescreenView.setRegisterDate(DateTimeUtil.checkMaxDate(prescreenView.getRegisterDate()));
         } else if (type.equalsIgnoreCase("dateOfrefer")) {
@@ -682,7 +684,7 @@ public class PrescreenMaker extends BaseController {
         ProductProgram productProgram = selectFacilityItem.getProductProgram();
         CreditType creditType = selectFacilityItem.getCreditType();
         BigDecimal requestAmount = selectFacilityItem.getRequestAmount();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(productProgram);
 
         facility.setProductProgram(productProgram);
         facility.setCreditType(creditType);
@@ -2515,39 +2517,6 @@ public class PrescreenMaker extends BaseController {
         }
     }
 
-    public void onOpenAssignCheckerDialog() {
-        bdmCheckerList = userDAO.findBDMChecker(user);
-        prescreenView.setCheckerId("");
-        prescreenView.setRemark("");
-        log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
-    }
-
-    public void onAssignToChecker() {
-        log.debug("onAssignToChecker ::: starting...");
-        boolean complete = false;
-        try {
-            if (prescreenView.getCheckerId() != null && !prescreenView.getCheckerId().equals("")) {
-                HttpSession session = FacesUtil.getSession(false);
-                prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, Util.parseString(session.getAttribute("wobNumber"), ""), prescreenView.getCheckerId(), ActionCode.ASSIGN_TO_CHECKER.getVal());
-                complete = true;
-                messageHeader = "Information.";
-                message = "Assign to checker complete.";
-                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
-            } else {
-                complete = false;
-            }
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-            log.debug("onAssignToChecker ::: complete");
-        } catch (Exception ex) {
-            messageHeader = "Assign to checker failed.";
-            message = "Assign to checker failed. Cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-
-            log.error("onAssignToChecker ::: exception : {}", ex);
-        }
-    }
-
     public void onCancelCA() {
         try {
             //TODO : set reason and remark from screen.
@@ -2652,7 +2621,7 @@ public class PrescreenMaker extends BaseController {
         ProductProgram productProgram = productProgramDAO.findById(facility.getProductProgram().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(productProgram);
         if (prdProgramToCreditTypeList == null) {
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         }
@@ -2752,7 +2721,7 @@ public class PrescreenMaker extends BaseController {
                 + facilityViewList.get(rowNumber).getRequestAmount());
 
         selectProductProgram = facilityViewList.get(rowNumber).getProductProgram();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(selectProductProgram);
         selectCreditType = facilityViewList.get(rowNumber).getCreditType();
         facility.setProductProgram(selectProductProgram);
         facility.setCreditType(selectCreditType);

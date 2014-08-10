@@ -202,8 +202,8 @@ public class ProposeLine extends BaseController {
         if(checkSession(session)) {
             workCaseId = (Long)session.getAttribute("workCaseId");
             user = (User) session.getAttribute("user");
-
-            loadFieldControl(workCaseId, Screen.CREDIT_FACILITY_PROPOSE);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.CREDIT_FACILITY_PROPOSE, ownerCaseUserId);
 
             proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
 

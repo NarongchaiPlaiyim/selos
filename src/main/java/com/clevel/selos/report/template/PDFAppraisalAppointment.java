@@ -11,6 +11,7 @@ import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -83,7 +84,7 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setLocationOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getLocationOfProperty()) ? appraisalView.getLocationOfProperty().getName() : SPACE));
             report.setProvinceOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getProvinceOfProperty()) ? appraisalView.getProvinceOfProperty().getName() : SPACE));
             report.setAppraisalDate( appraisalView.getAppraisalDate());
-            report.setDueDate( appraisalView.getDueDate());
+            report.setDueDate(appraisalView.getDueDate());
             report.setAADAdminRemark(Util.checkNullString(appraisalView.getAADAdminRemark()));
 
             report.setAppointmentDate(appraisalView.getAppointmentDate());
@@ -162,13 +163,13 @@ public class PDFAppraisalAppointment implements Serializable {
                 ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
                 report.setCount(count++);
                 report.setPath(pathsub);
-                report.setCallingDate(view.getCallingDate());
+                report.setCallingDate(DateTimeUtil.getCurrentDateTH(view.getCallingDate()));
                 report.setCallingResult(view.getCallingResult());
                 report.setAcceptResult(view.getAcceptResult());
                 report.setNextCallingDate(view.getNextCallingDate());
-                report.setReasonDescription(Util.checkNullString(view.getReason().getDescription()));
+                report.setReasonDescription(Util.checkNullString(!Util.isNull(view.getReason()) ? view.getReason().getDescription() : SPACE));
                 report.setRemark(Util.checkNullString(view.getRemark()));
-                report.setStatusDescription(Util.checkNullString(view.getStatus().getDescription()));
+                report.setStatusDescription(Util.checkNullString(!Util.isNull(view.getStatus()) ? view.getStatus().getDescription() : SPACE));
                 report.setDisplayName(Util.checkNullString(view.getCreateBy().getDisplayName()));
                 contactRecordDetailViewReports.add(report);
             }

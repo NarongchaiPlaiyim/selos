@@ -11,10 +11,11 @@ public class FeeCalculationOfferLetterReport extends ReportModel {
     private String paymentMethod;
     private String paymentType;
     private BigDecimal amount;
+    private String feeType;
 
     public FeeCalculationOfferLetterReport() {
-        paymentMethod = getDefaultString();
-        paymentMethod = getDefaultString();
+//        paymentMethod = getDefaultString();
+        paymentType = getDefaultString();
         amount = getDefaultBigDecimal();
     }
 
@@ -48,6 +49,14 @@ public class FeeCalculationOfferLetterReport extends ReportModel {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public String getFeeType() {
+        return feeType;
+    }
+
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
     }
 
     @Override

@@ -237,7 +237,7 @@
                     </table>
                     </p:panel>
 
-                    <p:panel styleClass="panel" id="returnInfoBDMPanel">
+                    <p:panel styleClass="panel" id="returnInfoReplyPanel">
                         <table class="content_table_form">
                             <tr>
                                 <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
@@ -275,7 +275,7 @@
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
     </div>
-        <p:blockUI block=":frmMain" trigger="saveBtn, btnViewHistory, cancelBtn">
+        <p:blockUI widgetVar="blockUI" block=":frmMain" trigger="saveBtn, btnViewHistory, cancelBtn">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

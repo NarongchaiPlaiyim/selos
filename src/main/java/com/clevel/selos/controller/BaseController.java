@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.UserAccessControl;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.UserAccessView;
@@ -20,25 +21,33 @@ public class BaseController implements Serializable {
     MandatoryFieldsControl mandatoryFieldsControl;
     @Inject
     UserAccessControl userAccessControl;
+    @Inject
+    @SELOS
+    private org.slf4j.Logger log;
 
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, UserAccessView> userAccessMap = new HashMap<String, UserAccessView>();
 
-    protected void loadFieldControl(long workCaseId, Screen screenId) {
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId, 0, 0);
-        List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, screenId);
+    protected void loadFieldControl(long workCaseId, Screen screenId, String ownerCaseUserId) {
+        log.debug("ownerCaseUserId : {}", ownerCaseUserId);
+        HttpSession session = FacesUtil.getSession(false);
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
+        //List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
         fieldMap.clear();
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
             fieldMap.put(field.getFieldName(), field);
-//            log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
-        }
-        for (FieldsControlView field : dialogFields) {
-            dialogFieldMap.put(field.getFieldName(), field);
+            //log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
 
+        /*for (FieldsControlView field : dialogFields) {
+            dialogFieldMap.put(field.getFieldName(), field);
+        }*/
+
     }
+
     public String mandate(String name) {
         FieldsControlView field = fieldMap.get(name);
         if (field == null)

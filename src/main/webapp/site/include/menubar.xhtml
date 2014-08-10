@@ -23,12 +23,12 @@
     <div id="selosmenu" class="selosmenu">
         <ul>
             <li id="mnuinbox"><a href="inbox.jsf" title="#{msg.get('app.menu.inbox')}">#{msg.get('app.menu.inbox')}</a></li>
-            <h:panelGroup id="pnl_menu_prescreen" rendered="#{headerController.stepId == 1001 || headerController.stepId == 1002 || headerController.stepId == 1003}" styleClass="panel">
+            <h:panelGroup id="pnl_menu_prescreen" rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel">
                 <li id="mnuprescreen">
                     <a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
                     <ul>
                         <li id="submnuprescreen"><a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a></li>
-                        <p:panel id="pnl_menu_prescreen_result" rendered="#{headerController.stepId == 1003}"
+                        <p:panel id="pnl_menu_prescreen_result" rendered="#{headerController.stepId == 1003 || headerController.stepId == 1}"
                                  styleClass="panel">
                             <li id="submnuprescreenresult"><a href="prescreenResult.jsf"
                                                               title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>

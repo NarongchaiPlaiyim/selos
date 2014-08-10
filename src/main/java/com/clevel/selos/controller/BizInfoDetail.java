@@ -145,8 +145,9 @@ public class BizInfoDetail extends BaseController {
                 statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
                 bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+                String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-                loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL);
+                loadFieldControl(workCaseId, Screen.BUSINESS_INFO_DETAIL, ownerCaseUserId);
 
                 if(!Util.isNull(bizInfoSummaryView) && !Util.isZero(bizInfoSummaryView.getId())){
                     bizInfoSummaryId = bizInfoSummaryView.getId();

@@ -72,6 +72,18 @@ public class AppraisalRequestControl extends BusinessControl {
         log.debug("-- init()");
         appraisalView = null;
     }
+
+    public String getZoneLocation(){
+        log.debug("-- getZoneLocation()");
+        String zoneLocation = null;
+        try {
+            zoneLocation = getCurrentUser().getZone().getName();
+        } catch (Exception e){
+            zoneLocation = "";
+        }
+        log.debug("-- Result is {}", zoneLocation);
+        return zoneLocation;
+    }
 	
 	public AppraisalView getAppraisalRequest(final long workCaseId, final long workCasePreScreenId){
         log.info("-- getAppraisalRequest WorkCaseId : {}, workCasePreScreenId : {}, User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
@@ -104,6 +116,7 @@ public class AppraisalRequestControl extends BusinessControl {
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralListForAdd);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                 log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
+                appraisalView.setZoneLocation(getZoneLocation());
                 return appraisalView;
             } else {
                 log.debug("-- NewCreditFacility = null");

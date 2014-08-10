@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.StepToStatus;
@@ -56,6 +57,9 @@ public class InboxControl extends BusinessControl {
     @Inject
     CustomerTransform customerTransform;
 
+    public static final String RETURN_REPLY_PAGE = "/site/returnInfoReply.jsf";
+    public static final String RETURN_REVIEW_PAGE = "/site/returnInfoReview.jsf";
+
     @Inject
     public InboxControl(){
 
@@ -64,8 +68,31 @@ public class InboxControl extends BusinessControl {
     public String getLandingPage(long stepId, long status){
         User user = getCurrentUser();
         if(user!=null){
-//            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepStatusAndRole(stepId,status,user.getRole().getId());
-            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepId(stepId);
+            if(stepId==2004 && status==20006){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
+                    return RETURN_REPLY_PAGE;
+                }
+            }
+
+            if(stepId==2026 && status==20006){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
+                    return RETURN_REPLY_PAGE;
+                }
+            }
+
+            if(stepId==2017 && status==20015){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
+                    return RETURN_REPLY_PAGE;
+                }
+            }
+
+            if(stepId==2030 && status==20015){
+                if(user.getRole().getId()== RoleValue.BDM.id()){
+                    return RETURN_REPLY_PAGE;
+                }
+            }
+
+            StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepStatus(stepId,status);
             String landingPage = "";
             if(stepLandingPage != null){
                 landingPage = stepLandingPage.getPageName();

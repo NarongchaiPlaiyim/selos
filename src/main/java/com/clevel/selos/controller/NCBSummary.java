@@ -13,6 +13,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -105,8 +106,8 @@ public class NCBSummary extends BaseController {
             if (ncbSumViewList == null) {
                 ncbSumViewList = new ArrayList<NCBInfoView>();
             }
-
-            loadFieldControl(workCaseId, Screen.NCB_SUMMARY);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.NCB_SUMMARY, ownerCaseUserId);
         }
     }
 

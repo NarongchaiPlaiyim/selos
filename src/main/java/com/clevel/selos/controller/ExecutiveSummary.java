@@ -1,13 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.ExSummaryControl;
-import com.clevel.selos.dao.master.AuthorizationDOADAO;
-import com.clevel.selos.dao.master.ReasonDAO;
-import com.clevel.selos.dao.master.UWRuleNameDAO;
-import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.ApprovalAuthority;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.UWRuleName;
@@ -71,7 +69,7 @@ public class ExecutiveSummary extends BaseController {
     @Inject
     private ReasonDAO reasonDAO;
     @Inject
-    private AuthorizationDOADAO authorizationDOADAO;
+    private ApprovalAuthorityDAO approvalAuthorityDAO;
     @Inject
     private UWRuleNameDAO uwRuleNameDAO;
 
@@ -82,7 +80,7 @@ public class ExecutiveSummary extends BaseController {
     CustomerTransform customerTransform;
 
     //*** Drop down List ***//
-    private List<AuthorizationDOA> authorizationDOAList;
+    private List<ApprovalAuthority> authorizationDOAList;
     private List<Reason> reasonList;
 
     //
@@ -132,7 +130,7 @@ public class ExecutiveSummary extends BaseController {
             statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
             reasonList = new ArrayList<Reason>();
-            authorizationDOAList = authorizationDOADAO.findAll();
+            authorizationDOAList = approvalAuthorityDAO.getList();
 
             reason = new ExSumReasonView();
 
@@ -161,8 +159,8 @@ public class ExecutiveSummary extends BaseController {
             } else {
                 reasonList = new ArrayList<Reason>();
             }
-
-            loadFieldControl(workCaseId, Screen.EXECUTIVE_SUMMARY);
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.EXECUTIVE_SUMMARY, ownerCaseUserId);
             onChangeRM008();
             onChangeRM020();
             onChangeRM204();
@@ -352,11 +350,11 @@ public class ExecutiveSummary extends BaseController {
         this.reasonList = reasonList;
     }
 
-    public List<AuthorizationDOA> getAuthorizationDOAList() {
+    public List<ApprovalAuthority> getAuthorizationDOAList() {
         return authorizationDOAList;
     }
 
-    public void setAuthorizationDOAList(List<AuthorizationDOA> authorizationDOAList) {
+    public void setAuthorizationDOAList(List<ApprovalAuthority> authorizationDOAList) {
         this.authorizationDOAList = authorizationDOAList;
     }
 

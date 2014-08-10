@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,30 +62,58 @@ public class MandatoryFieldsControl extends BusinessControl {
         return fieldsControlViewList;
     }
     
-    public List<FieldsControlView> getFieldsControlView(long workCaseId,Screen screen) {
-    	if (workCaseId <=0 || screen == null)
-    		return Collections.emptyList();
-    	User user = getCurrentUser();
-    	WorkCase workCase = workCaseDAO.findById(workCaseId);
-    	Status status = workCase.getStatus();
-    	long stepId = workCase.getStep().getId();
-    	log.debug("get Field control for screen "+screen+ " ,Workcase="+workCaseId+" ,stepId="+stepId+" ,role="+user.getRole());
-    	List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControlByScreenRoleStepStatus(screen.value(), user.getRole(), status, stepId);
-        List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
-        log.debug("Result fields control = "+fieldsControlViewList.size());
-        return fieldsControlViewList;
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (workCaseId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            Status status = workCase.getStatus();
+            long stepId = workCase.getStep().getId();
+            log.debug("get Field control for screen " + screen + " ,Workcase=" + workCaseId + " ,stepId=" + stepId + " ,role=" + user.getRole());
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControlByScreenRoleStepStatus(screen.value(), user.getRole(), status, stepId);
+            List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+            log.debug("Result fields control = " + fieldsControlViewList.size());
+            return fieldsControlViewList;
+        }else{
+            return Collections.emptyList();
+        }
     }
 
-    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId) {
-        if (workCaseId <=0 || screen == null)
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, long stepId, Screen screen, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (stepId <= 0 || workCaseId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            int productGroupId = workCase.getProductGroup().getId();
+            log.debug("get Field control for screen : {}, stepId : {}, role : {}", screen, stepId, user.getRole());
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
+            List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+            log.debug("Result fields control : {} ", fieldsControlViewList.size());
+            return fieldsControlViewList;
+        }else{
             return Collections.emptyList();
-        User user = getCurrentUser();
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        long stepId = workCase.getStep().getId();
-        int productGroupId = workCase.getProductGroup().getId();
-        Status status = workCase.getStatus();
-        List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, productProgramId, specialTypeId, status);
-        List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
-        return fieldsControlViewList;
+        }
+    }
+
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        log.debug("getFieldsControlView : caseOwnerUserId : {}, currentUserId : {}", caseOwnerUserId, currentUserId);
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (workCaseId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            long stepId = workCase.getStep().getId();
+            int productGroupId = workCase.getProductGroup().getId();
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, specialTypeId);
+            List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+            return fieldsControlViewList;
+        }else{
+            return Collections.emptyList();
+        }
     }
 }
