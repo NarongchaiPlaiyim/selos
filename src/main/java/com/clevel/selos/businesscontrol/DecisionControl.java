@@ -408,7 +408,8 @@ public class DecisionControl extends BusinessControl {
                 }
             }
 
-            decision.setTotalGuaranteeAmount(sumGuaranteeAmount);
+            decisionView.setApproveTotalGuaranteeAmt(sumGuaranteeAmount);
+
             proposeLineDAO.persist(decision);
 
             //Save Propose Fee Detail
