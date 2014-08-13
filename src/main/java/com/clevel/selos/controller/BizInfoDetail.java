@@ -221,7 +221,7 @@ public class BizInfoDetail extends BaseController {
 
                     onChangeBusinessGroupInitial();
 
-                    if (Util.isNull(bizInfoDetailView.getBizInfoText())){
+                    if (Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
                         // #### pass data by presceen ####
                         onChangeBusinessDesc();
                     }

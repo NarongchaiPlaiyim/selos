@@ -127,10 +127,11 @@ public class PDFRejectLetter implements Serializable {
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
         if (!Util.isNull(uwRuleResultSummary)){
+            log.debug("--Color. {}",uwRuleResultSummary.getUwResultColor());
             if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
                 // ##### Color is Red in Uwresult Summary ####
                 rejectLetterReport.setTypePolicy(2);
-                log.debug("--UwResult is Red. {}",uwRuleResultSummary.getUwResultColor().colorCode());
+                log.debug("--UwResult is Red. {}",uwRuleResultSummary.getUwResultColor());
             } else {
                 uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
                 log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
