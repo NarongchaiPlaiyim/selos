@@ -14,6 +14,11 @@ public class IsaActivityDAO extends GenericDAO<IsaActivity, Long> {
 
     @Inject
     public IsaActivityDAO() {
+
+    }
+
+    public void audit(final IsaActivity model){
+        persist(model);
     }
 
 }
