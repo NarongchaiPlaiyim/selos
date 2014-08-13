@@ -51,9 +51,10 @@ public class DecisionServiceSEStandardPricingFeeFlow_Service
      * @return
      *     returns DecisionServiceSEStandardPricingFeeFlow
      */
-    @WebEndpoint(name = "DecisionServiceSOAPstmbrmsred1")
-    public DecisionServiceSEStandardPricingFeeFlow getDecisionServiceSOAPstmbrmsred1() {
-        return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEStandardPricingFeeFlow.class);
+    @WebEndpoint(name = "DecisionServiceSOAP")
+    public DecisionServiceSEStandardPricingFeeFlow getDecisionServiceSOAP(String serviceUrl, String servicePortName) {
+        //return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEStandardPricingFeeFlow.class);
+        return super.getPort(new QName(serviceUrl, servicePortName), DecisionServiceSEStandardPricingFeeFlow.class);
     }
 
     /**

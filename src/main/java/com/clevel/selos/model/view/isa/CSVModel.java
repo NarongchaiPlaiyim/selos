@@ -127,23 +127,6 @@ public class CSVModel extends ValidationImp implements Serializable {
         return super.valid(this, commandType);
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("commandType", commandType)
-                .append("userId", userId)
-                .append("userName", userName)
-                .append("active", active)
-                .append("role", role)
-                .append("department", department)
-                .append("division", division)
-                .append("region", region)
-                .append("team", team)
-                .append("title", title)
-//                .append("status", status)
-                .toString();
-    }
-
     public String getSeq() {
         return Seq;
     }
@@ -214,5 +197,47 @@ public class CSVModel extends ValidationImp implements Serializable {
 
     public void setStatus(String status) {
         Status = status;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("commandType", commandType)
+                .append("userId", userId)
+                .append("userName", userName)
+                .append("active", active)
+                .append("role", role)
+                .append("department", department)
+                .append("division", division)
+                .append("region", region)
+                .append("team", team)
+                .append("title", title)
+                .append("Seq", Seq)
+                .append("EmployeeID", EmployeeID)
+                .append("EmployeeName", EmployeeName)
+                .append("TeamID", TeamID)
+                .append("TeamName", TeamName)
+                .append("CreateDate", CreateDate)
+                .append("LastSignOnDate", LastSignOnDate)
+                .append("Status", Status)
+                .append("NumberOfDays", NumberOfDays)
+                .toString();
+    }
+
+    public String toStringForAudit() {
+        return new StringBuilder()
+                .append("From CSV --> ")
+                .append("commandType[").append(commandType).append("]")
+                .append("userId[").append(userId).append("]")
+                .append("userName[").append(userName).append("]")
+                .append("active[").append(active).append("]")
+                .append("role[").append(role).append("]")
+                .append("department[").append(department).append("]")
+                .append("division[").append(division).append("]")
+                .append("region[").append(region).append("]")
+                .append("team[").append(team).append("]")
+                .append("title[").append(title).append("]")
+                .append("Status[").append(Status).append("]")
+                .toString();
     }
 }

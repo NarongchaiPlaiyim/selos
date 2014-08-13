@@ -51,9 +51,10 @@ public class DecisionServiceSEPrescreenUWSFlow_Service
      * @return
      *     returns DecisionServiceSEPrescreenUWSFlow
      */
-    @WebEndpoint(name = "DecisionServiceSOAPstmbrmsred1")
-    public DecisionServiceSEPrescreenUWSFlow getDecisionServiceSOAPstmbrmsred1() {
-        return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEPrescreenUWSFlow.class);
+    @WebEndpoint(name = "DecisionServiceSOAP")
+    public DecisionServiceSEPrescreenUWSFlow getDecisionServiceSOAP(String serviceUrl, String servicePortName) {
+        //return super.getPort(new QName("http://www.ilog.com/rules/DecisionService", "DecisionServiceSOAPstmbrmsred1"), DecisionServiceSEPrescreenUWSFlow.class);
+        return super.getPort(new QName(serviceUrl, servicePortName), DecisionServiceSEPrescreenUWSFlow.class);
     }
 
     /**

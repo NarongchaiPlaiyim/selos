@@ -11,10 +11,10 @@
             <td class="title right" style="min-width: 80px; width: 80px;">Assign to :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                 value="#{prescreenMaker.prescreenView.checkerId}"
+                                 value="#{headerController.bdmCheckerId}"
                                  required="#{not empty param[submitAssignCheckerBtn.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{prescreenMaker.bdmCheckerList}"
+                    <f:selectItems value="#{headerController.bdmCheckerList}"
                                    var="bdmCheckerItem"
                                    itemLabel="#{bdmCheckerItem.userName}"
                                    itemValue="#{bdmCheckerItem.id}"/>
@@ -24,7 +24,7 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea value="#{prescreenMaker.prescreenView.remark}" autoResize="false" cols="35"
+                <p:inputTextarea value="#{headerController.assignRemark}" autoResize="false" cols="35"
                                  rows="5"></p:inputTextarea>
             </td>
         </tr>
@@ -34,8 +34,8 @@
                                  binding="${submitAssignCheckerBtn}"
                                  value="#{msg.get('app.button.submit')}"
                                  styleClass="small"
-                                 actionListener="#{prescreenMaker.onAssignToChecker}"
-                                 oncomplete="handleAssignCheckerDialogRequest(xhr, status, args)"
+                                 actionListener="#{headerController.onAssignToChecker}"
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'assignCheckerDlg')"
                                  process="@form"
                                  update=":frmMain:assignCheckerDlgPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"

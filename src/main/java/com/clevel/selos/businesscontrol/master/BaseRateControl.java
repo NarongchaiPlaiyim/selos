@@ -89,7 +89,6 @@ public class BaseRateControl extends BusinessControl{
             for(BaseRate baseRate : _tmpList){
                 BaseRateView baseRateView = baseRateTransform.transformToView(baseRate);
                 _tmpMap.put(baseRateView.getId(), baseRateView);
-                System.out.println("baseRateView: " + baseRateView);
                 logger.info("baseRateView {}", baseRateView);
             }
 

@@ -1106,7 +1106,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         workCasePrescreenDAO.persist(workCasePrescreen);
 
         log.debug("savePreScreenInitial ::: saving prescreen data...");
-        if(customerEntity.getId() == BorrowerType.JURISTIC.value()) {
+        if(customerEntity != null && customerEntity.getId() == BorrowerType.JURISTIC.value()) {
             Date tmpDateOfRegister = calculateDateOfRegister(customerInfoViewList);
             prescreenView.setRegisterDate(tmpDateOfRegister);
         }
@@ -1210,14 +1210,14 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(customerModifyFlag > 0){
             prescreenView.setModifyFlag(1);
             modifyFlag = true;
-
-            //Remove PreScreen Result Data
-            log.debug("savePreScreen ::: remove UWResultSummary data...");
-            uwRuleResultControl.deleteUWRuleResult(workCasePreScreenId, 0);
         }else{
             prescreenView.setModifyFlag(0);
             modifyFlag = false;
         }
+        //Remove PreScreen Result Data
+        log.debug("savePreScreen ::: remove UWResultSummary data...");
+        uwRuleResultControl.deleteUWRuleResult(workCasePreScreenId, 0);
+
         log.debug("savePreScreen ::: saving prescreen data...");
         savePreScreenData(prescreenView, facilityViewList, bizInfoViewList, prescreenCollateralViewList, workCasePrescreen);
         log.debug("savePreScreen ::: saving prescreen data success...");
@@ -1390,8 +1390,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for BPM *** //
-    public void assignChecker(long workCasePreScreenId, String queueName, String wobNumber, String checkerId, long actionCode) throws Exception {
-        bpmExecutor.assignChecker(workCasePreScreenId, queueName, wobNumber, checkerId, actionCode, "");
+    public void assignChecker(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, String checkerId, String remark) throws Exception {
+        bpmExecutor.assignChecker(queueName, wobNumber, actionCode, workCasePreScreenId, checkerId, remark);
     }
 
     public void cancelCase(String queueName, String wobNumber, long actionCode, String reason, String remark) throws Exception {

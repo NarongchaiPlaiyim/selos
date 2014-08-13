@@ -4,6 +4,7 @@ import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.IsaActivity;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -24,21 +25,16 @@ public class IsaAuditor implements Serializable {
 
     }
 
-
-
-    private void add(String userName, String action, String actionDetail, ActionResult actionResult, String resultDetail) {
-        isaActivityDAO.persist(new IsaActivity(userName, action, actionDetail, DateTime.now().toDate(), actionResult, resultDetail, FacesUtil.getRequest().getRemoteAddr()));
+    private void add(String userId, String action, String actionDesc, ActionResult actionResult, String resultDesc, User modifyBy, String oldData, String newData) {
+        final IsaActivity model = new IsaActivity(userId, action, actionDesc, DateTime.now().toDate(), actionResult, resultDesc, FacesUtil.getRequest().getRemoteAddr(), DateTime.now().toDate(), modifyBy, oldData, newData);
+        isaActivityDAO.persist(model);
     }
 
-    public void addSucceed(String userName, String action, String actionDetail) {
-        add(userName, action, actionDetail, ActionResult.SUCCESS, "");
-    }
-
-    public void addFailed(String userName, String action, String actionDetail, String resultDetail) {
-        add(userName, action, actionDetail, ActionResult.FAILED, resultDetail);
-    }
-
-    public void addException(String userName, String action, String actionDetail, String resultDetail) {
-        add(userName, action, actionDetail, ActionResult.EXCEPTION, resultDetail);
+    public void audit(String userId, String action, String actionDetail, ActionResult actionResult, String resultDetail, User modifyBy, String oldData, String newData){
+        if(ActionResult.SUCCESS.equals(actionResult)){
+            add(userId, action, actionDetail, ActionResult.SUCCESS, "", modifyBy, oldData, newData);
+        } else {
+            add(userId, action, actionDetail, actionResult, resultDetail, modifyBy, oldData, newData);
+        }
     }
 }

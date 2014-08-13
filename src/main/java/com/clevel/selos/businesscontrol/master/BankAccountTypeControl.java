@@ -9,11 +9,13 @@ import com.clevel.selos.model.view.BankAccountTypeView;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Stateless
 public class BankAccountTypeControl extends BusinessControl{
 
 
