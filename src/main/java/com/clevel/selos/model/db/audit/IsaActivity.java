@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.audit;
 
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -33,10 +34,23 @@ public class IsaActivity implements Serializable {
     @Column(name = "ip_address", length = 100)
     private String ipAddress;
 
-    public IsaActivity() {
-    }
+    //Basic_Security_Checklist_v2.3
+    //User Account Management Activities (Add/Change/Delete User Account, etc.) Page 12.
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
 
-    public IsaActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String ipAddress) {
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "modify_by")
+    private User modifyBy;
+
+    @Column(name = "old_data", length = 1000)
+    private String oldData;
+
+    @Column(name = "new_data", length = 1000)
+    private String newData;
+
+    public IsaActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String ipAddress, Date modifyDate, User modifyBy, String oldData, String newData) {
         this.userId = userId;
         this.action = action;
         this.actionDesc = actionDesc;
@@ -44,6 +58,10 @@ public class IsaActivity implements Serializable {
         this.actionResult = actionResult;
         this.resultDesc = resultDesc;
         this.ipAddress = ipAddress;
+        this.modifyDate = modifyDate;
+        this.modifyBy = modifyBy;
+        this.oldData = oldData;
+        this.newData = newData;
     }
 
     public Long getId() {
@@ -110,18 +128,53 @@ public class IsaActivity implements Serializable {
         this.ipAddress = ipAddress;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("userId", userId).
-                append("action", action).
-                append("actionDesc", actionDesc).
-                append("actionDate", actionDate).
-                append("actionResult", actionResult).
-                append("resultDesc", resultDesc).
-                append("ipAddress", ipAddress).
-                toString();
+    public Date getModifyDate() {
+        return modifyDate;
     }
 
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public String getOldData() {
+        return oldData;
+    }
+
+    public void setOldData(String oldData) {
+        this.oldData = oldData;
+    }
+
+    public String getNewData() {
+        return newData;
+    }
+
+    public void setNewData(String newData) {
+        this.newData = newData;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("userId", userId)
+                .append("action", action)
+                .append("actionDesc", actionDesc)
+                .append("actionDate", actionDate)
+                .append("actionResult", actionResult)
+                .append("resultDesc", resultDesc)
+                .append("ipAddress", ipAddress)
+                .append("modifyDate", modifyDate)
+                .append("modifyBy", modifyBy)
+                .append("oldData", oldData)
+                .append("newData", newData)
+                .toString();
+    }
 }

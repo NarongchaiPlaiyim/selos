@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.working.*;
@@ -101,29 +102,16 @@ public class PDFRejectLetter implements Serializable {
             }
         }
 
-//        if(session.getAttribute("workCaseId") != null){
-//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//            log.debug("workCaseId. {}",workCaseId);
-//        }else{
-//            log.debug("workCaseId is null.");
-//            try{
-//                FacesUtil.redirect("/site/inbox.jsf");
-//            }catch (Exception ex){
-//                log.error("Exception :: {}",ex);
-//            }
-//        }
-
         if (!Util.isNull(workCaseId)){
             customerInfoView = new ArrayList<CustomerInfoView>();
             customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
             workCase = workCaseDAO.findById(workCaseId);
-
         }
     }
 
-//    public static void main(String[] args) {
-//         System.out.println(new RejectLetterReport());
-//    }
+    public static void main(String[] args) {
+        System.out.println("RED".equals(UWResultColor.RED));
+    }
 
     public RejectLetterReport typeReport(){
         log.debug("--On typeReport.");
@@ -139,20 +127,26 @@ public class PDFRejectLetter implements Serializable {
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
         if (!Util.isNull(uwRuleResultSummary)){
-            uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
-            log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
+            if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
+                // ##### Color is Red in Uwresult Summary ####
+                rejectLetterReport.setTypePolicy(2);
+                log.debug("--UwResult is Red. {}",uwRuleResultSummary.getUwResultColor().colorCode());
+            } else {
+                uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
+                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
 
-            for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
-                if (!Util.isNull(ruleResultDetail.getRejectGroup())){
-                    if (ruleResultDetail.getRejectGroup().getId() == 1){
-                        rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
-                    } else if (ruleResultDetail.getRejectGroup().getId() == 2){
-                        rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
-                    } else if (ruleResultDetail.getRejectGroup().getId() == 3){
-                        rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+                for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
+                    if (!Util.isNull(ruleResultDetail.getRejectGroup())){
+                        if (ruleResultDetail.getRejectGroup().getId() == 1){
+                            rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
+                        } else if (ruleResultDetail.getRejectGroup().getId() == 2){
+                            rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
+                        } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+                            rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+                        }
+                    } else {
+                        log.debug("--RejectGroup is Null.");
                     }
-                } else {
-                    log.debug("--RejectGroup is Null.");
                 }
             }
         }

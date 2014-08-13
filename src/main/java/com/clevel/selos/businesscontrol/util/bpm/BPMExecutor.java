@@ -47,36 +47,23 @@ public class BPMExecutor implements Serializable {
     @Inject
     private CustomerDAO customerDAO;
 
-    public void assignChecker(long workCasePreScreenId, String queueName, String wobNumber, String checkerId, long actionCode, String remark) throws Exception{
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+    public void assignChecker(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, String checkerId, String remark) throws Exception{
         Action action = actionDAO.findById(actionCode);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-        List<Customer> customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePreScreenId);
 
-        log.debug("assignChecker : workCasePreScreenId : {}, queueName : {}, checkerId : {}, actionCode : {}", workCasePrescreen, queueName, checkerId, actionCode);
+        log.debug("assignChecker : workCasePreScreenId : {}, queueName : {}, checkerId : {}, actionCode : {}", workCasePreScreenId, queueName, checkerId, actionCode);
         if(action != null && prescreen != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
             fields.put("BDMCheckerUserName", checkerId);
             fields.put("ProductGroup", prescreen.getProductGroup().getName());
-            //Send only 1st Borrower
-            if(customerList != null && customerList.size() > 0){
-                String borrowerName = customerList.get(0).getNameTh();
-                if(customerList.get(0).getLastNameTh() != null){
-                    borrowerName = borrowerName + " " + customerList.get(0).getLastNameTh();
-                }
-                fields.put("BorrowerName", borrowerName);
-            }
             if(!Util.isEmpty(remark))
                 fields.put("Remark", remark);
 
             log.debug("dispatch case for [Assign to Checker]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), checkerId);
 
-            if (workCasePrescreen != null)
-                execute(queueName, workCasePrescreen.getWobNumber(), fields);
-            else
-                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            execute(queueName, wobNumber, fields);
         }else{
             throw new Exception("An exception occurred, Can not find Action.");
         }

@@ -9,8 +9,6 @@
     <h:head>
         <title>ManageUser</title>
         <h:outputStylesheet name="css/style.css" />
-        <!--<script type="text/javascript" language="javascript"-->
-                <!--src="#{request.contextPath}/resources/js/jquery.numeric.js"/>-->
         <h:outputScript library="js" name="jquery.numeric.js"/>
         <h:outputScript library="js" name="custom.js" />
     </h:head>
@@ -45,6 +43,7 @@
                             </td>
                             <td>
                                 <p:inputText value="#{isa.isaSearchView.id}" style="width: 250px; min-width: 250px; max-width: 250px;"
+
                                              maxlength="10"
                                         />
                             </td>
@@ -55,6 +54,7 @@
                             </td>
                             <td>
                                 <p:inputText value="#{isa.isaSearchView.username}" style="width: 250px; min-width: 250px; max-width: 250px;"
+
                                              maxlength="50"
                                         />
                             </td>
@@ -199,10 +199,10 @@
 
                             <p:column selectionMode="multiple"/>
 
-                            <p:column headerText="userId">
+                            <p:column headerText="User Id">
                                 <h:outputText value="#{user.id}"/>
                             </p:column>
-                            <p:column headerText="Username">
+                            <p:column headerText="User Name">
                                 <h:outputText value="#{user.userName}"/>
                             </p:column>
                             <p:column headerText="Active">

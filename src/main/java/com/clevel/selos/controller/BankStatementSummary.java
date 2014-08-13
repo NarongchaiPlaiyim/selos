@@ -404,13 +404,20 @@ public class BankStatementSummary extends BaseController {
                             Date tmpDate;
                             for (int i = (numOfMonths - 1), j = 0; i >= 0; i--, j++) {
                                 BankStmtDetailView bankStmtDetailView = newBankStmtView.getBankStmtDetailViewList().get(j);
-                                // Replace the AsOfDate to NULL
+                                //Gen Only
+                                tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+                                bankStmtDetailView.setAsOfDate(tmpDate);
                                 if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
-                                    tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
-                                    bankStmtDetailView.setAsOfDate(tmpDate);
                                     bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
                                     bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
                                 }
+                                // Replace the AsOfDate to NULL
+//                                if (Util.isNull(bankStmtDetailView.getAsOfDate())) {
+//                                    tmpDate = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+//                                    bankStmtDetailView.setAsOfDate(tmpDate);
+//                                    bankStmtDetailView.setDateOfMaxBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+//                                    bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
+//                                }
                             }
                         }
                         newTMBBankStmtViewList.add(newBankStmtView);
@@ -927,7 +934,7 @@ public class BankStatementSummary extends BaseController {
     }
 
     public String getCurrentDateDDMMYY() {
-        return currentDateDDMMYY;
+        return currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
     }
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {

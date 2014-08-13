@@ -2856,12 +2856,10 @@ public class ProposeLineControl extends BusinessControl {
                                 if (collHeadViewList != null && collHeadViewList.size() > 0) {
                                     for (ProposeCollateralInfoHeadView collHeadView : collHeadViewList) {
                                         PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
-                                         /*
-                                          Sum of [(HeadCollateral-Appraisal of coreAsset/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
-                                          Sum of [(HeadCollateral-Appraisal of nonCoreAsset/50%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
-                                          Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???)/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())]
-                                         */
-                                        if (potentialCollateral.getId() != 0) {
+                                         /* Sum of [(HeadCollateral-Appraisal of coreAsset/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
+                                            Sum of [(HeadCollateral-Appraisal of nonCoreAsset/50%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
+                                            Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???)/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] */
+                                        if (!Util.isNull(potentialCollateral) && !Util.isZero(potentialCollateral.getId())) {
                                             if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
                                                 potentialCollValue = Util.subtract((Util.divide(collHeadView.getAppraisalValue(), thirtyPercent)), collHeadView.getExistingCredit());
                                             } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {

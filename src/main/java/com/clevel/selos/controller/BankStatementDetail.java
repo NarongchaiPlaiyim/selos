@@ -19,6 +19,7 @@ import com.clevel.selos.transform.AccountStatusTransform;
 import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.transform.BankTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -177,9 +178,10 @@ public class BankStatementDetail extends BaseController {
     private void initViewFormAndSelectItems() {
         if (bankStmtView != null) {
             log.debug("Edit Bank statement.");
-            if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
-                bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
-//                numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
+            if (bankStmtView != null) {
+                log.debug("Edit Bank statement.");
+                if (bankStmtView.getBankStmtDetailViewList() != null && bankStmtView.getBankStmtDetailViewList().size() > 0) {
+                    numberOfMonths = bankStmtView.getBankStmtDetailViewList().size();
 //                Date tmpDate;
 //                for (int i=(numberOfMonths-1), j=0; i>=0; i--, j++) {
 //                    BankStmtDetailView bankStmtDetailView = bankStmtView.getBankStmtDetailViewList().get(j);
@@ -190,6 +192,10 @@ public class BankStatementDetail extends BaseController {
 //                        bankStmtDetailView.setDateOfMinBalance(DateTimeUtil.getFirstDayOfMonth(tmpDate));
 //                    }
 //                }
+                }
+                else {
+                    bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));
+                }
             }
             else {
                 bankStmtView.setBankStmtDetailViewList(bankStmtControl.generateBankStmtDetail(numberOfMonths, lastMonthDate));

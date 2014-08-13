@@ -4,7 +4,9 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.isa.CSVModel;
 import com.clevel.selos.model.view.isa.ResultModel;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.supercsv.cellprocessor.constraint.UniqueHashCode;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -17,6 +19,7 @@ import org.supercsv.prefs.CsvPreference;
 import javax.inject.Inject;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CSVService {
@@ -67,14 +70,20 @@ public class CSVService {
             File fileDir = new File(fullPath);
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), UTF_8));
             beanWriter = new CsvBeanWriter(out, CsvPreference.STANDARD_PREFERENCE);
+//            final String[] header = new String[] {
+//                    "userId", "userName", "active", "role",
+//                    "team", "department", "division", "region",
+//                    "title", "status" };
+
             final String[] header = new String[] {
-                    "userId", "userName", "active", "role",
-                    "team", "department", "division", "region",
-                    "title", "status" };
+                    "Seq", "EmployeeID", "EmployeeName", "TeamID",
+                    "TeamName", "CreateDate", "LastSignOnDate", "Status",
+                    "NumberOfDays"};
+
             beanWriter.writeHeader(header);
             List<CSVModel> csvModelList = covertModelToCSV(userList);
             for (final CSVModel csvModel : csvModelList) {
-                beanWriter.write(csvModel, header, getProcessors());
+                beanWriter.write(csvModel, header/*, getProcessors()*/);
             }
             beanWriter.flush();
         } catch (Exception e) {
@@ -124,51 +133,103 @@ public class CSVService {
         CSVModel csvModel = null;
         if(!Util.isZero(userList.size())){
             csvModelList = new ArrayList<CSVModel>();
+            int round = 1;
             for(final User model : userList){
                 csvModel = new CSVModel();
-                csvModel.setUserId(model.getId());
-                csvModel.setUserName(model.getUserName());
-                csvModel.setActive(model.getActive()+EMPTY);
-                if(!Util.isNull(model.getRole())){
-                    csvModel.setRole(model.getRole().getName());
-                } else {
-                    csvModel.setRole(EMPTY);
-                }
-                if(!Util.isNull(model.getDepartment())){
-                    csvModel.setTitle(model.getDepartment().getName());
-                } else {
-                    csvModel.setDepartment(EMPTY);
-                }
-                if(!Util.isNull(model.getDivision())){
-                    csvModel.setTitle(model.getDivision().getName());
-                } else {
-                    csvModel.setDivision(EMPTY);
-                }
-                if(!Util.isNull(model.getRegion())){
-                    csvModel.setRegion(model.getRegion().getName());
-                } else {
-                    csvModel.setRegion(EMPTY);
-                }
+//                csvModel.setUserId(model.getId());
+//                csvModel.setUserName(model.getUserName());
+//                csvModel.setActive(model.getActive()+EMPTY);
+//                if(!Util.isNull(model.getRole())){
+//                    csvModel.setRole(model.getRole().getName());
+//                } else {
+//                    csvModel.setRole(EMPTY);
+//                }
+//                if(!Util.isNull(model.getDepartment())){
+//                    csvModel.setTitle(model.getDepartment().getName());
+//                } else {
+//                    csvModel.setDepartment(EMPTY);
+//                }
+//                if(!Util.isNull(model.getDivision())){
+//                    csvModel.setTitle(model.getDivision().getName());
+//                } else {
+//                    csvModel.setDivision(EMPTY);
+//                }
+//                if(!Util.isNull(model.getRegion())){
+//                    csvModel.setRegion(model.getRegion().getName());
+//                } else {
+//                    csvModel.setRegion(EMPTY);
+//                }
+//                if(!Util.isNull(model.getTeam())){
+//                    csvModel.setTeam(model.getTeam().getTeam_name());
+//                } else {
+//                    csvModel.setTeam(EMPTY);
+//                }
+//                if(!Util.isNull(model.getTitle())){
+//                    csvModel.setTitle(model.getTitle().getName());
+//                } else {
+//                    csvModel.setTitle(EMPTY);
+//                }
+//                if(!Util.isNull(model.getUserStatus())){
+//                    csvModel.setStatus(model.getUserStatus().name());
+//                } else {
+//                    csvModel.setStatus(EMPTY);
+//                }
+
+                csvModel.setSeq(String.valueOf(round++));
+                csvModel.setEmployeeID(model.getId());
+                csvModel.setEmployeeName(model.getUserName());
+
                 if(!Util.isNull(model.getTeam())){
-                    csvModel.setTeam(model.getTeam().getTeam_name());
+                    csvModel.setTeamID(model.getTeam().getTeam_code());
+                    csvModel.setTeamName(model.getTeam().getTeam_name());
                 } else {
-                    csvModel.setTeam(EMPTY);
+                    csvModel.setTeamID(EMPTY);
+                    csvModel.setTeamName(EMPTY);
                 }
-                if(!Util.isNull(model.getTitle())){
-                    csvModel.setTitle(model.getTitle().getName());
+
+                if(!Util.isNull(model.getCreateDate())){
+                    csvModel.setCreateDate(DateTimeUtil.convertToStringDDMMYYYY(model.getCreateDate()));
                 } else {
-                    csvModel.setTitle(EMPTY);
+                    csvModel.setCreateDate(EMPTY);
                 }
+
+                if(!Util.isNull(model.getLastLogon())){
+                    csvModel.setLastSignOnDate(DateTimeUtil.convertToStringDDMMYYYY(model.getLastLogon()));
+                } else {
+                    csvModel.setLastSignOnDate(EMPTY);
+                }
+
                 if(!Util.isNull(model.getUserStatus())){
                     csvModel.setStatus(model.getUserStatus().name());
                 } else {
                     csvModel.setStatus(EMPTY);
                 }
+
+                if(!Util.isNull(model.getLastLogon())){
+                    csvModel.setNumberOfDays(calNumberOfDays(model.getLastLogon()));
+                } else if(!Util.isNull(model.getCreateDate())){
+                    csvModel.setNumberOfDays(calNumberOfDays(model.getCreateDate()));
+                } else {
+                    csvModel.setNumberOfDays(EMPTY);
+                }
+
+
                 csvModelList.add(csvModel);
             }
         }
         return csvModelList;
     }
+
+    private String calNumberOfDays(final Date date){
+        int day = 0;
+        try {
+            day = (int) ((DateTime.now().toDate().getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+        } catch (Exception e){
+
+        }
+        return String.valueOf(day);
+    }
+
     private CellProcessor[] getProcessor() {
         final CellProcessor[] processors = new CellProcessor[] {
                 null, // commandType

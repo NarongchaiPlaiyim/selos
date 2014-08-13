@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.master;
 
 import com.clevel.selos.model.UserStatus;
+import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -278,5 +279,32 @@ public class User implements Serializable {
                 append("active", active).
                 append("userStatus", userStatus).
                 toString();
+    }
+
+    public String toStringForAudit() {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("id[").append(id).append("]");
+        stringBuilder.append("userName[").append(userName).append("]");
+        stringBuilder.append("active[").append(active).append("]");
+        if(!Util.isNull(role) && !Util.isZero(role.getId())){
+            stringBuilder.append("role[id=").append(role.getId()).append("]");
+        }
+        if(!Util.isNull(department) && !Util.isZero(department.getId())){
+            stringBuilder.append("department[id=").append(department.getId()).append("]");
+        }
+        if(!Util.isNull(division) && !Util.isZero(division.getId())){
+            stringBuilder.append("division[id=").append(division.getId()).append("]");
+        }
+        if(!Util.isNull(region) && !Util.isZero(region.getId())){
+            stringBuilder.append("region[id=").append(region.getId()).append("]");
+        }
+        if(!Util.isNull(team) && !Util.isZero(team.getId())){
+            stringBuilder.append("team[id=").append(team.getId()).append("]");
+        }
+        if(!Util.isNull(title) && !Util.isZero(title.getId())){
+            stringBuilder.append("title[id=").append(title.getId()).append("]");
+        }
+        stringBuilder.append("userStatus[id=").append(userStatus).append("]");
+        return stringBuilder.toString();
     }
 }

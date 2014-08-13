@@ -2,7 +2,11 @@ package com.clevel.selos.report;
 
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
+import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.PDFAppraisalAppointment;
 import com.clevel.selos.report.template.PDFExecutiveSummaryAndOpSheet;
@@ -62,29 +66,35 @@ public class GenPDF extends ReportService implements Serializable {
     @Config(name = "report.offerletter")
     String pathOfferLetter;
 
+    @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject PDFExecutiveSummaryAndOpSheet pdfExecutiveSummary;
+    @Inject PDFRejectLetter pdfReject_letter;
+    @Inject PDFAppraisalAppointment pdfAppraisalAppointment;
+    @Inject PDFOfferLetter pdfOfferLetter;
 
-
-    @Inject
-    private WorkCaseDAO workCaseDAO;
-
-    WorkCase workCase; // ห้าม @Inject
-
-    @Inject
-    PDFExecutiveSummaryAndOpSheet pdfExecutiveSummary;
-
-    @Inject
-    PDFRejectLetter pdfReject_letter;
-
-    @Inject
-    PDFAppraisalAppointment pdfAppraisalAppointment;
-
-    @Inject
-    PDFOfferLetter pdfOfferLetter;
-
+    private  WorkCase workCase; // ห้าม @Inject
+    private WorkCasePrescreen workCasePrescreen;
     private ReportView reportView;
+    private long workCaseId;
+    private long workCasePreScreenId;
+    private boolean rejectType;
+    private boolean exsumType;
+    private boolean opshectType;
+    private boolean appraisalType;
+    private User user;
+    private boolean readonlyIsUW;
+    private boolean readonlyIsBDM;
+    private boolean readonlyIsABDM;
+    private boolean readonlyIsZM;
+    private boolean readonlyIsRGM;
+    private boolean readonlyIsGH;
+    private boolean readonlyIsCSSO;
+    private boolean readonlyIsAAD_ADMIN;
+    private boolean readonlyIsAAD_COMMITTEE;
+    private boolean readonlyIsSSO;
 
-    long workCaseId;
-    private boolean type;
+
 
     @Inject
     private STPExecutor stpExecutor;
@@ -97,9 +107,11 @@ public class GenPDF extends ReportService implements Serializable {
         log.debug("init() {[]}");
         HttpSession session = FacesUtil.getSession(false);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             log.debug("workCaseId. {}",workCaseId);
+        }else if (!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         }else{
             log.debug("workCaseId is null.");
             try{
@@ -114,47 +126,83 @@ public class GenPDF extends ReportService implements Serializable {
     private void onCreation(){
         init();
         reportView = new ReportView();
+        HttpSession session = FacesUtil.getSession(false);
+        user = (User)session.getAttribute("user");
         log.debug("GenPDF onCreation and New ReportView");
+        onCheckRole();
+    }
+
+    private void onCheckRole(){
+        readonlyIsUW = user.getRole().getId() == RoleValue.UW.id();
+        readonlyIsBDM = user.getRole().getId() == RoleValue.BDM.id();
+        readonlyIsABDM = user.getRole().getId() == RoleValue.ABDM.id();
+        readonlyIsZM = user.getRole().getId() == RoleValue.ZM.id();
+        readonlyIsRGM = user.getRole().getId() == RoleValue.RGM.id();
+        readonlyIsGH = user.getRole().getId() == RoleValue.GH.id();
+        readonlyIsCSSO = user.getRole().getId() == RoleValue.CSSO.id();
+        readonlyIsAAD_ADMIN = user.getRole().getId() == RoleValue.AAD_ADMIN.id();
+        readonlyIsAAD_COMMITTEE = user.getRole().getId() == RoleValue.AAD_COMITTEE.id();
+        readonlyIsSSO = user.getRole().getId() == RoleValue.SSO.id();
+
     }
 
     public void setNameReport(){
         init();
         log.info("On setNameReport()");
         String date = Util.createDateTime(new Date());
-        type = false;
+        rejectType = false;
+        exsumType = false;
+        opshectType = false;
+        appraisalType = false;
 
-        if(!Util.isNull(workCaseId)){
+        if(!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             workCase = workCaseDAO.findById(workCaseId);
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             String appNumber = workCase.getAppNumber();
 
-            StringBuilder nameOpShect =new StringBuilder();
+            StringBuilder nameOpShect = new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
 
-            StringBuilder nameExSum =new StringBuilder();
+            StringBuilder nameExSum = new StringBuilder();
             nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
 
-            StringBuilder nameRejectLetter =new StringBuilder();
+            StringBuilder nameRejectLetter = new StringBuilder();
             nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
 
-            StringBuilder nameAppraisal =new StringBuilder();
+            StringBuilder nameAppraisal = new StringBuilder();
             nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest.pdf");
 
-            StringBuilder nameOfferLetter =new StringBuilder();
+            StringBuilder nameOfferLetter = new StringBuilder();
             nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
+
+            // ###### Role AAD Can not print Opshect And Exsum , Role UW Can not print Appraisal Request And Reject Letter ######
+            if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
+                log.debug("-------------------------1");
+                exsumType = true;
+                opshectType = true;
+            } else if (readonlyIsUW){
+                log.debug("-------------------------2");
+                appraisalType = true;
+                rejectType = true;
+            }
+
+            // ###### Request Appraisal is Zero in WorkCase OR WorkCasePrcescreen can not print Appraisal Request
+            if (Util.isZero(workCase.getRequestAppraisal()) || Util.isZero(workCasePrescreen.getRequestAppraisal())){
+                appraisalType = true;
+            }
+
+            // ###### Reject_Group in UwresultDetail is Null ######
+            pdfReject_letter.init();
+            if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
+                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                rejectType = true;
+            }
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
-
-            pdfReject_letter.init();
-            if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
-                    Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
-                reportView.setNameReportRejectLetter("-");
-                type = true;
-            } else {
-                reportView.setNameReportRejectLetter(nameRejectLetter.toString());
-            }
+            reportView.setNameReportRejectLetter(nameRejectLetter.toString());
         }
     }
 
@@ -324,11 +372,35 @@ public class GenPDF extends ReportService implements Serializable {
         this.reportView = reportView;
     }
 
-    public boolean isType() {
-        return type;
+    public boolean isRejectType() {
+        return rejectType;
     }
 
-    public void setType(boolean type) {
-        this.type = type;
+    public void setRejectType(boolean rejectType) {
+        this.rejectType = rejectType;
+    }
+
+    public boolean isAppraisalType() {
+        return appraisalType;
+    }
+
+    public void setAppraisalType(boolean appraisalType) {
+        this.appraisalType = appraisalType;
+    }
+
+    public boolean isExsumType() {
+        return exsumType;
+    }
+
+    public void setExsumType(boolean exsumType) {
+        this.exsumType = exsumType;
+    }
+
+    public boolean isOpshectType() {
+        return opshectType;
+    }
+
+    public void setOpshectType(boolean opshectType) {
+        this.opshectType = opshectType;
     }
 }

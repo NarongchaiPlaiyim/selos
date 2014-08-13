@@ -18,8 +18,18 @@ public class CSVModel extends ValidationImp implements Serializable {
     private String region;
     private String team;
     private String title;
-    private String status;
+//    private String status;
 
+
+    private String Seq;
+    private String EmployeeID;
+    private String EmployeeName;
+    private String TeamID;
+    private String TeamName;
+    private String CreateDate;
+    private String LastSignOnDate;
+    private String Status;
+    private String NumberOfDays;
 
     public CSVModel() {
 
@@ -105,16 +115,88 @@ public class CSVModel extends ValidationImp implements Serializable {
         this.title = title;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
     public String valid(CommandType commandType) {
         return super.valid(this, commandType);
+    }
+
+    public String getSeq() {
+        return Seq;
+    }
+
+    public void setSeq(String seq) {
+        Seq = seq;
+    }
+
+    public String getEmployeeID() {
+        return EmployeeID;
+    }
+
+    public void setEmployeeID(String employeeID) {
+        EmployeeID = employeeID;
+    }
+
+    public String getEmployeeName() {
+        return EmployeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        EmployeeName = employeeName;
+    }
+
+    public String getTeamID() {
+        return TeamID;
+    }
+
+    public void setTeamID(String teamID) {
+        TeamID = teamID;
+    }
+
+    public String getTeamName() {
+        return TeamName;
+    }
+
+    public void setTeamName(String teamName) {
+        TeamName = teamName;
+    }
+
+    public String getCreateDate() {
+        return CreateDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        CreateDate = createDate;
+    }
+
+    public String getLastSignOnDate() {
+        return LastSignOnDate;
+    }
+
+    public void setLastSignOnDate(String lastSignOnDate) {
+        LastSignOnDate = lastSignOnDate;
+    }
+
+    public String getNumberOfDays() {
+        return NumberOfDays;
+    }
+
+    public void setNumberOfDays(String numberOfDays) {
+        NumberOfDays = numberOfDays;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
     @Override
@@ -130,7 +212,32 @@ public class CSVModel extends ValidationImp implements Serializable {
                 .append("region", region)
                 .append("team", team)
                 .append("title", title)
-                .append("status", status)
+                .append("Seq", Seq)
+                .append("EmployeeID", EmployeeID)
+                .append("EmployeeName", EmployeeName)
+                .append("TeamID", TeamID)
+                .append("TeamName", TeamName)
+                .append("CreateDate", CreateDate)
+                .append("LastSignOnDate", LastSignOnDate)
+                .append("Status", Status)
+                .append("NumberOfDays", NumberOfDays)
+                .toString();
+    }
+
+    public String toStringForAudit() {
+        return new StringBuilder()
+                .append("From CSV --> ")
+                .append("commandType[").append(commandType).append("]")
+                .append("userId[").append(userId).append("]")
+                .append("userName[").append(userName).append("]")
+                .append("active[").append(active).append("]")
+                .append("role[").append(role).append("]")
+                .append("department[").append(department).append("]")
+                .append("division[").append(division).append("]")
+                .append("region[").append(region).append("]")
+                .append("team[").append(team).append("]")
+                .append("title[").append(title).append("]")
+                .append("Status[").append(Status).append("]")
                 .toString();
     }
 }

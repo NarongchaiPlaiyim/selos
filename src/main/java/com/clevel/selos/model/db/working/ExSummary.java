@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.ApprovalAuthority;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -238,7 +239,7 @@ public class ExSummary implements Serializable {
     ///////////////////////////////////////////////////////////////
     @OneToOne
     @JoinColumn(name = "authority_id")
-    private AuthorizationDOA approveAuthority;
+    private ApprovalAuthority approveAuthority;
 
     @Column(name = "uw_code")
     private String uwCode;
@@ -396,11 +397,11 @@ public class ExSummary implements Serializable {
         this.uwComment = uwComment;
     }
 
-    public AuthorizationDOA getApproveAuthority() {
+    public ApprovalAuthority getApproveAuthority() {
         return approveAuthority;
     }
 
-    public void setApproveAuthority(AuthorizationDOA approveAuthority) {
+    public void setApproveAuthority(ApprovalAuthority approveAuthority) {
         this.approveAuthority = approveAuthority;
     }
 
