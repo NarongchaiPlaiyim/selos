@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.util.*;
 
 @Stateless
+//@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class IsaBusinessControl extends BusinessControl {
     @Inject
     @SELOS
@@ -203,7 +204,7 @@ public class IsaBusinessControl extends BusinessControl {
         DownloadView downloadModel = null;
         if(!Util.isZero(csvModelList.size())){
             resultModelList = new ArrayList<ResultModel>();
-
+            onLoadUserId();
             for(final CSVModel csv : csvModelList){
                 final String command = csv.getCommandType();
                 if(CommandType.INSERT.equals(command)){
@@ -243,13 +244,9 @@ public class IsaBusinessControl extends BusinessControl {
             resultModel.setId(csvModel.getUserId());
             if(Util.isZero(result.length())){
                 result = stpExecutor.createFromCSV(csvModel, getCurrentUser());
-                if("SUCCESS".equalsIgnoreCase(result)){
+                if(ActionResult.SUCCESS.name().equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
-//                    log.debug(user.getId());
-//                    log.debug(commandType.name());
-//                    log.debug(csvModel.toStringForAudit());
-//                    log.debug(ActionResult.SUCCESS.name());
-//                    log.debug(user.toString());
+                    user = null;
                     isaAuditor.audit(user.getId(), commandType.name(), csvModel.toStringForAudit(),  ActionResult.SUCCESS, null, user, "", getNewData(csvModel.getUserId()));
                 } else {
                     resultModel.setResult(ActionResult.FAILED.toString());
@@ -283,7 +280,7 @@ public class IsaBusinessControl extends BusinessControl {
             if(Util.isZero(result.length())){
                 String oldData = getOldData(csvModel.getUserId());
                 result = stpExecutor.updateFromCSV(csvModel, getCurrentUser());
-                if("SUCCESS".equalsIgnoreCase(result)){
+                if(ActionResult.SUCCESS.name().equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
                     isaAuditor.audit(user.getId(), commandType.name(), csvModel.toStringForAudit(),  ActionResult.SUCCESS, null, user, oldData, getNewData(csvModel.getUserId()));
                 } else {
@@ -318,7 +315,7 @@ public class IsaBusinessControl extends BusinessControl {
             if(Util.isZero(result.length())){
                 String oldData = getOldData(csvModel.getUserId());
                 result = stpExecutor.deleteFromCSV(csvModel, getCurrentUser());
-                if("SUCCESS".equalsIgnoreCase(result)){
+                if(ActionResult.SUCCESS.name().equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
                     isaAuditor.audit(user.getId(), commandType.name(), csvModel.toStringForAudit(),  ActionResult.SUCCESS, null, user, oldData, getNewData(csvModel.getUserId()));
                 } else {
