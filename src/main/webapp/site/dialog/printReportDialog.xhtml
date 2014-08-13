@@ -14,10 +14,11 @@
                               <p:outputLabel value="Op Sheet" />
                           </td>
                           <td style="width: 230px">
-                              <h:outputText value="#{report.reportView.nameReportOpShect}" />
+                              <h:outputText value="#{report.opshectType ?'-' : report.reportView.nameReportOpShect}" />
                           </td>
                           <td class="right">
                               <p:commandButton id="dlgPrintReportDecisionBtn"
+                                               disabled = "#{report.opshectType}"
                                                value="#{msg.get('app.button.print')}"
                                                styleClass="small"
                                                actionListener="#{report.onPrintDecisionReport()}"
@@ -29,10 +30,11 @@
                               <p:outputLabel value="Ex Sum" />
                           </td>
                           <td style="width: 230px">
-                              <h:outputText value="#{report.reportView.nameReportExSum}" />
+                              <h:outputText value="#{report.exsumType ? '-' : report.reportView.nameReportExSum}" />
                           </td>
                           <td class="right">
                               <p:commandButton id="dlgPrintReportExsumBtn"
+                                               disabled = "#{report.exsumType}"
                                                value="#{msg.get('app.button.print')}"
                                                styleClass="small"
                                                actionListener="#{report.onPrintExsumReport()}"
@@ -44,10 +46,11 @@
                               <p:outputLabel value="Appraisal Request Form" />
                           </td>
                           <td style="width: 230px">
-                              <h:outputText value="#{report.reportView.nameReportAppralsal}" />
+                              <h:outputText value="#{report.appraisalType ? '-' : report.reportView.nameReportAppralsal}" />
                           </td>
                           <td class="right">
                               <p:commandButton id="dlgPrintReportAppraisalBtn"
+                                               disabled = "#{report.appraisalType}"
                                                value="#{msg.get('app.button.print')}"
                                                styleClass="small"
                                                actionListener="#{report.onPrintAppraisal()}"
@@ -59,7 +62,7 @@
                               <p:outputLabel value="RejectLetter" />
                           </td>
                           <td style="width: 230px">
-                              <h:outputText value="#{report.reportView.nameReportRejectLetter}" />
+                              <h:outputText value="#{report.rejectType ? '-' : report.reportView.nameReportRejectLetter}" />
                           </td>
                           <td class="right">
                               <p:commandButton id="dlgPrintReportRejectLetterBtn"
