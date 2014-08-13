@@ -245,6 +245,11 @@ public class IsaBusinessControl extends BusinessControl {
                 result = stpExecutor.createFromCSV(csvModel, getCurrentUser());
                 if("SUCCESS".equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
+//                    log.debug(user.getId());
+//                    log.debug(commandType.name());
+//                    log.debug(csvModel.toStringForAudit());
+//                    log.debug(ActionResult.SUCCESS.name());
+//                    log.debug(user.toString());
                     isaAuditor.audit(user.getId(), commandType.name(), csvModel.toStringForAudit(),  ActionResult.SUCCESS, null, user, "", getNewData(csvModel.getUserId()));
                 } else {
                     resultModel.setResult(ActionResult.FAILED.toString());
