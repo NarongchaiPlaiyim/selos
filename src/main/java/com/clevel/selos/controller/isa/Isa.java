@@ -2,6 +2,7 @@ package com.clevel.selos.controller.isa;
 
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
@@ -160,14 +161,14 @@ public class Isa implements Serializable {
                         if(!isaBusinessControl.isExistUserName(isaManageUserView.getUsername())){
                             isaBusinessControl.createUser(isaManageUserView, user);
                             message = Result.Success.toString();
-                            isaAuditor.addSucceed(userId, modeForButton.toString(), isaUserDetailView.toString());
+                            isaAuditor.audit(isaManageUserView.getId(), modeForButton.name(), isaManageUserView.toStringForAudit(),  ActionResult.SUCCESS, null, user, "", isaBusinessControl.getNewData(isaManageUserView.getId()));
                         } else {
                             message = "User Name already exists";
-                            isaAuditor.addFailed(userId, modeForButton.toString(), isaUserDetailView.toString(), message);
+                            isaAuditor.audit(isaManageUserView.getId(), modeForButton.name(), isaManageUserView.toStringForAudit(),  ActionResult.FAILED, message, user, "", "");
                         }
                     } else {
                         message = "User ID already exists";
-                        isaAuditor.addFailed(userId, modeForButton.toString(), isaUserDetailView.toString(), message);
+                        isaAuditor.audit(isaManageUserView.getId(), modeForButton.name(), isaManageUserView.toStringForAudit(),  ActionResult.FAILED, message, user, "", "");
                     }
                 } else if(ModeForButton.EDIT == modeForButton) {
                     messageHeader = "Edit User.";
@@ -232,9 +233,12 @@ public class Isa implements Serializable {
         messageHeader = "Delete User.";
         StringBuilder stringBuilder = null;
         try {
+            String oldData = isaBusinessControl.getOldData(id);
             isaBusinessControl.deleteUserById(id);
-            stringBuilder=new StringBuilder();
-            isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(id).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
+            String newData = isaBusinessControl.getNewData(id);
+//            stringBuilder=new StringBuilder();
+//            isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(id).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
+            isaAuditor.audit(isaBusinessControl.getUser(id).getId() , ModeForButton.DELETE.name(), "",  ActionResult.SUCCESS, null, user, oldData, newData);
             onLoadAllUser();
             message = Result.Success.toString();
             context.execute("msgBoxSystemMessageDlg.show()");
@@ -245,7 +249,9 @@ public class Isa implements Serializable {
             } else {
                 message = e.getMessage();
             }
-            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
+//            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
+            isaAuditor.audit(user.getId(), modeForButton.name(), isaManageUserView.toStringForAudit(),  ActionResult.EXCEPTION, message, user, "", "");
+
             context.execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -259,9 +265,12 @@ public class Isa implements Serializable {
             messageHeader = "Delete User.";
             if (selectUserDetail.length != 0) {
                 for ( final User user : selectUserDetail){
+                    String oldData = user.toStringForAudit();
                     isaBusinessControl.deleteUserById(user.getId());
+                    String newData = isaBusinessControl.getNewData(user.getId());
                     stringBuilder=new StringBuilder();
-                    isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
+                    String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to ").append(UserStatus.MARK_AS_DELETED).append(" By ").append(this.user.getId()).toString();
+                    isaAuditor.audit(user.getId() , ModeForButton.DELETE.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                 }
                 message = Result.Success.toString();
             } else {
@@ -276,7 +285,8 @@ public class Isa implements Serializable {
             } else {
                 message = e.getMessage();
             }
-            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
+//            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
+            isaAuditor.audit(user.getId(), ModeForButton.DELETE.name(), isaManageUserView.toStringForAudit(),  ActionResult.EXCEPTION, message, user, "", "");
             context.execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -317,18 +327,24 @@ public class Isa implements Serializable {
                 if (active == 1) {
                     for(final User user : selectUserDetail){
                         if(ManageUserActive.ACTIVE.getValue() != user.getActive()){
+                            String oldData = user.toStringForAudit();
                             isaBusinessControl.editUserActive(user, ManageUserActive.ACTIVE);
+                            String newData = isaBusinessControl.getNewData(user.getId());
                             stringBuilder=new StringBuilder();
-                            isaAuditor.addSucceed(userId, ModeForButton.EDIT.name(),stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(ManageUserActive.ACTIVE.name()).toString());
+                            String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change active to ").append(ManageUserActive.ACTIVE.name()).append(" By ").append(this.user.getId()).toString();
+                            isaAuditor.audit(user.getId() , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                         }
                     }
                     message = Result.Success.toString();
                 } else if (active == 0) {
                     for(final User user : selectUserDetail){
                         if(ManageUserActive.INACTIVE.getValue() != user.getActive()){
+                            String oldData = user.toStringForAudit();
                             isaBusinessControl.editUserActive(user, ManageUserActive.INACTIVE);
+                            String newData = isaBusinessControl.getNewData(user.getId());
                             stringBuilder=new StringBuilder();
-                            isaAuditor.addSucceed(userId, ModeForButton.EDIT.name(),stringBuilder.append("ID ").append(user.getId()).append(" change to ").append(ManageUserActive.INACTIVE.name()).toString());
+                            String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change active to ").append(ManageUserActive.INACTIVE.name()).append(" By ").append(this.user.getId()).toString();
+                            isaAuditor.audit(user.getId() , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                         }
                     }
                     message = Result.Success.toString();
@@ -346,7 +362,8 @@ public class Isa implements Serializable {
                 message = e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
-            isaAuditor.addException(userId, ModeForButton.EDIT.name(), "userId : "+id, message);
+//            isaAuditor.addException(userId, ModeForButton.EDIT.name(), "userId : "+id, message);
+            isaAuditor.audit(user.getId(), ModeForButton.EDIT.name(), isaManageUserView.toStringForAudit(),  ActionResult.EXCEPTION, message, user, "", "");
         }
     }
 

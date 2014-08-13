@@ -339,16 +339,19 @@ public class IsaReport implements Serializable {
             map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom));
             map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo));
             ResultSet rs = stpExecutor.getViolation(map);
+            int i = 1;
 
             if (!Util.isNull(rs)){
                 while (rs.next()){
                     ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setRow(i++);
                     viewReport.setUserId(rs.getString("USER_ID"));
+                    viewReport.setUserName(rs.getString("USER_NAME"));
                     viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
                     viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
                     viewReport.setStatus(rs.getString("STATUS"));
-                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
                     viewReportList.add(viewReport);
+                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
                 }
                 generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
             } else {
@@ -376,17 +379,14 @@ public class IsaReport implements Serializable {
                 while (rs.next()){
                     ISAViewReport viewReport = new ISAViewReport();
                     viewReport.setRow(i++);
-                    viewReport.setUserId(rs.getString("USER_ID"));
-                    viewReport.setUserName(rs.getString("USER_NAME"));
-                    viewReport.setBuCode(rs.getString("BU_CODE"));
-                    viewReport.setTeam(rs.getString("TEAM"));
-                    viewReport.setRole(rs.getString("ROLE_NAME"));
-                    viewReport.setStatus(rs.getString("STATUS"));
-                    viewReport.setLogin(rs.getTimestamp("LAST_DATE"));
-                    viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
-                    viewReport.setCreateBy(rs.getString("CREATE_BY"));
+                    viewReport.setAdminTask(rs.getString("ADMIN_TASK"));
+                    viewReport.setEmpID(rs.getString("EMP_ID"));
+                    viewReport.setEmpName(rs.getString("EMP_NAME"));
+                    viewReport.setOldData(rs.getString("OLD_DATA"));
+                    viewReport.setNewData(rs.getString("NEW_DATA"));
                     viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
                     viewReport.setModifyBy(rs.getString("MODIFY_BY"));
+                    viewReport.setAdminName(rs.getString("ADMIN_NAME"));
                     viewReportList.add(viewReport);
                 }
                 generatePDF(pathISAUserProfile, new HashMap<String, Object>(), nameISAUserProfile.toString(), viewReportList);

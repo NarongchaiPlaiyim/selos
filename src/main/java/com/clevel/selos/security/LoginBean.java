@@ -59,8 +59,8 @@ public class LoginBean {
     @Inject
     SecurityAuditor securityAuditor;
 
-    private String userName;
-    private String password;
+    private String userName = "";
+    private String password = "";
     private String loginExceptionMessage;
 
     @Inject
@@ -143,10 +143,10 @@ public class LoginBean {
         // find user profile in database
         User user = userDAO.findById(userName.trim());
 
-        log.info("user id :{} ",user.getId());
+//        log.info("user id :{} ",user.getId());
 
 
-        log.info("user name  : {}",user.getDisplayName());
+//        log.info("user name  : {}",user.getDisplayName());
 
         UserDetail userDetail = null;
 
