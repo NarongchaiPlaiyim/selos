@@ -1834,8 +1834,6 @@ public class ProposeLineTransform extends Transform {
             proposeLine.setGuarantorBA(decisionView.getGuarantorBA());
             proposeLine.setReasonForReduction(decisionView.getReasonForReduction());
 
-            proposeLine.setTotalGuaranteeAmount(decisionView.getApproveTotalGuaranteeAmt());
-
             proposeLine.setProposeCreditInfoList(transformProposeCreditToModelList(proposeLine, decisionView.getApproveCreditList(), workCase, user, proposeType));
         }
         return proposeLine;
