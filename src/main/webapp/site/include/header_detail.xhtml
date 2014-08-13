@@ -169,10 +169,12 @@
     <p:commandButton id="btnReturnBDM_BU" value="#{msg.get('app.header.button.reviseCA')}"
                      title="#{msg.get('app.header.button.reviseCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Revise CA')}"
-                     actionListener="#{headerController.onOpenReturnBDMByBU}"
-                     update=":frmMain:returnBDM_BUPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
-
+                     actionListener="#{headerController.onOpenReturnBUInfoDialog()}"
+                     oncomplete="returnInfoBUDlg.show()"
+                     update=":frmMain:returnInfoBUPanel">
+        <p:resetInput target=":frmMain:returnInfoBUPanel"/>
     </p:commandButton>
+
     <!--_________ Submit Case ___________ -->
     <!-- Submit Generic for BU -->
     <!--<p:commandButton id="btnSubmitCaseFullApplication" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
@@ -729,6 +731,14 @@
     </p:dialog>
 </p:panel>
 
+<p:panel id="returnInfoBUPanel" styleClass="panel">
+    <p:dialog id="returnInfoBUDialog" widgetVar="returnInfoBUDlg" header="Return Summary"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="800" height="500" closable="false">
+        <ui:include src="/site/dialog/returnInfoBUDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 <p:panel id="checkMandatePanel" styleClass="panel">
     <p:dialog id="checkMandateDialog"
               widgetVar="checkMandateDlg"
@@ -761,6 +771,14 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="460" height="160" closable="false">
         <ui:include src="/site/dialog/addReturnBDMInfoDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="addReturnBUInfoPanel" styleClass="panel">
+    <p:dialog id="addReturnBUInfoDialog" widgetVar="addReturnBUInfoDlg" header="Add Return Information"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/addReturnBUInfoDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

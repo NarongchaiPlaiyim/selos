@@ -139,16 +139,19 @@ public class HeaderController extends BaseController {
     private int reasonId;
     private int reasonAADId;
     private int reasonBDMId;
+    private int reasonBUId;
 
     //Return BDM Dialog
     private List<ReturnInfoView> returnInfoViewList;
     private List<Reason> returnReason;
     private List<Reason> returnAADReason;
     private List<Reason> returnBDMReason;
+    private List<Reason> returnBUReason;
     private String returnRemark;
     private int editRecordNo;
     private int editAADRecordNo;
     private int editBDMRecordNo;
+    private int editBURecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     //Request Appraisal
@@ -211,6 +214,7 @@ public class HeaderController extends BaseController {
     private int returnReasonId;
     private String returnAADRemark;
     private String returnBDMRemark;
+    private String returnBURemark;
 
     //Check Pre-Screen Result
     private boolean canCloseSale;
@@ -1705,6 +1709,22 @@ public class HeaderController extends BaseController {
         log.debug("onOpenReturnBDMInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
     }
 
+    public void onOpenReturnBUInfoDialog(){
+        log.debug("onOpenReturnBUInfoDialog ::: starting...");
+        _loadSessionVariable();
+
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+
+        //set return code master
+        //returnReason = returnControl.getReturnReasonList();
+        returnBUReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.REVISE_CA.getVal());
+        returnBURemark = "";
+        resetAddReturnBUInfo();
+
+        log.debug("onOpenReturnBDMInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
+    }
+
     public void resetAddReturnInfo(){
         returnRemark = "";
         reasonId = 0;
@@ -1721,6 +1741,12 @@ public class HeaderController extends BaseController {
         returnBDMRemark = "";
         reasonBDMId = 0;
         editBDMRecordNo = -1;
+    }
+
+    public void resetAddReturnBUInfo(){
+        returnBURemark = "";
+        reasonBUId = 0;
+        editBURecordNo = -1;
     }
 
     public void onOpenAddReturnInfo(){
@@ -1779,7 +1805,7 @@ public class HeaderController extends BaseController {
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 
-        resetAddReturnInfo();
+        resetAddReturnAADInfo();
 
         log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
@@ -1807,9 +1833,37 @@ public class HeaderController extends BaseController {
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 
-        resetAddReturnInfo();
+        resetAddReturnBDMInfo();
 
         log.debug("onSaveReturnBDMInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
+    }
+
+    public void onSaveReturnBUInfo(){
+        log.debug("onSaveReturnBUInfo ::: starting... (reasonAADId: {})",reasonBUId);
+        Reason reason = reasonDAO.findById(reasonBUId);
+
+        if(editBURecordNo>-1){
+            returnInfoViewList.get(editBURecordNo).setReturnCode(reason.getCode());
+            returnInfoViewList.get(editBURecordNo).setDescription(reason.getDescription());
+            returnInfoViewList.get(editBURecordNo).setReasonDetail(returnBURemark);
+            returnInfoViewList.get(editBURecordNo).setCanEdit(true);
+            returnInfoViewList.get(editBURecordNo).setReasonId(reasonBUId);
+        } else {
+            ReturnInfoView returnInfoView = new ReturnInfoView();
+            returnInfoView.setReturnCode(reason.getCode());
+            returnInfoView.setDescription(reason.getDescription());
+            returnInfoView.setReasonDetail(returnBURemark);
+            returnInfoView.setCanEdit(true);
+            returnInfoView.setReasonId(reasonBUId);
+
+            returnInfoViewList.add(returnInfoView);
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+
+        resetAddReturnInfo();
+
+        log.debug("onSaveReturnBUInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
     public void onSubmitReturnInfo(){ //Submit return to BDM
@@ -1878,6 +1932,51 @@ public class HeaderController extends BaseController {
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
                     returnControl.submitReturnAADAdmin(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
+                    messageHeader = "Information.";
+                    message = msg.get("app.message.dialog.return.success");
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                    complete = true;
+                    log.debug("onReturnBDMSubmit ::: success.");
+                }
+            } catch (Exception ex){
+                messageHeader = "Information.";
+                message = "Return case failed, cause : " + Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                complete = false;
+                log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
+            }
+        } else {
+            messageHeader = "Information.";
+            message = "Return case failed, have no reason to return.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            complete = false;
+            log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSubmitReturnBUInfo(){ //Submit return BU
+        log.debug("onSubmitReturnBUInfo ::: returnInfoViewList size : {}", returnInfoViewList);
+        boolean complete = false;
+        if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            try{
+                HttpSession session = FacesUtil.getSession(false);
+                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                String queueName = session.getAttribute("queueName").toString();
+                User user = (User) session.getAttribute("user");
+                long stepId = Long.parseLong(session.getAttribute("stepId").toString());
+
+                List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId,workCasePreScreenId);
+
+                if(returnInfoViews!=null && returnInfoViews.size()>0){
+                    messageHeader = "Information.";
+                    message = "Submit fail. Please check return information before submit return again.";
+                    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+
+                    log.error("onSubmitReviewReturn ::: fail.");
+                } else {
+                    returnControl.submitReturnBU(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
                     messageHeader = "Information.";
                     message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -2082,6 +2181,15 @@ public class HeaderController extends BaseController {
         log.debug("onEditReturnBDMInfo ::: end");
     }
 
+    public void onEditReturnBUInfo(int rowOnTable) {
+        log.debug("onEditReturnBUInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonBUId = returnInfoView.getReasonId();
+        returnBURemark = returnInfoView.getReasonDetail();
+        editBURecordNo = rowOnTable;
+        log.debug("onEditReturnBUInfo ::: end");
+    }
+
     public void onDeleteReturnInfo(int rowOnTable) {
         log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
         returnInfoViewList.remove(rowOnTable);
@@ -2104,6 +2212,14 @@ public class HeaderController extends BaseController {
 
         resetAddReturnBDMInfo();
         log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnBUInfo(int rowOnTable) {
+        log.debug("onDeleteReturnBUInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnBUInfo();
+        log.debug("onDeleteReturnBUInfo ::: end");
     }
 
     //-------------- Function for Appraisal Request ( BDM ) -------------------//
@@ -3200,5 +3316,37 @@ public class HeaderController extends BaseController {
 
     public void setSlaReasonList(List<Reason> slaReasonList) {
         this.slaReasonList = slaReasonList;
+    }
+
+    public List<Reason> getReturnBUReason() {
+        return returnBUReason;
+    }
+
+    public void setReturnBUReason(List<Reason> returnBUReason) {
+        this.returnBUReason = returnBUReason;
+    }
+
+    public int getReasonBUId() {
+        return reasonBUId;
+    }
+
+    public void setReasonBUId(int reasonBUId) {
+        this.reasonBUId = reasonBUId;
+    }
+
+    public int getEditBURecordNo() {
+        return editBURecordNo;
+    }
+
+    public void setEditBURecordNo(int editBURecordNo) {
+        this.editBURecordNo = editBURecordNo;
+    }
+
+    public String getReturnBURemark() {
+        return returnBURemark;
+    }
+
+    public void setReturnBURemark(String returnBURemark) {
+        this.returnBURemark = returnBURemark;
     }
 }
