@@ -29,17 +29,14 @@ public class PDFAppraisalAppointment implements Serializable {
     Logger log;
 
     @Inject
-    AppraisalAppointmentControl appraisalAppointmentControl;
-
-    @Inject
     @Config(name = "report.subreport")
     String pathsub;
 
+    @Inject AppraisalAppointmentControl appraisalAppointmentControl;
+
     private AppraisalView appraisalView;
-
-    long workCaseId;
-    long workCasePreScreenId;
-
+    private long workCaseId;
+    private long workCasePreScreenId;
     private final String SPACE = " ";
 
     public PDFAppraisalAppointment() {
@@ -47,17 +44,16 @@ public class PDFAppraisalAppointment implements Serializable {
 
     public void init(){
         HttpSession session = FacesUtil.getSession(false);
-
-        if((Long)session.getAttribute("workCaseId") != 0){
-            workCaseId = Long.valueOf("" + session.getAttribute("workCaseId"));
-        } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
-            workCasePreScreenId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-        }
-
-
         appraisalView = new AppraisalView();
 
-        if (!Util.isNull(workCaseId)){
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+            log.debug("workCaseId. {}",workCaseId);
+        }else if (!Util.isNull(session.getAttribute("workCasePreScreenId"))){
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        }
+
+        if (!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             log.info("workCaseID: {}",workCaseId);
 
             if (!Util.isNull(appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId))) {
