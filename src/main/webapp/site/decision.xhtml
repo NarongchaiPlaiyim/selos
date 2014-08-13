@@ -2067,7 +2067,7 @@
                                                                              update=":proposeCreditDlgForm"
                                                                              disabled="#{decision.isDisabled('approve.actionList')}"
                                                                              oncomplete="proposeCreditDlg.show()">
-                                                                <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.approveCreditInfoDetailView}"/>
+                                                                <f:setPropertyActionListener value="#{approveCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndex}"/>
                                                             </p:commandButton>
 
@@ -2075,7 +2075,7 @@
                                                                              icon="ui-icon-trash"
                                                                              disabled="#{decision.isDisabled('approve.actionList')}"
                                                                              oncomplete="confirmDeleteAppProposeCreditDlg.show()">
-                                                                <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.approveCreditInfoDetailView}"/>
+                                                                <f:setPropertyActionListener value="#{approveCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                             </p:commandButton>
                                                         </td>
                                                     </tr>
