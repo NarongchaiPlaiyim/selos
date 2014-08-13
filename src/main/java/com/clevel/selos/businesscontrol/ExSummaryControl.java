@@ -265,7 +265,7 @@ public class ExSummaryControl extends BusinessControl {
                     if((bizPermissionList.size()-1) == i){
                         bizPermission = bizPermission.append(bizPermissionList.get(i));
                     } else {
-                        bizPermission = bizPermission.append(bizPermissionList.get(i).concat(", "));
+                        bizPermission = bizPermission.append(Util.parseString(bizPermissionList.get(i), "").concat(", "));
                     }
                 }
                 exSummaryView.setBusinessPermission(bizPermission.toString());
