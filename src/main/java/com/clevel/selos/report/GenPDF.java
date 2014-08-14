@@ -177,11 +177,9 @@ public class GenPDF extends ReportService implements Serializable {
 
             // ###### Role AAD Can not print Opshect And Exsum , Role UW Can not print Appraisal Request And Reject Letter ######
             if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
-                log.debug("-------------------------1");
                 exsumType = true;
                 opshectType = true;
             } else if (readonlyIsUW){
-                log.debug("-------------------------2");
                 appraisalType = true;
                 rejectType = true;
             }
@@ -322,7 +320,7 @@ public class GenPDF extends ReportService implements Serializable {
                 log.debug("--path2. {}",pathReportReject);
             } else if (!Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
-                pathReportReject = pathNCBRejectLetter;//NCBRejectLetter wait it
+                pathReportReject = pathNCBRejectLetter;
                 log.debug("--path1. {}",pathReportReject);
             }
             map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());

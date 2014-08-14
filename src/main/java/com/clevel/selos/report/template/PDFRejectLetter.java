@@ -2,10 +2,13 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApprovalType;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
@@ -13,6 +16,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.report.RejectLetterReport;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
+import com.clevel.selos.model.view.ApprovalHistoryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -39,34 +43,28 @@ public class PDFRejectLetter implements Serializable {
     @NormalMessage
     Message msg;
 
-    @Inject
-    CustomerDAO customerDAO;
-    @Inject
-    private WorkCaseDAO workCaseDAO;
-    @Inject
-    private AddressDAO addressDAO;
-    @Inject
-    private CustomerInfoControl customerInfoControl;
-    @Inject
-    private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
-    @Inject
-    private UWRuleResultDetailDAO uwRuleResultDetailDAO;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    private User userView;
-    @Inject
-    private UserTeamDAO userTeamDAO;
-    @Inject
-    private UserTeam userTeam;
+    @Inject CustomerDAO customerDAO;
+    @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject private AddressDAO addressDAO;
+    @Inject private CustomerInfoControl customerInfoControl;
+    @Inject private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
+    @Inject private UWRuleResultDetailDAO uwRuleResultDetailDAO;
+    @Inject private UserDAO userDAO;
+    @Inject private UserTeamDAO userTeamDAO;
+    @Inject private UserTeam userTeam;
+    @Inject private DecisionControl decisionControl;
 
     private List<CustomerInfoView> customerInfoView;
     private AppHeaderView appHeaderView;
     private List<UWRuleResultDetail> uwRuleResultDetails;
-
+    private User userView;
     private UWRuleResultSummary uwRuleResultSummary;
+    private long stepId;
 
-    WorkCase workCase;
+    private WorkCase workCase;
+    private WorkCasePrescreen workCasePrescreen;
+    private ApprovalHistoryView approvalHistoryView;
 
     private final String SPACE = " ";
 
@@ -86,6 +84,7 @@ public class PDFRejectLetter implements Serializable {
     public void init(){
         log.debug("--on init()");
         HttpSession session = FacesUtil.getSession(true);
+        stepId = getCurrentStep(session);
 
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
@@ -102,16 +101,22 @@ public class PDFRejectLetter implements Serializable {
             }
         }
 
+        customerInfoView = new ArrayList<CustomerInfoView>();
+
         if (!Util.isNull(workCaseId)){
-            customerInfoView = new ArrayList<CustomerInfoView>();
-            customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
             workCase = workCaseDAO.findById(workCaseId);
+            customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
+            approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value() ,stepId);
+            approvalHistoryView.getUwDecision();
+        } else if (!Util.isNull(workCasePreScreenId)){
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+//            customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCasePrescreen);
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println("RED".equals(UWResultColor.RED));
-    }
+//
+//    public static void main(String[] args) {
+//        System.out.println("RED".equals(UWResultColor.RED));
+//    }
 
     public RejectLetterReport typeReport(){
         log.debug("--On typeReport.");
@@ -127,12 +132,7 @@ public class PDFRejectLetter implements Serializable {
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
         if (!Util.isNull(uwRuleResultSummary)){
-            log.debug("--Color. {}",uwRuleResultSummary.getUwResultColor());
             if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
-                // ##### Color is Red in Uwresult Summary ####
-                rejectLetterReport.setTypePolicy(2);
-                log.debug("--UwResult is Red. {}",uwRuleResultSummary.getUwResultColor());
-            } else {
                 uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
                 log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
 
@@ -149,6 +149,15 @@ public class PDFRejectLetter implements Serializable {
                         log.debug("--RejectGroup is Null.");
                     }
                 }
+            } else if ((DecisionType.REJECTED).equals(approvalHistoryView.getUwDecision()) && (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
+                    (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) || Util.isNull(uwRuleResultSummary.getUwResultColor())){
+                rejectLetterReport.setTypePolicy(2);
+                log.debug("--Reject on submit CA. [{}] if green color or yellow color [{}]",approvalHistoryView.getUwDecision(),uwRuleResultSummary.getUwResultColor());
+            } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
+                    (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) ||
+                    Util.isNull(uwRuleResultSummary.getUwResultColor())){
+                rejectLetterReport.setTypePolicy(2);
+                log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
             }
         }
         log.debug("--rejectLetterReport. {}",rejectLetterReport);
@@ -266,5 +275,10 @@ public class PDFRejectLetter implements Serializable {
             log.debug("--stringBuilder. {}",stringBuilder.toString());
         }
         return letterReport;
+    }
+
+    protected long getCurrentStep(HttpSession session){
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        return stepId;
     }
 }
