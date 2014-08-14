@@ -876,16 +876,16 @@ public class ExSummaryControl extends BusinessControl {
                 BigDecimal approxIncome = BigDecimal.ZERO;
                 if(cusListView != null && cusListView.size() > 0){
                     for(CustomerInfoView cus : cusListView){
-                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){
-                            if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                                saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
-                            }
-                        } else {
+                        if(cus.getRelation().getId() != RelationValue.BORROWER.value()){
                             if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                                 if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
                                     approxIncome = Util.add(approxIncome,cus.getApproxIncome());
                                 }
+                            } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                                saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
                             }
+                        } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                            saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
                         }
                     }
                 }
