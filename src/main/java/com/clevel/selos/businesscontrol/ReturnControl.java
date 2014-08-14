@@ -398,7 +398,7 @@ public class ReturnControl extends BusinessControl {
 
             returnInfoDAO.persist(returnInfoList);
 
-            if(step!=null && step.getId()==2003){
+            if((step!=null && step.getId()==2003) || (step!=null && step.getId()==2016)){
                 bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
             } else {
                 bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_BDM.getVal());

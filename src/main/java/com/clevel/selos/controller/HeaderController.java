@@ -145,6 +145,9 @@ public class HeaderController extends BaseController {
 
     //Return BDM Dialog
     private List<ReturnInfoView> returnInfoViewList;
+    private List<ReturnInfoView> returnInfoAADViewList;
+    private List<ReturnInfoView> returnInfoBDMViewList;
+    private List<ReturnInfoView> returnInfoBUViewList;
     private List<Reason> returnReason;
     private List<Reason> returnAADReason;
     private List<Reason> returnBDMReason;
@@ -1754,6 +1757,21 @@ public class HeaderController extends BaseController {
     public void onOpenAddReturnInfo(){
         log.debug("onOpenAddReturnInfo ::: starting...");
         resetAddReturnInfo();
+    }
+
+    public void onOpenAddReturnAADInfo(){
+        log.debug("onOpenAddReturnInfo ::: starting...");
+        resetAddReturnAADInfo();
+    }
+
+    public void onOpenAddReturnBDMInfo(){
+        log.debug("onOpenAddReturnInfo ::: starting...");
+        resetAddReturnBDMInfo();
+    }
+
+    public void onOpenAddReturnBUInfo(){
+        log.debug("onOpenAddReturnInfo ::: starting...");
+        resetAddReturnBUInfo();
     }
 
     public void onSaveReturnInfo(){
@@ -3405,5 +3423,29 @@ public class HeaderController extends BaseController {
 
     public void setReturnBURemark(String returnBURemark) {
         this.returnBURemark = returnBURemark;
+    }
+
+    public List<ReturnInfoView> getReturnInfoAADViewList() {
+        return returnInfoAADViewList;
+    }
+
+    public void setReturnInfoAADViewList(List<ReturnInfoView> returnInfoAADViewList) {
+        this.returnInfoAADViewList = returnInfoAADViewList;
+    }
+
+    public List<ReturnInfoView> getReturnInfoBDMViewList() {
+        return returnInfoBDMViewList;
+    }
+
+    public void setReturnInfoBDMViewList(List<ReturnInfoView> returnInfoBDMViewList) {
+        this.returnInfoBDMViewList = returnInfoBDMViewList;
+    }
+
+    public List<ReturnInfoView> getReturnInfoBUViewList() {
+        return returnInfoBUViewList;
+    }
+
+    public void setReturnInfoBUViewList(List<ReturnInfoView> returnInfoBUViewList) {
+        this.returnInfoBUViewList = returnInfoBUViewList;
     }
 }
