@@ -841,6 +841,8 @@ public class ExSummaryControl extends BusinessControl {
                             } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                                 saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
                             }
+                        } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                            saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
                         }
                     }
                 }
