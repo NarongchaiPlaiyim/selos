@@ -134,6 +134,7 @@ public class PDFRejectLetter implements Serializable {
         log.debug("--uwRuleResultSummary. {}",uwRuleResultSummary);
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
+
         if (!Util.isNull(uwRuleResultSummary)){
             if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
                 uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
@@ -173,8 +174,10 @@ public class PDFRejectLetter implements Serializable {
                     rejectLetterReport.setTypePolicy(2);
                     log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
                 }
-            }
-
+            } else {
+            rejectLetterReport.setTypePolicy(2);
+            log.debug("--Color is No Result where uwResultSummary is Null. {}",uwRuleResultSummary);
+        }
         log.debug("--rejectLetterReport. {}",rejectLetterReport);
 
         return rejectLetterReport;

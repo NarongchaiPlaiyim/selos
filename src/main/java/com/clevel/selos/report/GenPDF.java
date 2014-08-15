@@ -182,6 +182,7 @@ public class GenPDF extends ReportService implements Serializable {
             } else if (readonlyIsUW){
                 appraisalType = true;
                 rejectType = true;
+                log.debug("Is role UW. [{}]",readonlyIsUW);
             }
 
             // ###### Request Appraisal is Zero in WorkCase OR WorkCasePrcescreen can not print Appraisal Request
@@ -193,6 +194,7 @@ public class GenPDF extends ReportService implements Serializable {
             pdfReject_letter.init();
             if(Util.isZero(pdfReject_letter.typeReport().getTypeNCB()) && Util.isZero(pdfReject_letter.typeReport().getTypePolicy()) &&
                     Util.isZero(pdfReject_letter.typeReport().getTypeIncome())){
+                log.debug("--Reject Group is Null. NCB [{}] , Policy [{}], Income [{}]",pdfReject_letter.typeReport().getTypeNCB(),pdfReject_letter.typeReport().getTypePolicy(),pdfReject_letter.typeReport().getTypeIncome());
                 rejectType = true;
             }
 
