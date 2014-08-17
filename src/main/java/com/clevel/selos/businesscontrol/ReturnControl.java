@@ -396,9 +396,17 @@ public class ReturnControl extends BusinessControl {
 
             }
 
-            returnInfoDAO.persist(returnInfoList);
+            try{
+                log.debug("persist returnInfoList.");
+                returnInfoDAO.persist(returnInfoList);
+                log.debug("persist returnInfoList success");
+            } catch (Exception e) {
+                log.debug("persist returnInfoList error");
+                throw e;
+            }
 
-            if(step!=null && step.getId()==2003){
+            log.debug("execute bpm (dispatch)");
+            if((step!=null && step.getId()==2003) || (step!=null && step.getId()==2016)){
                 bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
             } else {
                 bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_BDM.getVal());
@@ -463,9 +471,88 @@ public class ReturnControl extends BusinessControl {
 
             }
 
-            returnInfoDAO.persist(returnInfoList);
+            try{
+                log.debug("persist returnInfoList.");
+                returnInfoDAO.persist(returnInfoList);
+                log.debug("persist returnInfoList success");
+            } catch (Exception e) {
+                log.debug("persist returnInfoList error");
+                throw e;
+            }
 
+            log.debug("execute bpm (dispatch)");
             bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+        }
+    }
+
+    public void submitReturnBU(long workCaseId, long workCasePrescreenId, String queueName, User user, long stepId, List<ReturnInfoView> returnInfoViewList, String wobNumber) throws Exception {
+        if(returnInfoViewList!=null && returnInfoViewList.size()>0){
+            boolean hasRG001 = false;
+
+            //Move Return Info in Working to History
+            saveReturnHistory(workCaseId,workCasePrescreenId);
+
+            //Save new to Return Info working
+            WorkCase workCase = null;
+            WorkCasePrescreen workCasePrescreen = null;
+            if(workCaseId!=0){
+                workCase = workCaseDAO.findById(workCaseId);
+            } else {
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            }
+            Step step = stepDAO.findById(stepId);
+            List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
+            Date returnDate = new Date();
+            String reason = "";
+            String remark = "";
+            for(ReturnInfoView returnInfoView: returnInfoViewList){
+                //Set Return User and Return Step
+                returnInfoView.setReturnFromUser(userTransform.transformToView(user));
+                returnInfoView.setReturnFromStep(stepTransform.transformToView(step));
+                returnInfoView.setDateOfReturn(returnDate);
+                returnInfoView.setChallenge(0); //not selected
+                returnInfoView.setAcceptChallenge(0); //not selected
+                if(returnInfoView.getReturnCode()!=null && returnInfoView.getReturnCode().equalsIgnoreCase("RG001")){
+                    hasRG001 = true;
+                }
+                ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, workCasePrescreen, user);
+                returnInfoList.add(returnInfo);
+
+                if(reason.trim().equalsIgnoreCase("")){
+                    reason = returnInfoView.getReason();
+                    if(reason==null){
+                        reason = "";
+                    }
+                } else {
+                    if(returnInfoView.getReason()!=null){
+                        reason = reason+","+returnInfoView.getReason();
+                    }
+                }
+
+                if(remark.trim().equalsIgnoreCase("")){
+                    remark = returnInfoView.getReasonDetail();
+                    if(remark==null){
+                        remark = "";
+                    }
+                } else {
+                    if(returnInfoView.getReasonDetail()!=null){
+                        remark = remark+","+returnInfoView.getReasonDetail();
+                    }
+                }
+
+            }
+
+            try{
+                log.debug("persist returnInfoList.");
+                returnInfoDAO.persist(returnInfoList);
+                log.debug("persist returnInfoList success");
+            } catch (Exception e) {
+                log.debug("persist returnInfoList error");
+                throw e;
+            }
+
+            log.debug("execute bpm (dispatch)");
+            bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.REVISE_CA.getVal());
         }
     }
 

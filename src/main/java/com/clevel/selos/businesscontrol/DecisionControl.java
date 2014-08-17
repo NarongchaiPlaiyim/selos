@@ -408,7 +408,8 @@ public class DecisionControl extends BusinessControl {
                 }
             }
 
-            decision.setTotalGuaranteeAmount(sumGuaranteeAmount);
+            decisionView.setApproveTotalGuaranteeAmt(sumGuaranteeAmount);
+
             proposeLineDAO.persist(decision);
 
             //Save Propose Fee Detail
@@ -898,15 +899,15 @@ public class DecisionControl extends BusinessControl {
                     if (collHeadViewList != null && collHeadViewList.size() > 0) {
                         for (ProposeCollateralInfoHeadView collHeadView : collHeadViewList) {
                             PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
-
-                            // Count core asset and none core asset
-                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
+                            if(!Util.isNull(potentialCollateral)) {
+                                // Count core asset and none core asset
+                                if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                    totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
+                                }
+                                else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                                    totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
+                                }
                             }
-                            else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
-                                totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
-                            }
-
                             // Sum total mortgage value
                             List<ProposeCollateralInfoSubView> collSubViewList = collHeadView.getProposeCollateralInfoSubViewList();
                             if (collSubViewList != null && collSubViewList.size() > 0) {

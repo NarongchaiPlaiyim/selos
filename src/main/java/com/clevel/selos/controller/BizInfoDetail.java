@@ -220,7 +220,11 @@ public class BizInfoDetail extends BaseController {
 
 
                     onChangeBusinessGroupInitial();
-                    onChangeBusinessDesc();
+
+                    if (Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
+                        // #### pass data by presceen ####
+                        onChangeBusinessDesc();
+                    }
 
                     if(Util.subtract(BigDecimal.valueOf(sumBizPercent),bizInfoDetailView.getPercentBiz()) != null){
                         sumBizPercent = Util.subtract(BigDecimal.valueOf(sumBizPercent),bizInfoDetailView.getPercentBiz()).doubleValue();

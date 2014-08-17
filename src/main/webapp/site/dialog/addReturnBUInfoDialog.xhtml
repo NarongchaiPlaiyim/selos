@@ -4,16 +4,16 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="addReturnBDMInfoDlgPanel" styleClass="panel-dialog">
+<p:panel id="addReturnBUInfoDlgPanel" styleClass="panel-dialog">
     <table class="content_form">
         <tr>
             <td class="title right" style="min-width: 140px; width: 80px;">Return Code :</td>
             <td>
-                <p:selectOneMenu id="reasonBDMId" styleClass="reasonitem" style="min-width: 234px; width: 234px; max-width: 234px;!important;" size="1"
-                                 value="#{headerController.reasonBDMId}"
-                                 required="#{not empty param[btnSubmitAddReturnBDMInfo.clientId]}">
+                <p:selectOneMenu id="reasonBUId" styleClass="reasonitem" style="min-width: 234px; width: 234px; max-width: 234px;!important;" size="1"
+                                 value="#{headerController.reasonBUId}"
+                                 required="#{not empty param[btnSubmitAddReturnBUInfo.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{headerController.returnBDMReason}"
+                    <f:selectItems value="#{headerController.returnBUReason}"
                                    var="reasonItem"
                                    itemDescription="#{reasonItem.code} - #{reasonItem.description}"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
@@ -25,33 +25,33 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea id="remarkBDM" value="#{headerController.returnBDMRemark}" autoResize="false" cols="35"
+                <p:inputTextarea id="remarkBU" value="#{headerController.returnBURemark}" autoResize="false" cols="35"
                                  rows="5" maxlength="200"></p:inputTextarea>
             </td>
         </tr>
         <tr>
             <td colspan="2" class="center">
-                <p:commandButton id="btnSubmitAddReturnBDMInfo"
+                <p:commandButton id="btnSubmitAddReturnBUInfo"
                                  styleClass="small"
-                                 binding="#{btnSubmitAddReturnBDMInfo}"
+                                 binding="#{btnSubmitAddReturnBUInfo}"
                                  value="#{msg.get('app.button.save')}"
-                                 actionListener="#{headerController.onSaveReturnBDMInfo()}"
+                                 actionListener="#{headerController.onSaveReturnBUInfo()}"
                                  process="@form"
-                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoBDMDlgPanel, :frmMain:addReturnBDMInfoDlgPanel"
-                                 oncomplete="handleReturnBDMAddDialogRequest(xhr, status, args)"/>
-                <p:commandButton id="dlgCancelReturnBDMInfoBtn"
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoBUDlgPanel, :frmMain:addReturnBUInfoDlgPanel"
+                                 oncomplete="handleReturnBUAddDialogRequest(xhr, status, args)"/>
+                <p:commandButton id="dlgCancelReturnBUInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"
-                                 action="#{headerController.resetAddReturnBDMInfo()}"
-                                 oncomplete="addReturnBDMInfoDlg.hide()"
+                                 action="#{headerController.resetAddReturnBUInfo()}"
+                                 oncomplete="addReturnBUInfoDlg.hide()"
                                  process="@form"
-                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoBDMDlgPanel"/>
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoBUDlgPanel"/>
             </td>
         </tr>
     </table>
 </p:panel>
 
-<p:blockUI widgetVar="blockAddReturnBDMInfoDlg" block="addReturnBDMInfoDlgPanel" trigger=":frmMain:btnSubmitAddReturnBDMInfo">
+<p:blockUI widgetVar="blockAddReturnBUInfoDlg" block="addReturnBUInfoDlgPanel" trigger=":frmMain:btnSubmitAddReturnBUInfo">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>

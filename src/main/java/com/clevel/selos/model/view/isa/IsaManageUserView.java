@@ -2,6 +2,7 @@ package com.clevel.selos.model.view.isa;
 
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -214,5 +215,31 @@ public class IsaManageUserView implements Serializable {
                 .append("userStatus", userStatus)
                 .append("readOnlyUserId", readOnlyUserId)
                 .toString();
+    }
+
+    public String toStringForAudit() {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("From UI --> ").append("id[").append(id).append("]");
+        stringBuilder.append("userName[").append(username).append("]");
+        stringBuilder.append("active[").append(active).append("]");
+        if(!Util.isNull(role) && !Util.isZero(role.getId())){
+            stringBuilder.append("role[id=").append(role.getId()).append("]");
+        }
+        if(!Util.isNull(userDepartment) && !Util.isZero(userDepartment.getId())){
+            stringBuilder.append("department[id=").append(userDepartment.getId()).append("]");
+        }
+        if(!Util.isNull(userDivision) && !Util.isZero(userDivision.getId())){
+            stringBuilder.append("division[id=").append(userDivision.getId()).append("]");
+        }
+        if(!Util.isNull(userRegion) && !Util.isZero(userRegion.getId())){
+            stringBuilder.append("region[id=").append(userRegion.getId()).append("]");
+        }
+        if(!Util.isNull(userTeam) && !Util.isZero(userTeam.getId())){
+            stringBuilder.append("team[id=").append(userTeam.getId()).append("]");
+        }
+        if(!Util.isNull(userTitle) && !Util.isZero(userTitle.getId())){
+            stringBuilder.append("title[id=").append(userTitle.getId()).append("]");
+        }
+        return stringBuilder.toString();
     }
 }

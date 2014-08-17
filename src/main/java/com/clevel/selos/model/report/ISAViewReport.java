@@ -22,7 +22,12 @@ public class ISAViewReport {
     private Date modifyDate;
     private String createBy;
     private String modifyBy;
-
+    private String adminTask;
+    private String empID;
+    private String empName;
+    private String oldData;
+    private String newData;
+    private String adminName;
 
     public ISAViewReport() {
     }
@@ -147,6 +152,54 @@ public class ISAViewReport {
         this.modifyBy = modifyBy;
     }
 
+    public String getAdminTask() {
+        return adminTask;
+    }
+
+    public void setAdminTask(String adminTask) {
+        this.adminTask = adminTask;
+    }
+
+    public String getEmpID() {
+        return empID;
+    }
+
+    public void setEmpID(String empID) {
+        this.empID = empID;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
+    public String getOldData() {
+        return oldData;
+    }
+
+    public void setOldData(String oldData) {
+        this.oldData = oldData;
+    }
+
+    public String getNewData() {
+        return newData;
+    }
+
+    public void setNewData(String newData) {
+        this.newData = newData;
+    }
+
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -165,6 +218,12 @@ public class ISAViewReport {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("adminTask", adminTask)
+                .append("empID", empID)
+                .append("empName", empName)
+                .append("oldData", oldData)
+                .append("newData", newData)
+                .append("adminName", adminName)
                 .toString();
     }
 }

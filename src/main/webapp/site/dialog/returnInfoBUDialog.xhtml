@@ -4,23 +4,23 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="returnInfoBDMDlgPanel" styleClass="panel-dialog">
+<p:panel id="returnInfoBUDlgPanel" styleClass="panel-dialog">
         <table class="content_form" style="width: 100%">
             <tr>
                 <td>
-                    <p:commandButton id="btnReturnInfoBDMDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
-                                     action="#{headerController.onOpenAddReturnBDMInfo()}"
-                                     oncomplete="addReturnBDMInfoDlg.show()"
-                                     update=":frmMain:reasonBDMId, :frmMain:remarkBDM">
-                        <p:resetInput target=":frmMain:reasonBDMId, :frmMain:remarkBDM"/>
+                    <p:commandButton id="btnReturnInfoBUDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
+                                     action="#{headerController.onOpenAddReturnBUInfo()}"
+                                     oncomplete="addReturnBUInfoDlg.show()"
+                                     update=":frmMain:reasonBUId, :frmMain:remarkBU">
+                        <p:resetInput target=":frmMain:reasonBUId, :frmMain:remarkBU"/>
                     </p:commandButton>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p:dataTable id="returnBDMResult" var="returnInfoBDM"
+                    <p:dataTable id="returnBUResult" var="returnInfoBU"
                                  value="#{headerController.returnInfoViewList}"
-                                 rowKey="#{returnInfoBDM.id}" rowIndexVar="rowIndex" style="width: 100%">
+                                 rowKey="#{returnInfoBU.id}" rowIndexVar="rowIndex" style="width: 100%">
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column style="width:15%;"
@@ -36,30 +36,30 @@
                         </p:columnGroup>
 
                         <p:column styleClass="center">
-                            <h:outputText value="#{returnInfoBDM.returnCode}"/>
+                            <h:outputText value="#{returnInfoBU.returnCode}"/>
                         </p:column>
                         <p:column styleClass="left">
-                            <h:outputText value="#{returnInfoBDM.description}"/>
+                            <h:outputText value="#{returnInfoBU.description}"/>
                         </p:column>
                         <p:column styleClass="left">
-                            <h:outputText value="#{returnInfoBDM.reason}"/>
+                            <h:outputText value="#{returnInfoBU.reason}"/>
                         </p:column>
                         <p:column styleClass="left">
-                            <h:outputText value="#{returnInfoBDM.reasonDetail}"/>
+                            <h:outputText value="#{returnInfoBU.reasonDetail}"/>
                         </p:column>
                         <p:column styleClass="center">
                             <p:commandButton title="Edit" process="@form"
                                              icon="ui-icon-pencil"
-                                             rendered="#{returnInfoBDM.canEdit}"
-                                             actionListener="#{headerController.onEditReturnBDMInfo(rowIndex)}"
-                                             oncomplete="addReturnBDMInfoDlg.show()"
-                                             update=":frmMain:reasonBDMId, :frmMain:remarkBDM">
+                                             rendered="#{returnInfoBU.canEdit}"
+                                             actionListener="#{headerController.onEditReturnBUInfo(rowIndex)}"
+                                             oncomplete="addReturnBUInfoDlg.show()"
+                                             update=":frmMain:reasonBUId, :frmMain:remarkBU">
                             </p:commandButton>
                             <p:commandButton title="Remove" process="@form"
                                              icon="ui-icon-trash"
-                                             rendered="#{returnInfoBDM.canEdit}"
-                                             action="#{headerController.onDeleteReturnBDMInfo(rowIndex)}"
-                                             update=":frmMain:returnInfoBDMDlgPanel">
+                                             rendered="#{returnInfoBU.canEdit}"
+                                             action="#{headerController.onDeleteReturnBUInfo(rowIndex)}"
+                                             update=":frmMain:returnInfoBUDlgPanel">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -67,22 +67,22 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <p:commandButton id="btnSubmitReturnBDMSummary"
-                                     binding="#{btnSubmitReturnBDMSummary}"
+                    <p:commandButton id="btnSubmitReturnBUSummary"
+                                     binding="#{btnSubmitReturnBUSummary}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
-                                     actionListener="#{headerController.onSubmitReturnInfo()}"
-                                     oncomplete="handleReturnBDMInfoDialogRequest(xhr, status, args)"
+                                     actionListener="#{headerController.onSubmitReturnBUInfo()}"
+                                     oncomplete="handleReturnBUInfoDialogRequest(xhr, status, args)"
                                      process="@form"
-                                     update=":frmMain:returnInfoBDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                                     update=":frmMain:returnInfoBUDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                     styleClass="small" onclick="returnInfoBDMDlg.hide()"/>
+                                     styleClass="small" onclick="returnInfoBUDlg.hide()"/>
                 </td>
             </tr>
         </table>
 </p:panel>
 
-<p:blockUI widgetVar="blockReturnInfoBDMDlg" block="returnInfoBDMDlgPanel" trigger=":frmMain:btnSubmitReturnBDMSummary">
+<p:blockUI widgetVar="blockReturnInfoBUDlg" block="returnInfoBUDlgPanel" trigger=":frmMain:btnSubmitReturnBUSummary">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
