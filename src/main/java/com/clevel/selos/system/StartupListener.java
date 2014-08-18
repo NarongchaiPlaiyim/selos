@@ -1,7 +1,8 @@
 package com.clevel.selos.system;
 
-
 import com.clevel.selos.businesscontrol.master.ApplicationCacheLoader;
+import com.clevel.selos.integration.SELOS;
+import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -11,12 +12,15 @@ import javax.servlet.annotation.WebListener;
 
 @WebListener
 public class StartupListener implements ServletContextListener {
-
-    @EJB
+    @Inject
+    @SELOS
+    Logger log;
+    @Inject
     ApplicationCacheLoader applicationCacheLoader;
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        log.debug("contextInitialized.");
         applicationCacheLoader.loadCacheDB();
     }
 
