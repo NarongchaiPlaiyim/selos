@@ -11,7 +11,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 
-@Singleton
 @ApplicationScoped
 public class ApplicationCacheLoader implements Serializable{
 
