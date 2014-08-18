@@ -94,6 +94,19 @@ public class GenPDF extends ReportService implements Serializable {
     private boolean readonlyIsAAD_COMMITTEE;
     private boolean readonlyIsSSO;
 
+    private boolean readonlyContec_Center;
+    private boolean readonlyInsurance_Center;
+    private boolean readonlyDoc_Check;
+    private boolean readonlyTCG_Team;  //ยังไม่มี
+    private boolean readonlyCDM;
+    private boolean readonlyLAR_BC;
+    private boolean readonlyCO1;
+    private boolean readonlyCO2;
+    private boolean readonlyLS_Setup_Limit; //ยังไม่มี
+    private boolean readonlyLS_PreDisbursme; //ยังไม่มี
+    private boolean readonlyLD;
+    private boolean readonlyViewer;
+
 
 
     @Inject
@@ -143,6 +156,15 @@ public class GenPDF extends ReportService implements Serializable {
         readonlyIsAAD_ADMIN = user.getRole().getId() == RoleValue.AAD_ADMIN.id();
         readonlyIsAAD_COMMITTEE = user.getRole().getId() == RoleValue.AAD_COMITTEE.id();
         readonlyIsSSO = user.getRole().getId() == RoleValue.SSO.id();
+        readonlyContec_Center = user.getRole().getId() == RoleValue.CONTACT_CENTER.id();
+        readonlyInsurance_Center = user.getRole().getId() == RoleValue.INSURANCE_CENTER.id();
+        readonlyDoc_Check = user.getRole().getId() == RoleValue.DOC_CHECK.id();
+        readonlyCDM = user.getRole().getId() == RoleValue.CDM.id();
+        readonlyLAR_BC = user.getRole().getId() == RoleValue.LAR_BC.id();
+        readonlyCO1 = user.getRole().getId() == RoleValue.CO1.id();
+        readonlyCO2 = user.getRole().getId() == RoleValue.CO2.id();
+        readonlyLD = user.getRole().getId() == RoleValue.LD.id();
+        readonlyViewer = user.getRole().getId() == RoleValue.VIEWER.id();
 
     }
 
@@ -154,6 +176,14 @@ public class GenPDF extends ReportService implements Serializable {
         exsumType = false;
         opshectType = false;
         appraisalType = false;
+        readonlyContec_Center = false;
+        readonlyInsurance_Center = false;
+        readonlyDoc_Check = false;
+        readonlyCDM = false;
+        readonlyLAR_BC = false;
+        readonlyCO1 = false;
+        readonlyCO2 = false;
+        readonlyLD = false;
 
         if(!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             workCase = workCaseDAO.findById(workCaseId);
@@ -179,15 +209,20 @@ public class GenPDF extends ReportService implements Serializable {
             if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
                 exsumType = true;
                 opshectType = true;
-            } else if (readonlyIsUW){
+                log.debug("Is role AAD Admin. [{}], Is role AAD Committee. [{}]",readonlyIsAAD_ADMIN,readonlyIsAAD_COMMITTEE);
+            } else if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
+                    readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
                 appraisalType = true;
                 rejectType = true;
-                log.debug("Is role UW. [{}]",readonlyIsUW);
+                log.debug("Is role UW. [{}] ,Is role Contect Center. [{}] ,Is role Insurance Center. [{}] ,Is role Doc Check. [{}] ,Is role CDM. [{}] ,Is role LAR/BC. [{}] ," +
+                        "Is role CO1. [{}] ,Is role CO2. [{}] ,Is role LD. [{}]",readonlyIsUW,readonlyContec_Center,readonlyInsurance_Center,readonlyDoc_Check,readonlyCDM,
+                        readonlyLAR_BC,readonlyCO1,readonlyCO2,readonlyLD);
             }
 
             // ###### Request Appraisal is Zero in WorkCase OR WorkCasePrcescreen can not print Appraisal Request
             if (Util.isZero(workCase.getRequestAppraisal()) || Util.isZero(workCasePrescreen.getRequestAppraisal())){
                 appraisalType = true;
+                log.debug("No Submit Request Appraisal to WorkCase. [{}],No Submit Request Appraisal to WorkCasePreScreen. [{}]",workCase.getRequestAppraisal(),workCasePrescreen.getRequestAppraisal());
             }
 
             // ###### Reject_Group in UwresultDetail is Null ######
