@@ -3,10 +3,10 @@ apply plugin: 'war'
 sourceCompatibility = 1.6
 
 project.ext {
-    projectRoot='D:/C-Level/SE_LOS/FullAppSpace/selos'
+    projectRoot='D:/C-Level(RMI)/selos'
     beanXML= projectRoot+'/src/main/webapp/WEB-INF/beans.xml'
     persistenceXML = projectRoot+'/src/main/resources/META-INF/persistence.bank.xml'
-    selosLib='D:/C-Level/SE_LOS/_shared_library/_selos_lib_compile'
+    selosLib='D:/C-Level(RMI)/_selos_lib_compile'
     versionString = ''
     versionNumber = 'vvv'
     buildNumber = '0'
@@ -133,6 +133,7 @@ task buildLibrary(dependsOn: classes, type: Jar) {
     include 'com/clevel/selos/system/Config.*'
     include 'com/clevel/selos/system/ConfigurationProducer.*'
     include 'com/clevel/selos/system/CustomNamingStrategy.*'
+    include 'com/clevel/selos/system/StartupListener.*'
 
     //************* Security and Encryption ***********************
     include 'com/clevel/selos/security/encryption/**/*'

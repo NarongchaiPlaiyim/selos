@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Util implements Serializable {
     private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -210,6 +211,12 @@ public class Util implements Serializable {
 
     public static void listFields(HashMap<String, String> fields) {
         for (Map.Entry<String, String> entry : fields.entrySet()) {
+            log.debug("key: {}, value: {}", entry.getKey(), entry.getValue());
+        }
+    }
+
+    public static void listMap(Map<?, ?> fields) {
+        for (Map.Entry<?, ?> entry : fields.entrySet()) {
             log.debug("key: {}, value: {}", entry.getKey(), entry.getValue());
         }
     }
