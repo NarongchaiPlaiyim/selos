@@ -234,7 +234,7 @@ public class GenPDF extends ReportService implements Serializable {
             if (Util.isZero(workCase.getRequestAppraisal()) || Util.isZero(workCasePrescreen.getRequestAppraisal())){
                 appraisalType = true;
                 log.debug("No Submit Request Appraisal to WorkCase. [{}],No Submit Request Appraisal to WorkCasePreScreen. [{}]",
-                        workCase.getRequestAppraisal(), workCasePrescreen.getRequestAppraisal());
+                        Util.isZero(workCase.getRequestAppraisal()), Util.isZero(workCasePrescreen.getRequestAppraisal()));
             }
 
             // ###### Reject_Group in UwresultDetail is Null ######
