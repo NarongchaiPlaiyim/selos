@@ -142,6 +142,7 @@ public class HeaderController extends BaseController {
     private int reasonAADId;
     private int reasonBDMId;
     private int reasonBUId;
+    private int reasonMakerId;
 
     //Return BDM Dialog
     private List<ReturnInfoView> returnInfoViewList;
@@ -152,11 +153,13 @@ public class HeaderController extends BaseController {
     private List<Reason> returnAADReason;
     private List<Reason> returnBDMReason;
     private List<Reason> returnBUReason;
+    private List<Reason> returnMakerReason;
     private String returnRemark;
     private int editRecordNo;
     private int editAADRecordNo;
     private int editBDMRecordNo;
     private int editBURecordNo;
+    private int editMakerRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     //Request Appraisal
@@ -220,6 +223,7 @@ public class HeaderController extends BaseController {
     private String returnAADRemark;
     private String returnBDMRemark;
     private String returnBURemark;
+    private String returnMakerRemark;
 
     //Check Pre-Screen Result
     private boolean canCloseSale;
@@ -1730,6 +1734,22 @@ public class HeaderController extends BaseController {
         log.debug("onOpenReturnBDMInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
     }
 
+    public void onOpenReturnMakerInfoDialog(){
+        log.debug("onOpenReturnMakerInfoDialog ::: starting...");
+        _loadSessionVariable();
+
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+
+        //set return code master
+        //returnReason = returnControl.getReturnReasonList();
+        returnMakerReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
+        returnMakerRemark = "";
+        resetAddReturnMakerInfo();
+
+        log.debug("onOpenReturnMakerInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
+    }
+
     public void resetAddReturnInfo(){
         returnRemark = "";
         reasonId = 0;
@@ -1754,6 +1774,12 @@ public class HeaderController extends BaseController {
         editBURecordNo = -1;
     }
 
+    public void resetAddReturnMakerInfo(){
+        returnMakerRemark = "";
+        reasonMakerId = 0;
+        editMakerRecordNo = -1;
+    }
+
     public void onOpenAddReturnInfo(){
         log.debug("onOpenAddReturnInfo ::: starting...");
         resetAddReturnInfo();
@@ -1772,6 +1798,11 @@ public class HeaderController extends BaseController {
     public void onOpenAddReturnBUInfo(){
         log.debug("onOpenAddReturnInfo ::: starting...");
         resetAddReturnBUInfo();
+    }
+
+    public void onOpenAddReturnMakerInfo(){
+        log.debug("onOpenAddReturnInfo ::: starting...");
+        resetAddReturnMakerInfo();
     }
 
     public void onSaveReturnInfo(){
@@ -1886,8 +1917,36 @@ public class HeaderController extends BaseController {
         log.debug("onSaveReturnBUInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
+    public void onSaveReturnMakerInfo(){
+        log.debug("onSaveReturnMakerInfo ::: starting... (reasonMakerId: {})",reasonMakerId);
+        Reason reason = reasonDAO.findById(reasonMakerId);
+
+        if(editMakerRecordNo>-1){
+            returnInfoViewList.get(editMakerRecordNo).setReturnCode(reason.getCode());
+            returnInfoViewList.get(editMakerRecordNo).setDescription(reason.getDescription());
+            returnInfoViewList.get(editMakerRecordNo).setReasonDetail(returnMakerRemark);
+            returnInfoViewList.get(editMakerRecordNo).setCanEdit(true);
+            returnInfoViewList.get(editMakerRecordNo).setReasonId(reasonMakerId);
+        } else {
+            ReturnInfoView returnInfoView = new ReturnInfoView();
+            returnInfoView.setReturnCode(reason.getCode());
+            returnInfoView.setDescription(reason.getDescription());
+            returnInfoView.setReasonDetail(returnMakerRemark);
+            returnInfoView.setCanEdit(true);
+            returnInfoView.setReasonId(reasonMakerId);
+
+            returnInfoViewList.add(returnInfoView);
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+
+        resetAddReturnMakerInfo();
+
+        log.debug("onSaveReturnMakerInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
+    }
+
     public void onSubmitReturnInfo(){ //Submit return to BDM
-        log.debug("onSubmitReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList);
+        log.debug("onSubmitReturnInfo ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             try{
@@ -1911,21 +1970,21 @@ public class HeaderController extends BaseController {
                     message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
                     complete = true;
-                    log.debug("onReturnBDMSubmit ::: success.");
+                    log.debug("onSubmitReturnInfo ::: success.");
                 }
             } catch (Exception ex){
                 messageHeader = "Information.";
                 message = "Return case failed, cause : " + Util.getMessageException(ex);
                 RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
                 complete = false;
-                log.error("onReturnBDMSubmit ::: exception occurred : ", ex);
+                log.error("onSubmitReturnInfo ::: exception occurred : ", ex);
             }
         } else {
             messageHeader = "Information.";
             message = "Return case failed, have no reason to return.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
             complete = false;
-            log.debug("onSubmitReturnBDM ::: Return to BDM failed, have no reason to return.");
+            log.debug("onSubmitReturnInfo ::: Return to BDM failed, have no reason to return.");
         }
 
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
@@ -2210,6 +2269,15 @@ public class HeaderController extends BaseController {
         log.debug("onEditReturnBUInfo ::: end");
     }
 
+    public void onEditReturnMakerInfo(int rowOnTable) {
+        log.debug("onEditReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonMakerId = returnInfoView.getReasonId();
+        returnMakerRemark = returnInfoView.getReasonDetail();
+        editMakerRecordNo = rowOnTable;
+        log.debug("onEditReturnMakerInfo ::: end");
+    }
+
     public void onDeleteReturnInfo(int rowOnTable) {
         log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
         returnInfoViewList.remove(rowOnTable);
@@ -2240,6 +2308,14 @@ public class HeaderController extends BaseController {
 
         resetAddReturnBUInfo();
         log.debug("onDeleteReturnBUInfo ::: end");
+    }
+
+    public void onDeleteReturnMakerInfo(int rowOnTable) {
+        log.debug("onDeleteReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnMakerInfo();
+        log.debug("onDeleteReturnMakerInfo ::: end");
     }
 
     //-------------- Function for Appraisal Request ( BDM ) -------------------//
@@ -3447,5 +3523,37 @@ public class HeaderController extends BaseController {
 
     public void setReturnInfoBUViewList(List<ReturnInfoView> returnInfoBUViewList) {
         this.returnInfoBUViewList = returnInfoBUViewList;
+    }
+
+    public int getReasonMakerId() {
+        return reasonMakerId;
+    }
+
+    public void setReasonMakerId(int reasonMakerId) {
+        this.reasonMakerId = reasonMakerId;
+    }
+
+    public List<Reason> getReturnMakerReason() {
+        return returnMakerReason;
+    }
+
+    public void setReturnMakerReason(List<Reason> returnMakerReason) {
+        this.returnMakerReason = returnMakerReason;
+    }
+
+    public int getEditMakerRecordNo() {
+        return editMakerRecordNo;
+    }
+
+    public void setEditMakerRecordNo(int editMakerRecordNo) {
+        this.editMakerRecordNo = editMakerRecordNo;
+    }
+
+    public String getReturnMakerRemark() {
+        return returnMakerRemark;
+    }
+
+    public void setReturnMakerRemark(String returnMakerRemark) {
+        this.returnMakerRemark = returnMakerRemark;
     }
 }
