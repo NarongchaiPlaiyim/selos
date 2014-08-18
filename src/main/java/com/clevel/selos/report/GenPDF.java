@@ -107,6 +107,8 @@ public class GenPDF extends ReportService implements Serializable {
     private boolean readonlyLD;
     private boolean readonlyViewer;
 
+    private String appNumber;
+
 
 
     @Inject
@@ -186,9 +188,13 @@ public class GenPDF extends ReportService implements Serializable {
         readonlyLD = false;
 
         if(!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
-            workCase = workCaseDAO.findById(workCaseId);
-            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            String appNumber = workCase.getAppNumber();
+            if (!Util.isZero(workCaseId)) {
+                workCase = workCaseDAO.findById(workCaseId);
+                appNumber = workCase.getAppNumber();
+            } else if (!Util.isZero(workCasePreScreenId)){
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+                appNumber = workCasePrescreen.getAppNumber();
+            }
 
             StringBuilder nameOpShect = new StringBuilder();
             nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
