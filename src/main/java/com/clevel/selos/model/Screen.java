@@ -61,7 +61,11 @@ public enum Screen {
     
     UpdateCollateralInfo(9600) ,
     PerfectionReview(10100) ,
-    ConfirmLimitSetUp(10200)
+    ConfirmLimitSetUp(10200) ,
+
+    //Return Screen
+    ReturnInfoReply(20100) ,
+    ReturnInfoReview(20200)
     
     ;
     int value;
