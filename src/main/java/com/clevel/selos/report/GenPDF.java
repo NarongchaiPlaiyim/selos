@@ -127,6 +127,7 @@ public class GenPDF extends ReportService implements Serializable {
             log.debug("workCaseId. {}",workCaseId);
         }else if (!Util.isNull(session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+            log.debug("workCasePreScreenId. {}",workCasePreScreenId);
         }else{
             log.debug("workCaseId is null.");
             try{
@@ -190,10 +191,14 @@ public class GenPDF extends ReportService implements Serializable {
         if(!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             if (!Util.isZero(workCaseId)) {
                 workCase = workCaseDAO.findById(workCaseId);
-                appNumber = workCase.getAppNumber();
-            } else if (!Util.isZero(workCasePreScreenId)){
+                if(!Util.isNull(workCase)){
+                    appNumber = workCase.getAppNumber();
+                }
+            } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-                appNumber = workCasePrescreen.getAppNumber();
+                if(!Util.isNull(workCasePrescreen)){
+                    appNumber = workCasePrescreen.getAppNumber();
+                }
             }
 
             StringBuilder nameOpShect = new StringBuilder();
@@ -228,7 +233,8 @@ public class GenPDF extends ReportService implements Serializable {
             // ###### Request Appraisal is Zero in WorkCase OR WorkCasePrcescreen can not print Appraisal Request
             if (Util.isZero(workCase.getRequestAppraisal()) || Util.isZero(workCasePrescreen.getRequestAppraisal())){
                 appraisalType = true;
-                log.debug("No Submit Request Appraisal to WorkCase. [{}],No Submit Request Appraisal to WorkCasePreScreen. [{}]",workCase.getRequestAppraisal(),workCasePrescreen.getRequestAppraisal());
+                log.debug("No Submit Request Appraisal to WorkCase. [{}],No Submit Request Appraisal to WorkCasePreScreen. [{}]",
+                        workCase.getRequestAppraisal(), workCasePrescreen.getRequestAppraisal());
             }
 
             // ###### Reject_Group in UwresultDetail is Null ######
