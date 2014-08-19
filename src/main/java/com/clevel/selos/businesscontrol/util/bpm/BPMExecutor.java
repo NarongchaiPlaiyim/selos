@@ -343,7 +343,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitUW2(long workCaseId, String queueName, String uw2Name, String uw2DOALevel, String decisionFlag, String haveRG001, long actionCode) throws Exception{
+    public void submitUW2(long workCaseId, String queueName, String uw2Name, String uw2DOALevel, String decisionFlag, String haveRG001, String remark, long actionCode) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
         if(action != null){
@@ -355,6 +355,10 @@ public class BPMExecutor implements Serializable {
             fields.put("UW1DecisionFlag", decisionFlag);
             fields.put("UWRG001Flag", haveRG001);
             fields.put("AppraisalReq", String.valueOf(workCase.getRequestAppraisalRequire()));
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
 
             log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 

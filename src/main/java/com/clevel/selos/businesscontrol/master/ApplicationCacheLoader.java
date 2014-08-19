@@ -1,15 +1,12 @@
 package com.clevel.selos.businesscontrol.master;
 
-import com.clevel.selos.businesscontrol.UserSysParameterControl;
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.util.Util;
-import org.primefaces.context.ApplicationContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;

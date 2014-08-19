@@ -729,11 +729,11 @@ public class FullApplicationControl extends BusinessControl {
                 decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
                 approvalHistoryEndorseCA.setSubmit(1);
                 approvalHistoryEndorseCA.setSubmitDate(new Date());
-                approvalHistoryEndorseCA.setComments(remark);
+                //approvalHistoryEndorseCA.setComments(remark);
             }
         }
 
-        bpmExecutor.submitUW2(workCaseId, queueName, uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, ActionCode.SUBMIT_CA.getVal());
+        bpmExecutor.submitUW2(workCaseId, queueName, uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, remark, ActionCode.SUBMIT_CA.getVal());
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
     }
 
@@ -1331,7 +1331,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public List<User> getUWUserListFromDOALevel(long doaLevelId) throws Exception{
-        List<User> authorizationDOAList = userToAuthorizationDOADAO.getUserListFromDOALevel(doaLevelId);
+        List<User> authorizationDOAList = userToAuthorizationDOADAO.getUserListFromDOALevel(doaLevelId, getCurrentUserID());
         if(authorizationDOAList == null){
             authorizationDOAList = new ArrayList<User>();
         }
