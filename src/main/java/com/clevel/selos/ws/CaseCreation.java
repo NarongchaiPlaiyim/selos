@@ -2,20 +2,20 @@ package com.clevel.selos.ws;
 
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.ecm.ECMInterfaceImpl;
 import com.clevel.selos.integration.ecm.db.ECMCAPShare;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.CaseRequestTypes;
-import com.clevel.selos.model.UserStatus;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -26,6 +26,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @WebService
 public class CaseCreation implements WSCaseCreation, Serializable {
@@ -44,6 +45,8 @@ public class CaseCreation implements WSCaseCreation, Serializable {
     STPExecutor stpExecutor;
     @Inject
     UserDAO userDAO;
+    @Inject
+    ReasonDAO reasonDAO;
 
     @Inject
     @NormalMessage
@@ -358,6 +361,15 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                     response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(reason)"), "");
                     log.debug("{}", response);
                     return response;
+                } else {
+                    //validate existing reason in master
+                    List<Reason> reasonList = reasonDAO.getListByCodeAndReasonType(reason.trim(), ReasonTypeValue.APPEAL_REASON.value());
+                    if(reasonList==null || (reasonList!=null && reasonList.size()==0)){
+                        wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_REASON, reason));
+                        response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_REASON, reason), "");
+                        log.debug("{}", response);
+                        return response;
+                    }
                 }
                 if (ValidationUtil.isEmpty(checkNCB) || ValidationUtil.isGreaterThan(1, checkNCB)) { //Required
                     wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(checkNCB)"));
