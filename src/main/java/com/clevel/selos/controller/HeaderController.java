@@ -729,6 +729,7 @@ public class HeaderController extends BaseController {
         if(zmUserId != null && !zmUserId.equals("")){
             try{
                 fullApplicationControl.submitToZM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
+                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
                 showMessageRedirect();
@@ -1157,19 +1158,12 @@ public class HeaderController extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            if(canSubmitWithoutReply(workCaseId, workCasePreScreenId)){
-                fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            messageHeader = "Information.";
+            message = "Request for appraisal success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
 
-                messageHeader = "Information.";
-                message = "Request for appraisal success.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-            } else {
-                messageHeader = "Information.";
-                message = "Submit case fail. Please check return information before submit again.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-                log.error("onSubmitAADCommittee ::: fail.");
-            }
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -2187,20 +2181,14 @@ public class HeaderController extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)) {
-                messageHeader = "Information.";
-                message = "Return to AAD Admin success.";
+            messageHeader = "Information.";
+            message = "Return to AAD Admin success.";
 
-                fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+            fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
 
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-            } else {
-                messageHeader = "Information.";
-                message = "Submit Return fail. Please check return information again.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
 
-                log.error("onReturnToAADAdminByBDM ::: fail.");
-            }
         } catch (Exception ex) {
             log.debug("Exception while Return to AAD Admin : ", ex);
             messageHeader = "Exception.";
@@ -2715,6 +2703,7 @@ public class HeaderController extends BaseController {
         try {
             if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
                 prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
+                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 complete = true;
                 messageHeader = "Information.";
                 message = "Assign to checker complete.";
