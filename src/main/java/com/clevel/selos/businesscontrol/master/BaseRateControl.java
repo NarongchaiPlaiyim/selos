@@ -79,6 +79,7 @@ public class BaseRateControl extends BusinessControl{
             synchronized (_mutexLock){
                 if(baseRateViewMap == null)
                     baseRateViewMap = new HashMap<Integer, BaseRateView>();
+                System.out.println("initial baseRateViewMap obj========");
             }
         }
 
@@ -89,7 +90,8 @@ public class BaseRateControl extends BusinessControl{
             for(BaseRate baseRate : _tmpList){
                 BaseRateView baseRateView = baseRateTransform.transformToView(baseRate);
                 _tmpMap.put(baseRateView.getId(), baseRateView);
-                logger.info("baseRateView {}", baseRateView);
+                logger.debug("baseRateView {}", baseRateView);
+                System.out.println("baseRateView : " + baseRateView);
             }
 
             synchronized (_mutexLock){
@@ -99,6 +101,7 @@ public class BaseRateControl extends BusinessControl{
 
         } catch (Exception ex){
             logger.error("Cannot Load BaseRate into Cache {}", ex);
+            ex.printStackTrace();
         }
     }
 }

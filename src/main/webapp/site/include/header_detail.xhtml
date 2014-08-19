@@ -45,10 +45,10 @@
     <!-- Return to Maker -->
     <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" title="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM')}"
-                     actionListener="#{headerController.onOpenReturnInfoDialog()}"
-                     oncomplete="returnInfoDlg.show()"
-                     update=":frmMain:returnInfoPanel">
-        <p:resetInput target=":frmMain:returnInfoPanel"/>
+                     actionListener="#{headerController.onOpenReturnMakerInfoDialog()}"
+                     oncomplete="returnInfoMakerDlg.show()"
+                     update=":frmMain:returnInfoMakerPanel">
+        <p:resetInput target=":frmMain:returnInfoMakerPanel"/>
     </p:commandButton>
     <!-- Check PreScreen (BRMS)-->
     <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
@@ -739,6 +739,14 @@
     </p:dialog>
 </p:panel>
 
+<p:panel id="returnInfoMakerPanel" styleClass="panel">
+    <p:dialog id="returnInfoMakerDialog" widgetVar="returnInfoMakerDlg" header="Return Summary"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="800" height="500" closable="false">
+        <ui:include src="/site/dialog/returnInfoMakerDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 <p:panel id="checkMandatePanel" styleClass="panel">
     <p:dialog id="checkMandateDialog"
               widgetVar="checkMandateDlg"
@@ -779,6 +787,14 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="460" height="160" closable="false">
         <ui:include src="/site/dialog/addReturnBUInfoDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="addReturnMakerInfoPanel" styleClass="panel">
+    <p:dialog id="addReturnMakerInfoDialog" widgetVar="addReturnMakerInfoDlg" header="Add Return Information"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/addReturnMakerInfoDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

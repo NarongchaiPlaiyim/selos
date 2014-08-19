@@ -197,7 +197,7 @@ public class DBRControl extends BusinessControl {
         currentDBR = Util.add(totalMonthDebtBorrowerStart, totalMonthDebtRelated);
 
         netMonthlyIncome = Util.multiply(dbr.getMonthlyIncomeAdjust(), dbr.getIncomeFactor());
-//        netMonthlyIncome = Util.divide(netMonthlyIncome, 100); 7/08/2557
+        netMonthlyIncome = Util.divide(netMonthlyIncome, 100);
         netMonthlyIncome = Util.add(netMonthlyIncome,dbr.getMonthlyIncomePerMonth());
 
         dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);

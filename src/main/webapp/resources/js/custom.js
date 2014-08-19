@@ -661,6 +661,12 @@ function handleReturnBUInfoDialogRequest(xhr, status, args) {
     }
 }
 
+function handleReturnMakerInfoDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        returnInfoMakerDlg.hide();
+    }
+}
+
 function handleReturnAddDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         addReturnInfoDlg.hide();
@@ -682,6 +688,12 @@ function handleReturnBDMAddDialogRequest(xhr, status, args) {
 function handleReturnBUAddDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         addReturnBUInfoDlg.hide();
+    }
+}
+
+function handleReturnMakerAddDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        addReturnMakerInfoDlg.hide();
     }
 }
 

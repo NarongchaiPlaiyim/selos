@@ -13,7 +13,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_country")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Country implements Serializable {
     @Id
     @Column(name = "id")

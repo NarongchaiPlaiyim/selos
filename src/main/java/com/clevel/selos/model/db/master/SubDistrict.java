@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_sub_district")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class SubDistrict implements Serializable {
     @Id
     @Column(name = "code")
