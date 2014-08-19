@@ -59,7 +59,7 @@ public class BPMExecutor implements Serializable {
             fields.put("BDMCheckerUserName", checkerId);
             fields.put("ProductGroup", prescreen.getProductGroup().getName());
             if(!Util.isEmpty(remark))
-                fields.put("Remark", remark);
+                fields.put("Remarks", remark);
 
             log.debug("dispatch case for [Assign to Checker]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), checkerId);
 

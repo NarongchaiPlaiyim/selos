@@ -16,7 +16,7 @@ public class AuthorizationDOA implements Serializable
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name", length = 20)
+    @Column(name = "name", length = 50)
     private String name;
 
     @Column(name = "description", length = 50)
