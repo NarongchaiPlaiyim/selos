@@ -1,0 +1,90 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="returnInfoMakerDlgPanel" styleClass="panel-dialog">
+        <table class="content_form" style="width: 100%">
+            <tr>
+                <td>
+                    <p:commandButton id="btnReturnInfoMakerDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
+                                     action="#{headerController.onOpenAddReturnMakerInfo()}"
+                                     oncomplete="addReturnMakerInfoDlg.show()"
+                                     update=":frmMain:reasonMakerId, :frmMain:remarkMaker">
+                        <p:resetInput target=":frmMain:reasonMakerId, :frmMain:remarkMaker"/>
+                    </p:commandButton>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p:dataTable id="returnMakerResult" var="returnInfoMaker"
+                                 value="#{headerController.returnInfoViewList}"
+                                 rowKey="#{returnInfoMaker.id}" rowIndexVar="rowIndex" style="width: 100%">
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width:15%;"
+                                          headerText="Return Code"/>
+                                <p:column style="width:25%;"
+                                          headerText="Description"/>
+                                <p:column style="width:25%;"
+                                          headerText="Reason"/>
+                                <p:column style="width:30%;"
+                                          headerText="Remark"/>
+                                <p:column style="width:5%"/>
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{returnInfoMaker.returnCode}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfoMaker.description}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfoMaker.reason}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfoMaker.reasonDetail}"/>
+                        </p:column>
+                        <p:column styleClass="center">
+                            <p:commandButton title="Edit" process="@form"
+                                             icon="ui-icon-pencil"
+                                             rendered="#{returnInfoMaker.canEdit}"
+                                             actionListener="#{headerController.onEditReturnMakerInfo(rowIndex)}"
+                                             oncomplete="addReturnMakerInfoDlg.show()"
+                                             update=":frmMain:reasonMakerId, :frmMain:remarkMaker">
+                            </p:commandButton>
+                            <p:commandButton title="Remove" process="@form"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfoMaker.canEdit}"
+                                             action="#{headerController.onDeleteReturnMakerInfo(rowIndex)}"
+                                             update=":frmMain:returnInfoMakerDlgPanel">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton id="btnSubmitReturnMakerSummary"
+                                     binding="#{btnSubmitReturnMakerSummary}"
+                                     value="#{msg.get('app.button.submit')}"
+                                     styleClass="small"
+                                     actionListener="#{headerController.onSubmitReturnInfo()}"
+                                     oncomplete="handleReturnMakerInfoDialogRequest(xhr, status, args)"
+                                     process="@form"
+                                     update=":frmMain:returnInfoMakerDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
+                                     styleClass="small" onclick="returnInfoMakerDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+</p:panel>
+
+<p:blockUI widgetVar="blockReturnInfoMakerDlg" block="returnInfoMakerDlgPanel" trigger=":frmMain:btnSubmitReturnMakerSummary">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
+</ui:composition>

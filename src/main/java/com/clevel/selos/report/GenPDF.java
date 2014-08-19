@@ -233,8 +233,12 @@ public class GenPDF extends ReportService implements Serializable {
             // ###### Request Appraisal is Zero in WorkCase OR WorkCasePrcescreen can not print Appraisal Request
             if (Util.isZero(workCase.getRequestAppraisal()) || Util.isZero(workCasePrescreen.getRequestAppraisal())){
                 appraisalType = true;
-                log.debug("No Submit Request Appraisal to WorkCase. [{}],No Submit Request Appraisal to WorkCasePreScreen. [{}]",
-                        Util.isZero(workCase.getRequestAppraisal()), Util.isZero(workCasePrescreen.getRequestAppraisal()));
+                if(!Util.isNull(workCase)){
+                    log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
+                }
+                if(!Util.isNull(workCasePrescreen)){
+                    log.debug("No Submit Request Appraisal to WorkCasePreScreen. [{}]", workCasePrescreen.getRequestAppraisal());
+                }
             }
 
             // ###### Reject_Group in UwresultDetail is Null ######
