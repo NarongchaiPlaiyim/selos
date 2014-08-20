@@ -433,6 +433,18 @@ public class BAInfo implements Serializable {
         deleteCreditList = new ArrayList<BAPAInfoCreditView>();
         deleteCreditRowId = -1;
         
+        if (bapaInfoView.getInsuranceCompany() == null) {
+        	//set default to id1
+        	if (insuranceCompanies != null && !insuranceCompanies.isEmpty()) {
+	        	for (InsuranceCompany company : insuranceCompanies) {
+	        		if (company.getId() == 1) {
+	        			bapaInfoView.setInsuranceCompany(company);
+	        			bapaInfoView.setUpdInsuranceCompany(company.getId());
+	        			break;
+	        		}
+	        	}
+        	}
+        }
         _calculateTotal();
         _checkUpatePayInsurance();
     }
