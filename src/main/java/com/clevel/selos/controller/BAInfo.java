@@ -185,19 +185,38 @@ public class BAInfo implements Serializable {
         this.selectedCredit = selectedCredit;
     }
 
+    public boolean isRequiredHC(BAPAInfoCustomerView baCustView) {
+    	if (baCustView == null)
+    		return false;
+    	 int id = baCustView.getUpdBAResultHC();
+         if (id <= 0)
+        	 return false;
+         for (BAResultHC data : baResultHCs) {
+             if (data.getId() == id)
+                 return data.isRequiredCheckDate();
+         }
+         return false;
+    }
     public boolean isEnableCheckDate() {
         if (bapaInfoCustomerView == null)
             return false;
-        int id = bapaInfoCustomerView.getUpdBAResultHC();
-        if (id <= 0)
-            return false;
         if (isDialogBADisable("ba.checkDate"))
         	return false;
-        for (BAResultHC data : baResultHCs) {
-            if (data.getId() == id)
-                return data.isRequiredCheckDate();
-        }
-        return false;
+        return isRequiredHC(bapaInfoCustomerView);        
+    }
+    
+    private void _checkUpatePayInsurance() {
+    	boolean addPay = false;
+    	for (BAPAInfoCustomerView view : bapaInfoCustomers) {
+    		if (isRequiredHC(view)) {
+    			addPay = true;
+    			break;
+    		}
+    	}
+    	if (addPay)
+    		bapaInfoView.setPayToInsuranceCompany(RadioValue.YES);
+    	else
+    		bapaInfoView.setPayToInsuranceCompany(RadioValue.NO);
     }
     /*
      * Action
@@ -254,8 +273,12 @@ public class BAInfo implements Serializable {
 
     }
     public void onApplyBAInformation() {
+    	if (!isRequiredHC(bapaInfoCustomerView)) {
+    		bapaInfoCustomerView.setCheckDate(null);
+    	}
         bapaInfoCustomerView.setNeedUpdate(true);
         bapaInfoCustomerView = null;
+        _checkUpatePayInsurance();
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
     public void onOpenAddBAPAInformationDialog() {
@@ -345,6 +368,7 @@ public class BAInfo implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
     public void onSaveBAInformation() {
+    	_checkUpatePayInsurance();
         bapaInfoView.setTotalExpense(totalExpense);
         bapaInfoView.setTotalPremium(totalPremium);
         bapaInfoView.setTotalLimit(totalLimit);
@@ -408,6 +432,7 @@ public class BAInfo implements Serializable {
         deleteCreditRowId = -1;
         
         _calculateTotal();
+        _checkUpatePayInsurance();
     }
     private void _calculateTotal() {
         totalExpense = new BigDecimal(0);
