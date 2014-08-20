@@ -85,7 +85,7 @@
                         				value="#{msg.get('app.pledgeDetail.detail.signingDate')}#{pledgeDetail.mandate('pledgeSignDate')}" />	
                         		</td>
                         		<td>
-                        			<clv:BECalendar id='pledge_signingdate'
+                        			<clv:BECalendar id='pledge_signingdate' readonlyInput="true"
                         					value="#{pledgeDetail.pledgeInfoView.signingDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{pledgeDetail.minDate}"

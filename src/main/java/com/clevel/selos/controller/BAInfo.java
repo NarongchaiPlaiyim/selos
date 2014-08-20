@@ -100,13 +100,13 @@ public class BAInfo implements Serializable {
 		//DO NOTHING
 	}
     public String getMinCheckDate() {
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
         return dFmt.format(new Date());
     }
     public String getMaxCheckDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 90);
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
         return dFmt.format(calendar.getTime());
     }
 
@@ -207,10 +207,12 @@ public class BAInfo implements Serializable {
     
     private void _checkUpatePayInsurance() {
     	boolean addPay = false;
-    	for (BAPAInfoCustomerView view : bapaInfoCustomers) {
-    		if (isRequiredHC(view)) {
-    			addPay = true;
-    			break;
+    	if (bapaInfoCustomers != null && !bapaInfoCustomers.isEmpty()) {
+    		for (BAPAInfoCustomerView view : bapaInfoCustomers) {
+    			if (isRequiredHC(view)) {
+    				addPay = true;
+    				break;
+    			}
     		}
     	}
     	if (addPay)

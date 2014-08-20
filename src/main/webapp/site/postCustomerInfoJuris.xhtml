@@ -159,7 +159,7 @@
 				value="#{msg.get('app.custInfoJuri.content.regisDate')}#{postCustomerInfoJuris.mandate('jus.registrationDate')}" />
 		</td>
 		<td>
-			<clv:BECalendar id='registdate' 
+			<clv:BECalendar id='registdate' readonlyInput="true"
 				value="#{postCustomerInfoJuris.customer.registrationDate}"
 				pattern="dd/MM/yyyy" showOn="button"
 				autocomplete="false" locale="th_TH"

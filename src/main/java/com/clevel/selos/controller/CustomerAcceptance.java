@@ -82,7 +82,7 @@ public class CustomerAcceptance implements Serializable {
 		return modUser.getDisplayName();
 	}
 	public String getMinTCGPayinSlipSendDate() {
-		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
 		return dFmt.format(new Date());
 	}
 	public ApproveResult getApproveResult() {
@@ -104,7 +104,7 @@ public class CustomerAcceptance implements Serializable {
 		//DO NOTHING
 	}
 	public String getMinDate() {
-		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
 		return dFmt.format(new Date());
 	}
 	public List<ContactRecordDetailView> getContactRecordDetailViews() {
