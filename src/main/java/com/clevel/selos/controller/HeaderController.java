@@ -729,7 +729,7 @@ public class HeaderController extends BaseController {
         if(zmUserId != null && !zmUserId.equals("")){
             try{
                 fullApplicationControl.submitToZM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
-                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
                 showMessageRedirect();
@@ -796,6 +796,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitToRGMPriceReduce(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
@@ -817,6 +818,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitToRM(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
@@ -838,6 +840,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitToGH(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
@@ -859,6 +862,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitToCSSO(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
@@ -880,6 +884,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitToUWFromCSSO(queueName, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
@@ -1157,9 +1162,10 @@ public class HeaderController extends BaseController {
             long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
+            if(stepId==2006 && statusId==20007){
+                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            }
             fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             messageHeader = "Information.";
             message = "Request for appraisal success.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -1182,7 +1188,7 @@ public class HeaderController extends BaseController {
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         try{
-
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitToUWFromCommittee(queueName, wobNumber);
 
             messageHeader = "Information.";
@@ -2185,7 +2191,7 @@ public class HeaderController extends BaseController {
             message = "Return to AAD Admin success.";
 
             fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
 
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
 
@@ -2703,7 +2709,7 @@ public class HeaderController extends BaseController {
         try {
             if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
                 prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
-                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 complete = true;
                 messageHeader = "Information.";
                 message = "Assign to checker complete.";

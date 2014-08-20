@@ -141,6 +141,7 @@
                                              value="View Return History"
                                              binding="#{btnViewHistory}"
                                              styleClass="larger"
+                                             disabled="#{returnReply.isDisabled('viewHistoryButton')}"
                                              action="#{returnReply.onViewHistory()}"
                                              update=":frmMain"/>
                         </td>

@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
+import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
@@ -67,6 +68,8 @@ public class PrescreenChecker implements Serializable {
     UserDAO userDAO;
     @Inject
     PrescreenBusinessControl prescreenBusinessControl;
+    @Inject
+    ReturnControl returnControl;
 
     private List<Reason> reasonList;
 
@@ -173,6 +176,14 @@ public class PrescreenChecker implements Serializable {
     public void onCheckCustomer(){
         log.debug("onCheckCustomer :::");
         RequestContext.getCurrentInstance().execute("blockUICheckCustomer.show()");
+
+        //save return history
+        try {
+            returnControl.saveReturnHistoryForRestart(0,workCasePreScreenId);
+        } catch (Exception ex){
+            log.error("exception while save return information to history! ",ex);
+        }
+
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
