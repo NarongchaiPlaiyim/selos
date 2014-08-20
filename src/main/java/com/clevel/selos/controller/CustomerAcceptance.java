@@ -193,6 +193,7 @@ public class CustomerAcceptance implements Serializable {
 	public void onAddContactRecord() {
 		Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
 		contactRecord.setReason(reason);
+		contactRecord.updateNextCallingDate();
 		contactRecordDetailViews.add(contactRecord);
 		contactRecord = null;
 		
@@ -201,6 +202,7 @@ public class CustomerAcceptance implements Serializable {
 	public void onUpdateContactRecord() {
 		Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
 		contactRecord.setReason(reason);
+		contactRecord.updateNextCallingDate();
 		contactRecord.setNeedUpdate(true);
 		contactRecord = null;
 		
