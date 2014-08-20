@@ -76,11 +76,13 @@
 					readonly="#{baInfo.isDialogBAPADisable('creditType.premium')}"
 					converterMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
 					validatorMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
-					
+					onkeydown="return onKeyDownMoney(event);"
+		            onkeypress="return onKeyPressMoney(event)"
+		            onfocus="removeComma(this)"
 					>
 					<p:ajax event="blur" update='morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<f:validateDoubleRange minimum="0"/>
-					<f:convertNumber pattern="0.00" />
+					<f:convertNumber pattern="#,##0.00" minFractionDigits="0" maxFractionDigits="0"/>
 				</p:inputText>
 			</td>
 		</tr>
@@ -93,8 +95,11 @@
 			<td>
 				<p:inputText id="morepay" style="large" readonly="true"
 					value="#{baInfo.bapaInfoCreditView.expenseAmount}"
+					onkeydown="return onKeyDownMoney(event);"
+		            onkeypress="return onKeyPressMoney(event)"
+		            onfocus="removeComma(this)"
 					>
-					<f:convertNumber pattern="#,##0.00" />
+					<f:convertNumber pattern="#,##0.00"  minFractionDigits="0" maxFractionDigits="0"/>
 				</p:inputText>
 			</td>
 		</tr>

@@ -93,7 +93,7 @@
                          id="saveBtn"
                          value="#{msg.get('app.button.ok')}"
                          actionListener="#{baInfo.onApplyBAInformation()}"
-                         update=":frmMain:bainfo_tbl,:baApplyInfoDlgForm"
+                         update=":frmMain:bainfo_tbl,:baApplyInfoDlgForm,:frmMain:ba_payInsurance"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_baApplyInfoDlg')"
                          styleClass="small"
                          disabled="#{baInfo.isDialogBADisable('okButton')}"

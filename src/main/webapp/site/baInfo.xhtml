@@ -98,7 +98,8 @@
                         			<h:outputText value="#{msg.get('app.baInfo.ba.payToInsuranceCompany')}#{baInfo.mandate('baPaymentMethod')}" />			
                         		</td>
                         		<td>
-                        			<p:selectOneRadio value="#{baInfo.bapaInfoView.payToInsuranceCompany}"
+                        			<p:selectOneRadio id="ba_payInsurance" 
+                        				value="#{baInfo.bapaInfoView.payToInsuranceCompany}"
                         				disabled="#{baInfo.isDisabled('baPaymentMethod')}"
                         				>
                                        <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
