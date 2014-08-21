@@ -344,7 +344,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId);
+            saveReturnHistoryForRestart(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -396,8 +396,16 @@ public class ReturnControl extends BusinessControl {
 
             }
 
-            returnInfoDAO.persist(returnInfoList);
+            try{
+                log.debug("persist returnInfoList.");
+                returnInfoDAO.persist(returnInfoList);
+                log.debug("persist returnInfoList success");
+            } catch (Exception e) {
+                log.debug("persist returnInfoList error");
+                throw e;
+            }
 
+            log.debug("execute bpm (dispatch)");
             if((step!=null && step.getId()==2003) || (step!=null && step.getId()==2016)){
                 bpmExecutor.returnBDM(workCaseId, queueName, ActionCode.RETURN_TO_BDM.getVal(),hasRG001);
             } else {
@@ -411,7 +419,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId);
+            saveReturnHistoryForRestart(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -463,8 +471,16 @@ public class ReturnControl extends BusinessControl {
 
             }
 
-            returnInfoDAO.persist(returnInfoList);
+            try{
+                log.debug("persist returnInfoList.");
+                returnInfoDAO.persist(returnInfoList);
+                log.debug("persist returnInfoList success");
+            } catch (Exception e) {
+                log.debug("persist returnInfoList error");
+                throw e;
+            }
 
+            log.debug("execute bpm (dispatch)");
             bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_AAD_ADMIN.getVal());
         }
     }
@@ -474,7 +490,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId);
+            saveReturnHistoryForRestart(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -526,8 +542,16 @@ public class ReturnControl extends BusinessControl {
 
             }
 
-            returnInfoDAO.persist(returnInfoList);
+            try{
+                log.debug("persist returnInfoList.");
+                returnInfoDAO.persist(returnInfoList);
+                log.debug("persist returnInfoList success");
+            } catch (Exception e) {
+                log.debug("persist returnInfoList error");
+                throw e;
+            }
 
+            log.debug("execute bpm (dispatch)");
             bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.REVISE_CA.getVal());
         }
     }

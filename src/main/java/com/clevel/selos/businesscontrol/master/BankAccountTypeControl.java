@@ -18,7 +18,6 @@ import java.util.Map;
 @Stateless
 public class BankAccountTypeControl extends BusinessControl{
 
-
     //Initial Map to cache the data of BaseRateContol
     //Initial mutex object to guaranteed thread safe
     private static Map<Integer, BankAccountTypeView> bankAccountTypeViewMap;

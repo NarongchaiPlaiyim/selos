@@ -108,12 +108,12 @@ public class PostCustomerInfoIndv implements Serializable {
 		//DO NOTHING
 	}
 	public String getCurrentDate() {
-		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
 		return dFmt.format(new Date());
 	}
 	public String getAgeYearRange() {
-		Calendar calendar = Calendar.getInstance(new Locale("th","TH"));
-		return "2450:"+calendar.get(Calendar.YEAR);
+		Calendar calendar = Calendar.getInstance();
+		return "1950:"+calendar.get(Calendar.YEAR);
 	}
 	public CustomerInfoPostIndvView getCustomer() {
 		return customer;

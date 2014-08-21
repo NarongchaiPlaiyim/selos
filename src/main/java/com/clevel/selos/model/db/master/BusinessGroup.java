@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Entity
 @Table(name = "mst_business_group")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BusinessGroup implements Serializable {
     @Id
     @Column(name = "id")

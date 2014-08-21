@@ -1,13 +1,17 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.FieldsControlDAO;
+import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.FieldsControl;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.transform.FieldsControlTransform;
 import com.clevel.selos.util.FacesUtil;
@@ -30,6 +34,10 @@ public class MandatoryFieldsControl extends BusinessControl {
 
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    PrescreenDAO prescreenDAO;
     @Inject
     FieldsControlDAO fieldsControlDAO;
 
@@ -94,6 +102,30 @@ public class MandatoryFieldsControl extends BusinessControl {
             List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
             log.debug("Result fields control : {} ", fieldsControlViewList.size());
             return fieldsControlViewList;
+        }else{
+            return Collections.emptyList();
+        }
+    }
+
+    public List<FieldsControlView> getFieldsControlViewPreeScreen(long workCasePreScreenId, long stepId, Screen screen, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (stepId <= 0 || workCasePreScreenId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(workCasePrescreen!=null && workCasePrescreen.getId()>0){
+                Prescreen prescreen = prescreenDAO.findByWorkCasePrescreen(workCasePrescreen);
+                if(prescreen!=null && prescreen.getId()>0){
+                    int productGroupId = prescreen.getProductGroup().getId();
+                    log.debug("get Field control for screen : {}, stepId : {}, role : {}", screen, stepId, user.getRole());
+                    List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
+                    List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+                    log.debug("Result fields control : {} ", fieldsControlViewList.size());
+                    return fieldsControlViewList;
+                }
+            }
+            return Collections.emptyList();
         }else{
             return Collections.emptyList();
         }

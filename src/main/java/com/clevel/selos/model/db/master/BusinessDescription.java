@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Entity
 @Table(name = "mst_business_desc")
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class BusinessDescription implements Serializable {
     @Id
     @Column(name = "id")

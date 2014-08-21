@@ -1569,7 +1569,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
         int count = 1;
         if (Util.safetyList(newGuarantorDetails).size() > 0){
-            log.debug("newGuarantorDetails by fillApprovedGuarantor. {}",newGuarantorDetails);
+            log.debug("newGuarantorDetails by fillExSumApprovedGuarantor. {}",newGuarantorDetails);
             for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
@@ -1610,7 +1610,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 //                }
             }
         } else {
-            log.debug("newGuarantorDetails is Null by fillApprovedGuarantor. {}",newGuarantorDetails);
+            log.debug("newGuarantorDetails is Null by fillExSumApprovedGuarantor. {}",newGuarantorDetails);
             ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
             approvedGuarantorDecisionReport.setPath(pathsub);
             approvedGuarantorDecisionReport.setProposeCreditDetailViewList(approvedGuarantorDecisionReport.getProposeCreditDetailViewList());

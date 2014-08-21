@@ -85,7 +85,7 @@
                         				value="#{msg.get('app.mortgageDetail.detail.signingDate')}#{mortgageDetail.mandate('mortSignDate')}" />	
                         		</td>
                         		<td colspan="3">
-                        			<clv:BECalendar id='mortgage_signingdate'
+                        			<clv:BECalendar id='mortgage_signingdate' readonlyInput="true"
                         					value="#{mortgageDetail.mortgageInfoView.signingDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageDetail.currentDate}"
@@ -493,7 +493,7 @@
                         								value="#{msg.get('app.mortgageDetail.powerattorney.dateOfBirth')}#{mortgageDetail.mandate('dateOfBirth')}" />
 	                        					</td>
 	                        					<td style="width:350px">
-	                        						<clv:BECalendar id='att_dateofbirth' navigator="true" 
+	                        						<clv:BECalendar id='att_dateofbirth' navigator="true"  readonlyInput="true"
 	                        							maxDate="#{mortgageDetail.currentDate}"
 	                        							yearRange="#{mortgageDetail.ageYearRange}"
 	                        							value="#{mortgageDetail.attorneyView.birthDate}"

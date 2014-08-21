@@ -9,6 +9,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApprovalType;
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
@@ -61,6 +62,7 @@ public class PDFRejectLetter implements Serializable {
     private User userView;
     private UWRuleResultSummary uwRuleResultSummary;
     private long stepId;
+    private User user;
 
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
@@ -85,6 +87,7 @@ public class PDFRejectLetter implements Serializable {
         log.debug("--on init()");
         HttpSession session = FacesUtil.getSession(true);
         stepId = getCurrentStep(session);
+        user = (User)session.getAttribute("user");
 
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
@@ -131,6 +134,7 @@ public class PDFRejectLetter implements Serializable {
         log.debug("--uwRuleResultSummary. {}",uwRuleResultSummary);
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
+
         if (!Util.isNull(uwRuleResultSummary)){
             if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
                 uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
@@ -149,16 +153,30 @@ public class PDFRejectLetter implements Serializable {
                         log.debug("--RejectGroup is Null.");
                     }
                 }
+            } else if (onCheckRoleZM()){
+                if ((DecisionType.REJECTED).equals(approvalHistoryView.getUwDecision()) && (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
+                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) || Util.isNull(uwRuleResultSummary.getUwResultColor())){
+                    rejectLetterReport.setTypePolicy(2);
+                    log.debug("--Reject on submit CA. [{}] if green color or yellow color [{}]",approvalHistoryView.getUwDecision(),uwRuleResultSummary.getUwResultColor());
+                } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
+                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) ||
+                        Util.isNull(uwRuleResultSummary.getUwResultColor())){
+                    rejectLetterReport.setTypePolicy(2);
+                    log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
+                }
             } else if ((DecisionType.REJECTED).equals(approvalHistoryView.getUwDecision()) && (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
-                    (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) || Util.isNull(uwRuleResultSummary.getUwResultColor())){
-                rejectLetterReport.setTypePolicy(2);
-                log.debug("--Reject on submit CA. [{}] if green color or yellow color [{}]",approvalHistoryView.getUwDecision(),uwRuleResultSummary.getUwResultColor());
-            } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
-                    (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) ||
-                    Util.isNull(uwRuleResultSummary.getUwResultColor())){
-                rejectLetterReport.setTypePolicy(2);
-                log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
-            }
+                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) || Util.isNull(uwRuleResultSummary.getUwResultColor())){
+                    rejectLetterReport.setTypePolicy(2);
+                    log.debug("--Reject on submit CA. [{}] if green color or yellow color [{}]",approvalHistoryView.getUwDecision(),uwRuleResultSummary.getUwResultColor());
+                } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
+                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) ||
+                        Util.isNull(uwRuleResultSummary.getUwResultColor())){
+                    rejectLetterReport.setTypePolicy(2);
+                    log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
+                }
+            } else {
+            rejectLetterReport.setTypePolicy(2);
+            log.debug("--Color is No Result where uwResultSummary is Null. {}",uwRuleResultSummary);
         }
         log.debug("--rejectLetterReport. {}",rejectLetterReport);
 
@@ -280,5 +298,11 @@ public class PDFRejectLetter implements Serializable {
     protected long getCurrentStep(HttpSession session){
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         return stepId;
+    }
+    private boolean onCheckRoleZM(){
+        if (user.getRole().getId() == RoleValue.ZM.id()){
+            return true;
+        }
+        return false;
     }
 }
