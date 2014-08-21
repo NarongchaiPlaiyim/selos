@@ -72,7 +72,7 @@
 						value="#{msg.get('app.baInfo.ba.dialog.checkDate')}#{baInfo.mandateDialogBA('ba.checkDate')}" />
 				</td>
 				<td>
-					<clv:BECalendar id='checkdate' 
+					<clv:BECalendar id='checkdate' readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button"
                    		value="#{baInfo.bapaInfoCustomerView.checkDate}"
                    		mindate="#{baInfo.minCheckDate}"

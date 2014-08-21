@@ -82,7 +82,7 @@
 					>
 					<p:ajax event="blur" update='morepay' listener="#{baInfo.onCalculateExpense()}" />
 					<f:validateDoubleRange minimum="0"/>
-					<f:convertNumber pattern="#,##0.00" minFractionDigits="0" maxFractionDigits="0"/>
+					<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"/>
 				</p:inputText>
 			</td>
 		</tr>
@@ -99,7 +99,7 @@
 		            onkeypress="return onKeyPressMoney(event)"
 		            onfocus="removeComma(this)"
 					>
-					<f:convertNumber pattern="#,##0.00"  minFractionDigits="0" maxFractionDigits="0"/>
+					<f:convertNumber pattern="#,##0.00"  minFractionDigits="2" maxFractionDigits="2"/>
 				</p:inputText>
 			</td>
 		</tr>

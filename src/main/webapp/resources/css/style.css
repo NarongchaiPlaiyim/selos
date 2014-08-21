@@ -946,3 +946,17 @@ table table.ui-selectoneradio tr {
 .ui-selectonemenu-items {
     display: inline !important;
 }
+
+.ui-button.ui-spinner-button {
+	display: block !important;
+    font-size: 0.5em !important;
+    margin-right: 0 !important;
+    position: absolute !important;
+}
+.ui-spinner-button.ui-spinner-down.ui-state-active {
+	top : auto !important;
+}
+input.ui-spinner-input {	
+	display: block !important;
+    padding-right: 20px !important;
+}

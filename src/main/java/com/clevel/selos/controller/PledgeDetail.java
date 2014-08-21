@@ -88,7 +88,7 @@ public class PledgeDetail implements Serializable {
 		//DO NOTHING
 	}
 	public String getMinDate() {
-		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
 		return dFmt.format(new Date());
 	}
 	

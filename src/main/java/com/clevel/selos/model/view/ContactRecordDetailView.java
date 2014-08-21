@@ -3,11 +3,14 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ContactRecordDetailView implements Serializable {
 	private static final long serialVersionUID = 466737071113972055L;
@@ -23,6 +26,10 @@ public class ContactRecordDetailView implements Serializable {
     private boolean needUpdate;
     
     private int updReasonId;
+    
+    private Date nextCallingDateOnly;
+    private int nextCallingHour = 0;
+    private int nextCallingMin = 0;
     
     public ContactRecordDetailView() {
     }
@@ -75,6 +82,47 @@ public class ContactRecordDetailView implements Serializable {
 
 	public void setNextCallingDate(Date nextCallingDate) {
 		this.nextCallingDate = nextCallingDate;
+		if (nextCallingDate != null) {
+			Calendar calendar = Calendar.getInstance(Locale.US);
+			calendar.setTime(nextCallingDate);
+			nextCallingHour = calendar.get(Calendar.HOUR_OF_DAY);
+			nextCallingMin = calendar.get(Calendar.MINUTE);
+			nextCallingDateOnly = nextCallingDate;
+		} else {
+			nextCallingHour = 0;
+			nextCallingMin = 0;
+			nextCallingDateOnly = null;
+		}
+	}
+	
+	public void updateNextCallingDate() {
+		if (nextCallingDateOnly == null) {
+			nextCallingDate = null;
+		} else {
+			Calendar calendar = Calendar.getInstance(Locale.US);
+			calendar.setTime(nextCallingDateOnly);
+			calendar.set(Calendar.HOUR_OF_DAY,nextCallingHour);
+			calendar.set(Calendar.MINUTE,nextCallingMin);
+			nextCallingDate = calendar.getTime();
+		}
+	}
+	public Date getNextCallingDateOnly() {
+		return nextCallingDateOnly;
+	}
+	public void setNextCallingDateOnly(Date nextCallingDateOnly) {
+		this.nextCallingDateOnly = nextCallingDateOnly;
+	}
+	public int getNextCallingHour() {
+		return nextCallingHour;
+	}
+	public void setNextCallingHour(int nextCallingHour) {
+		this.nextCallingHour = nextCallingHour;
+	}
+	public int getNextCallingMin() {
+		return nextCallingMin;
+	}
+	public void setNextCallingMin(int nextCallingMin) {
+		this.nextCallingMin = nextCallingMin;
 	}
 
 
