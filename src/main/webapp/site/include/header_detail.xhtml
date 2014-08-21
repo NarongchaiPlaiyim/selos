@@ -16,6 +16,7 @@
     <p:commandButton id="btnChkMandatePreScreenMaker" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 1003}"
                      actionListener="#{headerController.onCheckMandateForMaker()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -24,6 +25,7 @@
     <p:commandButton id="btnChkMandatePreScreenChecker" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and ( headerController.stepId == 1002 || headerController.stepId == 1001 )}"
                      actionListener="#{headerController.onCheckMandateForChecker()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -90,15 +92,17 @@
                      disabled="#{not headerController.canCloseSale or not headerController.canCheckPreScreen}"/>
 
 </p:panel>
-<!--############ Stage for FullApplication ############-->
-<p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
+<!--############ Stage for End Case #############-->
+<p:panel id="header_panel_report" rendered="#{headerController.checkAccessStage('ENDSTAGE')}" styleClass="panel">
     <!--Print Report-->
     <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Print PDF')}"
                      actionListener="#{report.setNameReport()}"
-                     oncomplete="printReportDlg.show()"
+                     oncomplete="PF('printReportDlg').show()"
                      update=":frmMain:printReportPanel">
     </p:commandButton>
+</p:panel>
+<!--############ Stage for FullApplication ############-->
+<p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
     <!--View Relate CA-->
     <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" title="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('View Related Application CA')}">
@@ -123,6 +127,7 @@
     <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc')}"
                      actionListener="#{headerController.onCheckMandateForFullApp()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -454,6 +459,7 @@
     <p:commandButton id="btnCheckMandate_AADM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2006}"
                      actionListener="#{headerController.onCheckMandateForAADAdmin()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -462,6 +468,7 @@
     <p:commandButton id="btnCheckMandate_AADC" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2008}"
                      actionListener="#{headerController.onCheckMandateForAADCommittee()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -470,6 +477,7 @@
     <p:commandButton id="btnCheckMandate_ABDM" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2023}"
                      actionListener="#{headerController.onCheckMandateForABDM()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -478,6 +486,7 @@
     <p:commandButton id="btnCheckMandate_CheckDoc" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 3008}"
                      actionListener="#{headerController.onCheckMandateForStepCheckDoc()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -486,6 +495,7 @@
     <p:commandButton id="btnCheckMandate_ZONE" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Check Mandate Doc') and headerController.stepId == 2002}"
                      actionListener="#{headerController.onCheckMandateForZONE()}"
+                     disabled="true"
                      oncomplete="checkMandateDlg.show()"
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
@@ -648,7 +658,6 @@
                          onclick="reload();"/>
     </p:confirmDialog>
 </p:panel>
-<!--End of Message Box -->
 <p:panel id="printReportPanel" styleClass="panel">
     <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"

@@ -55,6 +55,8 @@ public class FullApplicationControl extends BusinessControl {
     @Inject
     private AppraisalDAO appraisalDAO;
     @Inject
+    private CancelRejectInfoDAO cancelRejectInfoDAO;
+    @Inject
     private WorkCaseDAO workCaseDAO;
     @Inject
     private WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -1392,6 +1394,18 @@ public class FullApplicationControl extends BusinessControl {
     public void cancelCA(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
         log.info("Cancel CA - queueName : {}, wobNumber : {}, reasonId : {}, remark : {}", queueName, wobNumber, reasonId, remark);
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), getReasonDescription(reasonId), remark);
+    }
+
+    public void saveCancelRejectInfo(long workCaseId, long workCasePreScreenId, int reasonId){
+        CancelRejectInfo cancelRejectInfo = new CancelRejectInfo();
+        cancelRejectInfo.setReason(reasonDAO.findById(reasonId));
+        if(workCaseId != 0)
+            cancelRejectInfo.setWorkCase(workCaseDAO.findById(workCaseId));
+        if(workCasePreScreenId != 0)
+            cancelRejectInfo.setWorkCasePrescreen(workCasePrescreenDAO.findById(workCasePreScreenId));
+
+        cancelRejectInfoDAO.persist(cancelRejectInfo);
+
     }
 
     public void cancelRequestPriceReduction(String queueName, String wobNumber, int reasonId, String remark) throws Exception {

@@ -815,6 +815,8 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         try{
             fullApplicationControl.cancelCA(queueName, wobNumber, reasonId, cancelRemark);
+            log.debug("saveCancelRejectInfo...");
+            fullApplicationControl.saveCancelRejectInfo(workCaseId, workCasePreScreenId, reasonId);
             messageHeader =  msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.cancel.success");
             showMessageRedirect();
@@ -2927,6 +2929,10 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("GENERIC".equalsIgnoreCase(stageString)){
+            if(stageId == 0){
+                accessible = true;
+            }
+        } else if ("ENDSTAGE".equalsIgnoreCase(stageString)){
             if(stageId == 0){
                 accessible = true;
             }
