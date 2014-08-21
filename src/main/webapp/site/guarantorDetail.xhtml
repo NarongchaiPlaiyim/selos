@@ -86,7 +86,7 @@
                         				value="#{msg.get('app.guarantorDetail.detail.signingDate')}#{guarantorDetail.mandate('guarantorSignDate')}" />	
                         		</td>
                         		<td>
-                        		    <clv:BECalendar id='guarantor_signingdate'
+                        		    <clv:BECalendar id='guarantor_signingdate' readonlyInput="true"
                         					value="#{guarantorDetail.guarantorInfoView.signingDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{guarantorDetail.minDate}"

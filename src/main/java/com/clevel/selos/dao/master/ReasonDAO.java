@@ -166,4 +166,22 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         return list;
     }
 
+    public List<Reason> getListByCodeAndReasonType(String code, int reasonType) {
+        log.debug("getListByCodeAndReasonType. (code: {}, reasonType{})", code, reasonType);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("active", 1));
+        criteria.add(Restrictions.eq("code", code));
+        criteria.add(Restrictions.eq("reasonType.id", reasonType));
+        criteria.addOrder(Order.asc("id"));
+
+        List<Reason> list = criteria.list();
+        if(list!=null) {
+            log.debug("getResubmitReasonList. (result size: {})", list.size());
+        } else {
+            log.debug("getResubmitReasonList. (result : null)");
+        }
+        return list;
+    }
+
 }

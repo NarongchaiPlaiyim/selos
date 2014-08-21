@@ -13,4 +13,5 @@ public interface ValidationMapping {
     public static final String DUPLICATE_CA = "1101";
     public static final String INVALID_BDM = "1102";
     public static final String INVALID_UW = "1103";
+    public static final String INVALID_REASON = "1104";
 }

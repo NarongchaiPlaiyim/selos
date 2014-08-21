@@ -72,7 +72,7 @@
 						value="#{msg.get('app.baInfo.ba.dialog.checkDate')}#{baInfo.mandateDialogBA('ba.checkDate')}" />
 				</td>
 				<td>
-					<clv:BECalendar id='checkdate' 
+					<clv:BECalendar id='checkdate' readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button"
                    		value="#{baInfo.bapaInfoCustomerView.checkDate}"
                    		mindate="#{baInfo.minCheckDate}"
@@ -93,7 +93,7 @@
                          id="saveBtn"
                          value="#{msg.get('app.button.ok')}"
                          actionListener="#{baInfo.onApplyBAInformation()}"
-                         update=":frmMain:bainfo_tbl,:baApplyInfoDlgForm"
+                         update=":frmMain:bainfo_tbl,:baApplyInfoDlgForm,:frmMain:ba_payInsurance"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_baApplyInfoDlg')"
                          styleClass="small"
                          disabled="#{baInfo.isDialogBADisable('okButton')}"

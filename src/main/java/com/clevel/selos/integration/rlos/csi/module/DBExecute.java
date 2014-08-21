@@ -127,6 +127,22 @@ public class DBExecute implements Serializable {
         String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE " +
                 "FROM " + tableName + " WHERE NAME_TH like ? OR NAME_EN like ? AND ID_NO is null AND PASSPORT_NO is null AND BUSINESS_REG is null";
 
+        if (!Util.isEmpty(nameTh)) {
+            nameTh = "%" + nameTh + "%";
+        } else {
+            nameTh = null;
+        }
+
+        if (!Util.isEmpty(nameEn)) {
+            nameEn = "%" + nameEn + "%";
+        } else {
+            nameEn = null;
+        }
+
+        if(nameTh==null || nameEn==null){
+            return null;
+        }
+
         try{
             conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
         } catch (RLOSInterfaceException ex){
@@ -138,17 +154,6 @@ public class DBExecute implements Serializable {
             log.debug("SQL_SELECT : {}", SQL_SELECT);
 
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
-            if (!Util.isEmpty(nameTh)) {
-                nameTh = "%" + nameTh + "%";
-            } else {
-                nameTh = null;
-            }
-
-            if (!Util.isEmpty(nameEn)) {
-                nameEn = "%" + nameEn + "%";
-            } else {
-                nameEn = null;
-            }
 
             statement.setString(1, nameTh);
             statement.setString(2, nameEn);

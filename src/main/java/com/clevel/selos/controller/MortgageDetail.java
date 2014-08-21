@@ -110,7 +110,7 @@ public class MortgageDetail implements Serializable {
 		//DO NOTHING
 	}
 	public String getCurrentDate() {
-		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
 		return dFmt.format(new Date());
 	}
 	
@@ -236,8 +236,8 @@ public class MortgageDetail implements Serializable {
 		return credits;
 	}
 	public String getAgeYearRange() {
-		Calendar calendar = Calendar.getInstance(new Locale("th","TH"));
-		return "2450:"+calendar.get(Calendar.YEAR);
+		Calendar calendar = Calendar.getInstance();
+		return "1950:"+calendar.get(Calendar.YEAR);
 	}
 	/*
 	 * Action

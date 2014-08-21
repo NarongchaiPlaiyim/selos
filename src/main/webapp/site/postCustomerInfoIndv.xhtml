@@ -163,7 +163,7 @@
 				value="#{msg.get('app.custInfoIndi.content.dob')}#{postCustomerInfoIndv.mandate('ind.dateOfBirth')}" />
 		</td>
 		<td>
-			<clv:BECalendar id='birthdate' navigator="true" 
+			<clv:BECalendar id='birthdate' navigator="true" readonlyInput="true"
 				yearRange="#{postCustomerInfoIndv.ageYearRange}"
 				maxDate="#{postCustomerInfoIndv.currentDate}"
 				value="#{postCustomerInfoIndv.customer.birthDate}"

@@ -344,7 +344,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId);
+            saveReturnHistoryForRestart(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -419,7 +419,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId);
+            saveReturnHistoryForRestart(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
@@ -490,7 +490,7 @@ public class ReturnControl extends BusinessControl {
             boolean hasRG001 = false;
 
             //Move Return Info in Working to History
-            saveReturnHistory(workCaseId,workCasePrescreenId);
+            saveReturnHistoryForRestart(workCaseId,workCasePrescreenId);
 
             //Save new to Return Info working
             WorkCase workCase = null;
