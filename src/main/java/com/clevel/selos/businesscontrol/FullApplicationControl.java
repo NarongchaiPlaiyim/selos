@@ -762,11 +762,7 @@ public class FullApplicationControl extends BusinessControl {
             if(!Util.isNull(basicInfo)){
                 approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
                 tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
-            }
-
-            workCase = workCaseDAO.findById(workCaseId);
-            if(!Util.isNull(workCase)){
-                insuranceRequired = workCase.getInsuranceFlag() == 1 ? "Y" : "N";
+                insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
             }
         }
 
