@@ -177,12 +177,15 @@
 
     <!--_________ Submit Case ___________ -->
     <!-- Submit Generic for BU -->
-    <!--<p:commandButton id="btnSubmitCaseFullApplication" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+    <p:commandButton id="btnSubmitCaseFullApplication" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA')}"
                      disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
-                     action="#{headerController.onOpenSubmitFullApplication()}"
+                     action="#{headerController.onOpenSubmitBU()}"
+                     onclick="PF('blockUI').show()"
                      update=":frmMain:submitFullAppPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
-    </p:commandButton>-->
+    </p:commandButton>
+    <!-- Submit Generic for UW -->
+
     <!--Submit To Zone Manager [ From BDM ( 2001 ) and From Request Price Reduction ( 2018 ) ]-->
     <p:commandButton id="btnSubmitCaseToZM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2001 || headerController.stepId == 2018 )}"
@@ -331,7 +334,7 @@
                          widgetVar="subUW2CancelBtn"/>
     </p:confirmDialog>
     <!--Submit CA [ Zone Manager F-Cash ]-->
-    <p:commandButton id="btnSubmitCase_ZMFCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnSubmitCase_ZMFCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2009}"
                      disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                      onclick="PF('confirmSubmitZM_FCash').show()"/>
@@ -348,7 +351,7 @@
         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmSubmitZM_FCash').hide()"
                          styleClass="ui-confirmdialog-no"
                          widgetVar="subZMFCCancelBtn"/>
-    </p:confirmDialog>
+    </p:confirmDialog>-->
     <!--Submit to BDM [ From ABDM return case to BDM ]-->
     <p:commandButton id="btnSubmitCaseToBDM_ABDM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and ( headerController.stepId == 2023 || headerController.stepId == 2024 || headerController.stepId == 2027 )}"
@@ -597,6 +600,7 @@
             <h:outputText value="#{headerController.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
+                         onclick="showWindowsScrollBar()"
                          process="@this"
                          update=":frmMain"
                          oncomplete="msgBoxBaseMessageDlg.hide()"/>
@@ -667,13 +671,13 @@
     </p:dialog>
 </p:panel>
 
-<!--<p:panel id="submitFullAppPanel" styleClass="panel">
+<p:panel id="submitFullAppPanel" styleClass="panel">
     <p:dialog id="submitFullAppDialog" widgetVar="submitFullAppDlg" header="Submit CA"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" height="450">
+              modal="true" width="550" >
         <ui:include src="/site/dialog/submitCADialog.xhtml"/>
     </p:dialog>
-</p:panel>-->
+</p:panel>
 
 <p:panel id="submitUWPanel" styleClass="panel">
     <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit to UW"

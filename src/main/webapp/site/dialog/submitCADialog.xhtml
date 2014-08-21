@@ -6,35 +6,42 @@
         xmlns:p="http://primefaces.org/ui">
 
 <p:panel id="submitCADlgPanel" styleClass="panel-dialog">
-    <!--<h:outputText value="request pricing = #{headerController.requestPricing}"/>
-    <h:outputText value=" pricing level = #{headerController.pricingDOALevel}"/>-->
+    <p:blockUI widgetVar="blocksubmitCADlgPanel" block="submitCADlgPanel"
+               trigger=":frmMain:dlgSubmitCABtn">
+        <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+    <h:outputText value="request pricing = #{headerController.requestPricing}"/>
+    <h:outputText value=" pricing level = #{headerController.pricingDOALevel}"/>
     <p:panel id="submitCA_Endorse" rendered="#{not headerController.requestPricing}" styleClass="panel">
         <table class="content_table_form">
-            <tr>
-                <td colspan="2" class="title left">Submit CA</td>
-            </tr>
-            <tr>
-                <td class="title left" width="190px">Zone Manager :</td>
-                <td>
-                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{headerController.zmUserId}"
-                                     required="#{not empty param[btnSubmitFullApplication.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{headerController.zmUserList}"
-                                       var="zmItem"
-                                       itemLabel="#{zmItem.id} - #{zmItem.userName}"
-                                       itemValue="#{zmItem.id}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
+            <h:panelGroup rendered="#{headerController.isSubmitToZM()}">
+                <tr>
+                    <td colspan="2" class="title left">Submit CA</td>
+                </tr>
+                <tr>
+                    <td class="title left" width="190px">Zone Manager :</td>
+                    <td>
+                        <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                                         value="#{headerController.zmUserId}"
+                                         required="#{not empty param[btnSubmitFullApplication.clientId]}">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItems value="#{headerController.zmUserList}"
+                                           var="zmItem"
+                                           itemLabel="#{zmItem.id} - #{zmItem.userName}"
+                                           itemValue="#{zmItem.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+            </h:panelGroup>
         </table>
     </p:panel>
     <p:panel id="submitCA_Pricing" rendered="#{headerController.requestPricing}" styleClass="panel">
         <table class="content_table_form">
-            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 1}">
-                <tr>
-                    <td colspan="2" class="title left">Price Reduction Approval</td>
-                </tr>
+            <tr>
+                <td colspan="2" class="title left">Price Reduction Approval</td>
+            </tr>
+            <h:panelGroup rendered="#{headerController.isSubmitToZM()}">
                 <tr>
                     <td class="title left" width="190px">Zone Manager :</td>
                     <td>
@@ -51,7 +58,7 @@
                     </td>
                 </tr>
             </h:panelGroup>
-            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 1}">
+            <h:panelGroup rendered="#{headerController.isSubmitToRGM()}">
                 <tr>
                     <td class="title left" width="190px">Regional Manager :</td>
                     <td>
@@ -68,7 +75,7 @@
                     </td>
                 </tr>
             </h:panelGroup>
-            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 3}">
+            <h:panelGroup rendered="#{headerController.isSubmitToGHM()}">
                 <tr>
                     <td class="title left" width="190px">Group Head :</td>
                     <td>
@@ -85,7 +92,7 @@
                     </td>
                 </tr>
             </h:panelGroup>
-            <h:panelGroup rendered="#{headerController.pricingDOALevel >= 4}">
+            <h:panelGroup rendered="#{headerController.isSubmitToCSSO()}">
                 <tr>
                     <td class="title left" width="190px">Chief SME :</td>
                     <td>
@@ -154,17 +161,12 @@
                          binding="#{btnSubmitFullApplication}"
                          value="#{msg.get('app.button.submit')}"
                          styleClass="small"
-                         actionListener="#{headerController.onSubmitFullApplication()}"
+                         actionListener="#{headerController.onSubmitBU()}"
                          oncomplete="handleDialogRequest(xhr, status, args, 'submitFullAppDlg')"
                          process="@form"
                          update=":frmMain:submitCADlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                         styleClass="small" onclick="PF('submitFullAppDlg').hide()"/>
+                         styleClass="small" onclick="PF('submitFullAppDlg').hide(); PF('blockUI').hide()"/>
     </p:panel>
 </p:panel>
-<p:blockUI widgetVar="blocksubmitCADlgPanel" block="submitCADlgPanel"
-           trigger=":frmMain:dlgSubmitCABtn">
-    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 </ui:composition>

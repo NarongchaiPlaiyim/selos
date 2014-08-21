@@ -479,7 +479,75 @@ public class HeaderController extends BaseController {
     }
 
     //---------- Function for Submit CA -----------//
-    public void onOpenSubmitFullApplication(){
+    public void getUserOwnerBU(){
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        if(pricingDOALevel == 1 || pricingDOALevel == 2){
+            isSubmitToZM = true;
+            isSubmitToRGM = true;
+            //Get User ZM from WorkCase Owner
+            User zmUser = basicInfo.getZmUser();
+            if(!Util.isNull(zmUser)) {
+                zmUserId = zmUser.getId();
+                onSelectedZM();
+            }
+            //Get User RGM from WorkCase Owner
+            User rgmUser = basicInfo.getRgmUser();
+            if(!Util.isNull(rgmUser)) {
+                rgmUserId = rgmUser.getId();
+            }
+        }else if(pricingDOALevel == 3){
+            isSubmitToZM = true;
+            isSubmitToRGM = true;
+            isSubmitToGHM = true;
+            //Get User ZM from WorkCase Owner
+            User zmUser = basicInfo.getZmUser();
+            if(!Util.isNull(zmUser)) {
+                zmUserId = zmUser.getId();
+                onSelectedZM();
+            }
+            //Get User RGM from WorkCase Owner
+            User rgmUser = basicInfo.getRgmUser();
+            if(!Util.isNull(rgmUser)) {
+                rgmUserId = rgmUser.getId();
+                onSelectedRM();
+            }
+            //Get User GH from WorkCase Owner
+            User ghmUser = basicInfo.getGhUser();
+            if(!Util.isNull(ghmUser)) {
+                ghmUserId = ghmUser.getId();
+            }
+        }else if(pricingDOALevel == 4){
+            isSubmitToZM = true;
+            isSubmitToRGM = true;
+            isSubmitToGHM = true;
+            isSubmitToCSSO = true;
+            //Get User ZM from WorkCase Owner
+            User zmUser = basicInfo.getZmUser();
+            if(!Util.isNull(zmUser)) {
+                zmUserId = zmUser.getId();
+                onSelectedZM();
+            }
+            //Get User RGM from WorkCase Owner
+            User rgmUser = basicInfo.getRgmUser();
+            if(!Util.isNull(rgmUser)) {
+                rgmUserId = rgmUser.getId();
+                onSelectedRM();
+            }
+            //Get User GH from WorkCase Owner
+            User ghmUser = basicInfo.getGhUser();
+            if(!Util.isNull(ghmUser)) {
+                ghmUserId = ghmUser.getId();
+                onSelectedGH();
+            }
+            //Get User CSSO from WorkCase Owner
+            User cssoUser = basicInfo.getCssoUser();
+            if(!Util.isNull(cssoUser)) {
+                cssoUserId = cssoUser.getId();
+            }
+        }
+    }
+
+    public void onOpenSubmitBU(){
         _loadSessionVariable();
         log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
         try{
@@ -507,56 +575,37 @@ public class HeaderController extends BaseController {
                         isSubmitToGHM = false;
                         isSubmitToCSSO = false;
 
+                        //TO Get all owner of case
+                        getUserOwnerBU();
+
                         if(stepId <= StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
                             zmUserList = fullApplicationControl.getUserList(user);
                             log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
-                            isSubmitToZM = true;
                         }
 
-                        //TO GET LIST FOR REGION
+                        //TO Disabled DDL DOA Lower than RGM
                         if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            //Check Pricing DOA more than ZM level or not
-                            if(pricingDOALevel >= 1) {
-                                //Get User Zone from WorkCaseOwner
-                                User zmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.ZM.id());
-                                log.debug("onOpenSubmitFullApplication ::: zmUser : {}", zmUser);
-                                if (!Util.isNull(zmUser)) {
-                                    zmUserId = zmUser.getId();
-                                    onSelectedZM();
-                                }
-                                isSubmitToZM = true;
-                                isSubmitToRGM = true;
-                            }
+                            isSubmitToZM = false;
                         }
 
-                        //TO GET LIST FOR GROUP HEAD
+                        //TO Disabled DDL DOA Lower than GH
                         if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
-                            //Check Pricing DOA more than RM level or not
-                            if(pricingDOALevel >= 2) {
-                                //Get User Region from WorkCaseOwner
-                                User rmUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.RGM.id());
-                                log.debug("onOpenSubmitFullApplication ::: rmUser : {}", rmUser);
-                                if (!Util.isNull(rmUser)) {
-                                    rgmUserId = rmUser.getId();
-                                    onSelectedRM();
-                                }
-                                isSubmitToGHM = true;
-                            }
+                            isSubmitToZM = false;
+                            isSubmitToRGM = false;
                         }
 
-                        //TO GET LIST FOR CHIEF
+                        //TO Disabled DDL DOA Lower than CSSO
                         if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-                            //Check Pricing DOA more than GH level or not
-                            if(pricingDOALevel >= 3) {
-                                //Get User Group Head from WorkCaseOwner
-                                User ghUser = fullApplicationControl.getUserOwnerByRole(workCaseId, RoleValue.GH.id());
-                                log.debug("onOpenSubmitFullApplication ::: ghUser : {}", ghUser);
-                                if (!Util.isNull(ghUser)) {
-                                    ghmUserId = ghUser.getId();
-                                    onSelectedGH();
-                                }
-                                isSubmitToCSSO = true;
-                            }
+                            isSubmitToZM = false;
+                            isSubmitToRGM = false;
+                            isSubmitToGHM = false;
+                        }
+                        //TO All ( End of Pricing DOA )
+                        if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+                            isSubmitToZM = false;
+                            isSubmitToRGM = false;
+                            isSubmitToGHM = false;
+                            isSubmitToCSSO = false;
                         }
                         RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
                     } else {
@@ -565,8 +614,13 @@ public class HeaderController extends BaseController {
                         showMessageBox();
                     }
                 } else {
-                    zmUserList = fullApplicationControl.getUserList(user);
-                    log.debug("onOpenSubmitZM ::: No pricing request");
+                    if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                        isSubmitToZM = false;
+                    }else {
+                        isSubmitToZM = true;
+                        zmUserList = fullApplicationControl.getUserList(user);
+                        log.debug("onOpenSubmitZM ::: No pricing request");
+                    }
                     RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
                 }
 
@@ -588,24 +642,143 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onSubmitFullApplication(){
+    public void onSubmitBU(){
         _loadSessionVariable();
-        boolean complete = false;
-
         //Submit case by Step Id
         if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
             //Submit case from BDM to ZM ( Step 2001 )
-            //fullApplicationControl.submitCAByZM();
-        }else if(stepId == StepValue.FULLAPP_ZM.value()){
-            //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 )
+            submitForBDM();
+        }else if(stepId == StepValue.FULLAPP_ZM.value() || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {
+            //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 ) and Submit for FCash 2nd time ( Step 2009 )
+            submitForZM();
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
+            //Submit case from BDM to ZM ( Price Reduction ) ( Step 2018 )
+
         }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_RGM.value()){
             //Submit case from RGM to GH or UW ( DOA Level ) ( Step 2020 )
+            submitForRGM();
         }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_GH.value()){
             //Submit case from GH to CSSO or UW ( DOA Level ) ( Step 2021 )
+            submitForGH();
         }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
             //Submit case from CSSO to UW ( DOA Level ) ( Step 2022 )
+            submitForCSSO();
         }
+        //TO Save Selected UserId to BasicInfo
+        fullApplicationControl.saveSelectedUserBU(zmUserId, rgmUserId, ghmUserId, cssoUserId, workCaseId);
+        RequestContext.getCurrentInstance().execute("blockUI.hide()");
+    }
 
+    public void submitForBDM(){
+        log.debug("Submit Case from BDM to ZM Starting..., stepId : {}", stepId);
+        boolean complete = false;
+        if(zmUserId != null && !zmUserId.equals("")){
+            try{
+                if(canSubmitWithoutReturn()) {
+                    fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
+                    log.debug("submitForBDM ::: success.");
+                    log.debug("submitForBDM ::: Backup return info to History Start...");
+                    returnControl.saveReturnHistoryForRestart(workCaseId, workCasePreScreenId);
+                    log.debug("submitForBDM ::: Backup return info to History Success...");
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = msg.get("app.message.dialog.submit.success");
+                    showMessageRedirect();
+                    complete = true;
+                }else {
+                    messageHeader = "Information.";
+                    message = "Submit case fail. Please check return information before submit again.";
+                    showMessageBox();
+                    log.error("onSubmitCA ::: fail.");
+                }
+            } catch (Exception ex){
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = Util.getMessageException(ex);
+                showMessageBox();
+                log.error("submitForBDM ::: exception occurred : ", ex);
+            }
+        } else {
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : ZM not selected";
+            showMessageBox();
+            log.error("submitForBDM ::: submit failed (ZM not selected)");
+        }
+        sendCallBackParam(complete);
+    }
+
+    public void submitForZM(){
+        log.debug("Submit case from ZM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForZM(queueName, wobNumber, workCaseId, stepId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onSubmitRM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onSubmitRM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    public void submitForRGM(){
+        log.debug("Submit case from RGM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForRGM(queueName, wobNumber, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForRGM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForRGM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    public void submitForGH(){
+        log.debug("Submit case from GH to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForGH(queueName, wobNumber, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForGH ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForGH ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    public void submitForCSSO(){
+        log.debug("Submit case from CSSO to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForCSSO(queueName, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForCSSO ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForCSSO ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
     }
     //---------- End of Function for Submit CA ----------//
 
@@ -728,7 +901,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
-                fullApplicationControl.submitToZM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
+                fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
                 returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
@@ -752,7 +925,7 @@ public class HeaderController extends BaseController {
 
     public void onSelectedZM(){
         log.debug("onSelectedZM : pricingDOALevel : {}", pricingDOALevel);
-        if(pricingDOALevel >= PricingDOAValue.RGM_DOA.value()){
+        if(pricingDOALevel >= PricingDOAValue.ZM_DOA.value()){
             rgmUserId = "";
             log.debug("onSelectedZM : zmUserId : {}", zmUserId);
             if(!Util.isEmpty(zmUserId)) {
@@ -817,7 +990,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            fullApplicationControl.submitToRM(queueName, wobNumber, workCaseId);
+            //fullApplicationControl.submitForZM(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -838,7 +1011,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            fullApplicationControl.submitToGH(queueName, wobNumber, workCaseId);
+            fullApplicationControl.submitForRGM(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -859,7 +1032,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            fullApplicationControl.submitToCSSO(queueName, wobNumber, workCaseId);
+            fullApplicationControl.submitForGH(queueName, wobNumber, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -880,7 +1053,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            fullApplicationControl.submitToUWFromCSSO(queueName, workCaseId);
+            fullApplicationControl.submitForCSSO(queueName, workCaseId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -895,7 +1068,7 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
-    public void onSubmitUWFromZM(){
+    /*public void onSubmitUWFromZM(){
         log.debug("onSubmitUWFromZM ::: starting...");
         boolean complete = false;
         try{
@@ -916,7 +1089,7 @@ public class HeaderController extends BaseController {
             log.error("onSubmitUWFromZM ::: exception occurred : ", ex);
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-    }
+    }*/
 
     //---------- Submit CA ( to UW2 ) -----------//
     public void onOpenSubmitUW2(){
@@ -3545,4 +3718,6 @@ public class HeaderController extends BaseController {
     public void setReturnMakerRemark(String returnMakerRemark) {
         this.returnMakerRemark = returnMakerRemark;
     }
+
+
 }
