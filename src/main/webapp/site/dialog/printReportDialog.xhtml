@@ -65,10 +65,8 @@
                               <h:outputText value="#{report.rejectType ? '-' : report.reportView.nameReportRejectLetter}" />
                           </td>
                           <td class="right">
-                              <p:commandButton id="dlgPrintReportRejectLetterBtn"
-                                               disabled = "#{report.rejectType}"
-                                               value="#{msg.get('app.button.print')}"
-                                               styleClass="small"
+                              <p:commandButton id="dlgPrintReportRejectLetterBtn" disabled = "#{report.rejectType}"
+                                               value="#{msg.get('app.button.print')}" styleClass="small"
                                                actionListener="#{report.onPrintRejectLetter()}"
                                                ajax="false"/>
                           </td>
