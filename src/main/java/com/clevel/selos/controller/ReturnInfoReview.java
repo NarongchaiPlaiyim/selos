@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -27,7 +28,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "returnReview")
-public class ReturnInfoReview implements Serializable {
+public class ReturnInfoReview extends BaseController implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -98,6 +99,15 @@ public class ReturnInfoReview implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+
+        String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+
+        if(workCaseId!=0){
+            loadFieldControl(workCaseId, Screen.ReturnInfoReview, ownerCaseUserId);
+        } else {
+            loadFieldControlPrescreen(workCasePreScreenId, Screen.ReturnInfoReview, ownerCaseUserId);
+        }
+
         initialResultView();
     }
 
