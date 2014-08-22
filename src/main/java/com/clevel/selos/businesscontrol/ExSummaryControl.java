@@ -357,6 +357,27 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
+        } else {
+            ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
+            if(!Util.isNull(proposeLineView)) {
+                if(proposeLineView.getProposeCollateralInfoViewList() != null && proposeLineView.getProposeCollateralInfoViewList().size() > 0){
+                    for(ProposeCollateralInfoView pcl : proposeLineView.getProposeCollateralInfoViewList()){
+                        if(pcl.getProposeCollateralInfoHeadViewList() != null && pcl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : pcl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         ExSumCollateralView exSumCollateralView = new ExSumCollateralView();
