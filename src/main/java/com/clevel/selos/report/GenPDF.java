@@ -136,8 +136,17 @@ public class GenPDF extends ReportService implements Serializable {
     public void init(){
         log.debug("init() {[]}");
         cancelRejectInfo = new CancelRejectInfo();
-        rejectLetterReport =  (RejectLetterReport)session.getAttribute("rejectLetterReport");
-        codeByExSum = (RejectLetterCancelCodeByExSum)session.getAttribute("cancelCodeRejectByExSum");
+		if(!Util.isNull(session.getAttribute("rejectLetterReport"))){
+			rejectLetterReport =  (RejectLetterReport)session.getAttribute("rejectLetterReport");
+		}else{
+			rejectLetterReport = new RejectLetterReport();
+		}
+        
+		if(!Util.isNull(session.getAttribute("cancelCodeRejectByExSum"))){
+			codeByExSum = (RejectLetterCancelCodeByExSum)session.getAttribute("cancelCodeRejectByExSum");
+		}else{
+			codeByExSum = new RejectLetterCancelCodeByExSum();
+		}
 
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
@@ -163,9 +172,9 @@ public class GenPDF extends ReportService implements Serializable {
 
     @PostConstruct
     private void onCreation(){
+		session = FacesUtil.getSession(false);
         init();
-        reportView = new ReportView();
-        session = FacesUtil.getSession(false);
+        reportView = new ReportView();        
         user = (User)session.getAttribute("user");
         log.debug("GenPDF onCreation and New ReportView");
         onCheckRole();
