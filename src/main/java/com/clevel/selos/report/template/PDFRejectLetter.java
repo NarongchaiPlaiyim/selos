@@ -3,17 +3,17 @@ package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.DecisionControl;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.UserTeamDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApprovalType;
-import com.clevel.selos.model.DecisionType;
-import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.UWResultColor;
+import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.report.RejectLetterCancelCodeByExSum;
 import com.clevel.selos.model.report.RejectLetterReport;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -23,15 +23,22 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.ArrayUtils;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+@ViewScoped
+@ManagedBean(name = "rejectLetter")
 public class PDFRejectLetter implements Serializable {
     @Inject
     @SELOS
@@ -54,19 +61,27 @@ public class PDFRejectLetter implements Serializable {
     @Inject private UserDAO userDAO;
     @Inject private UserTeamDAO userTeamDAO;
     @Inject private UserTeam userTeam;
-    @Inject private DecisionControl decisionControl;
+    @Inject CancelRejectInfoDAO cancelRejectInfoDAO;
+    @Inject ExSummaryDAO exSummaryDAO;
+    @Inject ExSumDeviateDAO exSumDeviateDAO;
+    @Inject ReasonDAO reasonDAO;
 
-    private List<CustomerInfoView> customerInfoView;
+    private List<Customer> customers;
     private AppHeaderView appHeaderView;
     private List<UWRuleResultDetail> uwRuleResultDetails;
     private User userView;
     private UWRuleResultSummary uwRuleResultSummary;
-    private long stepId;
-    private User user;
-
+    private long statusId;
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
-    private ApprovalHistoryView approvalHistoryView;
+    private CancelRejectInfo cancelRejectInfo;
+    private int typeReject;
+    private ExSummary exSummary;
+    private List<ExSumDeviate> exSumDeviate;
+    int cancelCodebyExSum = 0;
+    private Reason reason;
+    private RejectLetterReport rejectLetterReport;
+    private RejectLetterCancelCodeByExSum codeByExSum;
 
     private final String SPACE = " ";
 
@@ -86,8 +101,7 @@ public class PDFRejectLetter implements Serializable {
     public void init(){
         log.debug("--on init()");
         HttpSession session = FacesUtil.getSession(true);
-        stepId = getCurrentStep(session);
-        user = (User)session.getAttribute("user");
+        rejectLetterReport = new RejectLetterReport();
 
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
@@ -104,83 +118,170 @@ public class PDFRejectLetter implements Serializable {
             }
         }
 
-        customerInfoView = new ArrayList<CustomerInfoView>();
-
-        if (!Util.isNull(workCaseId)){
-            workCase = workCaseDAO.findById(workCaseId);
-            customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCaseId);
-            approvalHistoryView = decisionControl.getCurrentApprovalHistory(workCaseId, ApprovalType.CA_APPROVAL.value() ,stepId);
-            approvalHistoryView.getUwDecision();
-        } else if (!Util.isNull(workCasePreScreenId)){
-            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-//            customerInfoView = customerInfoControl.getBorrowerByWorkCase(workCasePrescreen);
-        }
-    }
-//
-//    public static void main(String[] args) {
-//        System.out.println("RED".equals(UWResultColor.RED));
-//    }
-
-    public RejectLetterReport typeReport(){
-        log.debug("--On typeReport.");
-        uwRuleResultSummary = new UWRuleResultSummary();
-        RejectLetterReport rejectLetterReport = new RejectLetterReport();
-
-        if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+        if (!Util.isZero(workCaseId)){
+            customers = new ArrayList<Customer>();
+            customers = customerDAO.findBorrowerByWorkCaseId(workCaseId);
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
-        } else if (!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            cancelRejectInfo = cancelRejectInfoDAO.findByWorkCaseId(workCaseId);
+            exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+            if (!Util.isNull(exSummary)){
+                exSumDeviate = exSumDeviateDAO.findByExSumId(exSummary.getId());
+                log.debug("--exSumDeviate. {}",exSumDeviate.size());
+            }
+            workCase = workCaseDAO.findById(workCaseId);
+                if (!Util.isNull(workCase)){
+                    statusId = workCase.getStatus().getId();
+                    log.debug("--statusId from workcase. {}",statusId);
+                }
+        } else if (!Util.isZero(workCasePreScreenId)){
+            customers = customerDAO.findBorrowerByWorkCasePreScreenId(workCasePreScreenId);
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+            cancelRejectInfo = cancelRejectInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+                if (!Util.isNull(workCasePrescreen)){
+                    statusId = workCasePrescreen.getStatus().getId();
+                    log.debug("--statusId from workCasePrescreen. {}",statusId);
+                }
         }
-        log.debug("--uwRuleResultSummary. {}",uwRuleResultSummary);
+        getCancelCodeByExSum();
+        session.setAttribute("cancelCodeRejectByExSum",codeByExSum);
+        findRejectGroup();
+        session.setAttribute("rejectLetterReport", rejectLetterReport );
+        onCheckLogic();
+    }
+
+    public int getColorByUwRleResultSummary(){
+        log.debug("--On getColorByUwRleResultSummary.");
+        int colorCode = 3;
+        if (!Util.isNull(uwRuleResultSummary)){
+           if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
+               colorCode = 0;
+               log.debug("UWResultColor is Red");
+           } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor())){
+               colorCode = 1;
+               log.debug("UWResultColor is GREEN");
+           } else if ((UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor())){
+               colorCode = 2;
+               log.debug("UWResultColor is YELLOW");
+           }
+        } else {
+            colorCode = 4;
+            log.debug("UWResultColor is No Result");
+        }
+        log.debug("--Color is value. {}",colorCode);
+        return colorCode;
+    }
+
+    public RejectLetterReport findRejectGroup(){
+        log.debug("--On typeReport.");
 
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
 
         if (!Util.isNull(uwRuleResultSummary)){
-            if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
+            log.debug("--UwRuleResultSummary ID. {}",uwRuleResultSummary.getId());
+            if (!Util.isZero(uwRuleResultSummary.getId())){
+                log.debug("--UwRuldResult id is not Zero",uwRuleResultSummary.getId());
                 uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
-                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails);
-
-                for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
-                    if (!Util.isNull(ruleResultDetail.getRejectGroup())){
-                        if (ruleResultDetail.getRejectGroup().getId() == 1){
-                            rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
-                        } else if (ruleResultDetail.getRejectGroup().getId() == 2){
-                            rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
-                        } else if (ruleResultDetail.getRejectGroup().getId() == 3){
-                            rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails.size());
+                if (!Util.isNull(uwRuleResultDetails)){
+                    for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
+                        if (!Util.isNull(ruleResultDetail.getRejectGroup())){
+                            if (ruleResultDetail.getRejectGroup().getId() == 1){
+                                rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
+                            } else if (ruleResultDetail.getRejectGroup().getId() == 2){
+                                rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
+                            } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+                                rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+                            }
                         }
-                    } else {
-                        log.debug("--RejectGroup is Null.");
                     }
                 }
-            } else if (onCheckRoleZM()){
-                if ((DecisionType.REJECTED).equals(approvalHistoryView.getUwDecision()) && (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
-                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) || Util.isNull(uwRuleResultSummary.getUwResultColor())){
-                    rejectLetterReport.setTypePolicy(2);
-                    log.debug("--Reject on submit CA. [{}] if green color or yellow color [{}]",approvalHistoryView.getUwDecision(),uwRuleResultSummary.getUwResultColor());
-                } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
-                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) ||
-                        Util.isNull(uwRuleResultSummary.getUwResultColor())){
-                    rejectLetterReport.setTypePolicy(2);
-                    log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
-                }
-            } else if ((DecisionType.REJECTED).equals(approvalHistoryView.getUwDecision()) && (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
-                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) || Util.isNull(uwRuleResultSummary.getUwResultColor())){
-                    rejectLetterReport.setTypePolicy(2);
-                    log.debug("--Reject on submit CA. [{}] if green color or yellow color [{}]",approvalHistoryView.getUwDecision(),uwRuleResultSummary.getUwResultColor());
-                } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) ||
-                        (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor()) ||
-                        Util.isNull(uwRuleResultSummary.getUwResultColor())){
-                    rejectLetterReport.setTypePolicy(2);
-                    log.debug("--Print Template 2 Only where Green Color or Yellow Color and No Result.#### [{}]",uwRuleResultSummary.getUwResultColor());
-                }
-            } else {
-            rejectLetterReport.setTypePolicy(2);
-            log.debug("--Color is No Result where uwResultSummary is Null. {}",uwRuleResultSummary);
+            }
         }
-        log.debug("--rejectLetterReport. {}",rejectLetterReport);
-
         return rejectLetterReport;
+    }
+
+    public RejectLetterCancelCodeByExSum getCancelCodeByExSum(){
+        log.debug("--On getCancelCodeByExSum.");
+        codeByExSum = new RejectLetterCancelCodeByExSum();
+
+        reason = new Reason();
+        if (!Util.isNull(exSummary)){
+            if (Util.isSafetyList(exSumDeviate)){
+                log.debug("--exSumDeviate is not null. {}",exSumDeviate.size());
+                for (ExSumDeviate sumDeviate : exSumDeviate){
+                    reason = reasonDAO.findById(sumDeviate.getDeviateCode().getId());
+                    if (!Util.isNull(reason.getUwRejectGroup())){
+                        if (reason.getUwRejectGroup().getId() == 1) {
+                            rejectLetterReport.setTypeNCB(reason.getUwRejectGroup().getId());
+                            codeByExSum.setExSumNCB(reason.getUwRejectGroup().getId());
+                        } else if (reason.getUwRejectGroup().getId() == 2){
+                            rejectLetterReport.setTypeIncome(reason.getUwRejectGroup().getId());
+                            codeByExSum.setExSumIncome(reason.getUwRejectGroup().getId());
+                        } else if (reason.getUwRejectGroup().getId() == 3){
+                            rejectLetterReport.setTypePolicy(reason.getUwRejectGroup().getId());
+                            codeByExSum.setExSumPolicy(reason.getUwRejectGroup().getId());
+                        }
+                    }
+                }
+            }
+        }
+        return codeByExSum;
+    }
+
+    public int onCheckLogic(){
+        log.debug("OnCeckLogic.");
+        String[][] cancelCode = {{"C034", "C034"},
+                {"C035", "C035"},
+                {"C036", "C036"},
+                {"C037", "C037"},
+                {"C038", "C038"},
+                {"C039", "C039"},
+                {"C040", "C040"}};
+        Map code = ArrayUtils.toMap(cancelCode);
+
+        if (!Util.isZero(workCaseId) || !Util.isZero(workCasePreScreenId)){
+            log.debug("--Status is value. {}",statusId);
+
+            //##### status 90001
+            if (statusId == StatusValue.CANCEL_CA.value()){
+                log.debug("#### CANCEL CA ####",statusId);
+                if (Util.isNull(uwRuleResultSummary) || (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) || (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor())){
+                    if (!Util.isNull(cancelRejectInfo)){
+                        if (code.containsKey(cancelRejectInfo.getReason().getCode())){
+                            log.debug("Reason Code In C034-C040. [{}]",cancelRejectInfo.getReason().getCode());
+                            typeReject = 2;
+                        }
+                    }
+                } else {
+                    log.debug("UwRuleResuleSummary Red Color in StatusId 90001. {}",uwRuleResultSummary.getUwResultColor());
+                    typeReject = 1;
+                }
+            }
+
+            //##### status 90002/90007
+            if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
+                log.debug("#### REJECT UW1/UW2 ####",statusId);
+                typeReject = 1;
+                log.debug("--rejectLetterReport in getCancelCodeByExSum. {}",rejectLetterReport);
+            }
+
+            //##### status 90004
+            if (statusId == StatusValue.REJECT_CA.value()){
+                log.debug("#### REJECT CA ####",statusId);
+                if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) || (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor())){
+                    log.debug("UwRuleResuleSummary GREEN or YELLOW Color in StatusId 90004. {}",uwRuleResultSummary.getUwResultColor());
+                    typeReject = 2;
+                } else if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
+                    log.debug("--Result is Red on statusID 90004");
+                    typeReject = 1;
+                    log.debug("UwRuleResuleSummary Red Color in StatusId 90004. {}",uwRuleResultSummary.getUwResultColor());
+                }
+            }
+        }
+
+        log.debug("--typeReject. {}",typeReject);
+        return typeReject;
     }
 
     public List<RejectLetterReport> fillAllNameReject (){
@@ -220,10 +321,10 @@ public class PDFRejectLetter implements Serializable {
         StringBuilder addressTH = null;
 
         if(!Util.isNull(workCaseId)){
-            log.debug("--customerInfoView. {}",customerInfoView.size());
+            log.debug("--customers. {}",customers.size());
             letterReport.setAppNumber(workCase.getAppNumber());
 
-            for (CustomerInfoView view : customerInfoView){
+            for (Customer view : customers){
                 Customer customer = customerDAO.findById(view.getId());
                 log.debug("--getAddressesList. {}",customer.getAddressesList().size());
 
@@ -295,14 +396,11 @@ public class PDFRejectLetter implements Serializable {
         return letterReport;
     }
 
-    protected long getCurrentStep(HttpSession session){
-        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        return stepId;
+    public int getTypeReject() {
+        return typeReject;
     }
-    private boolean onCheckRoleZM(){
-        if (user.getRole().getId() == RoleValue.ZM.id()){
-            return true;
-        }
-        return false;
+
+    public void setTypeReject(int typeReject) {
+        this.typeReject = typeReject;
     }
 }
