@@ -808,7 +808,7 @@ public class BankStmtControl extends BusinessControl {
                 // ---------- CreditAmountNet(BDM) ---------- //
                 detailView.setCreditAmountBDM(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListBDM(), detailView.getChequeReturnAmount()));
                 // ---------- CreditAmountNet(UW) ---------- //
-                detailView.setCreditAmountUW(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListUW(), detailView.getChequeReturnAmount()));
+//                detailView.setCreditAmountUW(calCreditAmountNet(detailView.getGrossCreditBalance(), detailView.getExcludeListUW(), detailView.getChequeReturnAmount()));
 
                 // ---------- Swing & Utilization (%) ---------- //
                 // overLimitAmount = 0 -> Swing & Utilization (%) = 0
@@ -842,7 +842,7 @@ public class BankStmtControl extends BusinessControl {
                 // ---------- Summary ---------- //
                 sumGrossCreditBalance = Util.add(sumGrossCreditBalance, detailView.getGrossCreditBalance());
                 sumCreditAmountBDM = Util.add(sumCreditAmountBDM, detailView.getCreditAmountBDM());
-                sumCreditAmountUW = Util.add(sumCreditAmountUW, detailView.getCreditAmountUW()); //Role BDM show netUW
+//                sumCreditAmountUW = Util.add(sumCreditAmountUW, detailView.getCreditAmountUW()); //Role BDM show netUW
                 sumDebitAmount = Util.add(sumDebitAmount, detailView.getDebitAmount());
 //                sumGrossInflowPerLimit = Util.add(sumGrossInflowPerLimit, detailView.getGrossInflowPerLimit());
 
@@ -851,7 +851,7 @@ public class BankStmtControl extends BusinessControl {
                 log.debug("--GrossInflowPerLimit.{}",detailView.getGrossInflowPerLimit());
             }
 
-//            sumCreditAmountUW = null;
+            sumCreditAmountUW = null;
         }
 
         // Calculate Average all months
