@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class BankAccountTypeTransform extends Transform {
     @SELOS
@@ -63,5 +66,16 @@ public class BankAccountTypeTransform extends Transform {
             bankAccountTypeViews.add(getBankAccountTypeView(bankAccountType));
         }
         return bankAccountTypeViews;
+    }
+
+    public Map<Integer, BankAccountTypeView> transformToCache(List<BankAccountType> bankAccountTypeList){
+        if(bankAccountTypeList == null)
+            return null;
+        Map<Integer, BankAccountTypeView> _tmpMap = new ConcurrentHashMap<Integer, BankAccountTypeView>();
+        for(BankAccountType bankAccountType : bankAccountTypeList){
+            BankAccountTypeView bankAccountTypeView = getBankAccountTypeView(bankAccountType);
+            _tmpMap.put(bankAccountTypeView.getId(), bankAccountTypeView);
+        }
+        return _tmpMap;
     }
 }

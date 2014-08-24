@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
+import com.clevel.selos.businesscontrol.master.BankAccountPurposeControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
@@ -28,6 +29,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -67,8 +69,6 @@ public class BasicInfo extends BaseController {
     @Inject
     private BankAccountProductDAO accountProductDAO;
     @Inject
-    private BankAccountPurposeDAO accountPurposeDAO;
-    @Inject
     private BankDAO bankDAO;
     @Inject
     private BorrowingTypeDAO borrowingTypeDAO;
@@ -86,6 +86,9 @@ public class BasicInfo extends BaseController {
     private BasicInfoControl basicInfoControl;
     @Inject
     private OpenAccountControl openAccountControl;
+    @Inject
+    private BankAccountPurposeControl bankAccountPurposeControl;
+
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -218,15 +221,8 @@ public class BasicInfo extends BaseController {
 
             bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
             accountProductList = new ArrayList<BankAccountProduct>();
-            accountPurposeList = accountPurposeDAO.findAll();
             accountNameList = new ArrayList<CustomerInfoView>();
-            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-
-            for(BankAccountPurpose oap : accountPurposeList){
-                BankAccountPurposeView purposeView = new BankAccountPurposeView();
-                purposeView.setPurpose(oap);
-                bankAccountPurposeViewList.add(purposeView);
-            }
+            bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActive();
 
             CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
@@ -278,14 +274,7 @@ public class BasicInfo extends BaseController {
         accountProductList = new ArrayList<BankAccountProduct>();
 
         customerId = 0;
-
-        accountPurposeList = accountPurposeDAO.findAll();
-        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-        for(BankAccountPurpose oap : accountPurposeList){
-            BankAccountPurposeView purposeView = new BankAccountPurposeView();
-            purposeView.setPurpose(oap);
-            bankAccountPurposeViewList.add(purposeView);
-        }
+        bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActive();
     }
 
     public void onSelectEditAccount(){
@@ -300,19 +289,12 @@ public class BasicInfo extends BaseController {
 
             accountNameList = cloner.deepClone(openAccountView.getAccountNameList());
 
-            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-            for(BankAccountPurpose oap : accountPurposeList){
-                BankAccountPurposeView purposeView = new BankAccountPurposeView();
-                purposeView.setPurpose(oap);
-                bankAccountPurposeViewList.add(purposeView);
-            }
+            bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActive();
 
-            for(BankAccountPurposeView bapv : openAccountView.getBankAccountPurposeView()){
-                if(bapv.isSelected()){
-                    for(BankAccountPurposeView purposeView : bankAccountPurposeViewList){
-                        if(bapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
-                            purposeView.setSelected(true);
-                        }
+            for(BankAccountPurposeView _OpenBAPV : openAccountView.getBankAccountPurposeView()){
+                for(BankAccountPurposeView bankAccountPurposeView : bankAccountPurposeViewList){
+                    if(_OpenBAPV.getId() == bankAccountPurposeView.getId()){
+                        bankAccountPurposeView.setSelected(true);
                     }
                 }
             }
@@ -677,17 +659,17 @@ public class BasicInfo extends BaseController {
             if(bia.isSelected()){
                 if(openAccountView.getBankAccountPurposeView().size() == 0){
                     openAccountView.getBankAccountPurposeView().add(bia);
-                    stringBuilder.append(bia.getPurpose().getName());
+                    stringBuilder.append(bia.getName());
                 }else{
                     openAccountView.getBankAccountPurposeView().add(bia);
-                    stringBuilder.append(", "+bia.getPurpose().getName());
+                    stringBuilder.append(", "+bia.getName());
                 }
             }
         }
 
         if(!stringBuilder.toString().isEmpty()){
             openAccountView.setPurposeForShow(stringBuilder.toString());
-        }else{
+        } else {
             openAccountView.setPurposeForShow("-");
         }
 

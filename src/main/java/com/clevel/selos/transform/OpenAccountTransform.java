@@ -30,6 +30,8 @@ public class OpenAccountTransform extends Transform {
     BankAccountTypeTransform bankAccountTypeTransform;
     @Inject
     CustomerTransform customerTransform;
+    @Inject
+    BankAccountPurposeTransform bankAccountPurposeTransform;
 
     public OpenAccountTransform() {
     }
@@ -72,24 +74,13 @@ public class OpenAccountTransform extends Transform {
             List<OpenAccountPurpose> openAccountPurposeList = new ArrayList<OpenAccountPurpose>();
             for (BankAccountPurposeView bpv : openAccountView.getBankAccountPurposeView()){
                 OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
-                openAccountPurpose.setAccountPurpose(bpv.getPurpose());
+                openAccountPurpose.setAccountPurpose(bankAccountPurposeTransform.transformToModel(bpv));
                 openAccountPurposeList.add(openAccountPurpose);
             }
             openAccount.setOpenAccountPurposeList(openAccountPurposeList);
         } else {
             openAccount.setOpenAccountPurposeList(null);
         }
-
-//        private int requestType;
-//        private String accountNumber;
-//        private BankBranch bankBranch;
-//        private String term;
-//        private int numberOfDep;
-//        private List<OpenAccountDeposit> openAccountDepositList;
-//        private int confirmOpenAccount;
-//        private List<OpenAccountCredit> openAccountCreditList;
-
-
         return openAccount;
     }
 
@@ -135,8 +126,7 @@ public class OpenAccountTransform extends Transform {
         List<BankAccountPurposeView> bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
         if(openAccount.getOpenAccountPurposeList() != null && openAccount.getOpenAccountPurposeList().size() > 0){
             for (OpenAccountPurpose oap : openAccount.getOpenAccountPurposeList()){
-                BankAccountPurposeView bankAccountPurposeView = new BankAccountPurposeView();
-                bankAccountPurposeView.setPurpose(oap.getAccountPurpose());
+                BankAccountPurposeView bankAccountPurposeView = bankAccountPurposeTransform.transformToView(oap.getAccountPurpose());
                 bankAccountPurposeView.setSelected(true);
                 bankAccountPurposeViewList.add(bankAccountPurposeView);
             }
@@ -148,9 +138,9 @@ public class OpenAccountTransform extends Transform {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < openAccountView.getBankAccountPurposeView().size(); i++) {
                 if (i == 0) {
-                    stringBuilder.append(openAccountView.getBankAccountPurposeView().get(i).getPurpose().getName());
+                    stringBuilder.append(openAccountView.getBankAccountPurposeView().get(i).getName());
                 } else {
-                    stringBuilder.append(", " + openAccountView.getBankAccountPurposeView().get(i).getPurpose().getName());
+                    stringBuilder.append(", " + openAccountView.getBankAccountPurposeView().get(i).getName());
                 }
             }
             openAccountView.setPurposeForShow(stringBuilder.toString());

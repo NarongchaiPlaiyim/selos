@@ -8,7 +8,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserSysParameterKey;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.*;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

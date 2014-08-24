@@ -7,6 +7,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.transform.ActionTransform;
 import com.clevel.selos.transform.MandateFieldTransform;
 import com.clevel.selos.transform.StepTransform;

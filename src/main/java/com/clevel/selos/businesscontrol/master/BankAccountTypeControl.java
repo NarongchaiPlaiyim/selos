@@ -11,21 +11,19 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Stateless
 public class BankAccountTypeControl extends BusinessControl{
 
-    //Initial Map to cache the data of BaseRateContol
-    //Initial mutex object to guaranteed thread safe
-    private static Map<Integer, BankAccountTypeView> bankAccountTypeViewMap;
-    private static Object _mutexLock = new Object();
-
     @Inject
     @SELOS
     private Logger logger;
+
+    @Inject
+    private ApplicationCacheLoader cacheLoader;
 
     @Inject
     private BankAccountTypeDAO bankAccountTypeDAO;
@@ -36,31 +34,14 @@ public class BankAccountTypeControl extends BusinessControl{
     @Inject
     public BankAccountTypeControl(){}
 
-    public void loadData(){
-        if(bankAccountTypeViewMap == null){
-            synchronized (_mutexLock){
-                if(bankAccountTypeViewMap == null)
-                    bankAccountTypeViewMap = new HashMap<Integer, BankAccountTypeView>();
-            }
+    public Map<Integer, BankAccountTypeView> loadData(){
+        List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
+        Map<Integer, BankAccountTypeView> _tmpMap = bankAccountTypeTransform.transformToCache(bankAccountTypeList);
+        if(_tmpMap == null)
+            return new ConcurrentHashMap<Integer, BankAccountTypeView>();
+        else {
+            cacheLoader.setCacheMap(BankAccountType.class.getName(), _tmpMap);
+            return _tmpMap;
         }
-
-        try{
-            Map<Integer, BankAccountTypeView> _tmpMap = new HashMap<Integer, BankAccountTypeView>();
-
-            List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
-            for(BankAccountType bankAccountType : bankAccountTypeList){
-                BankAccountTypeView bankAccountTypeView = bankAccountTypeTransform.getBankAccountTypeView(bankAccountType);
-                _tmpMap.put(bankAccountTypeView.getId(), bankAccountTypeView);
-            }
-
-            synchronized (_mutexLock){
-                bankAccountTypeViewMap.clear();
-                bankAccountTypeViewMap.putAll(_tmpMap);
-            }
-
-        }catch (Exception ex){
-            logger.error("Cannot load BankAccountType into Cache", ex);
-        }
-
     }
 }

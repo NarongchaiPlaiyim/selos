@@ -1,7 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
-import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.master.ProductGroupDAO;
 import com.clevel.selos.dao.master.RequestTypeDAO;
 import com.clevel.selos.dao.working.*;
@@ -47,8 +46,6 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     OpenAccountPurposeDAO openAccPurposeDAO;
     @Inject
-    CustomerEntityDAO customerEntityDAO;
-    @Inject
     ProductGroupDAO productGroupDAO;
     @Inject
     RequestTypeDAO requestTypeDAO;
@@ -63,8 +60,6 @@ public class BasicInfoControl extends BusinessControl {
     BasicInfoTransform basicInfoTransform;
     @Inject
     OpenAccountTransform openAccountTransform;
-    @Inject
-    CustomerInfoControl customerInfoControl;
     @Inject
     BPMExecutor bpmExecutor;
 
