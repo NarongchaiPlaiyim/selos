@@ -47,6 +47,7 @@ public class BankAccountPurposeTransform extends Transform {
         bankAccountPurposeView.setActive(bankAccountPurpose.getActive());
         bankAccountPurposeView.setForOD(bankAccountPurpose.isForOD());
         bankAccountPurposeView.setForTCG(bankAccountPurpose.isForTCG());
+        bankAccountPurposeView.setActive(bankAccountPurpose.getActive());
         return bankAccountPurposeView;
     }
 

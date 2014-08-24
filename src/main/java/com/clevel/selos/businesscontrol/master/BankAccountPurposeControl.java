@@ -44,7 +44,7 @@ public class BankAccountPurposeControl extends BusinessControl{
         return selectItemList;
     }
 
-    public List<BankAccountPurposeView> getBankAccountPurposeViewActive(){
+    public List<BankAccountPurposeView> getBankAccountPurposeViewActiveList(){
         Map<Long, BankAccountPurposeView> bankAccountPurposeViewMap = cacheLoader.getCacheMap(BankAccountPurpose.class.getName());
         if(bankAccountPurposeViewMap == null || bankAccountPurposeViewMap.size() == 0){
             bankAccountPurposeViewMap = loadData();

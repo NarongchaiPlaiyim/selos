@@ -35,24 +35,17 @@ public class BankAccountTypeTransform extends Transform {
             bankAccountTypeView.setOpenAccountFlag(bankAccountType.getOpenAccountFlag());
             bankAccountTypeView.setBankStatementFlag(bankAccountType.getBankStatementFlag());
             bankAccountTypeView.setOthBankStatementFlag(bankAccountType.getOthBankStatementFlag());
+            bankAccountTypeView.setActive(bankAccountType.getActive());
             return bankAccountTypeView;
         }
         return null;
     }
 
     public BankAccountType getBankAccountType(BankAccountTypeView bankAccountTypeView) {
-        if (bankAccountTypeView != null) {
-            BankAccountType bankAccountType = new BankAccountType();
-            bankAccountType.setId(bankAccountTypeView.getId());
-            bankAccountType.setName(bankAccountTypeView.getName());
-            bankAccountType.setShortName(bankAccountTypeView.getShortName());
-            bankAccountType.setBankStatementFlag(bankAccountTypeView.getBankStatementFlag());
-            bankAccountType.setOthBankStatementFlag(bankAccountTypeView.getOthBankStatementFlag());
-            bankAccountType.setOpenAccountFlag(bankAccountTypeView.getOpenAccountFlag());
-            bankAccountType.setActive(bankAccountTypeView.getActive());
-            return bankAccountType;
-        }
-        return null;
+        if(bankAccountTypeView == null || bankAccountTypeView.getId() == 0)
+            return null;
+        BankAccountType bankAccountType = bankAccountTypeDAO.findById(bankAccountTypeView.getId());
+        return bankAccountType;
     }
 
     public List<BankAccountTypeView> getBankAccountTypeView(List<BankAccountType> bankAccountTypes) {
