@@ -75,7 +75,7 @@
                                                      onkeypress="return onKeyPressMoney(event);"
                                                      onfocus="removeComma(this)"
                                                      required="#{not empty param[saveTCG.clientId]}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                              type="number"/>
                                             <p:ajax event="blur" update="@this"/>
                                         </p:inputText>

@@ -20,6 +20,7 @@
                <td><p:outputLabel for="issuedDate" value="#{msg.get('app.disbursement.detail.mc.dialog.mcIssuedDate')}"/></td>
                <td>
                    <clv:BECalendar  value="#{disbursementInfo.disbursementMcDetailView.issuedDate}" id="issuedDate" showOn="button" pattern="dd/MM/yyyy"
+                   				readonlyInput="true"
                                      navigator="true" locale="th_TH" showButtonPanel="true" />
                </td>
             </tr>

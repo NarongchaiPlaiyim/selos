@@ -100,13 +100,13 @@ public class BAInfo implements Serializable {
 		//DO NOTHING
 	}
     public String getMinCheckDate() {
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
         return dFmt.format(new Date());
     }
     public String getMaxCheckDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 90);
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy");
         return dFmt.format(calendar.getTime());
     }
 
@@ -185,19 +185,40 @@ public class BAInfo implements Serializable {
         this.selectedCredit = selectedCredit;
     }
 
+    public boolean isRequiredHC(BAPAInfoCustomerView baCustView) {
+    	if (baCustView == null)
+    		return false;
+    	 int id = baCustView.getUpdBAResultHC();
+         if (id <= 0)
+        	 return false;
+         for (BAResultHC data : baResultHCs) {
+             if (data.getId() == id)
+                 return data.isRequiredCheckDate();
+         }
+         return false;
+    }
     public boolean isEnableCheckDate() {
         if (bapaInfoCustomerView == null)
             return false;
-        int id = bapaInfoCustomerView.getUpdBAResultHC();
-        if (id <= 0)
-            return false;
         if (isDialogBADisable("ba.checkDate"))
         	return false;
-        for (BAResultHC data : baResultHCs) {
-            if (data.getId() == id)
-                return data.isRequiredCheckDate();
-        }
-        return false;
+        return isRequiredHC(bapaInfoCustomerView);        
+    }
+    
+    private void _checkUpatePayInsurance() {
+    	boolean addPay = false;
+    	if (bapaInfoCustomers != null && !bapaInfoCustomers.isEmpty()) {
+    		for (BAPAInfoCustomerView view : bapaInfoCustomers) {
+    			if (isRequiredHC(view)) {
+    				addPay = true;
+    				break;
+    			}
+    		}
+    	}
+    	if (addPay)
+    		bapaInfoView.setPayToInsuranceCompany(RadioValue.YES);
+    	else
+    		bapaInfoView.setPayToInsuranceCompany(RadioValue.NO);
     }
     /*
      * Action
@@ -254,8 +275,12 @@ public class BAInfo implements Serializable {
 
     }
     public void onApplyBAInformation() {
+    	if (!isRequiredHC(bapaInfoCustomerView)) {
+    		bapaInfoCustomerView.setCheckDate(null);
+    	}
         bapaInfoCustomerView.setNeedUpdate(true);
         bapaInfoCustomerView = null;
+        _checkUpatePayInsurance();
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
     public void onOpenAddBAPAInformationDialog() {
@@ -345,6 +370,7 @@ public class BAInfo implements Serializable {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
     public void onSaveBAInformation() {
+    	_checkUpatePayInsurance();
         bapaInfoView.setTotalExpense(totalExpense);
         bapaInfoView.setTotalPremium(totalPremium);
         bapaInfoView.setTotalLimit(totalLimit);
@@ -407,7 +433,20 @@ public class BAInfo implements Serializable {
         deleteCreditList = new ArrayList<BAPAInfoCreditView>();
         deleteCreditRowId = -1;
         
+        if (bapaInfoView.getInsuranceCompany() == null) {
+        	//set default to id1
+        	if (insuranceCompanies != null && !insuranceCompanies.isEmpty()) {
+	        	for (InsuranceCompany company : insuranceCompanies) {
+	        		if (company.getId() == 1) {
+	        			bapaInfoView.setInsuranceCompany(company);
+	        			bapaInfoView.setUpdInsuranceCompany(company.getId());
+	        			break;
+	        		}
+	        	}
+        	}
+        }
         _calculateTotal();
+        _checkUpatePayInsurance();
     }
     private void _calculateTotal() {
         totalExpense = new BigDecimal(0);
