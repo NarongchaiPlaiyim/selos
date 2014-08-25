@@ -164,7 +164,7 @@ public class AppraisalTransform extends Transform {
 
         AppraisalContactDetailView appraisalContactDetailView = appraisalContactDetailTransform.transformToView(safetyList(appraisal.getAppraisalContactDetailList()), appraisal, user);
         appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-
+//        appraisalView.setAADAdminRemark(appraisal.getBdmRemark());   //25 / 08 / 2014
         return appraisalView;
     }
 

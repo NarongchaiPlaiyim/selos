@@ -116,9 +116,9 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
-        ProposeLineView newCreditFacilityView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
-        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
-            exSummaryView.setTradeFinance(newCreditFacilityView);
+        ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
+        if(proposeLineView != null && proposeLineView.getId() != 0){
+            exSummaryView.setTradeFinance(proposeLineView);
         } else {
             exSummaryView.setTradeFinance(null);
         }
@@ -314,10 +314,10 @@ public class ExSummaryControl extends BusinessControl {
             exSumCharacteristicView.setGroupExposureUW(null);
         }
 
-        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
-            if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.NORMAL){ // normal 1, prime 2
+        if(proposeLineView != null && proposeLineView.getId() != 0){
+            if(proposeLineView.getCreditCustomerType() == CreditCustomerType.NORMAL){ // normal 1, prime 2
                 exSumCharacteristicView.setCustomer("Normal");
-            } else if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.PRIME){
+            } else if(proposeLineView.getCreditCustomerType() == CreditCustomerType.PRIME){
                 exSumCharacteristicView.setCustomer("Prime");
             } else {
                 exSumCharacteristicView.setCustomer("-");
@@ -335,22 +335,45 @@ public class ExSummaryControl extends BusinessControl {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Collateral
+        User user = getCurrentUser();
         DecisionView decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
         BigDecimal tmpCashColl = null;
         BigDecimal tmpCoreAsset = null;
         BigDecimal tmpNonCore = null;
-        if(decisionView != null){
-            if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
-                for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
-                    if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
-                        for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
-                            if(nch != null && nch.getPotentialCollateral() != null){
-                                if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
-                                    tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                    tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                    tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+        if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.BDM.id()) {
+            if(!Util.isNull(proposeLineView)) {
+                if(proposeLineView.getProposeCollateralInfoViewList() != null && proposeLineView.getProposeCollateralInfoViewList().size() > 0){
+                    for(ProposeCollateralInfoView pcl : proposeLineView.getProposeCollateralInfoViewList()){
+                        if(pcl.getProposeCollateralInfoHeadViewList() != null && pcl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : pcl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if(!Util.isNull(decisionView)){
+                if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
+                    for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
+                        if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
                                 }
                             }
                         }
@@ -367,8 +390,8 @@ public class ExSummaryControl extends BusinessControl {
 //        Sum of (Propose/PreApprove/Approve Limit)
         if(decisionView != null && decisionView.getApproveTotalCreditLimit()!=null){
             exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
-        } else if(newCreditFacilityView!=null && newCreditFacilityView.getTotalPropose()!=null) {
-            exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
+        } else if(proposeLineView!=null && proposeLineView.getTotalPropose()!=null) {
+            exSumCollateralView.setLimitApprove(proposeLineView.getTotalPropose());
         } else {
             exSumCollateralView.setLimitApprove(BigDecimal.ZERO);
         }
@@ -376,8 +399,8 @@ public class ExSummaryControl extends BusinessControl {
         //Todo: Percent LTV
 //        (limitApprove + Sum(วงเงิน/ภาระสินเชื่อเดิม)) หาร (cashCollateralValue + coreAssetValue + noneCoreAssetValue)
         BigDecimal existingSMELimit = null;
-        if(newCreditFacilityView != null){
-            existingSMELimit = newCreditFacilityView.getExistingSMELimit();
+        if(proposeLineView != null){
+            existingSMELimit = proposeLineView.getExistingSMELimit();
         }
         exSumCollateralView.setPercentLTV(Util.multiply(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)),BigDecimal.valueOf(100)));
 
