@@ -308,7 +308,11 @@ public class PDFRejectLetter implements Serializable {
     public RejectLetterReport fillRejectLetter(){
         log.debug("fillRejectLetter. {}");
 
-        userView = userDAO.findByUserName(workCase.getCreateBy().getUserName());
+        if (!Util.isNull(workCase)){
+            userView = userDAO.findByUserName(workCase.getCreateBy().getUserName());
+        } else if (!Util.isNull(workCasePrescreen)){
+            userView = userDAO.findByUserName(workCasePrescreen.getCreateBy().getUserName());
+        }
         userTeam = userTeamDAO.findByID(userView.getTeam().getId());
 
         RejectLetterReport letterReport = new RejectLetterReport();
@@ -318,9 +322,13 @@ public class PDFRejectLetter implements Serializable {
         String setMonth;
         StringBuilder addressTH = null;
 
-        if(!Util.isNull(workCaseId)){
+        if(!Util.isZero(workCaseId) || !Util.isZero(workCasePreScreenId)){
             log.debug("--customers. {}",customers.size());
-            letterReport.setAppNumber(workCase.getAppNumber());
+            if (!Util.isNull(workCase)){
+                letterReport.setAppNumber(workCase.getAppNumber());
+            } else {
+                letterReport.setAppNumber(workCasePrescreen.getAppNumber());
+            }
 
             for (Customer view : customers){
                 Customer customer = customerDAO.findById(view.getId());
