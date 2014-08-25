@@ -335,40 +335,45 @@ public class ExSummaryControl extends BusinessControl {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Collateral
+        User user = getCurrentUser();
         DecisionView decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
         BigDecimal tmpCashColl = null;
         BigDecimal tmpCoreAsset = null;
         BigDecimal tmpNonCore = null;
-        if(decisionView != null){
-            if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
-                for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
-                    if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
-                        for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
-                            if(nch != null && nch.getPotentialCollateral() != null){
-                                if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
-                                    tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                    tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                    tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+        if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.BDM.id()) {
+            if(!Util.isNull(proposeLineView)) {
+                if(proposeLineView.getProposeCollateralInfoViewList() != null && proposeLineView.getProposeCollateralInfoViewList().size() > 0){
+                    for(ProposeCollateralInfoView pcl : proposeLineView.getProposeCollateralInfoViewList()){
+                        if(pcl.getProposeCollateralInfoHeadViewList() != null && pcl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : pcl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        } else if(!Util.isNull(proposeLineView)) {
-            if(proposeLineView.getProposeCollateralInfoViewList() != null && proposeLineView.getProposeCollateralInfoViewList().size() > 0){
-                for(ProposeCollateralInfoView pcl : proposeLineView.getProposeCollateralInfoViewList()){
-                    if(pcl.getProposeCollateralInfoHeadViewList() != null && pcl.getProposeCollateralInfoHeadViewList().size() > 0){
-                        for(ProposeCollateralInfoHeadView nch : pcl.getProposeCollateralInfoHeadViewList()){
-                            if(nch != null && nch.getPotentialCollateral() != null){
-                                if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
-                                    tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                    tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                    tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+        } else {
+            if(!Util.isNull(decisionView)){
+                if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
+                    for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
+                        if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
                                 }
                             }
                         }
