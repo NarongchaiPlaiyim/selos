@@ -9,6 +9,8 @@ import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

@@ -1,15 +1,9 @@
 package com.clevel.selos.businesscontrol.master;
 
-import com.clevel.selos.dao.master.BankAccountPurposeDAO;
-import com.clevel.selos.dao.master.BankAccountTypeDAO;
-import com.clevel.selos.dao.master.BaseRateDAO;
-import com.clevel.selos.dao.master.CountryDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.OpenAccountPurposeDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.BankAccountPurpose;
-import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.db.master.BaseRate;
-import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -43,6 +37,12 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private BankAccountPurposeDAO bankAccountPurposeDAO;
     @Inject private BankAccountPurposeTransform bankAccountPurposeTransform;
 
+    @Inject private BankAccountProductDAO bankAccountProductDAO;
+    @Inject private BankAccountProductTransform bankAccountProductTransform;
+
+    @Inject private ProductGroupDAO productGroupDAO;
+    @Inject private ProductTransform productTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -66,6 +66,12 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<BankAccountPurpose> bankAccountPurposeList = bankAccountPurposeDAO.findAll();
         indexHash.put(BankAccountPurpose.class.getName(), bankAccountPurposeTransform.transformToCache(bankAccountPurposeList));
+
+        List<BankAccountProduct> bankAccountProductList = bankAccountProductDAO.findAll();
+        indexHash.put(BankAccountProduct.class.getName(), bankAccountProductTransform.transformToCache(bankAccountProductList));
+
+        List<ProductGroup> productGroupList = productGroupDAO.findAll();
+        indexHash.put(ProductGroup.class.getName(), productTransform.transformToCache(productGroupList));
 
         Util.listMap(indexHash);
     }

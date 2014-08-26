@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.BankAccountProduct;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

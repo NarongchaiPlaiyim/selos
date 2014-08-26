@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductTransform extends Transform{
     @SELOS
@@ -165,10 +167,20 @@ public class ProductTransform extends Transform{
                 return productProgramViewList;
             }
         } catch (Exception ex) {
-            log.error("",ex);
+            log.error("transformToView: {}", ex);
         }
         return null;
     }
 
+    public Map<Integer, ProductGroupView> transformToCache(List<ProductGroup> productGroupList){
+        if(productGroupList == null || productGroupList.size() == 0)
+            return null;
+        Map<Integer, ProductGroupView> _tmpMap = new ConcurrentHashMap<Integer, ProductGroupView>();
+        for(ProductGroup productGroup : productGroupList){
+            ProductGroupView productGroupView = transformToView(productGroup);
+            _tmpMap.put(productGroupView.getId(), productGroupView);
+        }
+        return _tmpMap;
+    }
 
 }

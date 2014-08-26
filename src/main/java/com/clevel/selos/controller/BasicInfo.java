@@ -12,6 +12,8 @@ import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -100,8 +102,6 @@ public class BasicInfo extends BaseController {
 
     private List<BankAccountTypeView> bankAccountTypeList;
     private List<BankAccountProduct> accountProductList;
-    private List<BankAccountPurpose> accountPurposeList;
-
     private List<BankAccountPurposeView> bankAccountPurposeViewList;
 
     private List<BorrowingType> borrowingTypeList;

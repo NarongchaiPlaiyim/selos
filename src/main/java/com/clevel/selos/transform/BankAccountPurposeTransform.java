@@ -4,7 +4,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountPurpose;
-import com.clevel.selos.model.view.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

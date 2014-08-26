@@ -5,7 +5,7 @@ import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.view.BankAccountTypeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -36,16 +36,7 @@ public class BankAccountTypeControl extends BusinessControl{
     @Inject
     public BankAccountTypeControl(){}
 
-    public Map<Integer, BankAccountTypeView> loadData(){
-        List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
-        Map<Integer, BankAccountTypeView> _tmpMap = bankAccountTypeTransform.transformToCache(bankAccountTypeList);
-        if(_tmpMap == null)
-            return new ConcurrentHashMap<Integer, BankAccountTypeView>();
-        else {
-            cacheLoader.setCacheMap(BankAccountType.class.getName(), _tmpMap);
-            return _tmpMap;
-        }
-    }
+
 
     public List<BankAccountTypeView> getBankAccountTypeViewActiveList() {
         Map<Integer, BankAccountTypeView> bankAccountTypeViewMap = getInternalCacheMap();
@@ -82,5 +73,16 @@ public class BankAccountTypeControl extends BusinessControl{
             _tmpMap = loadData();
         }
         return _tmpMap;
+    }
+
+    private Map<Integer, BankAccountTypeView> loadData(){
+        List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
+        Map<Integer, BankAccountTypeView> _tmpMap = bankAccountTypeTransform.transformToCache(bankAccountTypeList);
+        if(_tmpMap == null)
+            return new ConcurrentHashMap<Integer, BankAccountTypeView>();
+        else {
+            cacheLoader.setCacheMap(BankAccountType.class.getName(), _tmpMap);
+            return _tmpMap;
+        }
     }
 }
