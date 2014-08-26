@@ -82,6 +82,7 @@ public class PDFRejectLetter implements Serializable {
     private Reason reason;
     private RejectLetterReport rejectLetterReport;
     private RejectLetterCancelCodeByExSum codeByExSum;
+    private HttpSession session;
 
     private final String SPACE = " ";
 
@@ -100,7 +101,7 @@ public class PDFRejectLetter implements Serializable {
 
     public void init(){
         log.debug("--on init()");
-        HttpSession session = FacesUtil.getSession(true);
+        session = FacesUtil.getSession(true);
         rejectLetterReport = new RejectLetterReport();
 
         if(checkSession(session)){
@@ -144,9 +145,7 @@ public class PDFRejectLetter implements Serializable {
                 }
         }
         getCancelCodeByExSum();
-        session.setAttribute("cancelCodeRejectByExSum",codeByExSum);
         findRejectGroup();
-        session.setAttribute("rejectLetterReport", rejectLetterReport );
         onCheckLogic();
     }
 
@@ -198,6 +197,7 @@ public class PDFRejectLetter implements Serializable {
                 }
             }
         }
+        log.debug("--rejectLetterReport. [{}]",rejectLetterReport);
         return rejectLetterReport;
     }
 
@@ -213,19 +213,17 @@ public class PDFRejectLetter implements Serializable {
                     reason = reasonDAO.findById(sumDeviate.getDeviateCode().getId());
                     if (!Util.isNull(reason.getUwRejectGroup())){
                         if (reason.getUwRejectGroup().getId() == 1) {
-                            rejectLetterReport.setTypeNCB(reason.getUwRejectGroup().getId());
                             codeByExSum.setExSumNCB(reason.getUwRejectGroup().getId());
                         } else if (reason.getUwRejectGroup().getId() == 2){
-                            rejectLetterReport.setTypeIncome(reason.getUwRejectGroup().getId());
                             codeByExSum.setExSumIncome(reason.getUwRejectGroup().getId());
                         } else if (reason.getUwRejectGroup().getId() == 3){
-                            rejectLetterReport.setTypePolicy(reason.getUwRejectGroup().getId());
                             codeByExSum.setExSumPolicy(reason.getUwRejectGroup().getId());
                         }
                     }
                 }
             }
         }
+        log.debug("--codeByExSum. [{}]",codeByExSum);
         return codeByExSum;
     }
 
@@ -263,7 +261,7 @@ public class PDFRejectLetter implements Serializable {
             if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
                 log.debug("#### REJECT UW1/UW2 ####",statusId);
                 typeReject = 1;
-                log.debug("--rejectLetterReport in getCancelCodeByExSum. {}",rejectLetterReport);
+                log.debug("--rejectLetterReport. {},--codeByExSum. {} ",rejectLetterReport,codeByExSum);
             }
 
             //##### status 90004
@@ -310,7 +308,11 @@ public class PDFRejectLetter implements Serializable {
     public RejectLetterReport fillRejectLetter(){
         log.debug("fillRejectLetter. {}");
 
-        userView = userDAO.findByUserName(workCase.getCreateBy().getUserName());
+        if (!Util.isNull(workCase)){
+            userView = userDAO.findByUserName(workCase.getCreateBy().getUserName());
+        } else if (!Util.isNull(workCasePrescreen)){
+            userView = userDAO.findByUserName(workCasePrescreen.getCreateBy().getUserName());
+        }
         userTeam = userTeamDAO.findByID(userView.getTeam().getId());
 
         RejectLetterReport letterReport = new RejectLetterReport();
@@ -320,9 +322,13 @@ public class PDFRejectLetter implements Serializable {
         String setMonth;
         StringBuilder addressTH = null;
 
-        if(!Util.isNull(workCaseId)){
+        if(!Util.isZero(workCaseId) || !Util.isZero(workCasePreScreenId)){
             log.debug("--customers. {}",customers.size());
-            letterReport.setAppNumber(workCase.getAppNumber());
+            if (!Util.isNull(workCase)){
+                letterReport.setAppNumber(workCase.getAppNumber());
+            } else {
+                letterReport.setAppNumber(workCasePrescreen.getAppNumber());
+            }
 
             for (Customer view : customers){
                 Customer customer = customerDAO.findById(view.getId());
