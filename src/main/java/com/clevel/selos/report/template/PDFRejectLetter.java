@@ -197,7 +197,7 @@ public class PDFRejectLetter implements Serializable {
                 }
             }
         }
-        session.setAttribute("rejectLetterReport", rejectLetterReport );
+        log.debug("--rejectLetterReport. [{}]",rejectLetterReport);
         return rejectLetterReport;
     }
 
@@ -223,7 +223,7 @@ public class PDFRejectLetter implements Serializable {
                 }
             }
         }
-        session.setAttribute("cancelCodeRejectByExSum",codeByExSum);
+        log.debug("--codeByExSum. [{}]",codeByExSum);
         return codeByExSum;
     }
 

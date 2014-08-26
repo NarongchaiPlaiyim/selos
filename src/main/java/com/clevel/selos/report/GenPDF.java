@@ -122,8 +122,8 @@ public class GenPDF extends ReportService implements Serializable {
     private  String pathReportReject;
     private String messageHeader;
     private String message;
-    private RejectLetterReport rejectLetterReport;
-    private RejectLetterCancelCodeByExSum codeByExSum;
+//    private RejectLetterReport rejectLetterReport;
+//    private RejectLetterCancelCodeByExSum codeByExSum;
     HttpSession session;
 
     @Inject
@@ -290,7 +290,7 @@ public class GenPDF extends ReportService implements Serializable {
             }
         } else if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
             if (!Util.isNull(pdfReject_letter)){
-                log.debug("--logic Disable Buttom Print Reject Letter Report. {}",codeByExSum);
+//                log.debug("--logic Disable Buttom Print Reject Letter Report. {}",codeByExSum);
                 if (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) &&
                         Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
                     log.debug("CancelCode by ExSum Not match");
@@ -300,7 +300,7 @@ public class GenPDF extends ReportService implements Serializable {
                 rejectType = false;
             }
             log.debug("--rejectType = {}",statusId);
-        } else if (statusId == StatusValue.REVIEW_CA.value()){
+        } else if (statusId == StatusValue.REJECT_CA.value()){
             rejectType = false;
             log.debug("--rejectType = {}",statusId);
         }  else {
@@ -313,8 +313,8 @@ public class GenPDF extends ReportService implements Serializable {
         log.debug("On checkRejectGroupType");
         //NCB = 1 Income = 2 Policy = 3
 
-        if (!Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
-            Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
+        if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
+            Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
             !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
             Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
                 templateRejectLetter(4);
@@ -323,8 +323,8 @@ public class GenPDF extends ReportService implements Serializable {
                 exsumNCB != 0 && exsumIncome != 0 && exsumPolicy != 0 ||
                 exsumNCB = 0 && exsumIncome != 0 && exsumPolicy != 0*/
                 log.debug("--path4. {}",pathReportReject);
-        } else if (!Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
-                   Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
+        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
+                   Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
                    !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
                    Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
                         templateRejectLetter(3);
@@ -333,8 +333,8 @@ public class GenPDF extends ReportService implements Serializable {
                         exsumNCB != 0 && exsumIncome != 0 && exsumPolicy = 0 ||
                         exsumNCB = 0 && exsumIncome != 0 && exsumPolicy = 0*/
                         log.debug("--path3. {}",pathReportReject);
-        } else if (!Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
-                   Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && !Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
+        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
+                   Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
                    !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
                    Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
                         templateRejectLetter(2);
@@ -343,7 +343,7 @@ public class GenPDF extends ReportService implements Serializable {
                         exsumNCB != 0 && exsumIncome = 0 && exsumPolicy !== 0 ||
                         exsumNCB = 0 && exsumIncome = 0 && exsumPolicy != 0*/
                         log.debug("--path2. {}",pathReportReject);
-        } else if (!Util.isZero(pdfReject_letter.fillRejectLetter().getTypeNCB()) && Util.isZero(pdfReject_letter.fillRejectLetter().getTypeIncome()) && Util.isZero(pdfReject_letter.fillRejectLetter().getTypePolicy()) ||
+        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
                    !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
                         templateRejectLetter(1);
                          /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy = 0  ||
@@ -447,10 +447,10 @@ public class GenPDF extends ReportService implements Serializable {
 
 //        pdfReject_letter.init();
         if (pdfReject_letter.onCheckLogic() == 1){
-            log.debug("--Type Reject Is Zero.",pdfReject_letter.onCheckLogic());
+            log.debug("--Type Reject Is One. {}",pdfReject_letter.onCheckLogic());
             checkRejectGroupType();
         } else if (pdfReject_letter.onCheckLogic() == 2){
-            log.debug("--Type Reject Is Two Print Template Policy Only.",pdfReject_letter.onCheckLogic());
+            log.debug("--Type Reject Is Two Print Template Policy Only. {}",pdfReject_letter.onCheckLogic());
             templateRejectLetter(pdfReject_letter.onCheckLogic());
         }
         map.put("path", pathsub);
