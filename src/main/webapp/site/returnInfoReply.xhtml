@@ -93,7 +93,7 @@
                                             <p:column headerText="#{msg.get('app.return.table.header.reason')}" style="width: 250px;"/>
                                             <p:column headerText="#{msg.get('app.return.table.header.reasonDetail')}" style="width: 250px;"/>
                                             <p:column headerText="#{msg.get('app.return.table.header.replyDetail')}" style="width: 250px;"/>
-                                            <p:column headerText="#{msg.get('app.return.table.header.challenge')}" style="width:150px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.challenge')}" style="width:180px;"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -117,7 +117,7 @@
                                                          value="#{returnInfoVar.replyDetail}">
                                         </p:inputTextarea>
                                     </p:column>
-                                    <p:column styleClass="center top" style="width:150px;">
+                                    <p:column styleClass="center top" style="width:180px;">
                                         <p:selectOneRadio id="radioChal" value="#{returnInfoVar.challenge}"
                                                           disabled="#{returnReply.isDisabled('radioChallenge')}"
                                                           required="#{not empty param[saveBtn.clientId]}" styleClass="normal_table">
