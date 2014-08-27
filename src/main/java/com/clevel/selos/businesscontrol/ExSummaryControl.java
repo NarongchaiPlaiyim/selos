@@ -652,8 +652,6 @@ public class ExSummaryControl extends BusinessControl {
         log.debug("calIncomeBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal totalWCTMB = BigDecimal.ZERO;
         BigDecimal limitBDM = BigDecimal.ZERO;
@@ -665,18 +663,12 @@ public class ExSummaryControl extends BusinessControl {
             totalWCTMB = proposeLine.getTotalWCTmb();
             if(!Util.isNull(proposeLine.getProposeCreditInfoList()) && !Util.isZero(proposeLine.getProposeCreditInfoList().size())) {
                 for(ProposeCreditInfo creditInfo : proposeLine.getProposeCreditInfoList()) {
-                    if(!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getCreditType()) && !Util.isNull(creditInfo.getProductProgram())) {
-                        PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
-                        if(!Util.isNull(basicInfo) && !Util.isNull(basicInfo.getSpecialProgram()) && !Util.isNull(tcg) && !Util.isNull(tcg.getTcgFlag()) && !Util.isNull(proposeLine.getCreditCustomerType())) {
-                            ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram(), tcg.getTcgFlag());
-                            if(!Util.isNull(productFormula) && !Util.isNull(productFormula.getWcCalculate())) {
-                                if(productFormula.getWcCalculate() == 2) {
-                                    if(creditInfo.getProposeType() == ProposeType.P) {
-                                        limitBDM = Util.add(limitBDM, creditInfo.getLimit());
-                                    } else {
-                                        limitUW = Util.add(limitUW, creditInfo.getLimit());
-                                    }
-                                }
+                    if(!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getCreditType())) {
+                        if(creditInfo.getCreditType().getWcIncomeFlag() == 1) {
+                            if(creditInfo.getProposeType() == ProposeType.P) {
+                                limitBDM = Util.add(limitBDM, creditInfo.getLimit());
+                            } else {
+                                limitUW = Util.add(limitUW, creditInfo.getLimit());
                             }
                         }
                     }
