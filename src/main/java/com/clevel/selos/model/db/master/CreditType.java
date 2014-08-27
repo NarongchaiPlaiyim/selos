@@ -31,8 +31,6 @@ public class CreditType implements Serializable {
     private int creditGroup;
     @Column(name = "contingent_flag", columnDefinition = "int default 1")
     private boolean contingentFlag;
-    @Column(name = "WC_INCOME_FLAG",columnDefinition="int default 0")
-    private int wcIncomeFlag;
     @Column(name = "active")
     private int active;
 
@@ -117,14 +115,6 @@ public class CreditType implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
-    }
-
-    public int getWcIncomeFlag() {
-        return wcIncomeFlag;
-    }
-
-    public void setWcIncomeFlag(int wcIncomeFlag) {
-        this.wcIncomeFlag = wcIncomeFlag;
     }
 
     @Override
