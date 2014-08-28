@@ -667,6 +667,12 @@ function handleReturnMakerInfoDialogRequest(xhr, status, args) {
     }
 }
 
+function handleReturnAADUWInfoDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        returnInfoAADUWDlg.hide();
+    }
+}
+
 function handleReturnAddDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         addReturnInfoDlg.hide();
@@ -694,6 +700,12 @@ function handleReturnBUAddDialogRequest(xhr, status, args) {
 function handleReturnMakerAddDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         addReturnMakerInfoDlg.hide();
+    }
+}
+
+function handleReturnAADUWAddDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        addReturnAADUWInfoDlg.hide();
     }
 }
 

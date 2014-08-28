@@ -166,10 +166,10 @@
     <p:commandButton id="btnReturnAADC_UW2" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                      title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2016 and (headerController.requestAppraisalRequire == 1 or headerController.requestAppraisal == 1)}"
-                     actionListener="#{headerController.onOpenReturnAADInfoDialog()}"
-                     oncomplete="returnInfoAADDlg.show()"
-                     update=":frmMain:returnInfoAADPanel">
-        <p:resetInput target=":frmMain:returnInfoAADPanel"/>
+                     actionListener="#{headerController.onOpenReturnAADUWInfoDialog()}"
+                     oncomplete="returnInfoAADUWDlg.show()"
+                     update=":frmMain:returnInfoAADUWPanel">
+        <p:resetInput target=":frmMain:returnInfoAADUWPanel"/>
     </p:commandButton>
     <!--Revise CA ( Return from BU ) -->
     <p:commandButton id="btnReturnBDM_BU" value="#{msg.get('app.header.button.reviseCA')}"
@@ -757,6 +757,14 @@
     </p:dialog>
 </p:panel>
 
+<p:panel id="returnInfoAADUWPanel" styleClass="panel">
+    <p:dialog id="returnInfoAADUWDialog" widgetVar="returnInfoAADUWDlg" header="Return Summary"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="800" height="500" closable="false">
+        <ui:include src="/site/dialog/returnInfoAADUWDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
 <p:panel id="checkMandatePanel" styleClass="panel">
     <p:dialog id="checkMandateDialog"
               widgetVar="checkMandateDlg"
@@ -805,6 +813,14 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="460" height="160" closable="false">
         <ui:include src="/site/dialog/addReturnMakerInfoDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="addReturnAADUWInfoPanel" styleClass="panel">
+    <p:dialog id="addReturnAADUWInfoDialog" widgetVar="addReturnAADUWInfoDlg" header="Add Return Information"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/addReturnAADUWInfoDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 
