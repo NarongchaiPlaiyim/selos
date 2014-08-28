@@ -128,9 +128,14 @@ public class HeaderController extends BaseController {
     private boolean isSubmitToRGM;
     private boolean isSubmitToGHM;
     private boolean isSubmitToCSSO;
+    private boolean isSubmitForBDM;
+    private boolean isSubmitForUW;
+    private boolean isSubmitForUW2;
 
     private int submitPricingLevel;
     private int submitOverSLA;
+
+    private int slaReasonId;
 
     private String aadAdminId;
     private String aadAdminName;
@@ -257,6 +262,14 @@ public class HeaderController extends BaseController {
     //Cancel CA
     private int cancelReasonId;
 
+    //Cancel Request Appraisal
+    private int cancelRequestReasonId;
+    private String cancelRequestRemark;
+
+    //Cancel Price Reduction
+    private int cancelPriceReduceReasonId;
+    private String cancelPriceReduceRemark;
+
     public HeaderController() {
     }
 
@@ -284,37 +297,88 @@ public class HeaderController extends BaseController {
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.debug("HeaderController ::: appHeader : {}", appHeaderView);
 
+        canSubmitCA = false;
+        canCheckCriteria = false;
         if(workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                if(Util.isZero(workCase.getNcbRejectFlag())){
+                    UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+                    if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                        if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                            canSubmitCA = true;
+                            canRequestAppraisal = true;
+                        } else {
+                            if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
+                                if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                                    canSubmitCA = true;
+                                    canRequestAppraisal = true;
+                                }
+                            }
+                        }
+                    } else {
+                        canRequestAppraisal = true;
+                    }
+                    canCheckFullApp = true;
+                    timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
+                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+                    int limitTimeOfCriteriaCheck = 3;
+                    if(!Util.isNull(userSysParameterView)){
+                        limitTimeOfCriteriaCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+                    }
+                    if(timesOfCriteriaCheck < limitTimeOfCriteriaCheck){
+                        canCheckCriteria = true;
+                    }
+
+                    requestAppraisalRequire = fullApplicationControl.getRequestAppraisalRequire(workCaseId);
+                } else {
+                    canCheckFullApp = false;
+                }
+            }
+
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             if(basicInfo != null){
                 qualitativeType = basicInfo.getQualitativeType();
             }
             log.debug("Qualitative type : {}", qualitativeType);
+            log.debug("canSubmit : {}, canCheckCriteria : {}, canCheckFullApp : {}", canSubmitCA, canCheckCriteria, canCheckFullApp);
         }
 
+        canCloseSale = false;
         if(workCasePreScreenId != 0){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            if(workCasePrescreen!=null && workCasePrescreen.getId()>0){
-                if(workCasePrescreen.getNcbRejectFlag()==0){
-                    canCheckPreScreen = true;
+            if(!Util.isNull(workCasePrescreen)){
+                if(Util.isZero(workCasePrescreen.getNcbRejectFlag())){
+                    UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+                    if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
+                        if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                            canCloseSale = true;
+                            canRequestAppraisal = true;
+                        }else{
+                            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
+                                    || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                                canCloseSale = true;
+                                canRequestAppraisal = true;
+                            }
+                        }
+                    } else {
+                        canRequestAppraisal = false;
+                    }
+
+                    timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
+                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+                    int limitTimeOfPreScreenCheck = 100;
+                    if(!Util.isNull(userSysParameterView)){
+                        limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+                    }
+                    if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck){
+                        canCheckPreScreen = true;
+                    }
                 } else {
                     canCheckPreScreen = false;
                 }
             }
         }
-
-        if(workCaseId != 0){
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            if(workCase!=null && workCase.getId()>0){
-                if(workCase.getNcbRejectFlag()==0){
-                    canCheckFullApp = true;
-                } else {
-                    canCheckFullApp = false;
-                }
-            }
-        }
-
-
 
         user = (User) session.getAttribute("user");
         if (user == null) {
@@ -322,73 +386,6 @@ public class HeaderController extends BaseController {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
-        }
-
-
-
-        //check pre-screen result
-        canCloseSale = false;
-        if(workCasePreScreenId != 0){
-            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
-            if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
-                if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
-                    canCloseSale = true;
-                    canRequestAppraisal = true;
-                }else{
-                    if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
-                            || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
-                        canCloseSale = true;
-                        canRequestAppraisal = true;
-                    }
-                }
-            } else {
-                canRequestAppraisal = false;
-            }
-
-            timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
-            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
-            int limitTimeOfPreScreenCheck = 3;
-            if(!Util.isNull(userSysParameterView)){
-                limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
-            }
-            if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck){
-                canCheckPreScreen = true;
-            }
-        }
-
-        //check criteria result
-        canSubmitCA = false;
-        canCheckCriteria = false;
-        if(workCaseId != 0){
-            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
-            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
-                if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
-                    canSubmitCA = true;
-                    canRequestAppraisal = true;
-                } else {
-                    if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
-                        if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
-                            canSubmitCA = true;
-                            canRequestAppraisal = true;
-                        }
-                    }
-                }
-            } else {
-                canRequestAppraisal = true;
-            }
-
-            timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
-            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
-            int limitTimeOfCriteriaCheck = 3;
-            if(!Util.isNull(userSysParameterView)){
-                limitTimeOfCriteriaCheck = Util.parseInt(userSysParameterView.getValue(), 0);
-            }
-            if(timesOfCriteriaCheck < limitTimeOfCriteriaCheck){
-                canCheckCriteria = true;
-            }
-
-            requestAppraisalRequire = fullApplicationControl.getRequestAppraisalRequire(workCaseId);
-
         }
     }
 
@@ -415,7 +412,8 @@ public class HeaderController extends BaseController {
         return check;
     }
 
-    //------- Function for Assign to ABDM ----------//
+    //************** FUNCTION FOR PRE_SCREEN STAGE *************//
+    //-------------- Assign to ABDM -------------//
     public void onOpenAssignToABDM(){
         log.debug("onOpenAssignToABDM ::: starting...");
         abdmUserId = "";
@@ -449,37 +447,460 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
-    //---------- Function for Cancel Appraisal Request -----------//
-    public void onOpenCancelAppraisalRequest(){
-        log.debug("onOpenCancelAppraisalRequest ::: starting...");
-        cancelRemark = "";
-        reasonId = 0;
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
-        log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
+    //-------------- Check Pre_Screen ---------------//
+    public void onCheckPreScreen(){
+        long workCasePreScreenId = 0;
+        boolean success = false;
+        HttpSession session = FacesUtil.getSession(false);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        if(workCasePreScreenId != 0){
+            try{
+                int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+                if (modifyFlag == 0) {
+                    mandateFieldMessageViewList = null;
+                    prescreenBusinessControl.updateCSIData(workCasePreScreenId);
+                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
+                    log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
+                    if(uwRuleResponseView != null){
+                        if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
+                            UWRuleResultSummaryView uwRuleResultSummaryView = null;
+                            try{
+                                uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
+                                uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
+                                uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+                                //TODO: wait to confirm spec
+                                if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
+                                    canCheckPreScreen = false;
+                                } else {
+                                    canCheckPreScreen = true;
+                                }
+                                headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
+                            }catch (Exception ex){
+                                log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
+                                messageHeader = "Exception.";
+                                message = Util.getMessageException(ex);
+                            }
+                            messageHeader = "Information.";
+                            message = "Request for Check Pre-Screen and Save data success.";
+                            success = true;
+                        }else {
+                            messageHeader = "Exception.";
+                            message = uwRuleResponseView.getReason();
+                            mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
+                        }
+                    } else {
+                        uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
+                        messageHeader = "Information.";
+                        message = "There is no data returned from getPrescreen. Please contact system administrator";
+                    }
+                } else {
+                    messageHeader = "Warning.";
+                    message = "Cannot Check Prescreen. Some of data has been modified. Please Retrieve Interface Info and Save.";
+                }
+            } catch (Exception ex){
+                log.error("Exception while getPrescreenResult : ", ex);
+                messageHeader = "Exception.";
+                message = Util.getMessageException(ex);
+            }
+
+            if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
+                if(success)
+                    showMessageRefresh();
+                else
+                    showMessageBox();
+            else
+                showMessageMandate();
+        }
     }
 
-    public void onCancelAppraisalRequest(){
-        log.debug("onCancelAppraisalRequest ::: starting...");
+    public void onOpenCloseSales(){
+        //Check SLA Over or not?
         _loadSessionVariable();
+        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+        if(submitOverSLA == 1){
+            //Show Close sales dialog with SLA Reason
+            reasonId = 0;
+            reasonList = reasonToStepDAO.getOverSLAReason(stepId);
+            slaRemark = "";
+        }else{
+            submitRemark = "";
+        }
+
+        RequestContext.getCurrentInstance().execute("closeSalesDlg.show()");
+    }
+
+    public void onCloseSales(){
+        _loadSessionVariable();
+        log.debug("onCloseSale ::: queueName : {}", queueName);
         boolean complete = false;
+        String tmpRemark = "";
         try{
-            fullApplicationControl.cancelRequestAppraisal(queueName, wobNumber, reasonId, cancelRemark);
-            messageHeader =  msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.cancel.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onCancelAppraisalRequest ::: success.");
-        } catch (Exception ex){
+            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+            log.debug("modifyFlag : {}", modifyFlag);
+            if (modifyFlag == 1) {
+                messageHeader = "Exception";
+                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else if (modifyFlag == 2) {
+                messageHeader = "Exception";
+                message = "Could not get data for PreScreen.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
+                if (submitOverSLA == 1) {
+                    if (reasonId != 0 && !Integer.toString(reasonId).equals("")) {
+                        complete = true;
+                        tmpRemark = slaRemark;
+                    }
+                } else {
+                    tmpRemark = submitRemark;
+                    complete = true;
+                }
+                log.debug("complete : {}", complete);
+                if (complete) {
+                    log.debug("complete true : starting duplicate data ");
+                    prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
+                    log.debug("Duplicate data complete and submit complete.");
+                    messageHeader = "Information.";
+                    message = "Close Sales Complete. Click 'OK' return Inbox.";
+                    showMessageRedirect();
+                }
+            }
+        }catch (Exception ex){
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            log.error("onCloseSales error : ", ex);
+            showMessageBox();
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
+    public void onOpenAssignCheckerDialog() {
+        try {
+            bdmCheckerList = userDAO.findBDMChecker(user);
+            bdmCheckerId = "";
+            assignRemark = "";
+            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
+            RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
+        } catch (Exception ex) {
+            messageHeader = "Exception.";
+            message = "Exception while open Assign to Checker dialog. Please try again.";
+            showMessageBox();
+        }
+    }
+
+    public void onAssignToChecker() {
+        log.debug("onAssignToChecker ::: starting...");
+        boolean complete = false;
+        try {
+            if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
+                prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
+                //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                complete = true;
+                messageHeader = "Information.";
+                message = "Assign to checker complete.";
+                showMessageRedirect();
+            } else {
+                complete = false;
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+            log.debug("onAssignToChecker ::: complete");
+        } catch (Exception ex) {
+            messageHeader = "Assign to checker failed.";
+            message = "Assign to checker failed. Cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+
+            log.error("onAssignToChecker ::: exception : {}", ex);
+        }
+    }
+
+    //************** END FUNCTION FOR PRE_SCREEN STAGE ***************//
+
+    //************** FUNCTION FOR FULL APPLICATION STAGE ************//
+    //-------------- Submit CA [ Generic for BU ] -----------//
+    public boolean checkSubmitBU(){
+        boolean isSubmitBU = true;
+        if(stepId == StepValue.CREDIT_DECISION_UW1.value() || stepId == StepValue.CREDIT_DECISION_UW2.value() ||
+                stepId == StepValue.CREDIT_DECISION_UW1_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM.value()){
+            isSubmitBU = false;
+        }
+        return isSubmitBU;
+    }
+    private boolean checkStepABDM(){
+        boolean isStepABDM = false;
+        if(stepId == StepValue.FULLAPP_ABDM.value() || stepId == StepValue.CREDIT_DECISION_BU_ABDM.value() ||
+                stepId == StepValue.CREDIT_DECISION_UW1_ABDM.value() || stepId == StepValue.CREDIT_DECISION_UW1_ABDM_UPDATE.value() ||
+                stepId == StepValue.CREDIT_DECISION_UW2_ABDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_ABDM_UPDATE.value()){
+            isStepABDM = true;
+        }
+
+        return isStepABDM;
+    }
+    public void onOpenSubmitBU(){
+        _loadSessionVariable();
+        log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
+        try{
+            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
+                //Check for Request Pricing
+                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
+
+                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                if(submitOverSLA == 1){
+                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                }
+
+                if(!checkStepABDM()){
+                    if(requestPricing){
+                        //Check for Pricing DOA Level
+                        pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                        log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
+                        if(pricingDOALevel != 0) {
+                            zmEndorseUserId = "";
+                            zmUserId = "";
+                            rgmUserId = "";
+                            ghmUserId = "";
+                            cssoUserId = "";
+
+                            zmEndorseRemark = "";
+                            submitRemark = "";
+                            slaRemark = "";
+
+                            isSubmitToZM = false;
+                            isSubmitToRGM = false;
+                            isSubmitToGHM = false;
+                            isSubmitToCSSO = false;
+
+                            //TO Get all owner of case
+                            getUserOwnerBU();
+
+                            if(stepId <= StepValue.FULLAPP_BDM.value()) {
+                                zmUserList = fullApplicationControl.getUserList(user);
+                                log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
+                            }
+
+                            //TO Disabled DDL DOA Lower than RGM
+                            if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                isSubmitToZM = false;
+                            }
+
+                            //TO Disabled DDL DOA Lower than GH
+                            if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                                isSubmitToZM = false;
+                                isSubmitToRGM = false;
+                            }
+
+                            //TO Disabled DDL DOA Lower than CSSO
+                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+                                isSubmitToZM = false;
+                                isSubmitToRGM = false;
+                                isSubmitToGHM = false;
+                            }
+                            //TO All ( End of Pricing DOA )
+                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+                                isSubmitToZM = false;
+                                isSubmitToRGM = false;
+                                isSubmitToGHM = false;
+                                isSubmitToCSSO = false;
+                            }
+                            RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+                        } else {
+                            messageHeader = msg.get("app.messageHeader.exception");
+                            message = msg.get("app.message.dialog.doapricing.notfound");
+                            showMessageBox();
+                        }
+                    } else {
+                        if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            isSubmitToZM = false;
+                        }else {
+                            isSubmitToZM = true;
+                            zmUserList = fullApplicationControl.getUserList(user);
+                            log.debug("onOpenSubmitZM ::: No pricing request");
+                        }
+                        RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+                    }
+                }else{
+                    isSubmitForBDM = true;
+                    isSubmitToZM = false;
+                    isSubmitToRGM = false;
+                    isSubmitToGHM = false;
+                    isSubmitToCSSO = false;
+                    RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+                }
+            } else {
+                //----Case is updated please check criteria before submit----
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "CA information is updated, please Check Criteria before submit.";
+                showMessageBox();
+            }
+        }catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
             showMessageBox();
-            log.error("onCancelAppraisalRequest ::: exception occurred : ", ex);
+        }
+    }
+
+    public void onSubmitBU(){
+        _loadSessionVariable();
+        //Submit case by Step Id
+        if(checkStepABDM()) {
+            //Submit case from ABDM to BDM
+            submitForABDM();
+        }else if(stepId == StepValue.FULLAPP_BDM.value()) {
+            //Submit case from BDM to ZM ( Step 2001 )
+            submitForBDM();
+        }else if(stepId == StepValue.FULLAPP_ZM.value() || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {
+            //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 ) and Submit for FCash 2nd time ( Step 2009 )
+            submitForZM();
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
+            //Submit case from BDM to ZM ( Price Reduction ) ( Step 2018 )
+
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_RGM.value()){
+            //Submit case from RGM to GH or UW ( DOA Level ) ( Step 2020 )
+            submitForRGM();
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+            //Submit case from GH to CSSO or UW ( DOA Level ) ( Step 2021 )
+            submitForGH();
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+            //Submit case from CSSO to UW ( DOA Level ) ( Step 2022 )
+            submitForCSSO();
+        }
+        //TO Save Selected UserId to BasicInfo
+        fullApplicationControl.saveSelectedUserBU(zmUserId, rgmUserId, ghmUserId, cssoUserId, workCaseId);
+        RequestContext.getCurrentInstance().execute("blockUI.hide()");
+    }
+
+    private void submitForABDM(){
+        log.debug("submitForABDM");
+        try{
+            fullApplicationControl.submitForABDM(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
+
+            messageHeader = "Information.";
+            message = "Submit case success.";
+
+            showMessageRedirect();
+        } catch (Exception ex) {
+            log.error("Exception while submit to BDM ( from ABDM ), ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+
+            showMessageBox();
+        }
+    }
+
+    private void submitForBDM(){
+        log.debug("Submit Case from BDM to ZM Starting..., stepId : {}", stepId);
+        boolean complete = false;
+        if(zmUserId != null && !zmUserId.equals("")){
+            try{
+                if(canSubmitWithoutReturn()) {
+                    fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+                    log.debug("submitForBDM ::: success.");
+                    log.debug("submitForBDM ::: Backup return info to History Start...");
+                    returnControl.saveReturnHistoryForRestart(workCaseId, workCasePreScreenId);
+                    log.debug("submitForBDM ::: Backup return info to History Success...");
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = msg.get("app.message.dialog.submit.success");
+                    showMessageRedirect();
+                    complete = true;
+                }else {
+                    messageHeader = "Information.";
+                    message = "Submit case fail. Please check return information before submit again.";
+                    showMessageBox();
+                    log.error("onSubmitCA ::: fail.");
+                }
+            } catch (Exception ex){
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = Util.getMessageException(ex);
+                showMessageBox();
+                log.error("submitForBDM ::: exception occurred : ", ex);
+            }
+        } else {
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : ZM not selected";
+            showMessageBox();
+            log.error("submitForBDM ::: submit failed (ZM not selected)");
         }
         sendCallBackParam(complete);
     }
 
-    //---------- Function for Submit CA -----------//
-    public void getUserOwnerBU(){
+    private void submitForZM(){
+        log.debug("Submit case from ZM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForZM(queueName, wobNumber, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId, stepId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onSubmitRM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onSubmitRM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    private void submitForRGM(){
+        log.debug("Submit case from RGM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForRGM(queueName, wobNumber, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForRGM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForRGM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    private void submitForGH(){
+        log.debug("Submit case from GH to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForGH(queueName, wobNumber, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForGH ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForGH ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    private void submitForCSSO(){
+        log.debug("Submit case from CSSO to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForCSSO(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForCSSO ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : " + Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForCSSO ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    private void getUserOwnerBU(){
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         if(pricingDOALevel == 1 || pricingDOALevel == 2){
             isSubmitToZM = true;
@@ -547,384 +968,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onOpenSubmitBU(){
-        _loadSessionVariable();
-        log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
-        try{
-            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
-                //Check for Request Pricing
-                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-                log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
-                if(requestPricing){
-                    //Check for Pricing DOA Level
-                    pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                    log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
-                    if(pricingDOALevel != 0) {
-                        zmEndorseUserId = "";
-                        zmUserId = "";
-                        rgmUserId = "";
-                        ghmUserId = "";
-                        cssoUserId = "";
-
-                        zmEndorseRemark = "";
-                        submitRemark = "";
-                        slaRemark = "";
-
-                        isSubmitToZM = false;
-                        isSubmitToRGM = false;
-                        isSubmitToGHM = false;
-                        isSubmitToCSSO = false;
-
-                        //TO Get all owner of case
-                        getUserOwnerBU();
-
-                        if(stepId <= StepValue.FULLAPP_BDM_SSO_ABDM.value()) {
-                            zmUserList = fullApplicationControl.getUserList(user);
-                            log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
-                        }
-
-                        //TO Disabled DDL DOA Lower than RGM
-                        if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            isSubmitToZM = false;
-                        }
-
-                        //TO Disabled DDL DOA Lower than GH
-                        if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
-                            isSubmitToZM = false;
-                            isSubmitToRGM = false;
-                        }
-
-                        //TO Disabled DDL DOA Lower than CSSO
-                        if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-                            isSubmitToZM = false;
-                            isSubmitToRGM = false;
-                            isSubmitToGHM = false;
-                        }
-                        //TO All ( End of Pricing DOA )
-                        if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
-                            isSubmitToZM = false;
-                            isSubmitToRGM = false;
-                            isSubmitToGHM = false;
-                            isSubmitToCSSO = false;
-                        }
-                        RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
-                    } else {
-                        messageHeader = msg.get("app.messageHeader.exception");
-                        message = msg.get("app.message.dialog.doapricing.notfound");
-                        showMessageBox();
-                    }
-                } else {
-                    if(stepId > StepValue.FULLAPP_BDM_SSO_ABDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                        isSubmitToZM = false;
-                    }else {
-                        isSubmitToZM = true;
-                        zmUserList = fullApplicationControl.getUserList(user);
-                        log.debug("onOpenSubmitZM ::: No pricing request");
-                    }
-                    RequestContext.getCurrentInstance().execute("submitFullAppDlg.show()");
-                }
-
-                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-                if(submitOverSLA == 1){
-                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
-                }
-
-            } else {
-                //----Case is updated please check criteria before submit----
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = "CA information is updated, please Check Criteria before submit.";
-                showMessageBox();
-            }
-        }catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-        }
-    }
-
-    public void onSubmitBU(){
-        _loadSessionVariable();
-        //Submit case by Step Id
-        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){
-            //Submit case from BDM to ZM ( Step 2001 )
-            submitForBDM();
-        }else if(stepId == StepValue.FULLAPP_ZM.value() || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {
-            //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 ) and Submit for FCash 2nd time ( Step 2009 )
-            submitForZM();
-        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
-            //Submit case from BDM to ZM ( Price Reduction ) ( Step 2018 )
-
-        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_RGM.value()){
-            //Submit case from RGM to GH or UW ( DOA Level ) ( Step 2020 )
-            submitForRGM();
-        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-            //Submit case from GH to CSSO or UW ( DOA Level ) ( Step 2021 )
-            submitForGH();
-        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
-            //Submit case from CSSO to UW ( DOA Level ) ( Step 2022 )
-            submitForCSSO();
-        }
-        //TO Save Selected UserId to BasicInfo
-        fullApplicationControl.saveSelectedUserBU(zmUserId, rgmUserId, ghmUserId, cssoUserId, workCaseId);
-        RequestContext.getCurrentInstance().execute("blockUI.hide()");
-    }
-
-    public void submitForBDM(){
-        log.debug("Submit Case from BDM to ZM Starting..., stepId : {}", stepId);
-        boolean complete = false;
-        if(zmUserId != null && !zmUserId.equals("")){
-            try{
-                if(canSubmitWithoutReturn()) {
-                    fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
-                    log.debug("submitForBDM ::: success.");
-                    log.debug("submitForBDM ::: Backup return info to History Start...");
-                    returnControl.saveReturnHistoryForRestart(workCaseId, workCasePreScreenId);
-                    log.debug("submitForBDM ::: Backup return info to History Success...");
-                    messageHeader = msg.get("app.messageHeader.info");
-                    message = msg.get("app.message.dialog.submit.success");
-                    showMessageRedirect();
-                    complete = true;
-                }else {
-                    messageHeader = "Information.";
-                    message = "Submit case fail. Please check return information before submit again.";
-                    showMessageBox();
-                    log.error("onSubmitCA ::: fail.");
-                }
-            } catch (Exception ex){
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = Util.getMessageException(ex);
-                showMessageBox();
-                log.error("submitForBDM ::: exception occurred : ", ex);
-            }
-        } else {
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = "Submit case failed, cause : ZM not selected";
-            showMessageBox();
-            log.error("submitForBDM ::: submit failed (ZM not selected)");
-        }
-        sendCallBackParam(complete);
-    }
-
-    public void submitForZM(){
-        log.debug("Submit case from ZM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
-        boolean complete = false;
-        try{
-            fullApplicationControl.submitForZM(queueName, wobNumber, workCaseId, stepId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitRM ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitRM ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    public void submitForRGM(){
-        log.debug("Submit case from RGM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
-        boolean complete = false;
-        try{
-            fullApplicationControl.submitForRGM(queueName, wobNumber, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("submitForRGM ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("submitForRGM ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    public void submitForGH(){
-        log.debug("Submit case from GH to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
-        boolean complete = false;
-        try{
-            fullApplicationControl.submitForGH(queueName, wobNumber, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("submitForGH ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            showMessageBox();
-            log.error("submitForGH ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    public void submitForCSSO(){
-        log.debug("Submit case from CSSO to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
-        boolean complete = false;
-        try{
-            fullApplicationControl.submitForCSSO(queueName, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("submitForCSSO ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            showMessageBox();
-            log.error("submitForCSSO ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-    //---------- End of Function for Submit CA ----------//
-
-    //---------- Function for Cancel CA -----------//
-    public void onOpenCancelCA(){
-        log.debug("onOpenCancelCA ::: starting...");
-        _loadSessionVariable();
-        cancelRemark = "";
-        reasonId = 0;
-        //Check BRMS Result
-        UWRuleResultSummary uwRuleResultSummary = null;
-
-        if(workCasePreScreenId != 0)
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
-        else if(workCaseId != 0)
-            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
-
-        if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
-            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
-                reasonList = reasonToStepDAO.getRejectReason(stepId);
-                reasonId = reasonDAO.getBRMSReasonId();
-            }
-        } else {
-            reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
-            reasonId = 0;
-        }
-
-        log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());
-    }
-
-    public void onCancelCA(){
-        log.debug("onCancelCA ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            fullApplicationControl.cancelCA(queueName, wobNumber, reasonId, cancelRemark);
-            log.debug("saveCancelRejectInfo...");
-            fullApplicationControl.saveCancelRejectInfo(workCaseId, workCasePreScreenId, reasonId);
-            messageHeader =  msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.cancel.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onCancelCA ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onCancelCA ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    //---------- Function for Submit CA ( BDM to Zone ) ------------//
-    public void onOpenSubmitZM(){
-        log.debug("onOpenSubmitZM ::: starting...");
-        log.debug("onOpenSubmitZM ::: find Pricing DOA Level");
-        _loadSessionVariable();
-        try{
-            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
-                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-                fullApplicationControl.duplicateFacilityData(workCaseId);
-                if(requestPricing){
-                    pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                    if(pricingDOALevel != 0){
-                        zmEndorseUserId = "";
-                        zmUserId = "";
-                        rgmUserId = "";
-                        ghmUserId = "";
-                        cssoUserId = "";
-
-                        zmEndorseRemark = "";
-                        submitRemark = "";
-                        slaRemark = "";
-
-                        isSubmitToRGM = false;
-                        isSubmitToGHM = false;
-                        isSubmitToCSSO = false;
-
-                        zmUserList = fullApplicationControl.getUserList(user);
-
-                        if(pricingDOALevel >= PricingDOAValue.RGM_DOA.value()){
-                            isSubmitToRGM = true;
-                        }
-
-                        if(pricingDOALevel >= PricingDOAValue.GH_DOA.value()){
-                            isSubmitToGHM = true;
-                        }
-
-                        if(pricingDOALevel >= PricingDOAValue.CSSO_DOA.value()){
-                            isSubmitToCSSO = true;
-                        }
-                        log.debug("onOpenSubmitZM ::: pricingDOALevel : {}", pricingDOALevel);
-                        RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
-                    } else {
-                        messageHeader = msg.get("app.messageHeader.exception");
-                        message = msg.get("app.message.dialog.doapricing.notfound");
-                        showMessageBox();
-                    }
-                } else {
-                    zmUserList = fullApplicationControl.getUserList(user);
-                    log.debug("onOpenSubmitZM ::: No pricing request");
-                    RequestContext.getCurrentInstance().execute("submitZMDlg.show()");
-                }
-            }else{
-                //----Case is updated please check criteria before submit----
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = "CA information is updated, please Check Criteria before submit.";
-                showMessageBox();
-            }
-
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-        }
-    }
-
-    //---------- Submit CA ( BDM to Zone ) -----------//
-    public void onSubmitZM(){
-        log.debug("onSubmitZM ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        if(zmUserId != null && !zmUserId.equals("")){
-            try{
-                fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
-                //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-                messageHeader = msg.get("app.messageHeader.info");
-                message = msg.get("app.message.dialog.submit.success");
-                showMessageRedirect();
-                complete = true;
-                log.debug("onSubmitZM ::: success.");
-            } catch (Exception ex){
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = Util.getMessageException(ex);
-                showMessageBox();
-                log.error("onSubmitZM ::: exception occurred : ", ex);
-            }
-        } else {
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = "Submit case failed, cause : ZM not selected";
-            showMessageBox();
-            log.error("onSubmitZM ::: submit failed (ZM not selected)");
-        }
-        sendCallBackParam(complete);
-    }
-
     public void onSelectedZM(){
         log.debug("onSelectedZM : pricingDOALevel : {}", pricingDOALevel);
         if(pricingDOALevel >= PricingDOAValue.ZM_DOA.value()){
@@ -965,154 +1008,22 @@ public class HeaderController extends BaseController {
         }
     }
 
-    //---------- Submit CA ( Zone to Region [Price Reduction]) -----------//
-    public void onSubmitPriceReduceRGM(){
-        log.debug("onSubmitPriceReduceRM ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitToRGMPriceReduce(queueName, wobNumber, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitPriceReduceRM ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitPriceReduceRM ::: exception occurred : ", ex);
+    //------------- Submit CA [ Generic for UW ] --------------------//
+    private void checkSubmitRole(){
+        isSubmitForUW = false;
+        isSubmitForUW2 = false;
+        isSubmitForBDM = false;
+        if(stepId == StepValue.CREDIT_DECISION_UW1.value()){
+            isSubmitForUW = true;
+        }else if(stepId == StepValue.CREDIT_DECISION_UW2.value()){
+            isSubmitForUW2 = true;
+        }else{
+            log.debug("No step match : stepId : {}", stepId);
         }
-        sendCallBackParam(complete);
-    }
 
-    //---------- Submit CA ( Zone to Region ) -----------//
-    public void onSubmitRM(){
-        log.debug("onSubmitRM ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitForZM(queueName, wobNumber, workCaseId, stepId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitRM ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitRM ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    //---------- Submit CA ( Region to Group Head ) -----------//
-    public void onSubmitGH(){
-        log.debug("onSubmitGH ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitForRGM(queueName, wobNumber, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitGH ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitGH ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    //---------- Submit CA ( Group Head to CSSO ) -----------//
-    public void onSubmitCSSO(){
-        log.debug("onSubmitCSSO ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitForGH(queueName, wobNumber, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitCSSO ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitCSSO ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    //---------- Submit CA ( CSSO to UW1 ) -----------//
-    public void onSubmitUWFromCSSO(){
-        log.debug("onSubmitUWFromCSSO ::: starting...");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitForCSSO(queueName, workCaseId);
-            messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.message.dialog.submit.success");
-            showMessageRedirect();
-            complete = true;
-            log.debug("onSubmitUWFromCSSO ::: success.");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            showMessageBox();
-            log.error("onSubmitUWFromCSSO ::: exception occurred : ", ex);
-        }
-        sendCallBackParam(complete);
-    }
-
-    /*public void onSubmitUWFromZM(){
-        log.debug("onSubmitUWFromZM ::: starting...");
-        boolean complete = false;
-        try{
-            HttpSession session = FacesUtil.getSession(false);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            fullApplicationControl.submitToUWFromZM(queueName, workCaseId);
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-            complete = true;
-            log.debug("onSubmitUWFromZM ::: success.");
-        } catch (Exception ex){
-            messageHeader = "Exception.";
-            message = "Submit case failed, cause : " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-            complete = false;
-            log.error("onSubmitUWFromZM ::: exception occurred : ", ex);
-        }
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-    }*/
-
-    //---------- Submit CA ( to UW2 ) -----------//
-    public void onOpenSubmitUW2(){
-        log.debug("onOpenSubmitUW ::: starting...");
-        HttpSession session = FacesUtil.getSession(false);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        selectedUW2User = "";
-        selectedDOALevel = 0;
-        try{
-            authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
-            RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
-        } catch (Exception ex){
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
+        /*else if(stepId == StepValue.CREDIT_DECISION_UW1_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM_UPD_INFO.value()){
+            isSubmitForBDM = true;
+        }*/
     }
 
     public void onSelectedUWDOALevel(){
@@ -1129,50 +1040,260 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onSubmitUW2(){ //Submit From UW1 (no return)
-        log.debug("onSubmitUW2 begin");
+    public void onOpenSubmitUW(){
         _loadSessionVariable();
+        try {
+            if (!fullApplicationControl.checkCaseUpdate(workCaseId)) {
+                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                if (submitOverSLA == 1) {
+                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                }
+
+                checkSubmitRole();
+                log.debug("isSubmitForUW : {}, isSubmitForUW2 : {}, isSubmitForBDM : {}", isSubmitForUW, isSubmitForUW2, isSubmitForBDM);
+
+                if(isSubmitForUW){
+                    //Get drop down DOA Level
+                    selectedUW2User = "";
+                    selectedDOALevel = 0;
+
+                    authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    log.debug("authorizationDOAList : {}", authorizationDOAList.size());
+                }
+                RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
+            }else{
+                //----Case is updated please check criteria before submit----
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "CA information is updated, please Check Criteria before submit.";
+                showMessageBox();
+            }
+        }catch(Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+    }
+
+    public void onSubmitUW(){
+        //TODO Split 2 function to Submit ( UW1 to UW2, UW2 submit for End Case )
+        if(isSubmitForUW){
+            //Submit case for UW to UW2
+            submitForUW();
+        }else if(isSubmitForUW2){
+            //Submit case for UW2 to End Case
+            submitForUW2();
+        }
+    }
+
+    private void submitForBDMUW(){
+        
+    }
+    private void submitForUW(){
+        log.debug("submitForUW :: Start..");
         boolean complete = false;
         try{
-            HttpSession session = FacesUtil.getSession(false);
-            User user = (User) session.getAttribute("user");
-
             if(selectedUW2User != null && !selectedUW2User.equals("")){
                 if(canSubmitWithoutReturn()){
                     fullApplicationControl.submitToUW2(selectedUW2User, selectedDOALevel, submitRemark, queueName, workCaseId);
-                    messageHeader = "Information.";
-                    message = "Submit case success";
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = msg.get("app.message.dialog.submit.success");
+                    complete = true;
                     showMessageRedirect();
-                    log.debug("onSubmitUW2 ::: success.");
+                    log.debug("submitForUW ::: success.");
                 } else {
                     messageHeader = "Information.";
                     message = "Submit case fail. Please check return information before submit again.";
                     showMessageBox();
-                    log.error("onSubmitUW2 ::: fail.");
+                    log.debug("submitForUW ::: fail.");
                 }
-
-                messageHeader = msg.get("app.messageHeader.info");
-                message = msg.get("app.message.dialog.submit.success");
-                showMessageRedirect();
-                complete = true;
-                log.debug("onSubmitUW2 ::: success.");
             } else {
                 messageHeader = msg.get("app.messageHeader.exception");
                 message = "Submit case failed, cause : UW2 was not selected";
                 showMessageBox();
-                complete = false;
-                log.error("onSubmitUW2 ::: submit failed (UW2 not selected)");
+                log.debug("submitForUW ::: submit failed (UW2 not selected)");
             }
         } catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
             showMessageBox();
-
-            log.error("onSubmitUW2 ::: exception occurred : ", ex);
+            log.error("submitForUW ::: exception occurred : ", ex);
         }
 
         sendCallBackParam(complete);
     }
+    private void submitForUW2(){
+        log.debug("submitForUW2 :: Start");
+        boolean complete = false;
+        try{
+            if(canSubmitWithoutReturn()){
+                fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
+
+                messageHeader = msg.get("app.messageHeader.info");
+                message = msg.get("app.message.dialog.submit.success");
+                complete = true;
+            } else {
+                messageHeader = "Information.";
+                message = "Submit case fail. Please check return information before submit again.";
+                showMessageBox();
+                log.error("submitForUW2 ::: fail.");
+            }
+
+            if(complete) {
+                fullApplicationControl.calculateApprovedResult(workCaseId);
+                showMessageRedirect();
+
+                log.debug("submitForUW2 ::: success.");
+            } else {
+                showMessageBox();
+                log.error("submitForUW2 ::: fail.");
+            }
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Submit case fail, cause : " + Util.getMessageException(ex);
+            showMessageBox();
+
+            log.error("submitForUW2 ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    //************** END OF FUNCTION FOR FULL APPLICATION STAGE ************//
+
+    //************* FUNCTION FOR CANCEL CA ****************//
+    public void onOpenCancelCA(){
+        log.debug("onOpenCancelCA ::: starting...");
+        _loadSessionVariable();
+        cancelRemark = "";
+        reasonId = 0;
+        //Check BRMS Result
+        UWRuleResultSummary uwRuleResultSummary = null;
+
+        if(workCasePreScreenId != 0)
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+        else if(workCaseId != 0)
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+
+        if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
+            reasonList = reasonToStepDAO.getRejectReason(stepId);
+            reasonId = reasonDAO.getBRMSReasonId();
+        } else {
+            reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
+            reasonId = 0;
+        }
+
+        log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());
+    }
+
+    public void onCancelCA(){
+        log.debug("onCancelCA ::: starting...");
+        _loadSessionVariable();
+        boolean complete = false;
+        try{
+            fullApplicationControl.cancelCA(queueName, wobNumber, reasonId, cancelRemark);
+            log.debug("saveCancelRejectInfo... cancelReasonId : {}, remark : {}, workCaseId : {}, workCasePreScreenId : {}", cancelReasonId, cancelRemark, workCaseId, workCasePreScreenId);
+            fullApplicationControl.saveCancelRejectInfo(workCaseId, workCasePreScreenId, cancelReasonId);
+            messageHeader =  msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.cancel.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onCancelCA ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onCancelCA ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    //************* END FUNCTION FOR CANCEL CA *************//
+
+    //************** FUNCTION FOR APPRAISAL STAGE *************//
+    //-------------- Function for Cancel Appraisal Request -----------//
+    public void onOpenCancelAppraisalRequest(){
+        log.debug("onOpenCancelAppraisalRequest ::: starting...");
+        cancelRemark = "";
+        reasonId = 0;
+        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
+    }
+
+    public void onCancelAppraisalRequest(){
+        log.debug("onCancelAppraisalRequest ::: starting...");
+        _loadSessionVariable();
+        boolean complete = false;
+        try{
+            fullApplicationControl.cancelRequestAppraisal(queueName, wobNumber, cancelRequestReasonId, cancelRequestRemark);
+            messageHeader =  msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.cancel.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onCancelAppraisalRequest ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onCancelAppraisalRequest ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    public void onOpenSubmitAADCommittee(){
+        log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
+        HttpSession session = FacesUtil.getSession(false);
+        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
+            //List AAD Admin by team structure
+            aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
+            RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
+        } else {
+            //TO show error
+            messageHeader = "Exception.";
+            message = "Please input Appointment Date first.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    public void onSubmitAADCommittee(){
+        log.debug("onSubmitAADCommittee ( submit to AAD committee )");
+        _loadSessionVariable();
+        try{
+            if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId==StatusValue.REPLY_FROM_BDM.value()){
+                log.debug("onSubmitAADCommittee ( save Return History For Restart )");
+                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            }
+            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+            messageHeader = "Information.";
+            message = "Request for appraisal success.";
+            showMessageRedirect();
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+    }
+
+    public void onSubmitAppraisalToUW(){
+        _loadSessionVariable();
+        log.debug("onSubmitAppraisalToUW ( appraisal to uw )");
+        try{
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            fullApplicationControl.submitToUWFromCommittee(queueName, wobNumber);
+
+            messageHeader = "Information.";
+            message = "Submit case success.";
+            showMessageRedirect();
+        } catch (Exception ex){
+            log.error("exception while submit case to uw2 : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+    }
+
+    //************** END FUNCTION FOR APPRAISAL STAGE **************//
 
     public boolean canSubmitWithoutReturn() throws Exception{
         List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId,workCasePreScreenId);
@@ -1211,61 +1332,6 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
-    //---------- Submit CA ( UW2 [End Case] ) -----------//
-    public void onSubmitCA(){ //Submit From UW2
-        log.debug("onSubmitCA begin");
-        _loadSessionVariable();
-        boolean complete = false;
-        try{
-            HttpSession session = FacesUtil.getSession(false);
-            User user = (User) session.getAttribute("user");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
-            if(canSubmitWithoutReturn()){
-                fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
-
-                messageHeader = "Information.";
-                message = "Submit case success";
-                complete = true;
-            } else {
-                messageHeader = "Information.";
-                message = "Submit case fail. Please check return information before submit again.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-
-                log.error("onSubmitCA ::: fail.");
-            }
-
-            if(complete) {
-                fullApplicationControl.calculateApprovedResult(workCaseId);
-                showMessageRedirect();
-
-                log.debug("onSubmitCA ::: success.");
-            } else {
-                showMessageBox();
-
-                log.error("onSubmitCA ::: fail.");
-            }
-        } catch (Exception ex){
-            messageHeader = "Information.";
-            message = "Submit case fail, cause : " + Util.getMessageException(ex);
-            showMessageBox();
-
-            log.error("onSubmitCA ::: exception occurred : ", ex);
-        }
-
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
-    }
-
-    public void onOpenReturnBDMByBU(){
-        _loadSessionVariable();
-        log.debug("onOpenReturnBDMByZM ( return to BDM by BU [ Open dialog ] )");
-        //reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
-        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.REVISE_CA.getVal());
-        returnRemark = "";
-
-        RequestContext.getCurrentInstance().execute("returnBDM_BUDlg.show()");
-    }
-
     public void onReturnBDMByBU(){
         log.debug("onReturnBDMByZM ( return to BDM from ZM )");
         HttpSession session = FacesUtil.getSession(false);
@@ -1285,14 +1351,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onOpenReturnAADMByUW2(){
-        log.debug("onOpenReturnAADAdmin ( return to AAD Admin from UW2 [ Open dialog ] )");
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
-        returnAADRemark = "";
-
-        RequestContext.getCurrentInstance().execute("returnAADM_UW2Dlg.show()");
-    }
-
     public void onReturnAADMByUW2(){
         log.debug("onReturnAADAdmin ( return to AAD Admin from UW2 )");
         HttpSession session = FacesUtil.getSession(false);
@@ -1309,71 +1367,6 @@ public class HeaderController extends BaseController {
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
             showMessageBox();
-        }
-    }
-
-    public void onOpenSubmitAADCommittee(){
-        log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
-        HttpSession session = FacesUtil.getSession(false);
-        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
-            //List AAD Admin by team structure
-            aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
-            RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
-        } else {
-            //TO show error
-            messageHeader = "Exception.";
-            message = "Please input Appointment Date first.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }
-
-    public void onSubmitAADCommittee(){
-        log.debug("onSubmitAADCommittee ( submit to AAD committee )");
-        try{
-            HttpSession session = FacesUtil.getSession(false);
-            long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-            if(stepId==2006 && statusId==20007){
-                returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            }
-            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
-            messageHeader = "Information.";
-            message = "Request for appraisal success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-
-        } catch (Exception ex){
-            log.error("exception while request appraisal : ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }
-
-    public void onSubmitAppraisalToUW(){
-        log.debug("onSubmitAppraisalToUW ( appraisal to uw )");
-        String wobNumber = "";
-        String queueName = "";
-
-        HttpSession session = FacesUtil.getSession(false);
-        queueName = Util.parseString(session.getAttribute("queueName"), "");
-        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
-        try{
-            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitToUWFromCommittee(queueName, wobNumber);
-
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-        } catch (Exception ex){
-            log.error("exception while submit case to uw2 : ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
     }
 
@@ -1483,7 +1476,7 @@ public class HeaderController extends BaseController {
 
         if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
-                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, reasonId, cancelRemark);
+                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, cancelPriceReduceReasonId, cancelPriceReduceRemark);
                 messageHeader = "Information.";
                 message = "Cancel Request Price Reduction success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -1534,80 +1527,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onCheckPreScreen(){
-        long workCasePreScreenId = 0;
-        boolean success = false;
-        HttpSession session = FacesUtil.getSession(false);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        if(workCasePreScreenId != 0){
-            try{
-                int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
-                if (modifyFlag == 0) {
-                    mandateFieldMessageViewList = null;
-                    prescreenBusinessControl.updateCSIData(workCasePreScreenId);
-                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
-                    log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
-                    if(uwRuleResponseView != null){
-                        if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
-                            UWRuleResultSummaryView uwRuleResultSummaryView = null;
-                            try{
-                                uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
-                                uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
-                                uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
-                                //TODO: wait to confirm spec
-                                if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
-                                    canCheckPreScreen = false;
-                                } else {
-                                    canCheckPreScreen = true;
-                                }
-                                headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
-                            }catch (Exception ex){
-                                log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
-                                messageHeader = "Exception.";
-                                message = Util.getMessageException(ex);
-                            }
-                            messageHeader = "Information.";
-                            message = "Request for Check Pre-Screen and Save data success.";
-                            success = true;
-                        }else {
-                            messageHeader = "Exception.";
-                            message = uwRuleResponseView.getReason();
-                            mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
-                        }
-                    } else {
-                        uwRuleResultControl.saveNewUWRuleResult(uwRuleResponseView.getUwRuleResultSummaryView());
-                        messageHeader = "Information.";
-                        message = "There is no data returned from getPrescreen. Please contact system administrator";
-                    }
-                } else {
-                    messageHeader = "Warning.";
-                    message = "Cannot Check Prescreen. Some of data has been modified. Please Retrieve Interface Info and Save.";
-                }
-            } catch (Exception ex){
-                log.error("Exception while getPrescreenResult : ", ex);
-                messageHeader = "Exception.";
-                message = Util.getMessageException(ex);
-            }
-
-            if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
-                if(success)
-                    showMessageRefresh();
-                else
-                    showMessageBox();
-            else
-                showMessageMandate();
-        }
-    }
-
-    public void onOpenReturnBDMByAAD(){
-        //TODO Get BDM Name
-        //reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
-        _loadSessionVariable();
-        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
-        returnRemark = "";
-        RequestContext.getCurrentInstance().execute("returnBDM_AADAdminDlg.show()");
-    }
-
     public void onReturnBDMByAAD(){
         String wobNumber = "";
         String queueName = "";
@@ -1632,27 +1551,6 @@ public class HeaderController extends BaseController {
             }
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-    }
-
-    public void onOpenReturnAADAdmin(){
-        log.debug("onOpenReturnAADAdmin ( return to AADAdmin )");
-        //Get aadCommittee from appraisal
-        HttpSession session = FacesUtil.getSession(false);
-        long workCasePreScreenId = 0;
-        long workCaseId = 0;
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        aadAdminName = fullApplicationControl.getAADAdmin(workCaseId, workCasePreScreenId);
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.RETURN_REASON);
-        reasonId = 0;
-        returnRemark = "";
-        //if(!Util.isEmpty(aadAdminName)){
-        RequestContext.getCurrentInstance().execute("returnAADM_AADCDlg.show()");
-        //} else {
-        //    messageHeader = "Exception.";
-        //    message = "Could not find AAD Admin name.";
-        //    RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        //}
     }
 
     public void onSubmitReturnAADAdmin(){
@@ -1680,6 +1578,8 @@ public class HeaderController extends BaseController {
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
+
+    //**************** FUNCTION FOR CHECK MANDATE DOC ****************//
     //Maker
     public void onCheckMandateForMaker(){
         log.debug("onCheckMandateForMaker ::: start...");
@@ -1727,7 +1627,6 @@ public class HeaderController extends BaseController {
         }
         log.debug("onCheckMandateForChecker ::: stop...");
     }
-
     //Full App
     public void onCheckMandateForFullApp(){
         log.debug("onCheckMandateForFullApp ::: start...");
@@ -1761,7 +1660,6 @@ public class HeaderController extends BaseController {
         }
         log.debug("onCheckMandateForFullApp ::: stop...");
     }
-
     //ABDM
     public void onCheckMandateForABDM(){
         log.debug("onCheckMandateForABDM ::: start...");
@@ -1773,7 +1671,6 @@ public class HeaderController extends BaseController {
         }
         log.debug("onCheckMandateForFullApp ::: stop...");
     }
-
     //AAD Committee
     public void onCheckMandateForStepCheckDoc(){
         log.debug("onCheckMandateForStepCheckDoc ::: start...");
@@ -1785,7 +1682,6 @@ public class HeaderController extends BaseController {
         }
         log.debug("onCheckMandateForStepCheckDoc ::: stop...");
     }
-
     // ZONE
     public void onCheckMandateForZONE(){
         log.debug("onCheckMandateForZONE ::: start...");
@@ -1819,7 +1715,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-
     public void onSaveCheckMandateDoc(){
         log.debug("-- onSaveCheckMandateDoc().");
         try {
@@ -1839,12 +1734,9 @@ public class HeaderController extends BaseController {
         }
     }
 
+    //**************** END FUNCTION FOR CHECK MANDATE DOC ***************//
 
-
-    public void onCancelCheckMandateDoc(){
-
-    }
-
+    //*************** FUNCTION FOR RETURN INFO ********************//
     public void onOpenReturnInfoDialog(){
         log.debug("onOpenReturnInfoDialog ::: starting...");
         _loadSessionVariable();
@@ -2120,6 +2012,91 @@ public class HeaderController extends BaseController {
         log.debug("onSaveReturnMakerInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
+    public void onEditReturnInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonId = returnInfoView.getReasonId();
+        returnRemark = returnInfoView.getReasonDetail();
+        editRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onEditReturnAADInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonAADId = returnInfoView.getReasonId();
+        returnAADRemark = returnInfoView.getReasonDetail();
+        editAADRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onEditReturnBDMInfo(int rowOnTable) {
+        log.debug("onEditReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonBDMId = returnInfoView.getReasonId();
+        returnBDMRemark = returnInfoView.getReasonDetail();
+        editBDMRecordNo = rowOnTable;
+        log.debug("onEditReturnBDMInfo ::: end");
+    }
+
+    public void onEditReturnBUInfo(int rowOnTable) {
+        log.debug("onEditReturnBUInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonBUId = returnInfoView.getReasonId();
+        returnBURemark = returnInfoView.getReasonDetail();
+        editBURecordNo = rowOnTable;
+        log.debug("onEditReturnBUInfo ::: end");
+    }
+
+    public void onEditReturnMakerInfo(int rowOnTable) {
+        log.debug("onEditReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonMakerId = returnInfoView.getReasonId();
+        returnMakerRemark = returnInfoView.getReasonDetail();
+        editMakerRecordNo = rowOnTable;
+        log.debug("onEditReturnMakerInfo ::: end");
+    }
+
+    public void onDeleteReturnInfo(int rowOnTable) {
+        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnAADInfo(int rowOnTable) {
+        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnAADInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnBDMInfo(int rowOnTable) {
+        log.debug("onDeleteReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnBDMInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnBUInfo(int rowOnTable) {
+        log.debug("onDeleteReturnBUInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnBUInfo();
+        log.debug("onDeleteReturnBUInfo ::: end");
+    }
+
+    public void onDeleteReturnMakerInfo(int rowOnTable) {
+        log.debug("onDeleteReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnMakerInfo();
+        log.debug("onDeleteReturnMakerInfo ::: end");
+    }
+
     public void onSubmitReturnInfo(){ //Submit return to BDM
         log.debug("onSubmitReturnInfo ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
@@ -2255,40 +2232,10 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    //-SUBMIT CASE FROM ABDM
-    public void onSubmitToBDM(){
-        log.debug("onSubmitBDM");
-        HttpSession session = FacesUtil.getSession(false);
-        String queueName = Util.parseString(session.getAttribute("queueName"), "");
-        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
-        try{
-            fullApplicationControl.submitToBDM(queueName, wobNumber);
-
-            messageHeader = "Information.";
-            message = "Submit case success.";
-
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-        } catch (Exception ex) {
-            log.error("Exception while submit to BDM ( from ABDM ), ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-
-    }
-
     public void onSubmitReply(){ //Submit Reply From BDM to UW1
         log.debug("onSubmitReturnUW1");
-
+        _loadSessionVariable();
         try{
-            HttpSession session = FacesUtil.getSession(false);
-            //long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            String queueName = session.getAttribute("queueName").toString();
-            User user = (User) session.getAttribute("user");
-            long stepId = Long.parseLong(session.getAttribute("stepId").toString());
-
             if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)) {
                 returnControl.submitReply(workCaseId,workCasePreScreenId,queueName);
                 messageHeader = "Information.";
@@ -2311,6 +2258,32 @@ public class HeaderController extends BaseController {
             log.error("onSubmitReturnUW1 ::: exception occurred : ", ex);
         }
     }
+
+    public void onReturnToMaker(){
+        log.debug("onReturnToMaker ::: starting...");
+        boolean complete;
+        try{
+            if(returnReasonId != 0 && !Integer.toString(returnReasonId).equals("")){
+                prescreenBusinessControl.returnBDM(workCasePreScreenId, queueName, ActionCode.RETURN_TO_BDM.getVal());
+                messageHeader = "Information.";
+                message = "Return to BDM Maker success. Click 'OK' return to inbox.";
+                complete = true;
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+                log.debug("onReturnToMaker ::: success...");
+            } else {
+                complete = false;
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Return to BDM Maker failed. " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            log.error("onReturnToMaker ::: error... : ", ex);
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
+        }
+    }
+
+    //****************** END FUNCTION FOR RETURN INFO *******************//
 
     public boolean canSubmitWithoutReply(long workCaseId, long workCasePreScreenId) throws Exception{
         List<ReturnInfoView> returnInfoViews;
@@ -2400,91 +2373,6 @@ public class HeaderController extends BaseController {
 
             log.error("onCompleteCase ::: exception occurred : ", ex);
         }
-    }
-
-    public void onEditReturnInfo(int rowOnTable) {
-        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonId = returnInfoView.getReasonId();
-        returnRemark = returnInfoView.getReasonDetail();
-        editRecordNo = rowOnTable;
-        log.debug("onEditReturnInfo ::: end");
-    }
-
-    public void onEditReturnAADInfo(int rowOnTable) {
-        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonAADId = returnInfoView.getReasonId();
-        returnAADRemark = returnInfoView.getReasonDetail();
-        editAADRecordNo = rowOnTable;
-        log.debug("onEditReturnInfo ::: end");
-    }
-
-    public void onEditReturnBDMInfo(int rowOnTable) {
-        log.debug("onEditReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonBDMId = returnInfoView.getReasonId();
-        returnBDMRemark = returnInfoView.getReasonDetail();
-        editBDMRecordNo = rowOnTable;
-        log.debug("onEditReturnBDMInfo ::: end");
-    }
-
-    public void onEditReturnBUInfo(int rowOnTable) {
-        log.debug("onEditReturnBUInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonBUId = returnInfoView.getReasonId();
-        returnBURemark = returnInfoView.getReasonDetail();
-        editBURecordNo = rowOnTable;
-        log.debug("onEditReturnBUInfo ::: end");
-    }
-
-    public void onEditReturnMakerInfo(int rowOnTable) {
-        log.debug("onEditReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonMakerId = returnInfoView.getReasonId();
-        returnMakerRemark = returnInfoView.getReasonDetail();
-        editMakerRecordNo = rowOnTable;
-        log.debug("onEditReturnMakerInfo ::: end");
-    }
-
-    public void onDeleteReturnInfo(int rowOnTable) {
-        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnAADInfo(int rowOnTable) {
-        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnAADInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnBDMInfo(int rowOnTable) {
-        log.debug("onDeleteReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnBDMInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnBUInfo(int rowOnTable) {
-        log.debug("onDeleteReturnBUInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnBUInfo();
-        log.debug("onDeleteReturnBUInfo ::: end");
-    }
-
-    public void onDeleteReturnMakerInfo(int rowOnTable) {
-        log.debug("onDeleteReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnMakerInfo();
-        log.debug("onDeleteReturnMakerInfo ::: end");
     }
 
     //-------------- Function for Appraisal Request ( BDM ) -------------------//
@@ -2737,50 +2625,6 @@ public class HeaderController extends BaseController {
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
-    //----- Function for Return ---------//
-    public void onOpenReturnToMaker(){
-        _loadSessionVariable();
-        returnReasonId = 0;
-        returnRemark = "";
-        reasonList = new ArrayList<Reason>();
-        //reasonList = reasonDAO.getReasonByStepAction(stepId, ActionCode.RETURN_TO_BDM.getVal());
-        reasonList = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_BDM.getVal());
-
-        if(reasonList == null){
-            log.debug("onOpenReturnToMaker : reasonList : {}", reasonList);
-            reasonList = new ArrayList<Reason>();
-        }
-
-        userName = prescreenBusinessControl.getBDMMakerName(workCasePreScreenId);
-
-        RequestContext.getCurrentInstance().execute("returnMakerDlg.show()");
-    }
-
-    public void onReturnToMaker(){
-        log.debug("onReturnToMaker ::: starting...");
-        boolean complete;
-        try{
-            if(returnReasonId != 0 && !Integer.toString(returnReasonId).equals("")){
-                prescreenBusinessControl.returnBDM(workCasePreScreenId, queueName, ActionCode.RETURN_TO_BDM.getVal());
-                messageHeader = "Information.";
-                message = "Return to BDM Maker success. Click 'OK' return to inbox.";
-                complete = true;
-                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
-                log.debug("onReturnToMaker ::: success...");
-            } else {
-                complete = false;
-            }
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-        } catch (Exception ex){
-            messageHeader = "Exception.";
-            message = "Return to BDM Maker failed. " + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            log.error("onReturnToMaker ::: error... : ", ex);
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
-        }
-    }
-    //----- End function for Return -------//
-
     //---- Function for Request Appraisal ( Parallel ) ----//
     public void onRequestParallelAppraisal(){
         HttpSession session = FacesUtil.getSession(false);
@@ -2802,107 +2646,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-    //----- Function for Close Sale -------//
-    public void onOpenCloseSales(){
-        //Check SLA Over or not?
-        _loadSessionVariable();
-        submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-        if(submitOverSLA == 1){
-            //Show Close sales dialog with SLA Reason
-            reasonId = 0;
-            reasonList = reasonToStepDAO.getOverSLAReason(stepId);
-            slaRemark = "";
-        }else{
-            submitRemark = "";
-        }
-
-        RequestContext.getCurrentInstance().execute("closeSalesDlg.show()");
-    }
-
-    public void onCloseSales(){
-        _loadSessionVariable();
-        log.debug("onCloseSale ::: queueName : {}", queueName);
-        boolean complete = false;
-        String tmpRemark = "";
-        try{
-            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
-            log.debug("modifyFlag : {}", modifyFlag);
-            if (modifyFlag == 1) {
-                messageHeader = "Exception";
-                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else if (modifyFlag == 2) {
-                messageHeader = "Exception";
-                message = "Could not get data for PreScreen.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                if (submitOverSLA == 1) {
-                    if (reasonId != 0 && !Integer.toString(reasonId).equals("")) {
-                        complete = true;
-                        tmpRemark = slaRemark;
-                    }
-                } else {
-                    tmpRemark = submitRemark;
-                    complete = true;
-                }
-                log.debug("complete : {}", complete);
-                if (complete) {
-                    log.debug("complete true : starting duplicate data ");
-                    prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
-                    log.debug("Duplicate data complete and submit complete.");
-                    messageHeader = "Information.";
-                    message = "Close Sales Complete. Click 'OK' return Inbox.";
-                    showMessageRedirect();
-                }
-            }
-        }catch (Exception ex){
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            log.error("onCloseSales error : ", ex);
-            showMessageBox();
-        }
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-    }
-
-    public void onOpenAssignCheckerDialog() {
-        try {
-            bdmCheckerList = userDAO.findBDMChecker(user);
-            bdmCheckerId = "";
-            assignRemark = "";
-            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
-            RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
-        } catch (Exception ex) {
-            messageHeader = "Exception.";
-            message = "Exception while open Assign to Checker dialog. Please try again.";
-            showMessageBox();
-        }
-    }
-
-    public void onAssignToChecker() {
-        log.debug("onAssignToChecker ::: starting...");
-        boolean complete = false;
-        try {
-            if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
-                prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
-                //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-                complete = true;
-                messageHeader = "Information.";
-                message = "Assign to checker complete.";
-                showMessageRedirect();
-            } else {
-                complete = false;
-            }
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-            log.debug("onAssignToChecker ::: complete");
-        } catch (Exception ex) {
-            messageHeader = "Assign to checker failed.";
-            message = "Assign to checker failed. Cause : " + Util.getMessageException(ex);
-            showMessageBox();
-            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
-
-            log.error("onAssignToChecker ::: exception : {}", ex);
-        }
-    }
 
     public boolean checkAccessStage(String stageString){
         boolean accessible = false;
@@ -3731,5 +3474,75 @@ public class HeaderController extends BaseController {
         this.returnMakerRemark = returnMakerRemark;
     }
 
+    public int getSlaReasonId() {
+        return slaReasonId;
+    }
 
+    public void setSlaReasonId(int slaReasonId) {
+        this.slaReasonId = slaReasonId;
+    }
+
+    public int getCancelReasonId() {
+        return cancelReasonId;
+    }
+
+    public void setCancelReasonId(int cancelReasonId) {
+        this.cancelReasonId = cancelReasonId;
+    }
+
+    public int getCancelRequestReasonId() {
+        return cancelRequestReasonId;
+    }
+
+    public void setCancelRequestReasonId(int cancelRequestReasonId) {
+        this.cancelRequestReasonId = cancelRequestReasonId;
+    }
+
+    public String getCancelRequestRemark() {
+        return cancelRequestRemark;
+    }
+
+    public void setCancelRequestRemark(String cancelRequestRemark) {
+        this.cancelRequestRemark = cancelRequestRemark;
+    }
+
+    public int getCancelPriceReduceReasonId() {
+        return cancelPriceReduceReasonId;
+    }
+
+    public void setCancelPriceReduceReasonId(int cancelPriceReduceReasonId) {
+        this.cancelPriceReduceReasonId = cancelPriceReduceReasonId;
+    }
+
+    public String getCancelPriceReduceRemark() {
+        return cancelPriceReduceRemark;
+    }
+
+    public void setCancelPriceReduceRemark(String cancelPriceReduceRemark) {
+        this.cancelPriceReduceRemark = cancelPriceReduceRemark;
+    }
+
+    public boolean isSubmitForBDM() {
+        return isSubmitForBDM;
+    }
+
+    public void setSubmitForBDM(boolean isSubmitForBDM) {
+        this.isSubmitForBDM = isSubmitForBDM;
+    }
+
+    public boolean isSubmitForUW() {
+        return isSubmitForUW;
+    }
+
+    public void setSubmitForUW(boolean isSubmitUW) {
+        this.isSubmitForUW = isSubmitUW;
+    }
+
+    public boolean isSubmitForUW2() {
+        return isSubmitForUW2;
+    }
+
+    public void setSubmitForUW2(boolean isSubmitUW2) {
+        this.isSubmitForUW2 = isSubmitUW2;
+    }
 }

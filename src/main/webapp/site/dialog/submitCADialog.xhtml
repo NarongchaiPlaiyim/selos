@@ -13,9 +13,10 @@
     </p:blockUI>
     <h:outputText value="request pricing = #{headerController.requestPricing}"/>
     <h:outputText value=" pricing level = #{headerController.pricingDOALevel}"/>
-    <p:panel id="submitCA_Endorse" rendered="#{not headerController.requestPricing}" styleClass="panel">
-        <table class="content_table_form">
-            <h:panelGroup rendered="#{headerController.isSubmitToZM()}">
+    <h:outputText value=" isSubmitForBDM = #{headerController.isSubmitForBDM()}"/>
+    <p:panel id="submitCA_Endorse" rendered="#{not headerController.requestPricing and not headerController.isSubmitForBDM()}" styleClass="panel">
+        <h:panelGroup rendered="#{headerController.isSubmitToZM()}">
+            <table class="content_table_form">
                 <tr>
                     <td colspan="2" class="title left">Submit CA</td>
                 </tr>
@@ -33,10 +34,10 @@
                         </p:selectOneMenu>
                     </td>
                 </tr>
-            </h:panelGroup>
-        </table>
+            </table>
+        </h:panelGroup>
     </p:panel>
-    <p:panel id="submitCA_Pricing" rendered="#{headerController.requestPricing}" styleClass="panel">
+    <p:panel id="submitCA_Pricing" rendered="#{headerController.requestPricing and not headerController.isSubmitForBDM()}" styleClass="panel">
         <table class="content_table_form">
             <tr>
                 <td colspan="2" class="title left">Price Reduction Approval</td>
@@ -113,7 +114,7 @@
     <p:panel id="submitCA_Remark" styleClass="panel">
         <table class="content_table_form">
             <tr>
-                <td class="title left" width="190px">Remark :</td>
+                <td class="title left top" width="190px">Remark :</td>
                 <td>
                     <p:inputTextarea value="#{headerController.submitRemark}" autoResize="false"
                                      required="#{not empty param[btnSubmitFullApplication.clientId]}"
@@ -132,13 +133,13 @@
                 <td class="title left" width="190px">Reason for over SLA :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{headerController.zmEndorseUserId}"
+                                     value="#{headerController.slaReasonId}"
                                      required="#{not empty param[btnSubmitFullApplication.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{headerController.zmUserList}"
-                                       var="zmItem"
-                                       itemLabel="#{zmItem.id} - #{zmItem.userName}"
-                                       itemValue="#{zmItem.id}"/>
+                        <f:selectItems value="#{headerController.slaReasonList}"
+                                       var="reasonItem"
+                                       itemLabel="#{reasonItem.code} - #{reasonItem.description}"
+                                       itemValue="#{reasonItem.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -162,11 +163,11 @@
                          value="#{msg.get('app.button.submit')}"
                          styleClass="small"
                          actionListener="#{headerController.onSubmitBU()}"
-                         oncomplete="handleDialogRequest(xhr, status, args, 'submitFullAppDlg')"
+                         oncomplete="handleDialogRequest(xhr, status, args, 'submitBUDlg')"
                          process="@form"
                          update=":frmMain:submitCADlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                         styleClass="small" onclick="PF('submitFullAppDlg').hide(); PF('blockUI').hide()"/>
+                         styleClass="small" onclick="PF('submitBUDlg').hide(); PF('blockUI').hide()"/>
     </p:panel>
 </p:panel>
 </ui:composition>

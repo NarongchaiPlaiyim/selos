@@ -48,6 +48,8 @@ public class NCBBizTransform extends BusinessTransform {
     private final String ENQ_PURPOSE_IND = "01";
     private final String NCB_ACCOUNT_STATUS_TMB = "BRMS Rule";
 
+    private final String PERSONAL_LOAN_CODE = "05";
+
     @Inject
     @Config(name = "ncb.nccrs.bank.tmb")
     String TMB_BANK_THAI;
@@ -205,6 +207,18 @@ public class NCBBizTransform extends BusinessTransform {
                                             boolean isTMBAccount = false;
                                             NCBDetailView ncbDetailView = new NCBDetailView();
                                             //set accountType
+                                            if(subjectAccountModel.getAccounttype().equalsIgnoreCase(PERSONAL_LOAN_CODE)) {
+                                                if (!Util.isEmpty(subjectAccountModel.getInstallmentamount())) {
+                                                    BigDecimal installment = new BigDecimal(subjectAccountModel.getInstallmentamount());
+                                                    if(installment.compareTo(BigDecimal.ZERO) == 0){
+                                                        //account type revolving
+                                                    }else{
+                                                        //account type personal loan
+                                                    }
+                                                } else {
+                                                    //account type revolving
+                                                }
+                                            }
                                             AccountType accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
                                             ncbDetailView.setAccountType(accountType);
                                             //set tmb account

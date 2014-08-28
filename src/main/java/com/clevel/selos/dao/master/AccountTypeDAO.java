@@ -28,6 +28,7 @@ public class AccountTypeDAO extends GenericDAO<AccountType, Integer> {
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 1));
             criteria.add(Restrictions.eq("ncbCode", code.trim()));
+            criteria.add(Restrictions.eq("active", 1));
             accountType = (AccountType) criteria.uniqueResult();
 
             log.debug("getIndividualByCode. (accountType: {})", accountType);
