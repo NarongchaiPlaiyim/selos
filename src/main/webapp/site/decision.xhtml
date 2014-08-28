@@ -2619,7 +2619,7 @@
                                     <ui:repeat value="#{decision.decisionView.approveCollateralList}" var="approveCollView" varStatus="collIndex">
                                     <tr>
                                         <td class="title" style="width: 15%">#{msg.get('app.decision.label.jobId')}</td>
-                                        <td class="left" style="width: 35%">#{proposeColl.jobID}</td>
+                                        <td class="left" style="width: 35%">#{approveCollView.jobID}</td>
                                         <td class="right" colspan="2">
                                             <!-- Approved Collateral (Edit/Delete) Button -->
                                             <p:commandButton id="btnEditApprovedCollateral" styleClass="small"
