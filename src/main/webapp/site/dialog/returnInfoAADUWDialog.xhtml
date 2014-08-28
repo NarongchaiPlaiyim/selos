@@ -1,0 +1,90 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="returnInfoAADUWDlgPanel" styleClass="panel-dialog">
+        <table class="content_form" style="width: 100%">
+            <tr>
+                <td>
+                    <p:commandButton id="btnReturnInfoAADUWDlg" value="Add Return Code" styleClass="larger" title="Add Return Code"
+                                     action="#{headerController.onOpenAddReturnAADUWInfo()}"
+                                     oncomplete="addReturnAADUWInfoDlg.show()"
+                                     update=":frmMain:reasonAADUWId, :frmMain:remarkAADUW">
+                        <p:resetInput target=":frmMain:reasonAADUWId, :frmMain:remarkAADUW"/>
+                    </p:commandButton>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p:dataTable id="returnAADUWResult" var="returnInfoAADUW"
+                                 value="#{headerController.returnInfoViewList}"
+                                 rowKey="#{returnInfoAADUW.id}" rowIndexVar="rowIndex" style="width: 100%">
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width:15%;"
+                                          headerText="Return Code"/>
+                                <p:column style="width:25%;"
+                                          headerText="Description"/>
+                                <p:column style="width:25%;"
+                                          headerText="Reason"/>
+                                <p:column style="width:30%;"
+                                          headerText="Remark"/>
+                                <p:column style="width:5%"/>
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{returnInfoAADUW.returnCode}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfoAADUW.description}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfoAADUW.reason}"/>
+                        </p:column>
+                        <p:column styleClass="left">
+                            <h:outputText value="#{returnInfoAADUW.reasonDetail}"/>
+                        </p:column>
+                        <p:column styleClass="center">
+                            <p:commandButton title="Edit" process="@form"
+                                             icon="ui-icon-pencil"
+                                             rendered="#{returnInfoAADUW.canEdit}"
+                                             actionListener="#{headerController.onEditReturnAADUWInfo(rowIndex)}"
+                                             oncomplete="addReturnAADUWInfoDlg.show()"
+                                             update=":frmMain:reasonAADUWId, :frmMain:remarkAADUW">
+                            </p:commandButton>
+                            <p:commandButton title="Remove" process="@form"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfoAADUW.canEdit}"
+                                             action="#{headerController.onDeleteReturnAADUWInfo(rowIndex)}"
+                                             update=":frmMain:returnInfoAADUWDlgPanel">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton id="btnSubmitReturnAADUWSummary"
+                                     binding="#{btnSubmitReturnAADUWSummary}"
+                                     value="#{msg.get('app.button.submit')}"
+                                     styleClass="small"
+                                     actionListener="#{headerController.onSubmitReturnAADInfo()}"
+                                     oncomplete="handleReturnAADUWInfoDialogRequest(xhr, status, args)"
+                                     process="@form"
+                                     update=":frmMain:returnInfoAADUWDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
+                                     styleClass="small" onclick="returnInfoAADUWDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+</p:panel>
+
+<p:blockUI widgetVar="blockReturnInfoAADUWDlg" block="returnInfoAADUWDlgPanel" trigger=":frmMain:btnSubmitReturnAADUWSummary">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
+</ui:composition>

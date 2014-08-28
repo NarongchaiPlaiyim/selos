@@ -1,0 +1,59 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="addReturnAADUWInfoDlgPanel" styleClass="panel-dialog">
+    <table class="content_form">
+        <tr>
+            <td class="title right" style="min-width: 140px; width: 80px;">Return Code :</td>
+            <td>
+                <p:selectOneMenu id="reasonAADUWId" styleClass="reasonitem" style="min-width: 234px; width: 234px; max-width: 234px;!important;" size="1"
+                                 value="#{headerController.reasonAADUWId}"
+                                 required="#{not empty param[btnSubmitAddReturnAADUWInfo.clientId]}">
+                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                    <f:selectItems value="#{headerController.returnAADUWReason}"
+                                   var="reasonItem"
+                                   itemDescription="#{reasonItem.code} - #{reasonItem.description}"
+                                   itemLabel="#{reasonItem.code} - #{reasonItem.description}"
+                                   itemValue="#{reasonItem.id}"/>
+                    <p:ajax event="change" update="@this"/>
+                </p:selectOneMenu>
+            </td>
+        </tr>
+        <tr>
+            <td class="title right top">Remark :</td>
+            <td>
+                <p:inputTextarea id="remarkAADUW" value="#{headerController.returnAADUWRemark}" autoResize="false" cols="35"
+                                 rows="5" maxlength="200"></p:inputTextarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="center">
+                <p:commandButton id="btnSubmitAddReturnAADUWInfo"
+                                 styleClass="small"
+                                 binding="#{btnSubmitAddReturnAADUWInfo}"
+                                 value="#{msg.get('app.button.save')}"
+                                 actionListener="#{headerController.onSaveReturnAADUWInfo()}"
+                                 process="@form"
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADUWDlgPanel, :frmMain:addReturnAADUWInfoDlgPanel"
+                                 oncomplete="handleReturnAADUWAddDialogRequest(xhr, status, args)"/>
+                <p:commandButton id="dlgCancelReturnAADUWInfoBtn"
+                                 value="#{msg.get('app.button.cancel')}"
+                                 styleClass="small"
+                                 action="#{headerController.resetAddReturnAADUWInfo()}"
+                                 oncomplete="addReturnAADUWInfoDlg.hide()"
+                                 process="@form"
+                                 update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADUWDlgPanel"/>
+            </td>
+        </tr>
+    </table>
+</p:panel>
+
+<p:blockUI widgetVar="blockAddReturnAADUWInfoDlg" block="addReturnAADUWInfoDlgPanel" trigger=":frmMain:btnSubmitAddReturnAADUWInfo">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
+</ui:composition>
