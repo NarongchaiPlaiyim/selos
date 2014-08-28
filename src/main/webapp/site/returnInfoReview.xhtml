@@ -93,8 +93,8 @@
                                             <p:column headerText="#{msg.get('app.return.table.header.reason')}" style="width: 250px;"/>
                                             <p:column headerText="#{msg.get('app.return.table.header.reasonDetail')}" style="width: 250px;"/>
                                             <p:column headerText="#{msg.get('app.return.table.header.replyDetail')}" style="width: 250px;"/>
-                                            <p:column headerText="#{msg.get('app.return.table.header.challenge')}" style="width:150px;"/>
-                                            <p:column headerText="#{msg.get('app.return.table.header.acceptChallenge')}" style="width:150px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.challenge')}" style="width:180px;"/>
+                                            <p:column headerText="#{msg.get('app.return.table.header.acceptChallenge')}" style="width:180px;"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -113,15 +113,15 @@
                                     <p:column styleClass="left middle" style="width: 250px;">
                                         <h:outputText value="#{returnInfoVar.replyDetail}"/>
                                     </p:column>
-                                    <p:column styleClass="center top" style="width:150px;">
+                                    <p:column styleClass="center top" style="width:180px;">
                                         <p:selectOneRadio id="radioChal" value="#{returnInfoVar.challenge}" disabled="true"
                                                           required="#{not empty param[saveBtn.clientId]}" styleClass="normal_table">
                                             <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
                                         </p:selectOneRadio>
                                     </p:column>
-                                    <p:column styleClass="center top" style="width:150px;">
-                                        <p:selectOneRadio id="radioAcptChal" value="#{returnInfoVar.acceptChallenge}" disabled="#{returnInfoVar.challenge==1?true:false}"
+                                    <p:column styleClass="center top" style="width:180px;">
+                                        <p:selectOneRadio id="radioAcptChal" value="#{returnInfoVar.acceptChallenge}" disabled="#{returnInfoVar.challenge==1?true:false or returnReview.isDisabled('radioAcptChal')}"
                                                           required="#{not empty param[saveBtn.clientId]}" styleClass="normal_table">
                                             <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
@@ -143,6 +143,7 @@
                                              value="View Return History"
                                              binding="#{btnViewHistory}"
                                              styleClass="larger"
+                                             disabled="#{returnReview.isDisabled('viewHistoryButton')}"
                                              action="#{returnReview.onViewHistory()}"
                                              update=":frmMain"/>
                         </td>
@@ -259,6 +260,7 @@
                                                      binding="#{saveBtn}"
                                                      value="#{msg.get('app.button.save')}"
                                                      action="#{returnReview.onSave()}"
+                                                     disabled="#{returnReview.isDisabled('saveButton')}"
                                                      update=":frmMain :msgBoxSystemMessagePanel"
                                                      styleClass="medium"/>
                                     <p:commandButton id="cancelBtn"
@@ -266,6 +268,7 @@
                                                      value="#{msg.get('app.button.cancel')}"
                                                      styleClass="medium"
                                                      action="#{returnReview.initialResultView()}"
+                                                     disabled="#{returnReview.isDisabled('cancelButton')}"
                                                      update=":frmMain"/>
                                 </td>
                             </tr>

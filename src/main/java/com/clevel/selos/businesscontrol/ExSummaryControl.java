@@ -1,11 +1,17 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.CreditTypeDAO;
+import com.clevel.selos.dao.master.ProductFormulaDAO;
+import com.clevel.selos.dao.master.ProductProgramDAO;
 import com.clevel.selos.dao.master.RiskTypeDAO;
+import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.RiskType;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
@@ -54,9 +60,15 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     private DecisionDAO decisionDAO;
     @Inject
-    UWRuleResultDetailDAO uwRuleResultDetailDAO;
+    private UWRuleResultDetailDAO uwRuleResultDetailDAO;
     @Inject
-    ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    private ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    private TCGDAO tcgDAO;
+    @Inject
+    private ProductFormulaDAO productFormulaDAO;
+    @Inject
+    private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
 
     @Inject
     private ExSummaryTransform exSummaryTransform;
@@ -116,9 +128,9 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
-        ProposeLineView newCreditFacilityView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
-        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
-            exSummaryView.setTradeFinance(newCreditFacilityView);
+        ProposeLineView proposeLineView = proposeLineControl.findProposeLineViewByWorkCaseId(workCaseId);
+        if(proposeLineView != null && proposeLineView.getId() != 0){
+            exSummaryView.setTradeFinance(proposeLineView);
         } else {
             exSummaryView.setTradeFinance(null);
         }
@@ -314,10 +326,10 @@ public class ExSummaryControl extends BusinessControl {
             exSumCharacteristicView.setGroupExposureUW(null);
         }
 
-        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
-            if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.NORMAL){ // normal 1, prime 2
+        if(proposeLineView != null && proposeLineView.getId() != 0){
+            if(proposeLineView.getCreditCustomerType() == CreditCustomerType.NORMAL){ // normal 1, prime 2
                 exSumCharacteristicView.setCustomer("Normal");
-            } else if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.PRIME){
+            } else if(proposeLineView.getCreditCustomerType() == CreditCustomerType.PRIME){
                 exSumCharacteristicView.setCustomer("Prime");
             } else {
                 exSumCharacteristicView.setCustomer("-");
@@ -335,22 +347,45 @@ public class ExSummaryControl extends BusinessControl {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Collateral
+        User user = getCurrentUser();
         DecisionView decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
         BigDecimal tmpCashColl = null;
         BigDecimal tmpCoreAsset = null;
         BigDecimal tmpNonCore = null;
-        if(decisionView != null){
-            if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
-                for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
-                    if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
-                        for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
-                            if(nch != null && nch.getPotentialCollateral() != null){
-                                if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
-                                    tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
-                                    tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
-                                } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
-                                    tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+        if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.BDM.id()) {
+            if(!Util.isNull(proposeLineView)) {
+                if(proposeLineView.getProposeCollateralInfoViewList() != null && proposeLineView.getProposeCollateralInfoViewList().size() > 0){
+                    for(ProposeCollateralInfoView pcl : proposeLineView.getProposeCollateralInfoViewList()){
+                        if(pcl.getProposeCollateralInfoHeadViewList() != null && pcl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : pcl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if(!Util.isNull(decisionView)){
+                if(decisionView.getApproveCollateralList() != null && decisionView.getApproveCollateralList().size() > 0){
+                    for(ProposeCollateralInfoView acl : decisionView.getApproveCollateralList()){
+                        if(acl.getProposeCollateralInfoHeadViewList() != null && acl.getProposeCollateralInfoHeadViewList().size() > 0){
+                            for(ProposeCollateralInfoHeadView nch : acl.getProposeCollateralInfoHeadViewList()){
+                                if(nch != null && nch.getPotentialCollateral() != null){
+                                    if(nch.getPotentialCollateral().getId() == 1){ // Cash Collateral / BE
+                                        tmpCashColl = Util.add(tmpCashColl,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 2){ // Core Asset
+                                        tmpCoreAsset = Util.add(tmpCoreAsset,nch.getAppraisalValue());
+                                    } else if(nch.getPotentialCollateral().getId() == 3){ // Non - Core Asset
+                                        tmpNonCore = Util.add(tmpNonCore,nch.getAppraisalValue());
+                                    }
                                 }
                             }
                         }
@@ -367,8 +402,8 @@ public class ExSummaryControl extends BusinessControl {
 //        Sum of (Propose/PreApprove/Approve Limit)
         if(decisionView != null && decisionView.getApproveTotalCreditLimit()!=null){
             exSumCollateralView.setLimitApprove(decisionView.getApproveTotalCreditLimit());
-        } else if(newCreditFacilityView!=null && newCreditFacilityView.getTotalPropose()!=null) {
-            exSumCollateralView.setLimitApprove(newCreditFacilityView.getTotalPropose());
+        } else if(proposeLineView!=null && proposeLineView.getTotalPropose()!=null) {
+            exSumCollateralView.setLimitApprove(proposeLineView.getTotalPropose());
         } else {
             exSumCollateralView.setLimitApprove(BigDecimal.ZERO);
         }
@@ -376,8 +411,8 @@ public class ExSummaryControl extends BusinessControl {
         //Todo: Percent LTV
 //        (limitApprove + Sum(วงเงิน/ภาระสินเชื่อเดิม)) หาร (cashCollateralValue + coreAssetValue + noneCoreAssetValue)
         BigDecimal existingSMELimit = null;
-        if(newCreditFacilityView != null){
-            existingSMELimit = newCreditFacilityView.getExistingSMELimit();
+        if(proposeLineView != null){
+            existingSMELimit = proposeLineView.getExistingSMELimit();
         }
         exSumCollateralView.setPercentLTV(Util.multiply(Util.divide(Util.add(exSumCollateralView.getLimitApprove(),existingSMELimit),Util.add(Util.add(tmpCashColl,tmpCoreAsset),tmpNonCore)),BigDecimal.valueOf(100)));
 
@@ -617,34 +652,49 @@ public class ExSummaryControl extends BusinessControl {
         log.debug("calIncomeBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
-        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal totalWCTMB = BigDecimal.ZERO;
-        BigDecimal odLimit = BigDecimal.ZERO;
-        BigDecimal loanCoreWC = BigDecimal.ZERO;
+        BigDecimal limitBDM = BigDecimal.ZERO;
+        BigDecimal limitUW = BigDecimal.ZERO;
         BigDecimal adjusted = BigDecimal.ZERO;
         BigDecimal twelve = BigDecimal.valueOf(12);
 
-        User user = getCurrentUser();
-
-        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
             totalWCTMB = proposeLine.getTotalWCTmb();
-            if(user.getRole().getId() != RoleValue.UW.id()) {
-                odLimit = proposeLine.getTotalCommercialAndOBOD();
-                loanCoreWC = proposeLine.getTotalCommercial();
+            if(!Util.isNull(proposeLine.getProposeCreditInfoList()) && !Util.isZero(proposeLine.getProposeCreditInfoList().size())) {
+                for(ProposeCreditInfo creditInfo : proposeLine.getProposeCreditInfoList()) {
+                    if(!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getCreditType()) && !Util.isNull(creditInfo.getProductProgram())) {
+                        PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
+                        if(!Util.isNull(basicInfo) && !Util.isNull(basicInfo.getSpecialProgram()) && !Util.isNull(tcg) && !Util.isNull(tcg.getTcgFlag()) && !Util.isNull(proposeLine.getCreditCustomerType())) {
+                            ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram(), tcg.getTcgFlag());
+                            if(!Util.isNull(productFormula) && !Util.isNull(productFormula.getWcCalculate())) {
+                                if(productFormula.getWcCalculate() == 2) {
+                                    if(creditInfo.getProposeType() == ProposeType.P) {
+                                        limitBDM = Util.add(limitBDM, creditInfo.getLimit());
+                                    } else {
+                                        limitUW = Util.add(limitUW, creditInfo.getLimit());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        }
-
-        if(!Util.isNull(decision) && !Util.isZero(decision.getId()) && user.getRole().getId() == RoleValue.UW.id()){
-            odLimit = decision.getTotalApproveComAndOBOD();
-            loanCoreWC = decision.getTotalApproveCommercial();
         }
 
         if(dbr != null && dbr.getId() != 0){
             adjusted = dbr.getMonthlyIncomeAdjust();
         }
 
-        BigDecimal income = Util.divide(Util.add(Util.add(totalWCTMB,odLimit),loanCoreWC),Util.multiply(adjusted,twelve));
+        User user = getCurrentUser();
+        BigDecimal income = BigDecimal.ZERO;
+        if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // USE BDM
+            income = Util.divide(Util.add(totalWCTMB,limitBDM),Util.multiply(adjusted,twelve));
+        } else if (!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() != RoleValue.UW.id()) { // USE UW
+            income = Util.divide(Util.add(totalWCTMB,limitUW),Util.multiply(adjusted,twelve));
+        }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
