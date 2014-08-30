@@ -140,7 +140,7 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         int reasonId = 0;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("active", 1));
-        criteria.add(Restrictions.eq("code", "B001"));
+        criteria.add(Restrictions.eq("code", "C099"));
         criteria.addOrder(Order.desc("id"));
 
         List<Reason> list = criteria.list();

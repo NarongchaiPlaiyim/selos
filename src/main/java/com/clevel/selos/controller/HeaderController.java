@@ -144,6 +144,7 @@ public class HeaderController extends BaseController {
     private int reasonBDMId;
     private int reasonBUId;
     private int reasonMakerId;
+    private int reasonAADUWId;
 
     //Return BDM Dialog
     private List<ReturnInfoView> returnInfoViewList;
@@ -155,12 +156,14 @@ public class HeaderController extends BaseController {
     private List<Reason> returnBDMReason;
     private List<Reason> returnBUReason;
     private List<Reason> returnMakerReason;
+    private List<Reason> returnAADUWReason;
     private String returnRemark;
     private int editRecordNo;
     private int editAADRecordNo;
     private int editBDMRecordNo;
     private int editBURecordNo;
     private int editMakerRecordNo;
+    private int editAADUWRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     //Request Appraisal
@@ -225,6 +228,7 @@ public class HeaderController extends BaseController {
     private String returnBDMRemark;
     private String returnBURemark;
     private String returnMakerRemark;
+    private String returnAADUWRemark;
 
     //Check Pre-Screen Result
     private boolean canCloseSale;
@@ -667,7 +671,6 @@ public class HeaderController extends BaseController {
         try{
             if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
                 requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-                fullApplicationControl.duplicateFacilityData(workCaseId);
                 if(requestPricing){
                     pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
                     if(pricingDOALevel != 0){
@@ -731,6 +734,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
+                fullApplicationControl.duplicateFacilityData(workCaseId);
                 fullApplicationControl.submitToZM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
                 //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 messageHeader = msg.get("app.messageHeader.info");
@@ -1753,6 +1757,22 @@ public class HeaderController extends BaseController {
         log.debug("onOpenReturnMakerInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
     }
 
+    public void onOpenReturnAADUWInfoDialog(){
+        log.debug("onOpenReturnInfoDialog ::: starting...");
+        _loadSessionVariable();
+
+        //get from not accept List and from CheckMandateDoc
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+
+        //set return code master
+        //returnReason = returnControl.getReturnReasonList();
+        returnAADUWReason = reasonToStepDAO.getReturnReason(stepId, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+        returnAADUWRemark = "";
+        resetAddReturnAADInfo();
+
+        log.debug("onOpenReturnInfoDialog ::: returnInfoViewList size : {}", returnInfoViewList.size());
+    }
+
     public void resetAddReturnInfo(){
         returnRemark = "";
         reasonId = 0;
@@ -1783,6 +1803,12 @@ public class HeaderController extends BaseController {
         editMakerRecordNo = -1;
     }
 
+    public void resetAddReturnAADUWInfo(){
+        returnAADUWRemark = "";
+        reasonAADUWId = 0;
+        editAADUWRecordNo = -1;
+    }
+
     public void onOpenAddReturnInfo(){
         log.debug("onOpenAddReturnInfo ::: starting...");
         resetAddReturnInfo();
@@ -1794,18 +1820,23 @@ public class HeaderController extends BaseController {
     }
 
     public void onOpenAddReturnBDMInfo(){
-        log.debug("onOpenAddReturnInfo ::: starting...");
+        log.debug("onOpenAddReturnBDMInfo ::: starting...");
         resetAddReturnBDMInfo();
     }
 
     public void onOpenAddReturnBUInfo(){
-        log.debug("onOpenAddReturnInfo ::: starting...");
+        log.debug("onOpenAddReturnBUInfo ::: starting...");
         resetAddReturnBUInfo();
     }
 
     public void onOpenAddReturnMakerInfo(){
-        log.debug("onOpenAddReturnInfo ::: starting...");
+        log.debug("onOpenAddReturnMakerInfo ::: starting...");
         resetAddReturnMakerInfo();
+    }
+
+    public void onOpenAddReturnAADUWInfo(){
+        log.debug("onOpenAddReturnAADUWInfo ::: starting...");
+        resetAddReturnAADUWInfo();
     }
 
     public void onSaveReturnInfo(){
@@ -1946,6 +1977,34 @@ public class HeaderController extends BaseController {
         resetAddReturnMakerInfo();
 
         log.debug("onSaveReturnMakerInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
+    }
+
+    public void onSaveReturnAADUWInfo(){
+        log.debug("onSaveReturnAADUWInfo ::: starting... (reasonAADUWId: {})",reasonAADUWId);
+        Reason reason = reasonDAO.findById(reasonAADUWId);
+
+        if(editAADUWRecordNo>-1){
+            returnInfoViewList.get(editAADUWRecordNo).setReturnCode(reason.getCode());
+            returnInfoViewList.get(editAADUWRecordNo).setDescription(reason.getDescription());
+            returnInfoViewList.get(editAADUWRecordNo).setReasonDetail(returnAADUWRemark);
+            returnInfoViewList.get(editAADUWRecordNo).setCanEdit(true);
+            returnInfoViewList.get(editAADUWRecordNo).setReasonId(reasonAADUWId);
+        } else {
+            ReturnInfoView returnInfoView = new ReturnInfoView();
+            returnInfoView.setReturnCode(reason.getCode());
+            returnInfoView.setDescription(reason.getDescription());
+            returnInfoView.setReasonDetail(returnAADUWRemark);
+            returnInfoView.setCanEdit(true);
+            returnInfoView.setReasonId(reasonAADUWId);
+
+            returnInfoViewList.add(returnInfoView);
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+
+        resetAddReturnAADUWInfo();
+
+        log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
     public void onSubmitReturnInfo(){ //Submit return to BDM
@@ -2275,6 +2334,15 @@ public class HeaderController extends BaseController {
         log.debug("onEditReturnMakerInfo ::: end");
     }
 
+    public void onEditReturnAADUWInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonAADUWId = returnInfoView.getReasonId();
+        returnAADUWRemark = returnInfoView.getReasonDetail();
+        editAADUWRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
     public void onDeleteReturnInfo(int rowOnTable) {
         log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
         returnInfoViewList.remove(rowOnTable);
@@ -2313,6 +2381,14 @@ public class HeaderController extends BaseController {
 
         resetAddReturnMakerInfo();
         log.debug("onDeleteReturnMakerInfo ::: end");
+    }
+
+    public void onDeleteReturnAADUWInfo(int rowOnTable) {
+        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnAADUWInfo();
+        log.debug("onDeleteReturnInfo ::: end");
     }
 
     //-------------- Function for Appraisal Request ( BDM ) -------------------//
@@ -3557,5 +3633,37 @@ public class HeaderController extends BaseController {
 
     public void setReturnMakerRemark(String returnMakerRemark) {
         this.returnMakerRemark = returnMakerRemark;
+    }
+
+    public int getReasonAADUWId() {
+        return reasonAADUWId;
+    }
+
+    public void setReasonAADUWId(int reasonAADUWId) {
+        this.reasonAADUWId = reasonAADUWId;
+    }
+
+    public List<Reason> getReturnAADUWReason() {
+        return returnAADUWReason;
+    }
+
+    public void setReturnAADUWReason(List<Reason> returnAADUWReason) {
+        this.returnAADUWReason = returnAADUWReason;
+    }
+
+    public int getEditAADUWRecordNo() {
+        return editAADUWRecordNo;
+    }
+
+    public void setEditAADUWRecordNo(int editAADUWRecordNo) {
+        this.editAADUWRecordNo = editAADUWRecordNo;
+    }
+
+    public String getReturnAADUWRemark() {
+        return returnAADUWRemark;
+    }
+
+    public void setReturnAADUWRemark(String returnAADUWRemark) {
+        this.returnAADUWRemark = returnAADUWRemark;
     }
 }

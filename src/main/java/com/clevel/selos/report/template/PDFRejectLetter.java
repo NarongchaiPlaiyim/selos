@@ -360,7 +360,7 @@ public class PDFRejectLetter implements Serializable {
                     addressTH = addressTH.append(SPACE);
                 }
             }
-            if(!Util.isNull(addressTH.toString())){
+            if(!Util.isNull(addressTH)){
                 letterReport.setAddress(addressTH.toString());
             } else {
                 letterReport.setAddress(SPACE);
