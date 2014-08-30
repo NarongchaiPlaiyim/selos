@@ -1,9 +1,10 @@
-package com.clevel.selos.transform;
+package com.clevel.selos.transform.master;
 
 import com.clevel.selos.dao.master.BankAccountStatusDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.view.BankAccountStatusView;
+import com.clevel.selos.transform.Transform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

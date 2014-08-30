@@ -9,7 +9,7 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.MandateFieldTransform;
+import com.clevel.selos.transform.master.MandateFieldTransform;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

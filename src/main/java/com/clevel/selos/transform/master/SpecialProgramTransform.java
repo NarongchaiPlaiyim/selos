@@ -1,8 +1,9 @@
-package com.clevel.selos.transform;
+package com.clevel.selos.transform.master;
 
 import com.clevel.selos.dao.master.SpecialProgramDAO;
 import com.clevel.selos.model.db.master.SpecialProgram;
 import com.clevel.selos.model.view.master.SpecialProgramView;
+import com.clevel.selos.transform.Transform;
 
 import javax.inject.Inject;
 import java.util.List;

@@ -20,7 +20,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;

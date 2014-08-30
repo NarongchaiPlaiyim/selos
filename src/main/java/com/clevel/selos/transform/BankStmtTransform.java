@@ -19,6 +19,7 @@ import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.db.working.BankStmtSrcOfCollateralProof;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;

@@ -9,7 +9,7 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.transform.ActionTransform;
-import com.clevel.selos.transform.MandateFieldTransform;
+import com.clevel.selos.transform.master.MandateFieldTransform;
 import com.clevel.selos.transform.StepTransform;
 import org.slf4j.Logger;
 

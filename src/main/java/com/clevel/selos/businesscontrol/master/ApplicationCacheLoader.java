@@ -1,10 +1,13 @@
 package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.working.OpenAccountPurposeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.master.BankAccountProductTransform;
+import com.clevel.selos.transform.master.BankAccountPurposeTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
+import com.clevel.selos.transform.master.SpecialProgramTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 

@@ -1,8 +1,9 @@
-package com.clevel.selos.transform;
+package com.clevel.selos.transform.master;
 
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.view.master.BankAccountProductView;
+import com.clevel.selos.transform.Transform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BankAccountProductTransform extends Transform{
+public class BankAccountProductTransform extends Transform {
 
     @Inject
     @SELOS

@@ -5,7 +5,7 @@ import com.clevel.selos.dao.master.SpecialProgramDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SpecialProgram;
 import com.clevel.selos.model.view.master.SpecialProgramView;
-import com.clevel.selos.transform.SpecialProgramTransform;
+import com.clevel.selos.transform.master.SpecialProgramTransform;
 import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;

@@ -11,6 +11,8 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.transform.master.BankAccountPurposeTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.clevel.selos.transform;
+package com.clevel.selos.transform.master;
 
 import com.clevel.selos.dao.master.MandateFieldClassDAO;
 import com.clevel.selos.dao.master.MandateFieldConditionDAO;
@@ -9,6 +9,9 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserSysParameterKey;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.master.*;
+import com.clevel.selos.transform.ActionTransform;
+import com.clevel.selos.transform.StepTransform;
+import com.clevel.selos.transform.Transform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -17,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MandateFieldTransform extends Transform{
+public class MandateFieldTransform extends Transform {
 
     @Inject
     @SELOS

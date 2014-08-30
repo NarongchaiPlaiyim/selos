@@ -4,7 +4,7 @@ import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.BankAccountPurposeDAO;
 import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
-import com.clevel.selos.transform.BankAccountPurposeTransform;
+import com.clevel.selos.transform.master.BankAccountPurposeTransform;
 import com.clevel.selos.util.Util;
 
 import javax.faces.model.SelectItem;

@@ -9,6 +9,7 @@ import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.ProductGroupView;
+import com.clevel.selos.transform.master.SpecialProgramTransform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

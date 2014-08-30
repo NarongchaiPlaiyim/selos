@@ -6,7 +6,7 @@ import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
-import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
