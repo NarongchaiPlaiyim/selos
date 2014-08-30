@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
+import com.clevel.selos.businesscontrol.master.ProductControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;

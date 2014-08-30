@@ -4,6 +4,8 @@ import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.businesscontrol.master.BankAccountPurposeControl;
 import com.clevel.selos.businesscontrol.master.BankAccountTypeControl;
+import com.clevel.selos.businesscontrol.master.ProductControl;
+import com.clevel.selos.businesscontrol.master.SpecialProgramControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
@@ -32,6 +34,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -57,10 +60,6 @@ public class BasicInfo extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private ProductGroupDAO productGroupDAO;
-    @Inject
-    private SpecialProgramDAO specialProgramDAO;
-    @Inject
     private RequestTypeDAO requestTypeDAO;
     @Inject
     private RiskTypeDAO riskTypeDAO;
@@ -83,6 +82,8 @@ public class BasicInfo extends BaseController {
     private CustomerTransform customerTransform;
 
     @Inject
+    private ProductControl productControl;
+    @Inject
     private BasicInfoControl basicInfoControl;
     @Inject
     private OpenAccountControl openAccountControl;
@@ -90,11 +91,14 @@ public class BasicInfo extends BaseController {
     private BankAccountPurposeControl bankAccountPurposeControl;
     @Inject
     private BankAccountTypeControl bankAccountTypeControl;
+    @Inject
+    private SpecialProgramControl specialProgramControl;
+
 
 
     //*** Drop down List ***//
-    private List<ProductGroup> productGroupList;
-    private List<SpecialProgram> specialProgramList;
+    private List<SelectItem> productGroupList;
+    private List<SelectItem> specialProgramList;
     private List<RequestType> requestTypeList;
     private List<RiskType> riskTypeList;
     private List<SBFScoreView> sbfScoreViewList;
@@ -210,8 +214,8 @@ public class BasicInfo extends BaseController {
 
             basicInfoView = new BasicInfoView();
 
-            productGroupList = productGroupDAO.findProposeProductGroup();
-            specialProgramList = specialProgramDAO.findAll();
+            productGroupList = productControl.getProductGroupSelectItem();
+            specialProgramList = specialProgramControl.getSpecialProgramSelectItem();
             requestTypeList = requestTypeDAO.findAll();
             riskTypeList = riskTypeDAO.findAll();
             sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
@@ -702,11 +706,11 @@ public class BasicInfo extends BaseController {
         this.basicInfoView = basicInfoView;
     }
 
-    public List<ProductGroup> getProductGroupList() {
+    public List<SelectItem> getProductGroupList() {
         return productGroupList;
     }
 
-    public void setProductGroupList(List<ProductGroup> productGroupList) {
+    public void setProductGroupList(List<SelectItem> productGroupList) {
         this.productGroupList = productGroupList;
     }
 
@@ -718,11 +722,11 @@ public class BasicInfo extends BaseController {
         this.requestTypeList = requestTypeList;
     }
 
-    public List<SpecialProgram> getSpecialProgramList() {
+    public List<SelectItem> getSpecialProgramList() {
         return specialProgramList;
     }
 
-    public void setSpecialProgramList(List<SpecialProgram> specialProgramList) {
+    public void setSpecialProgramList(List<SelectItem> specialProgramList) {
         this.specialProgramList = specialProgramList;
     }
 

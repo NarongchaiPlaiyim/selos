@@ -3,12 +3,12 @@ package com.clevel.selos.transform;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.view.master.BankAccountProductView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 public class BankAccountProductTransform extends Transform{
 

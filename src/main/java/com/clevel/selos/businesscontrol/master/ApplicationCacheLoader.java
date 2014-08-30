@@ -43,6 +43,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private ProductGroupDAO productGroupDAO;
     @Inject private ProductTransform productTransform;
 
+    @Inject private SpecialProgramDAO specialProgramDAO;
+    @Inject private SpecialProgramTransform specialProgramTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -72,6 +75,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<ProductGroup> productGroupList = productGroupDAO.findAll();
         indexHash.put(ProductGroup.class.getName(), productTransform.transformToCache(productGroupList));
+
+        List<SpecialProgram> specialProgramList = specialProgramDAO.findAll();
+        indexHash.put(SpecialProgram.class.getName(), specialProgramTransform.transformToCache(specialProgramList));
 
         Util.listMap(indexHash);
     }
