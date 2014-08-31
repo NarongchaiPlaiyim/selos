@@ -4,10 +4,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.transform.*;
-import com.clevel.selos.transform.master.BankAccountProductTransform;
-import com.clevel.selos.transform.master.BankAccountPurposeTransform;
-import com.clevel.selos.transform.master.BankAccountTypeTransform;
-import com.clevel.selos.transform.master.SpecialProgramTransform;
+import com.clevel.selos.transform.master.*;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -49,6 +46,12 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private SpecialProgramDAO specialProgramDAO;
     @Inject private SpecialProgramTransform specialProgramTransform;
 
+    @Inject private RequestTypeDAO requestTypeDAO;
+    @Inject private RequestTypeTransform requestTypeTransform;
+
+    @Inject private RiskTypeDAO riskTypeDAO;
+    @Inject private RiskTypeTransform riskTypeTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -81,6 +84,12 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<SpecialProgram> specialProgramList = specialProgramDAO.findAll();
         indexHash.put(SpecialProgram.class.getName(), specialProgramTransform.transformToCache(specialProgramList));
+
+        List<RequestType> requestTypeList = requestTypeDAO.findAll();
+        indexHash.put(RequestType.class.getName(), requestTypeTransform.transformToCache(requestTypeList));
+
+        List<RiskType> riskTypeList = riskTypeDAO.findAll();
+        indexHash.put(RiskType.class.getName(), riskTypeTransform.transformToCache(riskTypeList));
 
         Util.listMap(indexHash);
     }

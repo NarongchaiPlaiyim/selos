@@ -2,10 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
-import com.clevel.selos.businesscontrol.master.BankAccountPurposeControl;
-import com.clevel.selos.businesscontrol.master.BankAccountTypeControl;
-import com.clevel.selos.businesscontrol.master.ProductControl;
-import com.clevel.selos.businesscontrol.master.SpecialProgramControl;
+import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
@@ -60,10 +57,6 @@ public class BasicInfo extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private RequestTypeDAO requestTypeDAO;
-    @Inject
-    private RiskTypeDAO riskTypeDAO;
-    @Inject
     private SBFScoreDAO sbfScoreDAO;
     @Inject
     private BankAccountProductDAO accountProductDAO;
@@ -93,14 +86,16 @@ public class BasicInfo extends BaseController {
     private BankAccountTypeControl bankAccountTypeControl;
     @Inject
     private SpecialProgramControl specialProgramControl;
-
-
+    @Inject
+    private RequestTypeControl requestTypeControl;
+    @Inject
+    private RiskTypeControl riskTypeControl;
 
     //*** Drop down List ***//
     private List<SelectItem> productGroupList;
     private List<SelectItem> specialProgramList;
-    private List<RequestType> requestTypeList;
-    private List<RiskType> riskTypeList;
+    private List<SelectItem> requestTypeList;
+    private List<SelectItem> riskTypeList;
     private List<SBFScoreView> sbfScoreViewList;
     private List<Bank> bankList;
 
@@ -216,8 +211,8 @@ public class BasicInfo extends BaseController {
 
             productGroupList = productControl.getProductGroupSelectItem();
             specialProgramList = specialProgramControl.getSpecialProgramSelectItem();
-            requestTypeList = requestTypeDAO.findAll();
-            riskTypeList = riskTypeDAO.findAll();
+            requestTypeList = requestTypeControl.getRequestTypeViewActive();
+            riskTypeList = riskTypeControl.getRiskTypeActive();
             sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
             bankList = bankDAO.getListRefinance();
 
@@ -714,11 +709,11 @@ public class BasicInfo extends BaseController {
         this.productGroupList = productGroupList;
     }
 
-    public List<RequestType> getRequestTypeList() {
+    public List<SelectItem> getRequestTypeList() {
         return requestTypeList;
     }
 
-    public void setRequestTypeList(List<RequestType> requestTypeList) {
+    public void setRequestTypeList(List<SelectItem> requestTypeList) {
         this.requestTypeList = requestTypeList;
     }
 
@@ -730,11 +725,11 @@ public class BasicInfo extends BaseController {
         this.specialProgramList = specialProgramList;
     }
 
-    public List<RiskType> getRiskTypeList() {
+    public List<SelectItem> getRiskTypeList() {
         return riskTypeList;
     }
 
-    public void setRiskTypeList(List<RiskType> riskTypeList) {
+    public void setRiskTypeList(List<SelectItem> riskTypeList) {
         this.riskTypeList = riskTypeList;
     }
 
