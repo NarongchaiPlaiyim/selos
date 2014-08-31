@@ -3,7 +3,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui">
 	<p:dialog id="#{id}" widgetVar="#{name}"
-		header="#{msg.get('app.postApp.dlg.submit02.title')}"
+		header="#{title}"
 		modal='true' resizable='false' draggable="false" closeOnEscape="true"
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
 		appendTo="@(body)"
