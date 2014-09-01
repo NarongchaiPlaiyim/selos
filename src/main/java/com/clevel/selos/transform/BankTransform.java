@@ -31,6 +31,8 @@ public class BankTransform extends Transform {
         bankView.setCode(bank.getCode());
         bankView.setBankName(bank.getName());
         bankView.setBankShortName(bank.getShortName());
+        bankView.setActive(bank.getActive());
+        bankView.setRefinance(bank.getRefinance());
         return bankView;
     }
 

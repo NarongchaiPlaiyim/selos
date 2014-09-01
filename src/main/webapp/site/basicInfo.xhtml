@@ -341,8 +341,8 @@
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
                                                                                    var="bankList"
-                                                                                   itemLabel="#{bankList.name}"
-                                                                                   itemValue="#{bankList.code}"/>
+                                                                                   itemLabel="#{bankList.label}"
+                                                                                   itemValue="#{bankList.value}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
@@ -618,7 +618,7 @@
 
                                                         <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}"
                                                                   style="width: 180px; max-width: 180px; min-width: 180px;">
-                                                            <h:outputText value="#{item.bankAccountProduct.name}"
+                                                            <h:outputText value="#{item.bankAccountProductView.name}"
                                                                           style="width: 180px; max-width: 180px; min-width: 180px;"/>
                                                         </p:column>
 

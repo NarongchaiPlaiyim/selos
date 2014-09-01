@@ -97,7 +97,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
-                                     value="#{basicInfo.openAccountView.bankAccountProduct.id}"
+                                     value="#{basicInfo.openAccountView.bankAccountProductView.id}"
                                      disabled="#{basicInfo.isDisabled('accountProduct')}"
                                      required="#{basicInfo.openAccountView.bankAccountTypeView.id != 0 and not empty param[saveBtnDialog.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>

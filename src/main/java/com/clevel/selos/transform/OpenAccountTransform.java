@@ -9,8 +9,10 @@ import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.BankAccountProductView;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.transform.master.BankAccountProductTransform;
 import com.clevel.selos.transform.master.BankAccountPurposeTransform;
 import com.clevel.selos.transform.master.BankAccountTypeTransform;
 
@@ -36,6 +38,8 @@ public class OpenAccountTransform extends Transform {
     CustomerTransform customerTransform;
     @Inject
     BankAccountPurposeTransform bankAccountPurposeTransform;
+    @Inject
+    BankAccountProductTransform bankAccountProductTransform;
 
     public OpenAccountTransform() {
     }
@@ -56,8 +60,8 @@ public class OpenAccountTransform extends Transform {
         openAccount.setBankAccountType(bankaccountType);
 
         BankAccountProduct bankAccountProduct = null;
-        if(openAccountView.getBankAccountProduct() != null && openAccountView.getBankAccountProduct().getId() != 0){
-            bankAccountProduct = bankAccountProductDAO.findById(openAccountView.getBankAccountProduct().getId());
+        if(openAccountView.getBankAccountProductView() != null && openAccountView.getBankAccountProductView().getId() != 0){
+            bankAccountProduct = bankAccountProductDAO.findById(openAccountView.getBankAccountProductView().getId());
         }
         openAccount.setBankAccountProduct(bankAccountProduct);
 
@@ -115,10 +119,11 @@ public class OpenAccountTransform extends Transform {
             openAccountView.setAccountName(accName.toString());
         }
 
-        openAccountView.setBankAccountProduct(openAccount.getBankAccountProduct());
-        if (openAccountView.getBankAccountProduct() == null) {
-            openAccountView.setBankAccountProduct(new BankAccountProduct());
-            openAccountView.getBankAccountProduct().setName("-"); // for view
+        BankAccountProductView bankAccountProductView = bankAccountProductTransform.transformToView(openAccount.getBankAccountProduct());
+        openAccountView.setBankAccountProductView(bankAccountProductView);
+        if (openAccountView.getBankAccountProductView() == null) {
+            openAccountView.setBankAccountProductView(new BankAccountProductView());
+            openAccountView.getBankAccountProductView().setName("-"); // for view
         }
 
         openAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
