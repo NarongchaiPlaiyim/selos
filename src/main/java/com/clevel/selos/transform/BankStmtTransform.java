@@ -81,7 +81,7 @@ public class BankStmtTransform extends Transform {
             AccountTypeView accountTypeView = new AccountTypeView();
             accountTypeView.setAccountType(dwhBankStatement.getDataSource()); //TODO: transform data source to account type
 
-            BankView bankView = bankTransform.getBankView(bankDAO.getTMBBank());
+            BankView bankView = bankTransform.transformToView(bankDAO.getTMBBank());
             bankStmtView.setBankView(bankView);
             bankStmtView.setBranchName(dwhBankStatement.getBranchCode());
         }
@@ -181,7 +181,7 @@ public class BankStmtTransform extends Transform {
         }
         bankStmtView.setId(bankStatement.getId());
         bankStmtView.setNotCountIncome(bankStatement.getNotCountIncome());
-        bankStmtView.setBankView(bankTransform.getBankView(bankStatement.getBank()));
+        bankStmtView.setBankView(bankTransform.transformToView(bankStatement.getBank()));
         bankStmtView.setBranchName(bankStatement.getBranch());
         if (bankStatement.getBankAccountType() != null) {
             bankStmtView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankStatement.getBankAccountType()));

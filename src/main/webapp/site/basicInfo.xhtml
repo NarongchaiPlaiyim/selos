@@ -307,8 +307,8 @@
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
                                                                                    var="bankList"
-                                                                                   itemLabel="#{bankList.name}"
-                                                                                   itemValue="#{bankList.code}"/>
+                                                                                   itemLabel="#{bankList.label}"
+                                                                                   itemValue="#{bankList.value}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
@@ -534,8 +534,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.borrowingTypeList}"
                                                                        var="borrowingType"
-                                                                       itemLabel="#{borrowingType.name}"
-                                                                       itemValue="#{borrowingType.id}"/>
+                                                                       itemLabel="#{borrowingType.label}"
+                                                                       itemValue="#{borrowingType.value}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>

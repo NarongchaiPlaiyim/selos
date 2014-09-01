@@ -212,7 +212,7 @@ public class BankStatementDetail extends BaseController {
         log.debug("Load drop-down items from database.");
         bankViewList = new ArrayList<BankView>();
         if (isTmbBank) {
-            bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
+            bankViewList.add(bankTransform.transformToView(bankDAO.getTMBBank()));
         } else {
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
         }

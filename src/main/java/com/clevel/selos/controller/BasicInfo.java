@@ -13,13 +13,14 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.model.view.master.SBFScoreView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.CustomerTransform;
-import com.clevel.selos.transform.SBFScoreTransform;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -57,13 +58,7 @@ public class BasicInfo extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private SBFScoreDAO sbfScoreDAO;
-    @Inject
     private BankAccountProductDAO accountProductDAO;
-    @Inject
-    private BankDAO bankDAO;
-    @Inject
-    private BorrowingTypeDAO borrowingTypeDAO;
     @Inject
     private CustomerDAO customerDAO;
 
@@ -90,20 +85,24 @@ public class BasicInfo extends BaseController {
     private RequestTypeControl requestTypeControl;
     @Inject
     private RiskTypeControl riskTypeControl;
+    @Inject
+    private SBFScoreControl sbfScoreControl;
+    @Inject BankControl bankControl;
+    @Inject BorrowingTypeControl borrowingTypeControl;
 
     //*** Drop down List ***//
     private List<SelectItem> productGroupList;
     private List<SelectItem> specialProgramList;
     private List<SelectItem> requestTypeList;
     private List<SelectItem> riskTypeList;
-    private List<SBFScoreView> sbfScoreViewList;
-    private List<Bank> bankList;
+    private List<SelectItem> sbfScoreViewList;
+    private List<SelectItem> bankList;
 
     private List<BankAccountTypeView> bankAccountTypeList;
     private List<BankAccountProduct> accountProductList;
     private List<BankAccountPurposeView> bankAccountPurposeViewList;
 
-    private List<BorrowingType> borrowingTypeList;
+    private List<SelectItem> borrowingTypeList;
 
     private List<String> yearList;
 
@@ -213,8 +212,8 @@ public class BasicInfo extends BaseController {
             specialProgramList = specialProgramControl.getSpecialProgramSelectItem();
             requestTypeList = requestTypeControl.getRequestTypeViewActive();
             riskTypeList = riskTypeControl.getRiskTypeActive();
-            sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
-            bankList = bankDAO.getListRefinance();
+            sbfScoreViewList =  sbfScoreControl.getSBFScoreActive();
+            bankList = bankControl.getBankRefinanceList();
 
             customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
 
@@ -226,7 +225,7 @@ public class BasicInfo extends BaseController {
 
             CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
-            borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
+            borrowingTypeList = borrowingTypeControl.getBorrowingTypeByCustomerEntity(customerEntity.getId());
 
             basicInfoView.setSpProgram(0);
             basicInfoView.setRefIn(0);
@@ -765,19 +764,19 @@ public class BasicInfo extends BaseController {
         this.bankAccountPurposeViewList = bankAccountPurposeViewList;
     }
 
-    public List<SBFScoreView> getSbfScoreViewList() {
+    public List<SelectItem> getSbfScoreViewList() {
         return sbfScoreViewList;
     }
 
-    public void setSbfScoreViewList(List<SBFScoreView> sbfScoreViewList) {
+    public void setSbfScoreViewList(List<SelectItem> sbfScoreViewList) {
         this.sbfScoreViewList = sbfScoreViewList;
     }
 
-    public List<Bank> getBankList() {
+    public List<SelectItem> getBankList() {
         return bankList;
     }
 
-    public void setBankList(List<Bank> bankList) {
+    public void setBankList(List<SelectItem> bankList) {
         this.bankList = bankList;
     }
 
@@ -805,11 +804,11 @@ public class BasicInfo extends BaseController {
         this.rowIndex = rowIndex;
     }
 
-    public List<BorrowingType> getBorrowingTypeList() {
+    public List<SelectItem> getBorrowingTypeList() {
         return borrowingTypeList;
     }
 
-    public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
+    public void setBorrowingTypeList(List<SelectItem> borrowingTypeList) {
         this.borrowingTypeList = borrowingTypeList;
     }
 

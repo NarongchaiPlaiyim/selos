@@ -14,7 +14,7 @@ import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.ProductTransform;
-import com.clevel.selos.transform.SBFScoreTransform;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.transform.ServiceSegmentTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
