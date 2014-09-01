@@ -52,6 +52,15 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private RiskTypeDAO riskTypeDAO;
     @Inject private RiskTypeTransform riskTypeTransform;
 
+    @Inject private SBFScoreDAO sbfScoreDAO;
+    @Inject private SBFScoreTransform sbfScoreTransform;
+
+    @Inject private BankDAO bankDAO;
+    @Inject private BankTransform bankTransform;
+
+    @Inject private BorrowingTypeDAO borrowingTypeDAO;
+    @Inject private BorrowingTypeTransform borrowingTypeTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -90,6 +99,15 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<RiskType> riskTypeList = riskTypeDAO.findAll();
         indexHash.put(RiskType.class.getName(), riskTypeTransform.transformToCache(riskTypeList));
+
+        List<SBFScore> sbfScoreList = sbfScoreDAO.findAll();
+        indexHash.put(SBFScore.class.getName(), sbfScoreTransform.transformToCache(sbfScoreList));
+
+        List<Bank> bankList = bankDAO.findAll();
+        indexHash.put(Bank.class.getName(), bankTransform.transformToCache(bankList));
+
+        List<BorrowingType> borrowingTypeList = borrowingTypeDAO.findAll();
+        indexHash.put(BorrowingType.class.getName(), borrowingTypeTransform.transformToCache(borrowingTypeList));
 
         Util.listMap(indexHash);
     }
