@@ -681,7 +681,7 @@
                                                                              process="@this"
                                                                              update=":creditInfoDlgForm"
                                                                              oncomplete="creditInfoDlg.show();"
-                                                                             disabled="#{proposeLine.isDisabled('propose.actionList')}">
+                                                                             disabled="#{proposeLine.isDisabled('editProposeCreditButton')}">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}" target="#{proposeLine.proposeCreditInfoDetailView}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}" target="#{proposeLine.rowIndex}"/>
                                                                 <p:resetInput target=":creditInfoDlgForm"/>
@@ -690,7 +690,7 @@
                                                             <p:commandButton icon="ui-icon-trash"
                                                                              process="@this"
                                                                              onsuccess="confirmDeleteCreditInfoDlg.show();"
-                                                                             disabled="#{proposeLine.isDisabled('propose.actionList')}">
+                                                                             disabled="#{proposeLine.isDisabled('removeProposeCreditButton')}">
                                                                 <f:setPropertyActionListener value="#{proposeCredit}" target="#{proposeLine.proposeCreditInfoDetailView}"/>
                                                             </p:commandButton>
                                                         </td>
@@ -1124,7 +1124,7 @@
                                         <p:dataTable id="tradeTable"
                                                      var="tradeTableItem"
                                                      value="#{proposeLine.proposeLineView.proposeFeeDetailViewList}"
-                                                     rowKey="#{tradeTableItem.ProposeFeeDetailView}"
+                                                     rowKey="#{tradeTableItem.proposeFeeDetailView}"
                                                      rowIndexVar="rowIndex"
                                                      style="width: 100%">
 
@@ -1259,7 +1259,7 @@
                                                                          update=":collateralDlgForm"
                                                                          process="@form"
                                                                          oncomplete="collateralInfoDlg.show();"
-                                                                         disabled="#{proposeLine.isDisabled('collateral.editButton') or proposeCollView.appraisalRequest != 0}">
+                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton') or proposeCollView.appraisalRequest != 0}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                             <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
                                                             <p:resetInput target=":collateralDlgForm"/>
@@ -1268,7 +1268,7 @@
                                                         <p:commandButton value="Remove"
                                                                          process="@form" styleClass="small"
                                                                          oncomplete="confirmDeleteCollateralInfoDlg.show()"
-                                                                         disabled="#{proposeLine.isDisabled('collateral.deleteButton') or proposeCollView.appraisalRequest != 0}}">
+                                                                         disabled="#{proposeLine.isDisabled('removeProposeCollateralButton') or proposeCollView.appraisalRequest != 0}}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                         </p:commandButton>
                                                     </td>
@@ -1730,7 +1730,7 @@
                                                                  update=":guarantorDlgForm"
                                                                  process="@form"
                                                                  oncomplete="guarantorInfoDlg.show();"
-                                                                 disabled="#{proposeLine.isDisabled('guarantor.actionList')}">
+                                                                 disabled="#{proposeLine.isDisabled('editGuarantorButton')}">
                                                     <f:setPropertyActionListener value="#{proposeGuarantorView}" target="#{proposeLine.proposeGuarantorInfoView}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}" target="#{proposeLine.rowIndex}"/>
                                                     <p:resetInput target=":guarantorDlgForm"/>
@@ -1738,7 +1738,7 @@
                                                 <p:commandButton icon="ui-icon-trash"
                                                                  process="@form"
                                                                  oncomplete="confirmDeleteGuarantorInfoDlg.show()"
-                                                                 disabled="#{proposeLine.isDisabled('guarantor.actionList')}">
+                                                                 disabled="#{proposeLine.isDisabled('removeGuarantorButton')}">
                                                     <f:setPropertyActionListener value="#{proposeGuarantorView}" target="#{proposeLine.proposeGuarantorInfoView}"/>
                                                 </p:commandButton>
                                             </p:column>
@@ -1828,7 +1828,7 @@
                                                 <p:commandButton icon="ui-icon-trash"
                                                                  process="@this"
                                                                  onsuccess="confirmDeleteConditionInfoDlg.show();"
-                                                                 disabled="#{proposeLine.isDisabled('condition.actionList')}">
+                                                                 disabled="#{proposeLine.isDisabled('removeConditionButton')}">
                                                     <f:setPropertyActionListener value="#{conditionInfoItem}" target="#{proposeLine.proposeConditionInfoView}"/>
                                                 </p:commandButton>
                                             </p:column>

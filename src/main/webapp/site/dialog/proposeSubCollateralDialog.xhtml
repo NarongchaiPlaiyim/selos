@@ -11,12 +11,15 @@
             <tr>
                 <td class="title" style="width: 35%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.collateralType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 65%">
                     <p:selectOneMenu id="dlgSubCollateralType"
                                      value="#{proposeLine.proposeCollateralInfoSubView.subCollateralType.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[addSubCollDlg.clientId]}">
+                                     required="#{not empty param[addSubCollDlg.clientId]}"
+                                     disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralType')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.subCollateralTypeList}"
                                        var="subCollateralTypeItem"
@@ -30,10 +33,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.titleDeed')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.titleDeed}"
-                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                                 required="#{not empty param[addSubCollDlg.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.titleDeed')}">
                     <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -42,11 +48,14 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.address')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.address}"
                                  style="width: 300px;"
-                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                                 required="#{not empty param[addSubCollDlg.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.address')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -55,10 +64,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.landOffice')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.landOffice}"
-                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                                 required="#{not empty param[addSubCollDlg.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.landOffice')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -67,10 +79,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.collateralOwner')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.collateralOwnerAAD}"
-                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                                 required="#{not empty param[addSubCollDlg.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.collateralOwner')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -79,6 +94,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.collateralName')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <table border="0" style="width: 100%; margin-left: -3px;">
@@ -87,7 +104,8 @@
                                 <p:selectOneMenu id="dlgCollateralOwnerUW"
                                                  value="#{proposeLine.collOwnerId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
-                                                 required="#{not empty param[addCollOwnerUW.clientId]}">
+                                                 required="#{not empty param[addCollOwnerUW.clientId]}"
+                                                 disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralName')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{proposeLine.collateralOwnerUwAllList}"
                                                    var="collateralOwnerUWItem"
@@ -104,7 +122,8 @@
                                         styleClass="small"
                                         action="#{proposeLine.onAddCollateralOwnerUW()}"
                                         process=":subCollateralDlgForm"
-                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                        disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralName')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -143,7 +162,8 @@
                                              icon="ui-icon-trash"
                                              process=":subCollateralDlgForm"
                                              actionListener="#{proposeLine.onDeleteCollateralOwnerUW(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm"
+                                             disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralName.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -153,6 +173,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.mortgageType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <table border="0" style="width: 100%; margin-left: -3px;">
@@ -161,7 +183,8 @@
                                 <p:selectOneMenu id="dlgMortgageType"
                                                  value="#{proposeLine.mortgageTypeId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
-                                                 required="#{not empty param[addMortgageType.clientId]}">
+                                                 required="#{not empty param[addMortgageType.clientId]}"
+                                                 disabled="#{proposeLine.isDisabled('collateral.subcoll.mortgageType')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{proposeLine.mortgageTypeViewList}"
                                                    var="mortgageTypeItem"
@@ -178,7 +201,8 @@
                                         styleClass="small"
                                         actionListener="#{proposeLine.onAddMortgageType()}"
                                         process="@form"
-                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                        disabled="#{proposeLine.isDisabled('collateral.subcoll.mortgageType')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -217,7 +241,8 @@
                                              icon="ui-icon-trash"
                                              process=":subCollateralDlgForm"
                                              actionListener="#{proposeLine.onDeleteMortgageType(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm"
+                                             disabled="#{proposeLine.isDisabled('collateral.subcoll.mortgageType.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -227,6 +252,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.relatedWith')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <table border="0" style="width: 100%; margin-left: -3px;">
@@ -235,7 +262,8 @@
                                 <p:selectOneMenu id="dlgRelatedWith"
                                                  value="#{proposeLine.relateWithSubId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
-                                                 required="#{not empty param[addRelationWith.clientId]}">
+                                                 required="#{not empty param[addRelationWith.clientId]}"
+                                                 disabled="#{proposeLine.isDisabled('collateral.subcoll.relatedWith')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{proposeLine.relateWithList}"
                                                    var="relatedWithItem"
@@ -252,7 +280,8 @@
                                         styleClass="small"
                                         action="#{proposeLine.onAddRelatedWith()}"
                                         process="@form"
-                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                        disabled="#{proposeLine.isDisabled('collateral.subcoll.relatedWith')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -291,7 +320,8 @@
                                              icon="ui-icon-trash"
                                              process=":subCollateralDlgForm"
                                              actionListener="#{proposeLine.onDeleteRelatedWith(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm"
+                                             disabled="#{proposeLine.isDisabled('collateral.subcoll.relatedWith.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -301,6 +331,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.appraisalValue')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.appraisalValue}"
@@ -309,6 +341,7 @@
                                  onkeydown="return onKeyDownNegMoney(event);"
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.appraisalValue')}"
                                  style="width:200px;text-align: right">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
@@ -319,6 +352,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
+                    <h:outputText value="#{proposeLine.mandate('collateral.subcoll.mortgageValue')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.mortgageValue}"
@@ -327,6 +362,7 @@
                                  onkeydown="return onKeyDownNegMoney(event);"
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.mortgageValue')}"
                                  style="width:200px;text-align: right">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
@@ -346,12 +382,14 @@
                                      actionListener="#{proposeLine.onSaveSubCollateral()}"
                                      process=":subCollateralDlgForm"
                                      update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
+                                     disabled="#{proposeLine.isDisabled('collateral.subcoll.saveButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
                                      update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
                                      action="#{proposeLine.onCancelSubCollateralInfo()}"
+                                     disabled="#{proposeLine.isDisabled('collateral.subcoll.cancelButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"/>
                 </td>
             </tr>

@@ -10,10 +10,13 @@
                 <tr>
                     <td class="title" style="width: 45%">
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.loanType')}"/>
+                        <h:outputText value="#{proposeLine.mandate('condition.loanType')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left" style="width: 55%">
                         <p:inputText styleClass="large" id="loanType"
                                      value="#{proposeLine.proposeConditionInfoView.loanType}"
+                                     readonly="#{proposeLine.isDisabled('condition.loanType')}}"
                                      required="#{not empty param[addConditionDlg.clientId]}">
                         </p:inputText>
                     </td>
@@ -22,11 +25,14 @@
                 <tr>
                     <td class="title">
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.conditionDesc')}"/>
+                        <h:outputText value="#{proposeLine.mandate('condition.conditionDesc')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
                         <p:inputTextarea id="conditionDesc"
                                          rows="3" cols="50"
                                          value="#{proposeLine.proposeConditionInfoView.conditionDesc}"
+                                         readonly="#{proposeLine.isDisabled('condition.conditionDesc')}"
                                          required="#{not empty param[addConditionDlg.clientId]}" >
                         </p:inputTextarea>
                     </td>
@@ -42,10 +48,12 @@
                                 actionListener="#{proposeLine.onSaveConditionInfo()}"
                                 process=":conditionDlgForm"
                                 update=":conditionDlgForm,:frmMain:conditionInfoDetailTable"
+                                disabled="#{proposeLine.isDisabled('condition.saveButton')}"
                                 oncomplete="handleDialogRequest(xhr, status, args, 'conditionDlg')"/>
                         <p:spacer width="10" height="0"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                onclick="PF('conditionDlg').hide()"/>
+                                         disabled="#{proposeLine.isDisabled('condition.cancelButton')}"
+                                        onclick="PF('conditionDlg').hide()"/>
                     </td>
                 </tr>
                 <tr>
