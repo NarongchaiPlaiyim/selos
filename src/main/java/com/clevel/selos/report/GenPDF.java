@@ -291,9 +291,9 @@ public class GenPDF extends ReportService implements Serializable {
         } else if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
             if (!Util.isNull(pdfReject_letter)){
 //                log.debug("--logic Disable Buttom Print Reject Letter Report. {}",codeByExSum);
-                if (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) &&
-                        Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-                    log.debug("CancelCode by ExSum Not match");
+                if (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
+                    Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy())){
+                    log.debug("#### CancelCode by ExSum and CancelCode by UWResult is Null ####");
                     rejectType = true;
                 }
             } else {
