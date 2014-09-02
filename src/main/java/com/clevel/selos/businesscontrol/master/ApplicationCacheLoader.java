@@ -61,6 +61,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private BorrowingTypeDAO borrowingTypeDAO;
     @Inject private BorrowingTypeTransform borrowingTypeTransform;
 
+    @Inject private DocumentTypeDAO documentTypeDAO;
+    @Inject private DocumentTypeTransform documentTypeTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -108,6 +111,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<BorrowingType> borrowingTypeList = borrowingTypeDAO.findAll();
         indexHash.put(BorrowingType.class.getName(), borrowingTypeTransform.transformToCache(borrowingTypeList));
+
+        List<DocumentType> documentTypeList = documentTypeDAO.findAll();
+        indexHash.put(DocumentType.class.getName(), documentTypeTransform.transformToCache(documentTypeList));
 
         Util.listMap(indexHash);
     }
