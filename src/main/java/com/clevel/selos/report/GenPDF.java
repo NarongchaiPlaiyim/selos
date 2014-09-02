@@ -282,27 +282,23 @@ public class GenPDF extends ReportService implements Serializable {
         // ###### Disable Buttom Print Reject Letter ######
         if (statusId == StatusValue.CANCEL_CA.value()){
             if (!Util.isNull(cancelRejectInfo)){
-                log.debug("--cancelRejectInfo is not null. {}",cancelRejectInfo);
                 if (!Util.isZero(pdfReject_letter.getColorByUwRleResultSummary()) && !code.containsKey(cancelRejectInfo.getReason().getCode())){
                     rejectType = true;
-                    log.debug("--Disable Buttom Print Reject Letter statusId = 90001 but can not red color and not reason code. {}",statusId);
                 }
             }
+            log.debug("--statusId by CANCEL CA = {}",statusId);
         } else if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
-            if (!Util.isNull(pdfReject_letter)){
-//                log.debug("--logic Disable Buttom Print Reject Letter Report. {}",codeByExSum);
-                if (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-                    Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy())){
-                    log.debug("#### CancelCode by ExSum and CancelCode by UWResult is Null ####");
-                    rejectType = true;
-                }
+            if (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
+                Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy())){
+                log.debug("CancelCode by ExSum and CancelCode by UWResult is Null.");
+                rejectType = true;
             } else {
                 rejectType = false;
             }
-            log.debug("--rejectType = {}",statusId);
+            log.debug("--statusId by Reject UW = {}",statusId);
         } else if (statusId == StatusValue.REJECT_CA.value()){
             rejectType = false;
-            log.debug("--rejectType = {}",statusId);
+            log.debug("--statusId by Reject CA = {}",statusId);
         }  else {
             rejectType = true;
             log.debug("--rejectType not in (90001,90002,90004,90007) {}",statusId);
