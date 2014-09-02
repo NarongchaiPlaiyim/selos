@@ -4,6 +4,7 @@ import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.master.SBFScoreView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

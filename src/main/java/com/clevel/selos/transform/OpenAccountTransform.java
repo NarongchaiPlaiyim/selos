@@ -9,6 +9,12 @@ import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.BankAccountProductView;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.transform.master.BankAccountProductTransform;
+import com.clevel.selos.transform.master.BankAccountPurposeTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -30,6 +36,10 @@ public class OpenAccountTransform extends Transform {
     BankAccountTypeTransform bankAccountTypeTransform;
     @Inject
     CustomerTransform customerTransform;
+    @Inject
+    BankAccountPurposeTransform bankAccountPurposeTransform;
+    @Inject
+    BankAccountProductTransform bankAccountProductTransform;
 
     public OpenAccountTransform() {
     }
@@ -50,8 +60,8 @@ public class OpenAccountTransform extends Transform {
         openAccount.setBankAccountType(bankaccountType);
 
         BankAccountProduct bankAccountProduct = null;
-        if(openAccountView.getBankAccountProduct() != null && openAccountView.getBankAccountProduct().getId() != 0){
-            bankAccountProduct = bankAccountProductDAO.findById(openAccountView.getBankAccountProduct().getId());
+        if(openAccountView.getBankAccountProductView() != null && openAccountView.getBankAccountProductView().getId() != 0){
+            bankAccountProduct = bankAccountProductDAO.findById(openAccountView.getBankAccountProductView().getId());
         }
         openAccount.setBankAccountProduct(bankAccountProduct);
 
@@ -72,24 +82,13 @@ public class OpenAccountTransform extends Transform {
             List<OpenAccountPurpose> openAccountPurposeList = new ArrayList<OpenAccountPurpose>();
             for (BankAccountPurposeView bpv : openAccountView.getBankAccountPurposeView()){
                 OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
-                openAccountPurpose.setAccountPurpose(bpv.getPurpose());
+                openAccountPurpose.setAccountPurpose(bankAccountPurposeTransform.transformToModel(bpv));
                 openAccountPurposeList.add(openAccountPurpose);
             }
             openAccount.setOpenAccountPurposeList(openAccountPurposeList);
         } else {
             openAccount.setOpenAccountPurposeList(null);
         }
-
-//        private int requestType;
-//        private String accountNumber;
-//        private BankBranch bankBranch;
-//        private String term;
-//        private int numberOfDep;
-//        private List<OpenAccountDeposit> openAccountDepositList;
-//        private int confirmOpenAccount;
-//        private List<OpenAccountCredit> openAccountCreditList;
-
-
         return openAccount;
     }
 
@@ -120,10 +119,11 @@ public class OpenAccountTransform extends Transform {
             openAccountView.setAccountName(accName.toString());
         }
 
-        openAccountView.setBankAccountProduct(openAccount.getBankAccountProduct());
-        if (openAccountView.getBankAccountProduct() == null) {
-            openAccountView.setBankAccountProduct(new BankAccountProduct());
-            openAccountView.getBankAccountProduct().setName("-"); // for view
+        BankAccountProductView bankAccountProductView = bankAccountProductTransform.transformToView(openAccount.getBankAccountProduct());
+        openAccountView.setBankAccountProductView(bankAccountProductView);
+        if (openAccountView.getBankAccountProductView() == null) {
+            openAccountView.setBankAccountProductView(new BankAccountProductView());
+            openAccountView.getBankAccountProductView().setName("-"); // for view
         }
 
         openAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
@@ -135,8 +135,7 @@ public class OpenAccountTransform extends Transform {
         List<BankAccountPurposeView> bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
         if(openAccount.getOpenAccountPurposeList() != null && openAccount.getOpenAccountPurposeList().size() > 0){
             for (OpenAccountPurpose oap : openAccount.getOpenAccountPurposeList()){
-                BankAccountPurposeView bankAccountPurposeView = new BankAccountPurposeView();
-                bankAccountPurposeView.setPurpose(oap.getAccountPurpose());
+                BankAccountPurposeView bankAccountPurposeView = bankAccountPurposeTransform.transformToView(oap.getAccountPurpose());
                 bankAccountPurposeView.setSelected(true);
                 bankAccountPurposeViewList.add(bankAccountPurposeView);
             }
@@ -148,9 +147,9 @@ public class OpenAccountTransform extends Transform {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < openAccountView.getBankAccountPurposeView().size(); i++) {
                 if (i == 0) {
-                    stringBuilder.append(openAccountView.getBankAccountPurposeView().get(i).getPurpose().getName());
+                    stringBuilder.append(openAccountView.getBankAccountPurposeView().get(i).getName());
                 } else {
-                    stringBuilder.append(", " + openAccountView.getBankAccountPurposeView().get(i).getPurpose().getName());
+                    stringBuilder.append(", " + openAccountView.getBankAccountPurposeView().get(i).getName());
                 }
             }
             openAccountView.setPurposeForShow(stringBuilder.toString());

@@ -117,7 +117,8 @@ public class CollateralBizTransform extends BusinessTransform {
 
             List<HeadCollateralData> headCollateralDataList = appraisalData.getHeadCollateralDataList();
             List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
-            if(!Util.isNull(headCollateralDataList) && headCollateralDataList.size() > 0){
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+            if(Util.isSafetyList(headCollateralDataList)){
                 for(HeadCollateralData headCollateralData: headCollateralDataList){
                     ProposeCollateralInfoHeadView proposeCollateralInfoHeadView = new ProposeCollateralInfoHeadView();
                     proposeCollateralInfoHeadView.setTitleDeed(headCollateralData.getTitleDeed());
@@ -133,8 +134,7 @@ public class CollateralBizTransform extends BusinessTransform {
                     }*/
 
                     List<SubCollateralData> subCollateralDataList = headCollateralData.getSubCollateralDataList();
-                    List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-                    if(!Util.isNull(subCollateralDataList) && subCollateralDataList.size()>0){
+                    if(Util.isSafetyList(subCollateralDataList)){
                         for(SubCollateralData subCollateralData: subCollateralDataList){
                             ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                             CollateralType collateralTypeSub = collateralTypeDAO.findByCollateralCode(subCollateralData.getHeadCollType());

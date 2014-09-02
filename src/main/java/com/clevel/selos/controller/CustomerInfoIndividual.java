@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.master.DocumentTypeControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
@@ -28,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -51,8 +53,6 @@ public class CustomerInfoIndividual implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
-    @Inject
-    private DocumentTypeDAO documentTypeDAO;
     @Inject
     private RelationDAO relationDAO;
     @Inject
@@ -94,9 +94,11 @@ public class CustomerInfoIndividual implements Serializable {
 
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private DocumentTypeControl documentTypeControl;
 
     //*** Drop down List ***//
-    private List<DocumentType> documentTypeList;
+    private List<SelectItem> documentTypeList;
     private List<Relation> relationIndividualList;
     private List<Relation> relationSpouseList;
     private List<Reference> referenceIndividualList;
@@ -381,7 +383,7 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoSearchSpouse = new CustomerInfoView();
         customerInfoSearchSpouse.reset();
 
-        documentTypeList = documentTypeDAO.findByCustomerEntityId(1);
+        documentTypeList = documentTypeControl.getDocumentTypeByCustomerEntity(1);
 
         titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
         titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
@@ -2216,11 +2218,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.customerInfoView = customerInfoView;
     }
 
-    public List<DocumentType> getDocumentTypeList() {
+    public List<SelectItem> getDocumentTypeList() {
         return documentTypeList;
     }
 
-    public void setDocumentTypeList(List<DocumentType> documentTypeList) {
+    public void setDocumentTypeList(List<SelectItem> documentTypeList) {
         this.documentTypeList = documentTypeList;
     }
 

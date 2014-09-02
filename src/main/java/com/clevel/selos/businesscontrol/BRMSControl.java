@@ -14,6 +14,7 @@ import com.clevel.selos.model.db.master.MandateDocument;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.UWRuleResultTransform;
 import com.clevel.selos.util.DateTimeUtil;

@@ -18,6 +18,7 @@ import com.clevel.selos.model.db.working.UWRuleResultSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;

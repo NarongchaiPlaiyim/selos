@@ -10,6 +10,8 @@ public class BankView implements Serializable {
     private int code;
     private String bankName;
     private String bankShortName;
+    private int refinance;
+    private int active;
 
     public int getCode() {
         return code;
@@ -33,6 +35,22 @@ public class BankView implements Serializable {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public int getRefinance() {
+        return refinance;
+    }
+
+    public void setRefinance(int refinance) {
+        this.refinance = refinance;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
     @Override

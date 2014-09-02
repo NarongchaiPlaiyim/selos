@@ -8,11 +8,15 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.ProductGroupView;
+import com.clevel.selos.transform.master.SpecialProgramTransform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductTransform extends Transform{
     @SELOS
@@ -24,6 +28,8 @@ public class ProductTransform extends Transform{
     ProductProgramDAO productProgramDAO;
     @Inject
     ProductGroupDAO productGroupDAO;
+    @Inject
+    SpecialProgramTransform specialProgramTransform;
 
     public PrdGroupToPrdProgramView transformToView(PrdGroupToPrdProgram prdGroupToPrdProgram){
         PrdGroupToPrdProgramView prdGroupToPrdProgramView = new PrdGroupToPrdProgramView();
@@ -62,6 +68,8 @@ public class ProductTransform extends Transform{
             productGroupView.setDescription(productGroup.getDescription());
             productGroupView.setBrmsCode(productGroup.getBrmsCode());
             productGroupView.setActive(productGroup.getActive());
+            productGroupView.setAddProposeCredit(productGroup.getAddProposeCredit());
+            productGroupView.setSpecialLTV(productGroup.getSpecialLTV());
         }
         return productGroupView;
     }
@@ -82,20 +90,10 @@ public class ProductTransform extends Transform{
             productFormulaView.setProgramToCreditTypeView(transformToView(productFormula.getProgramToCreditType()));
             productFormulaView.setReduceFrontEndFee(productFormula.getReduceFrontEndFee());
             productFormulaView.setReducePricing(productFormula.getReducePricing());
-            productFormulaView.setSpecialProgramView(transformToView(productFormula.getSpecialProgram()));
+            productFormulaView.setSpecialProgramView(specialProgramTransform.transformToView(productFormula.getSpecialProgram()));
             productFormulaView.setWcCalculate(productFormula.getWcCalculate());
         }
         return productFormulaView;
-    }
-
-    public SpecialProgramView transformToView(SpecialProgram specialProgram){
-        SpecialProgramView specialProgramView = new SpecialProgramView();
-        if(specialProgram != null){
-            specialProgramView.setId(specialProgram.getId());
-            specialProgramView.setCode(specialProgram.getCode());
-            specialProgramView.setActive(specialProgram.getActive());
-        }
-        return specialProgramView;
     }
 
     public PrdProgramToCreditTypeView transformToView(PrdProgramToCreditType prdProgramToCreditType){
@@ -165,10 +163,20 @@ public class ProductTransform extends Transform{
                 return productProgramViewList;
             }
         } catch (Exception ex) {
-            log.error("",ex);
+            log.error("transformToView: {}", ex);
         }
         return null;
     }
 
+    public Map<Integer, ProductGroupView> transformToCache(List<ProductGroup> productGroupList){
+        if(productGroupList == null || productGroupList.size() == 0)
+            return null;
+        Map<Integer, ProductGroupView> _tmpMap = new ConcurrentHashMap<Integer, ProductGroupView>();
+        for(ProductGroup productGroup : productGroupList){
+            ProductGroupView productGroupView = transformToView(productGroup);
+            _tmpMap.put(productGroupView.getId(), productGroupView);
+        }
+        return _tmpMap;
+    }
 
 }

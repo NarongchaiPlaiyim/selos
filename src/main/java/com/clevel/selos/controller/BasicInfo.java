@@ -1,7 +1,9 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
+import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
@@ -10,13 +12,17 @@ import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.BankAccountProductView;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.model.view.master.SBFScoreView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.CustomerTransform;
-import com.clevel.selos.transform.SBFScoreTransform;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -28,6 +34,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -53,29 +60,6 @@ public class BasicInfo extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private ProductGroupDAO productGroupDAO;
-    @Inject
-    private SpecialProgramDAO specialProgramDAO;
-    @Inject
-    private RequestTypeDAO requestTypeDAO;
-    @Inject
-    private RiskTypeDAO riskTypeDAO;
-    @Inject
-    private SBFScoreDAO sbfScoreDAO;
-    @Inject
-    private BankAccountTypeDAO bankAccountTypeDAO;
-    @Inject
-    private BankAccountProductDAO accountProductDAO;
-    @Inject
-    private BankAccountPurposeDAO accountPurposeDAO;
-    @Inject
-    private BankDAO bankDAO;
-    @Inject
-    private BorrowingTypeDAO borrowingTypeDAO;
-    @Inject
-    private CustomerDAO customerDAO;
-
-    @Inject
     private BankAccountTypeTransform bankAccountTypeTransform;
     @Inject
     private SBFScoreTransform sbfScoreTransform;
@@ -83,25 +67,45 @@ public class BasicInfo extends BaseController {
     private CustomerTransform customerTransform;
 
     @Inject
+    private ProductControl productControl;
+    @Inject
     private BasicInfoControl basicInfoControl;
     @Inject
     private OpenAccountControl openAccountControl;
+    @Inject
+    private BankAccountPurposeControl bankAccountPurposeControl;
+    @Inject
+    private BankAccountTypeControl bankAccountTypeControl;
+    @Inject
+    private BankAccountProductControl bankAccountProductControl;
+    @Inject
+    private SpecialProgramControl specialProgramControl;
+    @Inject
+    private RequestTypeControl requestTypeControl;
+    @Inject
+    private RiskTypeControl riskTypeControl;
+    @Inject
+    private SBFScoreControl sbfScoreControl;
+    @Inject
+    private BankControl bankControl;
+    @Inject
+    private BorrowingTypeControl borrowingTypeControl;
+    @Inject
+    private CustomerInfoControl customerInfoControl;
 
     //*** Drop down List ***//
-    private List<ProductGroup> productGroupList;
-    private List<SpecialProgram> specialProgramList;
-    private List<RequestType> requestTypeList;
-    private List<RiskType> riskTypeList;
-    private List<SBFScoreView> sbfScoreViewList;
-    private List<Bank> bankList;
+    private List<SelectItem> productGroupList;
+    private List<SelectItem> specialProgramList;
+    private List<SelectItem> requestTypeList;
+    private List<SelectItem> riskTypeList;
+    private List<SelectItem> sbfScoreViewList;
+    private List<SelectItem> bankList;
 
-    private List<BankAccountType> bankAccountTypeList;
-    private List<BankAccountProduct> accountProductList;
-    private List<BankAccountPurpose> accountPurposeList;
-
+    private List<BankAccountTypeView> bankAccountTypeList;
+    private List<BankAccountProductView> accountProductList;
     private List<BankAccountPurposeView> bankAccountPurposeViewList;
 
-    private List<BorrowingType> borrowingTypeList;
+    private List<SelectItem> borrowingTypeList;
 
     private List<String> yearList;
 
@@ -207,30 +211,24 @@ public class BasicInfo extends BaseController {
 
             basicInfoView = new BasicInfoView();
 
-            productGroupList = productGroupDAO.findProposeProductGroup();
-            specialProgramList = specialProgramDAO.findAll();
-            requestTypeList = requestTypeDAO.findAll();
-            riskTypeList = riskTypeDAO.findAll();
-            sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
-            bankList = bankDAO.getListRefinance();
+            productGroupList = productControl.getProductGroupSelectItem();
+            specialProgramList = specialProgramControl.getSpecialProgramSelectItem();
+            requestTypeList = requestTypeControl.getRequestTypeViewActive();
+            riskTypeList = riskTypeControl.getRiskTypeActive();
+            sbfScoreViewList =  sbfScoreControl.getSBFScoreActive();
+            bankList = bankControl.getBankRefinanceList();
 
             customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
 
-            bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-            accountProductList = new ArrayList<BankAccountProduct>();
-            accountPurposeList = accountPurposeDAO.findAll();
-            accountNameList = new ArrayList<CustomerInfoView>();
-            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
 
-            for(BankAccountPurpose oap : accountPurposeList){
-                BankAccountPurposeView purposeView = new BankAccountPurposeView();
-                purposeView.setPurpose(oap);
-                bankAccountPurposeViewList.add(purposeView);
-            }
+            bankAccountTypeList = bankAccountTypeControl.getOpenAccountTypeList();
+            accountProductList = new ArrayList<BankAccountProductView>();
+            accountNameList = new ArrayList<CustomerInfoView>();
+            bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActiveList();
 
             CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
-            borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
+            borrowingTypeList = borrowingTypeControl.getBorrowingTypeByCustomerEntity(customerEntity.getId());
 
             basicInfoView.setSpProgram(0);
             basicInfoView.setRefIn(0);
@@ -274,18 +272,11 @@ public class BasicInfo extends BaseController {
 
         openAccountView = new OpenAccountView();
         accountNameList = new ArrayList<CustomerInfoView>();
-        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        accountProductList = new ArrayList<BankAccountProduct>();
+        bankAccountTypeList = bankAccountTypeControl.getOpenAccountTypeList();
+        accountProductList = new ArrayList<BankAccountProductView>();
 
         customerId = 0;
-
-        accountPurposeList = accountPurposeDAO.findAll();
-        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-        for(BankAccountPurpose oap : accountPurposeList){
-            BankAccountPurposeView purposeView = new BankAccountPurposeView();
-            purposeView.setPurpose(oap);
-            bankAccountPurposeViewList.add(purposeView);
-        }
+        bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActiveList();
     }
 
     public void onSelectEditAccount(){
@@ -300,19 +291,12 @@ public class BasicInfo extends BaseController {
 
             accountNameList = cloner.deepClone(openAccountView.getAccountNameList());
 
-            bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
-            for(BankAccountPurpose oap : accountPurposeList){
-                BankAccountPurposeView purposeView = new BankAccountPurposeView();
-                purposeView.setPurpose(oap);
-                bankAccountPurposeViewList.add(purposeView);
-            }
+            bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActiveList();
 
-            for(BankAccountPurposeView bapv : openAccountView.getBankAccountPurposeView()){
-                if(bapv.isSelected()){
-                    for(BankAccountPurposeView purposeView : bankAccountPurposeViewList){
-                        if(bapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
-                            purposeView.setSelected(true);
-                        }
+            for(BankAccountPurposeView _OpenBAPV : openAccountView.getBankAccountPurposeView()){
+                for(BankAccountPurposeView bankAccountPurposeView : bankAccountPurposeViewList){
+                    if(_OpenBAPV.getId() == bankAccountPurposeView.getId()){
+                        bankAccountPurposeView.setSelected(true);
                     }
                 }
             }
@@ -322,7 +306,7 @@ public class BasicInfo extends BaseController {
     }
 
     public void onChangeAccountType(){
-        accountProductList = accountProductDAO.findByBankAccountTypeId(openAccountView.getBankAccountTypeView().getId());
+        accountProductList = bankAccountProductControl.getAccountProductByAccountTypeId(openAccountView.getBankAccountTypeView().getId());
     }
 
     public void onSave(){
@@ -630,7 +614,8 @@ public class BasicInfo extends BaseController {
                 }
             }
         }
-        CustomerInfoView customerInfoView = customerTransform.transformToView(customerDAO.findById(customerId));
+
+        CustomerInfoView customerInfoView = customerInfoControl.getCustomerById(customerId);
         accountNameList.add(customerInfoView);
     }
 
@@ -659,16 +644,48 @@ public class BasicInfo extends BaseController {
         openAccountView.setAccountNameList(accountNameList);
 
         if(openAccountView.getBankAccountTypeView().getId() != 0){
+            for(BankAccountTypeView bankAccountTypeView : bankAccountTypeList){
+                if(bankAccountTypeView.getId() == openAccountView.getBankAccountTypeView().getId()){
+                    openAccountView.setBankAccountTypeView(bankAccountTypeView);
+                    break;
+                }
+            }
+        } else {
+            openAccountView.getBankAccountTypeView().setName("-");
+        }
+
+        if(openAccountView.getBankAccountTypeView().getId() == 0){
+            openAccountView.getBankAccountTypeView().setName("-");
+        }
+        /*if(openAccountView.getBankAccountTypeView().getId() != 0){
             openAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(openAccountView.getBankAccountTypeView().getId())));
         }else{
             openAccountView.getBankAccountTypeView().setName("-");
         }
+        if(openAccountView.getBankAccountProductView().getId() == 0){
+            openAccountView.getBankAccountProductView().setName("-");
+        }*/
 
-        if(openAccountView.getBankAccountProduct().getId() != 0){
-            openAccountView.setBankAccountProduct(accountProductDAO.findById(openAccountView.getBankAccountProduct().getId()));
-        }else{
-            openAccountView.getBankAccountProduct().setName("-");
+        if(openAccountView.getBankAccountProductView().getId() != 0){
+            for(BankAccountProductView bankAccountProductView : accountProductList){
+                if(bankAccountProductView.getId() == openAccountView.getBankAccountProductView().getId()){
+                    openAccountView.setBankAccountProductView(bankAccountProductView);
+                    break;
+                }
+            }
+        } else {
+            openAccountView.getBankAccountProductView().setName("-");
         }
+
+        if(openAccountView.getBankAccountProductView().getId() == 0){
+            openAccountView.getBankAccountProductView().setName("-");
+        }
+
+        /*if(openAccountView.getBankAccountProductView().getId() != 0){
+            openAccountView.setBankAccountProductView(openAccountView.getBankAccountProductView());
+        }else{
+            openAccountView.getBankAccountProductView().setName("-");
+        }*/
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -677,17 +694,17 @@ public class BasicInfo extends BaseController {
             if(bia.isSelected()){
                 if(openAccountView.getBankAccountPurposeView().size() == 0){
                     openAccountView.getBankAccountPurposeView().add(bia);
-                    stringBuilder.append(bia.getPurpose().getName());
+                    stringBuilder.append(bia.getName());
                 }else{
                     openAccountView.getBankAccountPurposeView().add(bia);
-                    stringBuilder.append(", "+bia.getPurpose().getName());
+                    stringBuilder.append(", " + bia.getName());
                 }
             }
         }
 
         if(!stringBuilder.toString().isEmpty()){
             openAccountView.setPurposeForShow(stringBuilder.toString());
-        }else{
+        } else {
             openAccountView.setPurposeForShow("-");
         }
 
@@ -716,35 +733,35 @@ public class BasicInfo extends BaseController {
         this.basicInfoView = basicInfoView;
     }
 
-    public List<ProductGroup> getProductGroupList() {
+    public List<SelectItem> getProductGroupList() {
         return productGroupList;
     }
 
-    public void setProductGroupList(List<ProductGroup> productGroupList) {
+    public void setProductGroupList(List<SelectItem> productGroupList) {
         this.productGroupList = productGroupList;
     }
 
-    public List<RequestType> getRequestTypeList() {
+    public List<SelectItem> getRequestTypeList() {
         return requestTypeList;
     }
 
-    public void setRequestTypeList(List<RequestType> requestTypeList) {
+    public void setRequestTypeList(List<SelectItem> requestTypeList) {
         this.requestTypeList = requestTypeList;
     }
 
-    public List<SpecialProgram> getSpecialProgramList() {
+    public List<SelectItem> getSpecialProgramList() {
         return specialProgramList;
     }
 
-    public void setSpecialProgramList(List<SpecialProgram> specialProgramList) {
+    public void setSpecialProgramList(List<SelectItem> specialProgramList) {
         this.specialProgramList = specialProgramList;
     }
 
-    public List<RiskType> getRiskTypeList() {
+    public List<SelectItem> getRiskTypeList() {
         return riskTypeList;
     }
 
-    public void setRiskTypeList(List<RiskType> riskTypeList) {
+    public void setRiskTypeList(List<SelectItem> riskTypeList) {
         this.riskTypeList = riskTypeList;
     }
 
@@ -756,19 +773,19 @@ public class BasicInfo extends BaseController {
         this.openAccountView = openAccountView;
     }
 
-    public List<BankAccountType> getBankAccountTypeList() {
+    public List<BankAccountTypeView> getBankAccountTypeList() {
         return bankAccountTypeList;
     }
 
-    public void setBankAccountTypeList(List<BankAccountType> bankAccountTypeList) {
+    public void setBankAccountTypeList(List<BankAccountTypeView> bankAccountTypeList) {
         this.bankAccountTypeList = bankAccountTypeList;
     }
 
-    public List<BankAccountProduct> getAccountProductList() {
+    public List<BankAccountProductView> getAccountProductList() {
         return accountProductList;
     }
 
-    public void setAccountProductList(List<BankAccountProduct> accountProductList) {
+    public void setAccountProductList(List<BankAccountProductView> accountProductList) {
         this.accountProductList = accountProductList;
     }
 
@@ -780,19 +797,19 @@ public class BasicInfo extends BaseController {
         this.bankAccountPurposeViewList = bankAccountPurposeViewList;
     }
 
-    public List<SBFScoreView> getSbfScoreViewList() {
+    public List<SelectItem> getSbfScoreViewList() {
         return sbfScoreViewList;
     }
 
-    public void setSbfScoreViewList(List<SBFScoreView> sbfScoreViewList) {
+    public void setSbfScoreViewList(List<SelectItem> sbfScoreViewList) {
         this.sbfScoreViewList = sbfScoreViewList;
     }
 
-    public List<Bank> getBankList() {
+    public List<SelectItem> getBankList() {
         return bankList;
     }
 
-    public void setBankList(List<Bank> bankList) {
+    public void setBankList(List<SelectItem> bankList) {
         this.bankList = bankList;
     }
 
@@ -820,11 +837,11 @@ public class BasicInfo extends BaseController {
         this.rowIndex = rowIndex;
     }
 
-    public List<BorrowingType> getBorrowingTypeList() {
+    public List<SelectItem> getBorrowingTypeList() {
         return borrowingTypeList;
     }
 
-    public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
+    public void setBorrowingTypeList(List<SelectItem> borrowingTypeList) {
         this.borrowingTypeList = borrowingTypeList;
     }
 

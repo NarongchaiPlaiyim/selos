@@ -1,4 +1,4 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.view.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,6 +13,7 @@ public class ProductGroupView implements Serializable{
     private String brmsCode;
     private int specialLTV;
     private int active;
+    private int addProposeCredit;
 
     public int getId() {
         return id;
@@ -60,6 +61,14 @@ public class ProductGroupView implements Serializable{
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public int getAddProposeCredit() {
+        return addProposeCredit;
+    }
+
+    public void setAddProposeCredit(int addProposeCredit) {
+        this.addProposeCredit = addProposeCredit;
     }
 
     @Override

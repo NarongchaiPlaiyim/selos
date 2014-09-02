@@ -1,15 +1,18 @@
-package com.clevel.selos.transform;
+package com.clevel.selos.transform.master;
 
 
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.view.BankAccountTypeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.transform.Transform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BankAccountTypeTransform extends Transform {
     @SELOS
@@ -32,24 +35,17 @@ public class BankAccountTypeTransform extends Transform {
             bankAccountTypeView.setOpenAccountFlag(bankAccountType.getOpenAccountFlag());
             bankAccountTypeView.setBankStatementFlag(bankAccountType.getBankStatementFlag());
             bankAccountTypeView.setOthBankStatementFlag(bankAccountType.getOthBankStatementFlag());
+            bankAccountTypeView.setActive(bankAccountType.getActive());
             return bankAccountTypeView;
         }
         return null;
     }
 
     public BankAccountType getBankAccountType(BankAccountTypeView bankAccountTypeView) {
-        if (bankAccountTypeView != null) {
-            BankAccountType bankAccountType = new BankAccountType();
-            bankAccountType.setId(bankAccountTypeView.getId());
-            bankAccountType.setName(bankAccountTypeView.getName());
-            bankAccountType.setShortName(bankAccountTypeView.getShortName());
-            bankAccountType.setBankStatementFlag(bankAccountTypeView.getBankStatementFlag());
-            bankAccountType.setOthBankStatementFlag(bankAccountTypeView.getOthBankStatementFlag());
-            bankAccountType.setOpenAccountFlag(bankAccountTypeView.getOpenAccountFlag());
-            bankAccountType.setActive(bankAccountTypeView.getActive());
-            return bankAccountType;
-        }
-        return null;
+        if(bankAccountTypeView == null || bankAccountTypeView.getId() == 0)
+            return null;
+        BankAccountType bankAccountType = bankAccountTypeDAO.findById(bankAccountTypeView.getId());
+        return bankAccountType;
     }
 
     public List<BankAccountTypeView> getBankAccountTypeView(List<BankAccountType> bankAccountTypes) {
@@ -63,5 +59,16 @@ public class BankAccountTypeTransform extends Transform {
             bankAccountTypeViews.add(getBankAccountTypeView(bankAccountType));
         }
         return bankAccountTypeViews;
+    }
+
+    public Map<Integer, BankAccountTypeView> transformToCache(List<BankAccountType> bankAccountTypeList){
+        if(bankAccountTypeList == null)
+            return null;
+        Map<Integer, BankAccountTypeView> _tmpMap = new ConcurrentHashMap<Integer, BankAccountTypeView>();
+        for(BankAccountType bankAccountType : bankAccountTypeList){
+            BankAccountTypeView bankAccountTypeView = getBankAccountTypeView(bankAccountType);
+            _tmpMap.put(bankAccountTypeView.getId(), bankAccountTypeView);
+        }
+        return _tmpMap;
     }
 }

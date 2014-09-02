@@ -11,15 +11,15 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.AccountStatusTransform;
-import com.clevel.selos.transform.BankAccountStatusTransform;
-import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.BankTransform;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -212,7 +212,7 @@ public class BankStatementDetail extends BaseController {
         log.debug("Load drop-down items from database.");
         bankViewList = new ArrayList<BankView>();
         if (isTmbBank) {
-            bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
+            bankViewList.add(bankTransform.transformToView(bankDAO.getTMBBank()));
         } else {
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
         }

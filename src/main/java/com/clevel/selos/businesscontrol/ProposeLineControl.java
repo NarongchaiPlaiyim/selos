@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.master.BaseRateControl;
+import com.clevel.selos.businesscontrol.master.ProductControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
@@ -20,6 +21,7 @@ import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.ProductGroupView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.*;
@@ -2694,7 +2696,8 @@ public class ProposeLineControl extends BusinessControl {
                     }
                     sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
                     sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
-                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
+//                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
+                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalPropose); //ให้เปลี่ยนเป็น Total Exposure ของ Group  (จาก Existing credit) +  Total Propose Credit
                 }
             }
             proposeLine.setTotalPropose(sumTotalPropose);                 //sumTotalPropose All Credit in this case

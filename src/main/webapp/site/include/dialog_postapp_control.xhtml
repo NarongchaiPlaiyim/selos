@@ -14,6 +14,7 @@
 		<ui:param name="formId" value="postApp_submit02_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onSubmitCAWithRemark"/>
+		<ui:param name="title" value="#{msg.get('app.postApp.dlg.submit02.title')}" />
 	</ui:include>
 	<ui:include src="/site/dialog/postAppReturn01Dialog.xhtml">
 		<ui:param name="id" value="postApp_returnBDM_Dlg"/>
@@ -61,6 +62,7 @@
 		<ui:param name="formId" value="postApp_cancelCA_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onCancelCA"/>
+		<ui:param name="title" value="#{msg.get('app.postApp.dlg.cancel01.title')}" />
 	</ui:include>
 	<ui:include src="/site/dialog/postAppCancel01Dialog.xhtml">
 		<ui:param name="id" value="postApp_cancelDisbursement_Dlg"/>
@@ -68,6 +70,7 @@
 		<ui:param name="formId" value="postApp_cancelDisbursement_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onCancelDisbursement"/>
+		<ui:param name="title" value="#{msg.get('app.postApp.dlg.cancelDisbursement.title')}" />
 	</ui:include>
 	<ui:include src="/site/dialog/postAppSubmit01Dialog.xhtml">
 		<ui:param name="id" value="postApp_reqPriceReduct_Dlg"/>
@@ -82,6 +85,7 @@
 		<ui:param name="formId" value="postApp_genAgreement_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onGenerateAgreement"/>
+		<ui:param name="title" value="#{msg.get('app.postApp.dlg.genAgreement.title')}" />
 	</ui:include>
 	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
 		<ui:param name="id" value="postApp_regenAgreement_Dlg"/>
@@ -89,6 +93,7 @@
 		<ui:param name="formId" value="postApp_regenAgreement_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onRegenerateAgreement"/>
+		<ui:param name="title" value="#{msg.get('app.postApp.dlg.regenAgreement.title')}" />
 	</ui:include>
 	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
 		<ui:param name="id" value="postApp_dataEntryComplete_Dlg"/>
@@ -96,6 +101,7 @@
 		<ui:param name="formId" value="postApp_dataEntryComplete_DlgFrm"/>
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onDataEntryComplete"/>
+		<ui:param name="title" value="#{msg.get('app.postApp.dlg.dataEntry.title')}" />
 	</ui:include>
 	
 	<p:dialog widgetVar='p_postapp_loading_dialog' id='postapp_loading_dialog' modal='true' 

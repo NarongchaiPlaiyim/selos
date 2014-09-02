@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
+import com.clevel.selos.businesscontrol.master.ProductControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
@@ -18,6 +19,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.master.SpecialProgramTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
