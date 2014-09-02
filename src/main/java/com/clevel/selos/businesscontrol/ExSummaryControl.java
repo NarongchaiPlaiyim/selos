@@ -603,8 +603,10 @@ public class ExSummaryControl extends BusinessControl {
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
         exSumDeviateDAO.delete(esdList);
         //Save Deviate
-        List<ExSumDeviate> exSumDeviateList = exSummaryTransform.transformDeviateToModel(exSummaryView.getDeviateCode(),exSummary.getId());
-        exSumDeviateDAO.persist(exSumDeviateList);
+        if(!Util.isSafetyList(exSummaryView.getDeviateCode()) && exSummaryView.getDeviateCode().size() > 0) {
+            List<ExSumDeviate> exSumDeviateList = exSummaryTransform.transformDeviateToModel(exSummaryView.getDeviateCode(), exSummary.getId());
+            exSumDeviateDAO.persist(exSumDeviateList);
+        }
     }
 
     //TODO : Method Call For Page

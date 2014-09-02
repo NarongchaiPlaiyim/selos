@@ -625,7 +625,8 @@ public class HeaderController extends BaseController {
     public boolean checkSubmitBU(){
         boolean isSubmitBU = true;
         if(stepId == StepValue.CREDIT_DECISION_UW1.value() || stepId == StepValue.CREDIT_DECISION_UW2.value() ||
-                stepId == StepValue.CREDIT_DECISION_UW1_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM.value()){
+                stepId == StepValue.CREDIT_DECISION_UW1_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM.value() ||
+                    stepId == StepValue.CREDIT_DECISION_UW1_CORRECT_INFO_BDM.value()){
             isSubmitBU = false;
         }
         return isSubmitBU;
@@ -1089,9 +1090,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-    private void submitForBDMUW(){
-        
-    }
     private void submitForUW(){
         log.debug("submitForUW :: Start..");
         boolean complete = false;
@@ -1125,6 +1123,7 @@ public class HeaderController extends BaseController {
 
         sendCallBackParam(complete);
     }
+
     private void submitForUW2(){
         log.debug("submitForUW2 :: Start");
         boolean complete = false;
@@ -1296,6 +1295,181 @@ public class HeaderController extends BaseController {
             showMessageBox();
         }
     }
+
+    //-------------- Function for Appraisal Request ( BDM ) -------------------//
+    public void onOpenRequestAppraisal(){
+        log.debug("onOpenRequestAppraisal");
+
+        appraisalView = new AppraisalView();
+        appraisalDetailView = new AppraisalDetailView();
+        appraisalContactDetailView = new AppraisalContactDetailView();
+        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+
+        try{
+            appraisalView.setZoneLocation(user.getZone().getName());
+        } catch (Exception e) {
+            appraisalView.setZoneLocation("");
+        }
+
+    }
+
+    public void onSubmitRequestAppraisal(){
+        log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
+        log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
+        HttpSession session = FacesUtil.getSession(false);
+        RequestContext context = RequestContext.getCurrentInstance();
+        boolean complete = false;
+        long workCaseId = 0;
+        long workCasePreScreenId = 0;
+
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+
+        log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
+
+        if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
+            if(checkAppraisalContact()){
+                if(appraisalDetailViewList.size() > 0){
+                    try{
+                        //Save Appraisal Request
+                        appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+
+                        //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
+                        fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
+                        log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
+
+                        complete = true;
+
+                        messageHeader = "Information.";
+                        message = "Request appraisal completed.";
+
+                        context.execute("msgBoxBaseMessageDlg.show()");
+                    } catch(Exception ex){
+                        log.error("Exception while submitRequestAppraisal : ", ex);
+                        messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+                        message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
+
+                        context.execute("msgBoxBaseMessageDlg.show()");
+                    }
+                } else {
+                    messageHeader = "Information.";
+                    message = "Please add information in Appraisal Detail at least 1.";
+
+                    context.execute("msgBoxBaseMessageDlg.show()");
+                }
+            }
+        } else {
+            messageHeader = "Information.";
+            message = "This case already Request Appraisal. Please contact to AAD Admin";
+
+            context.execute("msgBoxBaseMessageDlg.show()");
+        }
+
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onSaveAppraisalDetail(){
+        log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
+        boolean complete = false;
+        RequestContext context = RequestContext.getCurrentInstance();
+        if(checkAppraisalDialog()){
+            complete = true;
+            if(ModeForButton.ADD == modeForButton){
+                appraisalDetailViewList.add(appraisalDetailView);
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+            }else if(ModeForButton.EDIT == modeForButton){
+                log.debug("-- RowIndex[{}]", rowIndex);
+                appraisalDetailViewList.set(rowIndex, appraisalDetailView);
+                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+            }
+            context.addCallbackParam("functionComplete", complete);
+        }else {
+            context.addCallbackParam("functionComplete", complete);
+        }
+    }
+
+    public boolean checkAppraisalDialog(){
+        log.debug("-- appraisalDetailViewMandate() ::: appraisalDetailView : {}", appraisalDetailView);
+        boolean result = true;
+        if(!Util.isNull(appraisalDetailView.getTitleDeed())){
+            if(Util.isZero(appraisalDetailView.getTitleDeed().length())){
+                titleDeedFlag = true;
+                result = false;
+            } else {
+                titleDeedFlag = false;
+            }
+        } else {
+            titleDeedFlag = true;
+            result = false;
+        }
+        if(!appraisalDetailView.isPurposeNewAppraisalB() && !appraisalDetailView.isPurposeReviewAppraisalB() && !appraisalDetailView.isPurposeReviewBuildingB()){
+            purposeFlag = true;
+            result = false;
+        } else {
+            purposeFlag = false;
+        }
+        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == 0){
+            numberOfDocumentsFlag = true;
+            result = false;
+        } else {
+            numberOfDocumentsFlag = false;
+        }
+
+        log.debug("-- titleDeedFlag = {}", titleDeedFlag);
+        log.debug("-- purposeFlag = {}", purposeFlag);
+        log.debug("-- numberOfDocumentsFlag = {}", numberOfDocumentsFlag);
+        log.debug("-- result = {}", result);
+
+        return result;
+    }
+
+    public boolean checkAppraisalContact(){
+        log.debug("-- checkAppraisalContact()");
+        //todo :  2 0 21
+        boolean result = true;
+
+        if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
+            contactFlag = true;
+            result = false;
+        } else {
+            contactFlag = false;
+        }
+
+        log.debug("-- contactFlag = {}", contactFlag);
+        log.debug("-- result = {}", result);
+        return result;
+    }
+
+    public void onEditAppraisalDetail(){
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
+        modeForButton = ModeForButton.EDIT;
+        log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
+        Cloner cloner = new Cloner();
+        try{
+            appraisalDetailView = cloner.deepClone(appraisalDetailViewSelected);
+        } catch (Exception ex){
+            log.error("Exception occur when clone appraisalDetailView.");
+        }
+    }
+
+    public void onDeleteAppraisalDetailView() {
+        log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
+        appraisalDetailViewList.remove(rowIndex);
+        log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
+    }
+
+    public void onAddAppraisalDetail(){
+        log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
+        appraisalDetailView = new AppraisalDetailView();
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
+        modeForButton = ModeForButton.ADD;
+    }
+    //-------------- End of Function for Appraisal Request ( BDM ) ------------------//
 
     //************** END FUNCTION FOR APPRAISAL STAGE **************//
 
@@ -2071,6 +2245,108 @@ public class HeaderController extends BaseController {
         log.debug("onSaveReturnInfo ::: complete. returnInfoViewList size: {}", returnInfoViewList.size());
     }
 
+    public void onEditReturnInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonId = returnInfoView.getReasonId();
+        returnRemark = returnInfoView.getReasonDetail();
+        editRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onEditReturnAADInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonAADId = returnInfoView.getReasonId();
+        returnAADRemark = returnInfoView.getReasonDetail();
+        editAADRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onEditReturnBDMInfo(int rowOnTable) {
+        log.debug("onEditReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonBDMId = returnInfoView.getReasonId();
+        returnBDMRemark = returnInfoView.getReasonDetail();
+        editBDMRecordNo = rowOnTable;
+        log.debug("onEditReturnBDMInfo ::: end");
+    }
+
+    public void onEditReturnBUInfo(int rowOnTable) {
+        log.debug("onEditReturnBUInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonBUId = returnInfoView.getReasonId();
+        returnBURemark = returnInfoView.getReasonDetail();
+        editBURecordNo = rowOnTable;
+        log.debug("onEditReturnBUInfo ::: end");
+    }
+
+    public void onEditReturnMakerInfo(int rowOnTable) {
+        log.debug("onEditReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonMakerId = returnInfoView.getReasonId();
+        returnMakerRemark = returnInfoView.getReasonDetail();
+        editMakerRecordNo = rowOnTable;
+        log.debug("onEditReturnMakerInfo ::: end");
+    }
+
+    public void onEditReturnAADUWInfo(int rowOnTable) {
+        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
+        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
+        reasonAADUWId = returnInfoView.getReasonId();
+        returnAADUWRemark = returnInfoView.getReasonDetail();
+        editAADUWRecordNo = rowOnTable;
+        log.debug("onEditReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnInfo(int rowOnTable) {
+        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnAADInfo(int rowOnTable) {
+        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnAADInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnBDMInfo(int rowOnTable) {
+        log.debug("onDeleteReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnBDMInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
+    public void onDeleteReturnBUInfo(int rowOnTable) {
+        log.debug("onDeleteReturnBUInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnBUInfo();
+        log.debug("onDeleteReturnBUInfo ::: end");
+    }
+
+    public void onDeleteReturnMakerInfo(int rowOnTable) {
+        log.debug("onDeleteReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnMakerInfo();
+        log.debug("onDeleteReturnMakerInfo ::: end");
+    }
+
+    public void onDeleteReturnAADUWInfo(int rowOnTable) {
+        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
+        returnInfoViewList.remove(rowOnTable);
+
+        resetAddReturnAADUWInfo();
+        log.debug("onDeleteReturnInfo ::: end");
+    }
+
     public void onSubmitReturnInfo(){ //Submit return to BDM
         log.debug("onSubmitReturnInfo ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
@@ -2349,283 +2625,6 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onEditReturnInfo(int rowOnTable) {
-        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonId = returnInfoView.getReasonId();
-        returnRemark = returnInfoView.getReasonDetail();
-        editRecordNo = rowOnTable;
-        log.debug("onEditReturnInfo ::: end");
-    }
-
-    public void onEditReturnAADInfo(int rowOnTable) {
-        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonAADId = returnInfoView.getReasonId();
-        returnAADRemark = returnInfoView.getReasonDetail();
-        editAADRecordNo = rowOnTable;
-        log.debug("onEditReturnInfo ::: end");
-    }
-
-    public void onEditReturnBDMInfo(int rowOnTable) {
-        log.debug("onEditReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonBDMId = returnInfoView.getReasonId();
-        returnBDMRemark = returnInfoView.getReasonDetail();
-        editBDMRecordNo = rowOnTable;
-        log.debug("onEditReturnBDMInfo ::: end");
-    }
-
-    public void onEditReturnBUInfo(int rowOnTable) {
-        log.debug("onEditReturnBUInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonBUId = returnInfoView.getReasonId();
-        returnBURemark = returnInfoView.getReasonDetail();
-        editBURecordNo = rowOnTable;
-        log.debug("onEditReturnBUInfo ::: end");
-    }
-
-    public void onEditReturnMakerInfo(int rowOnTable) {
-        log.debug("onEditReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonMakerId = returnInfoView.getReasonId();
-        returnMakerRemark = returnInfoView.getReasonDetail();
-        editMakerRecordNo = rowOnTable;
-        log.debug("onEditReturnMakerInfo ::: end");
-    }
-
-    public void onEditReturnAADUWInfo(int rowOnTable) {
-        log.debug("onEditReturnInfo ::: rowOnTable : {}",rowOnTable);
-        ReturnInfoView returnInfoView = returnInfoViewList.get(rowOnTable);
-        reasonAADUWId = returnInfoView.getReasonId();
-        returnAADUWRemark = returnInfoView.getReasonDetail();
-        editAADUWRecordNo = rowOnTable;
-        log.debug("onEditReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnInfo(int rowOnTable) {
-        log.debug("onDeleteReturnInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnAADInfo(int rowOnTable) {
-        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnAADInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnBDMInfo(int rowOnTable) {
-        log.debug("onDeleteReturnBDMInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnBDMInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    public void onDeleteReturnBUInfo(int rowOnTable) {
-        log.debug("onDeleteReturnBUInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnBUInfo();
-        log.debug("onDeleteReturnBUInfo ::: end");
-    }
-
-    public void onDeleteReturnMakerInfo(int rowOnTable) {
-        log.debug("onDeleteReturnMakerInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnMakerInfo();
-        log.debug("onDeleteReturnMakerInfo ::: end");
-    }
-
-    public void onDeleteReturnAADUWInfo(int rowOnTable) {
-        log.debug("onDeleteReturnAADInfo ::: rowOnTable : {}",rowOnTable);
-        returnInfoViewList.remove(rowOnTable);
-
-        resetAddReturnAADUWInfo();
-        log.debug("onDeleteReturnInfo ::: end");
-    }
-
-    //-------------- Function for Appraisal Request ( BDM ) -------------------//
-    public void onOpenRequestAppraisal(){
-        log.debug("onOpenRequestAppraisal");
-
-        appraisalView = new AppraisalView();
-        appraisalDetailView = new AppraisalDetailView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-
-        try{
-            appraisalView.setZoneLocation(user.getZone().getName());
-        } catch (Exception e) {
-            appraisalView.setZoneLocation("");
-        }
-
-    }
-
-    public void onSubmitRequestAppraisal(){
-        log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
-        log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
-        HttpSession session = FacesUtil.getSession(false);
-        RequestContext context = RequestContext.getCurrentInstance();
-        boolean complete = false;
-        long workCaseId = 0;
-        long workCasePreScreenId = 0;
-
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-
-        log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
-
-        if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
-            if(checkAppraisalContact()){
-                if(appraisalDetailViewList.size() > 0){
-                    try{
-                        //Save Appraisal Request
-                        appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-                        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-
-                        //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
-                        fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
-                        log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
-
-                        complete = true;
-
-                        messageHeader = "Information.";
-                        message = "Request appraisal completed.";
-
-                        context.execute("msgBoxBaseMessageDlg.show()");
-                    } catch(Exception ex){
-                        log.error("Exception while submitRequestAppraisal : ", ex);
-                        messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                        message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
-
-                        context.execute("msgBoxBaseMessageDlg.show()");
-                    }
-                } else {
-                    messageHeader = "Information.";
-                    message = "Please add information in Appraisal Detail at least 1.";
-
-                    context.execute("msgBoxBaseMessageDlg.show()");
-                }
-            }
-        } else {
-            messageHeader = "Information.";
-            message = "This case already Request Appraisal. Please contact to AAD Admin";
-
-            context.execute("msgBoxBaseMessageDlg.show()");
-        }
-
-        context.addCallbackParam("functionComplete", complete);
-    }
-
-    public void onSaveAppraisalDetail(){
-        log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
-        boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-        if(checkAppraisalDialog()){
-            complete = true;
-            if(ModeForButton.ADD == modeForButton){
-                appraisalDetailViewList.add(appraisalDetailView);
-                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }else if(ModeForButton.EDIT == modeForButton){
-                log.debug("-- RowIndex[{}]", rowIndex);
-                appraisalDetailViewList.set(rowIndex, appraisalDetailView);
-                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }
-            context.addCallbackParam("functionComplete", complete);
-        }else {
-            context.addCallbackParam("functionComplete", complete);
-        }
-    }
-
-    public boolean checkAppraisalDialog(){
-        log.debug("-- appraisalDetailViewMandate() ::: appraisalDetailView : {}", appraisalDetailView);
-        boolean result = true;
-        if(!Util.isNull(appraisalDetailView.getTitleDeed())){
-            if(Util.isZero(appraisalDetailView.getTitleDeed().length())){
-                titleDeedFlag = true;
-                result = false;
-            } else {
-                titleDeedFlag = false;
-            }
-        } else {
-            titleDeedFlag = true;
-            result = false;
-        }
-        if(!appraisalDetailView.isPurposeNewAppraisalB() && !appraisalDetailView.isPurposeReviewAppraisalB() && !appraisalDetailView.isPurposeReviewBuildingB()){
-            purposeFlag = true;
-            result = false;
-        } else {
-            purposeFlag = false;
-        }
-        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == 0){
-            numberOfDocumentsFlag = true;
-            result = false;
-        } else {
-            numberOfDocumentsFlag = false;
-        }
-
-        log.debug("-- titleDeedFlag = {}", titleDeedFlag);
-        log.debug("-- purposeFlag = {}", purposeFlag);
-        log.debug("-- numberOfDocumentsFlag = {}", numberOfDocumentsFlag);
-        log.debug("-- result = {}", result);
-
-        return result;
-    }
-
-    public boolean checkAppraisalContact(){
-        log.debug("-- checkAppraisalContact()");
-        //todo :  2 0 21
-        boolean result = true;
-
-        if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
-            contactFlag = true;
-            result = false;
-        } else {
-            contactFlag = false;
-        }
-
-        log.debug("-- contactFlag = {}", contactFlag);
-        log.debug("-- result = {}", result);
-        return result;
-    }
-
-    public void onEditAppraisalDetail(){
-        titleDeedFlag = false;
-        purposeFlag = false;
-        numberOfDocumentsFlag = false;
-        modeForButton = ModeForButton.EDIT;
-        log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-        Cloner cloner = new Cloner();
-        try{
-            appraisalDetailView = cloner.deepClone(appraisalDetailViewSelected);
-        } catch (Exception ex){
-            log.error("Exception occur when clone appraisalDetailView.");
-        }
-    }
-
-    public void onDeleteAppraisalDetailView() {
-        log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
-        appraisalDetailViewList.remove(rowIndex);
-        log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
-    }
-
-    public void onAddAppraisalDetail(){
-        log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
-        appraisalDetailView = new AppraisalDetailView();
-        titleDeedFlag = false;
-        purposeFlag = false;
-        numberOfDocumentsFlag = false;
-        modeForButton = ModeForButton.ADD;
-    }
-    //-------------- End of Function for Appraisal Request ( BDM ) ------------------//
-
     public void onCheckCriteria(){
         long workCaseId;
         boolean success = false;
@@ -2765,7 +2764,7 @@ public class HeaderController extends BaseController {
     }
 
 
-
+    //************** Variable Getter/Setter **************//
     public int getQualitativeType() {
         return qualitativeType;
     }

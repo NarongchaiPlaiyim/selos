@@ -134,8 +134,9 @@
     <!--Return to BDM -->
     <p:commandButton id="btnReturnBDM" value="#{msg.get('app.header.button.returnToBDM')}" title="#{msg.get('app.header.button.returnToBDM')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to BDM')}"
+                     onclick="PF('blockUI').show()"
                      actionListener="#{headerController.onOpenReturnInfoDialog()}"
-                     oncomplete="returnInfoDlg.show()"
+                     oncomplete="returnInfoDlg.show(); blockUI.hide();"
                      update=":frmMain:returnInfoPanel">
         <p:resetInput target=":frmMain:returnInfoPanel"/>
     </p:commandButton>
@@ -182,7 +183,8 @@
     </p:commandButton>
 
     <!--__________ Submit Case ___________ -->
-    <h:outputText value="#{headerController.checkSubmitBU()}"/>
+    <h:outputText value="check submit bu : #{headerController.checkSubmitBU()}"/>
+    <h:outputText value=" stepId : #{headerController.stepId}"/>
     <!-- Submit Generic for BU -->
     <p:commandButton id="btnSubmitCaseBU" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.checkSubmitBU()}"
@@ -525,17 +527,6 @@
                          action="#{headerController.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
-<p:confirmDialog id="msgBoxNoPermissionDialog" widgetVar="msgBoxNoPermissionDlg" styleClass="messageDialog"
-                 header="Warning." closable="false">
-    <f:facet name="message">
-        <h:outputText value="You don't have permission to access this page. " escape="false"/>
-        <br/><br/>
-        <h:outputText value="Click 'OK' to redirect to Inbox. " escape="false"/>
-    </f:facet>
-    <p:commandButton value="OK"
-                     process="@this"
-                     action="#{headerController.onGoToInbox}"/>
-</p:confirmDialog>
 <p:panel id="msgBoxBaseRefreshPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxBaseRefreshDialog" widgetVar="msgBoxBaseRefreshDlg" styleClass="messageDialog"
                      header="#{headerController.messageHeader}" closable="false">
@@ -547,6 +538,18 @@
                          onclick="reload();"/>
     </p:confirmDialog>
 </p:panel>
+<p:confirmDialog id="msgBoxNoPermissionDialog" widgetVar="msgBoxNoPermissionDlg" styleClass="messageDialog"
+                 header="Warning." closable="false">
+    <f:facet name="message">
+        <h:outputText value="You don't have permission to access this page. " escape="false"/>
+        <br/><br/>
+        <h:outputText value="Click 'OK' to redirect to Inbox. " escape="false"/>
+    </f:facet>
+    <p:commandButton value="OK"
+                     process="@this"
+                     action="#{headerController.onGoToInbox}"/>
+</p:confirmDialog>
+
 <p:panel id="printReportPanel" styleClass="panel">
     <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -558,32 +561,40 @@
 <p:panel id="assignABDMPanel" styleClass="panel">
     <p:dialog id="assignABDMDialog" widgetVar="assignABDMDlg" header="Assign To ABDM"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="400" height="160">
+              modal="true" width="400" height="160" closable="false">
         <ui:include src="/site/dialog/assignABDMDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 
-<p:panel id="submitZMPanel" styleClass="panel">
+<!--<p:panel id="submitZMPanel" styleClass="panel">
     <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" height="450">
+              modal="true" width="550" height="450" closable="false">
         <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
     </p:dialog>
-</p:panel>
+</p:panel>-->
 
 <p:panel id="submitBUPanel" styleClass="panel">
-    <p:dialog id="submitBUDialog" widgetVar="submitBUDlg" header="Submit CA" closable="false"
+    <p:dialog id="submitBUDialog" widgetVar="submitBUDlg" header="Submit CA"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" >
+              modal="true" width="550" closable="false">
         <ui:include src="/site/dialog/submitCADialog.xhtml"/>
     </p:dialog>
 </p:panel>
 
 <p:panel id="submitUWPanel" styleClass="panel">
-    <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit CA" closable="false"
+    <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit CA"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="470" >
+              modal="true" width="490" closable="false">
         <ui:include src="/site/dialog/submitCAUWDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<p:panel id="cancelCAPanel" styleClass="panel">
+    <p:dialog id="cancelCADialog" widgetVar="cancelCADlg" header="Cancel CA"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="460" height="160" closable="false">
+        <ui:include src="/site/dialog/cancelCA.xhtml"/>
     </p:dialog>
 </p:panel>
 
@@ -603,14 +614,6 @@
     </p:dialog>
 </p:panel>
 
-<p:panel id="cancelCAPanel" styleClass="panel">
-    <p:dialog id="cancelCADialog" widgetVar="cancelCADlg" header="Cancel CA"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="460" height="160" closable="false">
-        <ui:include src="/site/dialog/cancelCA.xhtml"/>
-    </p:dialog>
-</p:panel>
-
 <p:panel id="cancelReqApprPanel" styleClass="panel">
     <p:dialog id="cancelReqApprDialog" widgetVar="cancelReqApprDlg" header="Cancel Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -619,6 +622,7 @@
     </p:dialog>
 </p:panel>
 
+<!-- Return Info Dialog -->
 <p:panel id="returnInfoPanel" styleClass="panel">
     <p:dialog id="returnInfoDialog" widgetVar="returnInfoDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -664,17 +668,6 @@
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="800" height="500" closable="false">
         <ui:include src="/site/dialog/returnInfoAADUWDialog.xhtml"/>
-    </p:dialog>
-</p:panel>
-
-<p:panel id="checkMandatePanel" styleClass="panel">
-    <p:dialog id="checkMandateDialog"
-              widgetVar="checkMandateDlg"
-              header="Check MandateDoc"
-              resizable="false"
-              modal="true" width="1024" height="500" closable="false"
-              maximizable="">
-        <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 
@@ -725,7 +718,17 @@
         <ui:include src="/site/dialog/addReturnAADUWInfoDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+<!-- End Return Info Dialog -->
 
+<p:panel id="checkMandatePanel" styleClass="panel">
+    <p:dialog id="checkMandateDialog" widgetVar="checkMandateDlg" header="Check MandateDoc"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="1024" height="500" closable="false">
+        <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+
+<!-- Appraisal Parallel Request -->
 <p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -741,6 +744,7 @@
         <ui:include src="/site/dialog/reqApprDetailDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
 <p:confirmDialog id="confirmDeleteAppraisalDetailViewDialog" header="#{msg.get('app.messageHeader.info')}" message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="250"
                  severity="alert" widgetVar="confirmDeleteAppraisalDetailViewDlg">
@@ -750,6 +754,8 @@
         <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="PF('confirmDeleteAppraisalDetailViewDlg').hide()"/>
     </div>
 </p:confirmDialog>
+<!-- End Appraisal Parallel Request -->
+
 <p:panel id="pendingDecisionPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Pending for Decision')}">
     <p:dialog id="pendingDecisionDialog" widgetVar="pendingDecisionDlg" header="Pending Decision Information"
@@ -813,6 +819,7 @@
     </p:dialog>
 </p:panel>
 
+<!-- PreScreen Dialog -->
 <p:panel id="returnMakerPanel" styleClass="panel"
         rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 1002}">
     <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
@@ -839,6 +846,6 @@
         <ui:include src="/site/dialog/closeSalesDialog.xhtml"/>
     </p:dialog>
 </p:panel>
-
+<!-- End PreScreen Dialog -->
 
 </ui:composition>
