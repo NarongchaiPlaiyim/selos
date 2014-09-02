@@ -97,7 +97,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
-                                     value="#{basicInfo.openAccountView.bankAccountProduct.id}"
+                                     value="#{basicInfo.openAccountView.bankAccountProductView.id}"
                                      disabled="#{basicInfo.isDisabled('accountProduct')}"
                                      required="#{basicInfo.openAccountView.bankAccountTypeView.id != 0 and not empty param[saveBtnDialog.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -119,7 +119,7 @@
                     <p:dataGrid value="#{basicInfo.bankAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
                         <p:column>
                             <h:selectBooleanCheckbox value="#{purposeList.selected}" disabled="#{basicInfo.isDisabled('accountPurpose')}"/>
-                            <h:outputText value="#{purposeList.purpose.name}"/>
+                            <h:outputText value="#{purposeList.name}"/>
                         </p:column>
                     </p:dataGrid>
                 </td>

@@ -70,11 +70,7 @@ public class CustomerInfoJuristic extends BaseController {
     @Inject
     private EducationDAO educationDAO;
     @Inject
-    private OccupationDAO occupationDAO;
-    @Inject
     private BusinessTypeDAO businessTypeDAO;
-    @Inject
-    private MaritalStatusDAO maritalStatusDAO;
     @Inject
     private ProvinceDAO provinceDAO;
     @Inject

@@ -1,14 +1,13 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.view.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class SBFScoreView implements Serializable {
-
+public class SpecialProgramView implements Serializable {
     private int id;
-    private int score;
+    private String code;
     private int active;
 
     public int getId() {
@@ -19,12 +18,12 @@ public class SBFScoreView implements Serializable {
         this.id = id;
     }
 
-    public int getScore() {
-        return score;
+    public String getCode() {
+        return code;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public int getActive() {
@@ -39,7 +38,7 @@ public class SBFScoreView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("score", score)
+                .append("code", code)
                 .append("active", active)
                 .toString();
     }

@@ -1,17 +1,20 @@
-package com.clevel.selos.transform;
+package com.clevel.selos.transform.master;
 
 import com.clevel.selos.dao.master.SBFScoreDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SBFScore;
-import com.clevel.selos.model.view.SBFScoreView;
+import com.clevel.selos.model.view.master.SBFScoreView;
+import com.clevel.selos.transform.Transform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class SBFScoreTransform extends Transform{
+public class SBFScoreTransform extends Transform {
     @SELOS
     @Inject
     private Logger log;
@@ -68,5 +71,18 @@ public class SBFScoreTransform extends Transform{
             sbfScoreViewList.add(transformToView(sbfScore));
         }
         return sbfScoreViewList;
+    }
+
+    public Map<Integer, SBFScoreView> transformToCache(List<SBFScore> sbfScoreList){
+        if(sbfScoreList == null || sbfScoreList.size() == 0)
+            return null;
+
+        Map<Integer, SBFScoreView> _tmpMap = new ConcurrentHashMap<Integer, SBFScoreView>();
+        for(SBFScore sbfScore : sbfScoreList){
+            SBFScoreView sbfScoreView = transformToView(sbfScore);
+            _tmpMap.put(sbfScoreView.getId(), sbfScoreView);
+
+        }
+        return _tmpMap;
     }
 }

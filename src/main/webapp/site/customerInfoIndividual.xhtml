@@ -52,8 +52,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
-                                                           itemLabel="#{docType.description}"
-                                                           itemValue="#{docType.id}"/>
+                                                           itemLabel="#{docType.label}"
+                                                           itemValue="#{docType.value}"/>
                                             <p:ajax event="change" update=":frmMain:inputSearch"
                                                     process="@this" listener="#{custInfoSumIndi.onChangeSearch}"/>
                                         </p:selectOneMenu>
