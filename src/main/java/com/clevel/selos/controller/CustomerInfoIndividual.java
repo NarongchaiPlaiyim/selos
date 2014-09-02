@@ -2,6 +2,8 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.master.DocumentTypeControl;
+import com.clevel.selos.businesscontrol.master.RelationControl;
+import com.clevel.selos.businesscontrol.master.RelationCustomerControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
@@ -54,10 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private RelationDAO relationDAO;
-    @Inject
-    private RelationCustomerDAO relationCustomerDAO;
-    @Inject
     private ReferenceDAO referenceDAO;
     @Inject
     private TitleDAO titleDAO;
@@ -96,11 +94,15 @@ public class CustomerInfoIndividual implements Serializable {
     private CustomerInfoControl customerInfoControl;
     @Inject
     private DocumentTypeControl documentTypeControl;
+    @Inject
+    private RelationControl relationControl;
+    @Inject
+    private RelationCustomerControl relationCustomerControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
-    private List<Relation> relationIndividualList;
-    private List<Relation> relationSpouseList;
+    private List<SelectItem> relationIndividualList;
+    private List<SelectItem> relationSpouseList;
     private List<Reference> referenceIndividualList;
     private List<Reference> referenceSpouseList;
     private List<Title> titleThList;
@@ -408,8 +410,8 @@ public class CustomerInfoIndividual implements Serializable {
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
-        relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        relationIndividualList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
+        relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
         referenceIndividualList = new ArrayList<Reference>();
         referenceSpouseList = new ArrayList<Reference>();
@@ -607,24 +609,24 @@ public class CustomerInfoIndividual implements Serializable {
 
         if(relationMainCusId == RelationValue.BORROWER.value()){
             isEditBorrower = true;
-            relationIndividualList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
+            relationIndividualList = relationCustomerControl.getRelationSelectItem(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
         }else{
-            relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,0);
+            relationIndividualList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,0);
         }
 
 //        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
         if(customerInfoView.getSpouse() != null && relationSpouseCusId == RelationValue.BORROWER.value()){
             isEditSpouseBorrower = true;
-            relationSpouseList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+            relationSpouseList = relationCustomerControl.getRelationSelectItem(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         }else{
-            relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,1);
+            relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,1);
         }
     }
 
     public void onChangeRelation(){
         referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
@@ -632,7 +634,7 @@ public class CustomerInfoIndividual implements Serializable {
 
 //      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
 //        int relationId = customerInfoView.getRelation().getId();
-        Relation tmp1 = new Relation();
+/*        Relation tmp1 = new Relation();
         Relation tmp2 = new Relation();
         if(relationMainCusId == 3 || relationMainCusId == 4) {
             for(Relation relationSpouse : relationSpouseList){
@@ -641,6 +643,25 @@ public class CustomerInfoIndividual implements Serializable {
                 }
                 if(relationMainCusId == 4){ // if main cus = 4 remove 3
                     if(relationSpouse.getId() == 3){
+                        tmp2 = relationSpouse;
+                    }
+                }
+            }
+            relationSpouseList.remove(tmp1);
+            if(relationMainCusId == 4){
+                relationSpouseList.remove(tmp2);
+            }
+        }*/
+
+        SelectItem tmp1 = new SelectItem();
+        SelectItem tmp2 = new SelectItem();
+        if(relationMainCusId == 3 || relationMainCusId == 4) {
+            for(SelectItem relationSpouse : relationSpouseList){
+                if((Integer) relationSpouse.getValue() == 2){ // if main cus = 3 , 4 remove 2 only
+                    tmp1 = relationSpouse;
+                }
+                if(relationMainCusId == 4){ // if main cus = 4 remove 3
+                    if((Integer)relationSpouse.getValue() == 3){
                         tmp2 = relationSpouse;
                     }
                 }
@@ -707,7 +728,7 @@ public class CustomerInfoIndividual implements Serializable {
     public void onChangeRelationInitial(){
         referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
@@ -715,7 +736,7 @@ public class CustomerInfoIndividual implements Serializable {
 
 //      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
 //        int relationId = customerInfoView.getRelation().getId();
-        Relation tmp1 = new Relation();
+        /*Relation tmp1 = new Relation();
         Relation tmp2 = new Relation();
         if(relationMainCusId == 3 || relationMainCusId == 4) {
             for(Relation relationSpouse : relationSpouseList){
@@ -724,6 +745,25 @@ public class CustomerInfoIndividual implements Serializable {
                 }
                 if(relationMainCusId == 4){ // if main cus = 4 remove 3
                     if(relationSpouse.getId() == 3){
+                        tmp2 = relationSpouse;
+                    }
+                }
+            }
+            relationSpouseList.remove(tmp1);
+            if(relationMainCusId == 4){
+                relationSpouseList.remove(tmp2);
+            }
+        }*/
+
+        SelectItem tmp1 = new SelectItem();
+        SelectItem tmp2 = new SelectItem();
+        if(relationMainCusId == 3 || relationMainCusId == 4) {
+            for(SelectItem relationSpouse : relationSpouseList){
+                if((Integer)relationSpouse.getValue() == 2){ // if main cus = 3 , 4 remove 2 only
+                    tmp1 = relationSpouse;
+                }
+                if(relationMainCusId == 4){ // if main cus = 4 remove 3
+                    if((Integer)relationSpouse.getValue() == 3){
                         tmp2 = relationSpouse;
                     }
                 }
@@ -2035,7 +2075,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         //customerInfoView = individual
         customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
-        customerInfoView.getRelation().setDescription(relationDAO.findById(relationMainCusId).getDescription());
+        customerInfoView.getRelation().setDescription(relationControl.getRelationViewById(relationMainCusId).getDescription());
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
@@ -2226,19 +2266,19 @@ public class CustomerInfoIndividual implements Serializable {
         this.documentTypeList = documentTypeList;
     }
 
-    public List<Relation> getRelationIndividualList() {
+    public List<SelectItem> getRelationIndividualList() {
         return relationIndividualList;
     }
 
-    public void setRelationIndividualList(List<Relation> relationIndividualList) {
+    public void setRelationIndividualList(List<SelectItem> relationIndividualList) {
         this.relationIndividualList = relationIndividualList;
     }
 
-    public List<Relation> getRelationSpouseList() {
+    public List<SelectItem> getRelationSpouseList() {
         return relationSpouseList;
     }
 
-    public void setRelationSpouseList(List<Relation> relationSpouseList) {
+    public void setRelationSpouseList(List<SelectItem> relationSpouseList) {
         this.relationSpouseList = relationSpouseList;
     }
 

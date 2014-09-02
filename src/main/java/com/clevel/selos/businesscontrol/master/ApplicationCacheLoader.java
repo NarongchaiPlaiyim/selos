@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.relation.RelationCustomer;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.master.*;
 import com.clevel.selos.util.Util;
@@ -64,6 +66,12 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private DocumentTypeDAO documentTypeDAO;
     @Inject private DocumentTypeTransform documentTypeTransform;
 
+    @Inject private RelationDAO relationDAO;
+    @Inject private RelationTransform relationTransform;
+
+    @Inject private RelationCustomerDAO relationCustomerDAO;
+    @Inject private RelationCustomerTransform relationCustomerTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -114,6 +122,12 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<DocumentType> documentTypeList = documentTypeDAO.findAll();
         indexHash.put(DocumentType.class.getName(), documentTypeTransform.transformToCache(documentTypeList));
+
+        List<Relation> relationList = relationDAO.findAll();
+        indexHash.put(Relation.class.getName(), relationTransform.transformToCache(relationList));
+
+        List<RelationCustomer> relationCustomerList = relationCustomerDAO.findAll();
+        indexHash.put(RelationCustomer.class.getName(), relationCustomerTransform.transformToCache(relationCustomerList));
 
         Util.listMap(indexHash);
     }

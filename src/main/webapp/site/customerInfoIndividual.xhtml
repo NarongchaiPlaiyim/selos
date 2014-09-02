@@ -144,8 +144,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.relationIndividualList}"
                                                            var="relation"
-                                                           itemLabel="#{relation.description}"
-                                                           itemValue="#{relation.id}"/>
+                                                           itemLabel="#{relation.label}"
+                                                           itemValue="#{relation.value}"/>
                                             <p:ajax event="change"
                                                     listener="#{custInfoSumIndi.onChangeRelation()}"
                                                     update=":frmMain:reference,:frmMain:relation,:frmMain:collateral,:frmMain:relationSpouse,:frmMain:referenceSpouse"/>
@@ -1444,8 +1444,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.relationSpouseList}"
                                                                                var="relation"
-                                                                               itemLabel="#{relation.description}"
-                                                                               itemValue="#{relation.id}"/>
+                                                                               itemLabel="#{relation.label}"
+                                                                               itemValue="#{relation.value}"/>
                                                                 <p:ajax event="change"
                                                                         listener="#{custInfoSumIndi.onChangeRelationSpouse()}"
                                                                         update=":frmMain:referenceSpouse,:frmMain:relationSpouse,:frmMain:collateralSpouse"/>
