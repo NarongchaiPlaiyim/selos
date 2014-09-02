@@ -11,11 +11,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.requestType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneRadio value="#{proposeLine.proposeCreditInfoDetailView.requestType}"
                                       required="#{not empty param[saveBtn.clientId]}"
-                                      disabled="#{proposeLine.modeEdit}">
+                                      disabled="#{proposeLine.modeEdit or proposeLine.isDisabled('credit.requestType')}">
                         <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
                         <p:ajax event="change" listener="#{proposeLine.onChangeRequestType()}"
@@ -27,9 +29,13 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.isRefinance')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:selectOneRadio value="#{proposeLine.proposeCreditInfoDetailView.refinance}" required="#{not empty param[saveBtn.clientId]}">
+                    <p:selectOneRadio value="#{proposeLine.proposeCreditInfoDetailView.refinance}"
+                                      required="#{not empty param[saveBtn.clientId]}"
+                                      disabled="#{proposeLine.isDisabled('credit.isRefinance')}">
                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                         <p:ajax event="change" process="@this" update=":creditInfoDlgForm"/>
@@ -40,12 +46,15 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productProgram')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.productProgram')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelProdProgram"
                                      value="#{proposeLine.proposeCreditInfoDetailView.productProgramView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{proposeLine.isDisabled('credit.productProgram')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.productProgramViewList}"
                                        var="prdGroupToPrdProgramItem"
@@ -59,12 +68,15 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.creditType')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.creditType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelCreditType"
                                      value="#{proposeLine.proposeCreditInfoDetailView.creditTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{proposeLine.isDisabled('credit.creditType')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.creditTypeViewList}"
                                        var="creditTypeItem"
@@ -80,18 +92,24 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.productCode')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="productCode" value="#{proposeLine.proposeCreditInfoDetailView.productCode}">
+                    <p:inputText id="productCode" value="#{proposeLine.proposeCreditInfoDetailView.productCode}"
+                                 readonly="#{proposeLine.isDisabled('credit.productCode')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.projectCode')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="projectCode" value="#{proposeLine.proposeCreditInfoDetailView.projectCode}"
-                                 required="#{not empty param[saveBtn.clientId]}">
+                                 required="#{not empty param[saveBtn.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('credit.projectCode')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -100,6 +118,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.limit')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="limit" value="#{proposeLine.proposeCreditInfoDetailView.limit}"
@@ -109,13 +129,16 @@
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  onfocus="removeComma(this)"
                                  required="#{not empty param[saveBtn.clientId]}"
-                                 style="width:200px;text-align: right">
+                                 style="width:200px;text-align: right"
+                                 readonly="#{proposeLine.isDisabled('credit.limit')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.PCEPercent')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCreditInfoDetailView.PCEPercent}"
@@ -125,7 +148,8 @@
                                  onkeypress="return onKeyPressMoney(event);"
                                  onfocus="removeComma(this)"
                                  styleClass="right"
-                                 required="#{not empty param[saveBtn.clientId]}">
+                                 required="#{not empty param[saveBtn.clientId]}"
+                                 readonly="#{proposeLine.isDisabled('credit.PCEPercent')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update="@this"/>
@@ -139,6 +163,8 @@
                 <td colspan="2"></td>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.PCEAmount')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCreditInfoDetailView.PCEAmount}"
@@ -150,7 +176,7 @@
                                  onfocus="removeComma(this)"
                                  required="#{not empty param[saveBtn.clientId]}"
                                  style="width:200px; min-width:200px; max-width:200px; text-align: right"
-                                 readonly="true">
+                                 readonly="#{proposeLine.isDisabled('credit.PCEAmount')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -167,26 +193,30 @@
                 <td class="left" colspan="2">
                     <p:selectBooleanCheckbox value="#{proposeLine.proposeCreditInfoDetailView.reducePriceFlag}"
                                              id="reducePriceFlagChk"
-                                             disabled="#{proposeLine.proposeCreditInfoDetailView.cannotCheckReducePricing}">
+                                             disabled="#{proposeLine.proposeCreditInfoDetailView.cannotCheckReducePricing or proposeLine.isDisabled('credit.reducePriceFlag')}">
                         <p:ajax update="@this"/>
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.reducePriceFlag')}" styleClass="require-field"/>
                 </td>
                 <td class="left" colspan="2">
                     <p:selectBooleanCheckbox value="#{proposeLine.proposeCreditInfoDetailView.reduceFrontEndFee}"
                                              id="reduceFrontEndFeeChk"
-                                             disabled="#{proposeLine.proposeCreditInfoDetailView.cannotCheckReduceFront}">
+                                             disabled="#{proposeLine.proposeCreditInfoDetailView.cannotCheckReduceFront or proposeLine.isDisabled('credit.reduceFrontEndFee')}">
                         <p:ajax update="@this"/>
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.reduceFrontEndFee')}" styleClass="require-field"/>
                 </td>
             </tr>
 
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.standardBasePrice')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <table border="0">
@@ -195,7 +225,7 @@
                                 <p:selectOneMenu id="standDlg"
                                                  value="#{proposeLine.proposeCreditInfoDetailView.standardBaseRate.id}"
                                                  style="width: 50px;"
-                                                 disabled="true">
+                                                 disabled="#{proposeLine.isDisabled('credit.standardBasePrice')}">
                                     <f:selectItems value="#{proposeLine.baseRateList}" var="standard"
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
@@ -212,7 +242,7 @@
                                              onfocus="removeComma(this)"
                                              style="width: 50px;"
                                              styleClass="right"
-                                             disabled="true">
+                                             readonly="#{proposeLine.isDisabled('credit.standardInterest')}">
                                     <f:convertNumber pattern="##0.##"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
@@ -225,6 +255,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.suggestBasePrice')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <table border="0">
@@ -233,7 +265,7 @@
                                 <p:selectOneMenu id="suggestDlg"
                                                  value="#{proposeLine.proposeCreditInfoDetailView.suggestBaseRate.id}"
                                                  style="width: 50px;"
-                                                 disabled="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode != 3}">
+                                                 disabled="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode != 3 or proposeLine.isDisabled('credit.suggestBasePrice')}">
                                     <f:selectItems value="#{proposeLine.baseRateList}" var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
@@ -250,7 +282,7 @@
                                              onfocus="removeComma(this)"
                                              style="width: 50px;"
                                              styleClass="right"
-                                             disabled="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode != 3}">
+                                             readonly="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode != 3 or proposeLine.isDisabled('credit.suggestInterest')}">
                                     <f:convertNumber pattern="##0.##"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
@@ -271,7 +303,7 @@
                             id="addTier"
                             process="@this"
                             update=":creditInfoDlgForm:resultFinal"
-                            disabled="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode == 2}"
+                            disabled="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode == 2 or proposeLine.isDisabled('credit.addTierButton')}"
                             actionListener="#{proposeLine.onAddTierInfo()}">
                     </p:commandButton>
                 </td>
@@ -310,7 +342,7 @@
                                     <p:column>
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}" id="finalBase"
                                                          style="width: 50px;"
-                                                         disabled="#{item.brmsFlag == 1}">
+                                                         disabled="#{item.brmsFlag == 1 or proposeLine.isDisabled('credit.tier.finalBasePrice')}">
                                             <f:selectItems value="#{proposeLine.baseRateList}"
                                                            var="finalBase"
                                                            itemLabel="#{finalBase.name}"
@@ -327,7 +359,7 @@
                                                      onfocus="removeComma(this)"
                                                      style="width: 50px;"
                                                      styleClass="right"
-                                                     readonly="#{item.brmsFlag == 1}">
+                                                     readonly="#{item.brmsFlag == 1 or proposeLine.isDisabled('credit.tier.finalInterest')}">
                                             <f:convertNumber pattern="##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                             <p:ajax event="blur" update="@this"/>
                                         </p:inputText>
@@ -343,7 +375,8 @@
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
                                          onfocus="removeComma(this)"
-                                         styleClass="right">
+                                         styleClass="right"
+                                         readonly="#{proposeLine.isDisabled('credit.tier.tenor')}">
                                 <f:convertNumber pattern="###" integerOnly="true" maxIntegerDigits="3"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -357,7 +390,7 @@
                                          onkeypress="return onKeyPressMoney(event);"
                                          onfocus="removeComma(this)"
                                          style="width:170px; text-align: right"
-                                         readonly="#{item.brmsFlag == 1}">
+                                         readonly="#{item.brmsFlag == 1 or proposeLine.isDisabled('credit.tier.installment')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -368,7 +401,8 @@
                                              rendered="#{item.brmsFlag != 1}"
                                              process="@form"
                                              update=":creditInfoDlgForm"
-                                             actionListener="#{proposeLine.onDeleteProposeTierInfo(rowIndex)}">
+                                             actionListener="#{proposeLine.onDeleteProposeTierInfo(rowIndex)}"
+                                             disabled="#{proposeLine.isDisabled('credit.tier.actionList')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -378,22 +412,21 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.frontEnd')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.frontEndFee')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:inputText id="frontEndFee"
                                  value="#{proposeLine.proposeCreditInfoDetailView.frontEndFee}"
                                  maxlength="6"
-                                 readonly="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode != 1}"
+                                 readonly="#{proposeLine.proposeCreditInfoDetailView.requestTypeMode != 1 or proposeLine.isDisabled('credit.frontEndFee')}"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  onfocus="removeComma(this)"
                                  styleClass="right"
                                  required="#{not empty param[saveBtn.clientId]}">
-                        <f:convertNumber pattern="##0.00"
-                                         minFractionDigits="2"
-                                         maxFractionDigits="2"
-                                         maxIntegerDigits="3"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -403,12 +436,15 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.loanPurpose')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.loanPurpose')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgLoanPurpose"
                                      value="#{proposeLine.proposeCreditInfoDetailView.loanPurposeView.id}"
                                      style="min-width: 400px; width: 400px; max-width: 400px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{proposeLine.isDisabled('credit.loanPurpose')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.loanPurposeViewList}"
                                        var="loanPurposeItem"
@@ -422,10 +458,12 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.purposeDetail')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.remark')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:inputTextarea value="#{proposeLine.proposeCreditInfoDetailView.proposeDetail}"
-                                     cols="100" rows="3">
+                                     cols="100" rows="3" readonly="#{proposeLine.isDisabled('credit.remark')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
                 </td>
@@ -434,12 +472,15 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.disbursement')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.disbursement')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:selectOneMenu id="dlgDisbursement"
                                      value="#{proposeLine.proposeCreditInfoDetailView.disbursementTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{proposeLine.isDisabled('credit.disbursement')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.disbursementTypeViewList}"
                                        var="disbursementItem"
@@ -450,6 +491,8 @@
                 </td>
                 <td class="title" style="width:200px;">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}"/>
+                    <h:outputText value="#{proposeLine.mandate('credit.holdLimitAmount')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCreditInfoDetailView.holdLimitAmount}"
@@ -458,7 +501,8 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  onfocus="removeComma(this)"
-                                 style="width:200px;text-align: right">
+                                 style="width:200px;text-align: right"
+                                 readonly="#{proposeLine.isDisabled('credit.holdLimitAmount')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -478,9 +522,11 @@
                                      action="#{proposeLine.onSaveCreditInfo()}"
                                      process="@form"
                                      update=":creditInfoDlgForm,:frmMain"
+                                     disabled="#{proposeLine.isDisabled('credit.saveButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'creditInfoDlg')"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                     disabled="#{proposeLine.isDisabled('credit.cancelButton')}"
                                      styleClass="small"
                                      onclick="PF('creditInfoDlg').hide()"/>
                 </td>

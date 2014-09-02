@@ -11,12 +11,15 @@
             <tr>
                 <td class="title" style="width: 20%">
                     <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
+                    <h:outputText value="#{proposeLine.mandate('guarantor.guarantorName')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 80%">
                     <p:selectOneMenu id="guarantorName"
                                      value="#{proposeLine.proposeGuarantorInfoView.guarantorName.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[addGuarantorDlg.clientId]}">
+                                     required="#{not empty param[addGuarantorDlg.clientId]}"
+                                     disabled="#{proposeLine.isDisabled('guarantor.guarantorName')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.customerInfoViewList}"
                                        var="customer"
@@ -30,9 +33,12 @@
             <tr>
                 <td class="title">
                     <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
+                    <h:outputText value="#{proposeLine.mandate('guarantor.TCGLGNo')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
-                    <p:inputMask id="tcgLgNo" value="#{proposeLine.proposeGuarantorInfoView.tcgLgNo}" mask="99-99999"/>
+                    <p:inputMask id="tcgLgNo" value="#{proposeLine.proposeGuarantorInfoView.tcgLgNo}" mask="99-99999"
+                                 readonly="#{proposeLine.isDisabled('guarantor.guarantorName')}"/>
                 </td>
             </tr>
 
@@ -69,7 +75,7 @@
                         </p:columnGroup>
 
                         <p:column styleClass="center">
-                            <p:selectBooleanCheckbox value="#{creditTypeItem.noFlag}">
+                            <p:selectBooleanCheckbox value="#{creditTypeItem.noFlag}" disabled="#{proposeLine.isDisabled('guarantor.creditType')}">
                                 <p:ajax listener="#{proposeLine.onCheckNoFlag(creditTypeItem)}"/>
                             </p:selectBooleanCheckbox>
                         </p:column>
@@ -106,7 +112,8 @@
                                          onkeydown="return onKeyDownNegMoney(event);"
                                          onkeypress="return onKeyPressNegMoney(event);"
                                          onfocus="removeComma(this)"
-                                         style="width:100px; text-align: right" >
+                                         style="width:100px; text-align: right"
+                                         readonly="#{proposeLine.isDisabled('guarantor.creditType')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -128,12 +135,14 @@
                             action="#{proposeLine.onSaveGuarantorInfo()}"
                             process=":guarantorDlgForm"
                             update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
+                            disabled="#{proposeLine.isDisabled('guarantor.saveButton')}"
                             oncomplete="handleDialogRequest(xhr, status, args, 'guarantorInfoDlg')"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
                                      update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      action="#{proposeLine.onCancelGuarantorInfo()}"
+                                     disabled="#{proposeLine.isDisabled('guarantor.cancelButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'guarantorInfoDlg')"/>
                 </td>
             </tr>
