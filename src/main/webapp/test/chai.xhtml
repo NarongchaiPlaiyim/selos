@@ -302,11 +302,13 @@
             </h:form>
             <h:form id="onPrintLogonOver90">
                 <p:commandButton id="print" value="onPrintLogonOver90" update="@form"
-                                 action="#{report.onPrintLogonOver90()}"/>
+                                 action="#{report.onPrintLogonOver90()}"
+                                 ajax="false"/>
             </h:form>
             <h:form id="onPrintViolation">
                 <p:commandButton id="print" value="onPrintViolation" update="@form"
-                                 action="#{report.onPrintViolation()}"/>
+                                 action="#{isaReport.onPrintUserProfile()}"
+                                 ajax="false"/>
             </h:form>
         </p:panel>
 
