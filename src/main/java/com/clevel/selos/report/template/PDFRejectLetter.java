@@ -83,8 +83,10 @@ public class PDFRejectLetter implements Serializable {
     private RejectLetterReport rejectLetterReport;
     private RejectLetterCancelCodeByExSum codeByExSum;
     private HttpSession session;
-
     private final String SPACE = " ";
+    private int typeNCB;
+    private int typePolicy;
+    private int typeIncome;
 
     public PDFRejectLetter() {
     }
@@ -169,6 +171,56 @@ public class PDFRejectLetter implements Serializable {
         }
         log.debug("--Color is value. {}",colorCode);
         return colorCode;
+    }
+
+    public void findCancelCodeByUWResult(){
+        uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
+
+        if (!Util.isNull(uwRuleResultSummary)){
+            log.debug("--UwRuleResultSummary ID. {}",uwRuleResultSummary.getId());
+            if (!Util.isZero(uwRuleResultSummary.getId())){
+                log.debug("--UwRuldResult id is not Zero",uwRuleResultSummary.getId());
+                uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
+                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails.size());
+                if (!Util.isNull(uwRuleResultDetails)){
+                    for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
+                        if (!Util.isNull(ruleResultDetail.getRejectGroup())){
+                            if (ruleResultDetail.getRejectGroup().getId() == 1){
+                                typeNCB = ruleResultDetail.getRejectGroup().getId();
+                            } else if (ruleResultDetail.getRejectGroup().getId() == 2){
+                               typeIncome = ruleResultDetail.getRejectGroup().getId();
+                            } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+                                typePolicy = ruleResultDetail.getRejectGroup().getId();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void findCancelCodeByExSum(){
+        log.debug("--On getCancelCodeByExSum.");
+        codeByExSum = new RejectLetterCancelCodeByExSum();
+
+        reason = new Reason();
+        if (!Util.isNull(exSummary)){
+            if (Util.isSafetyList(exSumDeviate)){
+                log.debug("--exSumDeviate is not null. {}",exSumDeviate.size());
+                for (ExSumDeviate sumDeviate : exSumDeviate){
+                    reason = reasonDAO.findById(sumDeviate.getDeviateCode().getId());
+                    if (!Util.isNull(reason.getUwRejectGroup())){
+                        if (reason.getUwRejectGroup().getId() == 1) {
+                            typeNCB = reason.getUwRejectGroup().getId();
+                        } else if (reason.getUwRejectGroup().getId() == 2){
+                            typeIncome = reason.getUwRejectGroup().getId();
+                        } else if (reason.getUwRejectGroup().getId() == 3){
+                            typePolicy = reason.getUwRejectGroup().getId();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public RejectLetterReport findRejectGroup(){
@@ -408,5 +460,29 @@ public class PDFRejectLetter implements Serializable {
 
     public void setTypeReject(int typeReject) {
         this.typeReject = typeReject;
+    }
+
+    public int getTypeIncome() {
+        return typeIncome;
+    }
+
+    public void setTypeIncome(int typeIncome) {
+        this.typeIncome = typeIncome;
+    }
+
+    public int getTypePolicy() {
+        return typePolicy;
+    }
+
+    public void setTypePolicy(int typePolicy) {
+        this.typePolicy = typePolicy;
+    }
+
+    public int getTypeNCB() {
+        return typeNCB;
+    }
+
+    public void setTypeNCB(int typeNCB) {
+        this.typeNCB = typeNCB;
     }
 }

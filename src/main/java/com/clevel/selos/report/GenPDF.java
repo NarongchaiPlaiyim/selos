@@ -288,13 +288,13 @@ public class GenPDF extends ReportService implements Serializable {
             }
             log.debug("--statusId by CANCEL CA = {}",statusId);
         } else if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
-            if (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-                Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy())){
-                log.debug("CancelCode by ExSum and CancelCode by UWResult is Null.");
-                rejectType = true;
-            } else {
-                rejectType = false;
-            }
+                if ((Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy())) &&
+                    (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()))){
+                    log.debug("CancelCode by ExSum and CancelCode by UWResult is Null.");
+                    rejectType = true;
+                } else {
+                    rejectType = false;
+                }
             log.debug("--statusId by Reject UW = {}",statusId);
         } else if (statusId == StatusValue.REJECT_CA.value()){
             rejectType = false;
