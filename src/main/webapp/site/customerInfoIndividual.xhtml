@@ -179,8 +179,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.referenceIndividualList}"
                                                            var="reference"
-                                                           itemLabel="#{reference.description}"
-                                                           itemValue="#{reference.id}"/>
+                                                           itemLabel="#{reference.label}"
+                                                           itemValue="#{reference.value}"/>
                                             <p:ajax event="change" process="@form" listener="#{custInfoSumIndi.onChangeReference()}"
                                                         update=":frmMain:referenceSpouse,:frmMain:relationSpouse,:frmMain:collateralSpouse"/>
                                         </p:selectOneMenu>
@@ -222,8 +222,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
-                                                           itemLabel="#{docType.description}"
-                                                           itemValue="#{docType.id}"/>
+                                                           itemLabel="#{docType.label}"
+                                                           itemValue="#{docType.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -1358,8 +1358,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                                                var="docType"
-                                                                               itemLabel="#{docType.description}"
-                                                                               itemValue="#{docType.id}"/>
+                                                                               itemLabel="#{docType.label}"
+                                                                               itemValue="#{docType.value}"/>
                                                                 <p:ajax event="change" update=":frmMain:inputSearchSpouse"
                                                                         process="@this" listener="#{custInfoSumIndi.onChangeSpouseSearch}"/>
                                                             </p:selectOneMenu>
@@ -1480,8 +1480,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.referenceSpouseList}"
                                                                                var="reference"
-                                                                               itemLabel="#{reference.description}"
-                                                                               itemValue="#{reference.id}"/>
+                                                                               itemLabel="#{reference.label}"
+                                                                               itemValue="#{reference.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1523,8 +1523,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                                                var="docType"
-                                                                               itemLabel="#{docType.description}"
-                                                                               itemValue="#{docType.id}"/>
+                                                                               itemLabel="#{docType.label}"
+                                                                               itemValue="#{docType.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>

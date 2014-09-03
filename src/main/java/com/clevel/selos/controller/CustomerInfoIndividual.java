@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.master.DocumentTypeControl;
+import com.clevel.selos.businesscontrol.master.ReferenceControl;
 import com.clevel.selos.businesscontrol.master.RelationControl;
 import com.clevel.selos.businesscontrol.master.RelationCustomerControl;
 import com.clevel.selos.dao.master.*;
@@ -16,6 +17,8 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.master.ReferenceView;
+import com.clevel.selos.model.view.master.RelationView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -55,8 +58,6 @@ public class CustomerInfoIndividual implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
-    @Inject
-    private ReferenceDAO referenceDAO;
     @Inject
     private TitleDAO titleDAO;
     @Inject
@@ -98,13 +99,15 @@ public class CustomerInfoIndividual implements Serializable {
     private RelationControl relationControl;
     @Inject
     private RelationCustomerControl relationCustomerControl;
+    @Inject
+    private ReferenceControl referenceControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
     private List<SelectItem> relationIndividualList;
     private List<SelectItem> relationSpouseList;
-    private List<Reference> referenceIndividualList;
-    private List<Reference> referenceSpouseList;
+    private List<SelectItem> referenceIndividualList;
+    private List<SelectItem> referenceSpouseList;
     private List<Title> titleThList;
     private List<Title> titleEnList;
     private List<Race> raceList;
@@ -413,8 +416,8 @@ public class CustomerInfoIndividual implements Serializable {
         relationIndividualList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
         relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
-        referenceIndividualList = new ArrayList<Reference>();
-        referenceSpouseList = new ArrayList<Reference>();
+        referenceIndividualList = new ArrayList<SelectItem>();
+        referenceSpouseList = new ArrayList<SelectItem>();
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -624,7 +627,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeRelation(){
-        referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
+        referenceIndividualList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
         relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
@@ -680,11 +683,11 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeRelationSpouse(){
 //        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
-        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
+        referenceSpouseList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
 
         //this condition for spouse
 //        Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
-        Reference referenceMain = referenceDAO.findById(referenceMainCusId);
+        ReferenceView referenceMain = referenceControl.getReferenceViewById(referenceMainCusId);
         if (caseBorrowerTypeId == 2) { // Juristic as Borrower
 //            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
             if(relationSpouseCusId == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
@@ -696,22 +699,24 @@ public class CustomerInfoIndividual implements Serializable {
                 }
 
                 if(flagRelateType == 0){
-                    Reference tmp1 = new Reference();
-                    Reference tmp2 = new Reference();
-                    for(Reference r : referenceSpouseList){
+                    SelectItem tmp1 = new SelectItem();
+                    SelectItem tmp2 = new SelectItem();
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == 3){
-                            tmp1 = r;
+                            tmp1 = selectItem;
                         }
                         if(r.getRelationType() == 4){
-                            tmp2 = r;
+                            tmp2 = selectItem;
                         }
                     }
                     referenceSpouseList.remove(tmp1);
                     referenceSpouseList.remove(tmp2);
                 } else {
-                    for(Reference r : referenceSpouseList){
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == flagRelateType){
-                            referenceSpouseList.remove(r);
+                            referenceSpouseList.remove(selectItem);
                             return;
                         }
                     }
@@ -726,7 +731,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeRelationInitial(){
-        referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
+        referenceIndividualList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
         relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
@@ -736,24 +741,6 @@ public class CustomerInfoIndividual implements Serializable {
 
 //      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
 //        int relationId = customerInfoView.getRelation().getId();
-        /*Relation tmp1 = new Relation();
-        Relation tmp2 = new Relation();
-        if(relationMainCusId == 3 || relationMainCusId == 4) {
-            for(Relation relationSpouse : relationSpouseList){
-                if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
-                    tmp1 = relationSpouse;
-                }
-                if(relationMainCusId == 4){ // if main cus = 4 remove 3
-                    if(relationSpouse.getId() == 3){
-                        tmp2 = relationSpouse;
-                    }
-                }
-            }
-            relationSpouseList.remove(tmp1);
-            if(relationMainCusId == 4){
-                relationSpouseList.remove(tmp2);
-            }
-        }*/
 
         SelectItem tmp1 = new SelectItem();
         SelectItem tmp2 = new SelectItem();
@@ -777,11 +764,11 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeRelationSpouseInitial(){
 //        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
-        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
+        referenceSpouseList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
 
         //this condition for spouse
 //        Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
-        Reference referenceMain = referenceDAO.findById(referenceMainCusId);
+        ReferenceView referenceMain = referenceControl.getReferenceViewById(referenceMainCusId);
         if (caseBorrowerTypeId == 2) { // Juristic as Borrower
 //            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
             if(relationSpouseCusId == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
@@ -793,22 +780,24 @@ public class CustomerInfoIndividual implements Serializable {
                 }
 
                 if(flagRelateType == 0){
-                    Reference tmp1 = new Reference();
-                    Reference tmp2 = new Reference();
-                    for(Reference r : referenceSpouseList){
+                    SelectItem tmp1 = new SelectItem();
+                    SelectItem tmp2 = new SelectItem();
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == 3){
-                            tmp1 = r;
+                            tmp1 = selectItem;
                         }
                         if(r.getRelationType() == 4){
-                            tmp2 = r;
+                            tmp2 = selectItem;
                         }
                     }
                     referenceSpouseList.remove(tmp1);
                     referenceSpouseList.remove(tmp2);
                 } else {
-                    for(Reference r : referenceSpouseList){
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == flagRelateType){
-                            referenceSpouseList.remove(r);
+                            referenceSpouseList.remove(selectItem);
                             return;
                         }
                     }
@@ -2282,19 +2271,19 @@ public class CustomerInfoIndividual implements Serializable {
         this.relationSpouseList = relationSpouseList;
     }
 
-    public List<Reference> getReferenceIndividualList() {
+    public List<SelectItem> getReferenceIndividualList() {
         return referenceIndividualList;
     }
 
-    public void setReferenceIndividualList(List<Reference> referenceIndividualList) {
+    public void setReferenceIndividualList(List<SelectItem> referenceIndividualList) {
         this.referenceIndividualList = referenceIndividualList;
     }
 
-    public List<Reference> getReferenceSpouseList() {
+    public List<SelectItem> getReferenceSpouseList() {
         return referenceSpouseList;
     }
 
-    public void setReferenceSpouseList(List<Reference> referenceSpouseList) {
+    public void setReferenceSpouseList(List<SelectItem> referenceSpouseList) {
         this.referenceSpouseList = referenceSpouseList;
     }
 
