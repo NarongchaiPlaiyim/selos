@@ -132,6 +132,8 @@ public class FullApplicationControl extends BusinessControl {
     private AppraisalRequestControl appraisalRequestControl;
     @Inject
     private ActionValidationControl actionValidationControl;
+    @Inject
+    private ReturnControl returnControl;
 
     @Inject
     private BPMExecutor bpmExecutor;
@@ -180,7 +182,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     //------ Function for Submit Case -------//
-    public void submitCAByBDM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, int overSLAReasonId, String overSLARemark, long workCaseId) throws Exception{
+    /*public void submitCAByBDM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, int overSLAReasonId, String overSLARemark, long workCaseId) throws Exception{
         //Submit case from BDM to ZM ( Step 2001 )
         log.debug("submitCAByBDM : queueName : {}, wobNumber : {}, zmUserId : {}, rgmUserId : {}, ghUserId : {}, cssoUserId : {}, submitRemark : {}, overSLAReasonId : {}, overSLARemark : {}, workCaseId : {}", queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, submitRemark, overSLAReasonId, workCaseId);
 
@@ -341,7 +343,7 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitCAByRGM(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, int overSLAReasonId, String overSLARemark, long workCaseId) throws Exception{
 
-    }
+    }*/
 
     //------ Function for Submit CA BU ------//
     public void submitForABDM(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception{
@@ -381,6 +383,7 @@ public class FullApplicationControl extends BusinessControl {
             throw new Exception(msg.get("exception.submit.workitem.notfound"));
         }
     }
+
     public void submitForBDM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
         WorkCase workCase;
         String productGroup;
@@ -586,6 +589,35 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    public void submitForZMFCash(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception{
+        String zmDecisionFlag;
+        ApprovalHistory approvalHistoryApprove;
+
+        if(workCaseId != 0){
+            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+            if(!Util.isNull(approvalHistoryApprove)){
+                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
+                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                    approvalHistoryApprove.setSubmit(1);
+                    approvalHistoryApprove.setSubmitDate(new Date());
+
+                    log.debug("submitForZMFCash ::: approvalHistory : {}", approvalHistoryApprove);
+
+                    bpmExecutor.submitForZMFCash(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
+
+                    approvalHistoryDAO.persist(approvalHistoryApprove);
+                } else {
+                    throw new Exception("Please make decision before submit.");
+                }
+            } else {
+                throw new Exception("Please make decision before submit.");
+            }
+        }else{
+            log.debug("submitForZMFCash ::: workCaseId : {}", workCaseId);
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
     public void submitForRGM(String queueName, String wobNumber, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
         String rgmDecisionFlag;
         int priceDOALevel;
@@ -727,7 +759,81 @@ public class FullApplicationControl extends BusinessControl {
         return remark;
     }
     //------ End Function for Submit CA BU ----------//
+    //------ Function for Submit UW ----------------//
+    public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
+        String decisionFlag;
+        String haveRG001 = "N";
+        ApprovalHistory approvalHistoryEndorseCA = null;
 
+        AuthorizationDOA authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
+
+        if(workCaseId != 0){
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+
+            if(approvalHistoryEndorseCA==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                approvalHistoryEndorseCA.setSubmit(1);
+                approvalHistoryEndorseCA.setSubmitDate(new Date());
+
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                String appraisalRequired = workCase != null ? String.valueOf(workCase.getRequestAppraisalRequire()) : "0";
+
+                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
+                    haveRG001 = "Y";
+                }
+
+                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
+                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+            }
+        }else{
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    public void submitForUW2(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
+        String decisionFlag;
+        String haveRG001 = "N";
+        ApprovalHistory approvalHistoryEndorseCA = null;
+
+        String insuranceRequired = "N";
+        String approvalFlag = "N";
+        String tcgRequired = "N";
+
+        if(workCaseId != 0){
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+
+            if(approvalHistoryEndorseCA==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+                approvalHistoryEndorseCA.setSubmit(1);
+                approvalHistoryEndorseCA.setSubmitDate(new Date());
+
+                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
+                    haveRG001 = "Y";
+                }
+
+                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                if(!Util.isNull(basicInfo)){
+                    approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
+                    tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
+                    insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
+                }
+
+                bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
+                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+            }
+        }else{
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    public void submitForBDMUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId) throws Exception{
+        bpmExecutor.submitForBDMUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), ActionCode.SUBMIT_CA.getVal());
+    }
+    //------ End function for Submit UW ------------//
 
 
     public void submitToRGMPriceReduce(String queueName, String wobNumber, long workCaseId) throws Exception {
@@ -821,7 +927,7 @@ public class FullApplicationControl extends BusinessControl {
         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
     }*/
 
-    public void submitToUW2(String uw2Name, long uw2DOALevelId, String remark, String queueName, long workCaseId) throws Exception {
+    /*public void submitToUW2(String uw2Name, long uw2DOALevelId, String remark, String queueName, long workCaseId) throws Exception {
         String decisionFlag = "A";
         String haveRG001 = "N"; //TODO
         WorkCase workCase;
@@ -844,7 +950,7 @@ public class FullApplicationControl extends BusinessControl {
 
         bpmExecutor.submitUW2(workCaseId, queueName, uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, remark, ActionCode.SUBMIT_CA.getVal());
         approvalHistoryDAO.persist(approvalHistoryEndorseCA);
-    }
+    }*/
 
     public void submitCA(String wobNumber, String queueName, long workCaseId) throws Exception {
         String decisionFlag = "A";

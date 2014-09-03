@@ -627,7 +627,7 @@ public class HeaderController extends BaseController {
         boolean isSubmitBU = true;
         if(stepId == StepValue.CREDIT_DECISION_UW1.value() || stepId == StepValue.CREDIT_DECISION_UW2.value() ||
                 stepId == StepValue.CREDIT_DECISION_UW1_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM.value() ||
-                    stepId == StepValue.CREDIT_DECISION_UW1_CORRECT_INFO_BDM.value()){
+                    stepId == StepValue.CREDIT_DECISION_UW1_CORRECT_INFO_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM_UPD_INFO.value()){
             isSubmitBU = false;
         }
         return isSubmitBU;
@@ -755,9 +755,11 @@ public class HeaderController extends BaseController {
         }else if(stepId == StepValue.FULLAPP_BDM.value()) {
             //Submit case from BDM to ZM ( Step 2001 )
             submitForBDM();
-        }else if(stepId == StepValue.FULLAPP_ZM.value() || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {
+        }else if(stepId == StepValue.FULLAPP_ZM.value()) {
             //Submit case from ZM to RGM or UW ( DOA Level ) ( Step 2002 ) and Submit for FCash 2nd time ( Step 2009 )
             submitForZM();
+        }else if(stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {
+            submitForZMFCash();
         }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
             //Submit case from BDM to ZM ( Price Reduction ) ( Step 2018 )
 
@@ -845,6 +847,25 @@ public class HeaderController extends BaseController {
             message = Util.getMessageException(ex);
             showMessageBox();
             log.error("onSubmitRM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    private void submitForZMFCash(){
+        log.debug("submitForZMFCash ::: starting...");
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForZMFCash(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("onSubmitFCashZM ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("onSubmitFCashZM ::: exception occurred : ", ex);
         }
         sendCallBackParam(complete);
     }
@@ -1021,8 +1042,11 @@ public class HeaderController extends BaseController {
         isSubmitForBDM = false;
         if(stepId == StepValue.CREDIT_DECISION_UW1.value()){
             isSubmitForUW = true;
-        }else if(stepId == StepValue.CREDIT_DECISION_UW2.value()){
+        }else if(stepId == StepValue.CREDIT_DECISION_UW2.value()) {
             isSubmitForUW2 = true;
+        }else if(stepId == StepValue.CREDIT_DECISION_UW1_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM.value() ||
+                stepId == StepValue.CREDIT_DECISION_UW1_CORRECT_INFO_BDM.value() || stepId == StepValue.CREDIT_DECISION_UW2_BDM_UPD_INFO.value()){
+            isSubmitForBDM = true;
         }else{
             log.debug("No step match : stepId : {}", stepId);
         }
@@ -1088,6 +1112,9 @@ public class HeaderController extends BaseController {
         }else if(isSubmitForUW2){
             //Submit case for UW2 to End Case
             submitForUW2();
+        }else if(isSubmitForBDM){
+            //Submit case for BDM ( from return by UW/UW2 )
+            submitForBDMUW();
         }
     }
 
@@ -1097,7 +1124,7 @@ public class HeaderController extends BaseController {
         try{
             if(selectedUW2User != null && !selectedUW2User.equals("")){
                 if(canSubmitWithoutReturn()){
-                    fullApplicationControl.submitToUW2(selectedUW2User, selectedDOALevel, submitRemark, queueName, workCaseId);
+                    fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
                     message = msg.get("app.message.dialog.submit.success");
                     complete = true;
@@ -1130,24 +1157,19 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         try{
             if(canSubmitWithoutReturn()){
-                fullApplicationControl.submitCA(wobNumber, queueName, workCaseId);
+                fullApplicationControl.calculateApprovedResult(workCaseId);
+                fullApplicationControl.submitForUW2(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
 
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
                 complete = true;
-            } else {
-                messageHeader = "Information.";
-                message = "Submit case fail. Please check return information before submit again.";
-                showMessageBox();
-                log.error("submitForUW2 ::: fail.");
-            }
 
-            if(complete) {
-                fullApplicationControl.calculateApprovedResult(workCaseId);
                 showMessageRedirect();
 
                 log.debug("submitForUW2 ::: success.");
             } else {
+                messageHeader = "Information.";
+                message = "Submit case fail. Please check return information before submit again.";
                 showMessageBox();
                 log.error("submitForUW2 ::: fail.");
             }
@@ -1155,12 +1177,37 @@ public class HeaderController extends BaseController {
             messageHeader = "Information.";
             message = "Submit case fail, cause : " + Util.getMessageException(ex);
             showMessageBox();
-
             log.error("submitForUW2 ::: exception occurred : ", ex);
         }
         sendCallBackParam(complete);
     }
 
+    private void submitForBDMUW(){
+        log.debug("submitForBDMUW :: Start");
+        boolean complete = false;
+        try{
+            if(canSubmitWithoutReturn()){
+                fullApplicationControl.submitForBDMUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId);
+
+                messageHeader = msg.get("app.messageHeader.info");
+                message = msg.get("app.message.dialog.submit.success");
+                complete = true;
+                showMessageRedirect();
+            } else {
+                messageHeader = "Information.";
+                message = "Submit case fail. Please check return information before submit again.";
+                showMessageBox();
+                log.error("submitForBDMUW ::: fail.");
+            }
+        } catch (Exception ex){
+            messageHeader = "Information.";
+            message = "Submit case fail, cause : " + Util.getMessageException(ex);
+            showMessageBox();
+
+            log.error("submitForBDMUW ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
     //************** END OF FUNCTION FOR FULL APPLICATION STAGE ************//
 
     //************* FUNCTION FOR CANCEL CA ****************//

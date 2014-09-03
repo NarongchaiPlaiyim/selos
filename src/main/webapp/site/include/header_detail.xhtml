@@ -203,7 +203,7 @@
     </p:commandButton>
 
 
-    <!--Submit UW2 [ From UW1 ]-->
+    <!--&lt;!&ndash;Submit UW2 [ From UW1 ]&ndash;&gt;
     <p:commandButton id="btnSubmitCaseToUW" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2003}" process="@this"
                      onclick="PF('blockUI').show()"
@@ -211,7 +211,7 @@
                      disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                      oncomplete="blockUI.hide()"
                      update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
-    <!--Submit To UW1 [ From BDM Submit return To UW1 ]-->
+    &lt;!&ndash;Submit To UW1 [ From BDM Submit return To UW1 ]&ndash;&gt;
     <p:commandButton id="btnSubmitCaseToBDMUW1" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitToUW1')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and (headerController.stepId == 2004 || headerController.stepId == 2017 || headerController.stepId == 2026 || headerController.stepId == 2030)}"
                      onclick="confirmSubmitSubmitUW1.show()"/>
@@ -229,7 +229,7 @@
                          styleClass="ui-confirmdialog-no"
                          widgetVar="subUW1CancelBtn"/>
     </p:confirmDialog>
-    <!--Submit CA [ END OF CA ]-->
+    &lt;!&ndash;Submit CA [ END OF CA ]&ndash;&gt;
     <p:commandButton id="btnSubmitCaseUW2" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2016}"
                      disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
@@ -247,7 +247,7 @@
         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmSubmitSubmitCAUW2.hide()"
                          styleClass="ui-confirmdialog-no"
                          widgetVar="subUW2CancelBtn"/>
-    </p:confirmDialog>
+    </p:confirmDialog>-->
     <!--Submit CA [ Zone Manager F-Cash ]-->
     <!--<p:commandButton id="btnSubmitCase_ZMFCash" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2009}"
