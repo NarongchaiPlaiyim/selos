@@ -2006,7 +2006,25 @@ body .ui-tooltip {
 .ui-radiobutton-box.ui-state-error {
     border: 1px solid #cd0a0a !important;
 }
-.ui-selectonemenu-items-wrapper {
+/*.ui-selectonemenu-items-wrapper {
+    max-width: 450px!important;
+}*/
+#frmMain\:reasonList_panel{
+    width: 900px!important;
+}
+
+.ui-selectonemenu-panel#frmMain\:reasonList_panel{
+    min-width: 900px!important;
+    max-width: 900px!important;
+}
+
+#frmMain\:reasonList_panel>.ui-selectonemenu-list-item{
+    min-width: 900px!important;
+    max-width: 900px!important;
+}
+
+.ui-selectonemenu-list-item{
+    min-width: 450px!important;
     max-width: 450px!important;
 }
 .ui-selectonemenu-items-wrapper {

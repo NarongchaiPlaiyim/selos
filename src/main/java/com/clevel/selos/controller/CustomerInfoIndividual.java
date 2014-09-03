@@ -1215,7 +1215,8 @@ public class CustomerInfoIndividual implements Serializable {
                         enableAllFieldCusSpouse = true;
                         try {
                             customerInfoView.getSpouse().setDocumentType(customerInfoSearch.getDocumentType());
-                            customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
+                            //customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy()); TO HARD CODE SEARCH BY CITIZEN ID
+                            customerInfoView.getSpouse().setSearchBy(1);
                             customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
