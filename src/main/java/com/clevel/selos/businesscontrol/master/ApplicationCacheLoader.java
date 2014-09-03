@@ -72,6 +72,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private RelationCustomerDAO relationCustomerDAO;
     @Inject private RelationCustomerTransform relationCustomerTransform;
 
+    @Inject private ReferenceDAO referenceDAO;
+    @Inject private ReferenceTransform referenceTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -128,6 +131,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<RelationCustomer> relationCustomerList = relationCustomerDAO.findAll();
         indexHash.put(RelationCustomer.class.getName(), relationCustomerTransform.transformToCache(relationCustomerList));
+
+        List<Reference> referenceList = referenceDAO.findAll();
+        indexHash.put(Reference.class.getName(), referenceTransform.transformToCache(referenceList));
 
         Util.listMap(indexHash);
     }

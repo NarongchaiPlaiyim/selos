@@ -6,13 +6,12 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.relation.RelationCustomer;
 import com.clevel.selos.model.view.master.RelationCustomerView;
-import com.clevel.selos.model.view.master.RelationView;
 import com.clevel.selos.transform.master.RelationCustomerTransform;
 import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +38,7 @@ public class RelationCustomerControl extends BusinessControl{
 
     public List<SelectItem> getRelationSelectItem(int customerEntityId, int borrowerTypeId, int spouse){
         Map<Integer, RelationCustomerView> _tmpRelationMap = getInternalCacheMap();
-        List<SelectItem> relationList = new LinkedList<SelectItem>();
+        List<SelectItem> relationList = new ArrayList<SelectItem>();
         for(RelationCustomerView relationCustomerView : _tmpRelationMap.values()){
             if(relationCustomerView.getCustomerEntityId() == customerEntityId &&
                     relationCustomerView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
@@ -55,7 +54,7 @@ public class RelationCustomerControl extends BusinessControl{
 
     public List<SelectItem> getRelationSelectItemWithOutBorrower(int customerEntityId, int borrowerTypeId, int spouse){
         Map<Integer, RelationCustomerView> _tmpRelationMap = getInternalCacheMap();
-        List<SelectItem> relationList = new LinkedList<SelectItem>();
+        List<SelectItem> relationList = new ArrayList<SelectItem>();
         for(RelationCustomerView relationCustomerView : _tmpRelationMap.values()){
             if(relationCustomerView.getCustomerEntityId() == customerEntityId &&
                     relationCustomerView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
