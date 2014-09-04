@@ -224,9 +224,7 @@
 			                                        style="margin-right:0px !important"
 			                                        action="#{postCustomerInfoSummary.onClickLink()}"
 			                                        onstart="p_loading_dialog.show()"
-			                                        process="@this"
-			                                        disabled="#{postCustomerInfoSummary.isDisabledGroup(group,'actionList')}"
-			                                        >
+			                                        process="@this">
 			                                        <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoSummary.selectedCustomer}"/>
 			                                    </p:commandButton>
 			                                </p:column>

@@ -288,8 +288,7 @@
                                                         <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditTmbBankStmt()}"
-                                                                         onclick="PF('blockUI').show()"
-                                                                         disabled="#{bankStatementSummary.isDisabled('TMBstmt.editButton')}">
+                                                                         onclick="PF('blockUI').show()">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>
@@ -503,8 +502,7 @@
                                                         <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                          icon="ui-icon-pencil"
                                                                          action="#{bankStatementSummary.onEditOthBankStmt()}"
-                                                                         onclick="PF('blockUI').show()"
-                                                                         disabled="#{bankStatementSummary.isDisabled('otherstmt.editButton')}">
+                                                                         onclick="PF('blockUI').show()">
                                                             <f:setPropertyActionListener value="#{item}"
                                                                                          target="#{bankStatementSummary.selectedBankStmtView}"/>
                                                         </p:commandButton>

@@ -194,6 +194,7 @@
                      update=":frmMain:submitBUPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
     </p:commandButton>
     <!-- Submit Generic for UW -->
+
     <p:commandButton id="btnSubmitCaseUW" value="#{msg.get('app.header.button.submitCA')}3" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and not headerController.checkSubmitBU()}"
 
@@ -201,6 +202,8 @@
                      onclick="PF('blockUI').show()"
                      update=":frmMain:submitUWPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
     </p:commandButton>
+
+
 
 
     <!--&lt;!&ndash;Submit UW2 [ From UW1 ]&ndash;&gt;
@@ -576,6 +579,7 @@
 
 <p:panel id="submitBUPanel" styleClass="panel">
     <p:dialog id="submitBUDialog" widgetVar="submitBUDlg" header="Submit CA"
+              rendered="#{headerController.checkButton('Submit CA') and headerController.checkSubmitBU()}"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="550" closable="false">
         <ui:include src="/site/dialog/submitCADialog.xhtml"/>
@@ -584,6 +588,7 @@
 
 <p:panel id="submitUWPanel" styleClass="panel">
     <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit CA"
+              rendered="#{headerController.checkButton('Submit CA') and not headerController.checkSubmitBU()}"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="490" closable="false">
         <ui:include src="/site/dialog/submitCAUWDialog.xhtml"/>

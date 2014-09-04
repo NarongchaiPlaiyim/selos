@@ -1215,7 +1215,7 @@ public class HeaderController extends BaseController {
         log.debug("onOpenCancelCA ::: starting...");
         _loadSessionVariable();
         cancelRemark = "";
-        reasonId = 0;
+        cancelReasonId = 0;
         //Check BRMS Result
         UWRuleResultSummary uwRuleResultSummary = null;
 
@@ -1226,10 +1226,10 @@ public class HeaderController extends BaseController {
 
         if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
             reasonList = reasonToStepDAO.getRejectReason(stepId);
-            reasonId = reasonDAO.getBRMSReasonId();
+            cancelReasonId = reasonDAO.getBRMSReasonId();
         } else {
             reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
-            reasonId = 0;
+            cancelReasonId = 0;
         }
 
         log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());

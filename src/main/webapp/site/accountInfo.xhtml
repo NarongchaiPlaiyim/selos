@@ -145,9 +145,7 @@
                            						oncomplete="p_openAccountDlg.show();"
                            						action="#{accountInfo.onOpenUpdateOpenAccountDialog()}"
                            						update=":openAccountDlg"
-                           						style="margin-right:0px !important"
-                           						disabled="#{accountInfo.isDisabled('accDetail.actionList')}"
-                           						>
+                           						style="margin-right:0px !important">
                            						<f:setPropertyActionListener target="#{accountInfo.selectedRowId}" value="#{rowIdx}" />
                            						<p:resetInput target=":openAccountDlg" />
                            					</p:commandButton>

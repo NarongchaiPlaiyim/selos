@@ -29,6 +29,8 @@ public class AccountType implements Serializable {
     private int monthFlag;
     @Column(name = "calculatetype", length = 1)
     private int calculateType;
+    @Column(name = "code", length = 4)
+    private String code;
 
     public AccountType() {
     }
@@ -105,6 +107,14 @@ public class AccountType implements Serializable {
         this.calculateType = calculateType;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -117,6 +127,7 @@ public class AccountType implements Serializable {
                 .append("ncbCode", ncbCode)
                 .append("monthFlag", monthFlag)
                 .append("calculateType", calculateType)
+                .append("code", code)
                 .toString();
     }
 }

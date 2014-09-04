@@ -117,7 +117,6 @@
                 <td class="title left top" width="190px">Remark :</td>
                 <td>
                     <p:inputTextarea value="#{headerController.submitRemark}" autoResize="false"
-                                     required="#{not empty param[btnSubmitFullApplication.clientId]}"
                                      cols="35" rows="5">
                     </p:inputTextarea>
                 </td>
@@ -132,14 +131,15 @@
             <tr>
                 <td class="title left" width="190px">Reason for over SLA :</td>
                 <td>
-                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                    <p:selectOneMenu id="submitFullAppOverSlaReason" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{headerController.slaReasonId}"
                                      required="#{not empty param[btnSubmitFullApplication.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{headerController.slaReasonList}"
-                                       var="reasonItem"
-                                       itemLabel="#{reasonItem.code} - #{reasonItem.description}"
-                                       itemValue="#{reasonItem.id}"/>
+                                       var="overReasonItem"
+                                       itemLabel="#{overReasonItem.code} - #{overReasonItem.description}"
+                                       itemValue="#{overReasonItem.id}"/>
+                        <p:ajax event="change" process="@form" update=":frmMain:submitFullAppOverSlaReason"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -147,7 +147,6 @@
                 <td class="title left" width="190px">SLA Remark :</td>
                 <td>
                     <p:inputTextarea value="#{headerController.slaRemark}"
-                                     required="#{not empty param[btnSubmitFullApplication.clientId]}"
                                      autoResize="false"
                                      cols="35"
                                      rows="5">

@@ -53,6 +53,7 @@ public class PrescreenView implements Serializable {
         this.refinanceOutBank = new Bank();
         this.referredExperience = new ReferredExperience();
         this.borrowingType = new BorrowingType();
+        this.countryOfRegister = new Country();
     }
 
     public long getId() {

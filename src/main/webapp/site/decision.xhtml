@@ -2065,7 +2065,6 @@
                                                                              icon="ui-icon-pencil"
                                                                              action="#{decision.onEditApproveCredit()}"
                                                                              update=":proposeCreditDlgForm"
-                                                                             disabled="#{decision.isDisabled('approve.actionList')}"
                                                                              oncomplete="proposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{approveCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndex}"/>
@@ -3125,7 +3124,6 @@
                                                          icon="ui-icon-pencil"
                                                          action="#{decision.onEditApproveGuarantor()}"
                                                          update=":guarantorDlgForm"
-                                                         disabled="#{decision.isDisabled('approveGuarantor.actionList')}"
                                                          oncomplete="proposeGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.approveGuarantorInfoView}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndex}"/>

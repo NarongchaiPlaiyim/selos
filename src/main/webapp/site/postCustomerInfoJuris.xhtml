@@ -585,9 +585,7 @@
               style="margin-right:0px !important"
               action="#{postCustomerInfoJuris.onClickLink()}"
               onstart="p_loading_dialog.show()"
-              process="@this"
-              disabled="#{postCustomerInfoJuris.isDisabled('authorized.actionList')}"
-              >
+              process="@this">
               <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoJuris.selectedCustomer}"/>
           </p:commandButton>
       </p:column>
