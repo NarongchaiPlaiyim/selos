@@ -421,8 +421,9 @@ public class FullApplicationControl extends BusinessControl {
                         }
                     }
                 }
-
+                log.debug("submitForBDM :: Duplicate Facility data start.");
                 duplicateFacilityData(workCaseId);
+                log.debug("submitForBDM :: Duplicate Facility data complete...");
                 bpmExecutor.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
 
                 //Insert Approval History

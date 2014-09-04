@@ -183,10 +183,10 @@
     </p:commandButton>
 
     <!--__________ Submit Case ___________ -->
-    <h:outputText value="check submit bu : #{headerController.checkSubmitBU()}"/>
-    <h:outputText value=" stepId : #{headerController.stepId}"/>
+    <!--<h:outputText value="check submit bu : #{headerController.checkSubmitBU()}"/>
+    <h:outputText value=" stepId : #{headerController.stepId}"/>-->
     <!-- Submit Generic for BU -->
-    <p:commandButton id="btnSubmitCaseBU" value="#{msg.get('app.header.button.submitCA')}2" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+    <p:commandButton id="btnSubmitCaseBU" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.checkSubmitBU()}"
                      disabled="#{not headerController.canSubmitCA or not headerController.canCheckFullApp}"
                      action="#{headerController.onOpenSubmitBU()}"
@@ -195,7 +195,7 @@
     </p:commandButton>
     <!-- Submit Generic for UW -->
 
-    <p:commandButton id="btnSubmitCaseUW" value="#{msg.get('app.header.button.submitCA')}3" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
+    <p:commandButton id="btnSubmitCaseUW" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and not headerController.checkSubmitBU()}"
 
                      action="#{headerController.onOpenSubmitUW()}"
