@@ -56,8 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private RaceDAO raceDAO;
-    @Inject
     private NationalityDAO nationalityDAO;
     @Inject
     private EducationDAO educationDAO;
@@ -98,6 +96,8 @@ public class CustomerInfoIndividual implements Serializable {
     private ReferenceControl referenceControl;
     @Inject
     private TitleControl titleControl;
+    @Inject
+    private RaceControl raceControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -107,7 +107,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> referenceSpouseList;
     private List<SelectItem> titleThList;
     private List<SelectItem> titleEnList;
-    private List<Race> raceList;
+    private List<SelectItem> raceList;
     private List<Nationality> nationalityList;
     private List<Nationality> sndNationalityList;
     private List<Education> educationList;
@@ -389,7 +389,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
         titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
-        raceList = raceDAO.findAll();
+        raceList = raceControl.getRaceSelectItemActiveList();
         nationalityList = nationalityDAO.findAll();
         sndNationalityList = nationalityDAO.findAll();
         educationList = educationDAO.findAll();
@@ -2308,11 +2308,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.titleEnList = titleEnList;
     }
 
-    public List<Race> getRaceList() {
+    public List<SelectItem> getRaceList() {
         return raceList;
     }
 
-    public void setRaceList(List<Race> raceList) {
+    public void setRaceList(List<SelectItem> raceList) {
         this.raceList = raceList;
     }
 
