@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NationalityControl extends BusinessControl{
@@ -36,15 +34,20 @@ public class NationalityControl extends BusinessControl{
 
     public List<SelectItem> getNationalitySelectItemActiveList(){
         Map<Integer, NationalityView> _tmpMap = getInternalCacheMap();
+        List<NationalityView> nationalityViewList = new ArrayList<NationalityView>(_tmpMap.values());
+        Collections.sort(nationalityViewList, new NationalityComparator());
+
         List<SelectItem> selectItemList = new ArrayList<SelectItem>();
-        for(NationalityView nationalityView : _tmpMap.values()){
+        for(NationalityView nationalityView : nationalityViewList){
             if(Util.isTrue(nationalityView.getActive())){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(nationalityView.getName());
                 selectItem.setValue(nationalityView.getId());
-                selectItemList.add(selectItem);
+                if(!nationalityView.getName().startsWith("TH"))
+                    selectItemList.add(selectItem);
+                else
+                    selectItemList.add(0, selectItem);
             }
-
         }
         return selectItemList;
     }
@@ -70,4 +73,17 @@ public class NationalityControl extends BusinessControl{
         }
         return _tmpMap;
     }
+
+    private class NationalityComparator implements Comparator {
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            NationalityView nationalityView1 = (NationalityView)o1;
+            NationalityView nationalityView2 = (NationalityView)o2;
+
+            int flag = nationalityView1.getName().compareTo(nationalityView2.getName());
+            return flag;
+        }
+    }
+
 }

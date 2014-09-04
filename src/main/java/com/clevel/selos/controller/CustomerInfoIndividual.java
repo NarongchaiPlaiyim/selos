@@ -56,8 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private OccupationDAO occupationDAO;
-    @Inject
     private BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
     private MaritalStatusDAO maritalStatusDAO;
@@ -98,6 +96,8 @@ public class CustomerInfoIndividual implements Serializable {
     private NationalityControl nationalityControl;
     @Inject
     private EducationControl educationControl;
+    @Inject
+    private OccupationControl occupationControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -111,7 +111,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> nationalityList;
     private List<SelectItem> sndNationalityList;
     private List<SelectItem> educationList;
-    private List<Occupation> occupationList;
+    private List<SelectItem> occupationList;
     private List<BusinessDescription> businessTypeList;
     private List<MaritalStatus> maritalStatusList;
 
@@ -393,7 +393,7 @@ public class CustomerInfoIndividual implements Serializable {
         nationalityList = nationalityControl.getNationalitySelectItemActiveList();
         sndNationalityList = nationalityControl.getNationalitySelectItemActiveList();
         educationList = educationControl.getEducationSelectItemActiveList();
-        occupationList = occupationDAO.findAll();
+        occupationList = occupationControl.getOccupationSelectItemActiveList();
         businessTypeList = businessDescriptionDAO.getListOrderByTMBCode();
         maritalStatusList = maritalStatusDAO.findAll();
 
@@ -2340,11 +2340,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.educationList = educationList;
     }
 
-    public List<Occupation> getOccupationList() {
+    public List<SelectItem> getOccupationList() {
         return occupationList;
     }
 
-    public void setOccupationList(List<Occupation> occupationList) {
+    public void setOccupationList(List<SelectItem> occupationList) {
         this.occupationList = occupationList;
     }
 

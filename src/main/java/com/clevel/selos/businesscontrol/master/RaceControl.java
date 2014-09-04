@@ -10,9 +10,7 @@ import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RaceControl {
@@ -32,9 +30,11 @@ public class RaceControl {
 
     public List<SelectItem> getRaceSelectItemActiveList(){
         Map<Integer, RaceView> _tmpMap = getInternalCacheMap();
+        List<RaceView> raceViewList = new ArrayList<RaceView>(_tmpMap.values());
+        Collections.sort(raceViewList, new RaceComparator());
         List<SelectItem> raceSelectItem = new ArrayList<SelectItem>();
-        for(RaceView raceView : _tmpMap.values()){
-            if(Util.isTrue(raceView.getId())){
+        for(RaceView raceView : raceViewList){
+            if(Util.isTrue(raceView.getActive())){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(raceView.getName());
                 selectItem.setValue(raceView.getId());
@@ -64,4 +64,17 @@ public class RaceControl {
         }
         return _tmpMap;
     }
+
+    private class RaceComparator implements Comparator{
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            RaceView raceView1 = (RaceView) o1;
+            RaceView raceView2 = (RaceView) o2;
+
+            int flag = ((Integer)raceView1.getId()).compareTo(raceView2.getId());
+            return flag;
+        }
+    }
+
 }

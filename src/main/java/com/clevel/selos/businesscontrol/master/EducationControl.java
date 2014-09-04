@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EducationControl extends BusinessControl {
@@ -33,8 +31,11 @@ public class EducationControl extends BusinessControl {
 
     public List<SelectItem> getEducationSelectItemActiveList(){
         Map<Integer, EducationView> _tmpMap = getInternalCacheMap();
+        List<EducationView> educationViewList = new ArrayList<EducationView>(_tmpMap.values());
+        Collections.sort(educationViewList, new EducationComparator());
+
         List<SelectItem> selectItemList = new ArrayList<SelectItem>();
-        for(EducationView educationView : _tmpMap.values()){
+        for(EducationView educationView : educationViewList){
             if(Util.isTrue(educationView.getActive())){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(educationView.getNameTh());
@@ -65,6 +66,18 @@ public class EducationControl extends BusinessControl {
             _tmpMap = loadData();
         }
         return _tmpMap;
+    }
+
+    private class EducationComparator implements Comparator {
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            EducationView educationView1 = (EducationView) o1;
+            EducationView educationView2 = (EducationView) o2;
+
+            int flag = ((Integer)educationView1.getId()).compareTo(educationView2.getId());
+            return flag;
+        }
     }
 
 }

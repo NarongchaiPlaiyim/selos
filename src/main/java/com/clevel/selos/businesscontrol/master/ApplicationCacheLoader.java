@@ -87,6 +87,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private EducationDAO educationDAO;
     @Inject private EducationTransform educationTransform;
 
+    @Inject private OccupationDAO occupationDAO;
+    @Inject private OccupationTransform occupationTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -158,6 +161,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<Education> educationList = educationDAO.findAll();
         indexHash.put(Education.class.getName(), educationTransform.transformToCache(educationList));
+
+        List<Occupation> occupationList = occupationDAO.findAll();
+        indexHash.put(Occupation.class.getName(), occupationTransform.transformToCache(occupationList));
 
         Util.listMap(indexHash);
     }

@@ -496,8 +496,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                            var="occupation"
-                                                           itemLabel="#{occupation.code} - #{occupation.description}"
-                                                           itemValue="#{occupation.id}"/>
+                                                           itemLabel="#{occupation.label}"
+                                                           itemValue="#{occupation.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -1795,8 +1795,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                                                var="occupation"
-                                                                               itemLabel="#{occupation.code} - #{occupation.description}"
-                                                                               itemValue="#{occupation.id}"/>
+                                                                               itemLabel="#{occupation.label}"
+                                                                               itemValue="#{occupation.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
