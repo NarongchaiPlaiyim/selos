@@ -56,8 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private NationalityDAO nationalityDAO;
-    @Inject
     private EducationDAO educationDAO;
     @Inject
     private OccupationDAO occupationDAO;
@@ -98,6 +96,8 @@ public class CustomerInfoIndividual implements Serializable {
     private TitleControl titleControl;
     @Inject
     private RaceControl raceControl;
+    @Inject
+    private NationalityControl nationalityControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -108,8 +108,8 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> titleThList;
     private List<SelectItem> titleEnList;
     private List<SelectItem> raceList;
-    private List<Nationality> nationalityList;
-    private List<Nationality> sndNationalityList;
+    private List<SelectItem> nationalityList;
+    private List<SelectItem> sndNationalityList;
     private List<Education> educationList;
     private List<Occupation> occupationList;
     private List<BusinessDescription> businessTypeList;
@@ -390,8 +390,8 @@ public class CustomerInfoIndividual implements Serializable {
         titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
         titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
         raceList = raceControl.getRaceSelectItemActiveList();
-        nationalityList = nationalityDAO.findAll();
-        sndNationalityList = nationalityDAO.findAll();
+        nationalityList = nationalityControl.getNationalitySelectItemActiveList();
+        sndNationalityList = nationalityControl.getNationalitySelectItemActiveList();
         educationList = educationDAO.findAll();
         occupationList = occupationDAO.findAll();
         businessTypeList = businessDescriptionDAO.getListOrderByTMBCode();
@@ -2316,19 +2316,19 @@ public class CustomerInfoIndividual implements Serializable {
         this.raceList = raceList;
     }
 
-    public List<Nationality> getNationalityList() {
+    public List<SelectItem> getNationalityList() {
         return nationalityList;
     }
 
-    public void setNationalityList(List<Nationality> nationalityList) {
+    public void setNationalityList(List<SelectItem> nationalityList) {
         this.nationalityList = nationalityList;
     }
 
-    public List<Nationality> getSndNationalityList() {
+    public List<SelectItem> getSndNationalityList() {
         return sndNationalityList;
     }
 
-    public void setSndNationalityList(List<Nationality> sndNationalityList) {
+    public void setSndNationalityList(List<SelectItem> sndNationalityList) {
         this.sndNationalityList = sndNationalityList;
     }
 
