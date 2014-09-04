@@ -10,6 +10,7 @@ import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -96,18 +97,23 @@ public class AppraisalResultControl extends BusinessControl {
             newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
             if(!Util.isNull(newCreditFacility)){
-                List<ProposeCollateralInfo> newCollateralListTypeP = null;
-                List<ProposeCollateralInfo> newCollateralListTypeA2 = null;
+//                List<ProposeCollateralInfo> newCollateralListTypeP = null;
+//                List<ProposeCollateralInfo> newCollateralListTypeA2 = null;
+                List<ProposeCollateralInfo> newCollateralListTypeAll = null;
 
-                newCollateralListTypeP = proposeCollateralInfoDAO.findNewCollateralByTypeP(newCreditFacility);//normal query
-                newCollateralListTypeA2 = proposeCollateralInfoDAO.findNewCollateralByTypeA2(newCreditFacility);
+//                newCollateralListTypeP = proposeCollateralInfoDAO.findNewCollateralByTypeP(newCreditFacility);//normal query
+//                newCollateralListTypeA2 = proposeCollateralInfoDAO.findNewCollateralByTypeA2(newCreditFacility);
+               newCollateralListTypeAll = proposeCollateralInfoDAO.findNewCollateralByTypePorA(newCreditFacility); //getProposeType A or P
 
                 newCollateralList = new ArrayList<ProposeCollateralInfo>();
-                if(Util.isSafetyList(newCollateralListTypeP)){
-                    newCollateralList.addAll(newCollateralListTypeP);
-                }
-                if(Util.isSafetyList(newCollateralListTypeA2)){
-                    newCollateralList.addAll(newCollateralListTypeA2);
+//                if(Util.isSafetyList(newCollateralListTypeP)){
+//                    newCollateralList.addAll(newCollateralListTypeP);
+//                }
+//                if(Util.isSafetyList(newCollateralListTypeA2)){
+//                    newCollateralList.addAll(newCollateralListTypeA2);
+//                }
+                if (Util.isSafetyList(newCollateralListTypeAll)){
+                    newCollateralList.addAll(newCollateralListTypeAll);
                 }
 
                 List<ProposeCollateralInfo> tempNewCollateralList = new ArrayList<ProposeCollateralInfo>();
@@ -115,6 +121,7 @@ public class AppraisalResultControl extends BusinessControl {
                     newCollateral.setProposeCollateralInfoHeadList(proposeCollateralInfoHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
                     tempNewCollateralList.add(newCollateral);
                 }
+
                 newCollateralViewList = proposeLineTransform.transformProposeCollateralToViewList(tempNewCollateralList, ProposeType.BOTH);
                 appraisalView.setNewCollateralViewList(newCollateralViewList);
             } else {
@@ -185,8 +192,10 @@ public class AppraisalResultControl extends BusinessControl {
         log.debug("-- User.id[{}]", user.getId());
         if(!Util.isNull(workCase)){
             log.debug("-- WorkCase.id[{}]", workCase.getId());
+            newCreditFacility = proposeLineDAO.findByWorkCaseId(workCase.getId());
         } else if(!Util.isNull(workCasePrescreen)){
             log.debug("-- WorkCasePrescreen.id[{}]", workCasePrescreen.getId());
+            newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePrescreen.getId());
         }
         log.debug("-- ProposeLine.id[{}]", newCreditFacility.getId());
 

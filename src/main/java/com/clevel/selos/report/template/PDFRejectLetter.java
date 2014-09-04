@@ -78,10 +78,10 @@ public class PDFRejectLetter implements Serializable {
     private int typeReject;
     private ExSummary exSummary;
     private List<ExSumDeviate> exSumDeviate;
-    int cancelCodebyExSum = 0;
+//    int cancelCodebyExSum = 0;
     private Reason reason;
     private RejectLetterReport rejectLetterReport;
-    private RejectLetterCancelCodeByExSum codeByExSum;
+//    private RejectLetterCancelCodeByExSum codeByExSum;
     private HttpSession session;
     private final String SPACE = " ";
     private int typeNCB;
@@ -146,8 +146,11 @@ public class PDFRejectLetter implements Serializable {
                     log.debug("--statusId from workCasePrescreen. {}",statusId);
                 }
         }
-        getCancelCodeByExSum();
-        findRejectGroup();
+        findCancelCodeByUWResult();
+        findCancelCodeByExSum();
+
+//        getCancelCodeByExSum();
+//        findRejectGroup();
         onCheckLogic();
     }
 
@@ -174,6 +177,7 @@ public class PDFRejectLetter implements Serializable {
     }
 
     public void findCancelCodeByUWResult(){
+        log.debug("--On findCancelCodeByUWResult.");
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
 
         if (!Util.isNull(uwRuleResultSummary)){
@@ -200,8 +204,8 @@ public class PDFRejectLetter implements Serializable {
     }
 
     public void findCancelCodeByExSum(){
-        log.debug("--On getCancelCodeByExSum.");
-        codeByExSum = new RejectLetterCancelCodeByExSum();
+        log.debug("--On findCancelCodeByExSum.");
+//        codeByExSum = new RejectLetterCancelCodeByExSum();
 
         reason = new Reason();
         if (!Util.isNull(exSummary)){
@@ -223,61 +227,61 @@ public class PDFRejectLetter implements Serializable {
         }
     }
 
-    public RejectLetterReport findRejectGroup(){
-        log.debug("--On typeReport.");
+//    public RejectLetterReport findRejectGroup(){
+//        log.debug("--On typeReport.");
+//
+//        uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
+//
+//        if (!Util.isNull(uwRuleResultSummary)){
+//            log.debug("--UwRuleResultSummary ID. {}",uwRuleResultSummary.getId());
+//            if (!Util.isZero(uwRuleResultSummary.getId())){
+//                log.debug("--UwRuldResult id is not Zero",uwRuleResultSummary.getId());
+//                uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
+//                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails.size());
+//                if (!Util.isNull(uwRuleResultDetails)){
+//                    for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
+//                        if (!Util.isNull(ruleResultDetail.getRejectGroup())){
+//                            if (ruleResultDetail.getRejectGroup().getId() == 1){
+//                                rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
+//                            } else if (ruleResultDetail.getRejectGroup().getId() == 2){
+//                                rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
+//                            } else if (ruleResultDetail.getRejectGroup().getId() == 3){
+//                                rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        log.debug("--rejectLetterReport. [{}]",rejectLetterReport);
+//        return rejectLetterReport;
+//    }
 
-        uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
-
-        if (!Util.isNull(uwRuleResultSummary)){
-            log.debug("--UwRuleResultSummary ID. {}",uwRuleResultSummary.getId());
-            if (!Util.isZero(uwRuleResultSummary.getId())){
-                log.debug("--UwRuldResult id is not Zero",uwRuleResultSummary.getId());
-                uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
-                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails.size());
-                if (!Util.isNull(uwRuleResultDetails)){
-                    for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
-                        if (!Util.isNull(ruleResultDetail.getRejectGroup())){
-                            if (ruleResultDetail.getRejectGroup().getId() == 1){
-                                rejectLetterReport.setTypeNCB(ruleResultDetail.getRejectGroup().getId());
-                            } else if (ruleResultDetail.getRejectGroup().getId() == 2){
-                                rejectLetterReport.setTypeIncome(ruleResultDetail.getRejectGroup().getId());
-                            } else if (ruleResultDetail.getRejectGroup().getId() == 3){
-                                rejectLetterReport.setTypePolicy(ruleResultDetail.getRejectGroup().getId());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        log.debug("--rejectLetterReport. [{}]",rejectLetterReport);
-        return rejectLetterReport;
-    }
-
-    public RejectLetterCancelCodeByExSum getCancelCodeByExSum(){
-        log.debug("--On getCancelCodeByExSum.");
-        codeByExSum = new RejectLetterCancelCodeByExSum();
-
-        reason = new Reason();
-        if (!Util.isNull(exSummary)){
-            if (Util.isSafetyList(exSumDeviate)){
-                log.debug("--exSumDeviate is not null. {}",exSumDeviate.size());
-                for (ExSumDeviate sumDeviate : exSumDeviate){
-                    reason = reasonDAO.findById(sumDeviate.getDeviateCode().getId());
-                    if (!Util.isNull(reason.getUwRejectGroup())){
-                        if (reason.getUwRejectGroup().getId() == 1) {
-                            codeByExSum.setExSumNCB(reason.getUwRejectGroup().getId());
-                        } else if (reason.getUwRejectGroup().getId() == 2){
-                            codeByExSum.setExSumIncome(reason.getUwRejectGroup().getId());
-                        } else if (reason.getUwRejectGroup().getId() == 3){
-                            codeByExSum.setExSumPolicy(reason.getUwRejectGroup().getId());
-                        }
-                    }
-                }
-            }
-        }
-        log.debug("--codeByExSum. [{}]",codeByExSum);
-        return codeByExSum;
-    }
+//    public RejectLetterCancelCodeByExSum getCancelCodeByExSum(){
+//        log.debug("--On getCancelCodeByExSum.");
+//        codeByExSum = new RejectLetterCancelCodeByExSum();
+//
+//        reason = new Reason();
+//        if (!Util.isNull(exSummary)){
+//            if (Util.isSafetyList(exSumDeviate)){
+//                log.debug("--exSumDeviate is not null. {}",exSumDeviate.size());
+//                for (ExSumDeviate sumDeviate : exSumDeviate){
+//                    reason = reasonDAO.findById(sumDeviate.getDeviateCode().getId());
+//                    if (!Util.isNull(reason.getUwRejectGroup())){
+//                        if (reason.getUwRejectGroup().getId() == 1) {
+//                            codeByExSum.setExSumNCB(reason.getUwRejectGroup().getId());
+//                        } else if (reason.getUwRejectGroup().getId() == 2){
+//                            codeByExSum.setExSumIncome(reason.getUwRejectGroup().getId());
+//                        } else if (reason.getUwRejectGroup().getId() == 3){
+//                            codeByExSum.setExSumPolicy(reason.getUwRejectGroup().getId());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        log.debug("--codeByExSum. [{}]",codeByExSum);
+//        return codeByExSum;
+//    }
 
     public int onCheckLogic(){
         log.debug("OnCeckLogic.");
@@ -313,7 +317,7 @@ public class PDFRejectLetter implements Serializable {
             if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
                 log.debug("#### REJECT UW1/UW2 ####",statusId);
                 typeReject = 1;
-                log.debug("--rejectLetterReport. {},--codeByExSum. {} ",rejectLetterReport,codeByExSum);
+                log.debug("--rejectLetterReport. {}",rejectLetterReport);
             }
 
             //##### status 90004
@@ -438,7 +442,7 @@ public class PDFRejectLetter implements Serializable {
 
             StringBuilder stringBuilder =new StringBuilder();
             if(!Util.isNull(spDate) && spDate.length == 3){
-                stringBuilder = stringBuilder.append(spDate[0]).append(SPACE);
+                stringBuilder = stringBuilder.append(Integer.parseInt(spDate[0])).append(SPACE);
                 stringBuilder = stringBuilder.append(setMonth).append(SPACE);
                 stringBuilder =  stringBuilder.append(spDate[2]);
                 letterReport.setDate(stringBuilder.toString());
