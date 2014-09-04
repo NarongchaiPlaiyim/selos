@@ -56,8 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private EducationDAO educationDAO;
-    @Inject
     private OccupationDAO occupationDAO;
     @Inject
     private BusinessDescriptionDAO businessDescriptionDAO;
@@ -98,6 +96,8 @@ public class CustomerInfoIndividual implements Serializable {
     private RaceControl raceControl;
     @Inject
     private NationalityControl nationalityControl;
+    @Inject
+    private EducationControl educationControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -110,7 +110,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> raceList;
     private List<SelectItem> nationalityList;
     private List<SelectItem> sndNationalityList;
-    private List<Education> educationList;
+    private List<SelectItem> educationList;
     private List<Occupation> occupationList;
     private List<BusinessDescription> businessTypeList;
     private List<MaritalStatus> maritalStatusList;
@@ -392,7 +392,7 @@ public class CustomerInfoIndividual implements Serializable {
         raceList = raceControl.getRaceSelectItemActiveList();
         nationalityList = nationalityControl.getNationalitySelectItemActiveList();
         sndNationalityList = nationalityControl.getNationalitySelectItemActiveList();
-        educationList = educationDAO.findAll();
+        educationList = educationControl.getEducationSelectItemActiveList();
         occupationList = occupationDAO.findAll();
         businessTypeList = businessDescriptionDAO.getListOrderByTMBCode();
         maritalStatusList = maritalStatusDAO.findAll();
@@ -2332,11 +2332,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.sndNationalityList = sndNationalityList;
     }
 
-    public List<Education> getEducationList() {
+    public List<SelectItem> getEducationList() {
         return educationList;
     }
 
-    public void setEducationList(List<Education> educationList) {
+    public void setEducationList(List<SelectItem> educationList) {
         this.educationList = educationList;
     }
 
