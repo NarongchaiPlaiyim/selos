@@ -227,9 +227,7 @@
 	                           						oncomplete="p_contactRecordDlg.show();"
 	                           						action="#{customerAcceptance.onOpenUpdateContactRecordDialog()}"
 	                           						update=":contactRecordDlg"
-	                           						style="margin-right:0px !important"
-	                           						disabled="#{customerAcceptance.isDisabled('customerContactRec.actionList')}"
-	                           						>
+	                           						style="margin-right:0px !important">
 	                           						<p:resetInput target=":contactRecordDlg" />
 	                           						<f:setPropertyActionListener target="#{customerAcceptance.contactRecord}"
 	                           							 value="#{detail}" />

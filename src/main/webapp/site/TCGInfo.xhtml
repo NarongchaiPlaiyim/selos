@@ -236,8 +236,7 @@
                                                                  action="#{tcgInfo.onEditCollateralDetail()}"
                                                                  process=":frmMain:resultCollateralDetail"
                                                                  update=":tcgDlgForm"
-                                                                 oncomplete="tcgDlg.show();"
-                                                                 disabled="#{tcgInfo.isDisabled('saveButton')}">
+                                                                 oncomplete="tcgDlg.show();">
                                                     <f:setPropertyActionListener value="#{item}"
                                                                                  target="#{tcgInfo.selectCollateralItem}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
