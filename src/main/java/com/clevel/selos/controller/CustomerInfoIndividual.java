@@ -1,10 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.master.DocumentTypeControl;
-import com.clevel.selos.businesscontrol.master.ReferenceControl;
-import com.clevel.selos.businesscontrol.master.RelationControl;
-import com.clevel.selos.businesscontrol.master.RelationCustomerControl;
+import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
@@ -59,8 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private TitleDAO titleDAO;
-    @Inject
     private RaceDAO raceDAO;
     @Inject
     private NationalityDAO nationalityDAO;
@@ -101,6 +96,8 @@ public class CustomerInfoIndividual implements Serializable {
     private RelationCustomerControl relationCustomerControl;
     @Inject
     private ReferenceControl referenceControl;
+    @Inject
+    private TitleControl titleControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -108,8 +105,8 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> relationSpouseList;
     private List<SelectItem> referenceIndividualList;
     private List<SelectItem> referenceSpouseList;
-    private List<Title> titleThList;
-    private List<Title> titleEnList;
+    private List<SelectItem> titleThList;
+    private List<SelectItem> titleEnList;
     private List<Race> raceList;
     private List<Nationality> nationalityList;
     private List<Nationality> sndNationalityList;
@@ -390,8 +387,8 @@ public class CustomerInfoIndividual implements Serializable {
 
         documentTypeList = documentTypeControl.getDocumentTypeByCustomerEntity(1);
 
-        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
-        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+        titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
+        titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
         raceList = raceDAO.findAll();
         nationalityList = nationalityDAO.findAll();
         sndNationalityList = nationalityDAO.findAll();
@@ -2063,7 +2060,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         //customerInfoView = individual
-        customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
+        customerInfoView.getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getTitleTh().getId()).getTitleTh());
         customerInfoView.getRelation().setDescription(relationControl.getRelationViewById(relationMainCusId).getDescription());
 
         if(isEditFromJuristic){
@@ -2295,19 +2292,19 @@ public class CustomerInfoIndividual implements Serializable {
         this.customerInfoSearch = customerInfoSearch;
     }
 
-    public List<Title> getTitleThList() {
+    public List<SelectItem> getTitleThList() {
         return titleThList;
     }
 
-    public void setTitleThList(List<Title> titleThList) {
+    public void setTitleThList(List<SelectItem> titleThList) {
         this.titleThList = titleThList;
     }
 
-    public List<Title> getTitleEnList() {
+    public List<SelectItem> getTitleEnList() {
         return titleEnList;
     }
 
-    public void setTitleEnList(List<Title> titleEnList) {
+    public void setTitleEnList(List<SelectItem> titleEnList) {
         this.titleEnList = titleEnList;
     }
 

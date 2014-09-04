@@ -334,8 +334,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleThList}"
                                                                        var="titleTh"
-                                                                       itemLabel="#{titleTh.titleTh}"
-                                                                       itemValue="#{titleTh.id}"/>
+                                                                       itemLabel="#{titleTh.label}"
+                                                                       itemValue="#{titleTh.value}"/>
                                                         <p:ajax event="change"
                                                                 listener="#{custInfoSumIndi.onChangeTitleTh()}"
                                                                 update=":frmMain:titleEn"/>
@@ -374,8 +374,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleEnList}"
                                                                        var="titleEn"
-                                                                       itemLabel="#{titleEn.titleEn}"
-                                                                       itemValue="#{titleEn.id}"/>
+                                                                       itemLabel="#{titleEn.label}"
+                                                                       itemValue="#{titleEn.value}"/>
                                                         <p:ajax event="change"
                                                                 listener="#{custInfoSumIndi.onChangeTitleEn()}"
                                                                 update=":frmMain:titleTh"/>
@@ -1635,8 +1635,8 @@
                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                             <f:selectItems value="#{custInfoSumIndi.titleThList}"
                                                                                            var="titleTh"
-                                                                                           itemLabel="#{titleTh.titleTh}"
-                                                                                           itemValue="#{titleTh.id}"/>
+                                                                                           itemLabel="#{titleTh.label}"
+                                                                                           itemValue="#{titleTh.value}"/>
                                                                             <p:ajax event="change"
                                                                                     listener="#{custInfoSumIndi.onChangeTitleThSpouse()}"
                                                                                     update=":frmMain:titleEnSpouse"/>
@@ -1674,8 +1674,8 @@
                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                             <f:selectItems value="#{custInfoSumIndi.titleEnList}"
                                                                                            var="titleEn"
-                                                                                           itemLabel="#{titleEn.titleEn}"
-                                                                                           itemValue="#{titleEn.id}"/>
+                                                                                           itemLabel="#{titleEn.label}"
+                                                                                           itemValue="#{titleEn.value}"/>
                                                                             <p:ajax event="change"
                                                                                     listener="#{custInfoSumIndi.onChangeTitleEnSpouse()}"
                                                                                     update=":frmMain:titleThSpouse"/>
