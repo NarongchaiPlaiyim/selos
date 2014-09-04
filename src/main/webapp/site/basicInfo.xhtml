@@ -633,8 +633,7 @@
                                                                              icon="ui-icon-pencil"
                                                                              action="#{basicInfo.onSelectEditAccount()}"
                                                                              update=":basicInfoAccountDlgForm"
-                                                                             oncomplete="basicInfoAccountDlg.show();"
-                                                                             disabled="#{basicInfo.isDisabled('saveButton')}">
+                                                                             oncomplete="basicInfoAccountDlg.show();">
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                                 <f:setPropertyActionListener value="#{rowIndex}"
