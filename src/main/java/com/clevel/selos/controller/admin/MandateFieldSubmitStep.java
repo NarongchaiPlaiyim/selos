@@ -4,7 +4,7 @@ import com.clevel.selos.businesscontrol.StepStatusControl;
 import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;

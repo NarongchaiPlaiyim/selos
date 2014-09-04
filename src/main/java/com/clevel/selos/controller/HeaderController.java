@@ -18,6 +18,7 @@ import com.clevel.selos.model.db.working.UWRuleResultSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -670,7 +671,6 @@ public class HeaderController extends BaseController {
         try{
             if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
                 requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-                fullApplicationControl.duplicateFacilityData(workCaseId);
                 if(requestPricing){
                     pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
                     if(pricingDOALevel != 0){
@@ -734,6 +734,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
+                fullApplicationControl.duplicateFacilityData(workCaseId);
                 fullApplicationControl.submitToZM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, workCaseId);
                 //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 messageHeader = msg.get("app.messageHeader.info");

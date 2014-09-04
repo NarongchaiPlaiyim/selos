@@ -769,7 +769,7 @@
                                                             <h:panelGroup rendered="#{(i.index) eq 6}">
                                                                 <td class="left">
                                                                     <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitTimes')}"/>
-                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitTimes')}" styleClass="require-field"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitTimesDetail')}" styleClass="require-field"/>
                                                                 </td>
                                                             </h:panelGroup>
                                                             <td class="center"
@@ -781,7 +781,7 @@
                                                                              onkeypress="return onKeyPressMoney(event);"
                                                                              onfocus="removeComma(this)"
                                                                              styleClass="right"
-                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitTimes')}">
+                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitTimesDetail')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>
@@ -797,7 +797,7 @@
                                                             <h:panelGroup rendered="#{(i.index) eq 6}">
                                                                 <td class="left">
                                                                     <h:outputText value="#{msg.get('app.bankStmtDetail.table.row.overLimitDays')}"/>
-                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitDays')}" styleClass="require-field"/>
+                                                                    <h:outputText value="#{bankStatementDetail.mandate('overLimitDaysDetail')}" styleClass="require-field"/>
                                                                 </td>
                                                             </h:panelGroup>
                                                             <td class="center"
@@ -809,7 +809,7 @@
                                                                              onkeypress="return onKeyPressMoney(event);"
                                                                              onfocus="removeComma(this)"
                                                                              styleClass="right"
-                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitDays')}">
+                                                                             readonly="#{bankStatementDetail.isDisabled('overLimitDaysDetail')}">
                                                                     <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                     <p:ajax event="blur" update="@this"/>
                                                                 </p:inputText>

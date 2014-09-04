@@ -9,6 +9,7 @@ import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

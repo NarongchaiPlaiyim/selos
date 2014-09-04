@@ -1,15 +1,14 @@
 package com.clevel.selos.businesscontrol.master;
 
-import com.clevel.selos.businesscontrol.UserSysParameterControl;
-import com.clevel.selos.dao.master.CountryDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.master.*;
 import com.clevel.selos.util.Util;
-import org.primefaces.context.ApplicationContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -23,10 +22,47 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject
     @SELOS
     private Logger logger;
-    @Inject
-    CountryDAO countryDAO;
-    Map<Integer,Country> countryMap;
 
+    private Map<String, Map> indexHash = null;
+
+    @Inject private CountryDAO countryDAO;
+    @Inject private CountryTransform countryTransform;
+
+    @Inject private BankAccountTypeDAO bankAccountTypeDAO;
+    @Inject private BankAccountTypeTransform bankAccountTypeTransform;
+
+    @Inject private BaseRateDAO baseRateDAO;
+    @Inject private BaseRateTransform baseRateTransform;
+
+    @Inject private BankAccountPurposeDAO bankAccountPurposeDAO;
+    @Inject private BankAccountPurposeTransform bankAccountPurposeTransform;
+
+    @Inject private BankAccountProductDAO bankAccountProductDAO;
+    @Inject private BankAccountProductTransform bankAccountProductTransform;
+
+    @Inject private ProductGroupDAO productGroupDAO;
+    @Inject private ProductTransform productTransform;
+
+    @Inject private SpecialProgramDAO specialProgramDAO;
+    @Inject private SpecialProgramTransform specialProgramTransform;
+
+    @Inject private RequestTypeDAO requestTypeDAO;
+    @Inject private RequestTypeTransform requestTypeTransform;
+
+    @Inject private RiskTypeDAO riskTypeDAO;
+    @Inject private RiskTypeTransform riskTypeTransform;
+
+    @Inject private SBFScoreDAO sbfScoreDAO;
+    @Inject private SBFScoreTransform sbfScoreTransform;
+
+    @Inject private BankDAO bankDAO;
+    @Inject private BankTransform bankTransform;
+
+    @Inject private BorrowingTypeDAO borrowingTypeDAO;
+    @Inject private BorrowingTypeTransform borrowingTypeTransform;
+
+    @Inject private DocumentTypeDAO documentTypeDAO;
+    @Inject private DocumentTypeTransform documentTypeTransform;
 
     @Inject
     public ApplicationCacheLoader() {
@@ -35,63 +71,58 @@ public class ApplicationCacheLoader implements Serializable{
     @PostConstruct
     public void onCreation() {
         logger.debug("onCreation.");
+        indexHash = new ConcurrentHashMap<String, Map>();
     }
 
     public void loadCacheDB() {
         logger.debug("loadCacheDB.");
         List<Country> countryList = countryDAO.findAll();
+        indexHash.put(Country.class.getName(), countryTransform.transformToCache(countryList));
 
-        // load country
-        logger.debug("================= Load country =======================");
-        countryMap = new ConcurrentHashMap<Integer, Country>();
-        for (Country country: countryList) {
-            countryMap.put(country.getId(),country);
-        }
-        // to verify
-        Util.listMap(countryMap);
+        List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
+        indexHash.put(BankAccountType.class.getName(), bankAccountTypeTransform.transformToCache(bankAccountTypeList));
+
+        List<BaseRate> baseRateList = baseRateDAO.findAll();
+        indexHash.put(BaseRate.class.getName(), baseRateTransform.transformToCache(baseRateList));
+
+        List<BankAccountPurpose> bankAccountPurposeList = bankAccountPurposeDAO.findAll();
+        indexHash.put(BankAccountPurpose.class.getName(), bankAccountPurposeTransform.transformToCache(bankAccountPurposeList));
+
+        List<BankAccountProduct> bankAccountProductList = bankAccountProductDAO.findAll();
+        indexHash.put(BankAccountProduct.class.getName(), bankAccountProductTransform.transformToCache(bankAccountProductList));
+
+        List<ProductGroup> productGroupList = productGroupDAO.findAll();
+        indexHash.put(ProductGroup.class.getName(), productTransform.transformToCache(productGroupList));
+
+        List<SpecialProgram> specialProgramList = specialProgramDAO.findAll();
+        indexHash.put(SpecialProgram.class.getName(), specialProgramTransform.transformToCache(specialProgramList));
+
+        List<RequestType> requestTypeList = requestTypeDAO.findAll();
+        indexHash.put(RequestType.class.getName(), requestTypeTransform.transformToCache(requestTypeList));
+
+        List<RiskType> riskTypeList = riskTypeDAO.findAll();
+        indexHash.put(RiskType.class.getName(), riskTypeTransform.transformToCache(riskTypeList));
+
+        List<SBFScore> sbfScoreList = sbfScoreDAO.findAll();
+        indexHash.put(SBFScore.class.getName(), sbfScoreTransform.transformToCache(sbfScoreList));
+
+        List<Bank> bankList = bankDAO.findAll();
+        indexHash.put(Bank.class.getName(), bankTransform.transformToCache(bankList));
+
+        List<BorrowingType> borrowingTypeList = borrowingTypeDAO.findAll();
+        indexHash.put(BorrowingType.class.getName(), borrowingTypeTransform.transformToCache(borrowingTypeList));
+
+        List<DocumentType> documentTypeList = documentTypeDAO.findAll();
+        indexHash.put(DocumentType.class.getName(), documentTypeTransform.transformToCache(documentTypeList));
+
+        Util.listMap(indexHash);
     }
 
-    public Map<Integer, Country> getCountryMap() {
-        return countryMap;
+    public Map getCacheMap(String className){
+        return indexHash.get(className);
     }
 
-    public void setCountryMap(Map<Integer, Country> countryMap) {
-        this.countryMap = countryMap;
+    public void setCacheMap(String className, Map cacheMap){
+        indexHash.put(className, cacheMap);
     }
-
-    //    @Inject
-//    private BaseRateControl baseRateControl;
-//    @Inject
-//    private UserSysParameterControl userSysParameterControl;
-//    @Inject
-//    private BankAccountTypeControl bankAccountTypeControl;
-//
-//    public enum State {INITIAL, START, STOP};
-//
-//    private State state;
-//
-//    @PostConstruct
-//    public void onStartUp(){
-//        state = State.INITIAL;
-//    }
-//
-//    public void loadCacheDB(){
-//        logger.debug("begin loadCacheDB");
-//        baseRateControl.loadData();
-//        userSysParameterControl.loadData();
-//        bankAccountTypeControl.loadData();
-//        state = State.START;
-//    }
-//
-//    public void onShutdown(){
-//        state = State.STOP;
-//    }
-//
-//    public State getState(){
-//        return state;
-//    }
-//
-//    public void setState(State state){
-//        this.state = state;
-//    }
 }

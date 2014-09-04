@@ -1,4 +1,4 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.view.master;
 
 import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependType;

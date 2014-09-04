@@ -7,6 +7,8 @@ import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.ProposeCollateralInfo;
 import com.clevel.selos.model.db.working.ProposeLine;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -56,7 +58,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", ProposeType.P));  //1
-        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.REQUESTED.value())); //Not equals
+        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value())); //Not equals
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
         log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
@@ -68,7 +70,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
         criteria.add(Restrictions.eq("proposeType", ProposeType.A));    //2
-        criteria.add(Restrictions.eq("appraisalRequest", RequestAppraisalValue.REQUESTED.value()));
+        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value()));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
         log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
@@ -110,5 +112,22 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
         proposeCollateralInfo.setProposeType(ProposeType.A);
         persist(proposeCollateralInfo);
+    }
+
+    public List<ProposeCollateralInfo> findNewCollateralByTypePorA(ProposeLine newCreditFacility) {
+        log.info("-- findNewCollateralByTypeAll ::: {}", newCreditFacility.toString());
+
+        Criterion proposeTypeP = Restrictions.eq("proposeType", ProposeType.P); //type = 1
+        Criterion proposeTypeA = Restrictions.eq("proposeType", ProposeType.A); //type = 2
+        LogicalExpression proposeType = Restrictions.or(proposeTypeP,proposeTypeA);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
+        criteria.add(proposeType);
+        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value())); //Not equals
+        criteria.addOrder(Order.asc("id"));
+        List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
+        log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
     }
  }
