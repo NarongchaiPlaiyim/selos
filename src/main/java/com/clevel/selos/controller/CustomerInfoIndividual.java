@@ -14,6 +14,7 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.master.MaritalStatusView;
 import com.clevel.selos.model.view.master.ReferenceView;
 import com.clevel.selos.model.view.master.RelationView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -56,8 +57,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private MaritalStatusDAO maritalStatusDAO;
-    @Inject
     private ProvinceDAO provinceDAO;
     @Inject
     private DistrictDAO districtDAO;
@@ -98,6 +97,8 @@ public class CustomerInfoIndividual implements Serializable {
     private OccupationControl occupationControl;
     @Inject
     private BizDescriptionControl bizDescriptionControl;
+    @Inject
+    private MaritalStatusControl maritalStatusControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -113,7 +114,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> educationList;
     private List<SelectItem> occupationList;
     private List<SelectItem> businessTypeList;
-    private List<MaritalStatus> maritalStatusList;
+    private List<SelectItem> maritalStatusList;
 
     private List<Province> provinceForm1List;
     private List<District> districtForm1List;
@@ -395,7 +396,7 @@ public class CustomerInfoIndividual implements Serializable {
         educationList = educationControl.getEducationSelectItemActiveList();
         occupationList = occupationControl.getOccupationSelectItemActiveList();
         businessTypeList = bizDescriptionControl.getBizDescSelectItemOrderByTMBCode();
-        maritalStatusList = maritalStatusDAO.findAll();
+        maritalStatusList = maritalStatusControl.getMaritalStatusSelectItemList();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
         provinceForm2List = provinceDAO.getListOrderByParameter("name");
@@ -634,24 +635,6 @@ public class CustomerInfoIndividual implements Serializable {
 
 //      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
 //        int relationId = customerInfoView.getRelation().getId();
-/*        Relation tmp1 = new Relation();
-        Relation tmp2 = new Relation();
-        if(relationMainCusId == 3 || relationMainCusId == 4) {
-            for(Relation relationSpouse : relationSpouseList){
-                if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
-                    tmp1 = relationSpouse;
-                }
-                if(relationMainCusId == 4){ // if main cus = 4 remove 3
-                    if(relationSpouse.getId() == 3){
-                        tmp2 = relationSpouse;
-                    }
-                }
-            }
-            relationSpouseList.remove(tmp1);
-            if(relationMainCusId == 4){
-                relationSpouseList.remove(tmp2);
-            }
-        }*/
 
         SelectItem tmp1 = new SelectItem();
         SelectItem tmp2 = new SelectItem();
@@ -1066,8 +1049,8 @@ public class CustomerInfoIndividual implements Serializable {
             return;
         }
 
-        MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
-        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+        MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
+        if(Util.isTrue(maritalStatusView.getSpouseFlag())){
             maritalStatusFlag = true;
         } else {
             maritalStatusFlag = false;
@@ -1093,8 +1076,8 @@ public class CustomerInfoIndividual implements Serializable {
             return;
         }
 
-        MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
-        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+        MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
+        if(Util.isTrue(maritalStatusView.getSpouseFlag())){
             maritalStatusFlag = true;
         } else {
             maritalStatusFlag = false;
@@ -2356,11 +2339,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.businessTypeList = businessTypeList;
     }
 
-    public List<MaritalStatus> getMaritalStatusList() {
+    public List<SelectItem> getMaritalStatusList() {
         return maritalStatusList;
     }
 
-    public void setMaritalStatusList(List<MaritalStatus> maritalStatusList) {
+    public void setMaritalStatusList(List<SelectItem> maritalStatusList) {
         this.maritalStatusList = maritalStatusList;
     }
 
