@@ -93,6 +93,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private MaritalStatusDAO maritalStatusDAO;
     @Inject private MaritalStatusTransform maritalStatusTransform;
 
+    @Inject private IncomeSourceDAO incomeSourceDAO;
+    @Inject private IncomeSourceTransform incomeSourceTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -170,6 +173,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<MaritalStatus> maritalStatusList = maritalStatusDAO.findAll();
         indexHash.put(MaritalStatus.class.getName(), maritalStatusTransform.transformToCache(maritalStatusList));
+
+        List<IncomeSource> incomeSourceList = incomeSourceDAO.findAll();
+        indexHash.put(IncomeSource.class.getName(), incomeSourceTransform.transformToCache(incomeSourceList));
 
         Util.listMap(indexHash);
     }

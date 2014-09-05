@@ -70,8 +70,6 @@ public class CustomerInfoIndividual implements Serializable {
     private UserDAO userDAO;
     @Inject
     private IndividualDAO individualDAO;
-    @Inject
-    private IncomeSourceDAO incomeSourceDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -97,6 +95,8 @@ public class CustomerInfoIndividual implements Serializable {
     private BizDescriptionControl bizDescriptionControl;
     @Inject
     private MaritalStatusControl maritalStatusControl;
+    @Inject
+    private IncomeSourceControl incomeSourceControl;
     @Inject
     private CountryControl countryControl;
 
@@ -139,7 +139,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<AddressType> addressTypeList;
     private List<KYCLevel> kycLevelList;
 
-    private List<IncomeSource> incomeSourceList;
+    private List<SelectItem> incomeSourceList;
 
     //*** View ***//
     private CustomerInfoView customerInfoView;
@@ -407,7 +407,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         countryList = countryControl.getCountrySelectItemActiveList();
 
-        incomeSourceList = incomeSourceDAO.findAll();
+        incomeSourceList = incomeSourceControl.getIncomeSourceSelectItemActiveList();
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
@@ -3436,11 +3436,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.relationMainCusId = relationMainCusId;
     }
 
-    public List<IncomeSource> getIncomeSourceList() {
+    public List<SelectItem> getIncomeSourceList() {
         return incomeSourceList;
     }
 
-    public void setIncomeSourceList(List<IncomeSource> incomeSourceList) {
+    public void setIncomeSourceList(List<SelectItem> incomeSourceList) {
         this.incomeSourceList = incomeSourceList;
     }
 }
