@@ -875,8 +875,8 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleBDM = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
-                groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
+                groupSaleBDM = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
+                groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
             } else { // use customer
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
                 BigDecimal saleFromFinStmt = BigDecimal.ZERO;
@@ -896,8 +896,8 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
-                groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
+                groupSaleBDM = Util.add(saleFromFinStmt,approxIncome);
+                groupSaleUW = Util.add(saleFromFinStmt,approxIncome);
             }
         } else if(stepId == StepValue.CREDIT_DECISION_UW1.value() && user.getRole().getId() == RoleValue.UW.id()){ //UW //update only groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
@@ -919,7 +919,7 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
+                groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
             } else { // use customer
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
                 BigDecimal saleFromFinStmt = BigDecimal.ZERO;
@@ -939,7 +939,7 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
+                groupSaleUW = Util.add(saleFromFinStmt,approxIncome);
             }
             //for do not update group sale bdm in step uw
             groupSaleBDM = exSummary.getGroupSaleBDM();
@@ -948,6 +948,7 @@ public class ExSummaryControl extends BusinessControl {
         if(user.getRole().getId() == RoleValue.UW.id()){
             exSummary.setGroupSaleUW(groupSaleUW);
         } else {
+            exSummary.setGroupSaleUW(groupSaleUW);
             exSummary.setGroupSaleBDM(groupSaleBDM);
         }
 
