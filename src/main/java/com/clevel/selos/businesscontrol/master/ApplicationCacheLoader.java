@@ -96,6 +96,15 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private IncomeSourceDAO incomeSourceDAO;
     @Inject private IncomeSourceTransform incomeSourceTransform;
 
+    @Inject private ProvinceDAO provinceDAO;
+    @Inject private ProvinceTransform provinceTransform;
+
+    @Inject private DistrictDAO districtDAO;
+    @Inject private DistrictTransform districtTransform;
+
+    @Inject private SubDistrictDAO subDistrictDAO;
+    @Inject private SubDistrictTransform subDistrictTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -176,6 +185,15 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<IncomeSource> incomeSourceList = incomeSourceDAO.findAll();
         indexHash.put(IncomeSource.class.getName(), incomeSourceTransform.transformToCache(incomeSourceList));
+
+        List<Province> provinceList = provinceDAO.findAll();
+        indexHash.put(Province.class.getName(), provinceTransform.transformToCache(provinceList));
+
+        List<District> districtList = districtDAO.findAll();
+        indexHash.put(District.class.getName(), districtTransform.transformToCache(districtList));
+
+        List<SubDistrict> subDistrictList = subDistrictDAO.findAll();
+        indexHash.put(SubDistrict.class.getName(), subDistrictTransform.transformToCache(subDistrictList));
 
         Util.listMap(indexHash);
     }

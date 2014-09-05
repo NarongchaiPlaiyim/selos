@@ -14,9 +14,7 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.master.MaritalStatusView;
-import com.clevel.selos.model.view.master.ReferenceView;
-import com.clevel.selos.model.view.master.RelationView;
+import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -57,10 +55,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private ProvinceDAO provinceDAO;
-    @Inject
-    private DistrictDAO districtDAO;
-    @Inject
     private SubDistrictDAO subDistrictDAO;
     @Inject
     private AddressTypeDAO addressTypeDAO;
@@ -99,6 +93,12 @@ public class CustomerInfoIndividual implements Serializable {
     private IncomeSourceControl incomeSourceControl;
     @Inject
     private CountryControl countryControl;
+    @Inject
+    private ProvinceControl provinceControl;
+    @Inject
+    private DistrictControl districtControl;
+    @Inject
+    private SubDistrictControl subDistrictControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -116,24 +116,24 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> businessTypeList;
     private List<SelectItem> maritalStatusList;
 
-    private List<Province> provinceForm1List;
-    private List<District> districtForm1List;
-    private List<SubDistrict> subDistrictForm1List;
-    private List<Province> provinceForm2List;
-    private List<District> districtForm2List;
-    private List<SubDistrict> subDistrictForm2List;
-    private List<Province> provinceForm3List;
-    private List<District> districtForm3List;
-    private List<SubDistrict> subDistrictForm3List;
-    private List<Province> provinceForm4List;
-    private List<District> districtForm4List;
-    private List<SubDistrict> subDistrictForm4List;
-    private List<Province> provinceForm5List;
-    private List<District> districtForm5List;
-    private List<SubDistrict> subDistrictForm5List;
-    private List<Province> provinceForm6List;
-    private List<District> districtForm6List;
-    private List<SubDistrict> subDistrictForm6List;
+    private List<SelectItem> provinceForm1List;
+    private List<SelectItem> districtForm1List;
+    private List<SelectItem> subDistrictForm1List;
+    private List<SelectItem> provinceForm2List;
+    private List<SelectItem> districtForm2List;
+    private List<SelectItem> subDistrictForm2List;
+    private List<SelectItem> provinceForm3List;
+    private List<SelectItem> districtForm3List;
+    private List<SelectItem> subDistrictForm3List;
+    private List<SelectItem> provinceForm4List;
+    private List<SelectItem> districtForm4List;
+    private List<SelectItem> subDistrictForm4List;
+    private List<SelectItem> provinceForm5List;
+    private List<SelectItem> districtForm5List;
+    private List<SelectItem> subDistrictForm5List;
+    private List<SelectItem> provinceForm6List;
+    private List<SelectItem> districtForm6List;
+    private List<SelectItem> subDistrictForm6List;
 
     private List<SelectItem> countryList;
     private List<AddressType> addressTypeList;
@@ -398,12 +398,12 @@ public class CustomerInfoIndividual implements Serializable {
         businessTypeList = bizDescriptionControl.getBizDescSelectItemOrderByTMBCode();
         maritalStatusList = maritalStatusControl.getMaritalStatusSelectItemList();
 
-        provinceForm1List = provinceDAO.getListOrderByParameter("name");
-        provinceForm2List = provinceDAO.getListOrderByParameter("name");
-        provinceForm3List = provinceDAO.getListOrderByParameter("name");
-        provinceForm4List = provinceDAO.getListOrderByParameter("name");
-        provinceForm5List = provinceDAO.getListOrderByParameter("name");
-        provinceForm6List = provinceDAO.getListOrderByParameter("name");
+        provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm3List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm4List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm5List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm6List = provinceControl.getProviceSelectItemActiveList();
 
         countryList = countryControl.getCountrySelectItemActiveList();
 
@@ -788,259 +788,259 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeProvinceForm1() {
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
-            districtForm1List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getCurrentAddress().getProvince().getCode());
+            districtForm1List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getCurrentAddress().setDistrict(new District());
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }else{
-            provinceForm1List = provinceDAO.getListOrderByParameter("name");
-            districtForm1List = new ArrayList<District>();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+            districtForm1List = new ArrayList<SelectItem>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm1() {
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getCurrentAddress().getDistrict().getId());
-            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getCurrentAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm1();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
-            districtForm2List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm2List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getRegisterAddress().setDistrict(new District());
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }else{
-            provinceForm2List = provinceDAO.getListOrderByParameter("name");
-            districtForm2List = new ArrayList<District>();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+            districtForm2List = new ArrayList<SelectItem>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
-            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm2();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
-            districtForm3List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm3List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getWorkAddress().setDistrict(new District());
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }else{
-            provinceForm3List = provinceDAO.getListOrderByParameter("name");
-            districtForm3List = new ArrayList<District>();
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            provinceForm3List = provinceControl.getProviceSelectItemActiveList();
+            districtForm3List = new ArrayList<SelectItem>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
-            subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm3List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm3();
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
-            districtForm4List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
+            districtForm4List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getSpouse().getCurrentAddress().setDistrict(new District());
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }else{
-            provinceForm4List = provinceDAO.getListOrderByParameter("name");
-            districtForm4List = new ArrayList<District>();
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            provinceForm4List = provinceControl.getProviceSelectItemActiveList();
+            districtForm4List = new ArrayList<SelectItem>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
-            subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
+            subDistrictForm4List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm4();
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
-            districtForm5List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
+            districtForm5List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getSpouse().getRegisterAddress().setDistrict(new District());
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }else{
-            provinceForm5List = provinceDAO.getListOrderByParameter("name");
-            districtForm5List = new ArrayList<District>();
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            provinceForm5List = provinceControl.getProviceSelectItemActiveList();
+            districtForm5List = new ArrayList<SelectItem>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
-            subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
+            subDistrictForm5List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm5();
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
-            districtForm6List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
+            districtForm6List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getSpouse().getWorkAddress().setDistrict(new District());
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }else{
-            provinceForm6List = provinceDAO.getListOrderByParameter("name");
-            districtForm6List = new ArrayList<District>();
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            provinceForm6List = provinceControl.getProviceSelectItemActiveList();
+            districtForm6List = new ArrayList<SelectItem>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
-            subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
+            subDistrictForm6List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm6();
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm1(){
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
-            districtForm1List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getCurrentAddress().getProvince().getCode());
+            districtForm1List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm1List = provinceDAO.getListOrderByParameter("name");
-            districtForm1List = new ArrayList<District>();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+            districtForm1List = new ArrayList<SelectItem>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm1(){
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getCurrentAddress().getDistrict().getId());
-            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getCurrentAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
-            districtForm2List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm2List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm2List = provinceDAO.getListOrderByParameter("name");
-            districtForm2List = new ArrayList<District>();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+            districtForm2List = new ArrayList<SelectItem>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
-            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
-            districtForm3List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm3List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm3List = provinceDAO.getListOrderByParameter("name");
-            districtForm3List = new ArrayList<District>();
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            provinceForm3List = provinceControl.getProviceSelectItemActiveList();
+            districtForm3List = new ArrayList<SelectItem>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
-            subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm3List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
-            districtForm4List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
+            districtForm4List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm4List = provinceDAO.getListOrderByParameter("name");
-            districtForm4List = new ArrayList<District>();
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            provinceForm4List = provinceControl.getProviceSelectItemActiveList();
+            districtForm4List = new ArrayList<SelectItem>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
-            subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
+            subDistrictForm4List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
-            districtForm5List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
+            districtForm5List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm5List = provinceDAO.getListOrderByParameter("name");
-            districtForm5List = new ArrayList<District>();
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            provinceForm5List = provinceControl.getProviceSelectItemActiveList();
+            districtForm5List = new ArrayList<SelectItem>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
-            subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
+            subDistrictForm5List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
-            districtForm6List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
+            districtForm6List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm6List = provinceDAO.getListOrderByParameter("name");
-            districtForm6List = new ArrayList<District>();
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            provinceForm6List = provinceControl.getProviceSelectItemActiveList();
+            districtForm6List = new ArrayList<SelectItem>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
-            subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
+            subDistrictForm6List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
@@ -2347,75 +2347,75 @@ public class CustomerInfoIndividual implements Serializable {
         this.maritalStatusList = maritalStatusList;
     }
 
-    public List<Province> getProvinceForm1List() {
+    public List<SelectItem> getProvinceForm1List() {
         return provinceForm1List;
     }
 
-    public void setProvinceForm1List(List<Province> provinceForm1List) {
+    public void setProvinceForm1List(List<SelectItem> provinceForm1List) {
         this.provinceForm1List = provinceForm1List;
     }
 
-    public List<District> getDistrictForm1List() {
+    public List<SelectItem> getDistrictForm1List() {
         return districtForm1List;
     }
 
-    public void setDistrictForm1List(List<District> districtForm1List) {
+    public void setDistrictForm1List(List<SelectItem> districtForm1List) {
         this.districtForm1List = districtForm1List;
     }
 
-    public List<SubDistrict> getSubDistrictForm1List() {
+    public List<SelectItem> getSubDistrictForm1List() {
         return subDistrictForm1List;
     }
 
-    public void setSubDistrictForm1List(List<SubDistrict> subDistrictForm1List) {
+    public void setSubDistrictForm1List(List<SelectItem> subDistrictForm1List) {
         this.subDistrictForm1List = subDistrictForm1List;
     }
 
-    public List<Province> getProvinceForm2List() {
+    public List<SelectItem> getProvinceForm2List() {
         return provinceForm2List;
     }
 
-    public void setProvinceForm2List(List<Province> provinceForm2List) {
+    public void setProvinceForm2List(List<SelectItem> provinceForm2List) {
         this.provinceForm2List = provinceForm2List;
     }
 
-    public List<District> getDistrictForm2List() {
+    public List<SelectItem> getDistrictForm2List() {
         return districtForm2List;
     }
 
-    public void setDistrictForm2List(List<District> districtForm2List) {
+    public void setDistrictForm2List(List<SelectItem> districtForm2List) {
         this.districtForm2List = districtForm2List;
     }
 
-    public List<SubDistrict> getSubDistrictForm2List() {
+    public List<SelectItem> getSubDistrictForm2List() {
         return subDistrictForm2List;
     }
 
-    public void setSubDistrictForm2List(List<SubDistrict> subDistrictForm2List) {
+    public void setSubDistrictForm2List(List<SelectItem> subDistrictForm2List) {
         this.subDistrictForm2List = subDistrictForm2List;
     }
 
-    public List<Province> getProvinceForm3List() {
+    public List<SelectItem> getProvinceForm3List() {
         return provinceForm3List;
     }
 
-    public void setProvinceForm3List(List<Province> provinceForm3List) {
+    public void setProvinceForm3List(List<SelectItem> provinceForm3List) {
         this.provinceForm3List = provinceForm3List;
     }
 
-    public List<District> getDistrictForm3List() {
+    public List<SelectItem> getDistrictForm3List() {
         return districtForm3List;
     }
 
-    public void setDistrictForm3List(List<District> districtForm3List) {
+    public void setDistrictForm3List(List<SelectItem> districtForm3List) {
         this.districtForm3List = districtForm3List;
     }
 
-    public List<SubDistrict> getSubDistrictForm3List() {
+    public List<SelectItem> getSubDistrictForm3List() {
         return subDistrictForm3List;
     }
 
-    public void setSubDistrictForm3List(List<SubDistrict> subDistrictForm3List) {
+    public void setSubDistrictForm3List(List<SelectItem> subDistrictForm3List) {
         this.subDistrictForm3List = subDistrictForm3List;
     }
 
@@ -2475,75 +2475,75 @@ public class CustomerInfoIndividual implements Serializable {
         this.kycLevelList = kycLevelList;
     }
 
-    public List<Province> getProvinceForm4List() {
+    public List<SelectItem> getProvinceForm4List() {
         return provinceForm4List;
     }
 
-    public void setProvinceForm4List(List<Province> provinceForm4List) {
+    public void setProvinceForm4List(List<SelectItem> provinceForm4List) {
         this.provinceForm4List = provinceForm4List;
     }
 
-    public List<District> getDistrictForm4List() {
+    public List<SelectItem> getDistrictForm4List() {
         return districtForm4List;
     }
 
-    public void setDistrictForm4List(List<District> districtForm4List) {
+    public void setDistrictForm4List(List<SelectItem> districtForm4List) {
         this.districtForm4List = districtForm4List;
     }
 
-    public List<SubDistrict> getSubDistrictForm4List() {
+    public List<SelectItem> getSubDistrictForm4List() {
         return subDistrictForm4List;
     }
 
-    public void setSubDistrictForm4List(List<SubDistrict> subDistrictForm4List) {
+    public void setSubDistrictForm4List(List<SelectItem> subDistrictForm4List) {
         this.subDistrictForm4List = subDistrictForm4List;
     }
 
-    public List<Province> getProvinceForm5List() {
+    public List<SelectItem> getProvinceForm5List() {
         return provinceForm5List;
     }
 
-    public void setProvinceForm5List(List<Province> provinceForm5List) {
+    public void setProvinceForm5List(List<SelectItem> provinceForm5List) {
         this.provinceForm5List = provinceForm5List;
     }
 
-    public List<District> getDistrictForm5List() {
+    public List<SelectItem> getDistrictForm5List() {
         return districtForm5List;
     }
 
-    public void setDistrictForm5List(List<District> districtForm5List) {
+    public void setDistrictForm5List(List<SelectItem> districtForm5List) {
         this.districtForm5List = districtForm5List;
     }
 
-    public List<SubDistrict> getSubDistrictForm5List() {
+    public List<SelectItem> getSubDistrictForm5List() {
         return subDistrictForm5List;
     }
 
-    public void setSubDistrictForm5List(List<SubDistrict> subDistrictForm5List) {
+    public void setSubDistrictForm5List(List<SelectItem> subDistrictForm5List) {
         this.subDistrictForm5List = subDistrictForm5List;
     }
 
-    public List<Province> getProvinceForm6List() {
+    public List<SelectItem> getProvinceForm6List() {
         return provinceForm6List;
     }
 
-    public void setProvinceForm6List(List<Province> provinceForm6List) {
+    public void setProvinceForm6List(List<SelectItem> provinceForm6List) {
         this.provinceForm6List = provinceForm6List;
     }
 
-    public List<District> getDistrictForm6List() {
+    public List<SelectItem> getDistrictForm6List() {
         return districtForm6List;
     }
 
-    public void setDistrictForm6List(List<District> districtForm6List) {
+    public void setDistrictForm6List(List<SelectItem> districtForm6List) {
         this.districtForm6List = districtForm6List;
     }
 
-    public List<SubDistrict> getSubDistrictForm6List() {
+    public List<SelectItem> getSubDistrictForm6List() {
         return subDistrictForm6List;
     }
 
-    public void setSubDistrictForm6List(List<SubDistrict> subDistrictForm6List) {
+    public void setSubDistrictForm6List(List<SelectItem> subDistrictForm6List) {
         this.subDistrictForm6List = subDistrictForm6List;
     }
 
