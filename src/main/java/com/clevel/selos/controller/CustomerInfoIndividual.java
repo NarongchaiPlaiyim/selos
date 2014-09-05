@@ -63,8 +63,6 @@ public class CustomerInfoIndividual implements Serializable {
     @Inject
     private SubDistrictDAO subDistrictDAO;
     @Inject
-    private CountryDAO countryDAO;
-    @Inject
     private AddressTypeDAO addressTypeDAO;
     @Inject
     private KYCLevelDAO kycLevelDAO;
@@ -99,6 +97,8 @@ public class CustomerInfoIndividual implements Serializable {
     private BizDescriptionControl bizDescriptionControl;
     @Inject
     private MaritalStatusControl maritalStatusControl;
+    @Inject
+    private CountryControl countryControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -135,7 +135,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<District> districtForm6List;
     private List<SubDistrict> subDistrictForm6List;
 
-    private List<Country> countryList;
+    private List<SelectItem> countryList;
     private List<AddressType> addressTypeList;
     private List<KYCLevel> kycLevelList;
 
@@ -405,7 +405,7 @@ public class CustomerInfoIndividual implements Serializable {
         provinceForm5List = provinceDAO.getListOrderByParameter("name");
         provinceForm6List = provinceDAO.getListOrderByParameter("name");
 
-        countryList = countryDAO.findAll();
+        countryList = countryControl.getCountrySelectItemActiveList();
 
         incomeSourceList = incomeSourceDAO.findAll();
 
@@ -2419,11 +2419,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.subDistrictForm3List = subDistrictForm3List;
     }
 
-    public List<Country> getCountryList() {
+    public List<SelectItem> getCountryList() {
         return countryList;
     }
 
-    public void setCountryList(List<Country> countryList) {
+    public void setCountryList(List<SelectItem> countryList) {
         this.countryList = countryList;
     }
 
