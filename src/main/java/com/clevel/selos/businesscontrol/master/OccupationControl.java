@@ -33,7 +33,7 @@ public class OccupationControl extends BusinessControl{
         Collections.sort(occupationViewList, new OccupationComparator());
 
         List<SelectItem> selectItemList = new ArrayList<SelectItem>();
-        for(OccupationView occupationView : _tmpMap.values()){
+        for(OccupationView occupationView : occupationViewList){
             if(Util.isTrue(occupationView.getActive())){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(occupationView.getCode() + " - " + occupationView.getDescription());
