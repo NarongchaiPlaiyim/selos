@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,6 +65,17 @@ public class RelationControl extends BusinessControl {
             _tmpMap = loadData();
         }
         return _tmpMap;
+    }
+
+    private class RelationComparator implements Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            RelationView relationView1 = (RelationView)o1;
+            RelationView relationView2 = (RelationView)o2;
+
+            int flag = ((Integer)relationView1.getId()).compareTo(relationView2.getId());
+            return flag;
+        }
     }
 
 }

@@ -29,7 +29,7 @@ public class OccupationControl extends BusinessControl{
 
     public List<SelectItem> getOccupationSelectItemActiveList(){
         Map<Integer, OccupationView> _tmpMap = getInternalCacheMap();
-        List<OccupationView> occupationViewList = new ArrayList<OccupationView>();
+        List<OccupationView> occupationViewList = new ArrayList<OccupationView>(_tmpMap.values());
         Collections.sort(occupationViewList, new OccupationComparator());
 
         List<SelectItem> selectItemList = new ArrayList<SelectItem>();
