@@ -56,8 +56,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private BusinessDescriptionDAO businessDescriptionDAO;
-    @Inject
     private MaritalStatusDAO maritalStatusDAO;
     @Inject
     private ProvinceDAO provinceDAO;
@@ -98,6 +96,8 @@ public class CustomerInfoIndividual implements Serializable {
     private EducationControl educationControl;
     @Inject
     private OccupationControl occupationControl;
+    @Inject
+    private BizDescriptionControl bizDescriptionControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -112,7 +112,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> sndNationalityList;
     private List<SelectItem> educationList;
     private List<SelectItem> occupationList;
-    private List<BusinessDescription> businessTypeList;
+    private List<SelectItem> businessTypeList;
     private List<MaritalStatus> maritalStatusList;
 
     private List<Province> provinceForm1List;
@@ -394,7 +394,7 @@ public class CustomerInfoIndividual implements Serializable {
         sndNationalityList = nationalityControl.getNationalitySelectItemActiveList();
         educationList = educationControl.getEducationSelectItemActiveList();
         occupationList = occupationControl.getOccupationSelectItemActiveList();
-        businessTypeList = businessDescriptionDAO.getListOrderByTMBCode();
+        businessTypeList = bizDescriptionControl.getBizDescSelectItemOrderByTMBCode();
         maritalStatusList = maritalStatusDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -2348,11 +2348,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.occupationList = occupationList;
     }
 
-    public List<BusinessDescription> getBusinessTypeList() {
+    public List<SelectItem> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessDescription> businessTypeList) {
+    public void setBusinessTypeList(List<SelectItem> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 
