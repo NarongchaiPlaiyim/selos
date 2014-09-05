@@ -3,7 +3,6 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
@@ -55,10 +54,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private SubDistrictDAO subDistrictDAO;
-    @Inject
-    private AddressTypeDAO addressTypeDAO;
-    @Inject
     private KYCLevelDAO kycLevelDAO;
     @Inject
     private UserDAO userDAO;
@@ -99,6 +94,8 @@ public class CustomerInfoIndividual implements Serializable {
     private DistrictControl districtControl;
     @Inject
     private SubDistrictControl subDistrictControl;
+    @Inject
+    private AddressTypeControl addressTypeControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -136,7 +133,7 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SelectItem> subDistrictForm6List;
 
     private List<SelectItem> countryList;
-    private List<AddressType> addressTypeList;
+    private List<SelectItem> addressTypeList;
     private List<KYCLevel> kycLevelList;
 
     private List<SelectItem> incomeSourceList;
@@ -417,7 +414,7 @@ public class CustomerInfoIndividual implements Serializable {
         referenceIndividualList = new ArrayList<SelectItem>();
         referenceSpouseList = new ArrayList<SelectItem>();
 
-        addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+        addressTypeList = addressTypeControl.getAddressTypeSelectItemByCustEntity(BorrowerType.INDIVIDUAL.value());
         kycLevelList = kycLevelDAO.findAll();
 
         enableDocumentType = true;
@@ -2459,11 +2456,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.addressFlagForm6 = addressFlagForm6;
     }*/
 
-    public List<AddressType> getAddressTypeList() {
+    public List<SelectItem> getAddressTypeList() {
         return addressTypeList;
     }
 
-    public void setAddressTypeList(List<AddressType> addressTypeList) {
+    public void setAddressTypeList(List<SelectItem> addressTypeList) {
         this.addressTypeList = addressTypeList;
     }
 

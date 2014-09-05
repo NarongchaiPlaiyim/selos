@@ -105,6 +105,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private SubDistrictDAO subDistrictDAO;
     @Inject private SubDistrictTransform subDistrictTransform;
 
+    @Inject private AddressTypeDAO addressTypeDAO;
+    @Inject private AddressTypeTransform addressTypeTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -194,6 +197,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<SubDistrict> subDistrictList = subDistrictDAO.findAll();
         indexHash.put(SubDistrict.class.getName(), subDistrictTransform.transformToCache(subDistrictList));
+
+        List<AddressType> addressTypeList = addressTypeDAO.findAll();
+        indexHash.put(AddressType.class.getName(), addressTypeTransform.transformToCache(addressTypeList));
 
         Util.listMap(indexHash);
     }
