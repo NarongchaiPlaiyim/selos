@@ -232,14 +232,14 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
-    public void dispatchCase(String queueName, String wobNumber, HashMap<String, String> fields) {
+    public void dispatchCase(String queueName, String wobNumber, HashMap<String, String> fields, int fetchType) {
         log.debug("dispatchCase. (queueName: {}, wobNumber: {})", queueName, wobNumber);
         Date now = new Date();
         Util.listFields(fields);
         String linkKey = Util.getLinkKey(getUserDTO().getUserName());
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
-            bpmService.dispatchCase(queueName, wobNumber, fields);
+            bpmService.dispatchCase(queueName, wobNumber, fields, fetchType);
             log.debug("[{}] dispatchCase success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
@@ -385,14 +385,14 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
-    public void updateCase(String queueName, String wobNumber, HashMap<String, String> fields){
+    public void updateCase(String queueName, String wobNumber, HashMap<String, String> fields, int fetchType){
         log.debug("dispatchCase. (queueName: {}, wobNumber: {})", queueName, wobNumber);
         Date now = new Date();
         Util.listFields(fields);
         String linkKey = Util.getLinkKey(getUserDTO().getUserName());
         try{
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
-            bpmService.updateWorkItem(queueName, wobNumber, fields);
+            bpmService.updateWorkItem(queueName, wobNumber, fields, fetchType);
             log.debug("[{}] dispatchCase success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.SUCCESS, "", linkKey);
         }catch (Exception e){

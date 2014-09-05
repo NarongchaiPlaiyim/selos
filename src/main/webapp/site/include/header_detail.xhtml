@@ -611,7 +611,8 @@
     </p:dialog>
 </p:panel>-->
 
-<p:panel id="submitAADCPanel" styleClass="panel">
+<p:panel id="submitAADCPanel" styleClass="panel"
+         rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}">
     <p:dialog id="submitAADCDialog" widgetVar="submitAADCDlg" header="Submit case to AAD Committee"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="550" height="260">

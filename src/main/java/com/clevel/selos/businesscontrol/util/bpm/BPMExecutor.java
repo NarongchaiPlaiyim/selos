@@ -12,10 +12,12 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -919,17 +921,19 @@ public class BPMExecutor implements Serializable {
         HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("BorrowerName", borrowerName);
         fields.put("ProductGroup", productGroup);
-
-        log.debug("updateBorrowerProductGroup : fields : {}", fields);
-        bpmInterface.updateCase(queueName, wobNumber, fields);
+        HttpSession session = FacesUtil.getSession(false);
+        int fetchType = Util.parseInt(session.getAttribute("fetchType"), 0);
+        log.debug("updateBorrowerProductGroup : fields : {}, queueName : {}, wobNumber : {}, fetchType : {}", fields, queueName, wobNumber, fetchType);
+        bpmInterface.updateCase(queueName, wobNumber, fields, fetchType);
     }
 
     public void updateProductGroup(String productGroup, String queueName, String wobNumber) throws Exception {
         HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("ProductGroup", productGroup);
-
-        log.debug("updateProductGroup : fields : {}", fields);
-        bpmInterface.updateCase(queueName, wobNumber, fields);
+        HttpSession session = FacesUtil.getSession(false);
+        int fetchType = Util.parseInt(session.getAttribute("fetchType"), 0);
+        log.debug("updateProductGroup : fields : {}, queueName : {}, wobNumber : {}, fetchType : {}", fields, queueName, wobNumber, fetchType);
+        bpmInterface.updateCase(queueName, wobNumber, fields, fetchType);
     }
 
     public void selectCase(long actionCode, String queueName, String wobNumber) throws Exception{
@@ -949,8 +953,10 @@ public class BPMExecutor implements Serializable {
     }
 
     public void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
-        log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
-        bpmInterface.dispatchCase(queueName, wobNumber, fields);
+        HttpSession session = FacesUtil.getSession(false);
+        int fetchType = Util.parseInt(session.getAttribute("fetchType"), 0);
+        log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}, fetchType : {}", queueName, wobNumber, fields, fetchType);
+        bpmInterface.dispatchCase(queueName, wobNumber, fields, fetchType);
     }
 
     public void batchDispatchCaseFromRoster(String rosterName, String[] arrayOfWobNo, HashMap<String, String> fields)
