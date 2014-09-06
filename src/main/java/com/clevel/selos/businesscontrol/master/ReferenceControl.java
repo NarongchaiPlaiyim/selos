@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ReferenceControl extends BusinessControl {
@@ -42,21 +40,36 @@ public class ReferenceControl extends BusinessControl {
     public List<SelectItem> getReferenceSelectItemByFlag(int customerEntityId, int borrowerTypeId, int relationId, int mainCustomer, int spouse){
 
         Map<Integer, ReferenceView> _tmpMap = getInternalCacheMap();
+        List<ReferenceView> referenceViewList = new ArrayList<ReferenceView>(_tmpMap.values());
+        Collections.sort(referenceViewList, new ReferenceDescComparator());
+
         List<SelectItem> referenceList = new ArrayList<SelectItem>();
-        for(ReferenceView referenceView : _tmpMap.values()){
+        for(ReferenceView referenceView : referenceViewList){
             boolean isMatched = true;
-            if(referenceView.getCustomerEntityId() != customerEntityId || referenceView.getBorrowerTypeCusEntityId() != borrowerTypeId
-                && referenceView.getRelationId() != relationId){
+            if (referenceView.getCustomerEntityId() == customerEntityId &&
+                    referenceView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
+                    referenceView.getRelationId() == relationId){
+                isMatched = true;
+
+                if(mainCustomer != 0){
+                    if(referenceView.getMainCustomer() == mainCustomer) {
+                        isMatched = true;
+                    } else {
+                        isMatched = false;
+                    }
+                }
+
+                if(spouse != 0) {
+                    if(referenceView.getSpouse() == spouse){
+                        isMatched = true;
+                    } else {
+                        isMatched = false;
+                    }
+                }
+            } else {
                 isMatched = false;
             }
-            if(mainCustomer != 0){
-                if(referenceView.getMainCustomer() != mainCustomer)
-                    isMatched = false;
-            }
-            if(spouse != 0){
-                if(referenceView.getSpouse() != spouse)
-                    isMatched = false;
-            }
+
             if(isMatched){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(referenceView.getDescription());
@@ -86,5 +99,18 @@ public class ReferenceControl extends BusinessControl {
             _tmpMap = loadData();
         }
         return _tmpMap;
+    }
+
+    private class ReferenceDescComparator implements Comparator {
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            ReferenceView referenceView1 = (ReferenceView)o1;
+            ReferenceView referenceView2 = (ReferenceView)o2;
+
+            //int flag = ((Integer)referenceView1.getId()).compareTo(referenceView2.getId());
+            int flag = referenceView1.getDescription().compareTo(referenceView2.getDescription());
+            return flag;
+        }
     }
 }

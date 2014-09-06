@@ -5,15 +5,16 @@ import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.relation.RelationCustomer;
+import com.clevel.selos.model.view.master.ReferenceView;
 import com.clevel.selos.model.view.master.RelationCustomerView;
+import com.clevel.selos.model.view.master.RelationView;
 import com.clevel.selos.transform.master.RelationCustomerTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RelationCustomerControl extends BusinessControl{
@@ -38,34 +39,54 @@ public class RelationCustomerControl extends BusinessControl{
 
     public List<SelectItem> getRelationSelectItem(int customerEntityId, int borrowerTypeId, int spouse){
         Map<Integer, RelationCustomerView> _tmpRelationMap = getInternalCacheMap();
-        List<SelectItem> relationList = new ArrayList<SelectItem>();
+        List<RelationView> relationViewList = new ArrayList<RelationView>();
+
         for(RelationCustomerView relationCustomerView : _tmpRelationMap.values()){
             if(relationCustomerView.getCustomerEntityId() == customerEntityId &&
                     relationCustomerView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
                     relationCustomerView.getSpouse() == spouse){
-                SelectItem selectItem = relationControl.getRelationSelectItemById(relationCustomerView.getRelationId());
-                if((Integer)selectItem.getValue() != 0) {
-                    relationList.add(selectItem);
-                }
+                relationViewList.add(relationControl.getRelationViewById(relationCustomerView.getRelationId()));
             }
         }
-        return relationList;
+
+        Collections.sort(relationViewList, new RelationComparator());
+
+        List<SelectItem> selectItemList = new ArrayList<SelectItem>();
+        for(RelationView relationView : relationViewList){
+            SelectItem selectItem = new SelectItem();
+            selectItem.setLabel(relationView.getDescription());
+            selectItem.setValue(relationView.getId());
+            selectItemList.add(selectItem);
+        }
+        return selectItemList;
     }
 
     public List<SelectItem> getRelationSelectItemWithOutBorrower(int customerEntityId, int borrowerTypeId, int spouse){
         Map<Integer, RelationCustomerView> _tmpRelationMap = getInternalCacheMap();
-        List<SelectItem> relationList = new ArrayList<SelectItem>();
+        List<RelationView> relationViewList = new ArrayList<RelationView>();
+
         for(RelationCustomerView relationCustomerView : _tmpRelationMap.values()){
             if(relationCustomerView.getCustomerEntityId() == customerEntityId &&
                     relationCustomerView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
                     relationCustomerView.getSpouse() == spouse){
-                SelectItem selectItem = relationControl.getRelationSelectItemById(relationCustomerView.getRelationId());
-                if((Integer)selectItem.getValue() != 0 && (Integer)selectItem.getValue() != RelationValue.BORROWER.value()) {
-                    relationList.add(selectItem);
+                RelationView relationView = relationControl.getRelationViewById(relationCustomerView.getRelationId());
+                if(relationView.getId() != RelationValue.BORROWER.value()) {
+                    relationViewList.add(relationView);
                 }
             }
         }
-        return relationList;
+
+        Collections.sort(relationViewList, new RelationComparator());
+
+        List<SelectItem> selectItemList = new ArrayList<SelectItem>();
+        for(RelationView relationView : relationViewList){
+            SelectItem selectItem = new SelectItem();
+            selectItem.setLabel(relationView.getDescription());
+            selectItem.setValue(relationView.getId());
+            selectItemList.add(selectItem);
+        }
+
+        return selectItemList;
     }
 
     private Map<Integer, RelationCustomerView> loadData(){
@@ -89,4 +110,14 @@ public class RelationCustomerControl extends BusinessControl{
         return _tmpMap;
     }
 
+    public class RelationComparator implements Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            RelationView relationView1 = (RelationView)o1;
+            RelationView relationView2 = (RelationView)o2;
+
+            int flag = ((Integer)relationView1.getId()).compareTo(relationView2.getId());
+            return flag;
+        }
+    }
 }

@@ -41,11 +41,6 @@ public class RelationControl extends BusinessControl {
         return new RelationView();
     }
 
-    public SelectItem getRelationSelectItemById(int relationId){
-        RelationView relationView = getRelationViewById(relationId);
-        return relationTransform.transformToSelectItem(relationView);
-    }
-
     private Map<Integer, RelationView> loadData(){
         logger.debug("-- begin loadData --");
         List<Relation> relationList = relationDAO.findAll();
@@ -65,17 +60,6 @@ public class RelationControl extends BusinessControl {
             _tmpMap = loadData();
         }
         return _tmpMap;
-    }
-
-    private class RelationComparator implements Comparator {
-        @Override
-        public int compare(Object o1, Object o2) {
-            RelationView relationView1 = (RelationView)o1;
-            RelationView relationView2 = (RelationView)o2;
-
-            int flag = ((Integer)relationView1.getId()).compareTo(relationView2.getId());
-            return flag;
-        }
     }
 
 }

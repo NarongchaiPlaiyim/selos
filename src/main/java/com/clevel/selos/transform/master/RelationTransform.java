@@ -54,8 +54,7 @@ public class RelationTransform extends Transform {
     public SelectItem transformToSelectItem(RelationView relationView){
         SelectItem selectItem = new SelectItem();
         if(relationView != null) {
-            selectItem.setLabel(relationView.getDescription());
-            selectItem.setValue(relationView.getId());
+
         }
         return selectItem;
     }
