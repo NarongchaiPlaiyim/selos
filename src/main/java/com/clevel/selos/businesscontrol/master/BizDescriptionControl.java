@@ -53,7 +53,7 @@ public class BizDescriptionControl extends BusinessControl {
         List<BusinessDescription> bizDescriptionList = businessDescriptionDAO.findAll();
         Map<Integer, BizDescriptionView> _tmpMap = bizDescriptionTransform.transformToCache(bizDescriptionList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Title View");
+            logger.debug("return empty business description View");
             return new ConcurrentHashMap<Integer, BizDescriptionView>();
         } else {
             cacheLoader.setCacheMap(BusinessDescription.class.getName(), _tmpMap);

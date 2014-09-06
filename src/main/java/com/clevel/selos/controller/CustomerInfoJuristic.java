@@ -56,8 +56,6 @@ public class CustomerInfoJuristic extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private BusinessTypeDAO businessTypeDAO;
-    @Inject
     private ProvinceDAO provinceDAO;
     @Inject
     private DistrictDAO districtDAO;
@@ -88,6 +86,8 @@ public class CustomerInfoJuristic extends BaseController {
     private ReferenceControl referenceControl;
     @Inject
     private TitleControl titleControl;
+    @Inject
+    private BusinessTypeControl businessTypeControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -95,7 +95,7 @@ public class CustomerInfoJuristic extends BaseController {
     private List<SelectItem> referenceList;
     private List<SelectItem> titleThList;
     private List<SelectItem> titleEnList;
-    private List<BusinessType> businessTypeList;
+    private List<SelectItem> businessTypeList;
 
     private List<Province> provinceForm1List;
     private List<District> districtForm1List;
@@ -252,7 +252,7 @@ public class CustomerInfoJuristic extends BaseController {
 
         titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.JURISTIC.value());
         titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.JURISTIC.value());
-        businessTypeList = businessTypeDAO.findAll();
+        businessTypeList = businessTypeControl.getBusinessTypeSelectItemList();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
         provinceForm2List = provinceDAO.getListOrderByParameter("name");
@@ -840,11 +840,11 @@ public class CustomerInfoJuristic extends BaseController {
         this.titleEnList = titleEnList;
     }
 
-    public List<BusinessType> getBusinessTypeList() {
+    public List<SelectItem> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessType> businessTypeList) {
+    public void setBusinessTypeList(List<SelectItem> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 
