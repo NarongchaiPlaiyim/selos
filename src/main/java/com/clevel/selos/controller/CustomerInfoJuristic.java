@@ -57,9 +57,6 @@ public class CustomerInfoJuristic extends BaseController {
     @ExceptionMessage
     Message exceptionMsg;
 
-    //@Inject
-    //private JuristicDAO juristicDAO;
-
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
