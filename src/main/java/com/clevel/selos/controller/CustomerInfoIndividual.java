@@ -54,13 +54,6 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private KYCLevelDAO kycLevelDAO;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    private IndividualDAO individualDAO;
-
-    @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
     private DocumentTypeControl documentTypeControl;
@@ -96,6 +89,8 @@ public class CustomerInfoIndividual implements Serializable {
     private SubDistrictControl subDistrictControl;
     @Inject
     private AddressTypeControl addressTypeControl;
+    @Inject
+    private KYCLevelControl kycLevelControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -134,7 +129,7 @@ public class CustomerInfoIndividual implements Serializable {
 
     private List<SelectItem> countryList;
     private List<SelectItem> addressTypeList;
-    private List<KYCLevel> kycLevelList;
+    private List<SelectItem> kycLevelList;
 
     private List<SelectItem> incomeSourceList;
 
@@ -415,7 +410,7 @@ public class CustomerInfoIndividual implements Serializable {
         referenceSpouseList = new ArrayList<SelectItem>();
 
         addressTypeList = addressTypeControl.getAddressTypeSelectItemByCustEntity(BorrowerType.INDIVIDUAL.value());
-        kycLevelList = kycLevelDAO.findAll();
+        kycLevelList = kycLevelControl.getKYCLevelSelectItem();
 
         enableDocumentType = true;
         enableCitizenId = true;
@@ -1763,27 +1758,22 @@ public class CustomerInfoIndividual implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
-            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
-            if(customer != null && customer.getId() != 0){
-                if(customer.getId() != customerInfoView.getSpouse().getId()){
-                    messageHeader = "Information.";
-                    message = "Citizen Id is already exist";
-                    severity = "info";
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    return;
-                }
-            }
-        }
 
-        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
-        if(customer != null && customer.getId() != 0){
-            if(customer.getId() != customerInfoView.getId()){
+            if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getSpouse().getCitizenId(), customerInfoView.getSpouse().getId(),workCaseId)){
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
+        }
+
+        if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getCitizenId(), customerInfoView.getId(),workCaseId)){
+            messageHeader = "Information.";
+            message = "Citizen Id is already exist";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
         }
 
 //        update relation & reference
@@ -1905,21 +1895,8 @@ public class CustomerInfoIndividual implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return "";
             }
-            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
-            if(customer != null && customer.getId() != 0){
-                if(customer.getId() != customerInfoView.getSpouse().getId()){
-                    messageHeader = "Information.";
-                    message = "Citizen Id is already exist";
-                    severity = "info";
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    return "";
-                }
-            }
-        }
 
-        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
-        if(customer != null && customer.getId() != 0){
-            if(customer.getId() != customerInfoView.getId()){
+            if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getSpouse().getCitizenId(), customerInfoView.getSpouse().getId(),workCaseId)){
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
@@ -1928,7 +1905,14 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-        //for check citizen id form list
+        if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getCitizenId(), customerInfoView.getId(),workCaseId)){
+            messageHeader = "Information.";
+            message = "Citizen Id is already exist";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return "";
+        }
+            //for check citizen id form list
         if(cusInfoJuristic.getIndividualViewList() != null && cusInfoJuristic.getIndividualViewList().size() > 0){
             int indexList = 0;
             for(CustomerInfoView cus : cusInfoJuristic.getIndividualViewList()){
@@ -2464,11 +2448,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.addressTypeList = addressTypeList;
     }
 
-    public List<KYCLevel> getKycLevelList() {
+    public List<SelectItem> getKycLevelList() {
         return kycLevelList;
     }
 
-    public void setKycLevelList(List<KYCLevel> kycLevelList) {
+    public void setKycLevelList(List<SelectItem> kycLevelList) {
         this.kycLevelList = kycLevelList;
     }
 

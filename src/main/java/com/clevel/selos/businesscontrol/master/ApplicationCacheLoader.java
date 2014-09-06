@@ -108,6 +108,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private AddressTypeDAO addressTypeDAO;
     @Inject private AddressTypeTransform addressTypeTransform;
 
+    @Inject private KYCLevelDAO kycLevelDAO;
+    @Inject private KYCLevelTransform kycLevelTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -200,6 +203,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<AddressType> addressTypeList = addressTypeDAO.findAll();
         indexHash.put(AddressType.class.getName(), addressTypeTransform.transformToCache(addressTypeList));
+
+        List<KYCLevel> kycLevelList = kycLevelDAO.findAll();
+        indexHash.put(KYCLevel.class.getName(), kycLevelTransform.transformToCache(kycLevelList));
 
         Util.listMap(indexHash);
     }

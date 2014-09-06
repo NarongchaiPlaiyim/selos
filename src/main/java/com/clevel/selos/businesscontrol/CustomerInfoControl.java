@@ -799,4 +799,13 @@ public class CustomerInfoControl extends BusinessControl {
         }
         return returnCusInfoView;
     }
+
+    public boolean isDuplicateCustomerIndv(String citizenId, long customerId, long workCaseId){
+        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(citizenId, workCaseId);
+        if(customer != null && customer.getId() != 0) {
+            if(customer.getId() != customerId)
+                return true;
+        }
+        return false;
+    }
 }
