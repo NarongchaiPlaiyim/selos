@@ -37,8 +37,10 @@ public class DocumentTypeControl extends BusinessControl {
         Map<Integer, DocumentTypeView> _tmpMap = getInternalCacheMap();
         List<SelectItem> documentTypeList = new ArrayList<SelectItem>();
         for(DocumentTypeView documentTypeView : _tmpMap.values()){
-            SelectItem selectItem = documentTypeTransform.transformToSelectItem(documentTypeView);
-            documentTypeList.add(selectItem);
+            if(documentTypeView.getCustomerEntityId() == customerEntityId) {
+                SelectItem selectItem = documentTypeTransform.transformToSelectItem(documentTypeView);
+                documentTypeList.add(selectItem);
+            }
         }
         return documentTypeList;
     }

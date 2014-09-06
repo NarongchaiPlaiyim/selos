@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.master.CustomerEntityControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -46,14 +48,14 @@ public class CustomerInfoSummary extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private CustomerEntityDAO customerEntityDAO;
-    @Inject
     private CustomerDAO customerDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private CustomerEntityControl customerEntityControl;
 
-    private List<CustomerEntity> customerEntityList;
+    private List<SelectItem> customerEntityList;
 
     private CustomerInfoSummaryView customerInfoSummaryView;
 
@@ -106,7 +108,7 @@ public class CustomerInfoSummary extends BaseController {
 
             loadFieldControl(workCaseId, Screen.CUSTOMER_INFO_SUMMARY, ownerCaseUserId);
 
-            customerEntityList = customerEntityDAO.findAll();
+            customerEntityList = customerEntityControl.getCustomerEntitySelectItemList();
             customerInfoSummaryView = new CustomerInfoSummaryView();
             customerInfoSummaryView = customerInfoControl.getCustomerInfoSummary(workCaseId);
         }
@@ -267,11 +269,11 @@ public class CustomerInfoSummary extends BaseController {
         this.customerInfoSummaryView = customerInfoSummaryView;
     }
 
-    public List<CustomerEntity> getCustomerEntityList() {
+    public List<SelectItem> getCustomerEntityList() {
         return customerEntityList;
     }
 
-    public void setCustomerEntityList(List<CustomerEntity> customerEntityList) {
+    public void setCustomerEntityList(List<SelectItem> customerEntityList) {
         this.customerEntityList = customerEntityList;
     }
 
