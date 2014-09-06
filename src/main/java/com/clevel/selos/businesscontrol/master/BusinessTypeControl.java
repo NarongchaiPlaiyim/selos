@@ -56,7 +56,7 @@ public class BusinessTypeControl extends BusinessControl{
     }
 
     private Map<Integer, BusinessTypeView> getInternalCacheMap(){
-        Map<Integer, BusinessTypeView> _tmpMap = cacheLoader.getCacheMap(BusinessTypeView.class.getName());
+        Map<Integer, BusinessTypeView> _tmpMap = cacheLoader.getCacheMap(BusinessType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
             _tmpMap = loadData();
         }

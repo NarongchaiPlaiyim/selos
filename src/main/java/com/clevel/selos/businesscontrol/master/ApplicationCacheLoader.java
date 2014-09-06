@@ -114,6 +114,9 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private BusinessTypeDAO businessTypeDAO;
     @Inject private BusinessTypeTransform businessTypeTransform;
 
+    @Inject private CustomerEntityDAO customerEntityDAO;
+    @Inject private CustomerEntityTransform customerEntityTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -212,6 +215,9 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<BusinessType> businessTypeList = businessTypeDAO.findAll();
         indexHash.put(BusinessType.class.getName(), businessTypeTransform.transformToCache(businessTypeList));
+
+        List<CustomerEntity> customerEntityList = customerEntityDAO.findAll();
+        indexHash.put(CustomerEntity.class.getName(), customerEntityTransform.transformToCache(customerEntityList));
 
         Util.listMap(indexHash);
     }
