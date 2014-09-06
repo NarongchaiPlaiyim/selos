@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.JuristicDAO;
@@ -29,6 +30,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -54,22 +56,6 @@ public class CustomerInfoJuristic extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private DocumentTypeDAO documentTypeDAO;
-    @Inject
-    private RelationDAO relationDAO;
-    @Inject
-    private RelationCustomerDAO relationCustomerDAO;
-    @Inject
-    private ReferenceDAO referenceDAO;
-    @Inject
-    private TitleDAO titleDAO;
-    @Inject
-    private RaceDAO raceDAO;
-    @Inject
-    private NationalityDAO nationalityDAO;
-    @Inject
-    private EducationDAO educationDAO;
-    @Inject
     private BusinessTypeDAO businessTypeDAO;
     @Inject
     private ProvinceDAO provinceDAO;
@@ -94,13 +80,21 @@ public class CustomerInfoJuristic extends BaseController {
     private CustomerInfoControl customerInfoControl;
     @Inject
     ExSummaryControl exSummaryControl;
+    @Inject
+    private DocumentTypeControl documentTypeControl;
+    @Inject
+    private RelationCustomerControl relationCustomerControl;
+    @Inject
+    private ReferenceControl referenceControl;
+    @Inject
+    private TitleControl titleControl;
 
     //*** Drop down List ***//
-    private List<DocumentType> documentTypeList;
-    private List<Relation> relationList;
-    private List<Reference> referenceList;
-    private List<Title> titleThList;
-    private List<Title> titleEnList;
+    private List<SelectItem> documentTypeList;
+    private List<SelectItem> relationList;
+    private List<SelectItem> referenceList;
+    private List<SelectItem> titleThList;
+    private List<SelectItem> titleEnList;
     private List<BusinessType> businessTypeList;
 
     private List<Province> provinceForm1List;
@@ -253,11 +247,11 @@ public class CustomerInfoJuristic extends BaseController {
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
-        documentTypeList = documentTypeDAO.findByCustomerEntityId(2);
-        relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
+        documentTypeList = documentTypeControl.getDocumentTypeByCustomerEntity(2);
+        relationList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
 
-        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
-        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
+        titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.JURISTIC.value());
+        titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.JURISTIC.value());
         businessTypeList = businessTypeDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -267,7 +261,7 @@ public class CustomerInfoJuristic extends BaseController {
 
         incomeSourceList = incomeSourceDAO.findAll();
 
-        referenceList = new ArrayList<Reference>();
+        referenceList = new ArrayList<SelectItem>();
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -334,9 +328,9 @@ public class CustomerInfoJuristic extends BaseController {
 
         if(relationId == RelationValue.BORROWER.value()){
             isEditBorrower = true;
-            relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
+            relationList = relationCustomerControl.getRelationSelectItem(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
-            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
+            relationList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }
 
         if(customerInfoView.getRemoveIndividualIdList() == null){
@@ -369,7 +363,7 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public void onChangeRelation(){
-        referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, relationId, 1, 0);
+        referenceList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, relationId, 1, 0);
         Relation relation = new Relation();
         relation.setId(relationId);
         customerInfoView.setRelation(relation);
@@ -798,27 +792,27 @@ public class CustomerInfoJuristic extends BaseController {
         this.customerInfoView = customerInfoView;
     }
 
-    public List<DocumentType> getDocumentTypeList() {
+    public List<SelectItem> getDocumentTypeList() {
         return documentTypeList;
     }
 
-    public void setDocumentTypeList(List<DocumentType> documentTypeList) {
+    public void setDocumentTypeList(List<SelectItem> documentTypeList) {
         this.documentTypeList = documentTypeList;
     }
 
-    public List<Relation> getRelationList() {
+    public List<SelectItem> getRelationList() {
         return relationList;
     }
 
-    public void setRelationList(List<Relation> relationList) {
+    public void setRelationList(List<SelectItem> relationList) {
         this.relationList = relationList;
     }
 
-    public List<Reference> getReferenceList() {
+    public List<SelectItem> getReferenceList() {
         return referenceList;
     }
 
-    public void setReferenceList(List<Reference> referenceList) {
+    public void setReferenceList(List<SelectItem> referenceList) {
         this.referenceList = referenceList;
     }
 
@@ -830,19 +824,19 @@ public class CustomerInfoJuristic extends BaseController {
         this.customerInfoSearch = customerInfoSearch;
     }
 
-    public List<Title> getTitleThList() {
+    public List<SelectItem> getTitleThList() {
         return titleThList;
     }
 
-    public void setTitleThList(List<Title> titleThList) {
+    public void setTitleThList(List<SelectItem> titleThList) {
         this.titleThList = titleThList;
     }
 
-    public List<Title> getTitleEnList() {
+    public List<SelectItem> getTitleEnList() {
         return titleEnList;
     }
 
-    public void setTitleEnList(List<Title> titleEnList) {
+    public void setTitleEnList(List<SelectItem> titleEnList) {
         this.titleEnList = titleEnList;
     }
 

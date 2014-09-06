@@ -57,8 +57,8 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.documentTypeList}"
                                                        var="docType"
-                                                       itemLabel="#{docType.description}"
-                                                       itemValue="#{docType.id}"/>
+                                                       itemLabel="#{docType.label}"
+                                                       itemValue="#{docType.value}"/>
                                         <p:ajax update="searchInputText"/>
                                     </p:selectOneMenu>
                                 </td>
@@ -117,8 +117,8 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.relationList}"
                                                        var="relation"
-                                                       itemLabel="#{relation.description}"
-                                                       itemValue="#{relation.id}"/>
+                                                       itemLabel="#{relation.label}"
+                                                       itemValue="#{relation.value}"/>
                                         <p:ajax event="change"
                                                 listener="#{custInfoSumJuris.onChangeRelation()}"
                                                 update=":frmMain:relation,:frmMain:reference,:frmMain:collateral"/>
@@ -152,8 +152,8 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.referenceList}"
                                                        var="reference"
-                                                       itemLabel="#{reference.description}"
-                                                       itemValue="#{reference.id}"/>
+                                                       itemLabel="#{reference.label}"
+                                                       itemValue="#{reference.value}"/>
                                         <p:ajax event="change" process="@form" update=":frmMain" listener="#{custInfoSumJuris.onChangeReference()}"/>
                                     </p:selectOneMenu>
                                 </td>
@@ -194,8 +194,8 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.documentTypeList}"
                                                        var="docType"
-                                                       itemLabel="#{docType.description}"
-                                                       itemValue="#{docType.id}"/>
+                                                       itemLabel="#{docType.label}"
+                                                       itemValue="#{docType.value}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -261,8 +261,8 @@
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.titleThList}"
                                                                    var="titleTh"
-                                                                   itemLabel="#{titleTh.titleTh}"
-                                                                   itemValue="#{titleTh.id}"/>
+                                                                   itemLabel="#{titleTh.label}"
+                                                                   itemValue="#{titleTh.value}"/>
                                                     <p:ajax event="change"
                                                             listener="#{custInfoSumJuris.onChangeTitleTh()}"
                                                             update=":frmMain:titleEn"/>
@@ -293,8 +293,8 @@
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.titleEnList}"
                                                                    var="titleEn"
-                                                                   itemLabel="#{titleEn.titleEn}"
-                                                                   itemValue="#{titleEn.id}"/>
+                                                                   itemLabel="#{titleEn.label}"
+                                                                   itemValue="#{titleEn.value}"/>
                                                     <p:ajax event="change"
                                                             listener="#{custInfoSumJuris.onChangeTitleEn()}"
                                                             update=":frmMain:titleTh"/>
