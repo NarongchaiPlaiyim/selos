@@ -32,6 +32,7 @@ public class TitleControl extends BusinessControl{
     public TitleControl(){}
 
     public List<SelectItem> getTitleEnSelectItemByCustomerEntity(int customerEntityId){
+        logger.debug("-- getTitleEnSelectItemByCustomerEntity");
         if(customerEntityId == 0)
             return new ArrayList<SelectItem>();
         Map<Integer, TitleView> _tmpMap = getInternalCacheMap();
@@ -45,12 +46,15 @@ public class TitleControl extends BusinessControl{
                 selectItem.setLabel(titleView.getTitleEn());
                 selectItem.setValue(titleView.getId());
                 titleSelectItemList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getTitleEnSelectItemByCustomerEntity return TitleView size: {}", titleSelectItemList.size());
         return titleSelectItemList;
     }
 
     public List<SelectItem> getTitleThSelectItemByCustomerEntity(int customerEntityId){
+        logger.debug("-- getTitleThSelectItemByCustomerEntity");
         if(customerEntityId == 0)
             return new ArrayList<SelectItem>();
 
@@ -65,14 +69,19 @@ public class TitleControl extends BusinessControl{
                 selectItem.setLabel(titleView.getTitleTh());
                 selectItem.setValue(titleView.getId());
                 titleList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getTitleThSelectItemByCustomerEntity return titleView size: {}", titleList.size());
         return titleList;
     }
 
     public TitleView getTitleById(int id){
+        logger.debug("-- getTitleById, id:{}", id);
         Map<Integer, TitleView> titleViewMap = getInternalCacheMap();
-        return titleViewMap.get(id);
+        TitleView titleView = titleViewMap.get(id);
+        logger.debug("getTitleById return titleView: {}",titleView);
+        return titleView;
     }
 
     private Map<Integer, TitleView> loadData(){
@@ -84,13 +93,16 @@ public class TitleControl extends BusinessControl{
             return new ConcurrentHashMap<Integer, TitleView>();
         } else {
             cacheLoader.setCacheMap(Title.class.getName(), _tmpMap);
+            logger.debug("loadData return TitleView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, TitleView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, TitleView> _tmpMap = cacheLoader.getCacheMap(Title.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("TitleView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

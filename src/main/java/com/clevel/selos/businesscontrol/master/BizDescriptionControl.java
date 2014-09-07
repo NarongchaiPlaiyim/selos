@@ -32,6 +32,7 @@ public class BizDescriptionControl extends BusinessControl {
     public BizDescriptionControl(){}
 
     public List<SelectItem> getBizDescSelectItemOrderByTMBCode(){
+        logger.debug("-- getBizDescSelectItemOrderByTMBCode --");
         Map<Integer, BizDescriptionView> _tmpMap = getInternalCacheMap();
         List<BizDescriptionView> bizDescriptionViewList = new ArrayList<BizDescriptionView>(_tmpMap.values());
         Collections.sort(bizDescriptionViewList, new BizDescriptionTMBCodeComparator());
@@ -42,9 +43,11 @@ public class BizDescriptionControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(bizDescriptionView.getTmbCode() + " - " + bizDescriptionView.getDescription());
                 selectItem.setValue(bizDescriptionView.getId());
+                logger.debug("added SelectItem: {}", selectItem);
                 bizSelectItemList.add(selectItem);
             }
         }
+        logger.debug("getBizDescSelectItemOrderByTMBCode return BizDescriptionView size:{}", bizDescriptionViewList.size());
         return bizSelectItemList;
     }
 
@@ -53,19 +56,23 @@ public class BizDescriptionControl extends BusinessControl {
         List<BusinessDescription> bizDescriptionList = businessDescriptionDAO.findAll();
         Map<Integer, BizDescriptionView> _tmpMap = bizDescriptionTransform.transformToCache(bizDescriptionList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty business description View");
+            logger.debug("return empty BizDescriptionView");
             return new ConcurrentHashMap<Integer, BizDescriptionView>();
         } else {
             cacheLoader.setCacheMap(BusinessDescription.class.getName(), _tmpMap);
+            logger.debug("loadData return BizDescriptionView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, BizDescriptionView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap --");
         Map<Integer, BizDescriptionView> _tmpMap = cacheLoader.getCacheMap(BusinessDescription.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("-- found null or empty value in Cache - reload Cache");
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return BizDescriptionView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 

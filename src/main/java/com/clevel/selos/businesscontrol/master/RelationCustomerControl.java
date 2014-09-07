@@ -38,6 +38,7 @@ public class RelationCustomerControl extends BusinessControl{
     public RelationCustomerControl(){}
 
     public List<SelectItem> getRelationSelectItem(int customerEntityId, int borrowerTypeId, int spouse){
+        logger.debug("-- getRelationSelectItem, customerEntityId:{}, borrowerTypeId:{}, spouse:{}", customerEntityId, borrowerTypeId, spouse);
         Map<Integer, RelationCustomerView> _tmpRelationMap = getInternalCacheMap();
         List<RelationView> relationViewList = new ArrayList<RelationView>();
 
@@ -45,7 +46,9 @@ public class RelationCustomerControl extends BusinessControl{
             if(relationCustomerView.getCustomerEntityId() == customerEntityId &&
                     relationCustomerView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
                     relationCustomerView.getSpouse() == spouse){
-                relationViewList.add(relationControl.getRelationViewById(relationCustomerView.getRelationId()));
+                RelationView relationView = relationControl.getRelationViewById(relationCustomerView.getRelationId());
+                logger.debug("add RelationView: {}",relationView);
+                relationViewList.add(relationView);
             }
         }
 
@@ -57,11 +60,14 @@ public class RelationCustomerControl extends BusinessControl{
             selectItem.setLabel(relationView.getDescription());
             selectItem.setValue(relationView.getId());
             selectItemList.add(selectItem);
+            logger.debug("add SelectItem: {}", selectItem);
         }
+        logger.debug("getRelationSelectItem return relationView size: {}", selectItemList.size());
         return selectItemList;
     }
 
     public List<SelectItem> getRelationSelectItemWithOutBorrower(int customerEntityId, int borrowerTypeId, int spouse){
+        logger.debug("-- getRelationSelectItemWithOutBorrower, customerEntityId: {}, borrowerTypeId:{}, spouse: {}", customerEntityId, borrowerTypeId, spouse);
         Map<Integer, RelationCustomerView> _tmpRelationMap = getInternalCacheMap();
         List<RelationView> relationViewList = new ArrayList<RelationView>();
 
@@ -72,6 +78,7 @@ public class RelationCustomerControl extends BusinessControl{
                 RelationView relationView = relationControl.getRelationViewById(relationCustomerView.getRelationId());
                 if(relationView.getId() != RelationValue.BORROWER.value()) {
                     relationViewList.add(relationView);
+                    logger.debug("add RelationView: {}", relationView);
                 }
             }
         }
@@ -84,8 +91,9 @@ public class RelationCustomerControl extends BusinessControl{
             selectItem.setLabel(relationView.getDescription());
             selectItem.setValue(relationView.getId());
             selectItemList.add(selectItem);
+            logger.debug("add SelectItem: {}", selectItem);
         }
-
+        logger.debug("getRelationSelectItemWithOutBorrower return RelationView size: {}", selectItemList);
         return selectItemList;
     }
 
@@ -94,17 +102,20 @@ public class RelationCustomerControl extends BusinessControl{
         List<RelationCustomer> relationCustomerList = relationCustomerDAO.findAll();
         Map<Integer, RelationCustomerView> _tmpMap = relationCustomerTransform.transformToCache(relationCustomerList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty RelationCustomerView");
             return new ConcurrentHashMap<Integer, RelationCustomerView>();
         } else {
             cacheLoader.setCacheMap(RelationCustomer.class.getName(), _tmpMap);
+            logger.debug("loadData return RelationCustomerView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, RelationCustomerView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, RelationCustomerView> _tmpMap = cacheLoader.getCacheMap(RelationCustomer.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("RelationCustomerView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

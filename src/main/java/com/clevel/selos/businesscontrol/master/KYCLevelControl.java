@@ -30,6 +30,7 @@ public class KYCLevelControl extends BusinessControl {
     private KYCLevelDAO kycLevelDAO;
 
     public List<SelectItem> getKYCLevelSelectItem(){
+        logger.debug("-- getKYCLevelSelectItem");
         Map<Integer, KYCLevelView> _tmpMap = getInternalCacheMap();
         List<KYCLevelView> kycLevelViewList = new ArrayList<KYCLevelView>(_tmpMap.values());
         Collections.sort(kycLevelViewList, new KYCLevelComparator());
@@ -40,9 +41,11 @@ public class KYCLevelControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(kycLevelView.getName());
                 selectItem.setValue(kycLevelView.getId());
+                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }
+        logger.debug("getKYCLevelSelectItem return kycLevelView size: {}", kycLevelViewList.size());
         return selectItemList;
     }
 
@@ -55,13 +58,16 @@ public class KYCLevelControl extends BusinessControl {
             return new ConcurrentHashMap<Integer, KYCLevelView>();
         } else {
             cacheLoader.setCacheMap(KYCLevel.class.getName(), _tmpMap);
+            logger.debug("loadData return KYCLevel size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, KYCLevelView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, KYCLevelView> _tmpMap = cacheLoader.getCacheMap(KYCLevel.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("KYCLevelView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

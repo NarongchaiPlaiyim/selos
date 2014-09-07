@@ -29,6 +29,7 @@ public class RaceControl {
     private RaceDAO raceDAO;
 
     public List<SelectItem> getRaceSelectItemActiveList(){
+        logger.debug("-- getRaceSelectItemActiveList");
         Map<Integer, RaceView> _tmpMap = getInternalCacheMap();
         List<RaceView> raceViewList = new ArrayList<RaceView>(_tmpMap.values());
         Collections.sort(raceViewList, new RaceComparator());
@@ -39,8 +40,10 @@ public class RaceControl {
                 selectItem.setLabel(raceView.getName());
                 selectItem.setValue(raceView.getId());
                 raceSelectItem.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getRaceSelectItemActiveList return raceViewList size: {}", raceSelectItem.size());
         return raceSelectItem;
     }
 
@@ -58,8 +61,10 @@ public class RaceControl {
     }
 
     private Map<Integer, RaceView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, RaceView> _tmpMap = cacheLoader.getCacheMap(Race.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("RaceView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

@@ -33,12 +33,15 @@ public class ReferenceControl extends BusinessControl {
     public ReferenceControl(){}
 
     public ReferenceView getReferenceViewById(int referenceId){
+        logger.debug("-- getReferenceViewById, referenceId: {}", referenceId);
         Map<Integer, ReferenceView> referenceViewMap = getInternalCacheMap();
-        return referenceViewMap.get(referenceId);
+        ReferenceView referenceView = referenceViewMap.get(referenceId);
+        logger.debug("getReferenceViewById return referenceView: {}", referenceView);
+        return referenceView;
     }
 
     public List<SelectItem> getReferenceSelectItemByFlag(int customerEntityId, int borrowerTypeId, int relationId, int mainCustomer, int spouse){
-
+        logger.debug("-- getReferenceSelectItemByFlag, customerEntityId: {},borrowerTypeId: {}, relationId:{}, mainCustomer: {}, spouse: {}", customerEntityId, borrowerTypeId, relationId, mainCustomer, spouse);
         Map<Integer, ReferenceView> _tmpMap = getInternalCacheMap();
         List<ReferenceView> referenceViewList = new ArrayList<ReferenceView>(_tmpMap.values());
         Collections.sort(referenceViewList, new ReferenceDescComparator());
@@ -75,8 +78,10 @@ public class ReferenceControl extends BusinessControl {
                 selectItem.setLabel(referenceView.getDescription());
                 selectItem.setValue(referenceView.getId());
                 referenceList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getReferenceSelectItemByFlag return referenceView size: {}", referenceList.size());
         return referenceList;
     }
 
@@ -85,17 +90,20 @@ public class ReferenceControl extends BusinessControl {
         List<Reference> referenceList = referenceDAO.findAll();
         Map<Integer, ReferenceView> _tmpMap = referenceTransform.transformToCache(referenceList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty ReferenceView");
             return new ConcurrentHashMap<Integer, ReferenceView>();
         } else {
             cacheLoader.setCacheMap(Reference.class.getName(), _tmpMap);
+            logger.debug("return ReferenceView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, ReferenceView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, ReferenceView> _tmpMap = cacheLoader.getCacheMap(Reference.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("ReferenceView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

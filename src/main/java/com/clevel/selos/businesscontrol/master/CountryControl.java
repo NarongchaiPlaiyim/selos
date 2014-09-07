@@ -33,6 +33,7 @@ public class CountryControl extends BusinessControl {
     public CountryControl(){}
 
     public List<SelectItem> getCountrySelectItemActiveList(){
+        logger.debug("-- getCountrySelectItemActiveList --");
         Map<Integer, CountryView> _tmpMap = getInternalCacheMap();
         List<CountryView> countryViewList = new ArrayList<CountryView>(_tmpMap.values());
         Collections.sort(countryViewList, new CountryComparator());
@@ -43,9 +44,11 @@ public class CountryControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(countryView.getName());
                 selectItem.setValue(countryView.getId());
+                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }
+        logger.debug("getCountrySelectItemActiveList return countryView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -54,17 +57,20 @@ public class CountryControl extends BusinessControl {
         List<Country> bizDescriptionList = countryDAO.findAll();
         Map<Integer, CountryView> _tmpMap = countryTransform.transformToCache(bizDescriptionList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Title View");
+            logger.debug("return empty CountryView View");
             return new ConcurrentHashMap<Integer, CountryView>();
         } else {
             cacheLoader.setCacheMap(Country.class.getName(), _tmpMap);
+            logger.debug("loadData return CountryView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, CountryView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, CountryView> _tmpMap = cacheLoader.getCacheMap(Country.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("CountryView is null or empty, reload from DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

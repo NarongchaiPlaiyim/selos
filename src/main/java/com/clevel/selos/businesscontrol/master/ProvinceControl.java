@@ -30,11 +30,15 @@ public class ProvinceControl extends BusinessControl {
     public ProvinceControl(){}
 
     public ProvinceView getProvinceViewById(int code){
+        logger.debug("-- getProvinceViewById, code: {}", code);
         Map<Integer, ProvinceView> _tmpMap = getInternalCacheMap();
-        return _tmpMap.get(code);
+        ProvinceView provinceView = _tmpMap.get(code);
+        logger.debug("getProvinceViewById return provinceView: {}", provinceView);
+        return provinceView;
     }
 
     public List<SelectItem> getProviceSelectItemActiveList(){
+        logger.debug("-- getProviceSelectItemActiveList");
         Map<Integer, ProvinceView> _tmpMap = getInternalCacheMap();
         List<ProvinceView> provinceViewList = new ArrayList<ProvinceView>(_tmpMap.values());
         Collections.sort(provinceViewList, new ProvinceComparator());
@@ -46,8 +50,10 @@ public class ProvinceControl extends BusinessControl {
                 selectItem.setLabel(provinceView.getName());
                 selectItem.setValue(provinceView.getCode());
                 selectItemList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getProviceSelectItemActiveList return provinceView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -60,13 +66,16 @@ public class ProvinceControl extends BusinessControl {
             return new ConcurrentHashMap<Integer, ProvinceView>();
         } else {
             cacheLoader.setCacheMap(Province.class.getName(), _tmpMap);
+            logger.debug("loadData return ProvinceView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, ProvinceView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, ProvinceView> _tmpMap = cacheLoader.getCacheMap(Province.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("ProvinceView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

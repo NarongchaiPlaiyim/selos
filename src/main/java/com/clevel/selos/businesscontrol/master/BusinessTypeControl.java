@@ -28,6 +28,7 @@ public class BusinessTypeControl extends BusinessControl{
     private BusinessTypeDAO businessTypeDAO;
 
     public List<SelectItem> getBusinessTypeSelectItemList(){
+        logger.debug("-- getBusinessTypeSelectItemList");
         Map<Integer, BusinessTypeView> _tmpMap = getInternalCacheMap();
         List<BusinessTypeView> businessTypeViewList = new ArrayList<BusinessTypeView>(_tmpMap.values());
         Collections.sort(businessTypeViewList, new BusinessTypeComparator());
@@ -37,8 +38,10 @@ public class BusinessTypeControl extends BusinessControl{
             SelectItem selectItem = new SelectItem();
             selectItem.setLabel(businessTypeView.getDescription());
             selectItem.setValue(businessTypeView.getId());
+            logger.debug("add selectItem: {}", selectItem);
             selectItemList.add(selectItem);
         }
+        logger.debug("getBusinessTypeSelectItemList return ");
         return selectItemList;
     }
 
@@ -51,15 +54,19 @@ public class BusinessTypeControl extends BusinessControl{
             return new ConcurrentHashMap<Integer, BusinessTypeView>();
         } else {
             cacheLoader.setCacheMap(BusinessType.class.getName(), _tmpMap);
+            logger.debug("loadData return BusinessTypeView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, BusinessTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap --");
         Map<Integer, BusinessTypeView> _tmpMap = cacheLoader.getCacheMap(BusinessType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("BusinessTypeView is null or empty, reload from DB");
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return BusinessTypeView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 

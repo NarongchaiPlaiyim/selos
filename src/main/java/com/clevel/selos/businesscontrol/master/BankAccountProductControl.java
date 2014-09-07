@@ -32,6 +32,7 @@ public class BankAccountProductControl extends BusinessControl{
     public BankAccountProductControl(){}
 
     public List<BankAccountProductView> getAccountProductByAccountTypeId(int bankAccountTypeId){
+        logger.debug("-- begin getAccountProductByAccountTypeId, bankAccountTypeId: {}", bankAccountTypeId);
         Map<Integer, BankAccountProductView> _tmpMap = getInternalCacheMap();
 
         List<BankAccountProductView> bankAccountProductViewList = new ArrayList<BankAccountProductView>();
@@ -40,6 +41,7 @@ public class BankAccountProductControl extends BusinessControl{
                 bankAccountProductViewList.add(bankAccountProductView);
             }
         }
+        logger.debug("getAccountProductByAccountTypeId return BankAccountProductView size: {}", bankAccountProductViewList.size());
         return bankAccountProductViewList;
     }
 
@@ -48,19 +50,22 @@ public class BankAccountProductControl extends BusinessControl{
         List<BankAccountProduct> bankAccountProductList = bankAccountProductDAO.findAll();
         Map<Integer, BankAccountProductView> _tmpMap = bankAccountProductTransform.transformToCache(bankAccountProductList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty BankAccountProductView");
             return new ConcurrentHashMap<Integer, BankAccountProductView>();
         } else {
             cacheLoader.setCacheMap(BankAccountProduct.class.getName(), _tmpMap);
+            logger.debug("loadData return BankAccountProductView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, BankAccountProductView> getInternalCacheMap(){
+        logger.debug("-- begin getInternalCacheMap --");
         Map<Integer, BankAccountProductView> _tmpMap = cacheLoader.getCacheMap(BankAccountProduct.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return BankAccountProductView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 

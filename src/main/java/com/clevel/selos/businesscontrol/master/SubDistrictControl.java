@@ -28,6 +28,7 @@ public class SubDistrictControl extends BusinessControl {
     private SubDistrictTransform subDistrictTransform;
 
     public List<SelectItem> getSubDistrictSelectItemByDistrict(int districtId){
+        logger.debug("-- getSubDistrictSelectItemByDistrict, districtId: {}", districtId);
         Map<Integer, SubDistrictView> _tmpMap = getInternalCacheMap();
         List<SubDistrictView> subDistrictViewList = new ArrayList<SubDistrictView>(_tmpMap.values());
         Collections.sort(subDistrictViewList, new SubDistrictComparator());
@@ -39,8 +40,10 @@ public class SubDistrictControl extends BusinessControl {
                 selectItem.setLabel(subDistrictView.getName());
                 selectItem.setValue(subDistrictView.getCode());
                 selectItemList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getSubDistrictSelectItemByDistrict return SubDistrictView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -49,10 +52,11 @@ public class SubDistrictControl extends BusinessControl {
         List<SubDistrict> subDistrictList = subDistrictDAO.findAll();
         Map<Integer, SubDistrictView> _tmpMap = subDistrictTransform.transformToCache(subDistrictList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Province View");
+            logger.debug("return empty SubDistrictView View");
             return new ConcurrentHashMap<Integer, SubDistrictView>();
         } else {
             cacheLoader.setCacheMap(SubDistrict.class.getName(), _tmpMap);
+            logger.debug("loadData return SubDistrictView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
@@ -60,6 +64,7 @@ public class SubDistrictControl extends BusinessControl {
     private Map<Integer, SubDistrictView> getInternalCacheMap(){
         Map<Integer, SubDistrictView> _tmpMap = cacheLoader.getCacheMap(SubDistrict.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("SubDistrictView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

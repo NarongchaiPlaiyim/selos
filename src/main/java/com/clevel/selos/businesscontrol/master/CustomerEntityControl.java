@@ -31,6 +31,7 @@ public class CustomerEntityControl extends BusinessControl {
     public CustomerEntityControl(){}
 
     public List<SelectItem> getCustomerEntitySelectItemList(){
+        logger.debug("-- getCustomerEntitySelectItemList");
         Map<Integer, CustomerEntityView> _tmpMap = getInternalCacheMap();
         List<CustomerEntityView> customerEntityViewList = new ArrayList<CustomerEntityView>(_tmpMap.values());
         Collections.sort(customerEntityViewList, new CustomerEntityComparator());
@@ -41,9 +42,11 @@ public class CustomerEntityControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(customerEntityView.getDescription());
                 selectItem.setValue(customerEntityView.getId());
+                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }
+        logger.debug("getCustomerEntitySelectItemList return CustomerEntityView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -52,17 +55,20 @@ public class CustomerEntityControl extends BusinessControl {
         List<CustomerEntity> customerEntityList = customerEntityDAO.findAll();
         Map<Integer, CustomerEntityView> _tmpMap = customerEntityTransform.transformToCache(customerEntityList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Business Type View");
+            logger.debug("return empty CustomerEntityView");
             return new ConcurrentHashMap<Integer, CustomerEntityView>();
         } else {
             cacheLoader.setCacheMap(CustomerEntity.class.getName(), _tmpMap);
+            logger.debug("loadData return CustomerEntityView size: {} ", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, CustomerEntityView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap ");
         Map<Integer, CustomerEntityView> _tmpMap = cacheLoader.getCacheMap(CustomerEntity.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("CustomerEntityView is null or empty, reload from DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

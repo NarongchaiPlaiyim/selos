@@ -28,6 +28,7 @@ public class OccupationControl extends BusinessControl{
     private OccupationTransform occupationTransform;
 
     public List<SelectItem> getOccupationSelectItemActiveList(){
+        logger.debug("-- getOccupationSelectItemActiveList");
         Map<Integer, OccupationView> _tmpMap = getInternalCacheMap();
         List<OccupationView> occupationViewList = new ArrayList<OccupationView>(_tmpMap.values());
         Collections.sort(occupationViewList, new OccupationComparator());
@@ -39,8 +40,10 @@ public class OccupationControl extends BusinessControl{
                 selectItem.setLabel(occupationView.getCode() + " - " + occupationView.getDescription());
                 selectItem.setValue(occupationView.getId());
                 selectItemList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getOccupationSelectItemActiveList return occupationView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -49,17 +52,20 @@ public class OccupationControl extends BusinessControl{
         List<Occupation> occupationList = occupationDAO.findAll();
         Map<Integer, OccupationView> _tmpMap = occupationTransform.transformToCache(occupationList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Title View");
+            logger.debug("return empty OccupationView View");
             return new ConcurrentHashMap<Integer, OccupationView>();
         } else {
             cacheLoader.setCacheMap(Occupation.class.getName(), _tmpMap);
+            logger.debug("loadData return OccupationView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, OccupationView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, OccupationView> _tmpMap = cacheLoader.getCacheMap(Occupation.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("OccupationView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

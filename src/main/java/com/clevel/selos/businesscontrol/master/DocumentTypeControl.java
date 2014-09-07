@@ -34,6 +34,7 @@ public class DocumentTypeControl extends BusinessControl {
     public DocumentTypeControl(){}
 
     public List<SelectItem> getDocumentTypeByCustomerEntity(int customerEntityId){
+        logger.debug("-- getDocumentTypeByCustomerEntity, customerEntityId: {}", customerEntityId);
         Map<Integer, DocumentTypeView> _tmpMap = getInternalCacheMap();
         List<SelectItem> documentTypeList = new ArrayList<SelectItem>();
         for(DocumentTypeView documentTypeView : _tmpMap.values()){
@@ -42,6 +43,7 @@ public class DocumentTypeControl extends BusinessControl {
                 documentTypeList.add(selectItem);
             }
         }
+        logger.debug("getDocumentTypeByCustomerEntity return DocumentTypeView size: {}", documentTypeList.size());
         return documentTypeList;
     }
 
@@ -50,17 +52,20 @@ public class DocumentTypeControl extends BusinessControl {
         List<DocumentType> documentTypeList = documentTypeDAO.findAll();
         Map<Integer, DocumentTypeView> _tmpMap = documentTypeTransform.transformToCache(documentTypeList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty DocumentTypeView");
             return new ConcurrentHashMap<Integer, DocumentTypeView>();
         } else {
             cacheLoader.setCacheMap(DocumentType.class.getName(), _tmpMap);
+            logger.debug("loadData return DocumentTypeView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, DocumentTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, DocumentTypeView> _tmpMap = cacheLoader.getCacheMap(DocumentType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("DocumentTypeView is null or empty, reload from DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

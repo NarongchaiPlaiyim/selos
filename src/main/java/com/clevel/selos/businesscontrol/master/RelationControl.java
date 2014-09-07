@@ -34,10 +34,14 @@ public class RelationControl extends BusinessControl {
     public RelationControl(){}
 
     public RelationView getRelationViewById(int relationId){
+        logger.debug("-- getRelationViewById");
         Map<Integer, RelationView> _tmpMap = getInternalCacheMap();
         RelationView relationView = _tmpMap.get(relationId);
-        if(relationView != null)
+        if(relationView != null){
+            logger.debug("getRelationViewById return RelationView: {}", relationView);
             return relationView;
+        }
+        logger.debug("return empty RelationView");
         return new RelationView();
     }
 
@@ -46,17 +50,20 @@ public class RelationControl extends BusinessControl {
         List<Relation> relationList = relationDAO.findAll();
         Map<Integer, RelationView> _tmpMap = relationTransform.transformToCache(relationList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty RelationView");
             return new ConcurrentHashMap<Integer, RelationView>();
         } else {
             cacheLoader.setCacheMap(Relation.class.getName(), _tmpMap);
+            logger.debug("loadData return RelationView size:{}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, RelationView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, RelationView> _tmpMap = cacheLoader.getCacheMap(Relation.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("RelationView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

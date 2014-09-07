@@ -33,6 +33,7 @@ public class IncomeSourceControl extends BusinessControl {
     public IncomeSourceControl(){}
 
     public List<SelectItem> getIncomeSourceSelectItemActiveList(){
+        logger.debug("-- getIncomeSourceSelectItemActiveList");
         Map<Integer, IncomeSourceView> _tmpMap = getInternalCacheMap();
         List<IncomeSourceView> incomeSourceViewList = new ArrayList<IncomeSourceView>(_tmpMap.values());
         Collections.sort(incomeSourceViewList, new IncomeSourceComparator());
@@ -43,9 +44,11 @@ public class IncomeSourceControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(incomeSourceView.getName());
                 selectItem.setValue(incomeSourceView.getId());
+                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }
+        logger.debug("getIncomeSourceSelectItemActiveList return incomeSourceView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -54,7 +57,7 @@ public class IncomeSourceControl extends BusinessControl {
         List<IncomeSource> bizDescriptionList = incomeSourceDAO.findAll();
         Map<Integer, IncomeSourceView> _tmpMap = incomeSourceTransform.transformToCache(bizDescriptionList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Title View");
+            logger.debug("return empty IncomeSourceView View");
             return new ConcurrentHashMap<Integer, IncomeSourceView>();
         } else {
             cacheLoader.setCacheMap(IncomeSource.class.getName(), _tmpMap);
@@ -63,8 +66,10 @@ public class IncomeSourceControl extends BusinessControl {
     }
 
     private Map<Integer, IncomeSourceView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, IncomeSourceView> _tmpMap = cacheLoader.getCacheMap(IncomeSource.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("IncomeSourceView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

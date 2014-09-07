@@ -220,6 +220,7 @@ public class ApplicationCacheLoader implements Serializable{
         indexHash.put(CustomerEntity.class.getName(), customerEntityTransform.transformToCache(customerEntityList));
 
         Util.listMap(indexHash);
+        logger.debug("-- finished load cache DB --");
     }
 
     public Map getCacheMap(String className){

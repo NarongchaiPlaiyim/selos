@@ -33,6 +33,7 @@ public class NationalityControl extends BusinessControl{
     public NationalityControl(){}
 
     public List<SelectItem> getNationalitySelectItemActiveList(){
+        logger.debug("-- getNationalitySelectItemActiveList");
         Map<Integer, NationalityView> _tmpMap = getInternalCacheMap();
         List<NationalityView> nationalityViewList = new ArrayList<NationalityView>(_tmpMap.values());
         Collections.sort(nationalityViewList, new NationalityComparator());
@@ -47,8 +48,10 @@ public class NationalityControl extends BusinessControl{
                     selectItemList.add(selectItem);
                 else
                     selectItemList.add(0, selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getNationalitySelectItemActiveList return nationalityView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -62,13 +65,16 @@ public class NationalityControl extends BusinessControl{
             return new ConcurrentHashMap<Integer, NationalityView>();
         } else {
             cacheLoader.setCacheMap(Nationality.class.getName(), _tmpMap);
+            logger.debug("loadData return NationalityView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, NationalityView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, NationalityView> _tmpMap = cacheLoader.getCacheMap(Nationality.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("NationalityView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

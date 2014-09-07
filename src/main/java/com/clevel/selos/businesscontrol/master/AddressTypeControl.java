@@ -29,6 +29,7 @@ public class AddressTypeControl extends BusinessControl{
     private AddressTypeDAO addressTypeDAO;
 
     public List<SelectItem> getAddressTypeSelectItemByCustEntity(int customerEntityId){
+        logger.debug("-- getAddressTypeSelectItemByCustEntity - customerEntityId: {}", customerEntityId);
         Map<Integer, AddressTypeView> _tmpMap = getInternalCacheMap();
         List<AddressTypeView> addressTypeViewList = new ArrayList<AddressTypeView>(_tmpMap.values());
         Collections.sort(addressTypeViewList, new AddressTypeComparator());
@@ -42,27 +43,31 @@ public class AddressTypeControl extends BusinessControl{
                 selectItemList.add(selectItem);
             }
         }
+        logger.debug("getAddressTypeSelectItemByCustEntity return {}", addressTypeViewList);
         return selectItemList;
     }
 
     private Map<Integer, AddressTypeView> loadData(){
-        logger.debug("-- begin loadData --");
+        logger.debug("-- loadData --");
         List<AddressType> addressTypeList = addressTypeDAO.findAll();
         Map<Integer, AddressTypeView> _tmpMap = addressTypeTransform.transformToCache(addressTypeList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Province View");
+            logger.debug("return empty AddressType View");
             return new ConcurrentHashMap<Integer, AddressTypeView>();
         } else {
             cacheLoader.setCacheMap(AddressType.class.getName(), _tmpMap);
+            logger.debug("return AddressType with size {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, AddressTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap -- ");
         Map<Integer, AddressTypeView> _tmpMap = cacheLoader.getCacheMap(AddressType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return AddressTypeView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 

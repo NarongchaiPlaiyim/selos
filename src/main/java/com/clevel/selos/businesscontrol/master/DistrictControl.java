@@ -32,11 +32,15 @@ public class DistrictControl extends BusinessControl{
     public DistrictControl(){}
 
     public DistrictView getDistrictById(int districtId){
+        logger.debug("-- getDistrictById, districtId: {}", districtId);
         Map<Integer, DistrictView> _tmpMap = getInternalCacheMap();
-        return _tmpMap.get(districtId);
+        DistrictView districtView = _tmpMap.get(districtId);
+        logger.debug("getDistrictById return districtView: {}", districtView);
+        return districtView;
     }
 
     public List<SelectItem> getDistrictSelectItemByProvince(int provinceCode){
+        logger.debug("-- getDistrictSelectItemByProvince, provinceCode: {}", provinceCode);
         Map<Integer, DistrictView> _tmpMap = getInternalCacheMap();
         List<DistrictView> districtViewList = new ArrayList<DistrictView>(_tmpMap.values());
         Collections.sort(districtViewList, new DistrictComparator());
@@ -47,9 +51,11 @@ public class DistrictControl extends BusinessControl{
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(districtView.getName());
                 selectItem.setValue(districtView.getId());
+                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }
+        logger.debug("getDistrictSelectItemByProvince return districtView size: {}", selectItemList.size());
         return selectItemList;
     }
 
@@ -58,19 +64,23 @@ public class DistrictControl extends BusinessControl{
         List<District> districtList = districtDAO.findAll();
         Map<Integer, DistrictView> _tmpMap = districtTransform.transformToCache(districtList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty Province View");
+            logger.debug("return empty DistrictView");
             return new ConcurrentHashMap<Integer, DistrictView>();
         } else {
             cacheLoader.setCacheMap(District.class.getName(), _tmpMap);
+            logger.debug("loadData return ");
             return _tmpMap;
         }
     }
 
     private Map<Integer, DistrictView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap --");
         Map<Integer, DistrictView> _tmpMap = cacheLoader.getCacheMap(District.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("DistrictView is null or empty, reload from DB");
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return DistrictView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 
