@@ -41,18 +41,17 @@
                             </tr>
                             <tr>
                                 <td style="height:53px;">
-                                    <p:inputText value="#{loginBean.userName}" required="true"  styleClass="login-inp" style="font-size: 18px!important;"/>
+                                    <p:inputText value="#{loginBean.userName}" styleClass="login-inp" style="font-size: 18px!important;"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <p:password value="#{loginBean.password}" required="true" autocomplete="false" styleClass="login-inp" style="font-size: 18px!important;"/>
+                                    <p:password value="#{loginBean.password}" autocomplete="false" styleClass="login-inp" style="font-size: 18px!important;"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="text-align:right; align:right; padding-right:42px;">
-                                    <p:commandButton id="btnLogin" value="Login" action="#{loginBean.login}" ajax="false"
-                                                     styleClass="login-button"/>
+                                    <p:commandButton id="btnLogin" value="Login" action="#{loginBean.login}" onclick="PF('blockUI').show()" update=":frmMain" styleClass="login-button"/>
                                 </td>
                             </tr>
                             <tr>
@@ -78,6 +77,7 @@
                     </div>
                 </div>
             </h:form>
+            <p:blockUI widgetVar="blockUI" block=":pnl_maincontainer_login"/>
         </p:panel>
     </h:body>
 </f:view>
