@@ -36,9 +36,8 @@ public class BankAccountTypeControl extends BusinessControl{
     @Inject
     public BankAccountTypeControl(){}
 
-
-
     public List<BankAccountTypeView> getBankAccountTypeViewActiveList() {
+        logger.debug("-- getBankAccountTypeViewActiveList --");
         Map<Integer, BankAccountTypeView> bankAccountTypeViewMap = getInternalCacheMap();
         List<BankAccountTypeView> bankAccountViewList = new ArrayList<BankAccountTypeView>();
         for(BankAccountTypeView bankAccountTypeView : bankAccountTypeViewMap.values()){
@@ -46,15 +45,17 @@ public class BankAccountTypeControl extends BusinessControl{
                 bankAccountViewList.add(bankAccountTypeView);
             }
         }
+        logger.debug("-- getBankAccountTypeViewActiveList return bankAccountViewList size: {}", bankAccountViewList.size());
         return bankAccountViewList;
     }
 
     public List<BankAccountTypeView> getOpenAccountTypeList(){
+        logger.debug("-- getOpenAccountTypeList --");
 
         Map<Integer, BankAccountTypeView> bankAccountTypeViewMap = getInternalCacheMap();
         List<BankAccountTypeView> bankAccountTypeViewList = new ArrayList<BankAccountTypeView>();
 
-        logger.info("get OpenAccount {}", bankAccountTypeViewList);
+        logger.debug("get getOpenAccountTypeList {}", bankAccountTypeViewList);
         for(BankAccountTypeView bankAccountTypeView : bankAccountTypeViewMap.values()){
             logger.info("--- looping {}", bankAccountTypeView);
             //active = 1, openAccountFlag = 1, othBankStatementFlag = 0, bankStatementFlag = 1
@@ -64,24 +65,30 @@ public class BankAccountTypeControl extends BusinessControl{
                 logger.info("Add Open Account type: {}", bankAccountTypeView);
             }
         }
+        logger.debug("getOpenAccountTypeList return bankAccountTypeViewList size: {}", bankAccountTypeViewList.size());
         return bankAccountTypeViewList;
     }
 
     private Map<Integer, BankAccountTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap --");
         Map<Integer, BankAccountTypeView> _tmpMap = cacheLoader.getCacheMap(BankAccountType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return BankAccountTypeView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 
     private Map<Integer, BankAccountTypeView> loadData(){
+        logger.debug("-- loadData --");
         List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
         Map<Integer, BankAccountTypeView> _tmpMap = bankAccountTypeTransform.transformToCache(bankAccountTypeList);
-        if(_tmpMap == null)
+        if(_tmpMap == null) {
+            logger.debug("return empty BankAccountTypeView");
             return new ConcurrentHashMap<Integer, BankAccountTypeView>();
-        else {
+        } else {
             cacheLoader.setCacheMap(BankAccountType.class.getName(), _tmpMap);
+            logger.debug("loadData return BankAccountTypeView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }

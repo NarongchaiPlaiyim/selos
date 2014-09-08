@@ -36,21 +36,25 @@ public class BankControl extends BusinessControl{
     public BankControl(){}
 
     public List<SelectItem> getBankActiveList(){
+        logger.debug("-- getBankActiveList --");
         Map<Integer, BankView> _tmpMap = getInternalCacheMap();
         List<SelectItem> bankList = new ArrayList<SelectItem>();
         for(BankView bankView : _tmpMap.values()){
             bankList.add(bankTransform.transformToSelectItem(bankView));
         }
+        logger.debug("-- getBankActiveList return bank size: {}", bankList.size());
         return bankList;
     }
 
     public List<SelectItem> getBankRefinanceList(){
+        logger.debug("-- getBankRefinanceList --");
         Map<Integer, BankView> _tmpMap = getInternalCacheMap();
         List<SelectItem> bankList = new ArrayList<SelectItem>();
         for(BankView bankView : _tmpMap.values()){
             if(Util.isTrue(bankView.getActive()) && Util.isTrue(bankView.getRefinance()))
                 bankList.add(bankTransform.transformToSelectItem(bankView));
         }
+        logger.debug(" getBankRefinanceList return bankList size: {}", bankList.size());
         return bankList;
     }
 
@@ -59,19 +63,22 @@ public class BankControl extends BusinessControl{
         List<Bank> bankList = bankDAO.findAll();
         Map<Integer, BankView> _tmpMap = bankTransform.transformToCache(bankList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty BankView");
             return new ConcurrentHashMap<Integer, BankView>();
         } else {
             cacheLoader.setCacheMap(Bank.class.getName(), _tmpMap);
+            logger.debug("loadData return BankView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, BankView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap --");
         Map<Integer, BankView> _tmpMap = cacheLoader.getCacheMap(Bank.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return BankView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 

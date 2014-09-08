@@ -27,7 +27,7 @@ public class BankAccountPurposeTransform extends Transform {
     }
 
     public Map<Long, BankAccountPurposeView> transformToCache(List<BankAccountPurpose> bankAccountPurposeList){
-        if(bankAccountPurposeList == null)
+        if(bankAccountPurposeList == null || bankAccountPurposeList.size() == 0)
             return null;
 
         Map<Long, BankAccountPurposeView> _tmpMap = new ConcurrentHashMap<Long, BankAccountPurposeView>();
@@ -36,6 +36,7 @@ public class BankAccountPurposeTransform extends Transform {
 
             _tmpMap.put(bankAccountPurpose.getId(), bankAccountPurposeView);
         }
+
         return _tmpMap;
     }
 

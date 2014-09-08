@@ -50,8 +50,8 @@
                                 <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                 <f:selectItems value="#{custInfoSummary.customerEntityList}"
                                                var="customerEntity"
-                                               itemLabel="#{customerEntity.description}"
-                                               itemValue="#{customerEntity.id}"/>
+                                               itemLabel="#{customerEntity.label}"
+                                               itemValue="#{customerEntity.value}"/>
                                 <p:ajax event="change" update="optLb,btnIndividual,btnJuristic" process="@this"/>
                             </p:selectOneMenu>
                         </td>

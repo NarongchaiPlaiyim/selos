@@ -124,6 +124,7 @@ public class ProductControl extends BusinessControl {
     }
 
     public List<SelectItem> getProductGroupSelectItem(){
+        logger.debug("-- getProductGroupSelectItem");
         Map<Integer, ProductGroupView> productGroupViewMap = getInternalCacheMap();
 
         List<SelectItem> selectItemList = new ArrayList<SelectItem>();
@@ -134,25 +135,33 @@ public class ProductControl extends BusinessControl {
                 selectItem.setValue(productGroupView.getId());
                 selectItem.setLabel(productGroupView.getName());
                 selectItemList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getProductGroupSelectItem return productGroupView size: {}", selectItemList.size());
         return selectItemList;
     }
 
     private Map<Integer, ProductGroupView> loadData(){
+        logger.debug("-- loadData");
         List<ProductGroup> productGroupList = productGroupDAO.findAll();
         Map<Integer, ProductGroupView> _tmpMap = productTransform.transformToCache(productGroupList);
-        if(_tmpMap == null || _tmpMap.size() == 0)
+        if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("return empty ProductGroupView View");
             return new ConcurrentHashMap<Integer, ProductGroupView>();
+        }
         else {
             cacheLoader.setCacheMap(ProductGroup.class.getName(), _tmpMap);
+            logger.debug("loadData return ProductGroupView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, ProductGroupView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, ProductGroupView> _tmpMap = cacheLoader.getCacheMap(ProductGroup.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("ProductGroupView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;
