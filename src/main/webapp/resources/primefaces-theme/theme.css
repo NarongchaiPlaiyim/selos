@@ -2009,6 +2009,24 @@ body .ui-tooltip {
 .ui-selectonemenu-items-wrapper {
     max-width: 450px!important;
 }
+#frmMain\:reasonList_panel{
+    width: 900px!important;
+}
+
+.ui-selectonemenu-panel#frmMain\:reasonList_panel{
+    min-width: 900px!important;
+    max-width: 900px!important;
+}
+
+#frmMain\:reasonList_panel>.ui-selectonemenu-items-wrapper{
+    min-width: 900px!important;
+    max-width: 900px!important;
+}
+
+/*.ui-selectonemenu-list-item{
+    min-width: 450px!important;
+    max-width: 450px!important;
+}*/
 .ui-selectonemenu-items-wrapper {
     overflow-x: hidden !important;
     overflow-y: auto !important;

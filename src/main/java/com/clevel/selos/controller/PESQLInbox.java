@@ -425,6 +425,7 @@ public class PESQLInbox implements Serializable
 
         String queueName = inboxViewSelectItem.getQueuename();
         String wobNumber = inboxViewSelectItem.getFwobnumber();
+        int fetchType = inboxViewSelectItem.getFetchType();
 
         WorkCase workCase = workCaseDAO.findByWobNumber(wobNumber);
 
@@ -437,7 +438,7 @@ public class PESQLInbox implements Serializable
             if(queueName != null && wobNumber != null && fieldsMap.size() !=0)
             {
 
-                bpmInterfaceImpl.dispatchCase(queueName,wobNumber,fieldsMap);
+                bpmInterfaceImpl.dispatchCase(queueName,wobNumber,fieldsMap,fetchType);
 
                 log.info("restart successful.... ");
 

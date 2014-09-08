@@ -22,6 +22,7 @@ import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
 import com.clevel.selos.transform.UserTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -604,5 +605,20 @@ public class ReturnControl extends BusinessControl {
         }
 
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public boolean getReturnHistoryHaveRG001(long workCaseId){
+        boolean haveRG001 = false;
+        List<ReturnInfoHistory> returnInfoHistoryList = returnInfoHistoryDAO.findReturnHistoryList(workCaseId);
+        if(Util.isSafetyList(returnInfoHistoryList)){
+            for(ReturnInfoHistory returnInfoHistory : returnInfoHistoryList){
+                if(!Util.isNull(returnInfoHistory.getReturnCode()) && returnInfoHistory.getReturnCode().equalsIgnoreCase("RG001")){
+                    haveRG001 = true;
+                    break;
+                }
+            }
+        }
+
+        return haveRG001;
     }
 }

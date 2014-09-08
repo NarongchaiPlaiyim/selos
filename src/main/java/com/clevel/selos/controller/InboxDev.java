@@ -121,6 +121,7 @@ public class InboxDev implements Serializable {
         session.setAttribute("requestAppraisal", inboxViewSelectItem.getRequestAppraisal());
         session.setAttribute("statusId", inboxViewSelectItem.getStatusCode());
         session.setAttribute("caseOwner", userDetail.getUserName());
+        session.setAttribute("slaStatus", "R");
 
         if(Long.toString(inboxViewSelectItem.getStepId()) != null && inboxViewSelectItem.getStepId() != 0){
             Step step = stepDAO.findById(inboxViewSelectItem.getStepId());

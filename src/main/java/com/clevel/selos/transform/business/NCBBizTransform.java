@@ -48,6 +48,8 @@ public class NCBBizTransform extends BusinessTransform {
     private final String ENQ_PURPOSE_IND = "01";
     private final String NCB_ACCOUNT_STATUS_TMB = "BRMS Rule";
 
+    private final String PERSONAL_LOAN_CODE = "05";
+
     @Inject
     @Config(name = "ncb.nccrs.bank.tmb")
     String TMB_BANK_THAI;
@@ -205,7 +207,24 @@ public class NCBBizTransform extends BusinessTransform {
                                             boolean isTMBAccount = false;
                                             NCBDetailView ncbDetailView = new NCBDetailView();
                                             //set accountType
-                                            AccountType accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
+                                            AccountType accountType = null;
+                                            if(subjectAccountModel.getAccounttype().equalsIgnoreCase(PERSONAL_LOAN_CODE)) {
+                                                if (!Util.isEmpty(subjectAccountModel.getInstallmentamount())) {
+                                                    BigDecimal installment = new BigDecimal(subjectAccountModel.getInstallmentamount());
+                                                    if(installment.compareTo(BigDecimal.ZERO) == 0){
+                                                        //account type revolving
+                                                        accountType = accountTypeDAO.getPersonalLoan(AccountTypeCode.PERSONAL_LOAN_REVOLVING);
+                                                    }else{
+                                                        //account type personal loan
+                                                        accountType = accountTypeDAO.getPersonalLoan(AccountTypeCode.PERSONAL_LOAN);
+                                                    }
+                                                } else {
+                                                    //account type revolving
+                                                    accountType = accountTypeDAO.getPersonalLoan(AccountTypeCode.PERSONAL_LOAN_REVOLVING);
+                                                }
+                                            }else {
+                                                accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
+                                            }
                                             ncbDetailView.setAccountType(accountType);
                                             //set tmb account
                                             ncbDetailView.setTMBAccount(RadioValue.NO.value());

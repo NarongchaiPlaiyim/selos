@@ -37,7 +37,7 @@ public class BankAccountProductTransform extends Transform {
     }
 
     public Map<Integer, BankAccountProductView> transformToCache(List<BankAccountProduct> bankAccountProductList){
-        if(bankAccountProductList == null)
+        if(bankAccountProductList == null || bankAccountProductList.size() == 0)
             return null;
         Map<Integer, BankAccountProductView> _tmpMap = new ConcurrentHashMap<Integer, BankAccountProductView>();
         for(BankAccountProduct bankAccountProduct : bankAccountProductList){

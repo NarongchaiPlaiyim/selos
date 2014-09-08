@@ -33,7 +33,8 @@ public class BaseController implements Serializable {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
         HttpSession session = FacesUtil.getSession(false);
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
+        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, statusId, screenId, ownerCaseUserId);
         //List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
         fieldMap.clear();
         dialogFieldMap.clear();

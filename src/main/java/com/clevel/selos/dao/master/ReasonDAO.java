@@ -68,6 +68,7 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("active", 1));
         criteria.add(Restrictions.eq("reasonType.id", 1));
+        criteria.add(Restrictions.isNotNull("uwRejectGroup.id"));
         criteria.addOrder(Order.asc("id"));
 
         List<Reason> list = criteria.list();

@@ -76,12 +76,12 @@ public class CountryTransform extends Transform {
     }
 
     public Map<Integer, CountryView> transformToCache(List<Country> countryList){
-        if(countryList == null)
+        if(countryList == null || countryList.size() == 0)
             return null;
         Map<Integer, CountryView> countryViewMap = new ConcurrentHashMap<Integer, CountryView>();
         for(Country country :  countryList){
-            CountryView countryView = transformToView(country);
-            countryViewMap.put(countryView.getId(), countryView);
+                CountryView countryView = transformToView(country);
+                countryViewMap.put(countryView.getId(), countryView);
         }
         return countryViewMap;
     }

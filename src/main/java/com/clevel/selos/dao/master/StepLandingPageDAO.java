@@ -34,6 +34,7 @@ public class StepLandingPageDAO extends GenericDAO<StepLandingPage, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("step.id", stepId));
         criteria.add(Restrictions.eq("status.id",statusId));
+        criteria.add(Restrictions.eq("active", 1));
         stepLandingPage = (StepLandingPage)criteria.uniqueResult();
 
         return stepLandingPage;

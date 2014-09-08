@@ -21,6 +21,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.codec.binary.Base64;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -96,9 +97,6 @@ public class LoginBean {
             if(userDetail != null)
             {
                 log.info("loginbean class oncreation method");
-                // FacesUtil.redirect("/site/inbox.jsf");
-
-                //FacesUtil.redirect("/site/PEDBInbox.jsf");
             }
         }
     }
@@ -110,6 +108,18 @@ public class LoginBean {
         log.info("controller in login method of loginbean class");
 
         loginExceptionMessage = "";
+
+        if(Util.isEmpty(userName)){
+            loginExceptionMessage = "Username is empty.";
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
+            return "fail";
+        }
+
+        if(Util.isEmpty(password)){
+            loginExceptionMessage = "Password is empty.";
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
+            return "fail";
+        }
 
         // make authentication with AD first
         if (Util.isTrue(ldapEnable))
@@ -136,6 +146,7 @@ public class LoginBean {
                 {
                     loginExceptionMessage = ex.getCause().getMessage();
                 }
+                RequestContext.getCurrentInstance().execute("blockUI.hide()");
                 return "failed";
             }
         }
@@ -169,6 +180,7 @@ public class LoginBean {
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
             loginExceptionMessage = message;
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
             return "failed";
         }
 
@@ -179,6 +191,7 @@ public class LoginBean {
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
             loginExceptionMessage = message;
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
             return "failed";
         }
 
@@ -191,6 +204,7 @@ public class LoginBean {
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
             loginExceptionMessage = message;
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
             return "failed";
         }
         else if (UserStatus.MARK_AS_DELETED == userStatus)
@@ -199,6 +213,7 @@ public class LoginBean {
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
             loginExceptionMessage = message;
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
             return "failed";
         }
 
@@ -256,6 +271,7 @@ public class LoginBean {
 
         }
 //        securityAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
+        RequestContext.getCurrentInstance().execute("blockUI.hide()");
         return "failed";
     }
     public void validationsendtootherpage()

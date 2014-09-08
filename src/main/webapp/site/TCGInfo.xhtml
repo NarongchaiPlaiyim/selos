@@ -9,6 +9,7 @@
     <title>SE-LOS : TCG Calculation</title>
     <h:outputStylesheet name="css/style.css"/>
     <h:outputScript library="js" name="custom.js"/>
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js"/>
 </h:head>
 <h:body>
 <f:event type="preRenderView" listener="#{tcgInfo.preRender()}" />
@@ -246,7 +247,7 @@
                                                 <p:commandButton title="Remove"
                                                                  icon="ui-icon-trash"
                                                                  oncomplete="confirmDeleteTcgDlg.show()"
-                                                                 disabled="#{tcgInfo.isDisabled('saveButton')}">
+                                                                 disabled="#{tcgInfo.isDisabled('deleteButton')}">
                                                     <f:setPropertyActionListener value="#{item}"
                                                                                  target="#{tcgInfo.selectCollateralItem}"/>
                                                 </p:commandButton>

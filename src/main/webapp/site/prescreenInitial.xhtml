@@ -267,12 +267,12 @@
                          oncomplete="msgBoxRedirectDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-<p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
+<p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information" closable="false"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="400">
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
-<p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
+<p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information" closable="false"
           onShow="hideWindowsScrollBar();" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="850" height="550">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>

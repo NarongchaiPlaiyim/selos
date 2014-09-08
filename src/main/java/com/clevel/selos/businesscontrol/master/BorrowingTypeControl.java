@@ -35,12 +35,14 @@ public class BorrowingTypeControl extends BusinessControl{
     public BorrowingTypeControl(){}
 
     public List<SelectItem> getBorrowingTypeByCustomerEntity(int customerEntityId){
+        logger.debug("-- getBorrowingTypeByCustomerEntity, customerEntityId: {}", customerEntityId);
         Map<Integer, BorrowingTypeView> _tmpMap = getInternalCacheMap();
         List<SelectItem> borrowingTypeList = new ArrayList<SelectItem>();
         for(BorrowingTypeView borrowingTypeView : _tmpMap.values()){
             if(Util.isTrue(borrowingTypeView.getActive()) && (customerEntityId == borrowingTypeView.getCustomerEntityID()))
                 borrowingTypeList.add(borrowingTypeTransform.transformToSelectItem(borrowingTypeView));
         }
+        logger.debug("getBorrowingTypeByCustomerEntity return BorrowingTypeView size: {}", borrowingTypeList.size());
         return borrowingTypeList;
     }
 
@@ -49,19 +51,22 @@ public class BorrowingTypeControl extends BusinessControl{
         List<BorrowingType> borrowingTypeList = borrowingTypeDAO.findAll();
         Map<Integer, BorrowingTypeView> _tmpMap = borrowingTypeTransform.transformToCache(borrowingTypeList);
         if(_tmpMap == null || _tmpMap.size() == 0) {
-            logger.debug("return empty SBFScoreView");
+            logger.debug("return empty BorrowingTypeView");
             return new ConcurrentHashMap<Integer, BorrowingTypeView>();
         } else {
             cacheLoader.setCacheMap(BorrowingType.class.getName(), _tmpMap);
+            logger.debug("loadData return BorrowingTypeView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, BorrowingTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, BorrowingTypeView> _tmpMap = cacheLoader.getCacheMap(BorrowingType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
             _tmpMap = loadData();
         }
+        logger.debug("getInternalCacheMap return BorrowingTypeView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 }

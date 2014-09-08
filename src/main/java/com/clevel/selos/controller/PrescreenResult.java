@@ -164,7 +164,7 @@ public class PrescreenResult implements Serializable {
         message = "Save PreScreen Result data success.";
 
         onCreation();
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageResultDlg.show()");
+        RequestContext.getCurrentInstance().execute("msgBoxRefreshDlg.show()");
     }
 
     public void onCloseSale() {
