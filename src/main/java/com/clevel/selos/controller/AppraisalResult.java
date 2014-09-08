@@ -359,6 +359,7 @@ public class AppraisalResult implements Serializable {
             log.debug("-- Flag {}", ModeForButton.EDIT);
             if(saveAndEditFlag){
                 newCollateralViewList.set(rowCollateral, newCollateralView);
+//                appraisalView.setNewCollateralViewList(newCollateralViewList);
                 log.info("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
                 message = ActionResult.SUCCESS.toString();
             } else {
@@ -394,7 +395,8 @@ public class AppraisalResult implements Serializable {
         log.info("-- onSaveAppraisalResult");
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
-            appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, workCasePreScreenId);
+            log.debug("## appraisalView.getNewCollateralViewList().size() ## [{}]",appraisalView.getNewCollateralViewList().size());
+            appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId);
 
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");
