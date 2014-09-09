@@ -5,27 +5,27 @@ import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.view.BankAccountTypeView;
-import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Stateless
 public class BankAccountTypeControl extends BusinessControl{
 
-    //Initial Map to cache the data of BaseRateContol
-    //Initial mutex object to guaranteed thread safe
-    private static Map<Integer, BankAccountTypeView> bankAccountTypeViewMap;
-    private static Object _mutexLock = new Object();
-
     @Inject
     @SELOS
     private Logger logger;
+
+    @Inject
+    private ApplicationCacheLoader cacheLoader;
 
     @Inject
     private BankAccountTypeDAO bankAccountTypeDAO;
@@ -36,31 +36,60 @@ public class BankAccountTypeControl extends BusinessControl{
     @Inject
     public BankAccountTypeControl(){}
 
-    public void loadData(){
-        if(bankAccountTypeViewMap == null){
-            synchronized (_mutexLock){
-                if(bankAccountTypeViewMap == null)
-                    bankAccountTypeViewMap = new HashMap<Integer, BankAccountTypeView>();
+    public List<BankAccountTypeView> getBankAccountTypeViewActiveList() {
+        logger.debug("-- getBankAccountTypeViewActiveList --");
+        Map<Integer, BankAccountTypeView> bankAccountTypeViewMap = getInternalCacheMap();
+        List<BankAccountTypeView> bankAccountViewList = new ArrayList<BankAccountTypeView>();
+        for(BankAccountTypeView bankAccountTypeView : bankAccountTypeViewMap.values()){
+            if(Util.isTrue(bankAccountTypeView.getActive())){
+                bankAccountViewList.add(bankAccountTypeView);
             }
         }
+        logger.debug("-- getBankAccountTypeViewActiveList return bankAccountViewList size: {}", bankAccountViewList.size());
+        return bankAccountViewList;
+    }
 
-        try{
-            Map<Integer, BankAccountTypeView> _tmpMap = new HashMap<Integer, BankAccountTypeView>();
+    public List<BankAccountTypeView> getOpenAccountTypeList(){
+        logger.debug("-- getOpenAccountTypeList --");
 
-            List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
-            for(BankAccountType bankAccountType : bankAccountTypeList){
-                BankAccountTypeView bankAccountTypeView = bankAccountTypeTransform.getBankAccountTypeView(bankAccountType);
-                _tmpMap.put(bankAccountTypeView.getId(), bankAccountTypeView);
+        Map<Integer, BankAccountTypeView> bankAccountTypeViewMap = getInternalCacheMap();
+        List<BankAccountTypeView> bankAccountTypeViewList = new ArrayList<BankAccountTypeView>();
+
+        logger.debug("get getOpenAccountTypeList {}", bankAccountTypeViewList);
+        for(BankAccountTypeView bankAccountTypeView : bankAccountTypeViewMap.values()){
+            logger.info("--- looping {}", bankAccountTypeView);
+            //active = 1, openAccountFlag = 1, othBankStatementFlag = 0, bankStatementFlag = 1
+            if( bankAccountTypeView.getActive() == 1 && bankAccountTypeView.getOpenAccountFlag() == 1 &&
+                bankAccountTypeView.getOthBankStatementFlag() == 0 && bankAccountTypeView.getBankStatementFlag() == 1){
+                bankAccountTypeViewList.add(bankAccountTypeView);
+                logger.info("Add Open Account type: {}", bankAccountTypeView);
             }
-
-            synchronized (_mutexLock){
-                bankAccountTypeViewMap.clear();
-                bankAccountTypeViewMap.putAll(_tmpMap);
-            }
-
-        }catch (Exception ex){
-            logger.error("Cannot load BankAccountType into Cache", ex);
         }
+        logger.debug("getOpenAccountTypeList return bankAccountTypeViewList size: {}", bankAccountTypeViewList.size());
+        return bankAccountTypeViewList;
+    }
 
+    private Map<Integer, BankAccountTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap --");
+        Map<Integer, BankAccountTypeView> _tmpMap = cacheLoader.getCacheMap(BankAccountType.class.getName());
+        if(_tmpMap == null || _tmpMap.size() == 0){
+            _tmpMap = loadData();
+        }
+        logger.debug("getInternalCacheMap return BankAccountTypeView size: {}", _tmpMap.size());
+        return _tmpMap;
+    }
+
+    private Map<Integer, BankAccountTypeView> loadData(){
+        logger.debug("-- loadData --");
+        List<BankAccountType> bankAccountTypeList = bankAccountTypeDAO.findAll();
+        Map<Integer, BankAccountTypeView> _tmpMap = bankAccountTypeTransform.transformToCache(bankAccountTypeList);
+        if(_tmpMap == null) {
+            logger.debug("return empty BankAccountTypeView");
+            return new ConcurrentHashMap<Integer, BankAccountTypeView>();
+        } else {
+            cacheLoader.setCacheMap(BankAccountType.class.getName(), _tmpMap);
+            logger.debug("loadData return BankAccountTypeView size: {}", _tmpMap.size());
+            return _tmpMap;
+        }
     }
 }

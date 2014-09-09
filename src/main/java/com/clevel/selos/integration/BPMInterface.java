@@ -21,7 +21,7 @@ public interface BPMInterface {
 
     public List<CaseDTO> getInboxPoolList(String queueName);
 
-    public void dispatchCase(String queueName, String wobNumber, HashMap<String, String> fields);
+    public void dispatchCase(String queueName, String wobNumber, HashMap<String, String> fields, int fetchType);
 
     public void lockCase(String queueName, String wobNumber, int fetchType) throws Exception;
 
@@ -37,7 +37,7 @@ public interface BPMInterface {
 
     public void batchDispatchCaseFromRoster(String s, String[] strings, HashMap<String, String> stringStringHashMap);
 
-    public void updateCase(String queueName, String wobNumber, HashMap<String, String> fields);
+    public void updateCase(String queueName, String wobNumber, HashMap<String, String> fields, int fetchType);
 
 
 }

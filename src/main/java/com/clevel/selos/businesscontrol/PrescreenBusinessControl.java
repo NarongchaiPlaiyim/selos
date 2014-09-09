@@ -281,13 +281,13 @@ public class PrescreenBusinessControl extends BusinessControl {
             totalRelatedLimitPreScreen = totalRelatedLimitPreScreen.add(totalRelatedComLimit);
         }
         if(totalRelatedRetailLimit!=null && totalRelatedRetailLimit.compareTo(BigDecimal.ZERO)>0){
-            totalRelatedRetailLimit = totalRelatedRetailLimit.add(totalRelatedRetailLimit);
+            totalRelatedLimitPreScreen = totalRelatedRetailLimit.add(totalRelatedRetailLimit);
         }
 
         existingCreditFacilityView.setBorrowerExistingCreditPreScreen(borrowerExistingCreditPreScreen);
         existingCreditFacilityView.setRelateExistingCreditPresScreen(relateExistingCreditPresScreen);
         existingCreditFacilityView.setTotalBorrowerLimitPreScreen(totalBorrowerLimitPreScreen);
-        existingCreditFacilityView.setTotalRelatedLimitPreScreen(totalRelatedRetailLimit);
+        existingCreditFacilityView.setTotalRelatedLimitPreScreen(totalRelatedLimitPreScreen);
 
         if(bankStmtSummaryView != null){
             if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){

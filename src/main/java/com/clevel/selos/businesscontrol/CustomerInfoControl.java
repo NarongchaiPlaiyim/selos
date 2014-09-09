@@ -589,6 +589,13 @@ public class CustomerInfoControl extends BusinessControl {
         return customerInfoView;
     }
 
+    public CustomerInfoView getCustomerById(long customerInfoId){
+        log.info("getCustomerById ::: customerInfo : {}", customerInfoId);
+        Customer customer = customerDAO.findById(customerInfoId);
+        CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
+        return customerInfoView;
+    }
+
     public int checkAddress(AddressView add1, AddressView add2){
         log.info("checkAddress ::: add1 : {} , add2 : {}", add1,add2);
         //currentAddress = 1 is current address
@@ -791,5 +798,23 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
         return returnCusInfoView;
+    }
+
+    public boolean isDuplicateCustomerIndv(String citizenId, long customerId, long workCaseId){
+        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(citizenId, workCaseId);
+        if(customer != null && customer.getId() != 0) {
+            if(customer.getId() != customerId)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isDuplicateCustomerJuris(String registrationId, long customerId, long workCaseId){
+        Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(registrationId, workCaseId);
+        if(customer != null && customer.getId() != 0) {
+            if(customer.getId() != customerId)
+                return true;
+        }
+        return false;
     }
 }

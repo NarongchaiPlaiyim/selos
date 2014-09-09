@@ -7,6 +7,8 @@ import com.clevel.selos.model.view.CountryView;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CountryTransform extends Transform {
     @Inject
@@ -71,5 +73,16 @@ public class CountryTransform extends Transform {
             country = countryDAO.findById(countryView.getId());
         }
         return country;
+    }
+
+    public Map<Integer, CountryView> transformToCache(List<Country> countryList){
+        if(countryList == null || countryList.size() == 0)
+            return null;
+        Map<Integer, CountryView> countryViewMap = new ConcurrentHashMap<Integer, CountryView>();
+        for(Country country :  countryList){
+                CountryView countryView = transformToView(country);
+                countryViewMap.put(countryView.getId(), countryView);
+        }
+        return countryViewMap;
     }
 }

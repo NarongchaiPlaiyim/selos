@@ -1857,7 +1857,7 @@
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/>
                                             <h:outputText value="#{decision.mandate('approvedPurposed')}" styleClass="require-field"/>
-                                            <h:outputText value="Â :"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left">
                                             <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
@@ -1879,7 +1879,7 @@
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/>
                                             <h:outputText value="#{decision.mandate('investedCountry')}" styleClass="require-field"/>
-                                            <h:outputText value="Â :"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left">
                                             <p:selectOneMenu value="#{decision.decisionView.investedCountry.id}"
@@ -1904,7 +1904,7 @@
                                             <td class="left">
                                                 <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}" styleClass="title" style="margin-right: 5px"/>
                                                 <h:outputText value="#{decision.mandate('existingSMELimit')}" styleClass="require-field"/>
-                                                <h:outputText value="Â :"/>
+                                                <h:outputText value=" :"/>
                                                 <p:inputText value="#{decision.decisionView.existingSMELimit}"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);"
@@ -1920,7 +1920,7 @@
 
                                                 <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}" styleClass="title" style="margin-right: 5px"/>
                                                 <h:outputText value="#{decision.mandate('maximumSMELimit')}" styleClass="require-field"/>
-                                                <h:outputText value="Â :"/>
+                                                <h:outputText value=" :"/>
                                                 <p:inputText value="#{decision.decisionView.maximumSMELimit}"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);"
@@ -3316,7 +3316,7 @@
                                         <td class="left" style="width: 280px;">
                                             <h:outputText value="#{msg.get('app.decision.tb.td.label.intFeeDOA')}"/>
                                             <h:outputText value="#{decision.mandate('intFeeDOA')}" styleClass="require-field"/>
-                                            <h:outputText value="Â :"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.intFeeDOA}"
@@ -3330,7 +3330,7 @@
                                         <td class="left" style="width: 300px;">
                                             <h:outputText value="#{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}"/>
                                             <h:outputText value="#{decision.mandate('frontendFeeDOA')}" styleClass="require-field"/>
-                                            <h:outputText value="Â :"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
@@ -3344,7 +3344,7 @@
                                         <td class="left" style="width: 130px;">
                                             <h:outputText value="#{msg.get('app.decision.tb.td.label.guarantorBA')}"/>
                                             <h:outputText value="#{decision.mandate('guarantorBA')}" styleClass="require-field"/>
-                                            <h:outputText value="Â :"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left" style="width: 190px;">
                                             <p:inputText value="#{decision.decisionView.guarantorBA}"
@@ -3361,7 +3361,7 @@
                                         <td class="left" style="width: 250px;">
                                             <h:outputText value="#{msg.get('app.decision.tb.td.label.reasonForReduction')}"/>
                                             <h:outputText value="#{decision.mandate('reasonForReduction')}" styleClass="require-field"/>
-                                            <h:outputText value="Â :"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left middle" colspan="5" style="padding-top: 10px;">
                                             <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"

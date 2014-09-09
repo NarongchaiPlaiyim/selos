@@ -12,10 +12,12 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -193,6 +195,280 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    //------ Submit Function Generic for BU -----------//
+    public void submitForABDM(String queueName, String wobNumber, String remark, String reason, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+
+        if(!Util.isNull(action)){
+            HashMap<String,String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
+            log.debug("dispatch case for [submitCase]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getDescription());
+
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception("An exception occurred, Could not found an Action.");
+        }
+    }
+
+    public void submitForBDM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String remark, String reason, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String productGroup, String deviationCode, int requestType, int appraisalRequestRequire, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ProductGroup", productGroup);
+            fields.put("ZMUserName", zmUserId);
+            if(!Util.isEmpty(rgmUserId)){
+                fields.put("RGMUserName", rgmUserId);
+            }
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("TotalCommercial", totalCommercial.toString());
+            fields.put("TotalRetail", totalRetail.toString());
+            fields.put("ResultCode", resultCode);
+            if(!Util.isEmpty(deviationCode)){
+                fields.put("DeviationCode", deviationCode);
+            }
+            fields.put("RequestType", String.valueOf(requestType));
+            fields.put("AppraisalReq", String.valueOf(appraisalRequestRequire));
+
+            log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    public void submitForZM(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String remark, String reason, String zmDecisionFlag, String zmPricingRequestFlag, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String deviationCode, int requestType, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        log.debug("submitForZM ::: action : {}", action);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(rgmUserId)){
+                fields.put("RGMUserName", rgmUserId);
+            }
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("ZMDecisionFlag", zmDecisionFlag);
+            fields.put("ZMPricingRequestFlag", zmPricingRequestFlag);
+            fields.put("TotalCommercial", totalCommercial.toString());
+            fields.put("TotalRetail", totalRetail.toString());
+            fields.put("ResultCode", resultCode);
+            if(!Util.isEmpty(deviationCode)){
+                fields.put("DeviationCode", deviationCode);
+            }
+            fields.put("RequestType", String.valueOf(requestType));
+
+            log.debug("dispatch case for [submitForZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+
+    public void submitForZMFCash(String queueName, String wobNumber, String remark, String reason, String zmDecisionFlag, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(!Util.isNull(action)){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ZMDecisionFlag", zmDecisionFlag);
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
+            log.debug("dispatch case for [submitForZMFCash]...");
+
+            execute(queueName, wobNumber, fields);
+        }
+    }
+
+    public void submitForRGM(String queueName, String wobNumber, String ghUserId, String cssoUserId, String remark, String reason, String rgmDecisionFlag, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("RGMDecisionFlag", rgmDecisionFlag);
+            log.debug("dispatch case for [submitForRGM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+
+    public void submitForGH(String queueName, String wobNumber, String cssoUserId, String remark, String reason, String ghDecisionFlag, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("GHDecisionFlag", ghDecisionFlag);
+            log.debug("dispatch case for [Submit CSSO]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+
+    public void submitForCSSO(String queueName, String wobNumber, String remark, String reason, String cssoDecisionFlag, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("CSSODecisionFlag", cssoDecisionFlag);
+            log.debug("dispatch case for [Submit UW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+    //------End Submit Function Generic for BU -----------//
+
+    //------ Submit Function Generic for UW -------------//
+    public void submitForUW(String queueName, String wobNumber, String remark, String reason, String uw2Name, String uw2DOALevel, String decisionFlag, String haveRG001, String appraisalRequired, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("UW2UserName", uw2Name);
+            fields.put("UW2DOALevel", uw2DOALevel);
+            fields.put("UW1DecisionFlag", decisionFlag);
+            fields.put("UWRG001Flag", haveRG001);
+            fields.put("AppraisalReq", appraisalRequired);
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
+            log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+            execute(queueName, wobNumber, fields);
+        }
+    }
+
+    public void submitForUW2(String queueName, String wobNumber, String remark, String reason, String decisionFlag, String haveRG001, String insuranceRequired, String approvalFlag, String tcgRequired, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("UW2DecisionFlag", decisionFlag);
+            fields.put("UWRG001Flag", haveRG001);
+            fields.put("InsuranceRequired", insuranceRequired);
+            fields.put("ApprovalFlag", approvalFlag);
+            fields.put("TCGRequired", tcgRequired);
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
+            log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+
+    public void submitForBDMUW(String queueName, String wobNumber, String remark, String reason, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
+            log.debug("dispatch case for [submitForBDMUW]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+    //------ End Submit Function Generic For UW ---------//
+
     public void submitZM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId,
                          BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode,
                          String productGroup, String deviationCode, int requestType, int appraisalRequestRequire, long actionCode) throws Exception{
@@ -343,7 +619,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitUW2(long workCaseId, String queueName, String uw2Name, String uw2DOALevel, String decisionFlag, String haveRG001, long actionCode) throws Exception{
+    public void submitUW2(long workCaseId, String queueName, String uw2Name, String uw2DOALevel, String decisionFlag, String haveRG001, String remark, long actionCode) throws Exception{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         Action action = actionDAO.findById(actionCode);
         if(action != null){
@@ -355,6 +631,10 @@ public class BPMExecutor implements Serializable {
             fields.put("UW1DecisionFlag", decisionFlag);
             fields.put("UWRG001Flag", haveRG001);
             fields.put("AppraisalReq", String.valueOf(workCase.getRequestAppraisalRequire()));
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
 
             log.debug("dispatch case for [Submit UW2]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -641,17 +921,19 @@ public class BPMExecutor implements Serializable {
         HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("BorrowerName", borrowerName);
         fields.put("ProductGroup", productGroup);
-
-        log.debug("updateBorrowerProductGroup : fields : {}", fields);
-        bpmInterface.updateCase(queueName, wobNumber, fields);
+        HttpSession session = FacesUtil.getSession(false);
+        int fetchType = Util.parseInt(session.getAttribute("fetchType"), 0);
+        log.debug("updateBorrowerProductGroup : fields : {}, queueName : {}, wobNumber : {}, fetchType : {}", fields, queueName, wobNumber, fetchType);
+        bpmInterface.updateCase(queueName, wobNumber, fields, fetchType);
     }
 
     public void updateProductGroup(String productGroup, String queueName, String wobNumber) throws Exception {
         HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("ProductGroup", productGroup);
-
-        log.debug("updateProductGroup : fields : {}", fields);
-        bpmInterface.updateCase(queueName, wobNumber, fields);
+        HttpSession session = FacesUtil.getSession(false);
+        int fetchType = Util.parseInt(session.getAttribute("fetchType"), 0);
+        log.debug("updateProductGroup : fields : {}, queueName : {}, wobNumber : {}, fetchType : {}", fields, queueName, wobNumber, fetchType);
+        bpmInterface.updateCase(queueName, wobNumber, fields, fetchType);
     }
 
     public void selectCase(long actionCode, String queueName, String wobNumber) throws Exception{
@@ -671,8 +953,10 @@ public class BPMExecutor implements Serializable {
     }
 
     public void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
-        log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
-        bpmInterface.dispatchCase(queueName, wobNumber, fields);
+        HttpSession session = FacesUtil.getSession(false);
+        int fetchType = Util.parseInt(session.getAttribute("fetchType"), 0);
+        log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}, fetchType : {}", queueName, wobNumber, fields, fetchType);
+        bpmInterface.dispatchCase(queueName, wobNumber, fields, fetchType);
     }
 
     public void batchDispatchCaseFromRoster(String rosterName, String[] arrayOfWobNo, HashMap<String, String> fields)

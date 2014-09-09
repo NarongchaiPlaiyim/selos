@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 

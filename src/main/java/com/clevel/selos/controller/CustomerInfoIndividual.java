@@ -1,8 +1,8 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -28,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -52,89 +54,84 @@ public class CustomerInfoIndividual implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    private DocumentTypeDAO documentTypeDAO;
-    @Inject
-    private RelationDAO relationDAO;
-    @Inject
-    private RelationCustomerDAO relationCustomerDAO;
-    @Inject
-    private ReferenceDAO referenceDAO;
-    @Inject
-    private TitleDAO titleDAO;
-    @Inject
-    private RaceDAO raceDAO;
-    @Inject
-    private NationalityDAO nationalityDAO;
-    @Inject
-    private EducationDAO educationDAO;
-    @Inject
-    private OccupationDAO occupationDAO;
-    @Inject
-    private BusinessDescriptionDAO businessDescriptionDAO;
-    @Inject
-    private MaritalStatusDAO maritalStatusDAO;
-    @Inject
-    private ProvinceDAO provinceDAO;
-    @Inject
-    private DistrictDAO districtDAO;
-    @Inject
-    private SubDistrictDAO subDistrictDAO;
-    @Inject
-    private CountryDAO countryDAO;
-    @Inject
-    private AddressTypeDAO addressTypeDAO;
-    @Inject
-    private KYCLevelDAO kycLevelDAO;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    private IndividualDAO individualDAO;
-    @Inject
-    private IncomeSourceDAO incomeSourceDAO;
-
-    @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private DocumentTypeControl documentTypeControl;
+    @Inject
+    private RelationControl relationControl;
+    @Inject
+    private RelationCustomerControl relationCustomerControl;
+    @Inject
+    private ReferenceControl referenceControl;
+    @Inject
+    private TitleControl titleControl;
+    @Inject
+    private RaceControl raceControl;
+    @Inject
+    private NationalityControl nationalityControl;
+    @Inject
+    private EducationControl educationControl;
+    @Inject
+    private OccupationControl occupationControl;
+    @Inject
+    private BizDescriptionControl bizDescriptionControl;
+    @Inject
+    private MaritalStatusControl maritalStatusControl;
+    @Inject
+    private IncomeSourceControl incomeSourceControl;
+    @Inject
+    private CountryControl countryControl;
+    @Inject
+    private ProvinceControl provinceControl;
+    @Inject
+    private DistrictControl districtControl;
+    @Inject
+    private SubDistrictControl subDistrictControl;
+    @Inject
+    private AddressTypeControl addressTypeControl;
+    @Inject
+    private KYCLevelControl kycLevelControl;
 
     //*** Drop down List ***//
-    private List<DocumentType> documentTypeList;
-    private List<Relation> relationIndividualList;
-    private List<Relation> relationSpouseList;
-    private List<Reference> referenceIndividualList;
-    private List<Reference> referenceSpouseList;
-    private List<Title> titleThList;
-    private List<Title> titleEnList;
-    private List<Race> raceList;
-    private List<Nationality> nationalityList;
-    private List<Nationality> sndNationalityList;
-    private List<Education> educationList;
-    private List<Occupation> occupationList;
-    private List<BusinessDescription> businessTypeList;
-    private List<MaritalStatus> maritalStatusList;
+    private List<SelectItem> documentTypeList;
+    private List<SelectItem> relationIndividualList;
+    private List<SelectItem> relationSpouseList;
+    private List<SelectItem> referenceIndividualList;
+    private List<SelectItem> referenceSpouseList;
+    private List<SelectItem> titleThList;
+    private List<SelectItem> titleEnList;
+    private List<SelectItem> raceList;
+    private List<SelectItem> nationalityList;
+    private List<SelectItem> sndNationalityList;
+    private List<SelectItem> educationList;
+    private List<SelectItem> occupationList;
+    private List<SelectItem> businessTypeList;
+    private List<SelectItem> maritalStatusList;
 
-    private List<Province> provinceForm1List;
-    private List<District> districtForm1List;
-    private List<SubDistrict> subDistrictForm1List;
-    private List<Province> provinceForm2List;
-    private List<District> districtForm2List;
-    private List<SubDistrict> subDistrictForm2List;
-    private List<Province> provinceForm3List;
-    private List<District> districtForm3List;
-    private List<SubDistrict> subDistrictForm3List;
-    private List<Province> provinceForm4List;
-    private List<District> districtForm4List;
-    private List<SubDistrict> subDistrictForm4List;
-    private List<Province> provinceForm5List;
-    private List<District> districtForm5List;
-    private List<SubDistrict> subDistrictForm5List;
-    private List<Province> provinceForm6List;
-    private List<District> districtForm6List;
-    private List<SubDistrict> subDistrictForm6List;
+    private List<SelectItem> provinceForm1List;
+    private List<SelectItem> districtForm1List;
+    private List<SelectItem> subDistrictForm1List;
+    private List<SelectItem> provinceForm2List;
+    private List<SelectItem> districtForm2List;
+    private List<SelectItem> subDistrictForm2List;
+    private List<SelectItem> provinceForm3List;
+    private List<SelectItem> districtForm3List;
+    private List<SelectItem> subDistrictForm3List;
+    private List<SelectItem> provinceForm4List;
+    private List<SelectItem> districtForm4List;
+    private List<SelectItem> subDistrictForm4List;
+    private List<SelectItem> provinceForm5List;
+    private List<SelectItem> districtForm5List;
+    private List<SelectItem> subDistrictForm5List;
+    private List<SelectItem> provinceForm6List;
+    private List<SelectItem> districtForm6List;
+    private List<SelectItem> subDistrictForm6List;
 
-    private List<Country> countryList;
-    private List<AddressType> addressTypeList;
-    private List<KYCLevel> kycLevelList;
+    private List<SelectItem> countryList;
+    private List<SelectItem> addressTypeList;
+    private List<SelectItem> kycLevelList;
 
-    private List<IncomeSource> incomeSourceList;
+    private List<SelectItem> incomeSourceList;
 
     //*** View ***//
     private CustomerInfoView customerInfoView;
@@ -381,39 +378,39 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoSearchSpouse = new CustomerInfoView();
         customerInfoSearchSpouse.reset();
 
-        documentTypeList = documentTypeDAO.findByCustomerEntityId(1);
+        documentTypeList = documentTypeControl.getDocumentTypeByCustomerEntity(1);
 
-        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
-        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
-        raceList = raceDAO.findAll();
-        nationalityList = nationalityDAO.findAll();
-        sndNationalityList = nationalityDAO.findAll();
-        educationList = educationDAO.findAll();
-        occupationList = occupationDAO.findAll();
-        businessTypeList = businessDescriptionDAO.getListOrderByTMBCode();
-        maritalStatusList = maritalStatusDAO.findAll();
+        titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
+        titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.INDIVIDUAL.value());
+        raceList = raceControl.getRaceSelectItemActiveList();
+        nationalityList = nationalityControl.getNationalitySelectItemActiveList();
+        sndNationalityList = nationalityControl.getNationalitySelectItemActiveList();
+        educationList = educationControl.getEducationSelectItemActiveList();
+        occupationList = occupationControl.getOccupationSelectItemActiveList();
+        businessTypeList = bizDescriptionControl.getBizDescSelectItemOrderByTMBCode();
+        maritalStatusList = maritalStatusControl.getMaritalStatusSelectItemList();
 
-        provinceForm1List = provinceDAO.getListOrderByParameter("name");
-        provinceForm2List = provinceDAO.getListOrderByParameter("name");
-        provinceForm3List = provinceDAO.getListOrderByParameter("name");
-        provinceForm4List = provinceDAO.getListOrderByParameter("name");
-        provinceForm5List = provinceDAO.getListOrderByParameter("name");
-        provinceForm6List = provinceDAO.getListOrderByParameter("name");
+        provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm3List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm4List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm5List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm6List = provinceControl.getProviceSelectItemActiveList();
 
-        countryList = countryDAO.findAll();
+        countryList = countryControl.getCountrySelectItemActiveList();
 
-        incomeSourceList = incomeSourceDAO.findAll();
+        incomeSourceList = incomeSourceControl.getIncomeSourceSelectItemActiveList();
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
-        relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        relationIndividualList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
+        relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
-        referenceIndividualList = new ArrayList<Reference>();
-        referenceSpouseList = new ArrayList<Reference>();
+        referenceIndividualList = new ArrayList<SelectItem>();
+        referenceSpouseList = new ArrayList<SelectItem>();
 
-        addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
-        kycLevelList = kycLevelDAO.findAll();
+        addressTypeList = addressTypeControl.getAddressTypeSelectItemByCustEntity(BorrowerType.INDIVIDUAL.value());
+        kycLevelList = kycLevelControl.getKYCLevelSelectItem();
 
         enableDocumentType = true;
         enableCitizenId = true;
@@ -605,24 +602,24 @@ public class CustomerInfoIndividual implements Serializable {
 
         if(relationMainCusId == RelationValue.BORROWER.value()){
             isEditBorrower = true;
-            relationIndividualList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
+            relationIndividualList = relationCustomerControl.getRelationSelectItem(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
         }else{
-            relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,0);
+            relationIndividualList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,0);
         }
 
 //        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
         if(customerInfoView.getSpouse() != null && relationSpouseCusId == RelationValue.BORROWER.value()){
             isEditSpouseBorrower = true;
-            relationSpouseList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+            relationSpouseList = relationCustomerControl.getRelationSelectItem(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         }else{
-            relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,1);
+            relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,1);
         }
     }
 
     public void onChangeRelation(){
-        referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
+        referenceIndividualList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
@@ -630,15 +627,16 @@ public class CustomerInfoIndividual implements Serializable {
 
 //      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
 //        int relationId = customerInfoView.getRelation().getId();
-        Relation tmp1 = new Relation();
-        Relation tmp2 = new Relation();
+
+        SelectItem tmp1 = new SelectItem();
+        SelectItem tmp2 = new SelectItem();
         if(relationMainCusId == 3 || relationMainCusId == 4) {
-            for(Relation relationSpouse : relationSpouseList){
-                if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
+            for(SelectItem relationSpouse : relationSpouseList){
+                if((Integer) relationSpouse.getValue() == 2){ // if main cus = 3 , 4 remove 2 only
                     tmp1 = relationSpouse;
                 }
                 if(relationMainCusId == 4){ // if main cus = 4 remove 3
-                    if(relationSpouse.getId() == 3){
+                    if((Integer)relationSpouse.getValue() == 3){
                         tmp2 = relationSpouse;
                     }
                 }
@@ -657,11 +655,11 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeRelationSpouse(){
 //        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
-        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
+        referenceSpouseList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
 
         //this condition for spouse
 //        Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
-        Reference referenceMain = referenceDAO.findById(referenceMainCusId);
+        ReferenceView referenceMain = referenceControl.getReferenceViewById(referenceMainCusId);
         if (caseBorrowerTypeId == 2) { // Juristic as Borrower
 //            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
             if(relationSpouseCusId == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
@@ -673,22 +671,24 @@ public class CustomerInfoIndividual implements Serializable {
                 }
 
                 if(flagRelateType == 0){
-                    Reference tmp1 = new Reference();
-                    Reference tmp2 = new Reference();
-                    for(Reference r : referenceSpouseList){
+                    SelectItem tmp1 = new SelectItem();
+                    SelectItem tmp2 = new SelectItem();
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == 3){
-                            tmp1 = r;
+                            tmp1 = selectItem;
                         }
                         if(r.getRelationType() == 4){
-                            tmp2 = r;
+                            tmp2 = selectItem;
                         }
                     }
                     referenceSpouseList.remove(tmp1);
                     referenceSpouseList.remove(tmp2);
                 } else {
-                    for(Reference r : referenceSpouseList){
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == flagRelateType){
-                            referenceSpouseList.remove(r);
+                            referenceSpouseList.remove(selectItem);
                             return;
                         }
                     }
@@ -703,9 +703,9 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeRelationInitial(){
-        referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
+        referenceIndividualList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        relationSpouseList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
@@ -713,15 +713,16 @@ public class CustomerInfoIndividual implements Serializable {
 
 //      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
 //        int relationId = customerInfoView.getRelation().getId();
-        Relation tmp1 = new Relation();
-        Relation tmp2 = new Relation();
+
+        SelectItem tmp1 = new SelectItem();
+        SelectItem tmp2 = new SelectItem();
         if(relationMainCusId == 3 || relationMainCusId == 4) {
-            for(Relation relationSpouse : relationSpouseList){
-                if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
+            for(SelectItem relationSpouse : relationSpouseList){
+                if((Integer)relationSpouse.getValue() == 2){ // if main cus = 3 , 4 remove 2 only
                     tmp1 = relationSpouse;
                 }
                 if(relationMainCusId == 4){ // if main cus = 4 remove 3
-                    if(relationSpouse.getId() == 3){
+                    if((Integer)relationSpouse.getValue() == 3){
                         tmp2 = relationSpouse;
                     }
                 }
@@ -735,11 +736,11 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeRelationSpouseInitial(){
 //        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
-        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
+        referenceSpouseList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationSpouseCusId, 0, 1);
 
         //this condition for spouse
 //        Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
-        Reference referenceMain = referenceDAO.findById(referenceMainCusId);
+        ReferenceView referenceMain = referenceControl.getReferenceViewById(referenceMainCusId);
         if (caseBorrowerTypeId == 2) { // Juristic as Borrower
 //            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
             if(relationSpouseCusId == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
@@ -751,22 +752,24 @@ public class CustomerInfoIndividual implements Serializable {
                 }
 
                 if(flagRelateType == 0){
-                    Reference tmp1 = new Reference();
-                    Reference tmp2 = new Reference();
-                    for(Reference r : referenceSpouseList){
+                    SelectItem tmp1 = new SelectItem();
+                    SelectItem tmp2 = new SelectItem();
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == 3){
-                            tmp1 = r;
+                            tmp1 = selectItem;
                         }
                         if(r.getRelationType() == 4){
-                            tmp2 = r;
+                            tmp2 = selectItem;
                         }
                     }
                     referenceSpouseList.remove(tmp1);
                     referenceSpouseList.remove(tmp2);
                 } else {
-                    for(Reference r : referenceSpouseList){
+                    for(SelectItem selectItem : referenceSpouseList){
+                        ReferenceView r = referenceControl.getReferenceViewById((Integer)selectItem.getValue());
                         if(r.getRelationType() == flagRelateType){
-                            referenceSpouseList.remove(r);
+                            referenceSpouseList.remove(selectItem);
                             return;
                         }
                     }
@@ -777,259 +780,259 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeProvinceForm1() {
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
-            districtForm1List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getCurrentAddress().getProvince().getCode());
+            districtForm1List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getCurrentAddress().setDistrict(new District());
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }else{
-            provinceForm1List = provinceDAO.getListOrderByParameter("name");
-            districtForm1List = new ArrayList<District>();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+            districtForm1List = new ArrayList<SelectItem>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm1() {
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getCurrentAddress().getDistrict().getId());
-            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getCurrentAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm1();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
-            districtForm2List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm2List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getRegisterAddress().setDistrict(new District());
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }else{
-            provinceForm2List = provinceDAO.getListOrderByParameter("name");
-            districtForm2List = new ArrayList<District>();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+            districtForm2List = new ArrayList<SelectItem>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
-            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm2();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
-            districtForm3List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm3List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getWorkAddress().setDistrict(new District());
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }else{
-            provinceForm3List = provinceDAO.getListOrderByParameter("name");
-            districtForm3List = new ArrayList<District>();
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            provinceForm3List = provinceControl.getProviceSelectItemActiveList();
+            districtForm3List = new ArrayList<SelectItem>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
-            subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm3List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm3();
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
-            districtForm4List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
+            districtForm4List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getSpouse().getCurrentAddress().setDistrict(new District());
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }else{
-            provinceForm4List = provinceDAO.getListOrderByParameter("name");
-            districtForm4List = new ArrayList<District>();
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            provinceForm4List = provinceControl.getProviceSelectItemActiveList();
+            districtForm4List = new ArrayList<SelectItem>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
-            subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
+            subDistrictForm4List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm4();
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
-            districtForm5List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
+            districtForm5List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getSpouse().getRegisterAddress().setDistrict(new District());
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }else{
-            provinceForm5List = provinceDAO.getListOrderByParameter("name");
-            districtForm5List = new ArrayList<District>();
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            provinceForm5List = provinceControl.getProviceSelectItemActiveList();
+            districtForm5List = new ArrayList<SelectItem>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
-            subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
+            subDistrictForm5List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm5();
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
-            districtForm6List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
+            districtForm6List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getSpouse().getWorkAddress().setDistrict(new District());
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }else{
-            provinceForm6List = provinceDAO.getListOrderByParameter("name");
-            districtForm6List = new ArrayList<District>();
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            provinceForm6List = provinceControl.getProviceSelectItemActiveList();
+            districtForm6List = new ArrayList<SelectItem>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
-            subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
+            subDistrictForm6List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm6();
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm1(){
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
-            districtForm1List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getCurrentAddress().getProvince().getCode());
+            districtForm1List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm1List = provinceDAO.getListOrderByParameter("name");
-            districtForm1List = new ArrayList<District>();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+            districtForm1List = new ArrayList<SelectItem>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm1(){
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getCurrentAddress().getDistrict().getId());
-            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getCurrentAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
-            districtForm2List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm2List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm2List = provinceDAO.getListOrderByParameter("name");
-            districtForm2List = new ArrayList<District>();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+            districtForm2List = new ArrayList<SelectItem>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm2() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
-            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
-            districtForm3List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm3List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm3List = provinceDAO.getListOrderByParameter("name");
-            districtForm3List = new ArrayList<District>();
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            provinceForm3List = provinceControl.getProviceSelectItemActiveList();
+            districtForm3List = new ArrayList<SelectItem>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm3() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
-            subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm3List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm3List = new ArrayList<SubDistrict>();
+            subDistrictForm3List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
-            districtForm4List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
+            districtForm4List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm4List = provinceDAO.getListOrderByParameter("name");
-            districtForm4List = new ArrayList<District>();
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            provinceForm4List = provinceControl.getProviceSelectItemActiveList();
+            districtForm4List = new ArrayList<SelectItem>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm4() {
         if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
-            subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
+            subDistrictForm4List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm4List = new ArrayList<SubDistrict>();
+            subDistrictForm4List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
-            districtForm5List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
+            districtForm5List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm5List = provinceDAO.getListOrderByParameter("name");
-            districtForm5List = new ArrayList<District>();
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            provinceForm5List = provinceControl.getProviceSelectItemActiveList();
+            districtForm5List = new ArrayList<SelectItem>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm5() {
         if(customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
-            subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
+            subDistrictForm5List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm5List = new ArrayList<SubDistrict>();
+            subDistrictForm5List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
-            districtForm6List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
+            districtForm6List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm6List = provinceDAO.getListOrderByParameter("name");
-            districtForm6List = new ArrayList<District>();
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            provinceForm6List = provinceControl.getProviceSelectItemActiveList();
+            districtForm6List = new ArrayList<SelectItem>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm6() {
         if(customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
-            subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
+            subDistrictForm6List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm6List = new ArrayList<SubDistrict>();
+            subDistrictForm6List = new ArrayList<SelectItem>();
         }
     }
 
@@ -1038,8 +1041,8 @@ public class CustomerInfoIndividual implements Serializable {
             return;
         }
 
-        MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
-        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+        MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
+        if(Util.isTrue(maritalStatusView.getSpouseFlag())){
             maritalStatusFlag = true;
         } else {
             maritalStatusFlag = false;
@@ -1065,8 +1068,8 @@ public class CustomerInfoIndividual implements Serializable {
             return;
         }
 
-        MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
-        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+        MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
+        if(Util.isTrue(maritalStatusView.getSpouseFlag())){
             maritalStatusFlag = true;
         } else {
             maritalStatusFlag = false;
@@ -1213,7 +1216,8 @@ public class CustomerInfoIndividual implements Serializable {
                         enableAllFieldCusSpouse = true;
                         try {
                             customerInfoView.getSpouse().setDocumentType(customerInfoSearch.getDocumentType());
-                            customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
+                            //customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy()); TO HARD CODE SEARCH BY CITIZEN ID
+                            customerInfoView.getSpouse().setSearchBy(1);
                             customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
@@ -1755,27 +1759,22 @@ public class CustomerInfoIndividual implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
-            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
-            if(customer != null && customer.getId() != 0){
-                if(customer.getId() != customerInfoView.getSpouse().getId()){
-                    messageHeader = "Information.";
-                    message = "Citizen Id is already exist";
-                    severity = "info";
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    return;
-                }
-            }
-        }
 
-        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
-        if(customer != null && customer.getId() != 0){
-            if(customer.getId() != customerInfoView.getId()){
+            if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getSpouse().getCitizenId(), customerInfoView.getSpouse().getId(),workCaseId)){
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
+        }
+
+        if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getCitizenId(), customerInfoView.getId(),workCaseId)){
+            messageHeader = "Information.";
+            message = "Citizen Id is already exist";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
         }
 
 //        update relation & reference
@@ -1897,21 +1896,8 @@ public class CustomerInfoIndividual implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return "";
             }
-            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
-            if(customer != null && customer.getId() != 0){
-                if(customer.getId() != customerInfoView.getSpouse().getId()){
-                    messageHeader = "Information.";
-                    message = "Citizen Id is already exist";
-                    severity = "info";
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    return "";
-                }
-            }
-        }
 
-        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
-        if(customer != null && customer.getId() != 0){
-            if(customer.getId() != customerInfoView.getId()){
+            if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getSpouse().getCitizenId(), customerInfoView.getSpouse().getId(),workCaseId)){
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
@@ -1920,7 +1906,14 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-        //for check citizen id form list
+        if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getCitizenId(), customerInfoView.getId(),workCaseId)){
+            messageHeader = "Information.";
+            message = "Citizen Id is already exist";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return "";
+        }
+            //for check citizen id form list
         if(cusInfoJuristic.getIndividualViewList() != null && cusInfoJuristic.getIndividualViewList().size() > 0){
             int indexList = 0;
             for(CustomerInfoView cus : cusInfoJuristic.getIndividualViewList()){
@@ -2032,8 +2025,8 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         //customerInfoView = individual
-        customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
-        customerInfoView.getRelation().setDescription(relationDAO.findById(relationMainCusId).getDescription());
+        customerInfoView.getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getTitleTh().getId()).getTitleTh());
+        customerInfoView.getRelation().setDescription(relationControl.getRelationViewById(relationMainCusId).getDescription());
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
@@ -2216,43 +2209,43 @@ public class CustomerInfoIndividual implements Serializable {
         this.customerInfoView = customerInfoView;
     }
 
-    public List<DocumentType> getDocumentTypeList() {
+    public List<SelectItem> getDocumentTypeList() {
         return documentTypeList;
     }
 
-    public void setDocumentTypeList(List<DocumentType> documentTypeList) {
+    public void setDocumentTypeList(List<SelectItem> documentTypeList) {
         this.documentTypeList = documentTypeList;
     }
 
-    public List<Relation> getRelationIndividualList() {
+    public List<SelectItem> getRelationIndividualList() {
         return relationIndividualList;
     }
 
-    public void setRelationIndividualList(List<Relation> relationIndividualList) {
+    public void setRelationIndividualList(List<SelectItem> relationIndividualList) {
         this.relationIndividualList = relationIndividualList;
     }
 
-    public List<Relation> getRelationSpouseList() {
+    public List<SelectItem> getRelationSpouseList() {
         return relationSpouseList;
     }
 
-    public void setRelationSpouseList(List<Relation> relationSpouseList) {
+    public void setRelationSpouseList(List<SelectItem> relationSpouseList) {
         this.relationSpouseList = relationSpouseList;
     }
 
-    public List<Reference> getReferenceIndividualList() {
+    public List<SelectItem> getReferenceIndividualList() {
         return referenceIndividualList;
     }
 
-    public void setReferenceIndividualList(List<Reference> referenceIndividualList) {
+    public void setReferenceIndividualList(List<SelectItem> referenceIndividualList) {
         this.referenceIndividualList = referenceIndividualList;
     }
 
-    public List<Reference> getReferenceSpouseList() {
+    public List<SelectItem> getReferenceSpouseList() {
         return referenceSpouseList;
     }
 
-    public void setReferenceSpouseList(List<Reference> referenceSpouseList) {
+    public void setReferenceSpouseList(List<SelectItem> referenceSpouseList) {
         this.referenceSpouseList = referenceSpouseList;
     }
 
@@ -2264,155 +2257,155 @@ public class CustomerInfoIndividual implements Serializable {
         this.customerInfoSearch = customerInfoSearch;
     }
 
-    public List<Title> getTitleThList() {
+    public List<SelectItem> getTitleThList() {
         return titleThList;
     }
 
-    public void setTitleThList(List<Title> titleThList) {
+    public void setTitleThList(List<SelectItem> titleThList) {
         this.titleThList = titleThList;
     }
 
-    public List<Title> getTitleEnList() {
+    public List<SelectItem> getTitleEnList() {
         return titleEnList;
     }
 
-    public void setTitleEnList(List<Title> titleEnList) {
+    public void setTitleEnList(List<SelectItem> titleEnList) {
         this.titleEnList = titleEnList;
     }
 
-    public List<Race> getRaceList() {
+    public List<SelectItem> getRaceList() {
         return raceList;
     }
 
-    public void setRaceList(List<Race> raceList) {
+    public void setRaceList(List<SelectItem> raceList) {
         this.raceList = raceList;
     }
 
-    public List<Nationality> getNationalityList() {
+    public List<SelectItem> getNationalityList() {
         return nationalityList;
     }
 
-    public void setNationalityList(List<Nationality> nationalityList) {
+    public void setNationalityList(List<SelectItem> nationalityList) {
         this.nationalityList = nationalityList;
     }
 
-    public List<Nationality> getSndNationalityList() {
+    public List<SelectItem> getSndNationalityList() {
         return sndNationalityList;
     }
 
-    public void setSndNationalityList(List<Nationality> sndNationalityList) {
+    public void setSndNationalityList(List<SelectItem> sndNationalityList) {
         this.sndNationalityList = sndNationalityList;
     }
 
-    public List<Education> getEducationList() {
+    public List<SelectItem> getEducationList() {
         return educationList;
     }
 
-    public void setEducationList(List<Education> educationList) {
+    public void setEducationList(List<SelectItem> educationList) {
         this.educationList = educationList;
     }
 
-    public List<Occupation> getOccupationList() {
+    public List<SelectItem> getOccupationList() {
         return occupationList;
     }
 
-    public void setOccupationList(List<Occupation> occupationList) {
+    public void setOccupationList(List<SelectItem> occupationList) {
         this.occupationList = occupationList;
     }
 
-    public List<BusinessDescription> getBusinessTypeList() {
+    public List<SelectItem> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessDescription> businessTypeList) {
+    public void setBusinessTypeList(List<SelectItem> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 
-    public List<MaritalStatus> getMaritalStatusList() {
+    public List<SelectItem> getMaritalStatusList() {
         return maritalStatusList;
     }
 
-    public void setMaritalStatusList(List<MaritalStatus> maritalStatusList) {
+    public void setMaritalStatusList(List<SelectItem> maritalStatusList) {
         this.maritalStatusList = maritalStatusList;
     }
 
-    public List<Province> getProvinceForm1List() {
+    public List<SelectItem> getProvinceForm1List() {
         return provinceForm1List;
     }
 
-    public void setProvinceForm1List(List<Province> provinceForm1List) {
+    public void setProvinceForm1List(List<SelectItem> provinceForm1List) {
         this.provinceForm1List = provinceForm1List;
     }
 
-    public List<District> getDistrictForm1List() {
+    public List<SelectItem> getDistrictForm1List() {
         return districtForm1List;
     }
 
-    public void setDistrictForm1List(List<District> districtForm1List) {
+    public void setDistrictForm1List(List<SelectItem> districtForm1List) {
         this.districtForm1List = districtForm1List;
     }
 
-    public List<SubDistrict> getSubDistrictForm1List() {
+    public List<SelectItem> getSubDistrictForm1List() {
         return subDistrictForm1List;
     }
 
-    public void setSubDistrictForm1List(List<SubDistrict> subDistrictForm1List) {
+    public void setSubDistrictForm1List(List<SelectItem> subDistrictForm1List) {
         this.subDistrictForm1List = subDistrictForm1List;
     }
 
-    public List<Province> getProvinceForm2List() {
+    public List<SelectItem> getProvinceForm2List() {
         return provinceForm2List;
     }
 
-    public void setProvinceForm2List(List<Province> provinceForm2List) {
+    public void setProvinceForm2List(List<SelectItem> provinceForm2List) {
         this.provinceForm2List = provinceForm2List;
     }
 
-    public List<District> getDistrictForm2List() {
+    public List<SelectItem> getDistrictForm2List() {
         return districtForm2List;
     }
 
-    public void setDistrictForm2List(List<District> districtForm2List) {
+    public void setDistrictForm2List(List<SelectItem> districtForm2List) {
         this.districtForm2List = districtForm2List;
     }
 
-    public List<SubDistrict> getSubDistrictForm2List() {
+    public List<SelectItem> getSubDistrictForm2List() {
         return subDistrictForm2List;
     }
 
-    public void setSubDistrictForm2List(List<SubDistrict> subDistrictForm2List) {
+    public void setSubDistrictForm2List(List<SelectItem> subDistrictForm2List) {
         this.subDistrictForm2List = subDistrictForm2List;
     }
 
-    public List<Province> getProvinceForm3List() {
+    public List<SelectItem> getProvinceForm3List() {
         return provinceForm3List;
     }
 
-    public void setProvinceForm3List(List<Province> provinceForm3List) {
+    public void setProvinceForm3List(List<SelectItem> provinceForm3List) {
         this.provinceForm3List = provinceForm3List;
     }
 
-    public List<District> getDistrictForm3List() {
+    public List<SelectItem> getDistrictForm3List() {
         return districtForm3List;
     }
 
-    public void setDistrictForm3List(List<District> districtForm3List) {
+    public void setDistrictForm3List(List<SelectItem> districtForm3List) {
         this.districtForm3List = districtForm3List;
     }
 
-    public List<SubDistrict> getSubDistrictForm3List() {
+    public List<SelectItem> getSubDistrictForm3List() {
         return subDistrictForm3List;
     }
 
-    public void setSubDistrictForm3List(List<SubDistrict> subDistrictForm3List) {
+    public void setSubDistrictForm3List(List<SelectItem> subDistrictForm3List) {
         this.subDistrictForm3List = subDistrictForm3List;
     }
 
-    public List<Country> getCountryList() {
+    public List<SelectItem> getCountryList() {
         return countryList;
     }
 
-    public void setCountryList(List<Country> countryList) {
+    public void setCountryList(List<SelectItem> countryList) {
         this.countryList = countryList;
     }
 
@@ -2448,91 +2441,91 @@ public class CustomerInfoIndividual implements Serializable {
         this.addressFlagForm6 = addressFlagForm6;
     }*/
 
-    public List<AddressType> getAddressTypeList() {
+    public List<SelectItem> getAddressTypeList() {
         return addressTypeList;
     }
 
-    public void setAddressTypeList(List<AddressType> addressTypeList) {
+    public void setAddressTypeList(List<SelectItem> addressTypeList) {
         this.addressTypeList = addressTypeList;
     }
 
-    public List<KYCLevel> getKycLevelList() {
+    public List<SelectItem> getKycLevelList() {
         return kycLevelList;
     }
 
-    public void setKycLevelList(List<KYCLevel> kycLevelList) {
+    public void setKycLevelList(List<SelectItem> kycLevelList) {
         this.kycLevelList = kycLevelList;
     }
 
-    public List<Province> getProvinceForm4List() {
+    public List<SelectItem> getProvinceForm4List() {
         return provinceForm4List;
     }
 
-    public void setProvinceForm4List(List<Province> provinceForm4List) {
+    public void setProvinceForm4List(List<SelectItem> provinceForm4List) {
         this.provinceForm4List = provinceForm4List;
     }
 
-    public List<District> getDistrictForm4List() {
+    public List<SelectItem> getDistrictForm4List() {
         return districtForm4List;
     }
 
-    public void setDistrictForm4List(List<District> districtForm4List) {
+    public void setDistrictForm4List(List<SelectItem> districtForm4List) {
         this.districtForm4List = districtForm4List;
     }
 
-    public List<SubDistrict> getSubDistrictForm4List() {
+    public List<SelectItem> getSubDistrictForm4List() {
         return subDistrictForm4List;
     }
 
-    public void setSubDistrictForm4List(List<SubDistrict> subDistrictForm4List) {
+    public void setSubDistrictForm4List(List<SelectItem> subDistrictForm4List) {
         this.subDistrictForm4List = subDistrictForm4List;
     }
 
-    public List<Province> getProvinceForm5List() {
+    public List<SelectItem> getProvinceForm5List() {
         return provinceForm5List;
     }
 
-    public void setProvinceForm5List(List<Province> provinceForm5List) {
+    public void setProvinceForm5List(List<SelectItem> provinceForm5List) {
         this.provinceForm5List = provinceForm5List;
     }
 
-    public List<District> getDistrictForm5List() {
+    public List<SelectItem> getDistrictForm5List() {
         return districtForm5List;
     }
 
-    public void setDistrictForm5List(List<District> districtForm5List) {
+    public void setDistrictForm5List(List<SelectItem> districtForm5List) {
         this.districtForm5List = districtForm5List;
     }
 
-    public List<SubDistrict> getSubDistrictForm5List() {
+    public List<SelectItem> getSubDistrictForm5List() {
         return subDistrictForm5List;
     }
 
-    public void setSubDistrictForm5List(List<SubDistrict> subDistrictForm5List) {
+    public void setSubDistrictForm5List(List<SelectItem> subDistrictForm5List) {
         this.subDistrictForm5List = subDistrictForm5List;
     }
 
-    public List<Province> getProvinceForm6List() {
+    public List<SelectItem> getProvinceForm6List() {
         return provinceForm6List;
     }
 
-    public void setProvinceForm6List(List<Province> provinceForm6List) {
+    public void setProvinceForm6List(List<SelectItem> provinceForm6List) {
         this.provinceForm6List = provinceForm6List;
     }
 
-    public List<District> getDistrictForm6List() {
+    public List<SelectItem> getDistrictForm6List() {
         return districtForm6List;
     }
 
-    public void setDistrictForm6List(List<District> districtForm6List) {
+    public void setDistrictForm6List(List<SelectItem> districtForm6List) {
         this.districtForm6List = districtForm6List;
     }
 
-    public List<SubDistrict> getSubDistrictForm6List() {
+    public List<SelectItem> getSubDistrictForm6List() {
         return subDistrictForm6List;
     }
 
-    public void setSubDistrictForm6List(List<SubDistrict> subDistrictForm6List) {
+    public void setSubDistrictForm6List(List<SelectItem> subDistrictForm6List) {
         this.subDistrictForm6List = subDistrictForm6List;
     }
 
@@ -3425,11 +3418,11 @@ public class CustomerInfoIndividual implements Serializable {
         this.relationMainCusId = relationMainCusId;
     }
 
-    public List<IncomeSource> getIncomeSourceList() {
+    public List<SelectItem> getIncomeSourceList() {
         return incomeSourceList;
     }
 
-    public void setIncomeSourceList(List<IncomeSource> incomeSourceList) {
+    public void setIncomeSourceList(List<SelectItem> incomeSourceList) {
         this.incomeSourceList = incomeSourceList;
     }
 }

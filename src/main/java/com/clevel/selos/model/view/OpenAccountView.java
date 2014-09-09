@@ -1,6 +1,9 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.BankAccountProduct;
+import com.clevel.selos.model.view.master.BankAccountProductView;
+import com.clevel.selos.model.view.master.BankAccountPurposeView;
+import com.clevel.selos.model.view.master.BankAccountTypeView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,7 +16,7 @@ public class OpenAccountView implements Serializable {
     private String accountName;
     private List<CustomerInfoView> accountNameList;
     private BankAccountTypeView bankAccountTypeView;
-    private BankAccountProduct bankAccountProduct;
+    private BankAccountProductView bankAccountProductView;
     private List<BankAccountPurposeView> bankAccountPurposeView;
     private String purposeForShow;
 
@@ -24,7 +27,7 @@ public class OpenAccountView implements Serializable {
     public void reset() {
         this.accountNameList = new ArrayList<CustomerInfoView>();
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.bankAccountProduct = new BankAccountProduct();
+        this.bankAccountProductView = new BankAccountProductView();
         this.bankAccountPurposeView = new ArrayList<BankAccountPurposeView>();
     }
 
@@ -60,12 +63,12 @@ public class OpenAccountView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public BankAccountProduct getBankAccountProduct() {
-        return bankAccountProduct;
+    public BankAccountProductView getBankAccountProductView() {
+        return bankAccountProductView;
     }
 
-    public void setBankAccountProduct(BankAccountProduct bankAccountProduct) {
-        this.bankAccountProduct = bankAccountProduct;
+    public void setBankAccountProductView(BankAccountProductView bankAccountProductView) {
+        this.bankAccountProductView = bankAccountProductView;
     }
 
     public List<BankAccountPurposeView> getBankAccountPurposeView() {
@@ -86,14 +89,14 @@ public class OpenAccountView implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("accountName", accountName).
-                append("accountNameList", accountNameList).
-                append("bankAccountTypeView", bankAccountTypeView).
-                append("bankAccountProduct", bankAccountProduct).
-                append("bankAccountPurposeView", bankAccountPurposeView).
-                append("purposeForShow", purposeForShow).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountName", accountName)
+                .append("accountNameList", accountNameList)
+                .append("bankAccountTypeView", bankAccountTypeView)
+                .append("bankAccountProductView", bankAccountProductView)
+                .append("bankAccountPurposeView", bankAccountPurposeView)
+                .append("purposeForShow", purposeForShow)
+                .toString();
     }
 }

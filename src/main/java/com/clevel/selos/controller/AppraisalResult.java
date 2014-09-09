@@ -165,8 +165,8 @@ public class AppraisalResult implements Serializable {
         provinceList= provinceDAO.findAll();
 
         newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
-        newCollateralViewList.add(newCollateralViewForTest());
-        newCollateralViewList.add(newCollateralViewForTest2());
+//        newCollateralViewList.add(newCollateralViewForTest());
+//        newCollateralViewList.add(newCollateralViewForTest2());
 
         appraisalView = new AppraisalView();
         flagReadOnly = false;
@@ -204,7 +204,6 @@ public class AppraisalResult implements Serializable {
             }
 
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
-//            appraisalView = appraisalResultControl.getAppraisalResult(10, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
             if(!Util.isNull(appraisalView)){
                 newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
@@ -279,14 +278,19 @@ public class AppraisalResult implements Serializable {
 
                 } else if(ModeForButton.EDIT.equals(modeForButton)){
                     log.debug("-- EDIT");
-                    AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
-                    if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
-                        newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
-                        saveAndEditFlag = true;
+                    flag = checkJobIdExist(newCollateralViewList, jobID);
+                    if (flag){
+                        AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
+                        if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
+                            newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
+                            saveAndEditFlag = true;
+                        } else {
+                            saveAndEditFlag = false;
+                            messageHeader = ""+appraisalDataResult.getActionResult();
+                            message = appraisalDataResult.getReason();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        }
                     } else {
-                        saveAndEditFlag = false;
-                        messageHeader = ""+appraisalDataResult.getActionResult();
-                        message = appraisalDataResult.getReason();
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
                 }
@@ -355,6 +359,7 @@ public class AppraisalResult implements Serializable {
             log.debug("-- Flag {}", ModeForButton.EDIT);
             if(saveAndEditFlag){
                 newCollateralViewList.set(rowCollateral, newCollateralView);
+//                appraisalView.setNewCollateralViewList(newCollateralViewList);
                 log.info("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
                 message = ActionResult.SUCCESS.toString();
             } else {
@@ -390,7 +395,8 @@ public class AppraisalResult implements Serializable {
         log.info("-- onSaveAppraisalResult");
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
-            appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, workCasePreScreenId);
+            log.debug("## appraisalView.getNewCollateralViewList().size() ## [{}]",appraisalView.getNewCollateralViewList().size());
+            appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId);
 
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");

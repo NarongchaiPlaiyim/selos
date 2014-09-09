@@ -54,10 +54,10 @@
             </tr>
         </table>
     </p:panel>
+    <p:blockUI widgetVar="blockSubmitCaseDlgPanel" block="submitAADCDlgPanel"
+               trigger=":frmMain:dlgSubmitAADCBtn">
+        <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
-<p:blockUI widgetVar="blockSubmitCaseDlgPanel" block="submitCaseDlgPanel"
-           trigger=":frmMain:dlgSubmitCaseZMPricingBtn">
-    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 </ui:composition>

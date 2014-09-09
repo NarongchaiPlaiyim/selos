@@ -13,7 +13,7 @@
                                  value="#{headerController.reasonId}"
                                  required="#{not empty param[btnCancelRequestPrice.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{headerController.cancelReason}"
+                    <f:selectItems value="#{headerController.cancelPriceReduceReasonId}"
                                    var="reasonItem"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
                                    itemValue="#{reasonItem.id}"/>
@@ -24,7 +24,7 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea value="#{headerController.cancelRemark}" autoResize="false" cols="35" rows="5"></p:inputTextarea>
+                <p:inputTextarea value="#{headerController.cancelPriceReduceRemark}" autoResize="false" cols="35" rows="5"></p:inputTextarea>
             </td>
         </tr>
         <tr>

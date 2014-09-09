@@ -31,11 +31,14 @@
             <div id="content">
                 <div id="content_info">
                     <div id="content_trackchange">[ View Track Change ]</div>
-                    <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalResult.appraisalView.modifyBy.userName}"/> , <h:outputText value="#{appraisalResult.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" /></h:outputText></div>
+                    <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalResult.appraisalView.modifyBy.userName}"/> ,
+                        <h:outputText value="#{appraisalResult.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" />
+                        </h:outputText>
+                    </div>
                 </div>
-                <div id="content_form">
+                <!--<div id="content_form">-->
 
-                </div>
+                <!--</div>-->
                 <table id="table_content" style="width: 100%;" class="content_table_form" border="0">
                     <tr>
                         <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
@@ -208,7 +211,7 @@
                                              <p:outputLabel value="#{collateralDetailView.jobID}"/>
                                          </td>
                                          <td>
-                                             <p:commandButton value="Edit"
+                                             <p:commandButton value="#{msg.get('app.button.edit')}"
                                                               action="#{appraisalResult.onEditCollateralDetailView()}"
                                                               update=":appraisalComsDlgForm"
                                                               process=":frmMain"

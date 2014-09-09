@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.JuristicDAO;
@@ -14,6 +15,8 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.master.DistrictView;
+import com.clevel.selos.model.view.master.ProvinceView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -29,6 +32,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -54,76 +58,59 @@ public class CustomerInfoJuristic extends BaseController {
     Message exceptionMsg;
 
     @Inject
-    private DocumentTypeDAO documentTypeDAO;
-    @Inject
-    private RelationDAO relationDAO;
-    @Inject
-    private RelationCustomerDAO relationCustomerDAO;
-    @Inject
-    private ReferenceDAO referenceDAO;
-    @Inject
-    private TitleDAO titleDAO;
-    @Inject
-    private RaceDAO raceDAO;
-    @Inject
-    private NationalityDAO nationalityDAO;
-    @Inject
-    private EducationDAO educationDAO;
-    @Inject
-    private OccupationDAO occupationDAO;
-    @Inject
-    private BusinessTypeDAO businessTypeDAO;
-    @Inject
-    private MaritalStatusDAO maritalStatusDAO;
-    @Inject
-    private ProvinceDAO provinceDAO;
-    @Inject
-    private DistrictDAO districtDAO;
-    @Inject
-    private SubDistrictDAO subDistrictDAO;
-    @Inject
-    private CountryDAO countryDAO;
-    @Inject
-    private AddressTypeDAO addressTypeDAO;
-    @Inject
-    private KYCLevelDAO kycLevelDAO;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    private JuristicDAO juristicDAO;
-    @Inject
-    private IncomeSourceDAO incomeSourceDAO;
-
-    @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
     ExSummaryControl exSummaryControl;
+    @Inject
+    private DocumentTypeControl documentTypeControl;
+    @Inject
+    private RelationCustomerControl relationCustomerControl;
+    @Inject
+    private ReferenceControl referenceControl;
+    @Inject
+    private TitleControl titleControl;
+    @Inject
+    private BusinessTypeControl businessTypeControl;
+    @Inject
+    private ProvinceControl provinceControl;
+    @Inject
+    private DistrictControl districtControl;
+    @Inject
+    private SubDistrictControl subDistrictControl;
+    @Inject
+    private CountryControl countryControl;
+    @Inject
+    private AddressTypeControl addressTypeControl;
+    @Inject
+    private KYCLevelControl kycLevelControl;
+    @Inject
+    private IncomeSourceControl incomeSourceControl;
 
     //*** Drop down List ***//
-    private List<DocumentType> documentTypeList;
-    private List<Relation> relationList;
-    private List<Reference> referenceList;
-    private List<Title> titleThList;
-    private List<Title> titleEnList;
-    private List<BusinessType> businessTypeList;
+    private List<SelectItem> documentTypeList;
+    private List<SelectItem> relationList;
+    private List<SelectItem> referenceList;
+    private List<SelectItem> titleThList;
+    private List<SelectItem> titleEnList;
+    private List<SelectItem> businessTypeList;
 
-    private List<Province> provinceForm1List;
-    private List<District> districtForm1List;
-    private List<SubDistrict> subDistrictForm1List;
-    private List<Province> provinceForm2List;
-    private List<District> districtForm2List;
-    private List<SubDistrict> subDistrictForm2List;
-    private List<Province> provinceForm3List;
-    private List<District> districtForm3List;
-    private List<SubDistrict> subDistrictForm3List;
+    private List<SelectItem> provinceForm1List;
+    private List<SelectItem> districtForm1List;
+    private List<SelectItem> subDistrictForm1List;
+    private List<SelectItem> provinceForm2List;
+    private List<SelectItem> districtForm2List;
+    private List<SelectItem> subDistrictForm2List;
+    private List<SelectItem> provinceForm3List;
+    private List<SelectItem> districtForm3List;
+    private List<SelectItem> subDistrictForm3List;
 
-    private List<Country> countryList;
-    private List<AddressType> addressTypeList;
-    private List<KYCLevel> kycLevelList;
+    private List<SelectItem> countryList;
+    private List<SelectItem> addressTypeList;
+    private List<SelectItem> kycLevelList;
 
     private List<String> yearList;
 
-    private List<IncomeSource> incomeSourceList;
+    private List<SelectItem> incomeSourceList;
 
     //*** View ***//
     private CustomerInfoView customerInfoView;
@@ -257,24 +244,24 @@ public class CustomerInfoJuristic extends BaseController {
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
-        documentTypeList = documentTypeDAO.findByCustomerEntityId(2);
-        relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
+        documentTypeList = documentTypeControl.getDocumentTypeByCustomerEntity(2);
+        relationList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
 
-        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
-        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
-        businessTypeList = businessTypeDAO.findAll();
+        titleEnList = titleControl.getTitleEnSelectItemByCustomerEntity(BorrowerType.JURISTIC.value());
+        titleThList = titleControl.getTitleThSelectItemByCustomerEntity(BorrowerType.JURISTIC.value());
+        businessTypeList = businessTypeControl.getBusinessTypeSelectItemList();
 
-        provinceForm1List = provinceDAO.getListOrderByParameter("name");
-        provinceForm2List = provinceDAO.getListOrderByParameter("name");
+        provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+        provinceForm2List = provinceControl.getProviceSelectItemActiveList();
 
-        countryList = countryDAO.findAll();
+        countryList = countryControl.getCountrySelectItemActiveList();
 
-        incomeSourceList = incomeSourceDAO.findAll();
+        incomeSourceList = incomeSourceControl.getIncomeSourceSelectItemActiveList();
 
-        referenceList = new ArrayList<Reference>();
+        referenceList = new ArrayList<SelectItem>();
 
-        addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
-        kycLevelList = kycLevelDAO.findAll();
+        addressTypeList = addressTypeControl.getAddressTypeSelectItemByCustEntity(BorrowerType.JURISTIC.value());
+        kycLevelList = kycLevelControl.getKYCLevelSelectItem();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
@@ -338,9 +325,9 @@ public class CustomerInfoJuristic extends BaseController {
 
         if(relationId == RelationValue.BORROWER.value()){
             isEditBorrower = true;
-            relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
+            relationList = relationCustomerControl.getRelationSelectItem(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
-            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
+            relationList = relationCustomerControl.getRelationSelectItemWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }
 
         if(customerInfoView.getRemoveIndividualIdList() == null){
@@ -373,7 +360,7 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public void onChangeRelation(){
-        referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, relationId, 1, 0);
+        referenceList = referenceControl.getReferenceSelectItemByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, relationId, 1, 0);
         Relation relation = new Relation();
         relation.setId(relationId);
         customerInfoView.setRelation(relation);
@@ -381,87 +368,87 @@ public class CustomerInfoJuristic extends BaseController {
 
     public void onChangeProvinceForm1() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
-            districtForm1List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm1List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getRegisterAddress().setDistrict(new District());
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }else{
-            provinceForm1List = provinceDAO.getListOrderByParameter("name");
-            districtForm1List = new ArrayList<District>();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+            districtForm1List = new ArrayList<SelectItem>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm1() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
-            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm1();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceForm2() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
-            districtForm2List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm2List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
             customerInfoView.getWorkAddress().setDistrict(new District());
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }else{
-            provinceForm2List = provinceDAO.getListOrderByParameter("name");
-            districtForm2List = new ArrayList<District>();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+            districtForm2List = new ArrayList<SelectItem>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictForm2() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
-            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
             onChangeProvinceForm2();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm1(){
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
-            districtForm1List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm1List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm1List = provinceDAO.getListOrderByParameter("name");
-            districtForm1List = new ArrayList<District>();
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            provinceForm1List = provinceControl.getProviceSelectItemActiveList();
+            districtForm1List = new ArrayList<SelectItem>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm1(){
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
-            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm1List = new ArrayList<SubDistrict>();
+            subDistrictForm1List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeProvinceEditForm2() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getProvince().getCode() != 0){
-            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
-            districtForm2List = districtDAO.getListByProvince(province);
+            ProvinceView provinceView = provinceControl.getProvinceViewById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm2List = districtControl.getDistrictSelectItemByProvince(provinceView.getCode());
         }else{
-            provinceForm2List = provinceDAO.getListOrderByParameter("name");
-            districtForm2List = new ArrayList<District>();
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            provinceForm2List = provinceControl.getProviceSelectItemActiveList();
+            districtForm2List = new ArrayList<SelectItem>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
     public void onChangeDistrictEditForm2() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getDistrict().getId() != 0){
-            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
-            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+            DistrictView districtView = districtControl.getDistrictById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictControl.getSubDistrictSelectItemByDistrict(districtView.getId());
         }else{
-            subDistrictForm2List = new ArrayList<SubDistrict>();
+            subDistrictForm2List = new ArrayList<SelectItem>();
         }
     }
 
@@ -672,15 +659,12 @@ public class CustomerInfoJuristic extends BaseController {
     public void onSave(){
         log.debug("onSave");
         //check registration
-        Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(customerInfoView.getRegistrationId(),workCaseId);
-        if(customer != null && customer.getId() != 0){
-            if(customer.getId() != customerInfoView.getId()){
-                messageHeader = "Information.";
-                message = "Registration Id is already exist";
-                severity = "info";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                return;
-            }
+        if(customerInfoControl.isDuplicateCustomerJuris(customerInfoView.getRegistrationId(), customerInfoView.getId() ,workCaseId)){
+            messageHeader = "Information.";
+            message = "Registration Id is already exist";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
         }
 
         if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2 - Address 1 is Regis , Address 2 is Work
@@ -802,27 +786,27 @@ public class CustomerInfoJuristic extends BaseController {
         this.customerInfoView = customerInfoView;
     }
 
-    public List<DocumentType> getDocumentTypeList() {
+    public List<SelectItem> getDocumentTypeList() {
         return documentTypeList;
     }
 
-    public void setDocumentTypeList(List<DocumentType> documentTypeList) {
+    public void setDocumentTypeList(List<SelectItem> documentTypeList) {
         this.documentTypeList = documentTypeList;
     }
 
-    public List<Relation> getRelationList() {
+    public List<SelectItem> getRelationList() {
         return relationList;
     }
 
-    public void setRelationList(List<Relation> relationList) {
+    public void setRelationList(List<SelectItem> relationList) {
         this.relationList = relationList;
     }
 
-    public List<Reference> getReferenceList() {
+    public List<SelectItem> getReferenceList() {
         return referenceList;
     }
 
-    public void setReferenceList(List<Reference> referenceList) {
+    public void setReferenceList(List<SelectItem> referenceList) {
         this.referenceList = referenceList;
     }
 
@@ -834,123 +818,123 @@ public class CustomerInfoJuristic extends BaseController {
         this.customerInfoSearch = customerInfoSearch;
     }
 
-    public List<Title> getTitleThList() {
+    public List<SelectItem> getTitleThList() {
         return titleThList;
     }
 
-    public void setTitleThList(List<Title> titleThList) {
+    public void setTitleThList(List<SelectItem> titleThList) {
         this.titleThList = titleThList;
     }
 
-    public List<Title> getTitleEnList() {
+    public List<SelectItem> getTitleEnList() {
         return titleEnList;
     }
 
-    public void setTitleEnList(List<Title> titleEnList) {
+    public void setTitleEnList(List<SelectItem> titleEnList) {
         this.titleEnList = titleEnList;
     }
 
-    public List<BusinessType> getBusinessTypeList() {
+    public List<SelectItem> getBusinessTypeList() {
         return businessTypeList;
     }
 
-    public void setBusinessTypeList(List<BusinessType> businessTypeList) {
+    public void setBusinessTypeList(List<SelectItem> businessTypeList) {
         this.businessTypeList = businessTypeList;
     }
 
-    public List<Province> getProvinceForm1List() {
+    public List<SelectItem> getProvinceForm1List() {
         return provinceForm1List;
     }
 
-    public void setProvinceForm1List(List<Province> provinceForm1List) {
+    public void setProvinceForm1List(List<SelectItem> provinceForm1List) {
         this.provinceForm1List = provinceForm1List;
     }
 
-    public List<District> getDistrictForm1List() {
+    public List<SelectItem> getDistrictForm1List() {
         return districtForm1List;
     }
 
-    public void setDistrictForm1List(List<District> districtForm1List) {
+    public void setDistrictForm1List(List<SelectItem> districtForm1List) {
         this.districtForm1List = districtForm1List;
     }
 
-    public List<SubDistrict> getSubDistrictForm1List() {
+    public List<SelectItem> getSubDistrictForm1List() {
         return subDistrictForm1List;
     }
 
-    public void setSubDistrictForm1List(List<SubDistrict> subDistrictForm1List) {
+    public void setSubDistrictForm1List(List<SelectItem> subDistrictForm1List) {
         this.subDistrictForm1List = subDistrictForm1List;
     }
 
-    public List<Province> getProvinceForm2List() {
+    public List<SelectItem> getProvinceForm2List() {
         return provinceForm2List;
     }
 
-    public void setProvinceForm2List(List<Province> provinceForm2List) {
+    public void setProvinceForm2List(List<SelectItem> provinceForm2List) {
         this.provinceForm2List = provinceForm2List;
     }
 
-    public List<District> getDistrictForm2List() {
+    public List<SelectItem> getDistrictForm2List() {
         return districtForm2List;
     }
 
-    public void setDistrictForm2List(List<District> districtForm2List) {
+    public void setDistrictForm2List(List<SelectItem> districtForm2List) {
         this.districtForm2List = districtForm2List;
     }
 
-    public List<SubDistrict> getSubDistrictForm2List() {
+    public List<SelectItem> getSubDistrictForm2List() {
         return subDistrictForm2List;
     }
 
-    public void setSubDistrictForm2List(List<SubDistrict> subDistrictForm2List) {
+    public void setSubDistrictForm2List(List<SelectItem> subDistrictForm2List) {
         this.subDistrictForm2List = subDistrictForm2List;
     }
 
-    public List<Province> getProvinceForm3List() {
+    public List<SelectItem> getProvinceForm3List() {
         return provinceForm3List;
     }
 
-    public void setProvinceForm3List(List<Province> provinceForm3List) {
+    public void setProvinceForm3List(List<SelectItem> provinceForm3List) {
         this.provinceForm3List = provinceForm3List;
     }
 
-    public List<District> getDistrictForm3List() {
+    public List<SelectItem> getDistrictForm3List() {
         return districtForm3List;
     }
 
-    public void setDistrictForm3List(List<District> districtForm3List) {
+    public void setDistrictForm3List(List<SelectItem> districtForm3List) {
         this.districtForm3List = districtForm3List;
     }
 
-    public List<SubDistrict> getSubDistrictForm3List() {
+    public List<SelectItem> getSubDistrictForm3List() {
         return subDistrictForm3List;
     }
 
-    public void setSubDistrictForm3List(List<SubDistrict> subDistrictForm3List) {
+    public void setSubDistrictForm3List(List<SelectItem> subDistrictForm3List) {
         this.subDistrictForm3List = subDistrictForm3List;
     }
 
-    public List<Country> getCountryList() {
+    public List<SelectItem> getCountryList() {
         return countryList;
     }
 
-    public void setCountryList(List<Country> countryList) {
+    public void setCountryList(List<SelectItem> countryList) {
         this.countryList = countryList;
     }
 
-    public List<AddressType> getAddressTypeList() {
+    public List<SelectItem> getAddressTypeList() {
         return addressTypeList;
     }
 
-    public void setAddressTypeList(List<AddressType> addressTypeList) {
+    public void setAddressTypeList(List<SelectItem> addressTypeList) {
         this.addressTypeList = addressTypeList;
     }
 
-    public List<KYCLevel> getKycLevelList() {
+    public List<SelectItem> getKycLevelList() {
         return kycLevelList;
     }
 
-    public void setKycLevelList(List<KYCLevel> kycLevelList) {
+    public void setKycLevelList(List<SelectItem> kycLevelList) {
         this.kycLevelList = kycLevelList;
     }
 
@@ -1291,11 +1275,11 @@ public class CustomerInfoJuristic extends BaseController {
         this.relationId = relationId;
     }
 
-    public List<IncomeSource> getIncomeSourceList() {
+    public List<SelectItem> getIncomeSourceList() {
         return incomeSourceList;
     }
 
-    public void setIncomeSourceList(List<IncomeSource> incomeSourceList) {
+    public void setIncomeSourceList(List<SelectItem> incomeSourceList) {
         this.incomeSourceList = incomeSourceList;
     }
 }

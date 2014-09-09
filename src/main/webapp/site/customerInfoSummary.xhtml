@@ -50,8 +50,8 @@
                                 <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                 <f:selectItems value="#{custInfoSummary.customerEntityList}"
                                                var="customerEntity"
-                                               itemLabel="#{customerEntity.description}"
-                                               itemValue="#{customerEntity.id}"/>
+                                               itemLabel="#{customerEntity.label}"
+                                               itemValue="#{customerEntity.value}"/>
                                 <p:ajax event="change" update="optLb,btnIndividual,btnJuristic" process="@this"/>
                             </p:selectOneMenu>
                         </td>
@@ -223,8 +223,7 @@
                                           style="min-width: 40px; max-width: 40px; width: 40px;"> <!--14-->
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
-                                                     action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="PF('blockUI').show()"
-                                                     disabled="#{custInfoSummary.isDisabled('borrower.editButton')}">
+                                                     action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="PF('blockUI').show()">
                                         <f:setPropertyActionListener value="#{item}"
                                                                      target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
                                     </p:commandButton>
@@ -388,8 +387,7 @@
                                 <p:column> <!--14-->
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
-                                                     action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="PF('blockUI').show()"
-                                                     disabled="#{custInfoSummary.isDisabled('guarantor.editButton')}">
+                                                     action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="PF('blockUI').show()">
                                         <f:setPropertyActionListener value="#{item2}"
                                                                      target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                     </p:commandButton>
@@ -561,8 +559,7 @@
                                 <p:column> <!--14-->
                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                      icon="ui-icon-pencil"
-                                                     action="#{custInfoSummary.onLinkToEditRelated()}" onclick="PF('blockUI').show()"
-                                                     disabled="#{custInfoSummary.isDisabled('related.editButton')}">
+                                                     action="#{custInfoSummary.onLinkToEditRelated()}" onclick="PF('blockUI').show()">
                                         <f:setPropertyActionListener value="#{item3}"
                                                                      target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                     </p:commandButton>

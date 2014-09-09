@@ -52,8 +52,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
-                                                           itemLabel="#{docType.description}"
-                                                           itemValue="#{docType.id}"/>
+                                                           itemLabel="#{docType.label}"
+                                                           itemValue="#{docType.value}"/>
                                             <p:ajax event="change" update=":frmMain:inputSearch"
                                                     process="@this" listener="#{custInfoSumIndi.onChangeSearch}"/>
                                         </p:selectOneMenu>
@@ -144,8 +144,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.relationIndividualList}"
                                                            var="relation"
-                                                           itemLabel="#{relation.description}"
-                                                           itemValue="#{relation.id}"/>
+                                                           itemLabel="#{relation.label}"
+                                                           itemValue="#{relation.value}"/>
                                             <p:ajax event="change"
                                                     listener="#{custInfoSumIndi.onChangeRelation()}"
                                                     update=":frmMain:reference,:frmMain:relation,:frmMain:collateral,:frmMain:relationSpouse,:frmMain:referenceSpouse"/>
@@ -179,8 +179,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.referenceIndividualList}"
                                                            var="reference"
-                                                           itemLabel="#{reference.description}"
-                                                           itemValue="#{reference.id}"/>
+                                                           itemLabel="#{reference.label}"
+                                                           itemValue="#{reference.value}"/>
                                             <p:ajax event="change" process="@form" listener="#{custInfoSumIndi.onChangeReference()}"
                                                         update=":frmMain:referenceSpouse,:frmMain:relationSpouse,:frmMain:collateralSpouse"/>
                                         </p:selectOneMenu>
@@ -222,8 +222,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
-                                                           itemLabel="#{docType.description}"
-                                                           itemValue="#{docType.id}"/>
+                                                           itemLabel="#{docType.label}"
+                                                           itemValue="#{docType.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -281,8 +281,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                            var="country"
-                                                           itemLabel="#{country.name}"
-                                                           itemValue="#{country.id}"/>
+                                                           itemLabel="#{country.label}"
+                                                           itemValue="#{country.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -334,8 +334,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleThList}"
                                                                        var="titleTh"
-                                                                       itemLabel="#{titleTh.titleTh}"
-                                                                       itemValue="#{titleTh.id}"/>
+                                                                       itemLabel="#{titleTh.label}"
+                                                                       itemValue="#{titleTh.value}"/>
                                                         <p:ajax event="change"
                                                                 listener="#{custInfoSumIndi.onChangeTitleTh()}"
                                                                 update=":frmMain:titleEn"/>
@@ -374,8 +374,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleEnList}"
                                                                        var="titleEn"
-                                                                       itemLabel="#{titleEn.titleEn}"
-                                                                       itemValue="#{titleEn.id}"/>
+                                                                       itemLabel="#{titleEn.label}"
+                                                                       itemValue="#{titleEn.value}"/>
                                                         <p:ajax event="change"
                                                                 listener="#{custInfoSumIndi.onChangeTitleEn()}"
                                                                 update=":frmMain:titleTh"/>
@@ -433,8 +433,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.raceList}"
                                                            var="race"
-                                                           itemLabel="#{race.name}"
-                                                           itemValue="#{race.id}"/>
+                                                           itemLabel="#{race.label}"
+                                                           itemValue="#{race.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -450,8 +450,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.nationalityList}"
                                                            var="nation"
-                                                           itemLabel="#{nation.name}"
-                                                           itemValue="#{nation.id}"/>
+                                                           itemLabel="#{nation.label}"
+                                                           itemValue="#{nation.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                     <td class="title">
@@ -464,8 +464,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.sndNationalityList}"
                                                            var="nation2"
-                                                           itemLabel="#{nation2.name}"
-                                                           itemValue="#{nation2.id}"/>
+                                                           itemLabel="#{nation2.label}"
+                                                           itemValue="#{nation2.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -481,8 +481,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.educationList}"
                                                            var="education"
-                                                           itemLabel="#{education.nameTh}"
-                                                           itemValue="#{education.id}"/>
+                                                           itemLabel="#{education.label}"
+                                                           itemValue="#{education.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                     <td class="title">
@@ -496,8 +496,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                            var="occupation"
-                                                           itemLabel="#{occupation.code} - #{occupation.description}"
-                                                           itemValue="#{occupation.id}"/>
+                                                           itemLabel="#{occupation.label}"
+                                                           itemValue="#{occupation.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -513,8 +513,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
                                                            var="busType"
-                                                           itemLabel="#{busType.tmbCode} - #{busType.description}"
-                                                           itemValue="#{busType.id}"/>
+                                                           itemLabel="#{busType.label}"
+                                                           itemValue="#{busType.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                     <td class="title">
@@ -543,8 +543,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.incomeSourceList}"
                                                            var="incomeSource"
-                                                           itemLabel="#{incomeSource.name}"
-                                                           itemValue="#{incomeSource.id}"/>
+                                                           itemLabel="#{incomeSource.label}"
+                                                           itemValue="#{incomeSource.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                     <td class="title larger" >
@@ -557,8 +557,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                            var="country"
-                                                           itemLabel="#{country.name}"
-                                                           itemValue="#{country.id}"/>
+                                                           itemLabel="#{country.label}"
+                                                           itemValue="#{country.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -658,8 +658,8 @@
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumIndi.provinceForm1List}"
                                                                                    var="province"
-                                                                                   itemLabel="#{province.name}"
-                                                                                   itemValue="#{province.code}"/>
+                                                                                   itemLabel="#{province.label}"
+                                                                                   itemValue="#{province.value}"/>
                                                                     <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm1()}"
                                                                             update=":frmMain:districtForm1,:frmMain:subDistrictForm1"/>
                                                                 </p:selectOneMenu>
@@ -672,8 +672,8 @@
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumIndi.districtForm1List}"
                                                                                    var="district"
-                                                                                   itemLabel="#{district.name}"
-                                                                                   itemValue="#{district.id}"/>
+                                                                                   itemLabel="#{district.label}"
+                                                                                   itemValue="#{district.value}"/>
                                                                     <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm1()}"
                                                                             update=":frmMain:subDistrictForm1"/>
                                                                 </p:selectOneMenu>
@@ -686,8 +686,8 @@
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumIndi.subDistrictForm1List}"
                                                                                    var="subDistrict"
-                                                                                   itemLabel="#{subDistrict.name}"
-                                                                                   itemValue="#{subDistrict.code}"/>
+                                                                                   itemLabel="#{subDistrict.label}"
+                                                                                   itemValue="#{subDistrict.value}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
@@ -718,8 +718,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                        var="country"
-                                                                       itemLabel="#{country.name}"
-                                                                       itemValue="#{country.id}"/>
+                                                                       itemLabel="#{country.label}"
+                                                                       itemValue="#{country.value}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -834,8 +834,8 @@
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                         <f:selectItems value="#{custInfoSumIndi.provinceForm2List}"
                                                                                        var="province"
-                                                                                       itemLabel="#{province.name}"
-                                                                                       itemValue="#{province.code}"/>
+                                                                                       itemLabel="#{province.label}"
+                                                                                       itemValue="#{province.value}"/>
                                                                         <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm2()}"
                                                                                 update=":frmMain:districtForm2,:frmMain:subDistrictForm2"/>
                                                                     </p:selectOneMenu>
@@ -848,8 +848,8 @@
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                         <f:selectItems value="#{custInfoSumIndi.districtForm2List}"
                                                                                        var="district"
-                                                                                       itemLabel="#{district.name}"
-                                                                                       itemValue="#{district.id}"/>
+                                                                                       itemLabel="#{district.label}"
+                                                                                       itemValue="#{district.value}"/>
                                                                         <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm2()}"
                                                                                 update=":frmMain:subDistrictForm2"/>
                                                                     </p:selectOneMenu>
@@ -862,8 +862,8 @@
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                         <f:selectItems value="#{custInfoSumIndi.subDistrictForm2List}"
                                                                                        var="subDistrict"
-                                                                                       itemLabel="#{subDistrict.name}"
-                                                                                       itemValue="#{subDistrict.code}"/>
+                                                                                       itemLabel="#{subDistrict.label}"
+                                                                                       itemValue="#{subDistrict.value}"/>
                                                                     </p:selectOneMenu>
                                                                 </td>
                                                             </tr>
@@ -894,8 +894,8 @@
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                            var="country"
-                                                                           itemLabel="#{country.name}"
-                                                                           itemValue="#{country.id}"/>
+                                                                           itemLabel="#{country.label}"
+                                                                           itemValue="#{country.value}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
@@ -1011,8 +1011,8 @@
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                         <f:selectItems value="#{custInfoSumIndi.provinceForm3List}"
                                                                                        var="province"
-                                                                                       itemLabel="#{province.name}"
-                                                                                       itemValue="#{province.code}"/>
+                                                                                       itemLabel="#{province.label}"
+                                                                                       itemValue="#{province.value}"/>
                                                                         <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm3()}"
                                                                                 update=":frmMain:districtForm3,:frmMain:subDistrictForm3"/>
                                                                     </p:selectOneMenu>
@@ -1025,8 +1025,8 @@
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                         <f:selectItems value="#{custInfoSumIndi.districtForm3List}"
                                                                                        var="district"
-                                                                                       itemLabel="#{district.name}"
-                                                                                       itemValue="#{district.id}"/>
+                                                                                       itemLabel="#{district.label}"
+                                                                                       itemValue="#{district.value}"/>
                                                                         <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm3()}"
                                                                                 update=":frmMain:subDistrictForm3"/>
                                                                     </p:selectOneMenu>
@@ -1039,8 +1039,8 @@
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                         <f:selectItems value="#{custInfoSumIndi.subDistrictForm3List}"
                                                                                        var="subDistrict"
-                                                                                       itemLabel="#{subDistrict.name}"
-                                                                                       itemValue="#{subDistrict.code}"/>
+                                                                                       itemLabel="#{subDistrict.label}"
+                                                                                       itemValue="#{subDistrict.value}"/>
                                                                     </p:selectOneMenu>
                                                                 </td>
                                                             </tr>
@@ -1071,8 +1071,8 @@
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                            var="country"
-                                                                           itemLabel="#{country.name}"
-                                                                           itemValue="#{country.id}"/>
+                                                                           itemLabel="#{country.label}"
+                                                                           itemValue="#{country.value}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
@@ -1127,8 +1127,8 @@
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.addressTypeList}"
                                                            var="addressType"
-                                                           itemLabel="#{addressType.name}"
-                                                           itemValue="#{addressType.id}"/>
+                                                           itemLabel="#{addressType.label}"
+                                                           itemValue="#{addressType.value}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -1358,8 +1358,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                                                var="docType"
-                                                                               itemLabel="#{docType.description}"
-                                                                               itemValue="#{docType.id}"/>
+                                                                               itemLabel="#{docType.label}"
+                                                                               itemValue="#{docType.value}"/>
                                                                 <p:ajax event="change" update=":frmMain:inputSearchSpouse"
                                                                         process="@this" listener="#{custInfoSumIndi.onChangeSpouseSearch}"/>
                                                             </p:selectOneMenu>
@@ -1444,8 +1444,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.relationSpouseList}"
                                                                                var="relation"
-                                                                               itemLabel="#{relation.description}"
-                                                                               itemValue="#{relation.id}"/>
+                                                                               itemLabel="#{relation.label}"
+                                                                               itemValue="#{relation.value}"/>
                                                                 <p:ajax event="change"
                                                                         listener="#{custInfoSumIndi.onChangeRelationSpouse()}"
                                                                         update=":frmMain:referenceSpouse,:frmMain:relationSpouse,:frmMain:collateralSpouse"/>
@@ -1480,8 +1480,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.referenceSpouseList}"
                                                                                var="reference"
-                                                                               itemLabel="#{reference.description}"
-                                                                               itemValue="#{reference.id}"/>
+                                                                               itemLabel="#{reference.label}"
+                                                                               itemValue="#{reference.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1523,8 +1523,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                                                var="docType"
-                                                                               itemLabel="#{docType.description}"
-                                                                               itemValue="#{docType.id}"/>
+                                                                               itemLabel="#{docType.label}"
+                                                                               itemValue="#{docType.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1583,8 +1583,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                                var="country"
-                                                                               itemLabel="#{country.name}"
-                                                                               itemValue="#{country.id}"/>
+                                                                               itemLabel="#{country.label}"
+                                                                               itemValue="#{country.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1635,8 +1635,8 @@
                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                             <f:selectItems value="#{custInfoSumIndi.titleThList}"
                                                                                            var="titleTh"
-                                                                                           itemLabel="#{titleTh.titleTh}"
-                                                                                           itemValue="#{titleTh.id}"/>
+                                                                                           itemLabel="#{titleTh.label}"
+                                                                                           itemValue="#{titleTh.value}"/>
                                                                             <p:ajax event="change"
                                                                                     listener="#{custInfoSumIndi.onChangeTitleThSpouse()}"
                                                                                     update=":frmMain:titleEnSpouse"/>
@@ -1674,8 +1674,8 @@
                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                             <f:selectItems value="#{custInfoSumIndi.titleEnList}"
                                                                                            var="titleEn"
-                                                                                           itemLabel="#{titleEn.titleEn}"
-                                                                                           itemValue="#{titleEn.id}"/>
+                                                                                           itemLabel="#{titleEn.label}"
+                                                                                           itemValue="#{titleEn.value}"/>
                                                                             <p:ajax event="change"
                                                                                     listener="#{custInfoSumIndi.onChangeTitleEnSpouse()}"
                                                                                     update=":frmMain:titleThSpouse"/>
@@ -1731,8 +1731,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.raceList}"
                                                                                var="race"
-                                                                               itemLabel="#{race.name}"
-                                                                               itemValue="#{race.id}"/>
+                                                                               itemLabel="#{race.label}"
+                                                                               itemValue="#{race.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1748,8 +1748,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.nationalityList}"
                                                                                var="nation"
-                                                                               itemLabel="#{nation.name}"
-                                                                               itemValue="#{nation.id}"/>
+                                                                               itemLabel="#{nation.label}"
+                                                                               itemValue="#{nation.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                         <td class="title">
@@ -1763,8 +1763,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.sndNationalityList}"
                                                                                var="nation2"
-                                                                               itemLabel="#{nation2.name}"
-                                                                               itemValue="#{nation2.id}"/>
+                                                                               itemLabel="#{nation2.label}"
+                                                                               itemValue="#{nation2.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1780,8 +1780,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.educationList}"
                                                                                var="education"
-                                                                               itemLabel="#{education.nameTh}"
-                                                                               itemValue="#{education.id}"/>
+                                                                               itemLabel="#{education.label}"
+                                                                               itemValue="#{education.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                         <td class="title">
@@ -1795,8 +1795,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.occupationList}"
                                                                                var="occupation"
-                                                                               itemLabel="#{occupation.code} - #{occupation.description}"
-                                                                               itemValue="#{occupation.id}"/>
+                                                                               itemLabel="#{occupation.label}"
+                                                                               itemValue="#{occupation.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1812,8 +1812,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
                                                                                var="busType"
-                                                                               itemLabel="#{busType.tmbCode} - #{busType.description}"
-                                                                               itemValue="#{busType.id}"/>
+                                                                               itemLabel="#{busType.label}"
+                                                                               itemValue="#{busType.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                         <td class="title">
@@ -1840,8 +1840,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.incomeSourceList}"
                                                                                var="incomeSource"
-                                                                               itemLabel="#{incomeSource.name}"
-                                                                               itemValue="#{incomeSource.id}"/>
+                                                                               itemLabel="#{incomeSource.label}"
+                                                                               itemValue="#{incomeSource.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                         <td class="title larger" >
@@ -1855,8 +1855,8 @@
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                                var="country"
-                                                                               itemLabel="#{country.name}"
-                                                                               itemValue="#{country.id}"/>
+                                                                               itemLabel="#{country.label}"
+                                                                               itemValue="#{country.value}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1936,8 +1936,8 @@
                                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                         <f:selectItems value="#{custInfoSumIndi.provinceForm4List}"
                                                                                                        var="province"
-                                                                                                       itemLabel="#{province.name}"
-                                                                                                       itemValue="#{province.code}"/>
+                                                                                                       itemLabel="#{province.label}"
+                                                                                                       itemValue="#{province.value}"/>
                                                                                         <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm4()}"
                                                                                                 update=":frmMain:districtForm4,:frmMain:subDistrictForm4"/>
                                                                                     </p:selectOneMenu>
@@ -1949,8 +1949,8 @@
                                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                         <f:selectItems value="#{custInfoSumIndi.districtForm4List}"
                                                                                                        var="district"
-                                                                                                       itemLabel="#{district.name}"
-                                                                                                       itemValue="#{district.id}"/>
+                                                                                                       itemLabel="#{district.label}"
+                                                                                                       itemValue="#{district.value}"/>
                                                                                         <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm4()}"
                                                                                                 update=":frmMain:subDistrictForm4"/>
                                                                                     </p:selectOneMenu>
@@ -1962,8 +1962,8 @@
                                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                         <f:selectItems value="#{custInfoSumIndi.subDistrictForm4List}"
                                                                                                        var="subDistrict"
-                                                                                                       itemLabel="#{subDistrict.name}"
-                                                                                                       itemValue="#{subDistrict.code}"/>
+                                                                                                       itemLabel="#{subDistrict.label}"
+                                                                                                       itemValue="#{subDistrict.value}"/>
                                                                                     </p:selectOneMenu>
                                                                                 </td>
                                                                             </tr>
@@ -1992,8 +1992,8 @@
                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                                            var="country"
-                                                                                           itemLabel="#{country.name}"
-                                                                                           itemValue="#{country.id}"/>
+                                                                                           itemLabel="#{country.label}"
+                                                                                           itemValue="#{country.value}"/>
                                                                         </p:selectOneMenu>
                                                                     </td>
                                                                 </tr>
@@ -2105,8 +2105,8 @@
                                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                             <f:selectItems value="#{custInfoSumIndi.provinceForm5List}"
                                                                                                            var="province"
-                                                                                                           itemLabel="#{province.name}"
-                                                                                                           itemValue="#{province.code}"/>
+                                                                                                           itemLabel="#{province.label}"
+                                                                                                           itemValue="#{province.value}"/>
                                                                                             <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm5()}"
                                                                                                     update=":frmMain:districtForm5,:frmMain:subDistrictForm5"/>
                                                                                         </p:selectOneMenu>
@@ -2118,8 +2118,8 @@
                                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                             <f:selectItems value="#{custInfoSumIndi.districtForm5List}"
                                                                                                            var="district"
-                                                                                                           itemLabel="#{district.name}"
-                                                                                                           itemValue="#{district.id}"/>
+                                                                                                           itemLabel="#{district.label}"
+                                                                                                           itemValue="#{district.value}"/>
                                                                                             <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm5()}"
                                                                                                     update=":frmMain:subDistrictForm5"/>
                                                                                         </p:selectOneMenu>
@@ -2131,8 +2131,8 @@
                                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                             <f:selectItems value="#{custInfoSumIndi.subDistrictForm5List}"
                                                                                                            var="subDistrict"
-                                                                                                           itemLabel="#{subDistrict.name}"
-                                                                                                           itemValue="#{subDistrict.code}"/>
+                                                                                                           itemLabel="#{subDistrict.label}"
+                                                                                                           itemValue="#{subDistrict.value}"/>
                                                                                         </p:selectOneMenu>
                                                                                     </td>
                                                                                 </tr>
@@ -2161,8 +2161,8 @@
                                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                 <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                                                var="country"
-                                                                                               itemLabel="#{country.name}"
-                                                                                               itemValue="#{country.id}"/>
+                                                                                               itemLabel="#{country.label}"
+                                                                                               itemValue="#{country.value}"/>
                                                                             </p:selectOneMenu>
                                                                         </td>
                                                                     </tr>
@@ -2275,8 +2275,8 @@
                                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                             <f:selectItems value="#{custInfoSumIndi.provinceForm6List}"
                                                                                                            var="province"
-                                                                                                           itemLabel="#{province.name}"
-                                                                                                           itemValue="#{province.code}"/>
+                                                                                                           itemLabel="#{province.label}"
+                                                                                                           itemValue="#{province.value}"/>
                                                                                             <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm6()}"
                                                                                                     update=":frmMain:districtForm6,:frmMain:subDistrictForm6"/>
                                                                                         </p:selectOneMenu>
@@ -2288,8 +2288,8 @@
                                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                             <f:selectItems value="#{custInfoSumIndi.districtForm6List}"
                                                                                                            var="district"
-                                                                                                           itemLabel="#{district.name}"
-                                                                                                           itemValue="#{district.id}"/>
+                                                                                                           itemLabel="#{district.label}"
+                                                                                                           itemValue="#{district.value}"/>
                                                                                             <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm6()}"
                                                                                                     update=":frmMain:subDistrictForm6"/>
                                                                                         </p:selectOneMenu>
@@ -2301,8 +2301,8 @@
                                                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                             <f:selectItems value="#{custInfoSumIndi.subDistrictForm6List}"
                                                                                                            var="subDistrict"
-                                                                                                           itemLabel="#{subDistrict.name}"
-                                                                                                           itemValue="#{subDistrict.code}"/>
+                                                                                                           itemLabel="#{subDistrict.label}"
+                                                                                                           itemValue="#{subDistrict.value}"/>
                                                                                         </p:selectOneMenu>
                                                                                     </td>
                                                                                 </tr>
@@ -2331,8 +2331,8 @@
                                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                                 <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                                                var="country"
-                                                                                               itemLabel="#{country.name}"
-                                                                                               itemValue="#{country.id}"/>
+                                                                                               itemLabel="#{country.label}"
+                                                                                               itemValue="#{country.value}"/>
                                                                             </p:selectOneMenu>
                                                                         </td>
                                                                     </tr>

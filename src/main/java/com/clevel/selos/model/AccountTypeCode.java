@@ -1,0 +1,52 @@
+package com.clevel.selos.model;
+
+public enum AccountTypeCode {
+    UNSPECIFIED("NA"),
+    COMMERCIAL_LOAN("CL"),
+    OVERDRAFT("OD"),
+    HOUSING_MORTGAGE("HL"),
+    SECURITIES_MARGIN("SM"),
+    DOMESTIC_BILL("DB"),
+    BILL_DISCOUNT("BD"),
+    IMPORT_BILL("IB"),
+    EXPORT_BILL("EB"),
+    TRUST_RECEIPT("TR"),
+    OTHER_BILLS("OTB"),
+    AUTOMOBILE_LEASING("AL"),
+    OTHER_HIRE_PURCHASE("OHP"),
+    LINE_OF_CREDIT("LC"),
+    OTHER_LEASING("OTLS"),
+    HIRE_PURCHASE_FOR_AGRICULTURE_VARY("HPAV"),
+    HIRE_PURCHASE_FOR_AGRICULTURE("HPA"),
+    LOAN_FOR_AGRICULTURE("LA"),
+    FACTORING("FAC"),
+    FUTURES_CONTRACT("FC"),
+    RESTRUCTURED_DEBT("RB"),
+    OTHER_LOANS("OTL"),
+    PERSONAL_LOAN("PL"),
+    PERSONAL_LOAN_REVOLVING("PLR"),
+    CREDIT_CARD("CC"),
+    CLAIM_PAID_AVAL("CP"),
+    CLAIM_PAID_ACCEPTANCE("CPA"),
+    CLAIM_PAID_LC("CPLC"),
+    CLAIM_PAID_LG("CPLG"),
+    OTHER_CLAIM_PAID("OCP"),
+    INTERNATIONAL_BANKING_FACILITIES("IBF"),
+    INTER_BANK("IB"),
+    PRE_SHIPMENT_FINANCING("PSFP"),
+    LEASING("LS"),
+    HIRE_PURCHASE("HP"),
+    SYNDICATED_LOAN("SL"),
+    STOCK_LOAN("STL");
+
+
+    String code;
+
+    AccountTypeCode(String code){
+        this.code = code;
+    }
+
+    public String value(){
+        return this.code;
+    }
+}

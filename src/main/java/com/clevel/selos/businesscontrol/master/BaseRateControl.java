@@ -22,14 +22,12 @@ import java.util.Map;
 @Stateless
 public class BaseRateControl extends BusinessControl{
 
-    //Initial Map to cache the data of BaseRateContol
-    //Initial mutex object to guaranteed thread safe
-    private static Map<Integer, BaseRateView> baseRateViewMap;
-    private static Object _mutexLock = new Object();
-
     @Inject
     @SELOS
     private Logger logger;
+
+    @Inject
+    private ApplicationCacheLoader cacheLoader;
 
     @Inject
     private BaseRateDAO baseRateDAO;
@@ -38,19 +36,27 @@ public class BaseRateControl extends BusinessControl{
     private BaseRateTransform baseRateTransform;
 
     @Inject
-    public BaseRateControl(){
-    }
+    public BaseRateControl(){}
 
     public BigDecimal getBaseRateValue(BaseRateConfig _baseRate){
+        logger.debug("-- getBaseRateValue --");
         BaseRateView baseRateView = getBaseRate(_baseRate);
-        if(baseRateView == null) return BigDecimal.ZERO;
-        return baseRateView.getValue() == null ? BigDecimal.ZERO :  baseRateView.getValue();
+        if(baseRateView == null || baseRateView.getValue() == null) {
+            logger.debug("-- getBaseRateValue return ZERO");
+            return BigDecimal.ZERO;
+        }
+        logger.debug("-- getBaseRateValue return baseRateView: {}", baseRateView);
+        return baseRateView.getValue();
     }
 
     public BaseRateView getBaseRate(BaseRateConfig _baseRate){
-        if(baseRateViewMap == null)
-            loadData();
+        logger.debug("-- getBaseRate --");
+        Map<Integer, BaseRateView> baseRateViewMap = (Map<Integer, BaseRateView>) cacheLoader.getCacheMap(BaseRate.class.getName());
+        if(baseRateViewMap == null) {
+            baseRateViewMap = loadData();
+        }
         BaseRateView baseRateView = baseRateViewMap.get(_baseRate.value());
+        logger.debug("getBaseRate return baseRateView: {}", baseRateView);
         return baseRateView;
     }
 
@@ -74,34 +80,21 @@ public class BaseRateControl extends BusinessControl{
     /**
      * loadData is for get the data from Database and cache in the MAP.
      */
-    public void loadData(){
-        if(baseRateViewMap == null){
-            synchronized (_mutexLock){
-                if(baseRateViewMap == null)
-                    baseRateViewMap = new HashMap<Integer, BaseRateView>();
-                System.out.println("initial baseRateViewMap obj========");
-            }
-        }
-
+    public Map<Integer, BaseRateView> loadData(){
+        logger.debug("-- loadData --");
+        Map<Integer, BaseRateView> _tmpMap = new HashMap<Integer, BaseRateView>();
         try{
-            Map<Integer, BaseRateView> _tmpMap = new HashMap<Integer, BaseRateView>();
-
             List<BaseRate> _tmpList = baseRateDAO.findAll();
             for(BaseRate baseRate : _tmpList){
                 BaseRateView baseRateView = baseRateTransform.transformToView(baseRate);
                 _tmpMap.put(baseRateView.getId(), baseRateView);
                 logger.debug("baseRateView {}", baseRateView);
-                System.out.println("baseRateView : " + baseRateView);
             }
-
-            synchronized (_mutexLock){
-                baseRateViewMap.clear();
-                baseRateViewMap.putAll(_tmpMap);
-            }
-
+            cacheLoader.setCacheMap(BaseRate.class.getName(), _tmpMap);
         } catch (Exception ex){
             logger.error("Cannot Load BaseRate into Cache {}", ex);
-            ex.printStackTrace();
         }
+        logger.debug("loadData return baseRateView size: {}", _tmpMap.size());
+        return _tmpMap;
     }
 }

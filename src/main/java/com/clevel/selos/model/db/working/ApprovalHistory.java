@@ -37,7 +37,7 @@ public class ApprovalHistory implements Serializable {
     @Column(name = "submit_date")
     private Date submitDate;
 
-    @Column(name = "comments")
+    @Column(name = "comments", length = 2000)
     private String comments;
 
     @Column(name = "approve_decision", columnDefinition = "int default 0")

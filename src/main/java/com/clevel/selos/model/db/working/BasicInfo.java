@@ -170,6 +170,22 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "appeal_resubmit_reason_id")
     private Reason appealResubmitReason;
 
+    @OneToOne
+    @JoinColumn(name = "zm_user_id")
+    private User zmUser;
+
+    @OneToOne
+    @JoinColumn(name = "rgm_user_id")
+    private User rgmUser;
+
+    @OneToOne
+    @JoinColumn(name = "gh_user_id")
+    private User ghUser;
+
+    @OneToOne
+    @JoinColumn(name = "csso_user_id")
+    private User cssoUser;
+
 
     public long getId() {
         return id;
@@ -528,6 +544,38 @@ public class BasicInfo implements Serializable {
 
     public void setAppealResubmitReason(Reason appealResubmitReason) {
         this.appealResubmitReason = appealResubmitReason;
+    }
+
+    public User getZmUser() {
+        return zmUser;
+    }
+
+    public void setZmUser(User zmUser) {
+        this.zmUser = zmUser;
+    }
+
+    public User getRgmUser() {
+        return rgmUser;
+    }
+
+    public void setRgmUser(User rgmUser) {
+        this.rgmUser = rgmUser;
+    }
+
+    public User getGhUser() {
+        return ghUser;
+    }
+
+    public void setGhUser(User ghUser) {
+        this.ghUser = ghUser;
+    }
+
+    public User getCssoUser() {
+        return cssoUser;
+    }
+
+    public void setCssoUser(User cssoUser) {
+        this.cssoUser = cssoUser;
     }
 
     @Override

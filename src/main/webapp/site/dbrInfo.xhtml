@@ -300,8 +300,7 @@
                                                              action="#{dbrInfo.initEditDBRDetail()}"
                                                              oncomplete="dbrDetailDialog.show()"
                                                              process="@this"
-                                                             update=":dbrDetailDlgForm"
-                                                             disabled="#{dbrInfo.isDisabled('related.editButton')}">
+                                                             update=":dbrDetailDlgForm">
                                                 <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
                                                 <f:setPropertyActionListener value="true" target="#{dbrInfo.update}"/>

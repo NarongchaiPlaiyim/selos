@@ -793,8 +793,7 @@
 
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit" process="@this"
-                                                         action = "#{bizInfoSummary.onCheckEdit}"
-                                                         disabled="#{bizInfoSummary.isDisabled('business.editButton')}">
+                                                         action = "#{bizInfoSummary.onCheckEdit}">
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                             <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
                                         </p:commandButton>

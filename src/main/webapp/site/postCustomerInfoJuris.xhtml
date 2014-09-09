@@ -11,6 +11,7 @@
     <title>#{msg.get('app.custInfoJuri.post.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js"/>
 </h:head>
 
 <h:body>
@@ -584,9 +585,7 @@
               style="margin-right:0px !important"
               action="#{postCustomerInfoJuris.onClickLink()}"
               onstart="p_loading_dialog.show()"
-              process="@this"
-              disabled="#{postCustomerInfoJuris.isDisabled('authorized.actionList')}"
-              >
+              process="@this">
               <f:setPropertyActionListener value="#{item}" target="#{postCustomerInfoJuris.selectedCustomer}"/>
           </p:commandButton>
       </p:column>

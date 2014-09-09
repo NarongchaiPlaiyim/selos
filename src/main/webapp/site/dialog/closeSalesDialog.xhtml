@@ -8,23 +8,18 @@
 <p:panel id="closeSalesDlgPanel" styleClass="panel-dialog">
     <table class="content_table_form">
         <tr>
-            <td colspan="2" class="title left">Close Sales</td>
+            <td class="title left top" style="width: 190px;">Remark :</td>
+            <td>
+                <p:inputTextarea value="#{headerController.submitRemark}"
+                                 autoResize="false"
+                                 cols="35"
+                                 rows="5">
+                </p:inputTextarea>
+            </td>
         </tr>
-        <h:panelGroup rendered="#{headerController.submitOverSLA == 0}">
-            <tr>
-                <td class="title left">Remark :</td>
-                <td>
-                    <p:inputTextarea value="#{headerController.submitRemark}"
-                                     autoResize="false"
-                                     cols="35"
-                                     rows="5">
-                    </p:inputTextarea>
-                </td>
-            </tr>
-        </h:panelGroup>
         <h:panelGroup rendered="#{headerController.submitOverSLA == 1}">
             <tr>
-                <td class="title left">Reason for over SLA :</td>
+                <td class="title left top" style="width: 190px;">Reason for over SLA :</td>
                 <td>
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{headerController.reasonId}"
@@ -49,7 +44,7 @@
             </tr>
         </h:panelGroup>
         <tr>
-            <td colspan="2">
+            <td colspan="2" class="center">
                 <p:commandButton id="dlgCloseSalesBtn"
                                  binding="#{btnDlgCloseSales}"
                                  value="#{msg.get('app.button.submit')}"

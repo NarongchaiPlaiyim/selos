@@ -196,7 +196,7 @@ public class PDFOfferLetter implements Serializable {
                         if (Util.safetyList(guarantorDetailViews).size() > 0){
                         log.debug("--Approved Guarantor Size. {}",collateralViews.size());
                             for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
-                                if (!Util.isSafetyList(guarantorDetailView.getProposeCreditInfoDetailViewList())){
+                                if (Util.isSafetyList(guarantorDetailView.getProposeCreditInfoDetailViewList())){
                                     log.debug("--Propose Credit Size. {}",guarantorDetailView.getProposeCreditInfoDetailViewList());
                                     for (ProposeCreditInfoDetailView detailView : guarantorDetailView.getProposeCreditInfoDetailViewList()){
                                         ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
@@ -231,7 +231,7 @@ public class PDFOfferLetter implements Serializable {
             log.debug("--Approved Guarantor Size. {}",guarantorDetailViews.size());
 
                 for(ProposeGuarantorInfoView guarantorDetailView : guarantorDetailViews){
-                    if (!Util.isSafetyList(guarantorDetailView.getProposeCreditInfoDetailViewList())){
+                    if (Util.isSafetyList(guarantorDetailView.getProposeCreditInfoDetailViewList())){
                         log.debug("--Propose Credit Size. {}",guarantorDetailView.getProposeCreditInfoDetailViewList());
                         for (ProposeCreditInfoDetailView detailView : guarantorDetailView.getProposeCreditInfoDetailViewList()){
                             ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();

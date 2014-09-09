@@ -26,7 +26,7 @@ public class ReasonToStepDAO extends GenericDAO<ReasonToStep, Long> {
 
     public List<Reason> getReturnReason(long stepId, long actionId){
         List<Reason> reasonList = new ArrayList<Reason>();
-        log.info("getCancelReason ::: stepId : {}, actionId : {}", stepId, actionId);
+        log.info("getReturnReason ::: stepId : {}, actionId : {}", stepId, actionId);
         String query = "SELECT reason FROM ReasonToStep reasonToStep WHERE reasonToStep.reason.reasonType.id = " + ReasonTypeValue.RETURN_REASON.value() + " AND reasonToStep.step.id = " + stepId + " AND reasonToStep.action.id = " + actionId + " AND reasonToStep.active = 1 order by reasonToStep.reason.code asc";
         reasonList = (List<Reason>) getSession().createQuery(query).list();
 

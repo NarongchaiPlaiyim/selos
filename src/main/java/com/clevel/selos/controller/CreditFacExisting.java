@@ -16,7 +16,7 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.transform.BankAccountStatusTransform;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.BaseRateTransform;
 import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.util.DateTimeUtil;

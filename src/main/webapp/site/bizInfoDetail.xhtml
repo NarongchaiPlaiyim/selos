@@ -361,8 +361,7 @@
                                                          action="#{bizInfoDetail.onEditBizProductDetailView()}"
                                                          update=":bizProductViewDlgForm"
                                                          process=":frmMain:bizProductViewTable"
-                                                         oncomplete="bizProductViewDlg.show();"
-                                                         disabled="#{bizInfoDetail.isDisabled('saveButton')}">
+                                                         oncomplete="bizProductViewDlg.show();">
                                             <f:setPropertyActionListener value="#{bizProductDetailView}"
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
@@ -475,8 +474,7 @@
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
                                                              update=":stakeholderViewDlgForm,:frmMain:supplierTable,:stakeholderViewDialog"
                                                              process=":frmMain:supplierTable"
-                                                             oncomplete="stakeholderViewDlg.show();"
-                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
+                                                             oncomplete="stakeholderViewDlg.show();">
                                                 <f:setPropertyActionListener value="1"
                                                                              target="#{bizInfoDetail.stakeType}"/>
                                                 <f:setPropertyActionListener value="#{supplierItem}"
@@ -676,8 +674,7 @@
                                                              action="#{bizInfoDetail.onEditBizStakeHolderDetailView}"
                                                              update=":stakeholderViewDlgForm,:frmMain:buyerTable,:stakeholderViewDialog"
                                                              process=":frmMain:buyerTable"
-                                                             oncomplete="stakeholderViewDlg.show();"
-                                                             disabled="#{bizInfoDetail.isDisabled('saveButton')}">
+                                                             oncomplete="stakeholderViewDlg.show();">
                                                 <f:setPropertyActionListener value="2"
                                                                              target="#{bizInfoDetail.stakeType}"/>
                                                 <f:setPropertyActionListener value="#{buyerItem}"

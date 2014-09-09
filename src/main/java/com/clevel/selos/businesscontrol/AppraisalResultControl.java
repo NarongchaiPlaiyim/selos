@@ -10,6 +10,7 @@ import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -96,18 +97,14 @@ public class AppraisalResultControl extends BusinessControl {
             newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
             if(!Util.isNull(newCreditFacility)){
-                List<ProposeCollateralInfo> newCollateralListTypeP = null;
-                List<ProposeCollateralInfo> newCollateralListTypeA2 = null;
+                List<ProposeCollateralInfo> newCollateralListTypeAll = null;
 
-                newCollateralListTypeP = proposeCollateralInfoDAO.findNewCollateralByTypeP(newCreditFacility);//normal query
-                newCollateralListTypeA2 = proposeCollateralInfoDAO.findNewCollateralByTypeA2(newCreditFacility);
+               newCollateralListTypeAll = proposeCollateralInfoDAO.findNewCollateralByTypePorA(newCreditFacility); //getProposeType A or P
 
                 newCollateralList = new ArrayList<ProposeCollateralInfo>();
-                if(Util.isSafetyList(newCollateralListTypeP)){
-                    newCollateralList.addAll(newCollateralListTypeP);
-                }
-                if(Util.isSafetyList(newCollateralListTypeA2)){
-                    newCollateralList.addAll(newCollateralListTypeA2);
+
+                if (Util.isSafetyList(newCollateralListTypeAll)){
+                    newCollateralList.addAll(newCollateralListTypeAll);
                 }
 
                 List<ProposeCollateralInfo> tempNewCollateralList = new ArrayList<ProposeCollateralInfo>();
@@ -115,6 +112,7 @@ public class AppraisalResultControl extends BusinessControl {
                     newCollateral.setProposeCollateralInfoHeadList(proposeCollateralInfoHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
                     tempNewCollateralList.add(newCollateral);
                 }
+
                 newCollateralViewList = proposeLineTransform.transformProposeCollateralToViewList(tempNewCollateralList, ProposeType.BOTH);
                 appraisalView.setNewCollateralViewList(newCollateralViewList);
             } else {
@@ -125,6 +123,91 @@ public class AppraisalResultControl extends BusinessControl {
         return appraisalView;
     }
 
+    public void onSaveAppraisalResultModify(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
+        log.debug("onSaveAppraisalResultModify ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
+        User currentUser = getCurrentUser();
+
+        if (!Util.isNull(appraisalView)){
+            newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+            if (!Util.isNull(newCreditFacility)){
+                final List<ProposeCollateralInfo> newCollateralList = proposeCollateralInfoDAO.findNewCollateralByTypePorA(newCreditFacility);
+                if (Util.isSafetyList(newCollateralList)){
+                    log.debug("## newCollateralList.size() ## [{}]",newCollateralList.size());
+                    for (ProposeCollateralInfo proposeCollateralInfo : newCollateralList){
+                        final List<ProposeCollateralInfoHead> collateralInfoHeadList = proposeCollateralInfo.getProposeCollateralInfoHeadList();
+                        if (Util.isSafetyList(collateralInfoHeadList)){
+                            log.debug("## collateralInfoHeadList.size() ## [{}]",collateralInfoHeadList.size());
+                            for (ProposeCollateralInfoHead collateralInfoHead : collateralInfoHeadList){
+                                final List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = collateralInfoHead.getProposeCollateralInfoSubList();
+                                if (Util.isSafetyList(proposeCollateralInfoSubList)){
+                                    log.debug("## proposeCollateralInfoSubList.size() ## [{}]",proposeCollateralInfoSubList.size());
+                                    for (ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoSubList){
+                                        final List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = proposeCollateralSubRelatedDAO.findByMainCollSubId(proposeCollateralInfoSub.getId());
+                                        if (Util.isSafetyList(proposeCollateralSubRelatedList)){
+                                            log.debug("## proposeCollateralSubRelatedList.size() ## [{}]",proposeCollateralSubRelatedList.size());
+                                            for (ProposeCollateralSubRelated proposeCollateralSubRelated : proposeCollateralSubRelatedList){
+                                                proposeCollateralSubRelatedDAO.delete(proposeCollateralSubRelated);
+                                                log.debug("-------- ProposeCollateralSubRelated.id[{}] was deleted", proposeCollateralSubRelated.getId());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        proposeCollateralInfoDAO.delete(proposeCollateralInfo);
+                        log.debug("-- ProposeCollateralInfo.id[{}] was deleted", proposeCollateralInfo.getId());
+                    }
+                }
+            }
+        }
+
+//        if (!Util.isNull(appraisalView)){
+//            for (ProposeCollateralInfoView view : appraisalView.getNewCollateralViewList()){
+//                log.debug("## view.getId() ## {}",view.getId());
+//                final ProposeCollateralInfo proposeCollateralInfo = proposeCollateralInfoDAO.findById(view.getId());
+//                log.debug("## proposeCollateralInfo ##. {}",proposeCollateralInfo);
+//                if(!Util.isNull(proposeCollateralInfo)){
+//                    proposeCollateralInfoList.add(proposeCollateralInfo);
+//                }
+//            }
+//
+//            log.debug("-- ProposeCollateralInfoList().size()[{}]", proposeCollateralInfoList.size());
+//            if(Util.isSafetyList(proposeCollateralInfoList)){
+//                for(final ProposeCollateralInfo proposeCollateralInfo : proposeCollateralInfoList){
+//                    log.debug("-- ProposeCollateralInfo.id[{}]", proposeCollateralInfo.getId());
+//                    final List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList = proposeCollateralInfo.getProposeCollateralInfoHeadList();
+//                    if(Util.isSafetyList(proposeCollateralInfoHeadList)){
+//                        for(final ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfoHeadList){
+//                            log.debug("---- ProposeCollateralInfoHead.id[{}]", proposeCollateralInfoHead.getId());
+//                            final List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = proposeCollateralInfoHead.getProposeCollateralInfoSubList();
+//                            if(Util.isSafetyList(proposeCollateralInfoSubList)){
+//                                for(final ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoSubList){
+//                                    log.debug("------ ProposeCollateralInfoSub.id[{}]", proposeCollateralInfoSub.getId());
+//                                    final List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = proposeCollateralSubRelatedDAO.findByMainCollSubId(proposeCollateralInfoSub.getId());
+//                                    for(final ProposeCollateralSubRelated proposeCollateralSubRelated : proposeCollateralSubRelatedList){
+//                                        proposeCollateralSubRelatedDAO.delete(proposeCollateralSubRelated);
+//                                        log.debug("-------- ProposeCollateralSubRelated.id[{}] was deleted", proposeCollateralSubRelated.getId());
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    proposeCollateralInfoDAO.delete(proposeCollateralInfo);
+//                    log.debug("-- ProposeCollateralInfo.id[{}] was deleted", proposeCollateralInfo.getId());
+//                }
+//            }
+//        }
+
+        if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
+            if(Util.isSafetyList(appraisalView.getNewCollateralViewList())){
+                log.debug("-- ProposeCollateralInfoViewList().size()[{}]", appraisalView.getNewCollateralViewList().size());
+                insertToDB(appraisalView.getNewCollateralViewList(), currentUser);
+            }
+        }
+
+        log.debug("-- done.");
+    }
+
     public void onSaveAppraisalResult(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
         log.debug("onSaveAppraisalResult ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
@@ -132,9 +215,10 @@ public class AppraisalResultControl extends BusinessControl {
         List<ProposeCollateralInfo> proposeCollateralInfoList = null;
         if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getRemoveCollListId())){
             proposeCollateralInfoList = new ArrayList<ProposeCollateralInfo>();
-            log.debug("--[NEW] ProposeCollateralInfoList");
+            log.debug("--[NEW] ProposeCollateralInfoList. [{}]",appraisalView.getRemoveCollListId());
             for(final Long proposeCollateralInfoId : appraisalView.getRemoveCollListId()){
                 final ProposeCollateralInfo proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoId);
+                log.debug("## proposeCollateralInfo ##. {}",proposeCollateralInfo);
                 if(!Util.isNull(proposeCollateralInfo)){
                     proposeCollateralInfoList.add(proposeCollateralInfo);
                 }
@@ -168,10 +252,10 @@ public class AppraisalResultControl extends BusinessControl {
         }
 
         if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
-            final List<ProposeCollateralInfoView> proposeCollateralInfoViewList = appraisalView.getNewCollateralViewList();
-            if(Util.isSafetyList(proposeCollateralInfoViewList)){
-                log.debug("-- ProposeCollateralInfoViewList().size()[{}]", proposeCollateralInfoViewList.size());
-                insertToDB(proposeCollateralInfoViewList, currentUser);
+//            final List<ProposeCollateralInfoView> proposeCollateralInfoViewList = appraisalView.getNewCollateralViewList();
+            if(Util.isSafetyList(appraisalView.getNewCollateralViewList())){
+                log.debug("-- ProposeCollateralInfoViewList().size()[{}]", appraisalView.getNewCollateralViewList().size());
+                insertToDB(appraisalView.getNewCollateralViewList(), currentUser);
             }
         }
 
@@ -188,11 +272,12 @@ public class AppraisalResultControl extends BusinessControl {
         } else if(!Util.isNull(workCasePrescreen)){
             log.debug("-- WorkCasePrescreen.id[{}]", workCasePrescreen.getId());
         }
-        log.debug("-- ProposeLine.id[{}]", newCreditFacility.getId());
 
+        log.debug("--newCollateralViewList.size() [{}]",newCollateralViewList.size());
         for(final ProposeCollateralInfoView proposeCollateralInfoView : newCollateralViewList) {
-            proposeCollateralInfoList.add(proposeLineTransform.transformProposeCollateralToModel(workCase, newCreditFacility, proposeCollateralInfoView, user, ProposeType.A));
+            proposeCollateralInfoList.add(proposeLineTransform.transformProposeCollateralToModelByAppraisalResult(workCase, newCreditFacility, proposeCollateralInfoView, user, ProposeType.A));
         }
+        log.debug("--proposeCollateralInfoList.size() [{}]",proposeCollateralInfoList.size());
 
         for (final ProposeCollateralInfo proposeCollateralInfo : proposeCollateralInfoList) {
             log.debug("-- ProposeCollateralInfo.id[{}]", proposeCollateralInfo.getId());
