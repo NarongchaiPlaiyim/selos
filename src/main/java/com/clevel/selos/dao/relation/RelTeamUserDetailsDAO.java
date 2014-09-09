@@ -56,7 +56,7 @@ public class RelTeamUserDetailsDAO extends GenericDAO<RelTeamUserDetails, Intege
         criteria.add(Restrictions.eq("teamFlag", "Y"));
         List<RelTeamUserDetails> relTeamUserDetailsList = criteria.list();
         if(relTeamUserDetailsList!=null && relTeamUserDetailsList.size() > 0){
-            return relTeamUserDetailsList.get(0).getTeam_Id();
+            return relTeamUserDetailsList.get(0).getTlThId();
         }
         return 0;
     }
