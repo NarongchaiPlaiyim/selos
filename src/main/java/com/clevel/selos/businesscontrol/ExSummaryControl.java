@@ -959,18 +959,20 @@ public class ExSummaryControl extends BusinessControl {
 
     //Borrower Characteristic - groupExposureBDM , groupExposureUW ( Line 58-59 )
     //Decision
-//    groupExposureBDM - Group Total Exposure + Total Propose Credit
-//    groupExposureUW - Group Total Exposure + Total Approved Credit
+//    groupExposureBDM - Group Total Exposure + Total Propose Credit > Change to Get Total Group Exposure on Propose Page ( Total Group Exposure = Total Group Exposure ( Existing ) + Total Propose Credit )
+//    groupExposureUW - Group Total Exposure + Total Approved Credit > Change to Get Total Group Exposure on Decision Page ( Total Group Exposure = Total Group Exposure ( Existing ) + Total Approve Credit )
     public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = null;
         BigDecimal groupExposureUW = null;
-        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
-            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
+            groupExposureBDM = proposeLine.getTotalExposure();
             if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
-                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+                groupExposureUW = decision.getTotalApproveExposure();
+            } else {
+                groupExposureUW = proposeLine.getTotalExposure();
             }
         }
 
