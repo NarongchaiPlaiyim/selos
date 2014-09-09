@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 
 import javax.persistence.*;
@@ -44,6 +45,10 @@ public class WorkCasePrescreen extends AbstractWorkCase {
 
     @Column(name = "ncb_reject_flag", columnDefinition = "int default 0")
     private int ncbRejectFlag;
+
+    @OneToOne
+    @JoinColumn(name = "appeal_resubmit_reason_id")
+    private Reason appealResubmitReason;
 
     /*@Column(name = "request_type_id")
     private int requestTypeId;*/
@@ -130,5 +135,13 @@ public class WorkCasePrescreen extends AbstractWorkCase {
 
     public void setNcbRejectFlag(int ncbRejectFlag) {
         this.ncbRejectFlag = ncbRejectFlag;
+    }
+
+    public Reason getAppealResubmitReason() {
+        return appealResubmitReason;
+    }
+
+    public void setAppealResubmitReason(Reason appealResubmitReason) {
+        this.appealResubmitReason = appealResubmitReason;
     }
 }

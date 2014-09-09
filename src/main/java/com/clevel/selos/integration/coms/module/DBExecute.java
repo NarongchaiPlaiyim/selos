@@ -328,7 +328,7 @@ public class DBExecute implements Serializable {
                                         "APPR_PRICE_TR_ONE.MATI_PRICE as matiPrice, " +
                                         "APPR_PRICE_TR_ONE.ONL_TYPE as onlType " +
                                     "FROM APPR_PRICE_TR_ONE " +
-                                    "LEFT JOIN APPR_PRICE_TR_OWNER ON APPR_PRICE_TR_ONE.HEAD_COL_ID = APPR_PRICE_TR_OWNER.HEAD_COL_ID AND APPR_PRICE_TR_ONE.COL_ID = APPR_PRICE_TR_OWNER.ONE_COL_ID " +
+                                    "LEFT JOIN APPR_PRICE_TR_OWNER ON APPR_PRICE_TR_ONE.HEAD_COL_ID = APPR_PRICE_TR_OWNER.HEAD_COL_ID AND APPR_PRICE_TR_ONE.COL_ID = APPR_PRICE_TR_OWNER.ONE_COL_ID AND APPR_PRICE_TR_ONE.JOB_NO = APPR_PRICE_TR_OWNER.JOB_NO " +
                                     "LEFT JOIN ONL_PERSON ON APPR_PRICE_TR_OWNER.CUS_ID = ONL_PERSON.CUS_ID " +
                                     "LEFT JOIN PRENAME ON ONL_PERSON.PRE_NAME = PRENAME.PRE_ID " +
                                     "WHERE APPR_PRICE_TR_ONE.HEAD_COL_ID = ? " +
@@ -350,7 +350,7 @@ public class DBExecute implements Serializable {
                                         "A.MATI_PRICE as matiPrice, " +
                                         "A.ONL_TYPE as onlType " +
                                     "FROM "+schema+".APPR_PRICE_TR_ONE A " +
-                                    "LEFT JOIN "+schema+".APPR_PRICE_TR_OWNER B ON A.HEAD_COL_ID = B.HEAD_COL_ID AND A.COL_ID = B.ONE_COL_ID " +
+                                    "LEFT JOIN "+schema+".APPR_PRICE_TR_OWNER B ON A.HEAD_COL_ID = B.HEAD_COL_ID AND A.COL_ID = B.ONE_COL_ID AND A.JOB_NO = B.JOB_NO " +
                                     "LEFT JOIN "+schema+".ONL_PERSON C ON B.CUS_ID = C.CUS_ID " +
                                     "LEFT JOIN "+schema+".PRENAME D ON C.PRE_NAME = D.PRE_ID " +
                                     "WHERE A.HEAD_COL_ID = ? " +

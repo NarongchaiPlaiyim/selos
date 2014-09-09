@@ -1059,7 +1059,7 @@ public class BRMSControl extends BusinessControl {
                 Step step =  workCase.getStep();
                 if(step!=null){
                     if(step.getId() == StepValue.FULLAPP_ABDM.value()){//2023
-                        step = stepDAO.findById(Util.parseLong(StepValue.FULLAPP_BDM_SSO_ABDM.value(), 1));
+                        step = stepDAO.findById(Util.parseLong(StepValue.FULLAPP_BDM.value(), 1));
                     }
                 }
                 Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, step);

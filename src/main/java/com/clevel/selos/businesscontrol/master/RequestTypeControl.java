@@ -35,6 +35,7 @@ public class RequestTypeControl extends BusinessControl{
     public RequestTypeControl(){}
 
     public List<SelectItem> getRequestTypeViewActive(){
+        logger.debug("-- getRequestTypeViewActive");
         Map<Integer, RequestTypeView> _tmpMap = getInternalCacheMap();
         List<SelectItem> selectItemList = new ArrayList<SelectItem>();
         for(RequestTypeView requestTypeView : _tmpMap.values()){
@@ -43,25 +44,33 @@ public class RequestTypeControl extends BusinessControl{
                 selectItem.setLabel(requestTypeView.getName());
                 selectItem.setValue(requestTypeView.getId());
                 selectItemList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getRequestTypeViewActive return RequestTypeView size:{}", selectItemList.size());
         return selectItemList;
     }
 
     private Map<Integer, RequestTypeView> loadData(){
+        logger.debug("-- begin loadData --");
         List<RequestType> requestTypeList = requestTypeDAO.findAll();
         Map<Integer, RequestTypeView> _tmpMap = requestTypeTransform.transformToCache(requestTypeList);
-        if(_tmpMap == null || _tmpMap.size() == 0)
+        if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("return empty RequestTypeView");
             return new ConcurrentHashMap<Integer, RequestTypeView>();
+        }
         else {
             cacheLoader.setCacheMap(RequestType.class.getName(), _tmpMap);
+            logger.debug("loadData return RequestTypeView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, RequestTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, RequestTypeView> _tmpMap = cacheLoader.getCacheMap(RequestType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("RequestTypeView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

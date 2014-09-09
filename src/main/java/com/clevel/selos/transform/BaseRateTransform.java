@@ -44,7 +44,7 @@ public class BaseRateTransform extends Transform {
     }
 
     public Map<Integer, BaseRateView> transformToCache(List<BaseRate> baseRateList){
-        if(baseRateList == null)
+        if(baseRateList == null || baseRateList.size() == 0)
             return null;
         Map<Integer, BaseRateView> _tmpMap = new ConcurrentHashMap<Integer, BaseRateView>();
         for(BaseRate baseRate : baseRateList){

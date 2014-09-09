@@ -89,7 +89,7 @@ public class MandatoryFieldsControl extends BusinessControl {
         }
     }
 
-    public List<FieldsControlView> getFieldsControlView(long workCaseId, long stepId, Screen screen, String caseOwnerUserId) {
+    public List<FieldsControlView> getFieldsControlView(long workCaseId, long stepId, long statusId, Screen screen, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
         if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
             if (stepId <= 0 || workCaseId <= 0 || screen == null)
@@ -97,7 +97,7 @@ public class MandatoryFieldsControl extends BusinessControl {
             User user = getCurrentUser();
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             int productGroupId = workCase.getProductGroup().getId();
-            log.debug("get Field control for screen : {}, stepId : {}, role : {}", screen, stepId, user.getRole());
+            log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, role : {}", screen, stepId, statusId, user.getRole());
             List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
             List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
             log.debug("Result fields control : {} ", fieldsControlViewList.size());

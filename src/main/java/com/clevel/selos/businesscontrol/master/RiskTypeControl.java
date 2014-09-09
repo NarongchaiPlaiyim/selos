@@ -57,13 +57,16 @@ public class RiskTypeControl extends BusinessControl {
             return new ConcurrentHashMap<Integer, RiskTypeView>();
         } else {
             cacheLoader.setCacheMap(RiskType.class.getName(), _tmpMap);
+            logger.debug("loadData return RiskTypeView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, RiskTypeView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, RiskTypeView> _tmpMap = cacheLoader.getCacheMap(RiskType.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("RiskTypeView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

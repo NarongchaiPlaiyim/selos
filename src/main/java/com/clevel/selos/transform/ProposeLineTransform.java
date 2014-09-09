@@ -1130,6 +1130,7 @@ public class ProposeLineTransform extends Transform {
         ProposeCollateralInfo proposeCollateralInfo = null;
         if(!Util.isNull(proposeCollateralInfoView)){
             proposeCollateralInfo = new ProposeCollateralInfo();
+            log.debug("## proposeCollateralInfoView.getId() [{}] ##",proposeCollateralInfoView.getId());
             if (!Util.isZero(proposeCollateralInfoView.getId())) {
                 proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoView.getId());
             } else {
@@ -1837,5 +1838,201 @@ public class ProposeLineTransform extends Transform {
             proposeLine.setProposeCreditInfoList(transformProposeCreditToModelList(proposeLine, decisionView.getApproveCreditList(), workCase, user, proposeType));
         }
         return proposeLine;
+    }
+
+    public ProposeCollateralInfo transformProposeCollateralToModelByAppraisalResult(WorkCase workCase, ProposeLine proposeLine, ProposeCollateralInfoView proposeCollateralInfoView, User user, ProposeType proposeType) {
+        ProposeCollateralInfo proposeCollateralInfo = null;
+        if(!Util.isNull(proposeCollateralInfoView)){
+            proposeCollateralInfo = new ProposeCollateralInfo();
+            log.debug("## proposeCollateralInfoView.getId() [{}] ##",proposeCollateralInfoView.getId());
+//            if (!Util.isZero(proposeCollateralInfoView.getId())) {
+//                proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoView.getId());
+//            } else {
+                proposeCollateralInfo.setCreateDate(new Date());
+                proposeCollateralInfo.setCreateBy(user);
+//            }
+            proposeCollateralInfo.setModifyDate(new Date());
+            proposeCollateralInfo.setModifyBy(user);
+
+            proposeCollateralInfo.setProposeType(proposeType);
+            proposeCollateralInfo.setProposeLine(proposeLine);
+            if(!Util.isNull(workCase)){
+                if(!Util.isZero(workCase.getId())) {
+                    proposeCollateralInfo.setWorkCase(workCase);
+                } else {
+                    proposeCollateralInfo.setWorkCase(null);
+                }
+            } else {
+                proposeCollateralInfo.setWorkCase(null);
+            }
+
+            proposeCollateralInfo.setAppraisalRequest(proposeCollateralInfoView.getAppraisalRequest());
+            proposeCollateralInfo.setComs(Util.isTrue(proposeCollateralInfoView.isComs()));
+            proposeCollateralInfo.setJobID(proposeCollateralInfoView.getJobID());
+            proposeCollateralInfo.setAppraisalDate(proposeCollateralInfoView.getAppraisalDate());
+            proposeCollateralInfo.setNumberMonthsFromApprDate(proposeCollateralInfoView.getNumberMonthsFromApprDate());
+            proposeCollateralInfo.setAadDecision(proposeCollateralInfoView.getAadDecision());
+            proposeCollateralInfo.setAadDecisionReason(proposeCollateralInfoView.getAadDecisionReason());
+            proposeCollateralInfo.setAadDecisionReasonDetail(proposeCollateralInfoView.getAadDecisionReasonDetail());
+            proposeCollateralInfo.setUsage(proposeCollateralInfoView.getUsage());
+            proposeCollateralInfo.setTypeOfUsage(proposeCollateralInfoView.getTypeOfUsage());
+            proposeCollateralInfo.setUwRemark(proposeCollateralInfoView.getUwRemark());
+            proposeCollateralInfo.setMortgageCondition(proposeCollateralInfoView.getMortgageCondition());
+            proposeCollateralInfo.setMortgageConditionDetail(proposeCollateralInfoView.getMortgageConditionDetail());
+            proposeCollateralInfo.setBdmComments(proposeCollateralInfoView.getBdmComments());
+            proposeCollateralInfo.setUwDecision(proposeCollateralInfoView.getUwDecision());
+
+            final List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList = transformProposeCollateralHeadToModelListByAppraisalResult(workCase, proposeCollateralInfo, proposeCollateralInfoView.getProposeCollateralInfoHeadViewList(), user, proposeType);
+            if(Util.isSafetyList(proposeCollateralInfoHeadList)){
+                proposeCollateralInfo.setProposeCollateralInfoHeadList(proposeCollateralInfoHeadList);
+            } else {
+                proposeCollateralInfo.setProposeCollateralInfoHeadList(null);
+            }
+
+            final List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = null;
+            if(Util.isSafetyList(proposeCollateralInfoHeadList)){
+                proposeCollateralInfo.setProposeCollateralInfoRelationList(proposeCollateralInfoRelationList);
+            } else {
+                proposeCollateralInfo.setProposeCollateralInfoRelationList(null);
+            }
+
+
+        }
+
+        return proposeCollateralInfo;
+    }
+
+    public List<ProposeCollateralInfoHead> transformProposeCollateralHeadToModelListByAppraisalResult(WorkCase workCase, ProposeCollateralInfo proposeCollateralInfo, List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList, User user, ProposeType proposeType) {
+        List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList = new ArrayList<ProposeCollateralInfoHead>();
+        if (!Util.isNull(proposeCollateralInfoHeadViewList)) {
+            for (ProposeCollateralInfoHeadView proColHeadView : proposeCollateralInfoHeadViewList) {
+                ProposeCollateralInfoHead proposeColHead = transformProposeCollateralHeadToModelByAppraisalResult(workCase, proposeCollateralInfo, proColHeadView, user, proposeType);
+                proposeCollateralInfoHeadList.add(proposeColHead);
+            }
+        }
+        return proposeCollateralInfoHeadList;
+    }
+
+    public ProposeCollateralInfoHead transformProposeCollateralHeadToModelByAppraisalResult(WorkCase workCase, ProposeCollateralInfo proposeCollateralInfo, ProposeCollateralInfoHeadView proposeCollateralInfoHeadView, User user, ProposeType proposeType) {
+        ProposeCollateralInfoHead proposeCollateralInfoHead = null;
+        if(!Util.isNull(proposeCollateralInfoHeadView)){
+            proposeCollateralInfoHead = new ProposeCollateralInfoHead();
+//            if (!Util.isZero(proposeCollateralInfoHeadView.getId())) {
+//                proposeCollateralInfoHead = proposeCollateralInfoHeadDAO.findById(proposeCollateralInfoHeadView.getId());
+//            } else {
+                proposeCollateralInfoHead.setCreateDate(new Date());
+                proposeCollateralInfoHead.setCreateBy(user);
+//            }
+
+            proposeCollateralInfoHead.setModifyDate(new Date());
+            proposeCollateralInfoHead.setModifyBy(user);
+            proposeCollateralInfoHead.setProposeType(proposeType);
+
+            if(!Util.isNull(proposeCollateralInfoHeadView.getPotentialCollateral()) && !Util.isZero(proposeCollateralInfoHeadView.getPotentialCollateral().getId())){
+                proposeCollateralInfoHead.setPotentialCollateral(proposeCollateralInfoHeadView.getPotentialCollateral());
+            } else {
+                proposeCollateralInfoHead.setPotentialCollateral(null);
+            }
+
+            if(!Util.isNull(proposeCollateralInfoHeadView.getTcgCollateralType()) && !Util.isZero(proposeCollateralInfoHeadView.getTcgCollateralType().getId())){
+                proposeCollateralInfoHead.setCollateralType(proposeCollateralInfoHeadView.getTcgCollateralType());
+            } else {
+                proposeCollateralInfoHead.setCollateralType(null);
+            }
+
+            if(!Util.isNull(proposeCollateralInfoHeadView.getHeadCollType()) && !Util.isZero(proposeCollateralInfoHeadView.getHeadCollType().getId())){
+                proposeCollateralInfoHead.setHeadCollType(proposeCollateralInfoHeadView.getHeadCollType());
+            } else {
+                proposeCollateralInfoHead.setHeadCollType(null);
+            }
+
+            proposeCollateralInfoHead.setExistingCredit(proposeCollateralInfoHeadView.getExistingCredit());
+            proposeCollateralInfoHead.setTitleDeed(proposeCollateralInfoHeadView.getTitleDeed());
+            proposeCollateralInfoHead.setCollateralLocation(proposeCollateralInfoHeadView.getCollateralLocation());
+            proposeCollateralInfoHead.setAppraisalValue(proposeCollateralInfoHeadView.getAppraisalValue());
+            proposeCollateralInfoHead.setInsuranceCompany(proposeCollateralInfoHeadView.getInsuranceCompany());
+            proposeCollateralInfoHead.setProposeCollateral(proposeCollateralInfo);
+
+            final List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = transformProposeCollateralSubToModelListByAppraisalResult(workCase, proposeCollateralInfoHead, proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList(), user, proposeType);
+            if(Util.isSafetyList(proposeCollateralInfoSubList)){
+                proposeCollateralInfoHead.setProposeCollateralInfoSubList(proposeCollateralInfoSubList);
+            } else {
+                proposeCollateralInfoHead.setProposeCollateralInfoSubList(null);
+            }
+        }
+
+        return proposeCollateralInfoHead;
+    }
+
+    public List<ProposeCollateralInfoSub> transformProposeCollateralSubToModelListByAppraisalResult(WorkCase workCase, ProposeCollateralInfoHead proposeCollateralInfoHead, List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList, User user, ProposeType proposeType) {
+        List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = new ArrayList<ProposeCollateralInfoSub>();
+        if (!Util.isNull(proposeCollateralInfoSubViewList)) {
+            for (ProposeCollateralInfoSubView proSubView : proposeCollateralInfoSubViewList) {
+                ProposeCollateralInfoSub proposeColSub = transformProposeCollateralSubToModelByAppraisalResult(workCase, proposeCollateralInfoHead, proSubView, user, proposeType);
+                proposeCollateralInfoSubList.add(proposeColSub);
+            }
+        }
+        return proposeCollateralInfoSubList;
+    }
+
+    public ProposeCollateralInfoSub transformProposeCollateralSubToModelByAppraisalResult(WorkCase workCase, ProposeCollateralInfoHead proposeCollateralInfoHead, ProposeCollateralInfoSubView proposeCollateralInfoSubView, User user, ProposeType proposeType) {
+        ProposeCollateralInfoSub proposeCollateralInfoSub = null;
+        if(!Util.isNull(proposeCollateralInfoSubView)){
+            proposeCollateralInfoSub = new ProposeCollateralInfoSub();
+//            if (!Util.isZero(proposeCollateralInfoSubView.getId())) {
+//                proposeCollateralInfoSub = proposeCollateralInfoSubDAO.findById(proposeCollateralInfoSubView.getId());
+//            } else {
+                proposeCollateralInfoSub.setCreateDate(new Date());
+                proposeCollateralInfoSub.setCreateBy(user);
+//            }
+            proposeCollateralInfoSub.setModifyDate(new Date());
+            proposeCollateralInfoSub.setModifyBy(user);
+
+            if(!Util.isNull(proposeCollateralInfoSubView.getSubCollateralType()) && !Util.isZero(proposeCollateralInfoSubView.getSubCollateralType().getId())){
+                proposeCollateralInfoSub.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+            } else {
+                proposeCollateralInfoSub.setSubCollateralType(null);
+            }
+
+
+
+            proposeCollateralInfoSub.setTitleDeed(proposeCollateralInfoSubView.getTitleDeed());
+            proposeCollateralInfoSub.setAddress(proposeCollateralInfoSubView.getAddress());
+            proposeCollateralInfoSub.setLandOffice(proposeCollateralInfoSubView.getLandOffice());
+            proposeCollateralInfoSub.setCollateralOwnerAAD(proposeCollateralInfoSubView.getCollateralOwnerAAD());
+            proposeCollateralInfoSub.setAppraisalValue(proposeCollateralInfoSubView.getAppraisalValue());
+            proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
+            proposeCollateralInfoSub.setSubId(proposeCollateralInfoSubView.getSubId());
+
+            proposeCollateralInfoSub.setProposeCollateralHead(proposeCollateralInfoHead);
+
+            final List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList = transformProposeCollateralSubOwnerToModelList(workCase, proposeCollateralInfoSub, proposeCollateralInfoSubView.getCollateralOwnerUWList(), proposeType);
+            if(Util.isSafetyList(proposeCollateralSubOwnerList)){
+                proposeCollateralInfoSub.setProposeCollateralSubOwnerList(proposeCollateralSubOwnerList);
+            } else {
+                proposeCollateralInfoSub.setProposeCollateralSubOwnerList(null);
+            }
+
+            final List<ProposeCollateralSubMortgage> proposeCollateralSubMortgageList = transformProposeCollateralSubMortgageToModelList(workCase, proposeCollateralInfoSub, proposeCollateralInfoSubView.getMortgageList(), proposeType);
+            if(Util.isSafetyList(proposeCollateralSubMortgageList)){
+                proposeCollateralInfoSub.setProposeCollateralSubMortgageList(proposeCollateralSubMortgageList);
+            } else {
+                proposeCollateralInfoSub.setProposeCollateralSubMortgageList(null);
+            }
+
+//            //TODO
+//            final List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = transformProposeCollateralSubRelatedToModelList(workCase, proposeCollateralInfoSub, proposeCollateralInfoSubView.get, proposeType);
+//            if(Util.isSafetyList(proposeCollateralSubMortgageList)){
+//                proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
+//            } else {
+            proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
+//            }
+
+
+
+
+        }
+
+        return proposeCollateralInfoSub;
     }
 }

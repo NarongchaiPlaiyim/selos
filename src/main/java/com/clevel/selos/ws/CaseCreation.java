@@ -15,7 +15,6 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -25,6 +24,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -363,7 +363,12 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                     return response;
                 } else {
                     //validate existing reason in master
-                    List<Reason> reasonList = reasonDAO.getListByCodeAndReasonType(reason.trim(), ReasonTypeValue.APPEAL_REASON.value());
+                    List<Reason> reasonList = new ArrayList<Reason>();
+                    if(requestType == CaseRequestTypes.APPEAL_CASE.getValue()){
+                        reasonList = reasonDAO.getListByCodeAndReasonType(reason.trim(), ReasonTypeValue.APPEAL_REASON.value());
+                    }else if(requestType == CaseRequestTypes.RESUBMIT_CASE.getValue()){
+                        reasonList = reasonDAO.getListByCodeAndReasonType(reason.trim(), ReasonTypeValue.RESUBMIT_REASON.value());
+                    }
                     if(reasonList==null || (reasonList!=null && reasonList.size()==0)){
                         wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.INVALID_REASON, reason));
                         response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.INVALID_REASON, reason), "");

@@ -36,21 +36,28 @@ public class BaseRateControl extends BusinessControl{
     private BaseRateTransform baseRateTransform;
 
     @Inject
-    public BaseRateControl(){
-    }
+    public BaseRateControl(){}
 
     public BigDecimal getBaseRateValue(BaseRateConfig _baseRate){
+        logger.debug("-- getBaseRateValue --");
         BaseRateView baseRateView = getBaseRate(_baseRate);
-        if(baseRateView == null) return BigDecimal.ZERO;
-        return baseRateView.getValue() == null ? BigDecimal.ZERO :  baseRateView.getValue();
+        if(baseRateView == null || baseRateView.getValue() == null) {
+            logger.debug("-- getBaseRateValue return ZERO");
+            return BigDecimal.ZERO;
+        }
+        logger.debug("-- getBaseRateValue return baseRateView: {}", baseRateView);
+        return baseRateView.getValue();
     }
 
     public BaseRateView getBaseRate(BaseRateConfig _baseRate){
+        logger.debug("-- getBaseRate --");
         Map<Integer, BaseRateView> baseRateViewMap = (Map<Integer, BaseRateView>) cacheLoader.getCacheMap(BaseRate.class.getName());
         if(baseRateViewMap == null) {
             baseRateViewMap = loadData();
         }
-        return baseRateViewMap.get(_baseRate.value());
+        BaseRateView baseRateView = baseRateViewMap.get(_baseRate.value());
+        logger.debug("getBaseRate return baseRateView: {}", baseRateView);
+        return baseRateView;
     }
 
     public BigDecimal getDBRInterest(){
@@ -74,9 +81,9 @@ public class BaseRateControl extends BusinessControl{
      * loadData is for get the data from Database and cache in the MAP.
      */
     public Map<Integer, BaseRateView> loadData(){
+        logger.debug("-- loadData --");
         Map<Integer, BaseRateView> _tmpMap = new HashMap<Integer, BaseRateView>();
         try{
-
             List<BaseRate> _tmpList = baseRateDAO.findAll();
             for(BaseRate baseRate : _tmpList){
                 BaseRateView baseRateView = baseRateTransform.transformToView(baseRate);
@@ -87,6 +94,7 @@ public class BaseRateControl extends BusinessControl{
         } catch (Exception ex){
             logger.error("Cannot Load BaseRate into Cache {}", ex);
         }
+        logger.debug("loadData return baseRateView size: {}", _tmpMap.size());
         return _tmpMap;
     }
 }

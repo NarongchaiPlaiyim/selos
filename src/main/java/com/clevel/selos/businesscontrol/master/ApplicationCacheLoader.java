@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.relation.RelationCustomer;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.master.*;
 import com.clevel.selos.util.Util;
@@ -64,6 +66,57 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private DocumentTypeDAO documentTypeDAO;
     @Inject private DocumentTypeTransform documentTypeTransform;
 
+    @Inject private RelationDAO relationDAO;
+    @Inject private RelationTransform relationTransform;
+
+    @Inject private RelationCustomerDAO relationCustomerDAO;
+    @Inject private RelationCustomerTransform relationCustomerTransform;
+
+    @Inject private ReferenceDAO referenceDAO;
+    @Inject private ReferenceTransform referenceTransform;
+
+    @Inject private TitleDAO titleDAO;
+    @Inject private TitleTransform titleTransform;
+
+    @Inject private RaceDAO raceDAO;
+    @Inject private RaceTransform raceTransform;
+
+    @Inject private NationalityDAO nationalityDAO;
+    @Inject private NationalityTransform nationalityTransform;
+
+    @Inject private EducationDAO educationDAO;
+    @Inject private EducationTransform educationTransform;
+
+    @Inject private OccupationDAO occupationDAO;
+    @Inject private OccupationTransform occupationTransform;
+
+    @Inject private MaritalStatusDAO maritalStatusDAO;
+    @Inject private MaritalStatusTransform maritalStatusTransform;
+
+    @Inject private IncomeSourceDAO incomeSourceDAO;
+    @Inject private IncomeSourceTransform incomeSourceTransform;
+
+    @Inject private ProvinceDAO provinceDAO;
+    @Inject private ProvinceTransform provinceTransform;
+
+    @Inject private DistrictDAO districtDAO;
+    @Inject private DistrictTransform districtTransform;
+
+    @Inject private SubDistrictDAO subDistrictDAO;
+    @Inject private SubDistrictTransform subDistrictTransform;
+
+    @Inject private AddressTypeDAO addressTypeDAO;
+    @Inject private AddressTypeTransform addressTypeTransform;
+
+    @Inject private KYCLevelDAO kycLevelDAO;
+    @Inject private KYCLevelTransform kycLevelTransform;
+
+    @Inject private BusinessTypeDAO businessTypeDAO;
+    @Inject private BusinessTypeTransform businessTypeTransform;
+
+    @Inject private CustomerEntityDAO customerEntityDAO;
+    @Inject private CustomerEntityTransform customerEntityTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -115,7 +168,59 @@ public class ApplicationCacheLoader implements Serializable{
         List<DocumentType> documentTypeList = documentTypeDAO.findAll();
         indexHash.put(DocumentType.class.getName(), documentTypeTransform.transformToCache(documentTypeList));
 
+        List<Relation> relationList = relationDAO.findAll();
+        indexHash.put(Relation.class.getName(), relationTransform.transformToCache(relationList));
+
+        List<RelationCustomer> relationCustomerList = relationCustomerDAO.findAll();
+        indexHash.put(RelationCustomer.class.getName(), relationCustomerTransform.transformToCache(relationCustomerList));
+
+        List<Reference> referenceList = referenceDAO.findAll();
+        indexHash.put(Reference.class.getName(), referenceTransform.transformToCache(referenceList));
+
+        List<Title> titleList = titleDAO.findAll();
+        indexHash.put(Title.class.getName(), titleTransform.transformToCache(titleList));
+
+        List<Race> raceList = raceDAO.findAll();
+        indexHash.put(Race.class.getName(), raceTransform.transformToCache(raceList));
+
+        List<Nationality> nationalityList = nationalityDAO.findAll();
+        indexHash.put(Nationality.class.getName(), nationalityTransform.transformToCache(nationalityList));
+
+        List<Education> educationList = educationDAO.findAll();
+        indexHash.put(Education.class.getName(), educationTransform.transformToCache(educationList));
+
+        List<Occupation> occupationList = occupationDAO.findAll();
+        indexHash.put(Occupation.class.getName(), occupationTransform.transformToCache(occupationList));
+
+        List<MaritalStatus> maritalStatusList = maritalStatusDAO.findAll();
+        indexHash.put(MaritalStatus.class.getName(), maritalStatusTransform.transformToCache(maritalStatusList));
+
+        List<IncomeSource> incomeSourceList = incomeSourceDAO.findAll();
+        indexHash.put(IncomeSource.class.getName(), incomeSourceTransform.transformToCache(incomeSourceList));
+
+        List<Province> provinceList = provinceDAO.findAll();
+        indexHash.put(Province.class.getName(), provinceTransform.transformToCache(provinceList));
+
+        List<District> districtList = districtDAO.findAll();
+        indexHash.put(District.class.getName(), districtTransform.transformToCache(districtList));
+
+        List<SubDistrict> subDistrictList = subDistrictDAO.findAll();
+        indexHash.put(SubDistrict.class.getName(), subDistrictTransform.transformToCache(subDistrictList));
+
+        List<AddressType> addressTypeList = addressTypeDAO.findAll();
+        indexHash.put(AddressType.class.getName(), addressTypeTransform.transformToCache(addressTypeList));
+
+        List<KYCLevel> kycLevelList = kycLevelDAO.findAll();
+        indexHash.put(KYCLevel.class.getName(), kycLevelTransform.transformToCache(kycLevelList));
+
+        List<BusinessType> businessTypeList = businessTypeDAO.findAll();
+        indexHash.put(BusinessType.class.getName(), businessTypeTransform.transformToCache(businessTypeList));
+
+        List<CustomerEntity> customerEntityList = customerEntityDAO.findAll();
+        indexHash.put(CustomerEntity.class.getName(), customerEntityTransform.transformToCache(customerEntityList));
+
         Util.listMap(indexHash);
+        logger.debug("-- finished load cache DB --");
     }
 
     public Map getCacheMap(String className){

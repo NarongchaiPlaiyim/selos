@@ -33,6 +33,7 @@ public class SBFScoreControl extends BusinessControl{
     public SBFScoreControl(){}
 
     public List<SelectItem> getSBFScoreActive(){
+        logger.debug("-- getSBFScoreActive");
         Map<Integer, SBFScoreView> _tmpMap = getInternalCacheMap();
         List<SelectItem> sbfScoreViewList = new ArrayList<SelectItem>();
         for(SBFScoreView sbfScoreView : _tmpMap.values()){
@@ -41,8 +42,10 @@ public class SBFScoreControl extends BusinessControl{
                 selectItem.setLabel(String.valueOf(sbfScoreView.getScore()));
                 selectItem.setValue(sbfScoreView.getId());
                 sbfScoreViewList.add(selectItem);
+                logger.debug("add SelectItem: {}", selectItem);
             }
         }
+        logger.debug("getSBFScoreActive return SBFScoreView size: {}", sbfScoreViewList.size());
         return sbfScoreViewList;
     }
 
@@ -55,13 +58,16 @@ public class SBFScoreControl extends BusinessControl{
             return new ConcurrentHashMap<Integer, SBFScoreView>();
         } else {
             cacheLoader.setCacheMap(SBFScore.class.getName(), _tmpMap);
+            logger.debug("loadData return SBFScoreView size: {}", _tmpMap.size());
             return _tmpMap;
         }
     }
 
     private Map<Integer, SBFScoreView> getInternalCacheMap(){
+        logger.debug("-- getInternalCacheMap");
         Map<Integer, SBFScoreView> _tmpMap = cacheLoader.getCacheMap(SBFScore.class.getName());
         if(_tmpMap == null || _tmpMap.size() == 0){
+            logger.debug("SBFScoreView is null or empty in Cache DB");
             _tmpMap = loadData();
         }
         return _tmpMap;

@@ -11,7 +11,7 @@
             <td class="title right" style="min-width: 140px; width: 80px;">Cancel Reason :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                 value="#{headerController.reasonId}"
+                                 value="#{headerController.cancelReasonId}"
                                  required="#{not empty param[btnSubmitCancelCA.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{headerController.reasonList}"
@@ -36,16 +36,15 @@
                                  value="#{msg.get('app.button.submit')}"
                                  actionListener="#{headerController.onCancelCA()}"
                                  oncomplete="handleDialogRequest(xhr, status, args, 'cancelCADlg')"
-                                 process="@form"
                                  update=":frmMain:cancelCADlgPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
                                  styleClass="small" onclick="PF('cancelCADlg').hide()"/>
             </td>
         </tr>
     </table>
+    <p:blockUI block="cancelCADlgPanel" trigger=":frmMain:dlgCancelCABtn">
+        <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
-<p:blockUI block="cancelCADlgPanel" trigger=":frmMain:dlgCancelCABtn">
-    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 </ui:composition>

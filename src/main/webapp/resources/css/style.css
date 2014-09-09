@@ -272,12 +272,28 @@ select {
 
 }
 
-#login_box{
+/*#login_box{
     position: relative;
     width: 700px;
     top: 25%;
     left: 25%;
     margin: 180px 0 0 0;
+}*/
+#login_box{
+    position: fixed;
+    width: 700px;
+    top: 50%;
+    left: 50%;
+    margin: -180px 0 0 -320px;
+}
+
+.ui-state-error.login-inp {
+    background: url(#{resource['images:login/inp_login.jpg']}) no-repeat;
+    border: 1px solid red!important;
+    color: #000!important;
+    font-weight: bold!important;
+    height: 28px;
+    width: 204px;
 }
 
 .login-inp {
@@ -312,7 +328,7 @@ select {
     line-height:0;
     overflow: hidden;
     width: 125px;
-    margin-right: 5px!important;
+    margin-right: 4px!important;
 }
 
 #content_name {

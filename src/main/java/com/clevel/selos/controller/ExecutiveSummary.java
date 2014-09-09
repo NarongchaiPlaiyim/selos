@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.ApprovalAuthority;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
@@ -169,14 +170,18 @@ public class ExecutiveSummary extends BaseController {
 
     public void onSaveExecutiveSummary() {
         log.debug("onSaveExecutiveSummary :::");
-        if(exSummaryView.getDecision() == 2 || exSummaryView.getDecision() == 3){ //1 approve , 2 deviate , 3 reject
-            if(exSummaryView.getDeviateCode() == null || exSummaryView.getDeviateCode().size() < 1){
-                messageHeader = msg.get("app.header.information");
-                message = "Save Ex Summary Failed. "+
-                        "<br/><br/> Cause : Reason is null.";
-                severity = "info";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                return;
+        if(exSummaryView.getApplicationColorResult() != UWResultColor.RED) {
+            if(!getUWResultColorRed()) {
+                if (exSummaryView.getDecision() == 2 || exSummaryView.getDecision() == 3) { //1 approve , 2 deviate , 3 reject
+                    if (exSummaryView.getDeviateCode() == null || exSummaryView.getDeviateCode().size() < 1) {
+                        messageHeader = msg.get("app.header.information");
+                        message = "Save Ex Summary Failed. " +
+                                "<br/><br/> Cause : Reason is null.";
+                        severity = "info";
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        return;
+                    }
+                }
             }
         }
 
@@ -201,6 +206,18 @@ public class ExecutiveSummary extends BaseController {
         }
     }
 
+    private boolean getUWResultColorRed(){
+        boolean colorRed = false;
+        List<ExSumDecisionView> exSumDecisionViewList = exSummaryView.getExSumDecisionListView();
+        for(ExSumDecisionView item : exSumDecisionViewList){
+            if(item.getFlag() == UWResultColor.RED){
+                colorRed = true;
+                break;
+            }
+        }
+
+        return colorRed;
+    }
     public void onChangeDeviate(){
         exSummaryView.setDeviateCode(new ArrayList<ExSumReasonView>());
         if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
