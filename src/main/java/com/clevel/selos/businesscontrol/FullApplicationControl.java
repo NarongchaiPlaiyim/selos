@@ -134,6 +134,8 @@ public class FullApplicationControl extends BusinessControl {
     private ActionValidationControl actionValidationControl;
     @Inject
     private ReturnControl returnControl;
+    @Inject
+    private MortgageSummaryControl mortgageSummaryControl;
 
     @Inject
     private BPMExecutor bpmExecutor;
@@ -822,6 +824,8 @@ public class FullApplicationControl extends BusinessControl {
                     tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
                     insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
                 }
+
+                mortgageSummaryControl.calculateMortgageSummary(workCaseId);
 
                 bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
                 approvalHistoryDAO.persist(approvalHistoryEndorseCA);
