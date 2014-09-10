@@ -744,12 +744,6 @@ function handleManageUserDialogRequest(xhr, status, args) {
     }
 }
 
-function handlePrescreenProposeCreditRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        proposeCollateralDlg.hide();
-    }
-}
-
 function handleNCBInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         ncbDlg.hide();
