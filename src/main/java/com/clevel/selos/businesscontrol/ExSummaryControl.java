@@ -876,8 +876,8 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
-            groupSaleBDM = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
-            groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
+            groupSaleBDM = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
+            groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
         } else { // use customer
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
             BigDecimal saleFromFinStmt = BigDecimal.ZERO;
@@ -889,16 +889,15 @@ public class ExSummaryControl extends BusinessControl {
                             if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
                                 approxIncome = Util.add(approxIncome,cus.getApproxIncome());
                             }
-                        } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                            saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
                         }
-                    } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                    }
+                    if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                         saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
                     }
                 }
             }
-            groupSaleBDM = Util.add(saleFromFinStmt,approxIncome);
-            groupSaleUW = Util.add(saleFromFinStmt,approxIncome);
+            groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
+            groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
         }
 
         if(user.getRole().getId() == RoleValue.UW.id()){
