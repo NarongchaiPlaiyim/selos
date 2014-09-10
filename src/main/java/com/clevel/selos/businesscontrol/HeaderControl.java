@@ -1,6 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.StatusDAO;
+import com.clevel.selos.dao.master.UserTeamDAO;
+import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.SELOS;
@@ -8,7 +10,9 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.Status;
+import com.clevel.selos.model.db.master.UWDeviationFlag;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -45,6 +49,11 @@ public class HeaderControl extends BusinessControl {
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
+    RelTeamUserDetailsDAO relTeamUserDetailsDAO;
+    @Inject
+    UserTeamDAO userTeamDAO;
+
     @Inject
     NCBInterface ncbInterface;
 
@@ -138,12 +147,17 @@ public class HeaderControl extends BusinessControl {
                 appHeaderView.setBdmPhoneNumber(bdmUser.getPhoneNumber());
                 appHeaderView.setBdmPhoneExtNumber(bdmUser.getPhoneExt());
 
+                if(!Util.isNull(bdmUser.getTeam())){
+                    appHeaderView.setBdmZoneName(bdmUser.getTeam().getTeam_name());
+                    int zmTeamId = relTeamUserDetailsDAO.getTeamLeadHeadIdByTeamId(bdmUser.getTeam().getId());
+                    if(!Util.isZero(zmTeamId)) {
+                        int rgmTeamId = relTeamUserDetailsDAO.getTeamLeadHeadIdByTeamId(zmTeamId);
+                        UserTeam userTeam = userTeamDAO.findById(rgmTeamId);
 
-                if (bdmUser.getZone() != null) {
-                    appHeaderView.setBdmZoneName(bdmUser.getZone().getName());
-                }
-                if (bdmUser.getRegion() != null) {
-                    appHeaderView.setBdmRegionName(bdmUser.getRegion().getName());
+                        if(!Util.isNull(userTeam)){
+                            appHeaderView.setBdmRegionName(userTeam.getTeam_name());
+                        }
+                    }
                 }
             }
         }
@@ -259,19 +273,20 @@ public class HeaderControl extends BusinessControl {
     public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
         log.debug("ncbResultValidation()");
         if(uwRuleResultSummaryView!=null){
-            Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
-            if(uwResultDetailMap!=null){
-                for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet())
-                {
-                    UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
-                    if(uwRuleResultDetailView.getUwRuleNameView()!=null
-                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView()!=null
-                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName()!=null
-                            && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")){
-                        if(uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED){
-                            log.debug("NCB Result is RED, auto reject case!");
-                            ncbInterface.generateRejectedLetter(user.getId(),workCasePreScreenId,workCaseId);
-                            return false;
+            if(uwRuleResultSummaryView.getUwDeviationFlagView().getBrmsCode().equalsIgnoreCase("ND")) {
+                Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
+                if (uwResultDetailMap != null) {
+                    for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet()) {
+                        UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
+                        if (uwRuleResultDetailView.getUwRuleNameView() != null
+                                && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView() != null
+                                && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName() != null
+                                && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")) {
+                            if (uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED) {
+                                log.debug("NCB Result is RED without Deviate, auto reject case!");
+                                ncbInterface.generateRejectedLetter(user.getId(), workCasePreScreenId, workCaseId);
+                                return false;
+                            }
                         }
                     }
                 }

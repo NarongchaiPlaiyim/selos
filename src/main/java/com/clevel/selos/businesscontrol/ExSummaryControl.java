@@ -877,8 +877,8 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleBDM = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
-                groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
+                groupSaleBDM = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
+                groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
             } else { // use customer
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
                 BigDecimal saleFromFinStmt = BigDecimal.ZERO;
@@ -898,8 +898,8 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
-                groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
+                groupSaleBDM = Util.add(saleFromFinStmt,approxIncome);
+                groupSaleUW = Util.add(saleFromFinStmt,approxIncome);
             }
         } else if(stepId == StepValue.CREDIT_DECISION_UW1.value() && user.getRole().getId() == RoleValue.UW.id()){ //UW //update only groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
@@ -921,7 +921,7 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
+                groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
             } else { // use customer
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
                 BigDecimal saleFromFinStmt = BigDecimal.ZERO;
@@ -941,7 +941,7 @@ public class ExSummaryControl extends BusinessControl {
                         }
                     }
                 }
-                groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
+                groupSaleUW = Util.add(saleFromFinStmt,approxIncome);
             }
             //for do not update group sale bdm in step uw
             groupSaleBDM = exSummary.getGroupSaleBDM();
@@ -950,6 +950,7 @@ public class ExSummaryControl extends BusinessControl {
         if(user.getRole().getId() == RoleValue.UW.id()){
             exSummary.setGroupSaleUW(groupSaleUW);
         } else {
+            exSummary.setGroupSaleUW(groupSaleUW);
             exSummary.setGroupSaleBDM(groupSaleBDM);
         }
 
@@ -958,18 +959,20 @@ public class ExSummaryControl extends BusinessControl {
 
     //Borrower Characteristic - groupExposureBDM , groupExposureUW ( Line 58-59 )
     //Decision
-//    groupExposureBDM - Group Total Exposure + Total Propose Credit
-//    groupExposureUW - Group Total Exposure + Total Approved Credit
+//    groupExposureBDM - Group Total Exposure + Total Propose Credit > Change to Get Total Group Exposure on Propose Page ( Total Group Exposure = Total Group Exposure ( Existing ) + Total Propose Credit )
+//    groupExposureUW - Group Total Exposure + Total Approved Credit > Change to Get Total Group Exposure on Decision Page ( Total Group Exposure = Total Group Exposure ( Existing ) + Total Approve Credit )
     public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         log.debug("calGroupExposureBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal groupExposureBDM = null;
         BigDecimal groupExposureUW = null;
-        if(!Util.isNull(newCreditFacility) && !Util.isZero(newCreditFacility.getId())){
-            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(), newCreditFacility.getTotalPropose());
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
+            groupExposureBDM = proposeLine.getTotalExposure();
             if(!Util.isNull(decision) && !Util.isZero(decision.getId())){
-                groupExposureUW = Util.add(newCreditFacility.getTotalExposure(), decision.getTotalApproveCredit());
+                groupExposureUW = decision.getTotalApproveExposure();
+            } else {
+                groupExposureUW = proposeLine.getTotalExposure();
             }
         }
 

@@ -1843,7 +1843,8 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="2">
-                                <p:selectOneRadio value="#{decision.decisionView.creditCustomerType}" disabled="true">
+                                <p:selectOneRadio value="#{decision.decisionView.creditCustomerType}"
+                                                  disabled="#{decision.isDisabled('creditCusType')}">
                                     <f:selectItems value="#{app.getCreditCustomerTypeValues('NORMAL|PRIME')}" var="creditCusType"
                                                    itemLabel="#{creditCusType.shortName()}" itemValue="#{creditCusType}"/>
                                 </p:selectOneRadio>
@@ -1853,10 +1854,15 @@
                             <td class="left" colspan="2">
                                 <table border="0">
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/>
+                                            <h:outputText value="#{decision.mandate('approvedPurposed')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td class="left">
                                             <p:selectOneMenu value="#{decision.decisionView.loanRequestType.id}"
-                                                             disabled="true" style="width: 200px">
+                                                             style="width: 200px"
+                                                             disabled="#{decision.isDisabled('approvedPurposed')}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItems value="#{decision.creditRequestTypeViewList}" var="crdRequestType"
                                                                itemLabel="#{crdRequestType.name}" itemValue="#{crdRequestType.id}"/>
@@ -1870,9 +1876,15 @@
                             <td class="left" colspan="2">
                                 <table border="0">
                                     <tr>
-                                        <td class="title"><h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/></td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/>
+                                            <h:outputText value="#{decision.mandate('investedCountry')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
+                                        </td>
                                         <td class="left">
-                                            <p:selectOneMenu value="#{decision.decisionView.investedCountry.id}" disabled="true" style="width: 200px">
+                                            <p:selectOneMenu value="#{decision.decisionView.investedCountry.id}"
+                                                             style="width: 200px"
+                                                             disabled="#{decision.isDisabled('investedCountry')}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItems value="#{decision.countryViewList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
@@ -1891,11 +1903,13 @@
                                         <tr>
                                             <td class="left">
                                                 <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}" styleClass="title" style="margin-right: 5px"/>
+                                                <h:outputText value="#{decision.mandate('existingSMELimit')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                                 <p:inputText value="#{decision.decisionView.existingSMELimit}"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);"
                                                              onkeypress="return onKeyPressMoney(event);"
-                                                             readonly="true"
+                                                             readonly="#{decision.isDisabled('existingSMELimit')}"
                                                              styleClass="right"
                                                              style="max-width: 200px; min-width: 200px; width: 200px;">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
@@ -1904,13 +1918,14 @@
 
                                                 <p:spacer width="10" height="0"/>
 
-                                                <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"
-                                                              styleClass="title" style="margin-right: 5px"/>
+                                                <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}" styleClass="title" style="margin-right: 5px"/>
+                                                <h:outputText value="#{decision.mandate('maximumSMELimit')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
                                                 <p:inputText value="#{decision.decisionView.maximumSMELimit}"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);"
                                                              onkeypress="return onKeyPressMoney(event);"
-                                                             readonly="true"
+                                                             readonly="#{decision.isDisabled('maximumSMELimit')}"
                                                              styleClass="right"
                                                              style="max-width: 200px; min-width: 200px; width: 200px;">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
@@ -2065,6 +2080,7 @@
                                                                              icon="ui-icon-pencil"
                                                                              action="#{decision.onEditApproveCredit()}"
                                                                              update=":proposeCreditDlgForm"
+                                                                             disabled="#{decision.isDisabled('editApproveCreditButton')}"
                                                                              oncomplete="proposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{approveCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                                 <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndex}"/>
@@ -2072,7 +2088,7 @@
 
                                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                              icon="ui-icon-trash"
-                                                                             disabled="#{decision.isDisabled('approve.actionList')}"
+                                                                             disabled="#{decision.isDisabled('removeApproveCreditButton')}"
                                                                              oncomplete="confirmDeleteAppProposeCreditDlg.show()">
                                                                 <f:setPropertyActionListener value="#{approveCredit}" target="#{decision.approveCreditInfoDetailView}"/>
                                                             </p:commandButton>
@@ -2627,7 +2643,7 @@
                                                              update=":collateralDlgForm"
                                                              process="@form"
                                                              oncomplete="proposeCollateralDlg.show();"
-                                                             disabled="#{decision.isDisabled('collateral.editButton') or approveCollView.appraisalRequest != 0}">
+                                                             disabled="#{decision.isDisabled('editApproveCollateralButton') or approveCollView.appraisalRequest != 0}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                                 <f:setPropertyActionListener value="#{collIndex.index}" target="#{decision.rowIndex}"/>
                                                 <p:resetInput target=":collateralDlgForm"/>
@@ -2637,7 +2653,7 @@
                                                              value="#{msg.get('app.button.delete')}"
                                                              process="@form" styleClass="small"
                                                              oncomplete="confirmDeleteAppProCollateralDlg.show()"
-                                                             disabled="#{decision.isDisabled('collateral.deleteButton') or approveCollView.appraisalRequest != 0}">
+                                                             disabled="#{decision.isDisabled('removeApproveCollateralButton') or approveCollView.appraisalRequest != 0}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                             </p:commandButton>
                                         </td>
@@ -3124,6 +3140,7 @@
                                                          icon="ui-icon-pencil"
                                                          action="#{decision.onEditApproveGuarantor()}"
                                                          update=":guarantorDlgForm"
+                                                         disabled="#{decision.isDisabled('editApproveGuarantorButton')}"
                                                          oncomplete="proposeGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.approveGuarantorInfoView}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndex}"/>
@@ -3131,7 +3148,7 @@
 
                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                          icon="ui-icon-trash"
-                                                         disabled="#{decision.isDisabled('approveGuarantor.actionList')}"
+                                                         disabled="#{decision.isDisabled('removeApproveGuarantorButton')}"
                                                          oncomplete="confirmDeleteAppGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.approveGuarantorInfoView}"/>
                                         </p:commandButton>
@@ -3209,7 +3226,8 @@
                                 <table border="0">
                                     <tr>
                                         <td class="left" style="border-style: none !important;">
-                                            <p:inputText value="#{decision.decisionFollowConditionView.detail}" style="width: 400px"/>
+                                            <p:inputText value="#{decision.decisionFollowConditionView.detail}" style="width: 400px"
+                                                    readonly="#{decision.isDisabled('followupCondition.detailOfFollowUp')}"/>
 
                                             <p:spacer width="10" height=""/>
 
@@ -3220,7 +3238,8 @@
                                                             value="#{decision.decisionFollowConditionView.followDate}"
                                                             locale="th_TH"
                                                             readonlyInput="true"
-                                                            styleClass="calendar_right">
+                                                            styleClass="calendar_right"
+                                                            disabled="#{decision.isDisabled('followupCondition.dateOfFollowUp')}">
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -3265,7 +3284,7 @@
                                     <p:column styleClass="center top">
                                         <p:commandButton title="#{msg.get('app.button.delete')}"
                                                          icon="ui-icon-trash"
-                                                         disabled="#{decision.isDisabled('followupCon.actionList')}"
+                                                         disabled="#{decision.isDisabled('followupCondition.actionList')}"
                                                          oncomplete="confirmDeleteFollowUpCondDlg.show()">
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{decision.rowIndexDecisionFollowCondition}"/>
@@ -3295,30 +3314,42 @@
                                 <table class="table_content" style="width:100%; background-color: #ffffff">
                                     <tr>
                                         <td class="left" style="width: 280px;">
-                                            #{msg.get('app.decision.tb.td.label.intFeeDOA')}
+                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.intFeeDOA')}"/>
+                                            <h:outputText value="#{decision.mandate('intFeeDOA')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left" style="width: 190px;">
-                                            <p:inputText value="#{decision.decisionView.intFeeDOA}" readonly="#{decision.isDisabled('intFeeDOA')}" styleClass="right">
+                                            <p:inputText value="#{decision.decisionView.intFeeDOA}"
+                                                         readonly="#{decision.isDisabled('intFeeDOA')}"
+                                                         styleClass="right">
                                                 <f:convertNumber pattern="##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                             </p:inputText>
                                             <h:outputText value=" %"/>
                                         </td>
 
                                         <td class="left" style="width: 300px;">
-                                            #{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}
+                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}"/>
+                                            <h:outputText value="#{decision.mandate('frontendFeeDOA')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left" style="width: 190px;">
-                                            <p:inputText value="#{decision.decisionView.frontendFeeDOA}" readonly="#{decision.isDisabled('frontendFeeDOA')}" styleClass="right">
+                                            <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
+                                                         readonly="#{decision.isDisabled('frontendFeeDOA')}"
+                                                         styleClass="right">
                                                 <f:convertNumber pattern="##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                             </p:inputText>
                                             <h:outputText value=" %"/>
                                         </td>
 
                                         <td class="left" style="width: 130px;">
-                                            #{msg.get('app.decision.tb.td.label.guarantorBA')}
+                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.guarantorBA')}"/>
+                                            <h:outputText value="#{decision.mandate('guarantorBA')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left" style="width: 190px;">
-                                            <p:inputText value="#{decision.decisionView.guarantorBA}" readonly="true" styleClass="right">
+                                            <p:inputText value="#{decision.decisionView.guarantorBA}"
+                                                         readonly="#{decision.isDisabled('guarantorBA')}"
+                                                         styleClass="right">
                                                 <f:convertNumber pattern="#,##0.##"
                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                  maxIntegerDigits="14"/>
@@ -3328,10 +3359,14 @@
 
                                     <tr>
                                         <td class="left" style="width: 250px;">
-                                            #{msg.get('app.decision.tb.td.label.reasonForReduction')}
+                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.reasonForReduction')}"/>
+                                            <h:outputText value="#{decision.mandate('reasonForReduction')}" styleClass="require-field"/>
+                                            <h:outputText value=" :"/>
                                         </td>
                                         <td class="left middle" colspan="5" style="padding-top: 10px;">
-                                            <p:inputTextarea value="#{decision.decisionView.reasonForReduction}" rows="3" cols="150" readonly="true" autoResize="false"/>
+                                            <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
+                                                             rows="3" cols="150" autoResize="false"
+                                                             readonly="#{decision.isDisabled('reasonForReduction')}"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -3438,7 +3473,6 @@
                                                                     <tr>
                                                                         <td class="center" style="border-style: none !important;">
                                                                             <p:inputTextarea value="#{decision.approvalHistoryView.comments}"
-                                                                                             maxlength="2000"
                                                                                              rows="5"
                                                                                              style="font-size: 12px !important; width: 450px"/>
                                                                         </td>
@@ -3594,13 +3628,15 @@
                                                  action="#{decision.onSaveDecision()}"
                                                  process="@form"
                                                  update=":frmMain,:msgBoxSystemMessagePanel"
-                                                 styleClass="small"/>
+                                                 styleClass="small"
+                                                 disabled="#{decision.isDisabled('saveButton')}"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                  action="#{decision.onCreation()}"
                                                  process="@form"
                                                  update=":frmMain"
-                                                 styleClass="small"/>
+                                                 styleClass="small"
+                                                 disabled="#{decision.isDisabled('cancelButton')}"/>
                             </td>
                         </tr>
                     </table>

@@ -10,11 +10,15 @@ xmlns:p="http://primefaces.org/ui">
         <table class="content_form content_table_form">
             <tr>
                 <td class="title" style="width: 20%">
-                    <h:outputText value="#{msg.get('app.decision.header')} :"/>
+                    <h:outputText value="#{msg.get('app.decision.header')}"/>
+                    <h:outputText value="#{decision.mandate('credit.UWDecision')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3" style="width: 80%">
-                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.approveCreditInfoDetailView.uwDecision}"
-                                      required="#{not empty param[saveBtn.clientId]}">
+                    <p:selectOneRadio id="dlgRadioApprove"
+                                      value="#{decision.approveCreditInfoDetailView.uwDecision}"
+                                      required="#{not empty param[saveBtn.clientId]}"
+                                      disabled="#{decision.isDisabled('credit.UWDecision')}">
                         <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionAPPROVED}"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionREJECTED}"/>
                         <p:ajax event="change" process="@this" update=":proposeCreditDlgForm"/>
@@ -24,11 +28,13 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
+                    <h:outputText value="#{decision.mandate('credit.requestType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneRadio value="#{decision.approveCreditInfoDetailView.requestType}"
                                       required="#{not empty param[saveBtn.clientId]}"
-                                      disabled="#{decision.modeEdit}">
+                                      disabled="#{decision.modeEdit or decision.isDisabled('credit.requestType')}">
                         <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
                         <p:ajax event="change" listener="#{decision.onChangeRequestType()}" process="@this" update=":proposeCreditDlgForm"/>
@@ -39,9 +45,13 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
+                    <h:outputText value="#{decision.mandate('credit.isRefinance')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:selectOneRadio value="#{decision.approveCreditInfoDetailView.refinance}" required="#{not empty param[saveBtn.clientId]}">
+                    <p:selectOneRadio value="#{decision.approveCreditInfoDetailView.refinance}"
+                                      required="#{not empty param[saveBtn.clientId]}"
+                                      disabled="#{decision.isDisabled('credit.isRefinance')}">
                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                         <p:ajax event="change" process="@this" update=":proposeCreditDlgForm"/>
@@ -52,12 +62,15 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productProgram')}"/>
+                    <h:outputText value="#{decision.mandate('credit.productProgram')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelProdProgram"
                                      value="#{decision.approveCreditInfoDetailView.productProgramView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{decision.isDisabled('credit.productProgram')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.productProgramViewList}"
                                        var="prdGroupToPrdProgramItem"
@@ -71,12 +84,15 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.creditType')}"/>
+                    <h:outputText value="#{decision.mandate('credit.creditType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelCreditType"
                                      value="#{decision.approveCreditInfoDetailView.creditTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{decision.isDisabled('credit.creditType')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.creditTypeViewList}"
                                        var="creditTypeItem"
@@ -92,18 +108,24 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
+                    <h:outputText value="#{decision.mandate('credit.productCode')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="productCode" value="#{decision.approveCreditInfoDetailView.productCode}">
+                    <p:inputText id="productCode" value="#{decision.approveCreditInfoDetailView.productCode}"
+                                 readonly="#{decision.isDisabled('credit.productCode')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
+                    <h:outputText value="#{decision.mandate('credit.projectCode')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="projectCode" value="#{decision.approveCreditInfoDetailView.projectCode}"
-                                 required="#{not empty param[saveBtn.clientId]}">
+                                 required="#{not empty param[saveBtn.clientId]}"
+                                 readonly="#{decision.isDisabled('credit.projectCode')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -112,6 +134,8 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
+                    <h:outputText value="#{decision.mandate('credit.limit')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="limit" value="#{decision.approveCreditInfoDetailView.limit}"
@@ -121,13 +145,16 @@ xmlns:p="http://primefaces.org/ui">
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  onfocus="removeComma(this)"
                                  required="#{not empty param[saveBtn.clientId]}"
-                                 style="width:200px;text-align: right">
+                                 style="width:200px;text-align: right"
+                                 readonly="#{decision.isDisabled('credit.limit')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
+                    <h:outputText value="#{decision.mandate('credit.PCEPercent')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{decision.approveCreditInfoDetailView.PCEPercent}"
@@ -137,7 +164,8 @@ xmlns:p="http://primefaces.org/ui">
                                  onkeypress="return onKeyPressMoney(event);"
                                  onfocus="removeComma(this)"
                                  styleClass="right"
-                                 required="#{not empty param[saveBtn.clientId]}">
+                                 required="#{not empty param[saveBtn.clientId]}"
+                                 readonly="#{decision.isDisabled('credit.PCEPercent')}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update="@this"/>
@@ -151,6 +179,8 @@ xmlns:p="http://primefaces.org/ui">
                 <td colspan="2"></td>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
+                    <h:outputText value="#{decision.mandate('credit.PCEAmount')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{decision.approveCreditInfoDetailView.PCEAmount}"
@@ -162,7 +192,7 @@ xmlns:p="http://primefaces.org/ui">
                                  onfocus="removeComma(this)"
                                  required="#{not empty param[saveBtn.clientId]}"
                                  style="width:200px; min-width:200px; max-width:200px; text-align: right"
-                                 readonly="true">
+                                 readonly="#{decision.isDisabled('credit.PCEAmount')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -179,26 +209,32 @@ xmlns:p="http://primefaces.org/ui">
                 <td class="left" colspan="2">
                     <p:selectBooleanCheckbox value="#{decision.approveCreditInfoDetailView.reducePriceFlag}"
                                              id="reducePriceFlagChk"
-                                             disabled="#{decision.approveCreditInfoDetailView.cannotCheckReducePricing}">
+                                             disabled="#{decision.approveCreditInfoDetailView.cannotCheckReducePricing
+                                                         or decision.isDisabled('credit.reducePriceFlag')}">
                         <p:ajax update="@this"/>
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
+                    <h:outputText value="#{decision.mandate('credit.reducePriceFlag')}" styleClass="require-field"/>
                 </td>
                 <td class="left" colspan="2">
                     <p:selectBooleanCheckbox value="#{decision.approveCreditInfoDetailView.reduceFrontEndFee}"
                                              id="reduceFrontEndFeeChk"
-                                             disabled="#{decision.approveCreditInfoDetailView.cannotCheckReduceFront}">
+                                             disabled="#{decision.approveCreditInfoDetailView.cannotCheckReduceFront
+                                                         or decision.isDisabled('credit.reduceFrontEndFee')}">
                         <p:ajax update="@this"/>
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
+                    <h:outputText value="#{decision.mandate('credit.reduceFrontEndFee')}" styleClass="require-field"/>
                 </td>
             </tr>
 
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
+                    <h:outputText value="#{decision.mandate('credit.standardBasePrice')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <table border="0">
@@ -207,7 +243,7 @@ xmlns:p="http://primefaces.org/ui">
                                 <p:selectOneMenu id="standDlg"
                                                  value="#{decision.approveCreditInfoDetailView.standardBaseRate.id}"
                                                  style="width: 50px;"
-                                                 disabled="true">
+                                                 disabled="#{decision.isDisabled('credit.standardBasePrice')}">
                                     <f:selectItems value="#{decision.baseRateList}" var="standard"
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
@@ -224,7 +260,7 @@ xmlns:p="http://primefaces.org/ui">
                                              onfocus="removeComma(this)"
                                              style="width: 50px;"
                                              styleClass="right"
-                                             disabled="true">
+                                             readonly="#{decision.isDisabled('credit.standardInterest')}">
                                     <f:convertNumber pattern="##0.##"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
@@ -237,6 +273,8 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
+                    <h:outputText value="#{decision.mandate('credit.suggestBasePrice')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <table border="0">
@@ -245,7 +283,8 @@ xmlns:p="http://primefaces.org/ui">
                                 <p:selectOneMenu id="suggestDlg"
                                                  value="#{decision.approveCreditInfoDetailView.suggestBaseRate.id}"
                                                  style="width: 50px;"
-                                                 disabled="#{decision.approveCreditInfoDetailView.requestTypeMode != 3}">
+                                                 disabled="#{decision.approveCreditInfoDetailView.requestTypeMode != 3
+                                                             or decision.isDisabled('credit.suggestBasePrice')}">
                                     <f:selectItems value="#{decision.baseRateList}" var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
@@ -262,7 +301,8 @@ xmlns:p="http://primefaces.org/ui">
                                              onfocus="removeComma(this)"
                                              style="width: 50px;"
                                              styleClass="right"
-                                             disabled="#{decision.approveCreditInfoDetailView.requestTypeMode != 3}">
+                                             readonly="#{decision.approveCreditInfoDetailView.requestTypeMode != 3
+                                                         or decision.isDisabled('credit.suggestInterest')}">
                                     <f:convertNumber pattern="##0.##"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
@@ -275,6 +315,8 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.final')}"/>
+                    <h:outputText value="#{decision.mandate('credit.addTierButton')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:commandButton
@@ -283,7 +325,8 @@ xmlns:p="http://primefaces.org/ui">
                             id="addTier"
                             process="@this"
                             update=":proposeCreditDlgForm:resultFinal"
-                            disabled="#{decision.approveCreditInfoDetailView.requestTypeMode == 2}"
+                            disabled="#{decision.approveCreditInfoDetailView.requestTypeMode == 2
+                                        or decision.isDisabled('credit.addTierButton')}"
                             actionListener="#{decision.onAddTierInfo()}">
                     </p:commandButton>
                 </td>
@@ -322,7 +365,8 @@ xmlns:p="http://primefaces.org/ui">
                                     <p:column>
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}" id="finalBase"
                                                          style="width: 50px;"
-                                                         disabled="#{item.brmsFlag == 1}">
+                                                         disabled="#{item.brmsFlag == 1
+                                                                     or decision.isDisabled('credit.tier.finalBasePrice')}">
                                             <f:selectItems value="#{decision.baseRateList}"
                                                            var="finalBase"
                                                            itemLabel="#{finalBase.name}"
@@ -339,7 +383,8 @@ xmlns:p="http://primefaces.org/ui">
                                                      onfocus="removeComma(this)"
                                                      style="width: 50px;"
                                                      styleClass="right"
-                                                     readonly="#{item.brmsFlag == 1}">
+                                                     readonly="#{item.brmsFlag == 1
+                                                                 or decision.isDisabled('credit.tier.finalInterest')}">
                                             <f:convertNumber pattern="##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                             <p:ajax event="blur" update="@this"/>
                                         </p:inputText>
@@ -355,7 +400,8 @@ xmlns:p="http://primefaces.org/ui">
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
                                          onfocus="removeComma(this)"
-                                         styleClass="right">
+                                         styleClass="right"
+                                         readonly="#{decision.isDisabled('credit.tier.tenor')}">
                                 <f:convertNumber pattern="###" integerOnly="true" maxIntegerDigits="3"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -369,7 +415,8 @@ xmlns:p="http://primefaces.org/ui">
                                          onkeypress="return onKeyPressMoney(event);"
                                          onfocus="removeComma(this)"
                                          style="width:170px; text-align: right"
-                                         readonly="#{item.brmsFlag == 1}">
+                                         readonly="#{item.brmsFlag == 1
+                                                     or decision.isDisabled('credit.tier.installment')}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
@@ -380,7 +427,8 @@ xmlns:p="http://primefaces.org/ui">
                                              rendered="#{item.brmsFlag != 1}"
                                              process="@form"
                                              update=":proposeCreditDlgForm"
-                                             actionListener="#{decision.onDeleteTierInfo(rowIndex)}">
+                                             actionListener="#{decision.onDeleteTierInfo(rowIndex)}"
+                                             disabled="#{decision.isDisabled('credit.tier.actionList')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -390,12 +438,15 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.frontEnd')}"/>
+                    <h:outputText value="#{decision.mandate('credit.tier.actionList')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:inputText id="frontEndFee"
                                  value="#{decision.approveCreditInfoDetailView.frontEndFee}"
                                  maxlength="6"
-                                 readonly="#{decision.approveCreditInfoDetailView.requestTypeMode != 1}"
+                                 readonly="#{decision.approveCreditInfoDetailView.requestTypeMode != 1
+                                             or decision.isDisabled('credit.tier.actionList')}"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
@@ -415,12 +466,15 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.loanPurpose')}"/>
+                    <h:outputText value="#{decision.mandate('credit.loanPurpose')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgLoanPurpose"
                                      value="#{decision.approveCreditInfoDetailView.loanPurposeView.id}"
                                      style="min-width: 400px; width: 400px; max-width: 400px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{decision.isDisabled('credit.loanPurpose')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.loanPurposeViewList}"
                                        var="loanPurposeItem"
@@ -434,10 +488,13 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.purposeDetail')}"/>
+                    <h:outputText value="#{decision.mandate('credit.remark')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:inputTextarea value="#{decision.approveCreditInfoDetailView.proposeDetail}"
-                                     cols="100" rows="3">
+                                     cols="100" rows="3"
+                                     readonly="#{decision.isDisabled('credit.remark')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
                 </td>
@@ -446,12 +503,15 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.disbursement')}"/>
+                    <h:outputText value="#{decision.mandate('credit.disbursement')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:selectOneMenu id="dlgDisbursement"
                                      value="#{decision.approveCreditInfoDetailView.disbursementTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="#{not empty param[saveBtn.clientId]}">
+                                     required="#{not empty param[saveBtn.clientId]}"
+                                     disabled="#{decision.isDisabled('credit.disbursement')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.disbursementTypeViewList}"
                                        var="disbursementItem"
@@ -462,6 +522,8 @@ xmlns:p="http://primefaces.org/ui">
                 </td>
                 <td class="title" style="width:200px;">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}"/>
+                    <h:outputText value="#{decision.mandate('credit.holdLimitAmount')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText value="#{decision.approveCreditInfoDetailView.holdLimitAmount}"
@@ -470,7 +532,8 @@ xmlns:p="http://primefaces.org/ui">
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  onfocus="removeComma(this)"
-                                 style="width:200px;text-align: right">
+                                 style="width:200px;text-align: right"
+                                 readonly="#{decision.isDisabled('credit.holdLimitAmount')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -490,11 +553,13 @@ xmlns:p="http://primefaces.org/ui">
                                      action="#{decision.onSaveApproveCredit()}"
                                      process="@form"
                                      update=":proposeCreditDlgForm,:frmMain"
-                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCreditDlg')"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCreditDlg')"
+                                     disabled="#{decision.isDisabled('credit.saveButton')}"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
-                                     onclick="PF('proposeCreditDlg').hide()"/>
+                                     onclick="PF('proposeCreditDlg').hide()"
+                                     disabled="#{decision.isDisabled('credit.cancelButton')}"/>
                 </td>
             </tr>
 
