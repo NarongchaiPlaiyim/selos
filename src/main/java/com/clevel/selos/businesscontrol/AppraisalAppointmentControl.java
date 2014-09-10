@@ -3,11 +3,13 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.AppraisalCompanyDAO;
 import com.clevel.selos.dao.master.HolidayDAO;
 import com.clevel.selos.dao.master.ProvinceDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.AppraisalCompany;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
@@ -76,10 +78,12 @@ public class AppraisalAppointmentControl extends BusinessControl {
     private ProposeLine newCreditFacility;
     private CustomerAcceptance customerAcceptance;
     private ContactRecordDetail contactRecordDetail;
+    private User user;
     @Inject
     private ProvinceDAO provinceDAO;
     @Inject
     private HolidayDAO holidayDAO;
+    @Inject private UserDAO userDAO;
 
     @Inject
     public AppraisalAppointmentControl(){
@@ -94,9 +98,10 @@ public class AppraisalAppointmentControl extends BusinessControl {
         return appraisalCompanyDAO.findAllASC();
     }
 
-    public String getZoneLocation(){
+    public String getZoneLocation(String bdmId){
         try {
-            return getCurrentUser().getZone().getName();
+            user = userDAO.findUserByID(bdmId);
+            return user.getTeam().getTeam_name();
         } catch (Exception e){
             return "";
         }
