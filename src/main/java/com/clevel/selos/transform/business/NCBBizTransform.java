@@ -299,10 +299,10 @@ public class NCBBizTransform extends BusinessTransform {
                                             String startAccountDate = subjectAccountModel.getPaymt01() != null ? subjectAccountModel.getAsofdate() : "";
                                             if (!Util.isEmpty(subjectAccountModel.getAccounttype()) && subjectAccountModel.getAccounttype().equals(ACCOUNT_TYPE_OD_IND)) {
                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), lastAsOfDate, TWELVE_MONTH)) {
-                                                    if (isOverLimit(subjectAccountModel.getPaymt01())) {
-                                                        numberOfOverLimit++;
-                                                    }
                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), lastAsOfDate, SIX_MONTH)) {
+                                                        if (isOverLimit(subjectAccountModel.getPaymt01())) {
+                                                            numberOfOverLimit++;
+                                                        }
                                                         if(!isIgnoreCode(subjectAccountModel.getPaymt01())){
                                                             worstCode = subjectAccountModel.getPaymt01();
                                                         }
@@ -328,10 +328,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                         }
                                                     }
                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), lastAsOfDate, TWELVE_MONTH)) {
-                                                        if (isOverLimit(subjectAccountModel.getPaymt02())) {
-                                                            numberOfOverLimit++;
-                                                        }
                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), lastAsOfDate, SIX_MONTH)) {
+                                                            if (isOverLimit(subjectAccountModel.getPaymt02())) {
+                                                                numberOfOverLimit++;
+                                                            }
                                                             if(!Util.isEmpty(worstCode)){
                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt02(), worstCode);
                                                             } else {
@@ -362,10 +362,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                             }
                                                         }
                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), lastAsOfDate, TWELVE_MONTH)) {
-                                                            if (isOverLimit(subjectAccountModel.getPaymt03())) {
-                                                                numberOfOverLimit++;
-                                                            }
                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), lastAsOfDate, SIX_MONTH)) {
+                                                                if (isOverLimit(subjectAccountModel.getPaymt03())) {
+                                                                    numberOfOverLimit++;
+                                                                }
                                                                 if(!Util.isEmpty(worstCode)){
                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt03(), worstCode);
                                                                 } else {
@@ -396,10 +396,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 }
                                                             }
                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                if (isOverLimit(subjectAccountModel.getPaymt04())) {
-                                                                    numberOfOverLimit++;
-                                                                }
                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), lastAsOfDate, SIX_MONTH)) {
+                                                                    if (isOverLimit(subjectAccountModel.getPaymt04())) {
+                                                                        numberOfOverLimit++;
+                                                                    }
                                                                     if(!Util.isEmpty(worstCode)){
                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt04(), worstCode);
                                                                     } else {
@@ -429,10 +429,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     }
                                                                 }
                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                    if (isOverLimit(subjectAccountModel.getPaymt05())) {
-                                                                        numberOfOverLimit++;
-                                                                    }
                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), lastAsOfDate, SIX_MONTH)) {
+                                                                        if (isOverLimit(subjectAccountModel.getPaymt05())) {
+                                                                            numberOfOverLimit++;
+                                                                        }
                                                                         if(!Util.isEmpty(worstCode)){
                                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt05(), worstCode);
                                                                         } else {
@@ -462,10 +462,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         }
                                                                     }
                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                        if (isOverLimit(subjectAccountModel.getPaymt06())) {
-                                                                            numberOfOverLimit++;
-                                                                        }
                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), lastAsOfDate, SIX_MONTH)) {
+                                                                            if (isOverLimit(subjectAccountModel.getPaymt06())) {
+                                                                                numberOfOverLimit++;
+                                                                            }
                                                                             if(!Util.isEmpty(worstCode)){
                                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt06(), worstCode);
                                                                             } else {
@@ -495,10 +495,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                             }
                                                                         }
                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                            if (isOverLimit(subjectAccountModel.getPaymt07())) {
-                                                                                numberOfOverLimit++;
-                                                                            }
                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), lastAsOfDate, SIX_MONTH)) {
+                                                                                if (isOverLimit(subjectAccountModel.getPaymt07())) {
+                                                                                    numberOfOverLimit++;
+                                                                                }
                                                                                 if(!Util.isEmpty(worstCode)){
                                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt07(), worstCode);
                                                                                 } else {
@@ -528,10 +528,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                 }
                                                                             }
                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                                if (isOverLimit(subjectAccountModel.getPaymt08())) {
-                                                                                    numberOfOverLimit++;
-                                                                                }
                                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), lastAsOfDate, SIX_MONTH)) {
+                                                                                    if (isOverLimit(subjectAccountModel.getPaymt08())) {
+                                                                                        numberOfOverLimit++;
+                                                                                    }
                                                                                     if(!Util.isEmpty(worstCode)){
                                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt08(), worstCode);
                                                                                     } else {
@@ -561,10 +561,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                     }
                                                                                 }
                                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                                    if (isOverLimit(subjectAccountModel.getPaymt09())) {
-                                                                                        numberOfOverLimit++;
-                                                                                    }
                                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), lastAsOfDate, SIX_MONTH)) {
+                                                                                        if (isOverLimit(subjectAccountModel.getPaymt09())) {
+                                                                                            numberOfOverLimit++;
+                                                                                        }
                                                                                         if(!Util.isEmpty(worstCode)){
                                                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt09(), worstCode);
                                                                                         } else {
@@ -594,10 +594,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                         }
                                                                                     }
                                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                                        if (isOverLimit(subjectAccountModel.getPaymt10())) {
-                                                                                            numberOfOverLimit++;
-                                                                                        }
                                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), lastAsOfDate, SIX_MONTH)) {
+                                                                                            if (isOverLimit(subjectAccountModel.getPaymt10())) {
+                                                                                                numberOfOverLimit++;
+                                                                                            }
                                                                                             if(!Util.isEmpty(worstCode)){
                                                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt10(), worstCode);
                                                                                             } else {
@@ -627,10 +627,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                             }
                                                                                         }
                                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                                            if (isOverLimit(subjectAccountModel.getPaymt11())) {
-                                                                                                numberOfOverLimit++;
-                                                                                            }
                                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), lastAsOfDate, SIX_MONTH)) {
+                                                                                                if (isOverLimit(subjectAccountModel.getPaymt11())) {
+                                                                                                    numberOfOverLimit++;
+                                                                                                }
                                                                                                 if(!Util.isEmpty(worstCode)){
                                                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt11(), worstCode);
                                                                                                 } else {
@@ -660,10 +660,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                 }
                                                                                             }
                                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), lastAsOfDate, TWELVE_MONTH)) {
-                                                                                                if (isOverLimit(subjectAccountModel.getPaymt12())) {
-                                                                                                    numberOfOverLimit++;
-                                                                                                }
                                                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), lastAsOfDate, SIX_MONTH)) {
+                                                                                                    if (isOverLimit(subjectAccountModel.getPaymt12())) {
+                                                                                                        numberOfOverLimit++;
+                                                                                                    }
                                                                                                     if(!Util.isEmpty(worstCode)){
                                                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt12(), worstCode);
                                                                                                     } else {
@@ -1365,7 +1365,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
                                                 ncbDetailView.setTMBAccount(RadioValue.NO.value());
-                                                if (creditInfoModel.getCreditortype() != null && creditInfoModel.getCreditortype().trim().equals(TMB_BANK_THAI)) {
+                                                if (creditInfoModel.getCreditor() != null && creditInfoModel.getCreditor().trim().equals(TMB_BANK_THAI)) {
                                                     ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                     isTMBAccount = true;
                                                 }
@@ -1591,7 +1591,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
                                                 ncbDetailView.setTMBAccount(RadioValue.NO.value());
-                                                if (creditInfoModel.getCreditortype() != null && creditInfoModel.getCreditortype().trim().equals(TMB_BANK_THAI)) {
+                                                if (creditInfoModel.getCreditor() != null && creditInfoModel.getCreditor().trim().equals(TMB_BANK_THAI)) {
                                                     ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                     isTMBAccount = true;
                                                 }
@@ -2138,7 +2138,7 @@ public class NCBBizTransform extends BusinessTransform {
             endCalendar.setTime(currentDate);
             int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
             int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-            if (diffMonth <= numberMonth) {
+            if (diffMonth < numberMonth) {
                 return true;
             }
         }
