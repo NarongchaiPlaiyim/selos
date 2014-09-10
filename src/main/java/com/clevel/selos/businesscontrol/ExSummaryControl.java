@@ -833,6 +833,7 @@ public class ExSummaryControl extends BusinessControl {
     //Borrower Characteristic - groupSaleBDM , groupSaleUW ( Line 55-56 )
     //Customer Info Detail , Bank Statement Summary
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+    // Change to
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
 //    Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
 //    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
@@ -876,8 +877,8 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
-            groupSaleBDM = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
-            groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twelve);
+            groupSaleBDM = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
+            groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
         } else { // use customer
 //    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
             BigDecimal saleFromFinStmt = BigDecimal.ZERO;
@@ -896,8 +897,8 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
-            groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
-            groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twelve);
+            groupSaleBDM = Util.add(saleFromFinStmt,approxIncome);
+            groupSaleUW = Util.add(saleFromFinStmt,approxIncome);
         }
 
         if(user.getRole().getId() == RoleValue.UW.id()){
