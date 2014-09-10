@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
@@ -18,6 +19,7 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.UWRuleResultDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
@@ -37,6 +39,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class FullApplicationControl extends BusinessControl {
@@ -142,6 +145,9 @@ public class FullApplicationControl extends BusinessControl {
 
     @Inject
     private STPExecutor stpExecutor;
+
+    @Inject
+    NCBInterface ncbInterface;
 
     public List<User> getABDMUserList(){
         User currentUser = getCurrentUser();
@@ -1941,6 +1947,53 @@ public class FullApplicationControl extends BusinessControl {
             stpExecutor.duplicateFacilityData(workCaseId);
         }catch (Exception ex){
             log.error("Exception while duplicateFacilityData : ", ex);
+        }
+    }
+
+    public void checkNCBReject(long workCasePreScreenId, long workCaseId) throws Exception{
+        log.debug("ncbResultValidation()");
+        UWRuleResultSummary uwRuleResultSummary = null;
+        if(!Util.isZero(workCasePreScreenId)) {
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+        }else if(!Util.isZero(workCaseId)){
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+        }
+
+        if(!Util.isNull(uwRuleResultSummary)){
+            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
+                List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
+                if(Util.isSafetyList(uwRuleResultDetailList)){
+                    for(UWRuleResultDetail uwRuleResultDetail : uwRuleResultDetailList){
+                        if(uwRuleResultDetail.getUwRuleName() != null &&
+                                uwRuleResultDetail.getUwRuleName().getRuleGroup() != null &&
+                                uwRuleResultDetail.getUwRuleName().getRuleGroup().getName() != null &&
+                                uwRuleResultDetail.getUwRuleName().getRuleGroup().getName().equalsIgnoreCase("NCB")){
+                            if(uwRuleResultDetail.getUwDeviationFlag() != null &&
+                                    uwRuleResultDetail.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
+                                if(uwRuleResultDetail.getUwResultColor() == UWResultColor.RED){
+                                    log.debug("NCB Result is RED without Deviate, auto reject case!");
+                                    ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
+                                    //Update ncb reject flag
+                                    updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void updateNCBRejectFlag(long workCasePreScreenId, long workCaseId, int isNCBReject){
+        if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setNcbRejectFlag(isNCBReject);
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        }else if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setNcbRejectFlag(isNCBReject);
+            workCaseDAO.persist(workCase);
         }
     }
 }

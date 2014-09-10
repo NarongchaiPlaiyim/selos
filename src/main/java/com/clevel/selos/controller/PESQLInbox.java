@@ -331,8 +331,8 @@ public class PESQLInbox implements Serializable
     public void onPickUpCase(){
         try{
             //TODO dispatch for Select case
-            HttpSession session = FacesUtil.getSession(false);
-
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("fetchType", 1);
             userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
             String queueName = inboxViewSelectItem.getQueuename();

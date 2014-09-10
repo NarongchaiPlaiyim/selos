@@ -829,7 +829,7 @@
 <p:panel id="returnMakerPanel" styleClass="panel"
         rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 1002}">
     <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" closable="false"
               modal="true" width="380" height="150">
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
     </p:dialog>
@@ -847,8 +847,8 @@
 <p:panel id="closeSalesPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Close Sales')}">
     <p:dialog id="closeSalesDialog" header="Close Sales" widgetVar="closeSalesDlg"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-              modal="true" width="380" height="150">
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" closable="false"
+              modal="true" width="380">
         <ui:include src="/site/dialog/closeSalesDialog.xhtml"/>
     </p:dialog>
 </p:panel>

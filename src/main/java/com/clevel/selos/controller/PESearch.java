@@ -358,9 +358,11 @@ public class PESearch implements Serializable
                 if(stepId == 1) {
                     if (wrkCaseId != 0) {
                         session.setAttribute("stepId", 2001L);
+                        session.setAttribute("stageId", 201);
                         FacesUtil.redirect("/site/basicInfo.jsf");
                     } else {
                         session.setAttribute("stepId", 1003L);
+                        session.setAttribute("stageId", 101);
                         FacesUtil.redirect("/site/prescreenMaker.jsf");
                     }
                 }else{

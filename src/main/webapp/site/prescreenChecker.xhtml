@@ -136,6 +136,10 @@
                 SUBMITTING CASE<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
+            <p:blockUI block="pnl_maincontainer" widgetVar="blockUIRedirect">
+                Redirecting to Inbox<br/>
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </p:panel>
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
@@ -159,6 +163,7 @@
                 <p:commandButton value="OK"
                                  process="@this"
                                  actionListener="#{headerController.onGoToInbox()}"
+                                 onclick="PF('blockUIRedirect').show()"
                                  oncomplete="msgBoxRedirectDlg.hide()" />
             </p:confirmDialog>
         </p:panel>
