@@ -1365,7 +1365,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
                                                 ncbDetailView.setTMBAccount(RadioValue.NO.value());
-                                                if (creditInfoModel.getCreditortype() != null && creditInfoModel.getCreditortype().trim().equals(TMB_BANK_THAI)) {
+                                                if (creditInfoModel.getCreditor() != null && creditInfoModel.getCreditor().trim().equals(TMB_BANK_THAI)) {
                                                     ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                     isTMBAccount = true;
                                                 }
@@ -1591,7 +1591,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
                                                 ncbDetailView.setTMBAccount(RadioValue.NO.value());
-                                                if (creditInfoModel.getCreditortype() != null && creditInfoModel.getCreditortype().trim().equals(TMB_BANK_THAI)) {
+                                                if (creditInfoModel.getCreditor() != null && creditInfoModel.getCreditor().trim().equals(TMB_BANK_THAI)) {
                                                     ncbDetailView.setTMBAccount(RadioValue.YES.value());
                                                     isTMBAccount = true;
                                                 }
