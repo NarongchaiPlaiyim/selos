@@ -2542,7 +2542,7 @@ public class ProposeLineControl extends BusinessControl {
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfoDetailView.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
-                                            sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfoDetailView.getPCEAmount());
+                                            sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(proposeCreditInfoDetailView.getLimit(),proposeCreditInfoDetailView.getPCEPercent()),100));
                                         }
                                     } else {
                                         //ExposureMethod for check to use limit or limit*PCE%
@@ -2551,7 +2551,7 @@ public class ProposeLineControl extends BusinessControl {
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfoDetailView.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
-                                            sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfoDetailView.getPCEAmount());
+                                            sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(proposeCreditInfoDetailView.getLimit(),proposeCreditInfoDetailView.getPCEPercent()),100));
                                         }
                                     }
 
