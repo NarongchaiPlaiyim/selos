@@ -59,11 +59,11 @@ public class AppraisalView implements Serializable {
         appraisalDivision = new AppraisalDivision();
         locationOfProperty = new LocationProperty();
         provinceOfProperty = new Province();
-        workCase = new WorkCase();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         appraisalContactDetailView = new AppraisalContactDetailView();
         removeCollListId = new ArrayList<Long>();
+        workCase = new WorkCase();
 //        appraisalDate = DateTime.now().toDate();
 //        dueDate = DateTime.now().toDate();
 //        appointmentDate = DateTime.now().toDate();
