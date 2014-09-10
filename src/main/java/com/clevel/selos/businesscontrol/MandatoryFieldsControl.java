@@ -107,7 +107,25 @@ public class MandatoryFieldsControl extends BusinessControl {
         }
     }
 
-    public List<FieldsControlView> getFieldsControlViewPreeScreen(long workCasePreScreenId, long stepId, Screen screen, String caseOwnerUserId) {
+    public List<FieldsControlView> getFieldsControlViewPreScreen(long workCasePreScreenId, long stepId, long statusId, Screen screen, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (stepId <= 0 || workCasePreScreenId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            int productGroupId = workCasePrescreen.getProductGroup().getId();
+            log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, role : {}", screen, stepId, statusId, user.getRole());
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
+            List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+            log.debug("Result fields control : {} ", fieldsControlViewList.size());
+            return fieldsControlViewList;
+        }else{
+            return Collections.emptyList();
+        }
+    }
+
+    /*public List<FieldsControlView> getFieldsControlViewPreeScreen(long workCasePreScreenId, long stepId, Screen screen, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
         if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
             if (stepId <= 0 || workCasePreScreenId <= 0 || screen == null)
@@ -129,7 +147,7 @@ public class MandatoryFieldsControl extends BusinessControl {
         }else{
             return Collections.emptyList();
         }
-    }
+    }*/
 
     public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();

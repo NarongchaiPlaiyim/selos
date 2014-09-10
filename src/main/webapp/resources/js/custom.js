@@ -744,24 +744,6 @@ function handleManageUserDialogRequest(xhr, status, args) {
     }
 }
 
-function handlePrescreenCustomerInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        customerDlg.hide();
-    }
-}
-
-function handlePrescreenFacilityRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        facilityDlg.hide();
-    }
-}
-
-function handlePrescreenBusinessInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        businessDlg.hide();
-    }
-}
-
 function handlePrescreenProposeCreditRequest(xhr, status, args) {
     if (args.functionComplete) {
         proposeCollateralDlg.hide();

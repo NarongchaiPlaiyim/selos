@@ -105,7 +105,7 @@ public class ReturnInfoReview extends BaseController implements Serializable {
         if(workCaseId!=0){
             loadFieldControl(workCaseId, Screen.ReturnInfoReview, ownerCaseUserId);
         } else {
-            loadFieldControlPrescreen(workCasePreScreenId, Screen.ReturnInfoReview, ownerCaseUserId);
+            loadFieldControlPreScreen(workCasePreScreenId, Screen.ReturnInfoReview, ownerCaseUserId);
         }
 
         initialResultView();
