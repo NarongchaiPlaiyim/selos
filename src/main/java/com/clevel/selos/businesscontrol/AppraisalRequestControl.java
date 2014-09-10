@@ -131,7 +131,6 @@ public class AppraisalRequestControl extends BusinessControl {
             }
         } else {
             log.debug("-- Find by work case id = {} or work case preScreen id = {} appraisal is {}   ", workCaseId, workCasePreScreenId, appraisalView);
-            appraisalView.setZoneLocation(getZoneLocation(bdmUserId));
             return appraisalView;
         }
     }

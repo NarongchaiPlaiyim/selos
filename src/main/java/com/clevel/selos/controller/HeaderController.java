@@ -1354,7 +1354,7 @@ public class HeaderController extends BaseController {
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
 
         try{
-            appraisalView.setZoneLocation(user.getZone().getName());
+            appraisalView.setZoneLocation(user.getTeam().getTeam_name());
         } catch (Exception e) {
             appraisalView.setZoneLocation("");
         }
