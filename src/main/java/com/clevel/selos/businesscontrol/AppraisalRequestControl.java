@@ -76,8 +76,12 @@ public class AppraisalRequestControl extends BusinessControl {
     public String getZoneLocation(String bdmId){
         log.debug("-- getZoneLocation()");
         User user = userDAO.findUserByID(bdmId);
+        String zoneTeam = "";
         try {
-            return user.getTeam().getTeam_name();
+            if (!Util.isNull(user.getTeam())){
+                zoneTeam = user.getTeam().getTeam_name();
+            }
+            return zoneTeam;
         } catch (Exception e){
             return "";
         }
@@ -127,6 +131,7 @@ public class AppraisalRequestControl extends BusinessControl {
             }
         } else {
             log.debug("-- Find by work case id = {} or work case preScreen id = {} appraisal is {}   ", workCaseId, workCasePreScreenId, appraisalView);
+            appraisalView.setZoneLocation(getZoneLocation(bdmUserId));
             return appraisalView;
         }
     }

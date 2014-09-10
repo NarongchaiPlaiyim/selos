@@ -146,9 +146,6 @@ public class AppraisalRequest extends BaseController {
 
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
-            if (!Util.isEmpty(bdmUserId)){
-                appraisalView.setZoneLocation(appraisalRequestControl.getZoneLocation(bdmUserId));
-            }
 
             if(!Util.isNull(appraisalView)){
                 log.debug("onCreation ::: appraisalView.id : [{}]", appraisalView.getId());
