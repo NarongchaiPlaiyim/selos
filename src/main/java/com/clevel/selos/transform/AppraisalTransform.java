@@ -152,7 +152,7 @@ public class AppraisalTransform extends Transform {
         appraisalView.setCancelAppointment(appraisal.getCancelAppointment());
         appraisalView.setAppointmentRemark(appraisal.getAppointmentRemark());
         appraisalView.setDueDate(appraisal.getDueDate());
-        appraisalView.setZoneLocation(appraisal.getZoneLocation());
+//        appraisalView.setZoneLocation(appraisal.getZoneLocation());
         appraisalView.setReceivedTaskDate(appraisal.getReceivedTaskDate());
         appraisalView.setCreateBy(appraisal.getCreateBy());
         appraisalView.setCreateDate(appraisal.getCreateDate());

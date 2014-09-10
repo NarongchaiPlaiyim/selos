@@ -4,7 +4,10 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalRequestControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
@@ -55,6 +58,7 @@ public class AppraisalRequest extends BaseController {
     private AppraisalRequestControl appraisalRequestControl;
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
+    @Inject private WorkCasePrescreenDAO workCasePreScreenDAO;
 
     private enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
@@ -124,15 +128,27 @@ public class AppraisalRequest extends BaseController {
         log.info("onCreation...");
         init();
         HttpSession session = FacesUtil.getSession(false);
+        String bdmUserId = "";
         if(checkSession(session)){
             stepId = (Long)session.getAttribute("stepId");
             workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
+            if (!Util.isZero(workCaseId)){
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                bdmUserId = workCase.getCreateBy().getId();
+            } else {
+                WorkCasePrescreen workCasePrescreen = workCasePreScreenDAO.findById(workCasePreScreenId);
+                bdmUserId = workCasePrescreen.getCreateBy().getId();
+            }
+
             log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}]", workCasePreScreenId, workCaseId);
 
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
+            if (!Util.isEmpty(bdmUserId)){
+                appraisalView.setZoneLocation(appraisalRequestControl.getZoneLocation(bdmUserId));
+            }
 
             if(!Util.isNull(appraisalView)){
                 log.debug("onCreation ::: appraisalView.id : [{}]", appraisalView.getId());
@@ -149,7 +165,9 @@ public class AppraisalRequest extends BaseController {
                 log.debug("onCreation ::: appraisalContactDetailView.id : [{}]", appraisalContactDetailView.getId());
             } else {
                 appraisalView = new AppraisalView();
-                appraisalView.setZoneLocation(appraisalRequestControl.getZoneLocation());
+                if (!Util.isEmpty(bdmUserId)){
+                    appraisalView.setZoneLocation(appraisalRequestControl.getZoneLocation(bdmUserId));
+                }
                 log.debug("-- AppraisalView[New] created");
                 appraisalContactDetailView = new AppraisalContactDetailView();
                 log.debug("-- AppraisalContactDetailView[New] created");
