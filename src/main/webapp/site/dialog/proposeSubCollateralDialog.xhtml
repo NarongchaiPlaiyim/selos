@@ -19,7 +19,7 @@
                                      value="#{proposeLine.proposeCollateralInfoSubView.subCollateralType.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[addSubCollDlg.clientId]}"
-                                     disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralType')}">
+                                     disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.collateralType')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{proposeLine.subCollateralTypeList}"
                                        var="subCollateralTypeItem"
@@ -39,7 +39,7 @@
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.titleDeed}"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
-                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.titleDeed')}">
+                                 readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.titleDeed')}">
                     <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -55,7 +55,7 @@
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.address}"
                                  style="width: 300px;"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
-                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.address')}">
+                                 readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.address')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -70,7 +70,7 @@
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.landOffice}"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
-                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.landOffice')}">
+                                 readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.landOffice')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -85,7 +85,7 @@
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoSubView.collateralOwnerAAD}"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
-                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.collateralOwner')}">
+                                 readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.collateralOwner')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -105,7 +105,7 @@
                                                  value="#{proposeLine.collOwnerId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
                                                  required="#{not empty param[addCollOwnerUW.clientId]}"
-                                                 disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralName')}">
+                                                 disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.collateralName')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{proposeLine.collateralOwnerUwAllList}"
                                                    var="collateralOwnerUWItem"
@@ -123,7 +123,7 @@
                                         action="#{proposeLine.onAddCollateralOwnerUW()}"
                                         process=":subCollateralDlgForm"
                                         update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                                        disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralName')}">
+                                        disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.collateralName')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -163,7 +163,7 @@
                                              process=":subCollateralDlgForm"
                                              actionListener="#{proposeLine.onDeleteCollateralOwnerUW(rowIndex)}"
                                              update=":subCollateralDlgForm"
-                                             disabled="#{proposeLine.isDisabled('collateral.subcoll.collateralName.removeButton')}">
+                                             disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.collateralName.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -184,7 +184,7 @@
                                                  value="#{proposeLine.mortgageTypeId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
                                                  required="#{not empty param[addMortgageType.clientId]}"
-                                                 disabled="#{proposeLine.isDisabled('collateral.subcoll.mortgageType')}">
+                                                 disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.mortgageType')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{proposeLine.mortgageTypeViewList}"
                                                    var="mortgageTypeItem"
@@ -202,7 +202,7 @@
                                         actionListener="#{proposeLine.onAddMortgageType()}"
                                         process="@form"
                                         update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                                        disabled="#{proposeLine.isDisabled('collateral.subcoll.mortgageType')}">
+                                        disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.mortgageType')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -242,7 +242,7 @@
                                              process=":subCollateralDlgForm"
                                              actionListener="#{proposeLine.onDeleteMortgageType(rowIndex)}"
                                              update=":subCollateralDlgForm"
-                                             disabled="#{proposeLine.isDisabled('collateral.subcoll.mortgageType.removeButton')}">
+                                             disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.mortgageType.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -341,7 +341,7 @@
                                  onkeydown="return onKeyDownNegMoney(event);"
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
-                                 readonly="#{proposeLine.isDisabled('collateral.subcoll.appraisalValue')}"
+                                 readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.appraisalValue')}"
                                  style="width:200px;text-align: right">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
