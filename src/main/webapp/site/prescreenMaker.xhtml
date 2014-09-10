@@ -465,7 +465,7 @@
                                 <td>
                                     <table class="content_table_form" style="padding: 0; border-spacing:0; border-collapse:collapse; margin-left: -1px;">
                                         <tr>
-                                            <td style="width: 180px;">
+                                            <td style="width: 190px;">
                                                 <clv:BECalendar id="referredDate" showOn="button" showButtonPanel="true" navigator="true"
                                                                 disabled="#{prescreenMaker.isDisabled('prescreen.referCompanyDate')}"
                                                                 yearRange="1950:2100"
@@ -518,7 +518,7 @@
                                             </td>
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceInBank" value="#{prescreenMaker.prescreenView.refinanceInBank.code}"
-                                                                 disabled="#{(prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0) and prescreenMaker.isDisabled('prescreen.refinanceInBank')}"
+                                                                 disabled="#{(prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0) || prescreenMaker.isDisabled('prescreen.refinanceInBank')}"
                                                                  required="#{prescreenMaker.prescreenView.refinanceIn == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -546,7 +546,7 @@
                                             </td>
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceOutBank" value="#{prescreenMaker.prescreenView.refinanceOutBank.code}"
-                                                                 disabled="#{(prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0) and prescreenMaker.isDisabled('prescreen.refinanceOutBank')}"
+                                                                 disabled="#{(prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0) || prescreenMaker.isDisabled('prescreen.refinanceOutBank')}"
                                                                  required="#{prescreenMaker.prescreenView.refinanceOut == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>

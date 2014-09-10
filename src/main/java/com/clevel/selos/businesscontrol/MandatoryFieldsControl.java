@@ -15,6 +15,7 @@ import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.transform.FieldsControlTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -114,7 +115,10 @@ public class MandatoryFieldsControl extends BusinessControl {
                 return Collections.emptyList();
             User user = getCurrentUser();
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            int productGroupId = workCasePrescreen.getProductGroup().getId();
+            int productGroupId = 1;
+            if(!Util.isNull(workCasePrescreen.getProductGroup())){
+                productGroupId = workCasePrescreen.getProductGroup().getId();
+            }
             log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, role : {}", screen, stepId, statusId, user.getRole());
             List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
             List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
