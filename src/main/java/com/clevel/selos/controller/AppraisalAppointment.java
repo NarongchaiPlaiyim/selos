@@ -254,9 +254,7 @@ public class AppraisalAppointment implements Serializable {
 
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
-                if (!Util.isEmpty(bdmUserId)){
-                    appraisalView.setZoneLocation(appraisalAppointmentControl.getZoneLocation(bdmUserId)); //Zone from user
-                }
+                getZoneTeamId(bdmUserId);
                 updateContractFlag(appraisalContactDetailView);
 //                if(Util.isNull(appraisalView.getAppraisalDate())){
 //                    appraisalView.setAppraisalDate(DateTime.now().toDate());
@@ -272,9 +270,16 @@ public class AppraisalAppointment implements Serializable {
 //                }
             } else {
                 appraisalView = new AppraisalView();
+                getZoneTeamId(bdmUserId);
             }
         } else {
             //TODO show message box
+        }
+    }
+
+    private void getZoneTeamId(String bdmUserId){
+        if (!Util.isEmpty(bdmUserId)){
+            appraisalView.setZoneLocation(appraisalAppointmentControl.getZoneLocation(bdmUserId)); //Zone from user
         }
     }
 
