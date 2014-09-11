@@ -1517,7 +1517,7 @@
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteExistingCollateralDlg.show()"
-                                                                     disabled="#{creditFacExisting.isDisabled('borrower.deleteButtons')}">
+                                                                     disabled="#{creditFacExisting.isDisabled('borrower.deleteButton')}">
                                                         <f:setPropertyActionListener value="#{borrowerCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfListCollateral}" />
@@ -1674,7 +1674,7 @@
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteExistingCollateralDlg.show()"
-                                                                     disabled="#{creditFacExisting.isDisabled('related.deleteButtons')}}">
+                                                                     disabled="#{creditFacExisting.isDisabled('related.deleteButton')}}">
                                                         <f:setPropertyActionListener value="#{relatedCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfListCollateral}" />
