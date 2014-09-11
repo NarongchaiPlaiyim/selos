@@ -94,11 +94,13 @@
 <!--############ Stage for End Case #############-->
 <p:panel id="header_panel_report" rendered="#{headerController.checkAccessStage('ENDSTAGE')}" styleClass="panel">
     <!--Print Report-->
-    <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
-                     actionListener="#{report.setNameReport()}"
-                     oncomplete="PF('printReportDlg').show()"
-                     update=":frmMain:printReportPanel">
-    </p:commandButton>
+    <c:if test="#{headerController.checkAccessStage('ENDSTAGE')}">
+        <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
+                         actionListener="#{report.setNameReport()}"
+                         oncomplete="PF('printReportDlg').show()"
+                         update=":frmMain:printReportPanel">
+        </p:commandButton>
+    </c:if>
 </p:panel>
 <!--############ Stage for FullApplication ############-->
 <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
@@ -554,11 +556,13 @@
 </p:confirmDialog>
 
 <p:panel id="printReportPanel" styleClass="panel">
-    <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="700" height="200" closable="false">
-        <ui:include src="/site/dialog/printReportDialog.xhtml"/>
-    </p:dialog>
+    <c:if test="#{headerController.checkAccessStage('ENDSTAGE')}">
+        <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="700" height="200" closable="false">
+            <ui:include src="/site/dialog/printReportDialog.xhtml"/>
+        </p:dialog>
+    </c:if>
 </p:panel>
 
 <p:panel id="assignABDMPanel" styleClass="panel">
@@ -829,7 +833,7 @@
 <p:panel id="returnMakerPanel" styleClass="panel"
         rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 1002}">
     <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" closable="false"
               modal="true" width="380" height="150">
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
     </p:dialog>
@@ -847,8 +851,8 @@
 <p:panel id="closeSalesPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Close Sales')}">
     <p:dialog id="closeSalesDialog" header="Close Sales" widgetVar="closeSalesDlg"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-              modal="true" width="380" height="150">
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" closable="false"
+              modal="true" width="380">
         <ui:include src="/site/dialog/closeSalesDialog.xhtml"/>
     </p:dialog>
 </p:panel>

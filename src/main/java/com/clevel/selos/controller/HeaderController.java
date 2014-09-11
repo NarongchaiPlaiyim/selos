@@ -307,7 +307,7 @@ public class HeaderController extends BaseController {
         if(workCaseId != 0){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if(!Util.isNull(workCase)){
-                if(Util.isZero(workCase.getNcbRejectFlag())){
+                //if(Util.isZero(workCase.getNcbRejectFlag())){
                     UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
                     if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
                         if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
@@ -327,7 +327,7 @@ public class HeaderController extends BaseController {
                     canCheckFullApp = true;
                     timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
                     UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
-                    int limitTimeOfCriteriaCheck = 3;
+                    int limitTimeOfCriteriaCheck = 100;
                     if(!Util.isNull(userSysParameterView)){
                         limitTimeOfCriteriaCheck = Util.parseInt(userSysParameterView.getValue(), 0);
                     }
@@ -336,9 +336,9 @@ public class HeaderController extends BaseController {
                     }
 
                     requestAppraisalRequire = fullApplicationControl.getRequestAppraisalRequire(workCaseId);
-                } else {
-                    canCheckFullApp = false;
-                }
+                //} else {
+                //    canCheckFullApp = false;
+                //}
             }
 
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
@@ -353,7 +353,7 @@ public class HeaderController extends BaseController {
         if(workCasePreScreenId != 0){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             if(!Util.isNull(workCasePrescreen)){
-                if(Util.isZero(workCasePrescreen.getNcbRejectFlag())){
+                //if(Util.isZero(workCasePrescreen.getNcbRejectFlag())){
                     UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
                     if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
                         if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
@@ -379,9 +379,9 @@ public class HeaderController extends BaseController {
                     if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck){
                         canCheckPreScreen = true;
                     }
-                } else {
-                    canCheckPreScreen = false;
-                }
+                //} else {
+                //    canCheckPreScreen = false;
+                //}
             }
         }
 
@@ -473,13 +473,6 @@ public class HeaderController extends BaseController {
                                 uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                                 uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                                 uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
-                                //TODO: wait to confirm spec
-                                if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,workCasePreScreenId,0,user)){
-                                    canCheckPreScreen = false;
-                                } else {
-                                    canCheckPreScreen = true;
-                                }
-                                headerControl.updateNCBRejectFlag(workCasePreScreenId,canCheckPreScreen);
                             }catch (Exception ex){
                                 log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                                 messageHeader = "Exception.";
@@ -1243,6 +1236,7 @@ public class HeaderController extends BaseController {
             fullApplicationControl.cancelCA(queueName, wobNumber, reasonId, cancelRemark);
             log.debug("saveCancelRejectInfo... cancelReasonId : {}, remark : {}, workCaseId : {}, workCasePreScreenId : {}", cancelReasonId, cancelRemark, workCaseId, workCasePreScreenId);
             fullApplicationControl.saveCancelRejectInfo(workCaseId, workCasePreScreenId, cancelReasonId);
+            fullApplicationControl.checkNCBReject(workCasePreScreenId, workCaseId);
             messageHeader =  msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.cancel.success");
             showMessageRedirect();
@@ -2705,12 +2699,12 @@ public class HeaderController extends BaseController {
                             fullApplicationControl.updateTimeOfCheckCriteria(workCaseId, stepId);
                             fullApplicationControl.clearCaseUpdateFlag(workCaseId);
 
-                            if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,0,workCaseId,user)){
+                            /*if(!headerControl.ncbResultValidation(uwRuleResultSummaryView,0,workCaseId,user)){
                                 canCheckFullApp = false;
                             } else {
                                 canCheckFullApp = true;
                             }
-                            headerControl.updateNCBRejectFlagFullApp(workCaseId, canCheckFullApp);
+                            headerControl.updateNCBRejectFlagFullApp(workCaseId, canCheckFullApp);*/
                         }catch (Exception ex){
                             log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                             messageHeader = "Exception.";

@@ -282,10 +282,12 @@ public class HeaderControl extends BusinessControl {
                                 && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView() != null
                                 && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName() != null
                                 && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")) {
-                            if (uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED) {
-                                log.debug("NCB Result is RED without Deviate, auto reject case!");
-                                ncbInterface.generateRejectedLetter(user.getId(), workCasePreScreenId, workCaseId);
-                                return false;
+                            if(uwRuleResultDetailView.getDeviationFlag() != null && uwRuleResultDetailView.getDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
+                                if (uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED) {
+                                    log.debug("NCB Result is RED without Deviate, auto reject case!");
+                                    ncbInterface.generateRejectedLetter(user.getId(), workCasePreScreenId, workCaseId);
+                                    return false;
+                                }
                             }
                         }
                     }

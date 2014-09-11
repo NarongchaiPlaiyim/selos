@@ -331,8 +331,8 @@ public class PESQLInbox implements Serializable
     public void onPickUpCase(){
         try{
             //TODO dispatch for Select case
-            HttpSession session = FacesUtil.getSession(false);
-
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("fetchType", 1);
             userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
             String queueName = inboxViewSelectItem.getQueuename();
@@ -341,7 +341,7 @@ public class PESQLInbox implements Serializable
             inboxControl.selectCasePoolBox(queueName, wobNumber, ActionCode.ASSIGN_TO_ME.getVal());
             //TODO Reload all value for Inbox Select
             inboxViewSelectItem = inboxControl.getNextStep(inboxViewSelectItem, ActionCode.ASSIGN_TO_ME.getVal());
-            inboxViewSelectItem.setFetchType(2);
+            inboxViewSelectItem.setFetchType(1);
             inboxViewSelectItem.setAtuser(userDetail.getUserName());
             inboxViewSelectItem.setQueuename("Inbox(0)");
             log.debug("onPickUpCase ::: find next step : {}", inboxViewSelectItem);

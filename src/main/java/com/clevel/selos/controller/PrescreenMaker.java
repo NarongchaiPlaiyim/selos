@@ -310,6 +310,13 @@ public class PrescreenMaker extends BaseController {
             onLoadSelectList();
             onClearObject();
             onCheckButton();
+
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            if(stepId == StepValue.PRESCREEN_INITIAL.value()){
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_INITIAL, ownerCaseUserId);
+            }else{
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_MAKER, ownerCaseUserId);
+            }
         } else {
             //--- Redirect to Inbox ---//
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);

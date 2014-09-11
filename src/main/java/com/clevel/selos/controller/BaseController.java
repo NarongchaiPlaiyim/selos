@@ -49,11 +49,12 @@ public class BaseController implements Serializable {
 
     }
 
-    protected void loadFieldControlPrescreen(long workCasePreScreenId, Screen screenId, String ownerCaseUserId) {
+    protected void loadFieldControlPreScreen(long workCasePreScreenId, Screen screenId, String ownerCaseUserId) {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
         HttpSession session = FacesUtil.getSession(false);
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlViewPreeScreen(workCasePreScreenId, stepId, screenId, ownerCaseUserId);
+        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlViewPreScreen(workCasePreScreenId, stepId, statusId, screenId, ownerCaseUserId);
         fieldMap.clear();
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
