@@ -912,7 +912,7 @@ public class Decision extends BaseController {
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit);
                 // Calculate Total Approve
-                decisionControl.calculateTotalApprove(decisionView);
+                decisionControl.calculateTotalApprove(decisionView, workCaseId);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 

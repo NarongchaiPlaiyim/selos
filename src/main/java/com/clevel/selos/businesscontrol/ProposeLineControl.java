@@ -2017,55 +2017,53 @@ public class ProposeLineControl extends BusinessControl {
 
                     if((!Util.isNull(proposeCreditInfoDetailView.getProductProgramView()) && !Util.isZero(proposeCreditInfoDetailView.getProductProgramView().getId())) &&
                             (!Util.isNull(proposeCreditInfoDetailView.getCreditTypeView()) && !Util.isZero(proposeCreditInfoDetailView.getCreditTypeView().getId()))){
+                        PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(proposeCreditInfoDetailView.getCreditTypeView().getId(), proposeCreditInfoDetailView.getProductProgramView().getId());
 
-                    }
-
-                    PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(proposeCreditInfoDetailView.getCreditTypeView().getId(), proposeCreditInfoDetailView.getProductProgramView().getId());
-
-                    if(!Util.isNull(prdProgramToCreditType)){
-                        ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG);
-                        if(!Util.isNull(productFormula)){
-                            spread = productFormula.getDbrSpread();
+                        if(!Util.isNull(prdProgramToCreditType)){
+                            ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG);
+                            if(!Util.isNull(productFormula)){
+                                spread = productFormula.getDbrSpread();
+                            }
                         }
+
+                        if (proCreInfTieDetView.getFinalBasePrice() != null) {
+                            baseRate = proCreInfTieDetView.getFinalBasePrice().getValue();
+                        }
+                        if (proCreInfTieDetView.getFinalInterest() != null) {
+                            interest = proCreInfTieDetView.getFinalInterest();
+                            interestOriginal = proCreInfTieDetView.getFinalInterestOriginal();
+                        }
+
+                        BigDecimal interestPerMonth = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interest),oneHundred,100),twelve,100);
+                        BigDecimal interestPerMonthOriginal = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interestOriginal),oneHundred,100),twelve,100);
+                        BigDecimal limit = BigDecimal.ZERO;
+                        int tenor = proCreInfTieDetView.getTenor();
+                        BigDecimal installment;
+                        BigDecimal installmentOriginal;
+
+                        if (proposeCreditInfoDetailView.getLimit() != null) {
+                            limit = proposeCreditInfoDetailView.getLimit();
+                        }
+
+                        installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor)) ,
+                                Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
+
+                        installmentOriginal = Util.divide(Util.multiply(Util.multiply(interestPerMonthOriginal,limit),Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor)) ,
+                                Util.subtract(Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor),BigDecimal.ONE));
+
+                        if (installment != null) {
+                            installment.setScale(2, RoundingMode.HALF_UP);
+                        }
+
+                        if (installmentOriginal != null) {
+                            installmentOriginal.setScale(2, RoundingMode.HALF_UP);
+                        }
+
+                        proCreInfTieDetView.setInstallment(installment);
+                        proCreInfTieDetView.setInstallmentOriginal(installmentOriginal);
+                    } else {
+                        proCreInfTieDetView.setInstallmentOriginal(proCreInfTieDetView.getInstallment());
                     }
-
-                    if (proCreInfTieDetView.getFinalBasePrice() != null) {
-                        baseRate = proCreInfTieDetView.getFinalBasePrice().getValue();
-                    }
-                    if (proCreInfTieDetView.getFinalInterest() != null) {
-                        interest = proCreInfTieDetView.getFinalInterest();
-                        interestOriginal = proCreInfTieDetView.getFinalInterestOriginal();
-                    }
-
-                    BigDecimal interestPerMonth = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interest),oneHundred,100),twelve,100);
-                    BigDecimal interestPerMonthOriginal = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interestOriginal),oneHundred,100),twelve,100);
-                    BigDecimal limit = BigDecimal.ZERO;
-                    int tenor = proCreInfTieDetView.getTenor();
-                    BigDecimal installment;
-                    BigDecimal installmentOriginal;
-
-                    if (proposeCreditInfoDetailView.getLimit() != null) {
-                        limit = proposeCreditInfoDetailView.getLimit();
-                    }
-
-                    installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor)) ,
-                            Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
-
-                    installmentOriginal = Util.divide(Util.multiply(Util.multiply(interestPerMonthOriginal,limit),Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor)) ,
-                            Util.subtract(Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor),BigDecimal.ONE));
-
-                    if (installment != null) {
-                        installment.setScale(2, RoundingMode.HALF_UP);
-                    }
-
-                    if (installmentOriginal != null) {
-                        installmentOriginal.setScale(2, RoundingMode.HALF_UP);
-                    }
-
-                    proCreInfTieDetView.setInstallment(installment);
-                    proCreInfTieDetView.setInstallmentOriginal(installmentOriginal);
-                } else {
-                    proCreInfTieDetView.setInstallmentOriginal(proCreInfTieDetView.getInstallment());
                 }
             }
         }
