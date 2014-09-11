@@ -277,6 +277,9 @@ public class BasicInfo extends BaseController {
 
         customerId = 0;
         bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActiveList();
+        for(BankAccountPurposeView bankAccountPurposeView : bankAccountPurposeViewList) {
+            bankAccountPurposeView.setSelected(false);
+        }
     }
 
     public void onSelectEditAccount(){
