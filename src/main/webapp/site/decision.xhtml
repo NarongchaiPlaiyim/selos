@@ -3423,7 +3423,7 @@
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{approvalHistory.userView.titleName}" rendered="#{not empty approvalHistory.userView}"/>
+                                        <h:outputText value="#{approvalHistory.userView.positionName}" rendered="#{not empty approvalHistory.userView}"/>
                                     </p:column>
 
                                     <p:column styleClass="center top">
@@ -3506,7 +3506,7 @@
                                                                             #{msg.get('app.decision.tb.td.label.position')}
                                                                         </td>
                                                                         <td class="left" style="border-style: none !important;">
-                                                                            <h:outputText value="#{decision.approvalHistoryView.userView.titleName}"
+                                                                            <h:outputText value="#{decision.approvalHistoryView.userView.positionName}"
                                                                                           rendered="#{not empty decision.approvalHistoryView.userView}"/>
                                                                         </td>
                                                                     </tr>
