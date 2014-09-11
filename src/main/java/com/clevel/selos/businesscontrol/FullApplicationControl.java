@@ -123,6 +123,8 @@ public class FullApplicationControl extends BusinessControl {
     private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
     @Inject
     private TCGDAO tcgDAO;
+    @Inject
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
 
     @Inject
     private ReturnInfoTransform returnInfoTransform;
@@ -413,7 +415,11 @@ public class FullApplicationControl extends BusinessControl {
                 ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                 if(proposeLine != null) {
                     totalCommercial = proposeLine.getTotalExposure();
-                    totalRetail = proposeLine.getTotalPropose();
+                }
+
+                ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+                if(existingCreditFacility != null) {
+                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
                 }
 
                 UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
@@ -490,8 +496,13 @@ public class FullApplicationControl extends BusinessControl {
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                     if(proposeLine != null) {
                         totalCommercial = proposeLine.getTotalExposure();
-                        totalRetail = proposeLine.getTotalPropose();
                     }
+
+                    ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+                    if(existingCreditFacility != null) {
+                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                    }
+
 
                     if(isPricingRequest){
                         approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
