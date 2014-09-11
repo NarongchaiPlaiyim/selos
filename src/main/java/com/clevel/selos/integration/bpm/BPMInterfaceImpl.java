@@ -118,7 +118,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             caseParameter.put("CheckNCB", caseCreationHistory.getCheckNCB());
             caseParameter.put("SSOUserName", caseCreationHistory.getSsoId());
         }
-        caseParameter.put("ReleaseVersion", "1");
+        caseParameter.put("ReleaseVersion", "1.1");
 
         String linkKey = Util.getLinkKey(bpmUsername);
         try {
