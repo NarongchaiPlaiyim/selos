@@ -697,7 +697,7 @@ public class CustomerInfoJuristic extends BaseController {
 
         try{
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
-            exSummaryControl.calForCustomerInfoJuristic(workCaseId, stepId);
+            exSummaryControl.calForCustomerInfo(workCaseId);
             isFromSummaryParam = true;
             initial();
             onEditJuristic();

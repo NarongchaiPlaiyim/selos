@@ -56,6 +56,7 @@ public class BankAccountPurposeControl extends BusinessControl{
 
         List<BankAccountPurposeView> bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
         for(BankAccountPurposeView bankAccountPurposeView : bankAccountPurposeViewMap.values()){
+            bankAccountPurposeView.setSelected(false);
             if(Util.isTrue(bankAccountPurposeView.getActive())){
                 bankAccountPurposeViewList.add(bankAccountPurposeView);
             }
