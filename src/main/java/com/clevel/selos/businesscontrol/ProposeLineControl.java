@@ -374,6 +374,8 @@ public class ProposeLineControl extends BusinessControl {
                                 }
                                 if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
                                     proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                                    proposeCreditInfoDetailView.setFrontEndFeeOriginal(feeDetailView.getPercentFee());
+                                    proposeCreditInfoDetailView.setFrontEndFee(feeDetailView.getPercentFee());
                                 } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
                                     proposeFeeDetailView.setPrepaymentFee(feeDetailView);
                                 } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
@@ -422,6 +424,18 @@ public class ProposeLineControl extends BusinessControl {
                                 }
                             }
                         }
+                        for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
+                            if(pricingFee.getType().equals("9")) {
+                                String creditTypeId = pricingFee.getCreditDetailId();
+                                for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeLineView.getProposeCreditInfoDetailViewList()) {
+                                    if (creditTypeId.equals(proposeCreditInfoDetailView.getId() + "")) {
+                                        proposeCreditInfoDetailView.setFrontEndFee(pricingFee.getFeePercent());
+                                        proposeCreditInfoDetailView.setFrontEndFeeOriginal(pricingFee.getFeePercent());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                     returnMapVal.put("complete", 1);
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
@@ -450,6 +464,7 @@ public class ProposeLineControl extends BusinessControl {
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
+                            log.debug("feeLevel : CREDIT_LEVEL : feeDetailView : {}", feeDetailView);
                             if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
                                 proposeFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
                             } else {
@@ -536,6 +551,18 @@ public class ProposeLineControl extends BusinessControl {
                                 if (creditTypeId.equals(proposeCreditInfoDetailView.getId()+"")) {
                                     proposeCreditInfoDetailView = proposeLineTransform.transformPricingIntTierToView(pricingIntTierList, proposeCreditInfoDetailView);
                                     break;
+                                }
+                            }
+                        }
+                        for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
+                            if(pricingFee.getType().equals("9")) {
+                                String creditTypeId = pricingFee.getCreditDetailId();
+                                for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
+                                    if (creditTypeId.equals(proposeCreditInfoDetailView.getId() + "")) {
+                                        proposeCreditInfoDetailView.setFrontEndFee(pricingFee.getFeePercent());
+                                        proposeCreditInfoDetailView.setFrontEndFeeOriginal(pricingFee.getFeePercent());
+                                        break;
+                                    }
                                 }
                             }
                         }

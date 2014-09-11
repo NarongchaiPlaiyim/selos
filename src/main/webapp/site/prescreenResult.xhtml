@@ -552,7 +552,7 @@
         <p:commandButton value="OK"
                          process="@this"
                          update=":frmMain"
-                         onclick="reload();"/>
+                         oncomplete="msgBoxSystemMessageResultDlg.hide();"/>
     </p:confirmDialog>
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">

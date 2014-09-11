@@ -50,6 +50,17 @@ public class NCBBizTransform extends BusinessTransform {
 
     private final String PERSONAL_LOAN_CODE = "05";
 
+    private final String UNSPECIFIED = "0";
+    private final String WEEKLY = "1";
+    private final String BI_WEEKLY = "2";
+    private final String MONTHLY = "3";
+    private final String BI_MONTHLY = "4";
+    private final String QUARTERTY = "5";
+    private final String SEMI_MONTHLY = "6";
+    private final String SPECIAL_USE = "7";
+    private final String SEMI_YEARLY = "8";
+    private final String YEARLY = "9";
+
     @Inject
     @Config(name = "ncb.nccrs.bank.tmb")
     String TMB_BANK_THAI;
@@ -249,7 +260,15 @@ public class NCBBizTransform extends BusinessTransform {
                                             }
                                             //set installment
                                             if (!Util.isEmpty(subjectAccountModel.getInstallmentamount())) {
-                                                ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount()));
+                                                BigDecimal installment = BigDecimal.ZERO;
+                                                try{
+                                                    installment = new BigDecimal(subjectAccountModel.getInstallmentamount());
+                                                } catch (Exception ex){
+                                                    installment = BigDecimal.ZERO;
+                                                }
+                                                ncbDetailView.setInstallment(calculateInstallmentInd(subjectAccountModel.getInstallmentfreq(),installment));
+                                            } else {
+                                                ncbDetailView.setInstallment(BigDecimal.ZERO);
                                             }
                                             //set restructure date
                                             log.debug("subjectAccountModel.getLastrestructureddate() : {}", subjectAccountModel.getLastrestructureddate());
@@ -1389,7 +1408,15 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
                                                 //set installment
                                                 if (!Util.isEmpty(creditInfoModel.getInstallmentamount())) {
-                                                    ncbDetailView.setInstallment(new BigDecimal(creditInfoModel.getInstallmentamount()));
+                                                    BigDecimal installment = BigDecimal.ZERO;
+                                                    try {
+                                                        installment = new BigDecimal(creditInfoModel.getInstallmentamount());
+                                                    } catch (Exception ex) {
+                                                        installment = BigDecimal.ZERO;
+                                                    }
+                                                    ncbDetailView.setInstallment(calculateInstallmentJur(creditInfoModel.getPaymentterm(),installment));
+                                                } else {
+                                                    ncbDetailView.setInstallment(BigDecimal.ZERO);
                                                 }
                                                 //for calculate brms rules,, add npl flag and tdr flag
                                                 ncbDetailView.setNplFlag(RadioValue.NO.value());
@@ -1419,6 +1446,8 @@ public class NCBBizTransform extends BusinessTransform {
                                                             lastTDRDateOther = getLastDateYYYYMMDD(lastTDRDateOther, creditInfoModel.getCloseddate());
                                                         }
                                                     }
+                                                }else{
+                                                    ncbDetailView.setDateOfDebtRestructuring(null);
                                                 }
                                             }
 
@@ -1615,7 +1644,15 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
                                                 //set installment
                                                 if (!Util.isEmpty(creditInfoModel.getInstallmentamount())) {
-                                                    ncbDetailView.setInstallment(new BigDecimal(creditInfoModel.getInstallmentamount()));
+                                                    BigDecimal installment = BigDecimal.ZERO;
+                                                    try {
+                                                        installment = new BigDecimal(creditInfoModel.getInstallmentamount());
+                                                    } catch (Exception ex) {
+                                                        installment = BigDecimal.ZERO;
+                                                    }
+                                                    ncbDetailView.setInstallment(calculateInstallmentJur(creditInfoModel.getPaymentterm(),installment));
+                                                } else {
+                                                    ncbDetailView.setInstallment(BigDecimal.ZERO);
                                                 }
                                                 //set restructure date
                                                 log.debug("creditInfoModel.getRestructuredate() : {}", creditInfoModel.getRestructuredate());
@@ -2221,5 +2258,66 @@ public class NCBBizTransform extends BusinessTransform {
             }
         }
         return dateStr1;
+    }
+
+    private BigDecimal calculateInstallmentInd(String termFreq, BigDecimal amount){
+        if(amount.compareTo(BigDecimal.ZERO)!=0){
+            if(termFreq!=null && !termFreq.trim().equalsIgnoreCase("")){
+                if(termFreq.trim().equalsIgnoreCase(UNSPECIFIED)){
+                    return amount;
+                } else if(termFreq.trim().equalsIgnoreCase(WEEKLY)){
+                    return amount.multiply(new BigDecimal(4));
+                } else if(termFreq.trim().equalsIgnoreCase(BI_WEEKLY)){
+                    return amount.multiply(new BigDecimal(2));
+                } else if(termFreq.trim().equalsIgnoreCase(MONTHLY)){
+                    return amount;
+                } else if(termFreq.trim().equalsIgnoreCase(BI_MONTHLY)){
+                    return amount.divide(new BigDecimal(2),2,BigDecimal.ROUND_HALF_UP);
+                } else if(termFreq.trim().equalsIgnoreCase(QUARTERTY)){
+                    return amount.divide(new BigDecimal(3),2,BigDecimal.ROUND_HALF_UP);
+                } else if(termFreq.trim().equalsIgnoreCase(SEMI_MONTHLY)){
+                    return amount.multiply(new BigDecimal(2));
+                } else if(termFreq.trim().equalsIgnoreCase(SPECIAL_USE)){
+                    return amount;
+                } else if(termFreq.trim().equalsIgnoreCase(SEMI_YEARLY)){
+                    return amount.divide(new BigDecimal(6),2,BigDecimal.ROUND_HALF_UP);
+                } else if(termFreq.trim().equalsIgnoreCase(YEARLY)){
+                    return amount.divide(new BigDecimal(12),2,BigDecimal.ROUND_HALF_UP);
+                } else {
+                    return amount;
+                }
+            } else {
+                return BigDecimal.ZERO;
+            }
+        } else {
+            return BigDecimal.ZERO;
+        }
+    }
+
+    private BigDecimal calculateInstallmentJur(String termFreq, BigDecimal amount){
+        if(amount.compareTo(BigDecimal.ZERO)!=0){
+            if(termFreq!=null && !termFreq.trim().equalsIgnoreCase("")){
+                if(termFreq.trim().equalsIgnoreCase("28") || termFreq.trim().equalsIgnoreCase("29")
+                        || termFreq.trim().equalsIgnoreCase("30") || termFreq.trim().equalsIgnoreCase("31")){
+                    return amount;
+                } else {
+                    BigDecimal term = BigDecimal.ZERO;
+                    try {
+                        term = new BigDecimal(termFreq);
+                    } catch (Exception ex){
+                        term = BigDecimal.ZERO;
+                    }
+                    if(term.compareTo(BigDecimal.ZERO)==0){
+                        return BigDecimal.ZERO;
+                    }
+
+                    return (amount.divide(term,3,BigDecimal.ROUND_HALF_UP)).multiply(new BigDecimal(30));
+                }
+            } else {
+                return BigDecimal.ZERO;
+            }
+        } else {
+            return BigDecimal.ZERO;
+        }
     }
 }
