@@ -622,9 +622,9 @@ public class ExSummaryControl extends BusinessControl {
         calGroupExposureBorrowerCharacteristic(workCaseId);
     }
 
-    public void calForBankStmtSummary(long workCaseId, long stepId){
+    public void calForBankStmtSummary(long workCaseId){
         calSalePerYearBorrowerCharacteristic(workCaseId);
-        calGroupSaleBorrowerCharacteristic(workCaseId, stepId);
+        calGroupSaleBorrowerCharacteristic(workCaseId);
     }
 
     public void calForDBR(long workCaseId){
@@ -636,8 +636,8 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeFactor(workCaseId);
     }
 
-    public void calForCustomerInfoJuristic(long workCaseId, long stepId){
-        calGroupSaleBorrowerCharacteristic(workCaseId, stepId);
+    public void calForCustomerInfo(long workCaseId){
+        calGroupSaleBorrowerCharacteristic(workCaseId);
     }
 
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
@@ -841,7 +841,7 @@ public class ExSummaryControl extends BusinessControl {
 //  Change TO ::: groupSaleUW - กรณีผู้กู้ = Juristic รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y
 //    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
 //  Change TO ::: groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary * 12) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y
-    public void calGroupSaleBorrowerCharacteristic(long workCaseId, long stepId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
+    public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
         log.debug("calGroupSaleBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
@@ -852,8 +852,6 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal groupSaleBDM;
         BigDecimal groupSaleUW;
         BigDecimal twelve = BigDecimal.valueOf(12);
-
-        log.debug("calGroupSaleBorrowerCharacteristic ::: stepId : {}", stepId);
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
