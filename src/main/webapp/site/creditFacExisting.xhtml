@@ -224,7 +224,7 @@
                                                                              action="#{creditFacExisting.onEditCommercialCredit()}"
                                                                              update=":existingCreditDlgForm"
                                                                              oncomplete="existingCreditDlg.show();"
-                                                                             disabled="#{creditFacExisting.isDisabled('borrower.actionList')}">
+                                                                             disabled="#{creditFacExisting.isDisabled('borrower.deleteButton')}">
                                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
                                                                 <f:setPropertyActionListener value="#{borrowerCredit}"
                                                                                              target="#{creditFacExisting.selectCreditDetail}"/>
@@ -235,7 +235,7 @@
                                                             <p:commandButton title="Remove"
                                                                              icon="ui-icon-trash" rendered="#{borrowerCredit.existingCreditFrom == 1}"
                                                                              oncomplete="confirmDeleteExistingCreditDetailDlg.show()"
-                                                                             disabled="#{creditFacExisting.isDisabled('borrower.actionList')}">
+                                                                             disabled="#{creditFacExisting.isDisabled('borrower.deleteButton')}">
                                                                 <f:setPropertyActionListener value="#{borrowerCredit}"
                                                                                              target="#{creditFacExisting.selectCreditDetail}"/>
                                                                 <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
@@ -427,7 +427,7 @@
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteConditionDetailDlg.show()"
-                                                                     disabled="#{creditFacExisting.isDisabled('condition.actionList')}">
+                                                                     disabled="#{creditFacExisting.isDisabled('condition.deleteButton')}">
                                                         <f:setPropertyActionListener value="#{conditionDetailItem}"
                                                                                      target="#{creditFacExisting.selectConditionItem}"/>
                                                     </p:commandButton>
@@ -902,7 +902,7 @@
                                                                                          icon="ui-icon-trash"
                                                                                          rendered="#{relatedCredit.existingCreditFrom==1}"
                                                                                          oncomplete="confirmDeleteExistingCreditDetailDlg.show()"
-                                                                                         disabled="#{creditFacExisting.isDisabled('related.actionList')}">
+                                                                                         disabled="#{creditFacExisting.isDisabled('related.deleteButton')}">
                                                                             <f:setPropertyActionListener value="#{relatedCredit}"
                                                                                                          target="#{creditFacExisting.selectCreditDetail}"/>
                                                                             <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
@@ -1517,7 +1517,7 @@
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteExistingCollateralDlg.show()"
-                                                                     disabled="#{creditFacExisting.isDisabled('borrower.actionLists')}">
+                                                                     disabled="#{creditFacExisting.isDisabled('borrower.deleteButtons')}">
                                                         <f:setPropertyActionListener value="#{borrowerCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfListCollateral}" />
@@ -1674,7 +1674,7 @@
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteExistingCollateralDlg.show()"
-                                                                     disabled="#{creditFacExisting.isDisabled('related.actionLists')}}">
+                                                                     disabled="#{creditFacExisting.isDisabled('related.deleteButtons')}}">
                                                         <f:setPropertyActionListener value="#{relatedCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfListCollateral}" />
@@ -1799,7 +1799,7 @@
                                                     <p:commandButton title="Remove"
                                                                      icon="ui-icon-trash"
                                                                      oncomplete="confirmDeleteExistingGuarantorDlg.show()"
-                                                                     disabled="#{creditFacExisting.isDisabled('guarantor.actionList')}">
+                                                                     disabled="#{creditFacExisting.isDisabled('guarantor.deleteButton')}">
                                                         <f:setPropertyActionListener value="#{existingGuarantor}"
                                                                                      target="#{creditFacExisting.selectGuarantorDetail}"/>
                                                     </p:commandButton>
