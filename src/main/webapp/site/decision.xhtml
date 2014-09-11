@@ -3198,9 +3198,9 @@
                             <td class="left" colspan="2">
                                 <table border="0">
                                     <tr>
-                                        <td class="left" style="border-style: none !important; width: 400px">
+                                        <td class="left" style="border-style: none !important; width: 400px; min-width: 400px; max-width: 400px;">
                                             <p:selectOneMenu value="#{decision.decisionFollowConditionView.conditionView.id}"
-                                                             style="width: 400px"
+                                                             style="width: 400px; min-width: 400px; max-width: 400px;"
                                                              required="#{not empty param[addFollowUpCondButton.clientId]}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItems value="#{decision.followConditionViewList}" var="followCondition"
