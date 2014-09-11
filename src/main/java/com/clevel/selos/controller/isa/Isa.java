@@ -172,6 +172,8 @@ public class Isa implements Serializable {
                     }
                 } else if(ModeForButton.EDIT == modeForButton) {
                     messageHeader = "Edit User.";
+                    isaBusinessControl.editUser(isaManageUserView, user);
+                    message = Result.Success.toString();
                 }
                 context.execute("manageUserDlg.hide()");
                 onLoadAllUser();
@@ -211,7 +213,7 @@ public class Isa implements Serializable {
                     userTeamList.clear();
                     userTeamList = isaBusinessControl.getUserTeamByRoleId(isaManageUserView.getRole().getId());
                 }
-                isaUserEditView=isaManageUserView;
+                isaUserEditView = isaManageUserView;
             } else {
                 message = id + " not found!";
             }
@@ -230,17 +232,19 @@ public class Isa implements Serializable {
         log.debug("-- onClickDelete()");
         complete = true;
         RequestContext context = RequestContext.getCurrentInstance();
-        messageHeader = "Delete User.";
-        StringBuilder stringBuilder = null;
+        StringBuilder stringBuilder = new StringBuilder();
         try {
-            String oldData = isaBusinessControl.getOldData(id);
-            isaBusinessControl.deleteUserById(id);
-            String newData = isaBusinessControl.getNewData(id);
-//            stringBuilder=new StringBuilder();
-//            isaAuditor.addSucceed(userId, ModeForButton.DELETE.name(), stringBuilder.append("ID ").append(id).append(" change to ").append(UserStatus.MARK_AS_DELETED).toString());
-            isaAuditor.audit(isaBusinessControl.getUser(id).getId() , ModeForButton.DELETE.name(), "",  ActionResult.SUCCESS, null, user, oldData, newData);
+            messageHeader = "Delete User.";
+            if (!Util.isNull(id)){
+                String oldData = isaBusinessControl.getOldData(id);
+                isaBusinessControl.deleteUserById(id);
+                String newData = isaBusinessControl.getNewData(id);
+                String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to ").append(UserStatus.MARK_AS_DELETED).append(" By ").append(this.user.getId()).toString();
+                isaAuditor.audit(id , ModeForButton.DELETE.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
+                message = Result.Success.toString();
+                log.debug("messageHeader [{}] message [{}]",messageHeader,message);
+            }
             onLoadAllUser();
-            message = Result.Success.toString();
             context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception e) {
             complete = false;
@@ -250,7 +254,7 @@ public class Isa implements Serializable {
                 message = e.getMessage();
             }
 //            isaAuditor.addException(userId, ModeForButton.DELETE.name(), "userId : "+id, message);
-            isaAuditor.audit(user.getId(), modeForButton.name(), isaManageUserView.toStringForAudit(),  ActionResult.EXCEPTION, message, user, "", "");
+            isaAuditor.audit(user.getId(), ModeForButton.DELETE.name(), isaManageUserView.toStringForAudit(),  ActionResult.EXCEPTION, message, user, "", "");
 
             context.execute("msgBoxSystemMessageDlg.show()");
         }
@@ -268,7 +272,7 @@ public class Isa implements Serializable {
                     String oldData = user.toStringForAudit();
                     isaBusinessControl.deleteUserById(user.getId());
                     String newData = isaBusinessControl.getNewData(user.getId());
-                    stringBuilder=new StringBuilder();
+                    stringBuilder = new StringBuilder();
                     String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to ").append(UserStatus.MARK_AS_DELETED).append(" By ").append(this.user.getId()).toString();
                     isaAuditor.audit(user.getId() , ModeForButton.DELETE.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                 }
@@ -366,17 +370,6 @@ public class Isa implements Serializable {
             isaAuditor.audit(user.getId(), ModeForButton.EDIT.name(), isaManageUserView.toStringForAudit(),  ActionResult.EXCEPTION, message, user, "", "");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
     public User[] getSelectUserDetail() {
         return selectUserDetail;
