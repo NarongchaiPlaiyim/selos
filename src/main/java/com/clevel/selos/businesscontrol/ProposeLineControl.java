@@ -1968,7 +1968,7 @@ public class ProposeLineControl extends BusinessControl {
         return returnBaseRateView;
     }
 
-    public ProposeCreditInfoDetailView onCalInstallment(ProposeLineView proposeLineView, ProposeCreditInfoDetailView proposeCreditInfoDetailView, int specialProgramId, int applyTCG){
+    public ProposeCreditInfoDetailView onCalInstallment(ProposeLineView proposeLineView, ProposeCreditInfoDetailView proposeCreditInfoDetailView, int specialProgramId, int applyTCG, int dbrMarketableFlag){
         if(!Util.isNull(proposeCreditInfoDetailView) && !Util.isNull(proposeCreditInfoDetailView.getProposeCreditInfoTierDetailViewList()) && !Util.isZero(proposeCreditInfoDetailView.getProposeCreditInfoTierDetailViewList().size())) {
             if(proposeCreditInfoDetailView.getLimit().compareTo(BigDecimal.ZERO) < 0) { // limit < 0
                 return proposeCreditInfoDetailView;
@@ -2020,9 +2020,16 @@ public class ProposeLineControl extends BusinessControl {
                         PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(proposeCreditInfoDetailView.getCreditTypeView().getId(), proposeCreditInfoDetailView.getProductProgramView().getId());
 
                         if(!Util.isNull(prdProgramToCreditType)){
-                            ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG);
-                            if(!Util.isNull(productFormula)){
-                                spread = productFormula.getDbrSpread();
+                            if (prdProgramToCreditType.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) { // check OD
+                                ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG, dbrMarketableFlag);
+                                if(!Util.isNull(productFormula)){
+                                    spread = productFormula.getDbrSpread();
+                                }
+                            } else {
+                                ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG);
+                                if(!Util.isNull(productFormula)){
+                                    spread = productFormula.getDbrSpread();
+                                }
                             }
                         }
 
@@ -2170,6 +2177,11 @@ public class ProposeLineControl extends BusinessControl {
         if (!Util.isNull(tcgView)) {
             applyTCG = tcgView.getTCG();
         }
+        DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
+        int dbrMarketableFlag = 0;
+        if(!Util.isNull(dbrView)){
+            dbrMarketableFlag = dbrView.getDbrMarketableFlag();
+        }
 
         if(!Util.isNull(proposeLineView)) {
             //Calculation
@@ -2247,7 +2259,7 @@ public class ProposeLineControl extends BusinessControl {
         if(!Util.isNull(proposeLineView.getProposeCreditInfoDetailViewList()) && !Util.isZero(proposeLineView.getProposeCreditInfoDetailViewList().size())) {
             List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
             for (ProposeCreditInfoDetailView proCreInfDetView : proposeLineView.getProposeCreditInfoDetailViewList()) {
-                proCreInfDetView = onCalInstallment(proposeLineView, proCreInfDetView, specialProgramId, applyTCG);
+                proCreInfDetView = onCalInstallment(proposeLineView, proCreInfDetView, specialProgramId, applyTCG, dbrMarketableFlag);
                 proposeCreditInfoDetailViewList.add(proCreInfDetView);
             }
             proposeLineView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
