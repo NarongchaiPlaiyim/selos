@@ -742,7 +742,7 @@
 <p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="1210" closable="false">
+              modal="true" width="1210" height = "500" closable="false">
         <ui:include src="/site/dialog/reqApprDialog.xhtml"/>
     </p:dialog>
 </p:panel>
