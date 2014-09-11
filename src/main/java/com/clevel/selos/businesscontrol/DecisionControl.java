@@ -847,7 +847,7 @@ public class DecisionControl extends BusinessControl {
         decisionDAO.persist(decision);
     }
 
-    public void calculateTotalApprove(DecisionView decisionView) {
+    public void calculateTotalApprove(DecisionView decisionView, long workCaseId) {
         log.debug("calculateTotalApprove()");
         if (decisionView != null) {
 
@@ -866,23 +866,65 @@ public class DecisionControl extends BusinessControl {
 
             // Credit Detail
             List<ProposeCreditInfoDetailView> approveCreditList = decisionView.getApproveCreditList();
-            if (approveCreditList != null && approveCreditList.size() > 0) {
-                for (ProposeCreditInfoDetailView approveCredit : approveCreditList) {
-                    // Sum total approve credit limit amount
-                    totalApproveCredit = Util.add(totalApproveCredit, approveCredit.getLimit());
-                    // Count All 'New' propose credit
-                    totalNumProposeCreditFac = Util.add(totalNumProposeCreditFac, BigDecimal.ONE);
+            if (!Util.isNull(approveCreditList) && !Util.isZero(approveCreditList.size())) {
+                BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+                TCGView tcgView = tcgInfoControl.getTCGView(workCaseId);
 
-                    CreditTypeView creditTypeView = approveCredit.getCreditTypeView();
-                    if (creditTypeView != null) {
-                        // Count propose credit which credit facility = 'OD'
-                        if (CreditTypeGroup.OD.value() == creditTypeView.getCreditGroup()) {
-                            totalNumOfNewOD = Util.add(totalNumOfNewOD, BigDecimal.ONE);
-                            totalODLimit = Util.add(totalODLimit, approveCredit.getLimit());
+                ProductProgram productProgram;
+                CreditType creditType;
+                PrdProgramToCreditType prdProgramToCreditType;
+                ProductFormula productFormula;
+
+                BigDecimal sumTotalCommercial = BigDecimal.ZERO;
+                BigDecimal sumTotalOBOD = BigDecimal.ZERO;
+
+                for (ProposeCreditInfoDetailView approveCredit : approveCreditList) {
+                    if(!Util.isNull(approveCredit) && !Util.isNull(approveCredit.getProductProgramView()) && !Util.isNull(approveCredit.getCreditTypeView())) {
+                        productProgram = productProgramDAO.findById(approveCredit.getProductProgramView().getId());
+                        creditType = creditTypeDAO.findById(approveCredit.getCreditTypeView().getId());
+
+                        if(!Util.isNull(productProgram) && !Util.isNull(creditType)) {
+                            prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
+                            if(!Util.isNull(prdProgramToCreditType)) {
+                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, decisionView.getCreditCustomerType().value(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
+                                if(!Util.isNull(productFormula)) {
+                                    if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
+                                        //ExposureMethod for check to use limit or limit*PCE%
+                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                            sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                            sumTotalOBOD = sumTotalOBOD.add(approveCredit.getLimit());
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
+                                            sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(approveCredit.getLimit(),approveCredit.getPCEPercent()),100));
+                                        }
+                                    } else {
+                                        //ExposureMethod for check to use limit or limit*PCE%
+                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                            sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                            sumTotalCommercial = sumTotalCommercial.add(approveCredit.getLimit());
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                            sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(approveCredit.getLimit(),approveCredit.getPCEPercent()),100));
+                                        }
+                                    }
+                                    totalApproveCredit = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
+                                }
+                            }
                         }
-                        // Count the 'New' propose credit which has Contingent Flag 'Y'
-                        if (creditTypeView.isContingentFlag()) {
-                            totalNumContingentPropose = Util.add(totalNumContingentPropose, BigDecimal.ONE);
+                        // Count All 'New' propose credit
+                        totalNumProposeCreditFac = Util.add(totalNumProposeCreditFac, BigDecimal.ONE);
+
+                        CreditTypeView creditTypeView = approveCredit.getCreditTypeView();
+                        if (creditTypeView != null) {
+                            // Count propose credit which credit facility = 'OD'
+                            if (CreditTypeGroup.OD.value() == creditTypeView.getCreditGroup()) {
+                                totalNumOfNewOD = Util.add(totalNumOfNewOD, BigDecimal.ONE);
+                                totalODLimit = Util.add(totalODLimit, approveCredit.getLimit());
+                            }
+                            // Count the 'New' propose credit which has Contingent Flag 'Y'
+                            if (creditTypeView.isContingentFlag()) {
+                                totalNumContingentPropose = Util.add(totalNumContingentPropose, BigDecimal.ONE);
+                            }
                         }
                     }
                 }

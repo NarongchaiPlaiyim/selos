@@ -281,6 +281,14 @@ public class User implements Serializable {
                 toString();
     }
 
+    public UserPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(UserPosition position) {
+        this.position = position;
+    }
+
     public String toStringForAudit() {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("id[").append(id).append("]");

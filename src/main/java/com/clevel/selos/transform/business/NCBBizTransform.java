@@ -1446,6 +1446,8 @@ public class NCBBizTransform extends BusinessTransform {
                                                             lastTDRDateOther = getLastDateYYYYMMDD(lastTDRDateOther, creditInfoModel.getCloseddate());
                                                         }
                                                     }
+                                                }else{
+                                                    ncbDetailView.setDateOfDebtRestructuring(null);
                                                 }
                                             }
 
