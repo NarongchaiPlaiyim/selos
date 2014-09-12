@@ -18,6 +18,7 @@ public class ISAViewReport {
     private String descrition;
     private String buCode;
     private String team;
+    private String testId;
     private String role;
     private Date modifyDate;
     private String createBy;
@@ -28,6 +29,7 @@ public class ISAViewReport {
     private String oldData;
     private String newData;
     private String adminName;
+    private Date lastLogOn;
 
     public ISAViewReport() {
     }
@@ -200,6 +202,22 @@ public class ISAViewReport {
         this.adminName = adminName;
     }
 
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
+    }
+
+    public Date getLastLogOn() {
+        return lastLogOn;
+    }
+
+    public void setLastLogOn(Date lastLogOn) {
+        this.lastLogOn = lastLogOn;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -214,6 +232,7 @@ public class ISAViewReport {
                 .append("descrition", descrition)
                 .append("buCode", buCode)
                 .append("team", team)
+                .append("testId", testId)
                 .append("role", role)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
@@ -224,6 +243,7 @@ public class ISAViewReport {
                 .append("oldData", oldData)
                 .append("newData", newData)
                 .append("adminName", adminName)
+                .append("lastLogOn", lastLogOn)
                 .toString();
     }
 }
