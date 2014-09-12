@@ -419,7 +419,7 @@ public class FullApplicationControl extends BusinessControl {
 
                 ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                 if(existingCreditFacility != null) {
-                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                 }
 
                 UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
@@ -495,12 +495,12 @@ public class FullApplicationControl extends BusinessControl {
 
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                     if(proposeLine != null) {
-                        totalCommercial = proposeLine.getTotalExposure();
+                        totalCommercial = proposeLine.getTotalExposure() != null ? proposeLine.getTotalExposure() : BigDecimal.ZERO;
                     }
 
                     ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                     if(existingCreditFacility != null) {
-                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                     }
 
 

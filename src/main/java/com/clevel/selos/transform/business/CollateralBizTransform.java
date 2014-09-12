@@ -145,6 +145,7 @@ public class CollateralBizTransform extends BusinessTransform {
                             proposeCollateralInfoSubView.setAddress(subCollateralData.getAddress());
                             proposeCollateralInfoSubView.setTitleDeed(subCollateralData.getTitleDeed());
                             proposeCollateralInfoSubView.setAppraisalValue(subCollateralData.getAppraisalValue());
+                            proposeCollateralInfoSubView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
 //                            proposeCollateralInfoSubView.setCollateralOwner(subCollateralData.getCollateralOwner());
 //                            proposeCollateralInfoSubView.setUsage(subCollateralData.getUsage());
 //                            proposeCollateralInfoSubView.setTypeOfUsage(subCollateralData.getTypeOfUsage());

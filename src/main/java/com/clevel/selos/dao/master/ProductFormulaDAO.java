@@ -78,7 +78,7 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
         String query = "SELECT productFormula FROM ProductFormula productFormula WHERE ( creditCusType = " + creditCusType + " OR creditCusType = 0 ) AND ";
         query = query + "( applyTCG = " + applyTcg + " OR applyTCG = 0 ) AND ( specialProgram = " + specialProgramId + " OR specialProgram = 3 ) AND ";
         query = query + "programToCreditType.id = " + programToCreditType.getId() + " AND ";
-        query = query + "dbrMarketableFlag = " + dbrMarketableFlag;
+        query = query + "marketableFlag = " + dbrMarketableFlag;
         log.debug("findProductFormulaPropose :: query : {}",query);
         List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
 

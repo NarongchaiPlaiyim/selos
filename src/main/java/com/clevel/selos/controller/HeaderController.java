@@ -709,7 +709,7 @@ public class HeaderController extends BaseController {
                             showMessageBox();
                         }
                     } else {
-                        if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                        if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
                             isSubmitToZM = false;
                         }else {
                             isSubmitToZM = true;
