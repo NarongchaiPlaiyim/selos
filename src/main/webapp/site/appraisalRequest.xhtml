@@ -51,6 +51,7 @@
                                                      value="#{msg.get('app.button.add')}"
                                                      styleClass="smaller"
                                                      process="@this"
+                                                     disabled = "#{appraisalRequest.isDisabled('addAppraisalDetailButton')}"
                                                      actionListener="#{appraisalRequest.onAddAppraisalDetailView()}"
                                                      update=":appraisalDetailDlgForm"
                                                      oncomplete="appraisalDetailViewDlg.show()"/>
@@ -90,7 +91,7 @@
                                             <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true" styleClass="radio_table">
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="#{appraisalRequest.isDisabled('document.characteristic')}" styleClass="radio_table">
                                                 <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                                                 <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                             </p:selectOneRadio>
@@ -105,6 +106,7 @@
                                                              process="@this"
                                                              action="#{appraisalRequest.onEditAppraisalDetailView()}"
                                                              update=":appraisalDetailDlgForm"
+                                                             disabled = "#{appraisalRequest.isDisabled('appraisal.actionList')}"
                                                              oncomplete="appraisalDetailViewDlg.show();">
                                                 <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
                                                                              target="#{appraisalRequest.appraisalDetailViewSelected}"/>
@@ -114,6 +116,7 @@
 
                                             <p:commandButton title="Remove" process="@this"
                                                              icon="ui-icon-trash"
+                                                             disabled = "#{appraisalRequest.isDisabled('appraisal.actionList')}"
                                                              oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
                                                 <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
                                                                              target="#{appraisalRequest.appraisalDetailViewSelected}"/>
@@ -157,13 +160,15 @@
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
                                                              required="#{not empty param[submitAppraisalRequsest.clientId] }"
                                                              onkeydown="return onKeyDownName(event);"
+                                                             disabled = "#{appraisalRequest.isDisabled('contact.cusname1')}"
                                                              onkeypress="return onKeyPressName(event);" maxlength="50"
                                                              counterTemplate="{0} characters remaining." autoResize="false"/>
                                                 <!--style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
                                             </td>
                                             <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
-                                                             required="#{not empty param[submitAppraisalRequsest.clientId] }"  />
+                                                             required="#{not empty param[submitAppraisalRequsest.clientId] }"
+                                                             disabled = "#{appraisalRequest.isDisabled('contact.contactNo1')}"/>
                                                              <!--onkeydown="return onKeyDownTelNo(event);"-->
                                                              <!--onkeypress="return onKeyPressTelNo(event);" />-->
                                                 <!--style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
@@ -177,10 +182,11 @@
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"
                                                              onkeydown="return onKeyDownName(event);"
                                                              onkeypress="return onKeyPressName(event);" maxlength="50"
+                                                             disabled = "#{appraisalRequest.isDisabled('contact.cusname2')}"
                                                              counterTemplate="{0} characters remaining." autoResize="false"/>
                                             </td>
                                             <td class="center">
-                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo2}" />
+                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo2}" disabled = "#{appraisalRequest.isDisabled('contact.contactNo2')}"/>
                                                              <!--onkeydown="return onKeyDownTelNo(event);"-->
                                                              <!--onkeypress="return onKeyPressTelNo(event);" />-->
                                             </td>
@@ -193,10 +199,11 @@
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"
                                                              onkeydown="return onKeyDownName(event);"
                                                              onkeypress="return onKeyPressName(event);" maxlength="50"
-                                                             counterTemplate="{0} characters remaining." autoResize="false"/>
+                                                             counterTemplate="{0} characters remaining." autoResize="false"
+                                                             disabled = "#{appraisalRequest.isDisabled('contact.cusname3')}"/>
                                             </td>
                                             <td class="center">
-                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"  />
+                                                <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo3}" disabled = "#{appraisalRequest.isDisabled('contact.contactNo3')}"  />
                                                              <!--onkeydown="return onKeyDownTelNo(event);"-->
                                                              <!--onkeypress="return onKeyPressTelNo(event);" />-->
                                             </td>
@@ -220,7 +227,8 @@
                                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" readonly="true" />
+                                    <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" readonly="true"
+                                            disabled = "#{appraisalRequest.isDisabled('zoneLocation')}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -229,7 +237,8 @@
                                 </td>
                                 <td>
                                     <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90" maxlength="500"
-                                                     counterTemplate="{0} characters remaining." autoResize="false"/>
+                                                     counterTemplate="{0} characters remaining." autoResize="false"
+                                                     disabled = "#{appraisalRequest.isDisabled('bdmRemark')}"/>
                                 </td>
                             </tr>
                             <tr></tr>
@@ -240,6 +249,7 @@
                                                      value="#{msg.get('app.button.save')}"
                                                      styleClass="medium"
                                                      process="@form"
+                                                     disabled = "#{appraisalRequest.isDisabled('saveButton')}"
                                                      action="#{appraisalRequest.onSaveAppraisalRequest()}"
                                                      update=":frmMain, :msgBoxSystemMessagePanel"/>
 
@@ -247,6 +257,7 @@
                                                      id="btnCancel"
                                                      styleClass="medium"
                                                      process=":frmMain"
+                                                     disabled = "#{appraisalRequest.isDisabled('cancelButton')}"
                                                      action="#{appraisalRequest.onCancelAppraisalRequest()}"
                                                      update=":frmMain"/>
 

@@ -12,7 +12,9 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
                 </td>
                 <td style="width: 200px;">
-                    <p:inputText value="#{appraisalAppointment.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalAppointment.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}" maxlength="50" />
+                    <p:inputText value="#{appraisalAppointment.appraisalDetailViewDialog.titleDeed}"
+                                 disabled = "#{appraisalAppointment.isDisabled('appraisal.titleDeed')}"
+                                 style = "#{appraisalAppointment.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}" maxlength="50" />
                 </td>
             </tr>
             <tr>
@@ -20,13 +22,16 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
                 </td>
                 <td style = "#{appraisalAppointment.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
-                    <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewAppraisalB}"/>
+                    <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewAppraisalB}"
+                                             disabled = "#{appraisalAppointment.isDisabled('appraisal.purposeReviewAppraisalB')}"/>
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}"/>
                      <br/>
-                    <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeNewAppraisalB}"/>
+                    <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeNewAppraisalB}"
+                                             disabled = "#{appraisalAppointment.isDisabled('appraisal.purposeNewAppraisalB')}"/>
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}"/>
                     <br/>
-                    <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewBuildingB}"/>
+                    <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewBuildingB}"
+                                             disabled = "#{appraisalAppointment.isDisabled('appraisal.purposeReviewBuildingB')}"/>
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}"/>
 
                 </td>
@@ -36,7 +41,8 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
                 </td>
                 <td style="width: 200px;">
-                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalAppointment.appraisalDetailViewDialog.characteristic}">
+                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalAppointment.appraisalDetailViewDialog.characteristic}"
+                                      disabled = "#{appraisalAppointment.isDisabled('appraisal.characteristic')}">
                         <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                         <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                     </p:selectOneRadio>
@@ -50,6 +56,7 @@
                     <p:inputText id="numberOfDocuments"  styleClass="right" maxlength="3"
                                  onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                  value="#{appraisalAppointment.appraisalDetailViewDialog.numberOfDocuments}"
+                                 disabled = "#{appraisalAppointment.isDisabled('appraisal.numberOfDocuments')}"
                                  style = "#{appraisalAppointment.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
                         <!--<f:convertNumber pattern="#,##0"  />-->
                         <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
@@ -62,9 +69,11 @@
                                      value="#{msg.get('app.button.ok')}"
                                      actionListener="#{appraisalAppointment.onSaveAppraisalDetailView()}"
                                      process="@form"
+                                     disabled = "#{appraisalAppointment.isDisabled('saveButton')}"
                                      update=":appraisalDetailDlgForm, :frmMain:appraisalDetailViewTable"
                                      oncomplete="handleAppraisalDetailRequest(xhr, status, args)"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalDetailViewDlg.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalDetailViewDlg.hide()"
+                                     disabled = "#{appraisalAppointment.isDisabled('cancelButton')}"/>
                 </td>
             </tr>
         </table>

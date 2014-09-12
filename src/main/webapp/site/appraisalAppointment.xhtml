@@ -49,7 +49,8 @@
                             <tr>
                                 <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
                                 <td colspan="3">
-                                    <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalAppointment.appraisalView.appraisalType}" >
+                                    <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalAppointment.appraisalView.appraisalType}"
+                                                      disabled = "#{appraisalAppointment.isDisabled('appraisalType')}">
                                         <f:selectItem itemLabel="Internal" itemValue="0" />
                                         <f:selectItem itemLabel="External" itemValue="1" />
                                     </p:selectOneRadio>
@@ -63,6 +64,7 @@
                                     <p:selectOneMenu size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
                                                      value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"
                                                      required="#{not empty param[saveButton.clientId]}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('appraisalCompany')}"
                                             >
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.appraisalCompanyList}"
@@ -78,6 +80,7 @@
                                     <p:selectOneMenu size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
                                                      value="#{appraisalAppointment.appraisalView.appraisalDivision.id}"
                                                      required="#{not empty param[saveButton.clientId]}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('appraisalDivision')}"
                                                      >
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.appraisalDivisionList}"
@@ -92,7 +95,9 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" required="#{not empty param[saveButton.clientId]}" maxlength="50" />
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}"
+                                                 disabled = "#{appraisalAppointment.isDisabled('appraisalName')}"
+                                                 required="#{not empty param[saveButton.clientId]}" maxlength="50" />
                                 </td>
                             </tr>
                             <tr>
@@ -106,6 +111,7 @@
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    disabled = "#{appraisalAppointment.isDisabled('receivedTaskDate')}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                     </clv:BECalendar>
@@ -118,7 +124,9 @@
                                 <td style="width: 300px; max-width: 300px; min-width: 300px;">
                                     <p:selectOneMenu id="locationOfPropertyId"
                                                      size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
-                                                     value="#{appraisalAppointment.appraisalView.locationOfProperty.id}"  required="#{not empty param[saveButton.clientId]}"
+                                                     value="#{appraisalAppointment.appraisalView.locationOfProperty.id}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('locationOfProperty')}"
+                                                     required="#{not empty param[saveButton.clientId]}"
                                             >
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.locationPropertyList}"
@@ -134,7 +142,9 @@
                                 <td style="width: 300px; max-width: 300px; min-width: 300px;">
                                     <p:selectOneMenu id="provinceOfPropertyId"
                                                      size="1" style="width: 275px; max-width: 275px; min-width: 275px;"
-                                                     value="#{appraisalAppointment.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}">
+                                                     value="#{appraisalAppointment.appraisalView.provinceOfProperty.code}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('provinceOfProperty')}"
+                                                     required="#{not empty param[saveButton.clientId]}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{appraisalAppointment.provinceList}"
                                                        var="province"
@@ -154,6 +164,7 @@
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    disabled = "#{appraisalAppointment.isDisabled('appraisalDate')}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                         <p:ajax event="dateSelect" process="@this" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate" />
@@ -169,6 +180,7 @@
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    disabled = "#{appraisalAppointment.isDisabled('dueDate')}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                     </clv:BECalendar>
@@ -180,7 +192,8 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td colspan="3">
-                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.bdmRemark}" readonly="true" maxlength="150" />
+                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.bdmRemark}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('BDMRemark')}" readonly="true" maxlength="150" />
                                 </td>
                             </tr>
                             <tr>
@@ -229,7 +242,8 @@
                                             <p:outputLabel value="#{appraisalDetailViewItem.purposeReviewAppraisalLabel}"/>
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}" disabled="true" styleClass="radio_table">
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailViewItem.characteristic}"
+                                                              disabled = "#{appraisalAppointment.isDisabled('document.characteristic')}" styleClass="radio_table">
                                                 <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                                                 <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                             </p:selectOneRadio>
@@ -243,7 +257,8 @@
                                                                  process="@this"
                                                                  action="#{appraisalAppointment.onEditAppraisalDetailView()}"
                                                                  update=":appraisalDetailDlgForm"
-                                                                 oncomplete="appraisalDetailViewDlg.show();">
+                                                                 oncomplete="appraisalDetailViewDlg.show();"
+                                                                 disabled = "#{appraisalAppointment.isDisabled('appraisal.actionList')}">
                                                     <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
                                                                                  target="#{appraisalAppointment.appraisalDetailViewSelected}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
@@ -251,7 +266,8 @@
                                                 </p:commandButton>
                                                 <p:commandButton title="Remove" process="@this"
                                                                  icon="ui-icon-trash"
-                                                                 oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
+                                                                 oncomplete="confirmDeleteAppraisalDetailViewDlg.show()"
+                                                                 disabled = "#{appraisalAppointment.isDisabled('appraisal.actionList')}">
                                                     <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
                                                                                  target="#{appraisalAppointment.appraisalDetailViewSelected}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
@@ -344,6 +360,7 @@
                                                     pattern="dd/MM/yyyy"
                                                     defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
                                                     mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                                    disabled = "#{appraisalAppointment.isDisabled('appointmentDate')}"
                                                     yearRange="1950:2100">
                                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                         <p:ajax event="dateSelect" process="@this" listener="#{appraisalAppointment.onChangeAppointmentDate()}" update=":frmMain:appraisalDate, :frmMain:dueDate" />
@@ -355,6 +372,7 @@
                                 <td >
                                     <p:inputText value="#{appraisalAppointment.appraisalView.appointmentCusName}"
                                                  required="#{not empty param[saveButton.clientId]}"
+                                                 disabled = "#{appraisalAppointment.isDisabled('appointmentCusName')}"
                                                  maxlength="50" />
                                 </td>
                             </tr>
@@ -363,7 +381,8 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.cancelAppointment')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu value="#{appraisalAppointment.appraisalView.cancelAppointment}">
+                                    <p:selectOneMenu value="#{appraisalAppointment.appraisalView.cancelAppointment}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('cancelAppointment')}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItem itemLabel="#{msg.get('app.appraisal.label.cancelAppointment.select.postpone')}" itemValue="0"/>
                                         <f:selectItem itemLabel="#{msg.get('app.appraisal.label.cancelAppointment.select.abort')}"    itemValue="1" />
@@ -375,7 +394,8 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
                                 </td>
                                 <td colspan="3">
-                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" maxlength="150" />
+                                    <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" maxlength="150"
+                                                     disabled = "#{appraisalAppointment.isDisabled('AADAdminRemark')}"/>
                                 </td>
                             </tr>
 
@@ -387,6 +407,7 @@
                                                      style="width: 150px"
                                                      process="@this"
                                                      actionListener="#{appraisalAppointment.onAddAppraisalContactDetailView()}"
+                                                     disabled = "#{appraisalAppointment.isDisabled('addContactRecordButton')}"
                                                      update=":contactRecordViewDlgForm"
                                                      oncomplete="contactRecordViewDlg.show()">
                                             <p:resetInput target=":contactRecordViewDlgForm"/>
@@ -464,6 +485,7 @@
                                                              process="@this"
                                                              action="#{appraisalAppointment.onEditAppraisalContactDetailView()}"
                                                              update=":contactRecordViewDlgForm"
+                                                             disabled = "#{appraisalAppointment.isDisabled('record.actionLists')}"
                                                              oncomplete="contactRecordViewDlg.show();">
                                                 <f:setPropertyActionListener value="#{detail}"
                                                                              target="#{appraisalAppointment.contactRecord}"/>
@@ -473,6 +495,7 @@
 
                                             <p:commandButton title="Remove" process="@this"
                                                              icon="ui-icon-trash"
+                                                             disabled = "#{appraisalAppointment.isDisabled('record.actionLists')}"
                                                              oncomplete="confirmDeleteContactRecordViewDlg.show()" >
                                                 <f:setPropertyActionListener value="#{detail}"
                                                                              target="#{appraisalAppointment.contactRecord}"/>
@@ -502,7 +525,8 @@
                                     <p:outputLabel value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{appraisalAppointment.appraisalView.zoneLocation}" readonly="true" maxlength="50" />
+                                    <p:inputText value="#{appraisalAppointment.appraisalView.zoneLocation}" readonly="true" maxlength="50"
+                                                 disabled = "#{appraisalAppointment.isDisabled('zoneLocation')}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -517,6 +541,7 @@
                                                      value="#{msg.get('app.button.save')}"
                                                      binding="#{saveButton}"
                                                      styleClass="medium"
+                                                     disabled = "#{appraisalAppointment.isDisabled('saveButton')}"
                                                      process=":frmMain"
                                                      action="#{appraisalAppointment.onSaveAppraisalAppointment()}"
                                                      update=":frmMain, :msgBoxSystemMessagePanel"/>
@@ -525,6 +550,7 @@
                                                      id="btnCancel"
                                                      styleClass="medium"
                                                      process=":frmMain"
+                                                     disabled = "#{appraisalAppointment.isDisabled('cancelButton')}"
                                                      action="#{appraisalAppointment.onCancelAppraisalAppointment()}"
                                                      update=":frmMain"/>
                                 </td>
@@ -600,7 +626,7 @@
         </f:facet>
         <p:commandButton value="OK"
                          process="@this"
-                         action="#{headerController.onGoToInbox}"/>
+                         action="#{appraisalAppointment.onGoToInbox}"/>
     </p:confirmDialog>
 </p:panel>
 

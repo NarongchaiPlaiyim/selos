@@ -17,6 +17,7 @@
                              process="@this"
                              actionListener="#{headerController.onAddAppraisalDetail()}"
                              update=":frmMain:reqApprDetailPanel"
+                             disabled = "#{headerController.isDisabled('addAppraisalDetailButton')}"
                              oncomplete="reqApprDetailDlg.show()"/>
         </td>
     </tr>
@@ -55,7 +56,7 @@
                     <h:outputText value="#{appraisalDetailItem.purposeReviewAppraisalLabel}"/>
                 </p:column>
                 <p:column styleClass="left" style="font-size: 11px;">
-                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailItem.characteristic}" disabled="true" styleClass="radio_table" style="font-size:11px;">
+                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailItem.characteristic}" disabled = "#{headerController.isDisabled('document.characteristic')}" styleClass="radio_table" style="font-size:11px;">
                         <f:selectItem id="characteristicRadio0" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                         <f:selectItem id="characteristicRadio1" itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                     </p:selectOneRadio>
@@ -68,6 +69,7 @@
                                      process="@this"
                                      action="#{headerController.onEditAppraisalDetail()}"
                                      update=":frmMain:reqApprDetailPanel"
+                                     disabled = "#{headerController.isDisabled('appraisal.actionList')}"
                                      oncomplete="reqApprDetailDlg.show();">
                         <f:setPropertyActionListener value="#{appraisalDetailItem}"
                                                      target="#{headerController.appraisalDetailViewSelected}"/>
@@ -77,6 +79,7 @@
 
                     <p:commandButton title="Remove" process="@this"
                                      icon="ui-icon-trash"
+                                     disabled = "#{headerController.isDisabled('appraisal.actionList')}"
                                      oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
                         <f:setPropertyActionListener value="#{appraisalDetailItem}"
                                                      target="#{headerController.appraisalDetailViewSelected}"/>
@@ -118,13 +121,15 @@
                         <p:inputText id="customerName1" value="#{headerController.appraisalContactDetailView.customerName1}"
                                      required="#{not empty param[addAppraisalRequsest.clientId] }"
                                      onkeydown="return onKeyDownName(event);"
+                                     disabled = "#{headerController.isDisabled('contact.cusname1')}"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                         <!--style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
                     </td>
                     <td class="center">
                         <p:inputText value="#{headerController.appraisalContactDetailView.contactNo1}"
-                                     required="#{not empty param[addAppraisalRequsest.clientId] }" />
+                                     required="#{not empty param[addAppraisalRequsest.clientId] }"
+                                     disabled = "#{headerController.isDisabled('contact.contactNo1')}"/>
                                      <!--onkeydown="return onKeyDownTelNo(event);"-->
                                      <!--onkeypress="return onKeyPressTelNo(event);" />-->
                         <!--style = "#{headerController.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
@@ -137,11 +142,13 @@
                     <td class="center">
                         <p:inputText id="customerName2" value="#{headerController.appraisalContactDetailView.customerName2}"
                                      onkeydown="return onKeyDownName(event);"
+                                     disabled = "#{headerController.isDisabled('contact.cusname2')}"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                     <td class="center">
-                        <p:inputText value="#{headerController.appraisalContactDetailView.contactNo2}"  />
+                        <p:inputText value="#{headerController.appraisalContactDetailView.contactNo2}"
+                                     disabled = "#{headerController.isDisabled('contact.contactNo2')}"/>
                                      <!--onkeydown="return onKeyDownTelNo(event);"-->
                                      <!--onkeypress="return onKeyPressTelNo(event);" />-->
                     </td>
@@ -153,11 +160,13 @@
                     <td class="center">
                         <p:inputText id="customerName3" value="#{headerController.appraisalContactDetailView.customerName3}"
                                      onkeydown="return onKeyDownName(event);"
+                                     disabled = "#{headerController.isDisabled('contact.cusname3')}"
                                      onkeypress="return onKeyPressName(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                     <td class="center">
-                        <p:inputText value="#{headerController.appraisalContactDetailView.contactNo3}" />
+                        <p:inputText value="#{headerController.appraisalContactDetailView.contactNo3}"
+                                     disabled = "#{headerController.isDisabled('contact.contactNo3')}"/>
                                      <!--onkeydown="return onKeyDownTelNo(event);"-->
                                      <!--onkeypress="return onKeyPressTelNo(event);" />-->
                     </td>
@@ -181,7 +190,8 @@
             <p:outputLabel for="zoneLocation" styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
         </td>
         <td>
-            <p:inputText id="zoneLocation" value="#{headerController.appraisalView.zoneLocation}" readonly="true" />
+            <p:inputText id="zoneLocation" value="#{headerController.appraisalView.zoneLocation}" readonly="true"
+                         disabled = "#{headerController.isDisabled('zoneLocation')}"/>
         </td>
     </tr>
     <tr>
@@ -190,7 +200,8 @@
         </td>
         <td>
             <p:inputTextarea id="bdmRemark" value="#{headerController.appraisalView.bdmRemark}" rows="3" cols="90" maxlength="500"
-                             counterTemplate="{0} characters remaining." autoResize="false"/>
+                             counterTemplate="{0} characters remaining." autoResize="false"
+                             disabled = "#{headerController.isDisabled('bdmRemark')}"/>
         </td>
     </tr>
     <tr>
@@ -202,11 +213,13 @@
                              process="@form"
                              actionListener="#{headerController.onSubmitRequestAppraisal()}"
                              oncomplete="handleRequestAppraisal(xhr, status, args);"
+                             disabled = "#{headerController.isDisabled('saveButton')}"
                              update=":frmMain:reqApprDialogPanel, :frmMain:msgBoxBaseMessagePanel"/>
 
             <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="medium"
                              process="@this"
                              update=":frmMain:reqApprDialogPanel"
+                             disabled = "#{headerController.isDisabled('cancelButton')}"
                              oncomplete="reqApprDlg.hide()">
                 <p:resetInput target=":frmMain:reqApprDialogPanel" />
             </p:commandButton>

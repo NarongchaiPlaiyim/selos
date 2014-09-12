@@ -60,7 +60,8 @@
                     <tr>
                         <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
                         <td colspan="3">
-                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}" disabled="true">
+                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}"
+                                              disabled="#{appraisalResult.isDisabled('appraisalType')}">
                                 <f:selectItem itemLabel="Internal" itemValue="0" />
                                 <f:selectItem itemLabel="External" itemValue="1" />
                             </p:selectOneRadio>
@@ -72,7 +73,7 @@
                         </td>
                         <td >
                             <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}"
-                                             disabled="true">
+                                             disabled="#{appraisalResult.isDisabled('appraisalType')}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.appraisalCompanyList}"
                                                var="appraisalCompany"
@@ -85,7 +86,7 @@
                         </td>
                         <td>
                             <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}"
-                                             disabled="true">
+                                             disabled="#{appraisalResult.isDisabled('appraisalDivision')}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.appraisalDivisionList}"
                                                var="appraisalDivision"
@@ -99,7 +100,7 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                         </td>
                         <td colspan="3">
-                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}" readonly="true" />
+                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}" readonly="#{appraisalResult.isDisabled('appraisalName')}" />
                         </td>
                     </tr>
                     <tr>
@@ -107,7 +108,7 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
                         </td>
                         <td colspan="3">
-                            <p:inputText value="#{appraisalResult.appraisalView.receivedTaskDate}" readonly="true" >
+                            <p:inputText value="#{appraisalResult.appraisalView.receivedTaskDate}" readonly="#{appraisalResult.isDisabled('receivedTaskDate')}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </p:inputText>
                         </td>
@@ -118,7 +119,7 @@
                         </td>
                         <td>
                             <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}"
-                                             disabled="true" >
+                                             disabled="#{appraisalResult.isDisabled('locationOfProperty')}" >
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.locationPropertyList}"
                                                var="locationProperty"
@@ -130,7 +131,8 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}" disabled="true" >
+                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}"
+                                             required="#{not empty param[saveButton.clientId]}" disabled="#{appraisalResult.isDisabled('provinceOfProperty')}" >
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.provinceList}"
                                                var="province"
@@ -144,7 +146,7 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
                         </td>
                         <td>
-                            <p:inputText value="#{appraisalResult.appraisalView.appraisalDate}" readonly="true" >
+                            <p:inputText value="#{appraisalResult.appraisalView.appraisalDate}" readonly="#{appraisalResult.isDisabled('appraisalDate')}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </p:inputText>
                         </td>
@@ -152,7 +154,7 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
                         </td>
                         <td>
-                            <p:inputText value="#{appraisalResult.appraisalView.dueDate}" readonly="true" >
+                            <p:inputText value="#{appraisalResult.appraisalView.dueDate}" readonly="#{appraisalResult.isDisabled('dueDate')}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </p:inputText>
                         </td>
@@ -162,7 +164,7 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}" />
                         </td>
                         <td colspan="3">
-                            <p:inputTextarea cols="69" rows="4" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="true" />
+                            <p:inputTextarea cols="69" rows="4" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="#{appraisalResult.isDisabled('AADAdminRemark')}" />
                         </td>
                     </tr>
 
@@ -186,6 +188,7 @@
                                              process="@this"
                                              actionListener="#{appraisalResult.onAddCollateralDetailView()}"
                                              update=":appraisalComsDlgForm"
+                                             disabled = "#{appraisalResult.isDisabled('addAppraisalReportButton')}"
                                              oncomplete="appraisalComsViewDlg.show()"/>
                         </td>
                     </tr>
@@ -215,11 +218,13 @@
                                                               action="#{appraisalResult.onEditCollateralDetailView()}"
                                                               update=":appraisalComsDlgForm"
                                                               process=":frmMain"
+                                                              disabled = "#{appraisalResult.isDisabled('collateral.editButton')}"
                                                               oncomplete="appraisalComsViewDlg.show();">
                                                  <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}" />
                                                  <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
                                              </p:commandButton>
                                              <p:commandButton value="Remove" process="@this"
+                                                              disabled = "#{appraisalResult.isDisabled('collateral.deleteButton')}"
                                                               oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >
                                                  <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}"/>
                                                  <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
@@ -404,6 +409,7 @@
                                      value="#{msg.get('app.button.save')}"
                                      styleClass="medium"
                                      process=":frmMain"
+                                     disabled = "#{appraisalResult.isDisabled('saveButton')}"
                                      action="#{appraisalResult.onSaveAppraisalResult()}"
                                      update=":msgBoxSystemMessagePanel"/>
 
@@ -411,6 +417,7 @@
                                      id="btnCancel"
                                      styleClass="medium"
                                      process=":frmMain"
+                                     disabled = "#{appraisalResult.isDisabled('cancelButton')}"
                                      action="#{appraisalResult.onCancelAppraisalResult()}"
                                      update=":frmMain"/>
                         </td>

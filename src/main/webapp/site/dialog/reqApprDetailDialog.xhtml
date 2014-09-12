@@ -13,6 +13,7 @@
             <td class="title" style="width: 200px;">
                 <p:inputText value="#{headerController.appraisalDetailView.titleDeed}" style = "#{headerController.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                              maxlength="50"
+                             disabled = "#{headerController.isDisabled('appraisal.titleDeed')}"
                              counterTemplate="{0} characters remaining."
                              autoResize="false" />
                     <!--onkeydown="return onKeyPressName2(event);"
@@ -24,19 +25,22 @@
                 <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
             </td>
             <td id="checkBox" style = "#{headerController.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
-                <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeReviewAppraisalB}">
+                <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeReviewAppraisalB}"
+                                         disabled = "#{headerController.isDisabled('appraisal.purpose')}">
                     <!--<p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"-->
                             <!--listener="#{headerController.checkAppraisalDialog()}"/>-->
                 </h:selectBooleanCheckbox>
                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" />
                 <br/>
-                <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeNewAppraisalB}">
+                <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeNewAppraisalB}"
+                                         disabled = "#{headerController.isDisabled('appraisal.purpose')}">
                     <!--<p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"-->
                             <!--listener="#{headerController.checkAppraisalDialog()}"/>-->
                 </h:selectBooleanCheckbox>
                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" />
                 <br/>
-                <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeReviewBuildingB}" >
+                <h:selectBooleanCheckbox value="#{headerController.appraisalDetailView.purposeReviewBuildingB}"
+                                         disabled = "#{headerController.isDisabled('appraisal.purpose')}">
                     <!--<p:ajax process="@form" update=":frmMain:reqApprDetailDialogPanel"-->
                             <!--listener="#{headerController.checkAppraisalDialog()}"/>-->
                 </h:selectBooleanCheckbox>
@@ -48,7 +52,8 @@
                 <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
             </td>
             <td style="mid-width: 250px;width: 250px;max-width: 250px;">
-                <p:selectOneRadio id="characteristicRadio" value="#{headerController.appraisalDetailView.characteristic}" >
+                <p:selectOneRadio id="characteristicRadio" value="#{headerController.appraisalDetailView.characteristic}"
+                                  disabled = "#{headerController.isDisabled('document.characteristic')}">
                     <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                     <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                 </p:selectOneRadio>
@@ -62,6 +67,7 @@
                 <p:inputText id="numberOfDocuments"  styleClass="right"
                              onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                              value="#{headerController.appraisalDetailView.numberOfDocuments}"
+                             disabled = "#{headerController.isDisabled('document.numberOfDocuments')}"
                              style = "#{headerController.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                              maxlength="3">
                     <!--<p:ajax event="blur" update=":frmMain:reqApprDetailDialogPanel"/>-->
@@ -77,10 +83,12 @@
                                  onclick="blockReqApprDetailDialogPanel.show();"
                                  actionListener="#{headerController.onSaveAppraisalDetail()}"
                                  process="@form"
+                                 disabled = "#{headerController.isDisabled('okButton')}"
                                  update=":frmMain:reqApprDetailDialogPanel, :frmMain:reqApprDialogPanel"
                                  oncomplete="handleRequestAppraisalDetail(xhr, status, args); blockReqApprDetailDialogPanel.hide()"/>
 
-                <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="reqApprDetailDlg.hide()" />
+                <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="reqApprDetailDlg.hide()"
+                                 disabled = "#{headerController.isDisabled('cancelButton')}"/>
             </td>
         </tr>
     </table>

@@ -47,7 +47,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "appraisalResult")
-public class AppraisalResult implements Serializable {
+public class AppraisalResult extends BaseController implements Serializable {
 
     @Inject
     @SELOS

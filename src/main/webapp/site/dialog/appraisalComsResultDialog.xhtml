@@ -11,13 +11,14 @@
             <td>
                 <p:inputText id="jobID" value="#{appraisalResult.newCollateralView.jobID}"
                              required="#{not empty param[searchButton.clientId]}"
-                             readonly="#{appraisalResult.flagReadOnly}"
+                             readonly="#{appraisalResult.isDisabled('collateral.jobID')}"
                         />
             </td>
             <td>
                 <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"
                                  binding="#{searchButton}"
                                  process="@form"
+                                 disabled = "#{appraisalResult.isDisabled('collateral.retrieveAppraisalButton')}"
                                  action="#{appraisalResult.onCallRetrieveAppraisalReportInfo()}"
                                  update=":msgBoxSystemMessagePanel,:appraisalComsDlgForm"/>
             </td>
@@ -204,9 +205,11 @@
                          value="#{msg.get('app.button.ok')}"
                          action="#{appraisalResult.onSaveCollateralDetailView()}"
                          process="@form"
+                         disabled = "#{appraisalResult.isDisabled('okButton')}"
                          update=":appraisalComsDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                          oncomplete="handleCollateralDetailRequest(xhr, status, args)"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalComsViewDlg.hide()"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalComsViewDlg.hide()"
+                         disabled = "#{appraisalResult.isDisabled('cancelButton')}"/>
     </p:panel>
 </h:form>
 <p:blockUI widgetVar="blockAppraisalComsDlgForm" block="appraisalComsDlgForm" trigger=":appraisalComsDlgForm:btnSaveAppraisalComs">
