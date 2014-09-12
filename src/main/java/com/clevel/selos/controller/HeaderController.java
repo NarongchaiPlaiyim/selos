@@ -794,22 +794,15 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
-                if(canSubmitWithoutReturn()) {
-                    fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
-                    log.debug("submitForBDM ::: success.");
-                    log.debug("submitForBDM ::: Backup return info to History Start...");
-                    returnControl.saveReturnHistoryForRestart(workCaseId, workCasePreScreenId);
-                    log.debug("submitForBDM ::: Backup return info to History Success...");
-                    messageHeader = msg.get("app.messageHeader.info");
-                    message = msg.get("app.message.dialog.submit.success");
-                    showMessageRedirect();
-                    complete = true;
-                }else {
-                    messageHeader = "Information.";
-                    message = "Submit case fail. Please check return information before submit again.";
-                    showMessageBox();
-                    log.error("onSubmitCA ::: fail.");
-                }
+                fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+                log.debug("submitForBDM ::: success.");
+                log.debug("submitForBDM ::: Backup return info to History Start...");
+                //returnControl.saveReturnHistoryForRestart(workCaseId, workCasePreScreenId);
+                log.debug("submitForBDM ::: Backup return info to History Success...");
+                messageHeader = msg.get("app.messageHeader.info");
+                message = msg.get("app.message.dialog.submit.success");
+                showMessageRedirect();
+                complete = true;
             } catch (Exception ex){
                 messageHeader = msg.get("app.messageHeader.exception");
                 message = Util.getMessageException(ex);
@@ -1179,7 +1172,7 @@ public class HeaderController extends BaseController {
         log.debug("submitForBDMUW :: Start");
         boolean complete = false;
         try{
-            if(canSubmitWithoutReturn()){
+            if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)){
                 fullApplicationControl.submitForBDMUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId);
 
                 messageHeader = msg.get("app.messageHeader.info");
