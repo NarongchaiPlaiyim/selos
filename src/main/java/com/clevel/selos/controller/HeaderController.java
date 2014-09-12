@@ -1172,7 +1172,7 @@ public class HeaderController extends BaseController {
         log.debug("submitForBDMUW :: Start");
         boolean complete = false;
         try{
-            if(canSubmitWithoutReturn()){
+            if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)){
                 fullApplicationControl.submitForBDMUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId);
 
                 messageHeader = msg.get("app.messageHeader.info");
