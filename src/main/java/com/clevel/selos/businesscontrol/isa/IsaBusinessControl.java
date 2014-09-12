@@ -12,6 +12,7 @@ import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.db.audit.IsaActivity;
 import com.clevel.selos.model.db.audit.SecurityActivity;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.isa.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.IsaAuditor;
@@ -27,6 +28,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.InputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Stateless
@@ -385,6 +388,33 @@ public class IsaBusinessControl extends BusinessControl {
         }
 
         return list;
+    }
+
+    public List<ISAViewReport> getUserProFile() throws SQLException {
+        log.debug("--getUserProFile by CSVService.");
+        ResultSet rs = stpExecutor.getUserProfile();
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+
+        try{
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setAdminTask(rs.getString("ADMIN_TASK"));
+                    viewReport.setEmpID(rs.getString("EMP_ID"));
+                    viewReport.setEmpName(rs.getString("EMP_NAME"));
+                    viewReport.setOldData(rs.getString("OLD_DATA"));
+                    viewReport.setNewData(rs.getString("NEW_DATA"));
+                    viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
+                    viewReport.setModifyBy(rs.getString("MODIFY_BY"));
+                    viewReport.setAdminName(rs.getString("ADMIN_NAME"));
+                    viewReportList.add(viewReport);
+                }
+            }
+        } catch (Exception e){
+            log.debug("getUserProFile SQLException : ",e) ;
+        }
+
+        return viewReportList;
     }
 
 
