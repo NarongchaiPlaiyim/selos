@@ -438,7 +438,7 @@ xmlns:p="http://primefaces.org/ui">
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.frontEnd')}"/>
-                    <h:outputText value="#{decision.mandate('credit.tier.actionList')}" styleClass="require-field"/>
+                    <h:outputText value="#{decision.mandate('credit.frontEndFee')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
@@ -446,7 +446,7 @@ xmlns:p="http://primefaces.org/ui">
                                  value="#{decision.approveCreditInfoDetailView.frontEndFee}"
                                  maxlength="6"
                                  readonly="#{decision.approveCreditInfoDetailView.requestTypeMode != 1
-                                             or decision.isDisabled('credit.tier.actionList')}"
+                                             or decision.isDisabled('credit.frontEndFee')}"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"

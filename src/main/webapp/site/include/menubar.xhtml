@@ -56,6 +56,12 @@
                 </li>
             </h:panelGroup>
             <h:panelGroup id="pnl_menu_fullapp" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
+                <li id="mnuprescreen">
+                    <a href="prescreenResult.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
+                    <ul>
+                        <li id="submnuprescreenresult"><a href="prescreenResult.jsf" title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>
+                    </ul>
+                </li>
                 <li id="mnubasicinfo"><a href="basicInfo.jsf" title="#{msg.get('app.menu.basicInfo')}">#{msg.get('app.menu.basicInfo')}</a></li>
                 <li id="mnuborrowerinfo">
                     <a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.borrowerInfo')}">#{msg.get('app.menu.borrowerInfo')}</a>

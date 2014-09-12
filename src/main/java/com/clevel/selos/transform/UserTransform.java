@@ -27,6 +27,7 @@ public class UserTransform extends Transform {
         userView.setUserName(user.getUserName());
         userView.setRoleDescription(user.getRole() != null ? user.getRole().getDescription() : "");
         userView.setTitleName(user.getTitle() != null ? user.getTitle().getName() : "");
+        userView.setPositionName(user.getPosition() != null ? user.getPosition().getName() : "");
         return userView;
     }
 

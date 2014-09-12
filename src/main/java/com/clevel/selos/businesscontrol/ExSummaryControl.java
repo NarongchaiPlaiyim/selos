@@ -832,15 +832,10 @@ public class ExSummaryControl extends BusinessControl {
 
     //Borrower Characteristic - groupSaleBDM , groupSaleUW ( Line 55-56 )
     //Customer Info Detail , Bank Statement Summary
-//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-//  Change TO ::: groupSaleBDM - กรณีผู้กู้ = Juristic รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y
-//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-//  Change TO ::: groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary * 12) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y
-//    Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
-//    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-//  Change TO ::: groupSaleUW - กรณีผู้กู้ = Juristic รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y
-//    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-//  Change TO ::: groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary * 12) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y
+//    - กรณีผู้กู้เป็น Juristic
+//    - ใช้ รายได้ตามงบการเงิน จาก Customer ( Juristic ) ทั้งหมด ( ไม่ว่า Relation จะเป็นอะไร ) บวกกับ Approx. Income จาก Customer ( Individual ) ที่ Relation = Guarantor , Related ที่มี Flag Group Sale ใน Reference เป็น Y
+//    - กรณีผู้กู้เป็น Individual
+//    - ใช้ Grand Total Income Gross จากหน้า Bank Statement คูณด้วย 12 แล้ว บวกกับ รายได้ตามงบการเงิน จากหน้า Customer ( Juristic ) ที่ Relation = Guarantor , Related ที่มี Flag Group Sale ใน Reference เป็น Y บวกกับ Approx. Income จาก Customer ( Individual ) ที่ Relation = Guarantor , Related ที่มี Flag Group Sale ใน Reference เป็น Y
     public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
         log.debug("calGroupSaleBorrowerCharacteristic :: workCaseId : {}",workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -860,7 +855,6 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
-//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12 //
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
             BigDecimal grdTotalIncomeGross = BigDecimal.ZERO;
             BigDecimal approxIncome = BigDecimal.ZERO;
@@ -874,6 +868,10 @@ public class ExSummaryControl extends BusinessControl {
                             if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
                                 approxIncome = Util.add(approxIncome,cus.getApproxIncome());
                             }
+                        } else if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                            if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                approxIncome = Util.add(approxIncome,cus.getSalesFromFinancialStmt());
+                            }
                         }
                     }
                 }
@@ -881,7 +879,6 @@ public class ExSummaryControl extends BusinessControl {
             groupSaleBDM = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
             groupSaleUW = Util.add(Util.multiply(grdTotalIncomeGross,twelve),approxIncome);
         } else { // use customer
-//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
             BigDecimal saleFromFinStmt = BigDecimal.ZERO;
             BigDecimal approxIncome = BigDecimal.ZERO;
             if(cusListView != null && cusListView.size() > 0){

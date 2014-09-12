@@ -1555,7 +1555,13 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(stepId == StepValue.PRESCREEN_INITIAL.value()){
             relationList = relationDAO.getRelationOnlyBorrower();
         } else if(stepId == StepValue.PRESCREEN_MAKER.value()){
-            relationList = relationCustomerDAO.getListRelationForSpouse(customerEntityId, borrowerTypeId, borrowerPiority);
+            List<Relation> tmpRelationList = relationCustomerDAO.getListRelationForSpouse(customerEntityId, borrowerTypeId, borrowerPiority);
+            //Remove Borrower for Spouse
+            for(Relation relation : tmpRelationList){
+                if(relation.getId() != RelationValue.BORROWER.value()){
+                    relationList.add(relation);
+                }
+            }
         }
 
         return relationList;
