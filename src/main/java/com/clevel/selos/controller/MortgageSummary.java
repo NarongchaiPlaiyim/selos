@@ -216,6 +216,20 @@ public class MortgageSummary implements Serializable {
 		mortgageInfos = mortgageSummaryControl.getMortgageInfoList(workCaseId);
 		pledgeInfos = mortgageSummaryControl.getPledgeInfoList(workCaseId);
 		guarantorInfos = mortgageSummaryControl.getGuarantorInfoList(workCaseId);
+		
+		//init agreement 
+		switch(agreementInfoView.getSigningLocation()) {
+			case BRANCH :
+				locations = branches;
+				break;
+			case ZONE :
+				locations = zones;
+				break;
+			default:
+				locations = Collections.emptyList();
+				break;
+		}
+		
 	}
 	
 	/*
