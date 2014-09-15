@@ -238,14 +238,14 @@ public class STPExecutor implements Serializable {
         return rs[0];
     }
 
-    public ResultSet getUserProfile(){
+    public ResultSet getActivity(){
         log.debug("on getViolation.");
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
                 try{
-                    CallableStatement callStmt = connection.prepareCall("call SLOS.userprofile (?)");
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.activity (?)");
                     callStmt.registerOutParameter(1,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
                     rs[0] = (ResultSet) callStmt.getObject(1);

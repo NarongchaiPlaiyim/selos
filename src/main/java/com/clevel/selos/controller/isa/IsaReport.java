@@ -131,7 +131,7 @@ public class IsaReport implements Serializable {
         }
     }
 
-    public void onPrintUserProFile(){
+    public void onPrintActivity(){
         List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
         StringBuilder nameISAUserProfile = new StringBuilder();
         nameISAUserProfile = nameISAUserProfile.append("Activity_").append(Util.getFileNameForISA());
