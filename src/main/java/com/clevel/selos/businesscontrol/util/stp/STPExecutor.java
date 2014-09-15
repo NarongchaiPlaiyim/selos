@@ -22,6 +22,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
 @Stateless
@@ -238,17 +239,25 @@ public class STPExecutor implements Serializable {
         return rs[0];
     }
 
-    public ResultSet getActivity(){
+    public ResultSet getActivity(final Map<String, Object> map){
         log.debug("on getViolation.");
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
                 try{
-                    CallableStatement callStmt = connection.prepareCall("call SLOS.activity (?)");
-                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.activity (?, ?, ?)");
+                    int round = 1;
+                    for (String key : map.keySet()){
+                        callStmt.setObject(round, map.get(key).toString());
+                        round++;
+                    }
+                    callStmt.registerOutParameter(3,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
-                    rs[0] = (ResultSet) callStmt.getObject(1);
+                    rs[0] = (ResultSet) callStmt.getObject(3);
+//                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
+//                    callStmt.executeUpdate();
+//                    rs[0] = (ResultSet) callStmt.getObject(1);
                 } catch (Exception e){
                     log.debug("Exception Error. {}",e);
                 }

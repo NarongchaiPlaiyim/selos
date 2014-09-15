@@ -448,9 +448,9 @@ public class IsaBusinessControl extends BusinessControl {
         return viewReportList;
     }
 
-    public List<ISAViewReport> getUserProFileByISA() throws SQLException {
+    public List<ISAViewReport> getUserProFileByISA(final Map<String, Object> map) throws SQLException {
         log.debug("--getUserProFile by CSVService.");
-        ResultSet rs = stpExecutor.getActivity();
+        ResultSet rs = stpExecutor.getActivity(map);
         List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
 
         try{

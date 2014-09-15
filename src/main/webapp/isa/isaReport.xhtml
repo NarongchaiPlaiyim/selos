@@ -33,10 +33,12 @@
                             <label class="subject">ISA Reports</label>
                             <table border="0">
                                 <tr>
-                                    <!--<td style="width: 100px; min-width: 100px; max-width: 100px;" />-->
-                                    <!--<td style="width: 300px; min-width: 300px; max-width: 300px;" />-->
-                                    <!--<td style="width: 100px; min-width: 100px; max-width: 100px;" />-->
-                                    <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+                                    <td style="width: 50px; min-width: 50px; max-width: 50px;" />
+                                    <td style="width: 200px; min-width: 200px; max-width: 300px;" />
+                                    <td style="width: 80px; min-width: 50px; max-width: 80px;" />
+                                    <td style="width: 220px; min-width: 220px; max-width: 220px;" />
+                                    <td style="width: 120px; min-width: 120px; max-width: 120px;" />
+                                    <td style="width: 220px; min-width: 220px; max-width: 220px;" />
                                     <td style="width: 120px; min-width: 120px; max-width: 120px;" />
 
                                 </tr>
@@ -104,6 +106,36 @@
                                 <tr>
                                     <td class="title" colspan="2" >
                                         <p:outputLabel value="รายงานสิทธิของกลุ่มผู้ใช้งาน : " />
+                                    </td>
+                                    <td class="title" >
+                                        <p:outputLabel value="จากวันที่ : " />
+                                    </td>
+                                    <td>
+                                        <clv:BECalendar value="#{isaReport.dateFrom}"
+                                        id="dateOfFrom"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        navigator="true"
+                                        locale="th_TH"
+                                        showButtonPanel="true">
+                                        </clv:BECalendar>
+                                    </td>
+                                    <td class="title" >
+                                        <p:outputLabel value="ถึงวันที่ : " />
+                                    </td>
+                                    <td >
+                                        <clv:BECalendar value="#{isaReport.dateTo}"
+                                        id="dateOfTo"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        navigator="true"
+                                        locale="th_TH"
+                                        showButtonPanel="true">
+                                        </clv:BECalendar>
                                     </td>
                                     <td>
                                         <p:commandButton value="ส่งออกรายงาน" styleClass="medium"

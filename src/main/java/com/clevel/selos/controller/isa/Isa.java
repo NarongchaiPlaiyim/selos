@@ -168,7 +168,8 @@ public class Isa implements Serializable {
                     } else if (isaBusinessControl.isExistIdAndActivityAndStatus(isaManageUserView.getId())){
                         log.debug("--Update user.");
                         isaBusinessControl.editUserAfterDelete(isaManageUserView, user);
-                        isaAuditor.audit(id , ModeForButton.EDIT.name(), isaManageUserView.toStringForAudit(),  ActionResult.SUCCESS, null, this.user, oldData, newData);
+                        String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to Edit").append(" By ").append(this.user.getId()).toString();
+                        isaAuditor.audit(id , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                         message = Result.Success.toString();
                     } else {
                         message = "User ID already exists";
