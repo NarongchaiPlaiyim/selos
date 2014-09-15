@@ -21,7 +21,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name="mandateFieldSubmitStep")
-public class MandateFieldSubmitStep implements Serializable {
+public class MandateFieldStepAction implements Serializable {
     @Inject
     @ADMIN
     private Logger log;
@@ -57,7 +57,7 @@ public class MandateFieldSubmitStep implements Serializable {
     private boolean updatedMode = false;
 
     @Inject
-    public MandateFieldSubmitStep(){}
+    public MandateFieldStepAction(){}
 
     @PostConstruct
     private void init() {

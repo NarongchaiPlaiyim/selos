@@ -6,7 +6,7 @@
 <h:form id="mandateFieldDetailFrm">
 <p:scrollPanel style="height:400px" styleClass="panel-dialog" id="mandateFieldPanel"
                mode="native"
-               rendered="#{not empty mandateFieldSubmit.wrkMandateFieldView}">
+               rendered="#{not empty mandateFieldDetail.wrkMandateFieldView}">
 <p:messages />
 <table class="content_form">
 <tr>
@@ -14,7 +14,7 @@
         <p:outputLabel for="fieldNameDlg" value="#{msg.get('app.mandateField.field.name')}" />
     </td>
     <td>
-        <p:inputText id="fieldNameDlg" readonly="true" value="#{mandateFieldSubmit.wrkMandateFieldView.fieldName}"/>
+        <p:inputText id="fieldNameDlg" readonly="true" value="#{mandateFieldDetail.wrkMandateFieldView.fieldName}"/>
     </td>
 </tr>
 <tr>
@@ -22,7 +22,7 @@
         <p:outputLabel for="fieldDescDlg" value="#{msg.get('app.mandateField.field.desc')}" />
     </td>
     <td>
-        <p:inputText id="fieldDescDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.fieldDesc}"/>
+        <p:inputText id="fieldDescDlg" value="#{mandateFieldDetail.wrkMandateFieldView.fieldDesc}"/>
     </td>
 </tr>
 <tr>
@@ -30,7 +30,7 @@
         <p:outputLabel for="pageDlg" value="#{msg.get('app.mandateField.field.pageName')}" />
     </td>
     <td>
-        <p:inputText id="pageDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.page}" maxlength="100"/>
+        <p:inputText id="pageDlg" value="#{mandateFieldDetail.wrkMandateFieldView.page}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -38,7 +38,7 @@
         <p:outputLabel for="minValueDlg" value="#{msg.get('app.mandateField.field.min')}" />
     </td>
     <td>
-        <p:inputText id="minValueDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.minValue}" maxlength="100"/>
+        <p:inputText id="minValueDlg" value="#{mandateFieldDetail.wrkMandateFieldView.minValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -46,7 +46,7 @@
         <p:outputLabel for="maxValueDlg" value="#{msg.get('app.mandateField.field.max')}" />
     </td>
     <td>
-        <p:inputText id="maxValueDlg" value="#{mandateFieldSubmit.wrkMandateFieldView.maxValue}" maxlength="100"/>
+        <p:inputText id="maxValueDlg" value="#{mandateFieldDetail.wrkMandateFieldView.maxValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -55,7 +55,7 @@
     </td>
     <td>
         <h:selectOneRadio id="matchedEmpty"
-                          value="#{mandateFieldSubmit.wrkMandateFieldView.matchedEmpty}">
+                          value="#{mandateFieldDetail.wrkMandateFieldView.matchedEmpty}">
             <f:selectItem itemLabel="N/A" itemValue="0"/>
             <f:selectItem itemLabel="Empty" itemValue="2"/>
             <f:selectItem itemLabel="Other" itemValue="1"/>
@@ -63,7 +63,7 @@
                     process=":mandateFieldDetailFrm:matchedEmpty"
                     update=":mandateFieldDetailFrm:matchedValueDlg"/>
         </h:selectOneRadio>
-        <p:inputText id="matchedValueDlg" readonly="#{mandateFieldSubmit.wrkMandateFieldView.matchedEmpty != 1}" value="#{mandateFieldSubmit.wrkMandateFieldView.matchedValue}" maxlength="100"/>
+        <p:inputText id="matchedValueDlg" readonly="#{mandateFieldDetail.wrkMandateFieldView.matchedEmpty != 1}" value="#{mandateFieldDetail.wrkMandateFieldView.matchedValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -72,7 +72,7 @@
     </td>
     <td>
         <h:selectOneRadio id="notMatchedEmpty"
-                          value="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedEmpty}">
+                          value="#{mandateFieldDetail.wrkMandateFieldView.notMatchedEmpty}">
             <f:selectItem itemLabel="N/A" itemValue="0"/>
             <f:selectItem itemLabel="Empty" itemValue="2"/>
             <f:selectItem itemLabel="Other" itemValue="1"/>
@@ -80,7 +80,7 @@
                     process=":mandateFieldDetailFrm:notMatchedEmpty"
                     update=":mandateFieldDetailFrm:notMatchedValueDlg"/>
         </h:selectOneRadio>
-        <p:inputText id="notMatchedValueDlg" readonly="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedEmpty != 1}" value="#{mandateFieldSubmit.wrkMandateFieldView.notMatchedValue}" maxlength="100"/>
+        <p:inputText id="notMatchedValueDlg" readonly="#{mandateFieldDetail.wrkMandateFieldView.notMatchedEmpty != 1}" value="#{mandateFieldDetail.wrkMandateFieldView.notMatchedValue}" maxlength="100"/>
     </td>
 </tr>
 <tr>
@@ -92,7 +92,7 @@
         <td colspan="2" class="center">
             <p:commandButton id="okBtn" styleClass="small"
                              value="#{msg.get('app.button.ok')}"
-                             actionListener="#{mandateFieldSubmit.onUpdateMandateFieldDetail()}"
+                             actionListener="#{mandateFieldDetail.onUpdateMandateFieldDetail()}"
                              process="@form"
                              update=":mandateFieldDetailFrm,:frmMain:fieldName_tbl"
                              oncomplete="handleDialogRequest(xhr, status, args,'p_mandateFieldDlg')"

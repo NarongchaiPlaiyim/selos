@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.master;
 
 import com.clevel.selos.model.MandateConditionType;
+import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,7 +20,7 @@ public class MandateFieldCondition implements Serializable{
     private long id;
 
     @Column(name = "condition_type", length = 100)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private MandateConditionType mandateConditionType;
 
     @Column(name = "condition_name", length = 30)
@@ -33,8 +34,12 @@ public class MandateFieldCondition implements Serializable{
     private MandateFieldClass mandateFieldClass;
 
     @Column(name = "depend_type", length = 100)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private MandateDependType dependType;
+
+    @Column(name = "depend_con_type")
+    @Enumerated(EnumType.ORDINAL)
+    private MandateDependConType dependConType;
 
     @Column(name = "depend_con_id")
     private long dependCondition = 0;
@@ -90,6 +95,14 @@ public class MandateFieldCondition implements Serializable{
         this.dependType = dependType;
     }
 
+    public MandateDependConType getDependConType() {
+        return dependConType;
+    }
+
+    public void setDependConType(MandateDependConType dependConType) {
+        this.dependConType = dependConType;
+    }
+
     public long getDependCondition() {
         return dependCondition;
     }
@@ -115,6 +128,7 @@ public class MandateFieldCondition implements Serializable{
                 .append("conditionDesc", conditionDesc)
                 .append("mandateFieldClass", mandateFieldClass)
                 .append("dependType", dependType)
+                .append("dependConType", dependConType)
                 .append("dependCondition", dependCondition)
                 .append("mandateFieldConditionDetailList", mandateFieldConditionDetailList)
                 .toString();

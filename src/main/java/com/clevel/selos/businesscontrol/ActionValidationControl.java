@@ -120,7 +120,7 @@ public class ActionValidationControl extends BusinessControl{
         String parameterizedName = parameterizedClass.getName();
 
         if(parameterizedName != null){
-            MandateFieldView mandateFieldView = listMandateFieldViewMap.get(parameterizedName);
+            //MandateFieldView mandateFieldView = listMandateFieldViewMap.get(parameterizedName);
             MandateFieldClassView mandateFieldClassView = listMandateClassViewMap.get(parameterizedName);
             if(mandateFieldClassView != null){
                 if(object == null){
@@ -680,7 +680,7 @@ public class ActionValidationControl extends BusinessControl{
             if(mandateFieldView.getMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.toString())){
                 isPassMatched = (_fieldObj == null);
             } else {
-                isPassNotMatched = isContainValue(mandateFieldView.getNotMatchedValue(), _fieldObj);
+                isPassMatched = isContainValue(mandateFieldView.getMatchedValue(), _fieldObj);
 
             }
         }
@@ -844,6 +844,5 @@ public class ActionValidationControl extends BusinessControl{
                     .toString();
         }
     }
-
 
 }

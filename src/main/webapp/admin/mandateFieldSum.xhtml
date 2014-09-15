@@ -15,7 +15,7 @@
     </h:head>
 
     <h:body>
-        <f:event type="preRenderView" listener="#{mandateFieldSubmit.preRender()}" />
+        <f:event type="preRenderView" listener="#{mandateFieldSum.preRender()}" />
 
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
             <h:form id="frmMain">
@@ -39,7 +39,7 @@
                                 <table class="content_table_form">
                                     <tr>
                                         <td colspan="100%">
-                                            <p:dataTable id='className_tbl' value="#{mandateFieldSubmit.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
+                                            <p:dataTable id='className_tbl' value="#{mandateFieldSum.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
                                             <p:column styleClass="center">
                                                 <h:outputText value="#{rowIndex+1}"
                                                               style="min-width: 20px; max-width: 20px; width: 20px;"/>
@@ -57,12 +57,18 @@
                                                       headerText="#{msg.get('app.mandateField.class.pageName')}">
                                                 #{mandateClassView.pageName}
                                             </p:column>
-                                            <p:column styleClass="center" style="width:30px;">
-                                                <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                 icon="ui-icon-pencil"
-                                                                 action="#{mandateFieldSubmit.onLinkEditMandateFieldDetail()}" onclick="blockUI.show()">
+                                            <p:column styleClass="center" style="width:60px;">
+                                                <p:commandButton title="#{msg.get('app.mandate.button.config.field')}"
+                                                                 icon="ui-icon-wrench"
+                                                                 action="#{mandateFieldSum.onLinkEditMandateFieldDetail()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{mandateClassView}"
-                                                                                 target="#{mandateFieldSubmit.selectedMandateClassView}"/>
+                                                                                 target="#{mandateFieldSum.selectedMandateClassView}"/>
+                                                </p:commandButton>
+                                                <p:commandButton title="#{msg.get('app.mandate.button.config.condition')}"
+                                                                 icon="ui-icon-link"
+                                                                 action="#{mandateFieldSum.onLinkUpdateMandateFieldCondition()}" onclick="blockUI.show()">
+                                                    <f:setPropertyActionListener value="#{mandateClassView}"
+                                                                                 target="#{mandateFieldSum.selectedMandateClassView}"/>
                                                 </p:commandButton>
                                             </p:column>
                                         </p:dataTable>
