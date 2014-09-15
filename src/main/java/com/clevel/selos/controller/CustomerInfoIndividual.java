@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.IndividualDAO;
@@ -55,6 +56,8 @@ public class CustomerInfoIndividual implements Serializable {
 
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
     @Inject
     private DocumentTypeControl documentTypeControl;
     @Inject
@@ -1865,6 +1868,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         try{
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
+            exSummaryControl.calForCustomerInfo(workCaseId);
             isFromSummaryParam = true;
             onAddNewIndividual();
             onEditIndividual();

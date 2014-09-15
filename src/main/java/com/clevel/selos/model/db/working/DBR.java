@@ -77,6 +77,9 @@ public class DBR implements Serializable {
     @Column(name = "TOTAL_MONTH_DEBT_RELATED_WC")
     private BigDecimal totalMonthDebtRelatedWc;
 
+    @Column(name = "marketable_flag", columnDefinition = "int default 0")
+    private int marketableFlag;
+
     public DBR() {
 
     }
@@ -231,6 +234,14 @@ public class DBR implements Serializable {
 
     public void setTotalMonthDebtRelatedWc(BigDecimal totalMonthDebtRelatedWc) {
         this.totalMonthDebtRelatedWc = totalMonthDebtRelatedWc;
+    }
+
+    public int getMarketableFlag() {
+        return marketableFlag;
+    }
+
+    public void setMarketableFlag(int marketableFlag) {
+        this.marketableFlag = marketableFlag;
     }
 
     @Override

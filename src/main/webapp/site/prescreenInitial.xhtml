@@ -45,6 +45,7 @@
                                     <h:inputHidden value="#{prescreenMaker.previousProductGroupId}"/>
                                     <p:selectOneMenu id="selProdGroupId" styleClass="largest" size="1"
                                                      value="#{prescreenMaker.prescreenView.productGroup.id}"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.productGroup')}"
                                                      required="#{not empty param[btnAddFacility.clientId] || not empty param[btnSaveInitialButton.clientId]}">
                                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
@@ -71,9 +72,9 @@
                             <tr>
                                 <td class="title"><h:outputText value="#{msg.get('app.label.productprogram')}"/> :</td>
                                 <td>
-                                    <p:commandButton id="btnAddFacility" styleClass="smaller"
+                                    <p:commandButton id="btnAddFacility" styleClass="smaller" value="#{msg.get('app.button.add')}"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.addFacilityButton')}"
                                                      binding="#{btnAddFacility}"
-                                                     value="#{msg.get('app.button.add')}"
                                                      process="@form"
                                                      action="#{prescreenMaker.onAddFacility}"
                                                      update=":frmMain, :facilityDlgForm">
@@ -120,6 +121,7 @@
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteFacilityButton')}"
                                                              oncomplete="confirmDeleteFacilityDlg.show()">
                                                 <f:setPropertyActionListener value="#{item}"
                                                                              target="#{prescreenMaker.selectFacilityItem}"/>
@@ -136,9 +138,8 @@
                             <tr>
                                 <td class="title">Customer Information</td>
                                 <td>
-                                    <p:commandButton id="btnAddCustomerInfo"
-                                                     value="Add"
-                                                     styleClass="smaller"
+                                    <p:commandButton id="btnAddCustomerInfo" value="Add" styleClass="smaller"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.addCustomerButton')}"
                                                      process="@this"
                                                      actionListener="#{prescreenMaker.onAddCustomerInfo()}"
                                                      update=":customerDlgForm"
@@ -195,6 +196,7 @@
                                                                              target="#{prescreenMaker.rowIndex}"/>
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteBorrowerButton')}"
                                                              icon="ui-icon-trash"
                                                              rendered="#{borrowerItem.ncbFlag == 0}"
                                                              oncomplete="confirmDeleteCustomerDlg.show()">
@@ -215,9 +217,9 @@
                             </tr>
                             <tr>
                                 <td class="center" colspan="100%">
-                                    <p:commandButton id="btnSave" value="Save"
+                                    <p:commandButton id="btnSave" value="Save" styleClass="medium"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.saveButton')}"
                                                      binding="#{btnSaveInitialButton}"
-                                                     styleClass="medium"
                                                      process="@form"
                                                      actionListener="#{prescreenMaker.onSavePrescreenInitial()}"
                                                      update=":frmMain :msgBoxSystemMessagePanel"/>

@@ -77,7 +77,10 @@
                     </div>
                 </div>
             </h:form>
-            <p:blockUI widgetVar="blockUI" block=":pnl_maincontainer_login"/>
+            <p:blockUI widgetVar="blockUI" block=":pnl_maincontainer_login">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </p:panel>
     </h:body>
 </f:view>

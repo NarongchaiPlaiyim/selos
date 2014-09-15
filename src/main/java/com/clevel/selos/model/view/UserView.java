@@ -10,6 +10,7 @@ public class UserView implements Serializable {
     private String userName;
     private String roleDescription;
     private String titleName;
+    private String positionName;
 
     public UserView() {
         reset();
@@ -54,6 +55,14 @@ public class UserView implements Serializable {
         this.titleName = titleName;
     }
 
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -61,6 +70,7 @@ public class UserView implements Serializable {
                 .append("userName", userName)
                 .append("roleDescription", roleDescription)
                 .append("titleName", titleName)
+                .append("positionName", positionName)
                 .toString();
     }
 }

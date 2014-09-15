@@ -11,6 +11,8 @@
             <tr>
                 <td class="title" style="width: 20%;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.jobID')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 80%" colspan="3">
                     <h:outputText value="#{decision.approveCollateralInfoView.jobID}"/>
@@ -19,6 +21,8 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.appraisalDate')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <h:outputText value="#{decision.approveCollateralInfoView.appraisalDate}">
@@ -29,6 +33,8 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.AADDecision')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <h:outputText value="#{decision.approveCollateralInfoView.aadDecision}"/>
@@ -37,12 +43,16 @@
             <tr>
                 <td class="title" style="width: 20%;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.AADDecisionReason')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 30%;">
                     <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReason}"/>
                 </td>
                 <td class="title" style="width: 20%;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.AADDecisionReasonDetail')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 30%">
                     <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReasonDetail}"/>
@@ -51,12 +61,16 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.usage')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <h:outputText value="#{decision.approveCollateralInfoView.usage}"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.typeOfUsage')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <h:outputText value="#{decision.approveCollateralInfoView.typeOfUsage}"/>
@@ -64,8 +78,9 @@
             </tr>
             <tr>
                 <td class="title">
-                    <p:outputLabel for="dlgCollateralRadioApprove"
-                                   value="#{msg.get('app.decision.label.UWDecision')}"/>
+                    <p:outputLabel for="dlgCollateralRadioApprove" value="#{msg.get('app.decision.label.UWDecision')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.UWDecision')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <table border="0" style="width: 100%">
@@ -74,7 +89,8 @@
                             <td style="text-align: left">
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
                                                   value="#{decision.approveCollateralInfoView.uwDecision}"
-                                                  required="#{not empty param[saveCollateralButton.clientId]}">
+                                                  required="#{not empty param[saveCollateralButton.clientId]}"
+                                                  disabled="#{decision.isDisabled('collateral.UWDecision')}">
                                     <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="#{decision.decisionAPPROVED}"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="#{decision.decisionREJECTED}"/>
                                     <p:ajax event="click" update="@this"/>
@@ -87,9 +103,12 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.decision.label.UWRemark')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.UWRemark')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.approveCollateralInfoView.uwRemark}" rows="3" cols="100">
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.uwRemark}" rows="3" cols="100"
+                                     readonly="#{decision.isDisabled('collateral.UWRemark')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
                 </td>
@@ -97,12 +116,16 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.mortgageCondition')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <h:outputText value="#{decision.approveCollateralInfoView.mortgageCondition}"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.mortgageConditionDetail')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <h:outputText value="#{decision.approveCollateralInfoView.mortgageConditionDetail}"/>
@@ -111,6 +134,8 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.creditType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
                     <p:dataTable value="#{decision.proposeCreditViewList}"
@@ -137,7 +162,8 @@
 
                         <p:column styleClass="center">
                             <p:selectBooleanCheckbox value="#{creditTypeItem.noFlag}">
-                                <p:ajax listener="#{decision.onCheckNoFlag(creditTypeItem)}"/>
+                                <p:ajax listener="#{decision.onCheckNoFlag(creditTypeItem)}"
+                                        disabled="#{decision.isDisabled('collateral.creditType')}"/>
                             </p:selectBooleanCheckbox>
                         </p:column>
 
@@ -170,9 +196,12 @@
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.BDMComments')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.approveCollateralInfoView.bdmComments}" cols="100" rows="3">
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.bdmComments}" cols="100" rows="3"
+                                     readonly="#{decision.isDisabled('collateral.BDMComments')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
                 </td>
@@ -190,12 +219,15 @@
                 <tr>
                     <td class="title">
                         <p:outputLabel for="dlgPotentialColl" value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.potential')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgPotentialColl"
                                          value="#{collHeadDetail.potentialCollateral.id}"
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
-                                         required="#{not empty param[saveCollateralButton.clientId]}">
+                                         required="#{not empty param[saveCollateralButton.clientId]}"
+                                         disabled="#{decision.isDisabled('collateral.headcoll.potential')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{decision.potentialCollViewList}"
                                            var="potentialItem"
@@ -210,6 +242,8 @@
                     <td class="title">
                         <p:outputLabel for="dlgCollTypePercentLTV"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.collTypePercentLTV')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgCollTypePercentLTV"
@@ -217,7 +251,8 @@
                                          styleClass="largest"
                                          size="1"
                                          required="#{not empty param[btnSaveCollateral.clientId]}"
-                                         style="min-width: 400px; width: 400px; max-width: 400px;">
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
+                                         disabled="#{decision.isDisabled('collateral.headcoll.collTypePercentLTV')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{collHeadDetail.potentialColToTCGColList}"
                                            var="dlgPotentialColToTCGColList"
@@ -231,6 +266,8 @@
                     <td class="title">
                         <p:outputLabel for="dlgExistingCredit"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.existingCredit')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
                         <p:inputText id="dlgExistingCredit"
@@ -241,7 +278,7 @@
                                      onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)"
                                      style="width:200px;text-align: right"
-                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                                     readonly="#{decision.isDisabled('collateral.headcoll.existingCredit')}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
@@ -251,11 +288,13 @@
                     <td class="title">
                         <p:outputLabel for="dlgTitleDeed"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.titleDeed')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.titleDeed')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
                         <p:inputText id="dlgTitleDeed" value="#{collHeadDetail.titleDeed}"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
-                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.titleDeed')}}">
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -264,12 +303,14 @@
                     <td class="title">
                         <p:outputLabel for="dlgCollLocation"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.collateralLocation')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.collateralLocation')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
                         <p:inputText id="dlgCollLocation" value="#{collHeadDetail.collateralLocation}"
                                      style="width: 400px;"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
-                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.collateralLocation')}}">
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -278,6 +319,8 @@
                     <td class="title">
                         <p:outputLabel for="dlgAppraisalValue"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.appraisalValue')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.appraisalValue')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
                         <p:inputText id="dlgAppraisalValue"
@@ -289,7 +332,7 @@
                                      onfocus="removeComma(this)"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
                                      style="width:200px;text-align: right"
-                                     readonly="#{proposeLine.proposeCollateralInfoView.coms}">
+                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.appraisalValue')}}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
@@ -299,13 +342,15 @@
                     <td class="title">
                         <p:outputLabel for="dlgHeadCollType"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.headCollType')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.headCollType')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
                         <p:selectOneMenu id="dlgHeadCollType"
                                          value="#{collHeadDetail.headCollType.id}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}"
-                                         disabled="#{collHeadDetail.haveSubColl}">
+                                         disabled="#{decision.approveCollateralInfoView.coms or collHeadDetail.haveSubColl or decision.isDisabled('collateral.headcoll.headCollType')}}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                             <f:selectItems value="#{decision.headCollTypeViewList}"
                                            var="headCollateralTypeItem"
@@ -319,9 +364,12 @@
                     <td class="title">
                         <p:outputLabel for="dlgInsuranceComp"
                                        value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
+                        <h:outputText value="#{decision.mandate('collateral.headcoll.insuranceCompany')}" styleClass="require-field"/>
+                        <h:outputText value=" :"/>
                     </td>
                     <td class="left">
-                        <p:selectOneRadio id="dlgInsuranceComp" value="#{collHeadDetail.insuranceCompany}">
+                        <p:selectOneRadio id="dlgInsuranceComp" value="#{collHeadDetail.insuranceCompany}"
+                                          disabled="#{decision.isDisabled('collateral.headcoll.insuranceCompany')}">
                             <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="#{decision.yesValue}"/>
                             <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="#{decision.noValue}"/>
                             <p:ajax event="click" update="@this"/>
@@ -336,8 +384,8 @@
                                          process="@this"
                                          actionListener="#{decision.onAddSubCollateral()}"
                                          update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                                         disabled="#{proposeLine.proposeCollateralInfoView.coms}">
-                            <f:setPropertyActionListener value="#{i.index}" target="#{proposeLine.rowHeadCollIndex}"/>
+                                         disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.addButton')}">
+                            <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowHeadCollIndex}"/>
                             <p:resetInput target=":subCollateralDlgForm"/>
                         </p:commandButton>
                     </td>
@@ -441,7 +489,7 @@
                                                  update=":subCollateralDlgForm"
                                                  process="@this"
                                                  oncomplete="subCollateralInfoDlg.show();"
-                                                 disabled="#{decision.approveCollateralInfoView.coms}">
+                                                 disabled="#{decision.isDisabled('collateral.subcoll.editButton')}">
                                     <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowSubCollIndex}"/>
                                     <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{decision.approveCollateralInfoSubView}"/>
                                     <p:resetInput target=":subCollateralDlgForm"/>
@@ -449,7 +497,7 @@
                                 <p:commandButton icon="ui-icon-trash"
                                                  process="@this"
                                                  oncomplete="confirmDeleteSubCollateralInfoDlg.show()"
-                                                 disabled="#{decision.approveCollateralInfoView.coms}">
+                                                 disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.removeButton')}">
                                     <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{decision.approveCollateralInfoSubView}"/>
                                 </p:commandButton>
                             </p:column>
@@ -478,13 +526,15 @@
                                      action="#{decision.onSaveProposeCollInfo()}"
                                      process=":collateralDlgForm"
                                      update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
-                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"
+                                     disabled="#{decision.isDisabled('collateral.saveButton')}"/>
                     <p:spacer width="10" height=""/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
                                      update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      action="#{decision.onCancelCollateralInfo()}"
-                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"
+                                     disabled="#{decision.isDisabled('collateral.cancelButton')}"/>
                 </td>
             </tr>
             <tr>

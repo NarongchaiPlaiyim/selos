@@ -15,6 +15,7 @@ import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.transform.FieldsControlTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -89,6 +90,7 @@ public class MandatoryFieldsControl extends BusinessControl {
         }
     }
 
+    //FULLAPP
     public List<FieldsControlView> getFieldsControlView(long workCaseId, long stepId, long statusId, Screen screen, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
         if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
@@ -98,7 +100,7 @@ public class MandatoryFieldsControl extends BusinessControl {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             int productGroupId = workCase.getProductGroup().getId();
             log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, role : {}", screen, stepId, statusId, user.getRole());
-            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, productGroupId, 0);
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, statusId, productGroupId, 0);
             List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
             log.debug("Result fields control : {} ", fieldsControlViewList.size());
             return fieldsControlViewList;
@@ -107,7 +109,28 @@ public class MandatoryFieldsControl extends BusinessControl {
         }
     }
 
-    public List<FieldsControlView> getFieldsControlViewPreeScreen(long workCasePreScreenId, long stepId, Screen screen, String caseOwnerUserId) {
+    public List<FieldsControlView> getFieldsControlViewPreScreen(long workCasePreScreenId, long stepId, long statusId, Screen screen, String caseOwnerUserId) {
+        String currentUserId = getCurrentUserID();
+        if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
+            if (stepId <= 0 || workCasePreScreenId <= 0 || screen == null)
+                return Collections.emptyList();
+            User user = getCurrentUser();
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            int productGroupId = 1;
+            if(!Util.isNull(workCasePrescreen.getProductGroup())){
+                productGroupId = workCasePrescreen.getProductGroup().getId();
+            }
+            log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, role : {}", screen, stepId, statusId, user.getRole());
+            List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControl(screen.value(), user.getRole(), stepId, statusId, productGroupId, 0);
+            List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
+            log.debug("Result fields control : {} ", fieldsControlViewList.size());
+            return fieldsControlViewList;
+        }else{
+            return Collections.emptyList();
+        }
+    }
+
+    /*public List<FieldsControlView> getFieldsControlViewPreeScreen(long workCasePreScreenId, long stepId, Screen screen, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
         if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
             if (stepId <= 0 || workCasePreScreenId <= 0 || screen == null)
@@ -129,9 +152,9 @@ public class MandatoryFieldsControl extends BusinessControl {
         }else{
             return Collections.emptyList();
         }
-    }
+    }*/
 
-    public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId, String caseOwnerUserId) {
+    /*public List<FieldsControlView> getFieldsControlView(long workCaseId, Screen screen, int productProgramId, int specialTypeId, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
         log.debug("getFieldsControlView : caseOwnerUserId : {}, currentUserId : {}", caseOwnerUserId, currentUserId);
         if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
@@ -147,5 +170,5 @@ public class MandatoryFieldsControl extends BusinessControl {
         }else{
             return Collections.emptyList();
         }
-    }
+    }*/
 }

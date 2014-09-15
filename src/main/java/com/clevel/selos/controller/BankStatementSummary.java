@@ -451,7 +451,7 @@ public class BankStatementSummary extends BaseController {
                     summaryView = bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
                     // update related parts
                     dbrControl.updateValueOfDBR(workCaseId);
-                    exSummaryControl.calForBankStmtSummary(workCaseId, stepId);
+                    exSummaryControl.calForBankStmtSummary(workCaseId);
                     bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
                     onCreation();
@@ -541,7 +541,7 @@ public class BankStatementSummary extends BaseController {
 
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
-            exSummaryControl.calForBankStmtSummary(workCaseId, stepId);
+            exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
             onCreation();

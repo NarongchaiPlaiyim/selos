@@ -38,9 +38,8 @@
                         <tr>
                             <td class="title" style="min-width: 200px; width: 200px; max-width: 200px;"><h:outputText value="#{msg.get('app.prescreen.result.interfaceResult')}"/>
                             </td>
-                            <td><p:commandButton id="btnRetrieveInterfaceInfo"
-                                                 value="#{msg.get('app.prescreen.result.retrieveInterfaceInfo')}"
-                                                 styleClass="largest"
+                            <td><p:commandButton id="btnRetrieveInterfaceInfo" value="#{msg.get('app.prescreen.result.retrieveInterfaceInfo')}" styleClass="largest"
+                                                 disabled="#{prescreenResult.isDisabled('prescreen.retrieveInterfaceButton')}"
                                                  process="@this"
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
                                                  update="frmMain:interfaceInfoPanel, :msgBoxSystemMessageResultPanel">
@@ -518,8 +517,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="center">
-                                        <p:commandButton id="btnSave"
-                                                         value="#{msg.get('app.button.save')}"
+                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                         disabled="#{prescreenResult.isDisabled('prescreen.saveButton')}"
                                                          action="#{prescreenResult.onSave()}"
                                                          update=":msgBoxSystemMessageResultPanel :msgBoxRefreshPanel"
                                                          styleClass="medium"/>
@@ -553,7 +552,7 @@
         <p:commandButton value="OK"
                          process="@this"
                          update=":frmMain"
-                         oncomplete="msgBoxSystemMessageResultDlg.hide()"/>
+                         oncomplete="msgBoxSystemMessageResultDlg.hide();"/>
     </p:confirmDialog>
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">

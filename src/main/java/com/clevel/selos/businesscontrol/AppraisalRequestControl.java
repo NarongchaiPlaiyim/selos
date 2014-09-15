@@ -73,31 +73,39 @@ public class AppraisalRequestControl extends BusinessControl {
         appraisalView = null;
     }
 
-    public String getZoneLocation(){
+    public String getZoneLocation(String bdmId){
         log.debug("-- getZoneLocation()");
-        String zoneLocation = null;
+        User user = userDAO.findUserByID(bdmId);
+        String zoneTeam = "";
         try {
-            zoneLocation = getCurrentUser().getZone().getName();
+            if (!Util.isNull(user.getTeam())){
+                zoneTeam = user.getTeam().getTeam_name();
+            }
+            return zoneTeam;
         } catch (Exception e){
-            zoneLocation = "";
+            return "";
         }
-        log.debug("-- Result is {}", zoneLocation);
-        return zoneLocation;
     }
 	
 	public AppraisalView getAppraisalRequest(final long workCaseId, final long workCasePreScreenId){
         log.info("-- getAppraisalRequest WorkCaseId : {}, workCasePreScreenId : {}, User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
         init();
+        String bdmUserId = "";
         if(Long.toString(workCaseId) != null && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+            workCase = workCaseDAO.findById(workCaseId);
+            bdmUserId = workCase.getCreateBy().getId();
         } else if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            bdmUserId = workCasePrescreen.getCreateBy().getId();
         }
 
         if(!Util.isNull(appraisal)){
             appraisalContactDetailList = Util.safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
             appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
+            appraisalView.setZoneLocation(getZoneLocation(bdmUserId));
             if(Long.toString(workCaseId) != null && workCaseId != 0){
                 newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             } else if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
@@ -116,7 +124,6 @@ public class AppraisalRequestControl extends BusinessControl {
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralListForAdd);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                 log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
-                appraisalView.setZoneLocation(getZoneLocation());
                 return appraisalView;
             } else {
                 log.debug("-- NewCreditFacility = null");

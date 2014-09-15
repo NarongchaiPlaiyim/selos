@@ -12,9 +12,11 @@
             </td>
             <td class="title" style="width: 200px;">
                 <p:inputText value="#{headerController.appraisalDetailView.titleDeed}" style = "#{headerController.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
-                             onkeydown="return onKeyPressName2(event);"
-                             onkeypress="return onKeyPressName2(event);" maxlength="50"
-                             counterTemplate="{0} characters remaining." autoResize="false" />
+                             maxlength="50"
+                             counterTemplate="{0} characters remaining."
+                             autoResize="false" />
+                    <!--onkeydown="return onKeyPressName2(event);"
+                             onkeypress="return onKeyPressName2(event);" -->
             </td>
         </tr>
         <tr>

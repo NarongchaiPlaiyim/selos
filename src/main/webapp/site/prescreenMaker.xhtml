@@ -42,9 +42,8 @@
                                 <td class="title" style="min-width: 200px; width: 200px;">Product Group :</td>
                                 <td>
                                     <h:inputHidden value="#{prescreenMaker.previousProductGroupId}"/>
-                                    <p:selectOneMenu id="selProdGroupId"
-                                                     styleClass="largest"
-                                                     size="1"
+                                    <p:selectOneMenu id="selProdGroupId" styleClass="largest" size="1"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.productGroup')}"
                                                      value="#{prescreenMaker.prescreenView.productGroup.id}"
                                                      required="#{not empty param[btnAddFacility.clientId] || not empty param[btnSaveInitialButton.clientId]}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -71,9 +70,8 @@
                             <tr>
                                 <td class="title">Product Program <h:outputText value="*" styleClass="require-field"/> :</td>
                                 <td>
-                                    <p:commandButton id="btnAddFacility"
-                                                     value="Add"
-                                                     styleClass="smaller"
+                                    <p:commandButton id="btnAddFacility" value="Add" styleClass="smaller"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.addFacilityButton')}"
                                                      process="@this, selProdGroupId"
                                                      actionListener="#{prescreenMaker.onAddFacility}"
                                                      update=":facilityDlgForm"
@@ -121,6 +119,7 @@
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteFacilityButton')}"
                                                              oncomplete="confirmDeleteFacilityDlg.show()" >
                                                 <f:setPropertyActionListener value="#{item}"
                                                                              target="#{prescreenMaker.selectFacilityItem}"/>
@@ -138,6 +137,7 @@
                                 <td class="title">Expected submission date :</td>
                                 <td>
                                     <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    disabled="#{prescreenMaker.isDisabled('prescreen.expectedSubmissionDate')}"
                                                     yearRange="1950:2100"
                                                     defaultdate="#{prescreenMaker.currentDateDDMMYY}"
                                                     mindate="#{prescreenMaker.currentDateDDMMYY}"
@@ -152,9 +152,8 @@
                             <tr>
                                 <td class="title">Customer Information </td>
                                 <td>
-                                    <p:commandButton id="btnAddCustomerInfo"
-                                                     value="Add"
-                                                     styleClass="smaller"
+                                    <p:commandButton id="btnAddCustomerInfo" value="Add" styleClass="smaller"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.addCustomerButton')}"
                                                      process="@this"
                                                      actionListener="#{prescreenMaker.onAddCustomerInfo()}"
                                                      update=":customerDlgForm"
@@ -260,6 +259,7 @@
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteGuarantorButton')}"
                                                              oncomplete="confirmDeleteCustomerDlg.show()" >
                                                 <f:setPropertyActionListener value="#{guarantorItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
@@ -316,6 +316,7 @@
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteRelatedButton')}"
                                                              oncomplete="confirmDeleteCustomerDlg.show()" >
                                                 <f:setPropertyActionListener value="#{relatedItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
@@ -332,10 +333,9 @@
                             <tr>
                                 <td class="title">Business Information :</td>
                                 <td>
-                                    <p:commandButton id="btnAddBusinessInfo"
-                                                     value="Add"
-                                                     styleClass="smaller"
+                                    <p:commandButton id="btnAddBusinessInfo" value="Add" styleClass="smaller"
                                                      process="@this"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.addBusinessButton')}"
                                                      actionListener="#{prescreenMaker.onAddBusinessInfo()}"
                                                      update=":businessDlgForm"
                                                      oncomplete="businessDlg.show();">
@@ -402,6 +402,7 @@
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteBusinessButton')}"
                                                              oncomplete="confirmDeleteBusinesssDlg.show()" >
                                                 <f:setPropertyActionListener value="#{businessResultItem}"
                                                                              target="#{prescreenMaker.selectBizInfoItem}"/>
@@ -414,6 +415,7 @@
                                 <td class="title">Business Location :</td>
                                 <td>
                                     <p:selectOneMenu value="#{prescreenMaker.prescreenView.businessLocation.code}"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.businessLocation')}"
                                                      required="#{not empty param[savePreMakerButton.clientId]}"
                                                      size="1" style="width: 200px;">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -428,6 +430,7 @@
                                 <td class="title">Country of register</td>
                                 <td>
                                     <p:selectOneMenu value="#{prescreenMaker.prescreenView.countryOfRegister.id}"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.countryOfRegister')}"
                                                      required="#{not empty param[savePreMakerButton.clientId]}"
                                                      size="1" style="width: 200px;">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -442,6 +445,7 @@
                                 <td class="title">Date of register :</td>
                                 <td>
                                     <clv:BECalendar id="registerDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    disabled="#{prescreenMaker.isDisabled('prescreen.dateOfRegister')}"
                                                     yearRange="1950:2100"
                                                     defaultdate="#{prescreenMaker.currentDateDDMMYY}"
                                                     mindate="01/01/1950"
@@ -461,8 +465,9 @@
                                 <td>
                                     <table class="content_table_form" style="padding: 0; border-spacing:0; border-collapse:collapse; margin-left: -1px;">
                                         <tr>
-                                            <td style="width: 180px;">
+                                            <td style="width: 190px;">
                                                 <clv:BECalendar id="referredDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                                disabled="#{prescreenMaker.isDisabled('prescreen.referCompanyDate')}"
                                                                 yearRange="1950:2100"
                                                                 mindate="01/01/1950"
                                                                 maxdate="#{prescreenMaker.currentDateDDMMYY}"
@@ -477,6 +482,7 @@
                                             </td>
                                             <td>
                                                 <p:selectOneMenu value="#{prescreenMaker.prescreenView.referredExperience.id}"
+                                                                 disabled="#{prescreenMaker.isDisabled('prescreen.referCompany')}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{prescreenMaker.referredExperienceList}"
@@ -492,7 +498,7 @@
                             <tr>
                                 <td class="title">TCG :</td>
                                 <td>
-                                    <p:selectOneRadio value="#{prescreenMaker.prescreenView.tcg}" required="#{not empty param[savePreMakerButton.clientId]}">
+                                    <p:selectOneRadio value="#{prescreenMaker.prescreenView.tcg}" required="#{not empty param[savePreMakerButton.clientId]}" disabled="#{prescreenMaker.isDisabled('prescreen.tcg')}">
                                         <f:selectItems value="#{app.getRadioValues('NO|YES')}"
                                                        var="tcgVar" itemLabel="#{tcgVar.shortName()}" itemValue="#{tcgVar.value()}"/>
                                     </p:selectOneRadio>
@@ -504,7 +510,7 @@
                                     <table class="content_table_form" style="border-spacing: 0;">
                                         <tr>
                                             <td style="width:100px;">
-                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinanceIn}" required="#{not empty param[savePreMakerButton.clientId]}">
+                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinanceIn}" required="#{not empty param[savePreMakerButton.clientId]}" disabled="#{prescreenMaker.isDisabled('prescreen.refinanceIn')}">
                                                     <f:selectItems value="#{app.getRadioValues('NO|YES')}"
                                                                    var="refinanceInVar" itemLabel="#{refinanceInVar.shortName()}" itemValue="#{refinanceInVar.value()}"/>
                                                     <p:ajax event="change" process="@form" update=":frmMain:selRefinanceInBank" />
@@ -512,7 +518,7 @@
                                             </td>
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceInBank" value="#{prescreenMaker.prescreenView.refinanceInBank.code}"
-                                                                 disabled="#{prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0}"
+                                                                 disabled="#{(prescreenMaker.prescreenView.refinanceIn == 1 || prescreenMaker.prescreenView.refinanceIn == 0) || prescreenMaker.isDisabled('prescreen.refinanceInBank')}"
                                                                  required="#{prescreenMaker.prescreenView.refinanceIn == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -532,7 +538,7 @@
                                     <table class="content_table_form" style="border-spacing: 0;">
                                         <tr>
                                             <td style="width:100px;">
-                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinanceOut}" required="#{not empty param[savePreMakerButton.clientId]}">
+                                                <p:selectOneRadio value="#{prescreenMaker.prescreenView.refinanceOut}" required="#{not empty param[savePreMakerButton.clientId]}" disabled="#{prescreenMaker.isDisabled('prescreen.refinanceOut')}">
                                                     <f:selectItems value="#{app.getRadioValues('NO|YES')}"
                                                                    var="refinanceOutVar" itemLabel="#{refinanceOutVar.shortName()}" itemValue="#{refinanceOutVar.value()}"/>
                                                     <p:ajax event="change" process="@form" update=":frmMain:selRefinanceOutBank" />
@@ -540,7 +546,7 @@
                                             </td>
                                             <td>
                                                 <p:selectOneMenu id="selRefinanceOutBank" value="#{prescreenMaker.prescreenView.refinanceOutBank.code}"
-                                                                 disabled="#{prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0}"
+                                                                 disabled="#{(prescreenMaker.prescreenView.refinanceOut == 1 || prescreenMaker.prescreenView.refinanceOut == 0) || prescreenMaker.isDisabled('prescreen.refinanceOutBank')}"
                                                                  required="#{prescreenMaker.prescreenView.refinanceOut == 2 and not empty param[savePreMakerButton.clientId]}"
                                                                  size="1" style="width: 200px;">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -558,6 +564,7 @@
                                 <td class="title">รูปแบบการขอสินเชื่อ :</td>
                                 <td>
                                     <p:selectOneMenu value="#{prescreenMaker.prescreenView.borrowingType.id}"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.borrowingType')}"
                                                      size="1" style="min-width: 240px; width: 240px; max-width: 240px;">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.borrowingTypeList}"
@@ -570,10 +577,9 @@
                             <tr>
                                 <td class="title">Collateral :</td>
                                 <td>
-                                    <p:commandButton id="btnAddCollateral"
-                                                     value="Add"
-                                                     styleClass="smaller"
+                                    <p:commandButton id="btnAddCollateral" value="Add" styleClass="smaller"
                                                      process="@this"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.addCollateralButton')}"
                                                      actionListener="#{prescreenMaker.onAddProposeCollateral()}"
                                                      update=":proposeCollateralDlgForm"
                                                      oncomplete="proposeCollateralDlg.show();">
@@ -609,6 +615,7 @@
                                                                              target="#{prescreenMaker.rowIndex}"/>
                                             </p:commandButton>
                                             <p:commandButton title="Remove" icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteCollateralButton')}"
                                                              oncomplete="confirmDeleteProposeCollateralDlg.show()" >
                                                 <f:setPropertyActionListener value="#{proposeCollateral}"
                                                                              target="#{prescreenMaker.selectProposeCollateralItem}"/>
@@ -626,15 +633,15 @@
                             <tr><td colspan="2"><p:spacer width="5"/></td></tr>
                             <tr>
                                 <td class="center" colspan="100%">
-                                    <p:commandButton id="btnSave" value="Save"
+                                    <p:commandButton id="btnSave" value="Save" styleClass="medium"
                                                      binding="#{savePreMakerButton}"
-                                                     styleClass="medium"
                                                      process="@form"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.saveButton')}"
                                                      action="#{prescreenMaker.onSavePrescreen()}"
                                                      update=":frmMain :msgBoxSystemMessagePanel"/>
-                                    <p:commandButton id="btnCancel" value="Cancel"
-                                                     styleClass="medium"
+                                    <p:commandButton id="btnCancel" value="Cancel" styleClass="medium"
                                                      process="@this"
+                                                     disabled="#{prescreenMaker.isDisabled('prescreen.cancelButton')}"
                                                      action="#{prescreenMaker.onReset()}"
                                                      update=":frmMain"/>
                                 </td>

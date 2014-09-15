@@ -6,10 +6,14 @@ import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.dao.master.AppraisalDivisionDAO;
 import com.clevel.selos.dao.master.LocationPropertyDAO;
 import com.clevel.selos.dao.relation.ReasonToStepDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DayOff;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -75,6 +79,9 @@ public class AppraisalAppointment implements Serializable {
 
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
+
+    @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
 
     private enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
@@ -206,11 +213,18 @@ public class AppraisalAppointment implements Serializable {
         log.info("onCreation :::");
         init();
         HttpSession session = FacesUtil.getSession(false);
+        WorkCase workCase = null;
+        WorkCasePrescreen workCasePrescreen = null;
+        String bdmUserId = "";
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
                 workCaseId = (Long)session.getAttribute("workCaseId");
+                workCase = workCaseDAO.findById(workCaseId);
+                bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
             } else if ((Long)session.getAttribute("workCasePreScreenId") != 0){
                 workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+                bdmUserId = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
             }
 
             reasons = reasonToStepDAO.getAppraisalReason();
@@ -240,7 +254,7 @@ public class AppraisalAppointment implements Serializable {
 
 //                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
 
-                appraisalView.setZoneLocation(appraisalAppointmentControl.getZoneLocation()); //Zone from user
+                getZoneTeamId(bdmUserId);
                 updateContractFlag(appraisalContactDetailView);
 //                if(Util.isNull(appraisalView.getAppraisalDate())){
 //                    appraisalView.setAppraisalDate(DateTime.now().toDate());
@@ -256,9 +270,16 @@ public class AppraisalAppointment implements Serializable {
 //                }
             } else {
                 appraisalView = new AppraisalView();
+                getZoneTeamId(bdmUserId);
             }
         } else {
             //TODO show message box
+        }
+    }
+
+    private void getZoneTeamId(String bdmUserId){
+        if (!Util.isEmpty(bdmUserId)){
+            appraisalView.setZoneLocation(appraisalAppointmentControl.getZoneLocation(bdmUserId)); //Zone from user
         }
     }
 

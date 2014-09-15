@@ -554,11 +554,13 @@
 </p:confirmDialog>
 
 <p:panel id="printReportPanel" styleClass="panel">
-    <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="700" height="200" closable="false">
-        <ui:include src="/site/dialog/printReportDialog.xhtml"/>
-    </p:dialog>
+    <c:if test="#{headerController.checkAccessStage('ENDSTAGE')}">
+        <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="700" height="200" closable="false">
+            <ui:include src="/site/dialog/printReportDialog.xhtml"/>
+        </p:dialog>
+    </c:if>
 </p:panel>
 
 <p:panel id="assignABDMPanel" styleClass="panel">
@@ -738,7 +740,7 @@
 <p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="1210" closable="false">
+              modal="true" width="1210" height = "500" closable="false">
         <ui:include src="/site/dialog/reqApprDialog.xhtml"/>
     </p:dialog>
 </p:panel>
@@ -829,7 +831,7 @@
 <p:panel id="returnMakerPanel" styleClass="panel"
         rendered="#{headerController.checkButton('Return to BDM') and headerController.stepId == 1002}">
     <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" closable="false"
               modal="true" width="380" height="150">
         <ui:include src="/site/dialog/prescreenReturnDialog.xhtml"/>
     </p:dialog>
@@ -847,8 +849,8 @@
 <p:panel id="closeSalesPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Close Sales')}">
     <p:dialog id="closeSalesDialog" header="Close Sales" widgetVar="closeSalesDlg"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-              modal="true" width="380" height="150">
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" closable="false"
+              modal="true" width="380">
         <ui:include src="/site/dialog/closeSalesDialog.xhtml"/>
     </p:dialog>
 </p:panel>

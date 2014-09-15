@@ -121,6 +121,7 @@ public class CollateralBizTransform extends BusinessTransform {
             if(Util.isSafetyList(headCollateralDataList)){
                 for(HeadCollateralData headCollateralData: headCollateralDataList){
                     ProposeCollateralInfoHeadView proposeCollateralInfoHeadView = new ProposeCollateralInfoHeadView();
+                    proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                     proposeCollateralInfoHeadView.setTitleDeed(headCollateralData.getTitleDeed());
                     proposeCollateralInfoHeadView.setCollateralLocation(headCollateralData.getCollateralLocation());
                     proposeCollateralInfoHeadView.setAppraisalValue(headCollateralData.getAppraisalValue());

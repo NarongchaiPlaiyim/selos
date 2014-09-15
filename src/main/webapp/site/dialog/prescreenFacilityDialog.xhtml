@@ -11,6 +11,7 @@
                     <td class="title" style="width:145px;">Product Program :</td>
                     <td>
                         <p:selectOneMenu id="dlgSelProdProgram" value="#{prescreenMaker.facility.productProgram.id}"
+                                         disabled="#{prescreenMaker.isDisabled('facility.productProgram')}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[addFacilityButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -28,6 +29,7 @@
                     <td class="title">Facility :</td>
                     <td>
                         <p:selectOneMenu id="creditTypeName" value="#{prescreenMaker.facility.creditType.id}"
+                                         disabled="#{prescreenMaker.isDisabled('facility.creditType')}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[addFacilityButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -42,6 +44,7 @@
                     <td class="title">Request Amount :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.facility.requestAmount}"
+                                     disabled="#{prescreenMaker.isDisabled('facility.amount')}"
                                      required="#{not empty param[addFacilityButton.clientId]}"
                                      maxlength="10" styleClass="large right"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
@@ -57,13 +60,13 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="center">
-                        <p:commandButton id="dlgSaveFacilityBtn" styleClass="small"
-                                         value="#{msg.get('app.button.ok')}"
+                        <p:commandButton id="dlgSaveFacilityBtn" value="#{msg.get('app.button.ok')}" styleClass="small"
                                          binding="#{addFacilityButton}"
+                                         disabled="#{prescreenMaker.isDisabled('facility.saveButton')}"
                                          action="#{prescreenMaker.onSaveFacility}"
                                          process="@form"
                                          update=":facilityDlgForm :frmMain:resultTableFacility"
-                                         oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
+                                         oncomplete="handleDialogRequest(xhr, status, args, 'facilityDlg')"/>
                         <p:commandButton type="button" styleClass="small"
                                          value="#{msg.get('app.button.cancel')}"
                                          onclick="PF('facilityDlg').hide()"

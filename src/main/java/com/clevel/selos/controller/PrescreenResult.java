@@ -1,9 +1,13 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
@@ -29,7 +33,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "prescreenResult")
-public class PrescreenResult implements Serializable {
+public class PrescreenResult extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -45,16 +49,17 @@ public class PrescreenResult implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+
 
     @Inject
     PrescreenBusinessControl prescreenBusinessControl;
 
     enum ModeForButton {ADD, EDIT, DELETE}
 
-    private ModeForButton modeForButton;
     private long workCasePreScreenId;
     private long stepId;
-    private String queueName;
     private User user;
 
     private String message;
@@ -70,29 +75,19 @@ public class PrescreenResult implements Serializable {
     public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
         log.info("preRender ::: setSession ");
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
 
-        if (session.getAttribute("workCasePreScreenId") != null) {
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-
-            if (stepId != 1003) {
-                try {
-                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                    return;
-                } catch (Exception ex) {
-                    log.info("Exception :: {}", ex);
-                }
-            }
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCasePrescreenId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+        if (Util.isZero(workCasePreScreenId)){
+            /*stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            if (stepId != StepValue.PRESCREEN_MAKER.value()) {
+                FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+            }*/
+            long workCaseId = getCurrentWorkCaseId(session);
+            if(Util.isZero(workCaseId)) {
+                log.info("preRender ::: workCasePrescreenId is null.");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
             }
         }
     }
@@ -101,19 +96,30 @@ public class PrescreenResult implements Serializable {
     public void onCreation() {
         log.info("PrescreenResult ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
-
-        if (session.getAttribute("workCasePreScreenId") != null) {
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        if(Util.isZero(workCasePreScreenId)){
+            long workCaseId = getCurrentWorkCaseId(session);
+            if(!Util.isZero(workCaseId)){
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                if(!Util.isNull(workCase)){
+                    workCasePreScreenId = workCase.getWorkCasePrescreen() != null ? workCase.getWorkCasePrescreen().getId() : 0;
+                }
+            }else{
+                log.error("No workCaseId and workCasePreScreenId");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }
+        }
+        if (!Util.isZero(workCasePreScreenId)) {
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            queueName = session.getAttribute("queueName").toString();
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
             user = (User) session.getAttribute("user");
 
             prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
             prescreenView = prescreenBusinessControl.getPreScreen(workCasePreScreenId);
-
-
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_RESULT, ownerCaseUserId);
         }
     }
 

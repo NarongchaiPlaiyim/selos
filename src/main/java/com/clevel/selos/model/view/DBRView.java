@@ -28,7 +28,7 @@ public class DBRView implements Serializable {
     private String userId;
     private String modifyBy;
     private Date modifyDate;
-
+    private int dbrMarketableFlag;
 
     public DBRView() {
         reset();
@@ -48,6 +48,7 @@ public class DBRView implements Serializable {
         this.workCaseId = 0;
         this.isUpdateTotalDebtBorrower = false;
         this.totalMonthDebtRelatedWc = BigDecimal.ZERO;
+        this.dbrMarketableFlag = 0;
     }
 
     public long getId() {
@@ -194,25 +195,36 @@ public class DBRView implements Serializable {
         this.totalMonthDebtRelatedWc = totalMonthDebtRelatedWc;
     }
 
+    public int getDbrMarketableFlag() {
+        return dbrMarketableFlag;
+    }
+
+    public void setDbrMarketableFlag(int dbrMarketableFlag) {
+        this.dbrMarketableFlag = dbrMarketableFlag;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("dbrDetailViews", dbrDetailViews)
-                .append("incomeFactor", incomeFactor)
-                .append("monthlyIncome", monthlyIncome)
-                .append("monthlyIncomeAdjust", monthlyIncomeAdjust)
-                .append("monthlyIncomePerMonth", monthlyIncomePerMonth)
-                .append("netMonthlyIncome", netMonthlyIncome)
-                .append("currentDBR", currentDBR)
-                .append("dbrBeforeRequest", dbrBeforeRequest)
-                .append("dbrInterest", dbrInterest)
-                .append("totalMonthDebtBorrowerStart", totalMonthDebtBorrowerStart)
-                .append("totalMonthDebtBorrowerFinal", totalMonthDebtBorrowerFinal)
-                .append("workCaseId", workCaseId)
-                .append("userId", userId)
-                .append("modifyBy", modifyBy)
-                .append("modifyDate", modifyDate)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("dbrDetailViews", dbrDetailViews).
+                append("incomeFactor", incomeFactor).
+                append("monthlyIncome", monthlyIncome).
+                append("monthlyIncomeAdjust", monthlyIncomeAdjust).
+                append("monthlyIncomePerMonth", monthlyIncomePerMonth).
+                append("netMonthlyIncome", netMonthlyIncome).
+                append("currentDBR", currentDBR).
+                append("dbrBeforeRequest", dbrBeforeRequest).
+                append("dbrInterest", dbrInterest).
+                append("totalMonthDebtBorrowerStart", totalMonthDebtBorrowerStart).
+                append("totalMonthDebtBorrowerFinal", totalMonthDebtBorrowerFinal).
+                append("totalMonthDebtRelatedWc", totalMonthDebtRelatedWc).
+                append("isUpdateTotalDebtBorrower", isUpdateTotalDebtBorrower).
+                append("workCaseId", workCaseId).
+                append("userId", userId).
+                append("modifyBy", modifyBy).
+                append("modifyDate", modifyDate).
+                append("dbrMarketableFlag", dbrMarketableFlag).
+                toString();
     }
 }
