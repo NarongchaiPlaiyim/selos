@@ -9,9 +9,11 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.CommandType;
 import com.clevel.selos.model.ManageUserActive;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.audit.IsaActivity;
 import com.clevel.selos.model.db.audit.SecurityActivity;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.isa.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.IsaAuditor;
@@ -27,6 +29,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.InputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Stateless
@@ -124,6 +128,26 @@ public class IsaBusinessControl extends BusinessControl {
             userDAO.persist(model);
         }
     }
+    public void editUserAfterDelete(final IsaManageUserView isaManageUserView, final User user) throws Exception {
+        log.debug("-- editUser()");
+        User model = null;
+        model = userTransform.transformToModelAfterDelete(isaManageUserView, user);
+        if(!Util.isNull(model)){
+            userDAO.persist(model);
+        }
+    }
+    public void editUserFromDelete(final IsaManageUserView isaManageUserView, final User user) throws Exception {
+        log.debug("-- editUser()");
+        User model = null;
+        model = userTransform.transformToModelModify(isaManageUserView, user);
+        if(!Util.isNull(model)){
+            userDAO.persist(model);
+        }
+    }
+    public void modifyAfterDeleteById(final IsaManageUserView isaManageUserView, final User user) throws Exception {
+        log.debug("-- IsaManageUserView : {}", isaManageUserView);
+        userDAO.createNewUserByISA(userTransform.transformToNewModel(isaManageUserView, user));
+    }
     public void deleteUserById(final String id) throws Exception {
         log.debug("-- deleteUser(id : {})", id);
         userDAO.deleteUserByISA(id, getCurrentUser());
@@ -143,6 +167,16 @@ public class IsaBusinessControl extends BusinessControl {
     }
     public boolean isExistUserName(final String userId) throws Exception{
         return userDAO.isExistUserName(userId);
+    }
+
+    public boolean isExistIdAndActivityAndStatus(final String id) throws Exception{
+        log.debug("--On isExistIdAndActivityAndStatus.");
+        user = userDAO.findById(id);
+        log.debug("-- user. [{}]",user);
+            if ((UserStatus.MARK_AS_DELETED).equals(user.getUserStatus()) && user.getActive() == ManageUserActive.INACTIVE.getValue()){
+                return true;
+            }
+        return false;
     }
 
     public String getNewData(final String id){
@@ -385,6 +419,60 @@ public class IsaBusinessControl extends BusinessControl {
         }
 
         return list;
+    }
+
+    public List<ISAViewReport> getUserProFileByUser() throws SQLException {
+        log.debug("--getUserProFile by CSVService.");
+        ResultSet rs = stpExecutor.getUserProfileByUserMaster();
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+
+        try{
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setEmpID(rs.getString("EMP_ID"));
+                    viewReport.setEmpName(rs.getString("EMP_NAME"));
+                    viewReport.setTestId(rs.getString("TEAM_ID"));
+                    viewReport.setTeam(rs.getString("TEAM_NAME"));
+                    viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                    viewReport.setLastLogOn(rs.getTimestamp("LAST_SING_ON_DATE"));
+                    viewReport.setStatus(rs.getString("STATUS"));
+                    viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAYS"));
+                    viewReportList.add(viewReport);
+                }
+            }
+        } catch (Exception e){
+            log.debug("getUserProFile SQLException : ",e) ;
+        }
+
+        return viewReportList;
+    }
+
+    public List<ISAViewReport> getUserProFileByISA() throws SQLException {
+        log.debug("--getUserProFile by CSVService.");
+        ResultSet rs = stpExecutor.getUserProfile();
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+
+        try{
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport viewReport = new ISAViewReport();
+                    viewReport.setAdminTask(rs.getString("ADMIN_TASK"));
+                    viewReport.setEmpID(rs.getString("EMP_ID"));
+                    viewReport.setEmpName(rs.getString("EMP_NAME"));
+                    viewReport.setOldData(rs.getString("OLD_DATA"));
+                    viewReport.setNewData(rs.getString("NEW_DATA"));
+                    viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
+                    viewReport.setModifyBy(rs.getString("MODIFY_BY"));
+                    viewReport.setAdminName(rs.getString("ADMIN_NAME"));
+                    viewReportList.add(viewReport);
+                }
+            }
+        } catch (Exception e){
+            log.debug("getUserProFile SQLException : ",e) ;
+        }
+
+        return viewReportList;
     }
 
 
