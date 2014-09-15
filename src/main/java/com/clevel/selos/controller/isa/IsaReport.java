@@ -115,7 +115,7 @@ public class IsaReport implements Serializable {
         if (!Util.isNull(viewReportList)){
             log.debug("--viewReportList is not null. [{}]",viewReportList.size());
             for (ISAViewReport report : viewReportList){
-                builder.append('"' + rowNumber + '"').append(COMMA_DELIMITED);
+                builder.append(rowNumber).append(COMMA_DELIMITED);
                 builder.append('"' + report.getEmpID() + '"').append(COMMA_DELIMITED);
                 builder.append('"' + report.getEmpName() + '"').append(COMMA_DELIMITED);
                 builder.append('"' + report.getTestId() + '"').append(COMMA_DELIMITED);
@@ -158,7 +158,7 @@ public class IsaReport implements Serializable {
         if (!Util.isNull(viewReportList)){
             log.debug("--viewReportList is not null. [{}]",viewReportList.size());
             for (ISAViewReport report : viewReportList){
-                builder.append('"' + rowNumber + '"').append(COMMA_DELIMITED);
+                builder.append(rowNumber).append(COMMA_DELIMITED);
                 builder.append('"' + report.getAdminTask() + '"').append(COMMA_DELIMITED);
                 builder.append('"' + report.getEmpID() + '"').append(COMMA_DELIMITED);
                 builder.append('"' + report.getEmpName() + '"').append(COMMA_DELIMITED);
