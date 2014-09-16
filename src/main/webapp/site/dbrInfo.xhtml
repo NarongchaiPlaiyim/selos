@@ -65,8 +65,8 @@
                                             </td>
                                             <td >
                                                 <p:selectOneMenu id="dbrMarketableFlag"
-                                                                 value="#{dbrInfo.dbr.dbrMarketableFlag}">
-                                                    <!--disabled="#{dbrInfo.isDisabled('DBRMarketableFlag')}"-->
+                                                                 value="#{dbrInfo.dbr.dbrMarketableFlag}"
+                                                                 disabled="#{dbrInfo.isDisabled('DBRMarketableFlag')}">
                                                     <f:selectItem itemLabel="#{msg.get('app.label.no')}" itemValue="1"/>
                                                     <f:selectItem itemLabel="#{msg.get('app.label.yes')}" itemValue="2"/>
                                                     <p:ajax event="change" process="@this" update="@this"/>
