@@ -1444,6 +1444,8 @@ public class DBExecute implements Serializable {
             throw ex;
         }
         HashMap<String,String> result = new HashMap<String, String>();
+        String retUsages = "";
+        String retUsageType = "";
         try {
             log.debug("SQL_USAGE : {}",SQL_USAGE);
             PreparedStatement statement = conn.prepareStatement(SQL_USAGE);
@@ -1454,14 +1456,27 @@ public class DBExecute implements Serializable {
                 String usages = Util.getStringNotNull(rs.getString("usages"));
                 String usageType = Util.getStringNotNull(rs.getString("usageType"));
 
-                if(usages!=null && !usages.trim().equalsIgnoreCase("")){
-                    result.put("usages", usages);
+                if(retUsages.equalsIgnoreCase("")){
+                    retUsages = usages;
+                } else {
+                    retUsages = retUsages+", "+usages;
                 }
 
-                if(usageType!=null && !usageType.trim().equalsIgnoreCase("")){
-                    result.put("usageType", usageType);
+                if(retUsageType.equalsIgnoreCase("")){
+                    retUsageType = usageType;
+                } else {
+                    retUsageType = retUsageType+", "+usageType;
                 }
             }
+
+            if(retUsages!=null && !retUsages.trim().equalsIgnoreCase("")){
+                result.put("usages", retUsages);
+            }
+
+            if(retUsageType!=null && !retUsageType.trim().equalsIgnoreCase("")){
+                result.put("usageType", retUsageType);
+            }
+
             log.debug("result : {}", result.size());
             rs.close();
             conn.close();
