@@ -557,6 +557,7 @@ public class HeaderController extends BaseController {
                 if (complete) {
                     log.debug("complete true : starting duplicate data ");
                     prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
+                    returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                     log.debug("Duplicate data complete and submit complete.");
                     messageHeader = "Information.";
                     message = "Close Sales Complete. Click 'OK' return Inbox.";
@@ -592,7 +593,7 @@ public class HeaderController extends BaseController {
         try {
             if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
                 prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
-                //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
                 complete = true;
                 messageHeader = "Information.";
                 message = "Assign to checker complete.";
@@ -797,7 +798,7 @@ public class HeaderController extends BaseController {
                 fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
                 log.debug("submitForBDM ::: success.");
                 log.debug("submitForBDM ::: Backup return info to History Start...");
-                //returnControl.saveReturnHistoryForRestart(workCaseId, workCasePreScreenId);
+                returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
                 log.debug("submitForBDM ::: Backup return info to History Success...");
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
@@ -823,6 +824,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         try{
             fullApplicationControl.submitForZM(queueName, wobNumber, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId, stepId);
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -1174,6 +1176,7 @@ public class HeaderController extends BaseController {
         try{
             if(canSubmitWithoutReply(workCaseId,workCasePreScreenId)){
                 fullApplicationControl.submitForBDMUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId);
+                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
 
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.submit.success");
@@ -1300,6 +1303,8 @@ public class HeaderController extends BaseController {
             if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId==StatusValue.REPLY_FROM_BDM.value()){
                 log.debug("onSubmitAADCommittee ( save Return History For Restart )");
                 returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            } else {
+                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
             }
             fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
             messageHeader = "Information.";
@@ -2624,7 +2629,7 @@ public class HeaderController extends BaseController {
             message = "Return to AAD Admin success.";
 
             fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
-            //returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
 
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
 

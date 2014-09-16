@@ -294,7 +294,7 @@
                     <td class="left">
                         <p:inputText id="dlgTitleDeed" value="#{collHeadDetail.titleDeed}"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
-                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.titleDeed')}}">
+                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.titleDeed')}">
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -310,7 +310,7 @@
                         <p:inputText id="dlgCollLocation" value="#{collHeadDetail.collateralLocation}"
                                      style="width: 400px;"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
-                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.collateralLocation')}}">
+                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.collateralLocation')}">
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -332,7 +332,7 @@
                                      onfocus="removeComma(this)"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
                                      style="width:200px;text-align: right"
-                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.appraisalValue')}}">
+                                     readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.appraisalValue')}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
@@ -350,7 +350,7 @@
                                          value="#{collHeadDetail.headCollType.id}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}"
-                                         disabled="#{decision.approveCollateralInfoView.coms or collHeadDetail.haveSubColl or decision.isDisabled('collateral.headcoll.headCollType')}}">
+                                         disabled="#{decision.approveCollateralInfoView.coms or collHeadDetail.haveSubColl or decision.isDisabled('collateral.headcoll.headCollType')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                             <f:selectItems value="#{decision.headCollTypeViewList}"
                                            var="headCollateralTypeItem"
