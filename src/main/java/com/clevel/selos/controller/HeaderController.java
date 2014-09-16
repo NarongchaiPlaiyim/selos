@@ -2767,6 +2767,7 @@ public class HeaderController extends BaseController {
         HttpSession session = FacesUtil.getSession(false);
 
         long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
+        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
@@ -2791,7 +2792,7 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("ENDSTAGE".equalsIgnoreCase(stageString)){
-            if(stageId == 0){
+            if(statusId == 0){
                 accessible = true;
             }
         }

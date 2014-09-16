@@ -1290,6 +1290,7 @@ public class NCBBizTransform extends BusinessTransform {
                 AccountInfoName accountInfoName = new AccountInfoName();
                 AccountInfoId accountInfoId = new AccountInfoId();
 
+                //set default account ( from request model )
                 accountInfoName.setNameTh(nccrsModel.getCompanyName());
                 accountInfoId.setIdNumber(nccrsModel.getRegistId());
                 accountInfoId.setDocumentType(DocumentType.CORPORATE_ID);
@@ -1326,7 +1327,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     AccountInfoId accountInfoId2 = new AccountInfoId();
 
                                     accountInfoName2.setNameTh(profileModel.getThainame());
-                                    accountInfoName2.setNameTh(profileModel.getEngname());
+                                    accountInfoName2.setNameEn(profileModel.getEngname());
                                     accountInfoId2.setIdNumber(profileModel.getRegistid());
                                     accountInfoId2.setDocumentType(DocumentType.CORPORATE_ID);
                                     accountInfoNameList.add(accountInfoName2);
@@ -1338,6 +1339,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             for (ProfileNameModel profileNameModel : additionalModel.getName()) {
                                                 AccountInfoName ncbAccountInfoName = new AccountInfoName();
                                                 ncbAccountInfoName.setNameTh(profileNameModel.getThainame());
+                                                ncbAccountInfoName.setNameEn(profileNameModel.getEngname());
                                                 ncbAccountInfoName.setSurnameTh(profileNameModel.getEngname());
                                                 accountInfoNameList.add(ncbAccountInfoName);
                                             }

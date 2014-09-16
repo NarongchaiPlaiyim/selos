@@ -93,12 +93,14 @@
 </p:panel>
 <!--############ Stage for End Case #############-->
 <p:panel id="header_panel_report" rendered="#{headerController.checkAccessStage('ENDSTAGE')}" styleClass="panel">
-    <!--Print Report-->
-    <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
-                     actionListener="#{report.setNameReport()}"
-                     oncomplete="PF('printReportDlg').show()"
-                     update=":frmMain:printReportPanel">
-    </p:commandButton>
+    <c:if test="#{headerController.checkAccessStage('ENDSTAGE')}">
+        <!--Print Report-->
+        <p:commandButton id="btnPrintReport" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
+                         actionListener="#{report.setNameReport()}"
+                         oncomplete="PF('printReportDlg').show()"
+                         update=":frmMain:printReportPanel">
+        </p:commandButton>
+    </c:if>
 </p:panel>
 <!--############ Stage for FullApplication ############-->
 <p:panel id="header_panel_fullapplication" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
