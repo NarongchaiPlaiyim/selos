@@ -125,6 +125,8 @@ public class FullApplicationControl extends BusinessControl {
     private TCGDAO tcgDAO;
     @Inject
     ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    private ProposeGuarantorInfoDAO proposeGuarantorInfoDAO;
 
     @Inject
     private ReturnInfoTransform returnInfoTransform;
@@ -419,7 +421,7 @@ public class FullApplicationControl extends BusinessControl {
 
                 ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                 if(existingCreditFacility != null) {
-                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                 }
 
                 UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
@@ -495,12 +497,12 @@ public class FullApplicationControl extends BusinessControl {
 
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                     if(proposeLine != null) {
-                        totalCommercial = proposeLine.getTotalExposure();
+                        totalCommercial = proposeLine.getTotalExposure() != null ? proposeLine.getTotalExposure() : BigDecimal.ZERO;
                     }
 
                     ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                     if(existingCreditFacility != null) {
-                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                     }
 
 
@@ -1920,12 +1922,18 @@ public class FullApplicationControl extends BusinessControl {
     public int calculateTCGFlag(long workCaseId){
         int tcgFlag = 0;
 
-        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+        //Get all Approve Guarantor to find TCG As Guarantor
+        List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findApprovedTCGGuarantor(workCaseId);
+        if(Util.isSafetyList(proposeGuarantorInfoList) && proposeGuarantorInfoList.size() > 0){
+            tcgFlag = 1;
+        }
+
+        /*TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
         if(!Util.isNull(tcg)){
             if(tcg.getTcgFlag() == RadioValue.YES.value())
                 tcgFlag = 1;
-        }
+        }*/
 
         return tcgFlag;
     }
