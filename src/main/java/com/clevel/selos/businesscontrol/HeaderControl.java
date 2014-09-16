@@ -270,7 +270,7 @@ public class HeaderControl extends BusinessControl {
         return requestAppraisal;
     }
 
-    public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
+    /*public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
         log.debug("ncbResultValidation()");
         if(uwRuleResultSummaryView!=null){
             if(uwRuleResultSummaryView.getUwDeviationFlagView().getBrmsCode().equalsIgnoreCase("ND")) {
@@ -295,7 +295,7 @@ public class HeaderControl extends BusinessControl {
             }
         }
         return true;
-    }
+    }*/
 
     public void updateNCBRejectFlag(long workCasePreScreenId, boolean canCheckPreScreen){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);

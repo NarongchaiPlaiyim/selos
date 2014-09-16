@@ -1978,6 +1978,7 @@ public class FullApplicationControl extends BusinessControl {
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         }
 
+        boolean rejectedNCB = false;
         if(!Util.isNull(uwRuleResultSummary)){
             if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
                 List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
@@ -1991,15 +1992,19 @@ public class FullApplicationControl extends BusinessControl {
                                     uwRuleResultDetail.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
                                 if(uwRuleResultDetail.getUwResultColor() == UWResultColor.RED){
                                     log.debug("NCB Result is RED without Deviate, auto reject case!");
-                                    ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
-                                    //Update ncb reject flag
-                                    updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
+                                    rejectedNCB = true;
+                                    break;
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+        if(rejectedNCB){
+            ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
+            //Update ncb reject flag
+            updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
         }
     }
 

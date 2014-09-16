@@ -200,6 +200,23 @@ public class NCBBizTransform extends BusinessTransform {
                                         }
                                     }
 
+                                    //Check all account closed ( wait for confirm NPL checking )
+                                    /*boolean allAccountClosed = true;
+                                    for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
+                                        AccountStatus tmpAccountStatus = accountStatusDAO.getIndividualByCode(subjectAccountModel.getAccountstatus());
+                                        if(!Util.isNull(tmpAccountStatus)){
+                                            if(Util.isTrue(tmpAccountStatus.getDbrFlag())){
+                                                allAccountClosed = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(allAccountClosed){
+                                        lastAsOfDate = enquiryDateStr;
+                                    }*/
+
+
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
                                         isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel, lastAsOfDate);
                                         log.debug("isValidPayment {}",isValidPayment);
