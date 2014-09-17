@@ -209,7 +209,11 @@ public class PostAppBusinessControl extends BusinessControl {
         if (!Util.isEmpty(remark))
         	fields.put("Remarks", remark);
         
-        String stepCode = workCase.getStep().getCode().trim();
+        String stepCode = workCase.getStep().getCode();
+        if (stepCode == null)
+        	stepCode = "";
+        else
+        	stepCode = stepCode.trim();
         long actionId = action.getId();
         
         log.debug("Call BPM "+workCase.getId());
