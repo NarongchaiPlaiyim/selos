@@ -57,6 +57,9 @@ public class ValidationImp{
         if(Util.isNull(csvModel.getUserId()) || Util.isZero(csvModel.getUserId().length())){
             return "userId is required";
         }
+        if(Util.isNull(csvModel.getUserName()) || Util.isZero(csvModel.getUserName().length())){
+            return "userName is required";
+        }
         if(Util.isNull(csvModel.getRole()) || Util.isZero(csvModel.getRole().length())){
             return "role is required";
         }
