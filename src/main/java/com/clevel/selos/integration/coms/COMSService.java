@@ -103,8 +103,8 @@ public class COMSService implements Serializable {
                             headCollateralData.setCollId(headCollateral.getColId());
                             headCollateralData.setTitleDeed(headCollateral.getColNo());
                             String location = "";
-                            if(headCollateral.getAddCity()!=null){
-                                location = location.concat(headCollateral.getAddCity()).concat(SPACE);
+                            if(headCollateral.getAddDistrict()!=null){
+                                location = location.concat(headCollateral.getAddDistrict()).concat(SPACE);
                             }
                             if(headCollateral.getCity()!=null){
                                 location = location.concat(headCollateral.getCity()).concat(SPACE);
