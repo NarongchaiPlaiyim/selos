@@ -104,7 +104,7 @@
                                                  value="#{decision.collOwnerId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
                                                  required="#{not empty param[addCollOwnerUW.clientId]}"
-                                                 disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.collateralName')}">
+                                                 disabled="#{decision.isDisabled('collateral.subcoll.collateralName')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.collateralOwnerUwAllList}"
                                                    var="collateralOwnerUWItem"
@@ -122,7 +122,7 @@
                                         action="#{decision.onAddCollateralOwnerUW()}"
                                         process=":subCollateralDlgForm"
                                         update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                                        disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.collateralName')}">
+                                        disabled="#{decision.isDisabled('collateral.subcoll.collateralName')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -161,7 +161,7 @@
                                              process=":subCollateralDlgForm"
                                              actionListener="#{decision.onDeleteCollateralOwnerUW(rowIndex)}"
                                              update=":subCollateralDlgForm"
-                                             disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.collateralName.removeButton')}">
+                                             disabled="#{decision.isDisabled('collateral.subcoll.collateralName.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -181,7 +181,7 @@
                                                  value="#{decision.mortgageTypeId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
                                                  required="#{not empty param[addMortgageType.clientId]}"
-                                                 disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.mortgageType')}">
+                                                 disabled="#{decision.isDisabled('collateral.subcoll.mortgageType')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.mortgageTypeViewList}"
                                                    var="mortgageTypeItem"
@@ -199,7 +199,7 @@
                                         actionListener="#{decision.onAddMortgageType()}"
                                         process="@form"
                                         update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
-                                        disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.mortgageType')}">
+                                        disabled="#{decision.isDisabled('collateral.subcoll.mortgageType')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -238,7 +238,7 @@
                                              process=":subCollateralDlgForm"
                                              actionListener="#{decision.onDeleteMortgageType(rowIndex)}"
                                              update=":subCollateralDlgForm"
-                                             disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.mortgageType.removeButton')}">
+                                             disabled="#{decision.isDisabled('collateral.subcoll.mortgageType.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

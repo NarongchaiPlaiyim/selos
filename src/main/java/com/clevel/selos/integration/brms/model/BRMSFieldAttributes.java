@@ -135,7 +135,9 @@ public enum BRMSFieldAttributes {
     SHOW_FLAG("Show Flag"),
     OPER_MANDATORY_Flag("Oper Mandatory Flag"),
     OPER_STEP("Oper Step"),
-    OPER_SHOW_FLAG("Oper Show Flag");
+    OPER_SHOW_FLAG("Oper Show Flag"),
+
+    BOT_CLASS("BOT Class");
 
     String value;
 

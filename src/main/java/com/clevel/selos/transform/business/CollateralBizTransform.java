@@ -118,6 +118,10 @@ public class CollateralBizTransform extends BusinessTransform {
             List<HeadCollateralData> headCollateralDataList = appraisalData.getHeadCollateralDataList();
             List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
             List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+
+            String usage = "";
+            String typeOfUsage = "";
+
             if(Util.isSafetyList(headCollateralDataList)){
                 for(HeadCollateralData headCollateralData: headCollateralDataList){
                     ProposeCollateralInfoHeadView proposeCollateralInfoHeadView = new ProposeCollateralInfoHeadView();
@@ -146,12 +150,28 @@ public class CollateralBizTransform extends BusinessTransform {
                             proposeCollateralInfoSubView.setAddress(subCollateralData.getAddress());
                             proposeCollateralInfoSubView.setTitleDeed(subCollateralData.getTitleDeed());
                             proposeCollateralInfoSubView.setAppraisalValue(subCollateralData.getAppraisalValue());
+                            proposeCollateralInfoSubView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
 //                            proposeCollateralInfoSubView.setCollateralOwner(subCollateralData.getCollateralOwner());
 //                            proposeCollateralInfoSubView.setUsage(subCollateralData.getUsage());
 //                            proposeCollateralInfoSubView.setTypeOfUsage(subCollateralData.getTypeOfUsage());
                             UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
                             proposeCollateralInfoSubView.setSubId(uid.randomUUID().toString());
                             proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+
+                            if(subCollateralData.getUsage()!=null && !subCollateralData.getUsage().trim().equalsIgnoreCase("")){
+                                if(usage.equalsIgnoreCase("")){
+                                    usage = subCollateralData.getUsage();
+                                } else {
+                                    usage = usage+", "+subCollateralData.getUsage();
+                                }
+                            }
+                            if(subCollateralData.getTypeOfUsage()!=null && !subCollateralData.getTypeOfUsage().trim().equalsIgnoreCase("")){
+                                if(typeOfUsage.equalsIgnoreCase("")){
+                                    typeOfUsage = subCollateralData.getTypeOfUsage();
+                                } else {
+                                    typeOfUsage = typeOfUsage+", "+subCollateralData.getTypeOfUsage();
+                                }
+                            }
                         }
                     }
                     proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(proposeCollateralInfoSubViewList);
@@ -165,6 +185,8 @@ public class CollateralBizTransform extends BusinessTransform {
             } else {
                 proposeCollateralInfoHeadViewList.add(new ProposeCollateralInfoHeadView());
             }
+            proposeCollateralInfoView.setUsage(usage);
+            proposeCollateralInfoView.setTypeOfUsage(typeOfUsage);
             proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(proposeCollateralInfoHeadViewList);
             proposeCollateralInfoView.setComs(true);
         }

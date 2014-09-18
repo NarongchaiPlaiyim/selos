@@ -29,6 +29,18 @@ public class KYCLevelControl extends BusinessControl {
     @Inject
     private KYCLevelDAO kycLevelDAO;
 
+    public KYCLevelView getKYCLevelViewById(int kycLevelId){
+        logger.debug("-- getRelationViewById");
+        Map<Integer, KYCLevelView> _tmpMap = getInternalCacheMap();
+        KYCLevelView kycLevelView = _tmpMap.get(kycLevelId);
+        if(kycLevelView != null){
+            logger.debug("getKYCLevelViewById return kycLevelView: {}", kycLevelView);
+            return kycLevelView;
+        }
+        logger.debug("return empty RelationView");
+        return new KYCLevelView();
+    }
+
     public List<SelectItem> getKYCLevelSelectItem(){
         logger.debug("-- getKYCLevelSelectItem");
         Map<Integer, KYCLevelView> _tmpMap = getInternalCacheMap();

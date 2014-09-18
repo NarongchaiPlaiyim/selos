@@ -22,7 +22,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBExecute implements Serializable {
     @Inject
@@ -1417,6 +1419,77 @@ public class DBExecute implements Serializable {
         }
 
         return address;
+    }
+
+    public HashMap<String,String> getUsageForBuilding(String colId, String headColId){
+        log.debug("getAddressType5 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_USAGE = "SELECT " +
+                "USAGES as usages, " +
+                "USAGE_TYPE as usageType " +
+                "FROM APPR_BUILDING " +
+                "WHERE COL_ID = ? AND HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_USAGE = "SELECT " +
+                    "USAGES as usages, " +
+                    "USAGE_TYPE_NAME as usageType " +
+                    "FROM "+schema+".APPR_BUILDING " +
+                    "WHERE COL_ID = ? AND HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+        HashMap<String,String> result = new HashMap<String, String>();
+        String retUsages = "";
+        String retUsageType = "";
+        try {
+            log.debug("SQL_USAGE : {}",SQL_USAGE);
+            PreparedStatement statement = conn.prepareStatement(SQL_USAGE);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String usages = Util.getStringNotNull(rs.getString("usages"));
+                String usageType = Util.getStringNotNull(rs.getString("usageType"));
+
+                if(retUsages.equalsIgnoreCase("")){
+                    retUsages = usages;
+                } else {
+                    retUsages = retUsages+", "+usages;
+                }
+
+                if(retUsageType.equalsIgnoreCase("")){
+                    retUsageType = usageType;
+                } else {
+                    retUsageType = retUsageType+", "+usageType;
+                }
+            }
+
+            if(retUsages!=null && !retUsages.trim().equalsIgnoreCase("")){
+                result.put("usages", retUsages);
+            }
+
+            if(retUsageType!=null && !retUsageType.trim().equalsIgnoreCase("")){
+                result.put("usageType", retUsageType);
+            }
+
+            log.debug("result : {}", result.size());
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return result;
     }
 
 
