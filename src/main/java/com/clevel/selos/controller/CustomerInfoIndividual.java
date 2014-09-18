@@ -431,7 +431,6 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.getCurrentAddress().getCountry().setId(211);
         customerInfoView.getRegisterAddress().getCountry().setId(211);
         customerInfoView.getWorkAddress().getCountry().setId(211);
-        customerInfoView.getSourceIncome().setId(211);
 
         customerInfoView.getSpouse().getNationality().setId(1);
         customerInfoView.getSpouse().getCitizenCountry().setId(211);
@@ -1454,24 +1453,26 @@ public class CustomerInfoIndividual implements Serializable {
                             }
                         }
 
-                        if(Util.isTrue(customerInfoView.getMaritalStatus().getSpouseFlag())){
-                            maritalStatusFlag = true;
-                            enableAllFieldCusSpouse = true;
-                            isEditFormSpouse = true;
-                        } else {
-                            maritalStatusFlag = false;
-                            enableAllFieldCusSpouse = false;
-                            isEditFormSpouse = false;
-                        }
-
                         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                                maritalStatusFlag = true;
+                                enableAllFieldCusSpouse = true;
+                                isEditFormSpouse = true;
+                                enableSpouseDocumentType = false;
+                                enableSpouseCitizenId = false;
                                 log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
                                     log.debug("refreshInterfaceInfo ::: customer found : {}", cusSpouseResultView.getCustomerInfoView());
                                     customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
                                     customerInfoView.getSpouse().setId(cusSpoId);
+
+                                    customerInfoView.getSpouse().setSearchBy(1);
+                                    customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+                                    customerInfoView.getSpouse().getDocumentType().setId(1);
+                                    customerInfoView.getSpouse().setSearchFromRM(1);
+                                    customerInfoView.getSpouse().setCollateralOwner(1);
+
                                     Relation relationSpouse = new Relation();
                                     relationSpouse.setId(relSpoId);
                                     customerInfoView.getSpouse().setRelation(relationSpouse);
