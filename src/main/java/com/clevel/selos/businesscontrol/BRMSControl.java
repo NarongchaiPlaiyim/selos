@@ -419,6 +419,9 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
+        //TODO waiting to confirm with TMB
+        applicationInfo.setBotClass("");
+
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
         logger.info("actionValidationResult: {}", actionValidationResult);
         if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){

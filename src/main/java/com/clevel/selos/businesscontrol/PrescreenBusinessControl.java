@@ -728,7 +728,9 @@ public class PrescreenBusinessControl extends BusinessControl {
                 accountInfoName.setSurnameEn(customer.getLastNameEn());
 
                 if(ncbView.getAccountInfoNameList() != null) {
-                    ncbView.getAccountInfoNameList().add(accountInfoName);
+                    List<AccountInfoName> accountInfoNameList = ncbView.getAccountInfoNameList();
+                    accountInfoNameList.add(accountInfoName);
+                    ncbView.setAccountInfoNameList(accountInfoNameList);
                 }else{
                     List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
                     accountInfoNameList.add(accountInfoName);

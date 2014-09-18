@@ -51,6 +51,7 @@ public class PrescreenConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.YEAR_IN_BUSINESS, applicationInfo.getYearInBusinessMonth()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.COUNTRY_OF_BUSINESS, applicationInfo.getCountryOfRegistration()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.BOT_CLASS, applicationInfo.getBotClass()));
 
         List<ProductType> productTypeList =  applicationType.getProduct();
         ProductType productType = new ProductType();

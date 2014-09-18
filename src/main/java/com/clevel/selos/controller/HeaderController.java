@@ -1061,7 +1061,15 @@ public class HeaderController extends BaseController {
     public void onOpenSubmitUW(){
         _loadSessionVariable();
         try {
-            if (!fullApplicationControl.checkCaseUpdate(workCaseId)) {
+            boolean checkForCheckCriteria = false;
+
+            if(checkButton("Check Criteria")){
+                if(fullApplicationControl.checkCaseUpdate(workCaseId)){
+                    checkForCheckCriteria = true;
+                }
+            }
+
+            if (!checkForCheckCriteria) {
                 submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
                 if (submitOverSLA == 1) {
                     slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);

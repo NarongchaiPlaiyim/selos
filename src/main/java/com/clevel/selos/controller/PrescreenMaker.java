@@ -2291,6 +2291,7 @@ public class PrescreenMaker extends BaseController {
             }else{
                 previousStatusFlag = false;
             }
+            log.debug("previousStatusFlag : {}", previousStatusFlag);
 
             if (maritalStatusFlag == false && previousStatusFlag == true) {
                 Cloner cloner = new Cloner();
@@ -2301,6 +2302,8 @@ public class PrescreenMaker extends BaseController {
             } else {
                 borrowerInfo.setMaritalStatus(maritalStatus);
             }
+        }else{
+            borrowerInfo.setMaritalStatus(maritalStatus);
         }
     }
 
