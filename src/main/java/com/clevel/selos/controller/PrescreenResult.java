@@ -1,11 +1,13 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
@@ -47,6 +49,9 @@ public class PrescreenResult extends BaseController {
     @ExceptionMessage
     Message exceptionMsg;
 
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+
 
     @Inject
     PrescreenBusinessControl prescreenBusinessControl;
@@ -72,16 +77,18 @@ public class PrescreenResult extends BaseController {
         log.info("preRender ::: setSession ");
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
 
-        if (!Util.isZero(workCasePreScreenId)){
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+        if (Util.isZero(workCasePreScreenId)){
+            /*stepId = Long.parseLong(session.getAttribute("stepId").toString());
             if (stepId != StepValue.PRESCREEN_MAKER.value()) {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
+            }*/
+            long workCaseId = getCurrentWorkCaseId(session);
+            if(Util.isZero(workCaseId)) {
+                log.info("preRender ::: workCasePrescreenId is null.");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
             }
-        }else{
-            log.info("preRender ::: workCasePrescreenId is null.");
-            FacesUtil.redirect("/site/inbox.jsf");
-            return;
         }
     }
 
@@ -90,6 +97,19 @@ public class PrescreenResult extends BaseController {
         log.info("PrescreenResult ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        if(Util.isZero(workCasePreScreenId)){
+            long workCaseId = getCurrentWorkCaseId(session);
+            if(!Util.isZero(workCaseId)){
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                if(!Util.isNull(workCase)){
+                    workCasePreScreenId = workCase.getWorkCasePrescreen() != null ? workCase.getWorkCasePrescreen().getId() : 0;
+                }
+            }else{
+                log.error("No workCaseId and workCasePreScreenId");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }
+        }
         if (!Util.isZero(workCasePreScreenId)) {
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));

@@ -194,8 +194,7 @@
 
                         <p:dataTable id="dataTable" var="user" value="#{isa.userList}"
                                      selection="#{isa.selectUserDetail}" rowKey="#{user.id}"
-                                     rowIndexVar="rowIndex" rows="15" paginator="true"
-                                >
+                                     rowIndexVar="rowIndex" rows="15" paginator="true">
 
                             <p:column selectionMode="multiple"/>
 
@@ -290,7 +289,7 @@
             <ui:param name="formId" value="frmConfirmDeleteUser"/>
             <ui:param name="controller" value="#{isa}"/>
             <ui:param name="action" value="onClickDelete"/>
-            <ui:param name="update" value=":userTableData"/>
+            <ui:param name="update" value=":userTableData,:msgBoxSystemMessagePanel"/>
         </ui:include>
 
         <ui:include src="../site/dialog/confirmDeleteDlg.xhtml">

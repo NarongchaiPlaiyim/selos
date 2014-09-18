@@ -109,7 +109,6 @@
                                         <p:column headerText="" styleClass="center" style="width:54px;">
                                             <p:commandButton title="Edit"
                                                              icon="ui-icon-pencil"
-                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteFacilityButton')}"
                                                              action="#{prescreenMaker.onEditFacility()}"
                                                              update=":facilityDlgForm"
                                                              oncomplete="facilityDlg.show();">
@@ -120,6 +119,7 @@
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
+                                                             disabled="#{prescreenMaker.isDisabled('prescreen.deleteFacilityButton')}"
                                                              oncomplete="confirmDeleteFacilityDlg.show()" >
                                                 <f:setPropertyActionListener value="#{item}"
                                                                              target="#{prescreenMaker.selectFacilityItem}"/>

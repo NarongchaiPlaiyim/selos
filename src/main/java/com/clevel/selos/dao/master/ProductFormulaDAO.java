@@ -70,7 +70,21 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
             return productFormulaList.get(0);
         }
         return null;
-
     }
 
+    public ProductFormula findProductFormulaPropose(PrdProgramToCreditType programToCreditType,int creditCusType, int specialProgramId,int applyTcg,int dbrMarketableFlag) {
+        log.debug("findProductFormulaPropose :: programToCreditType : {}, creditCusType : {}, specialProgramId : {}, applyTcg : {}"
+                ,programToCreditType, creditCusType, specialProgramId, applyTcg);
+        String query = "SELECT productFormula FROM ProductFormula productFormula WHERE ( creditCusType = " + creditCusType + " OR creditCusType = 0 ) AND ";
+        query = query + "( applyTCG = " + applyTcg + " OR applyTCG = 0 ) AND ( specialProgram = " + specialProgramId + " OR specialProgram = 3 ) AND ";
+        query = query + "programToCreditType.id = " + programToCreditType.getId() + " AND ";
+        query = query + "marketableFlag = " + dbrMarketableFlag;
+        log.debug("findProductFormulaPropose :: query : {}",query);
+        List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
+
+        if(productFormulaList != null && productFormulaList.size() > 0){
+            return productFormulaList.get(0);
+        }
+        return null;
+    }
 }

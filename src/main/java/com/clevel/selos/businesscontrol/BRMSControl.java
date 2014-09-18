@@ -1240,7 +1240,8 @@ public class BRMSControl extends BusinessControl {
                 Individual spouseIndv = spouse.getIndividual();
                 customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
                 if(spouse.getRelation() != null)
-                    customerInfo.setRelation(spouse.getRelation().getBrmsCode());
+                    customerInfo.setSpouseRelationType(spouse.getRelation().getBrmsCode());
+                    //customerInfo.setRelation(spouse.getRelation().getBrmsCode());
             } else {
                 if(isActive(individual.getMaritalStatus().getSpouseFlag())) {
                     //Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());

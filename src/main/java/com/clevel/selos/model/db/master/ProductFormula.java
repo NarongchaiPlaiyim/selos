@@ -49,6 +49,9 @@ public class ProductFormula implements Serializable {
     @Column(name = "active")
     private int active;
 
+    @Column(name = "marketable_flag", columnDefinition = "int default 0")
+    private int marketableFlag;
+
     public int getId() {
         return id;
     }
@@ -167,6 +170,14 @@ public class ProductFormula implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public int getMarketableFlag() {
+        return marketableFlag;
+    }
+
+    public void setMarketableFlag(int marketableFlag) {
+        this.marketableFlag = marketableFlag;
     }
 
     @Override
