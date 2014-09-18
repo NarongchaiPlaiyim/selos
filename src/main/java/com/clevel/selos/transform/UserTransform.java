@@ -100,17 +100,25 @@ public class UserTransform extends Transform {
             if(!Util.isNull(view.getUserTeam())){
                 model.setTeam(view.getUserTeam());
             }
-            if(!Util.isNull(view.getUserDepartment())){
+            if(!Util.isNull(view.getUserDepartment()) && view.getUserDepartment().getId() != 0){
                 model.setDepartment(view.getUserDepartment());
+            } else {
+                model.setDepartment(null);
             }
-            if(!Util.isNull(view.getUserDivision())){
+            if(!Util.isNull(view.getUserDivision()) && view.getUserDivision().getId() != 0){
                 model.setDivision(view.getUserDivision());
+            } else {
+                model.setDivision(null);
             }
-            if(!Util.isNull(view.getUserRegion())){
+            if(!Util.isNull(view.getUserRegion()) && view.getUserRegion().getId() != 0){
                 model.setRegion(view.getUserRegion());
+            } else {
+                model.setRegion(null);
             }
-            if(!Util.isNull(view.getUserTitle())){
+            if(!Util.isNull(view.getUserTitle()) && view.getUserTitle().getId() != 0 ){
                 model.setTitle(view.getUserTitle());
+            } else {
+                model.setTitle(null);
             }
             model.setActive(ManageUserActive.ACTIVE.getValue());
             model.setUserStatus(UserStatus.NORMAL);

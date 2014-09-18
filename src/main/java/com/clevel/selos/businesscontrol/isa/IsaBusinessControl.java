@@ -241,8 +241,9 @@ public class IsaBusinessControl extends BusinessControl {
             onLoadUserId();
             for(final CSVModel csv : csvModelList){
                 final String command = csv.getCommandType();
-                if(CommandType.INSERT.equals(command)){
-                    resultModel = executeInsert(csv, CommandType.INSERT);
+                log.debug("--command. [{}]",command);
+                if(CommandType.CREATE.equals(command)){
+                    resultModel = executeInsert(csv, CommandType.CREATE);
                 } else if(CommandType.UPDATE.equals(command)){
                     resultModel = executeUpdate(csv, CommandType.UPDATE);
                 } else if(CommandType.DELETE.equals(command)){
@@ -280,7 +281,7 @@ public class IsaBusinessControl extends BusinessControl {
                 result = stpExecutor.createFromCSV(csvModel, getCurrentUser());
                 if(ActionResult.SUCCESS.name().equalsIgnoreCase(result)){
                     resultModel.setResult(ActionResult.SUCCESS.toString());
-                    user = null;
+//                    user = null;
                     isaAuditor.audit(user.getId(), commandType.name(), csvModel.toStringForAudit(),  ActionResult.SUCCESS, null, user, "", getNewData(csvModel.getUserId()));
                 } else {
                     resultModel.setResult(ActionResult.FAILED.toString());
@@ -430,14 +431,17 @@ public class IsaBusinessControl extends BusinessControl {
             if (!Util.isNull(rs)){
                 while (rs.next()){
                     ISAViewReport viewReport = new ISAViewReport();
-                    viewReport.setEmpID(rs.getString("EMP_ID"));
-                    viewReport.setEmpName(rs.getString("EMP_NAME"));
-                    viewReport.setTestId(rs.getString("TEAM_ID"));
+                    viewReport.setUserId(rs.getString("USER_ID"));
+                    viewReport.setUserName(rs.getString("USER_NAME"));
+                    viewReport.setActive(rs.getString("ACTIVE"));
+                    viewReport.setRole(rs.getString("ROLE_NAME"));
                     viewReport.setTeam(rs.getString("TEAM_NAME"));
+                    viewReport.setDepartment(rs.getString("DEPARTMENT"));
+                    viewReport.setDivision(rs.getString("DIVISION"));
+                    viewReport.setRegion(rs.getString("REGION"));
+                    viewReport.setTitle(rs.getString("TITLE"));
                     viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
                     viewReport.setLastLogOn(rs.getTimestamp("LAST_SING_ON_DATE"));
-                    viewReport.setStatus(rs.getString("STATUS"));
-                    viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAYS"));
                     viewReportList.add(viewReport);
                 }
             }
