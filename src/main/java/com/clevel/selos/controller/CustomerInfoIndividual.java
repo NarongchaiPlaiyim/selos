@@ -1456,8 +1456,12 @@ public class CustomerInfoIndividual implements Serializable {
 
                         if(Util.isTrue(customerInfoView.getMaritalStatus().getSpouseFlag())){
                             maritalStatusFlag = true;
+                            enableAllFieldCusSpouse = true;
+                            isEditFormSpouse = true;
                         } else {
                             maritalStatusFlag = false;
+                            enableAllFieldCusSpouse = false;
+                            isEditFormSpouse = false;
                         }
 
                         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
