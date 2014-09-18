@@ -60,7 +60,7 @@ public class ProposeCollateralInfoView implements Serializable {
         ProposeCollateralInfoHeadView proposeCollateralInfoHeadView = new ProposeCollateralInfoHeadView();
         this.proposeCollateralInfoHeadViewList.add(proposeCollateralInfoHeadView);
         this.proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
-        this.appraisalRequest = 0;
+        this.appraisalRequest = 1;
     }
 
     public long getId() {
