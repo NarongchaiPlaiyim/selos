@@ -352,7 +352,7 @@
 	                        			</p:column>
 													<p:column style="width:200px"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountName')}">
-														<h:outputText value="#{item.allAccountNames}" />
+														<h:outputText value="#{item.allAccountNames}" escape="false"/>
 													</p:column>
 													<p:column style="width:150px"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountNumber')}">
