@@ -72,6 +72,8 @@ public class BasicInfo extends BaseController {
     @Inject
     private BasicInfoControl basicInfoControl;
     @Inject
+    private ExSummaryControl exSummaryControl;
+    @Inject
     private OpenAccountControl openAccountControl;
     @Inject
     private BankAccountPurposeControl bankAccountPurposeControl;
@@ -319,6 +321,7 @@ public class BasicInfo extends BaseController {
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
             exSummaryControl.calculateBOTClass(workCaseId);
+            exSummaryControl.calForBasicInfo(workCaseId);
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
