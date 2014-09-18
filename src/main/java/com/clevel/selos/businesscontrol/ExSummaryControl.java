@@ -1073,4 +1073,54 @@ public class ExSummaryControl extends BusinessControl {
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findByWorkCaseId(workCaseId));
         return customerInfoViewList;
     }
+
+    public void calculateBOTClass(long workCaseId){
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        int qualitative = 0;
+        if(basicInfo != null && basicInfo.getId() != 0){
+            qualitative = basicInfo.getQualitativeType(); // A = 1 , B = 2
+        }
+
+        QualitativeView qualitativeView;
+        if(qualitative == 1){ //todo: enum
+            qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
+        } else if (qualitative == 2) {
+            qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
+        } else {
+            qualitativeView = null;
+        }
+
+        String botClassReason = "";
+        String botClass = "";
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(Util.isNull(exSummary)){
+            exSummary = new ExSummary();
+        }
+
+        if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                botClassReason = qualitativeView.getQualityLevel() != null ? qualitativeView.getQualityLevel().getDescription() : "";
+                botClass = qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("") ? qualitativeView.getQualityResult() : "";
+            }
+        } else { // (Bot Class = P,SM,SS,D,DL) DL is the worst.
+            String tmpWorstCase = "";
+            String worstCase = "";
+            List<Customer> customerList = customerDAO.findBorrowerByWorkCaseId(workCaseId);
+            if(customerList != null && customerList.size() > 0){
+                for(Customer customer : customerList){
+                    tmpWorstCase = calWorstCaseBotClass(tmpWorstCase, customer.getCustomerOblInfo() != null ? customer.getCustomerOblInfo().getAdjustClass() : "");
+                }
+            }
+
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                botClassReason = qualitativeView.getQualityLevel() != null ? qualitativeView.getQualityLevel().getDescription() : "";
+                if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("")){
+                    botClass = calWorstCaseBotClass(tmpWorstCase, qualitativeView.getQualityResult());
+                }
+            }
+        }
+        exSummary.setCreditRiskReason(botClassReason);
+        exSummary.setCreditRiskBOTClass(botClass);
+        exSummaryDAO.persist(exSummary);
+    }
 }

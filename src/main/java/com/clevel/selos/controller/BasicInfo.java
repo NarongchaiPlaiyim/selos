@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.dao.master.*;
@@ -92,6 +93,8 @@ public class BasicInfo extends BaseController {
     private BorrowingTypeControl borrowingTypeControl;
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     //*** Drop down List ***//
     private List<SelectItem> productGroupList;
@@ -315,6 +318,7 @@ public class BasicInfo extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
+            exSummaryControl.calculateBOTClass(workCaseId);
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");

@@ -1037,6 +1037,23 @@ public class CustomerTransform extends Transform {
         return customerHashMap;
     }
 
+    public List<Customer> transformToModelDeleteList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase, User user){
+        List<Customer> customerList = new ArrayList<Customer>();
+
+        if(customerInfoViews != null){
+            for(CustomerInfoView item : customerInfoViews){
+                log.info("transformToModelList before item : {}", item);
+                if(item.getId() != 0) {
+                    Customer customer = transformToModel(item, workCasePrescreen, workCase, user);
+                    log.info("transformToModelList after item : {}", customer);
+                    customerList.add(customer);
+                }
+
+            }
+        }
+        return customerList;
+    }
+
     public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase, User user){
         List<Customer> customerList = new ArrayList<Customer>();
 
@@ -1046,7 +1063,7 @@ public class CustomerTransform extends Transform {
                 Customer customer = transformToModel(item, workCasePrescreen, workCase, user);
                 log.info("transformToModelList after item : {}", customer);
                 customerList.add(customer);
-                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getSpouseFlag() == 1){
                     if(item.getSpouse() != null){
                         log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
                         Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase, user);
