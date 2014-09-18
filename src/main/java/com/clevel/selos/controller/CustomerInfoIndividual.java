@@ -1996,6 +1996,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
+            customerInfoView.getSpouse().setIsSpouse(1);
             if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
                 addressView.setAddressTypeFlag(1);
@@ -2031,6 +2032,7 @@ public class CustomerInfoIndividual implements Serializable {
         //customerInfoView = individual
         customerInfoView.getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getTitleTh().getId()).getTitleTh());
         customerInfoView.getRelation().setDescription(relationControl.getRelationViewById(relationMainCusId).getDescription());
+        customerInfoView.getKycLevel().setKycLevel(kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId()).getKycLevel());
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
