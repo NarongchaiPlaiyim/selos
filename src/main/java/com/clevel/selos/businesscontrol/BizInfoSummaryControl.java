@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BankStatementSummary;
@@ -162,7 +163,8 @@ public class BizInfoSummaryControl extends BusinessControl {
         BigDecimal sumIncomeNet;
 
         if(!Util.isNull(bankStatementSummary)){
-            if(stepId >= StepValue.CREDIT_DECISION_UW1.value()){
+//            if(stepId >= StepValue.CREDIT_DECISION_UW1.value()){
+            if (getCurrentUser().getRole().getId() == RoleValue.UW.id()){
                 if (!Util.isNull(bankStatementSummary.getGrdTotalIncomeNetUW())){
                     income = bankStatementSummary.getGrdTotalIncomeNetUW();
                 } else {

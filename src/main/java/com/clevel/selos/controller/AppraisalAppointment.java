@@ -45,7 +45,7 @@ import java.util.Locale;
 
 @ViewScoped
 @ManagedBean(name = "appraisalAppointment")
-public class AppraisalAppointment implements Serializable {
+public class AppraisalAppointment extends BaseController implements Serializable {
 
     @Inject
     @SELOS
