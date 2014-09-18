@@ -103,6 +103,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="userTeamDialog" value="#{isa.isaManageUserView.userTeam.id}"
+                                     required="true"
                                      style="width: 250px; min-width: 250px; max-width: 250px;">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userTeamList}"
@@ -119,7 +120,6 @@
                 </td>
                 <td>
                     <p:selectOneMenu value="#{isa.isaManageUserView.userDepartment.id}"
-                                     required="true"
                                      style="width: 250px; min-width: 250px; max-width: 250px;">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userDepartmentList}"
@@ -135,7 +135,6 @@
                 </td>
                 <td>
                     <p:selectOneMenu value="#{isa.isaManageUserView.userDivision.id}"
-                                     required="true"
                                      style="width: 250px; min-width: 250px; max-width: 250px;">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userDivisionList}"
@@ -151,7 +150,6 @@
                 </td>
                 <td>
                     <p:selectOneMenu value="#{isa.isaManageUserView.userRegion.id}"
-                                     required="true"
                                      style="width: 250px; min-width: 250px; max-width: 250px;">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userRegionList}"
@@ -167,7 +165,6 @@
                 </td>
                 <td>
                     <p:selectOneMenu value="#{isa.isaManageUserView.userTitle.id}"
-                                     required="true"
                                      style="width: 250px; min-width: 250px; max-width: 250px;">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userTitleList}"

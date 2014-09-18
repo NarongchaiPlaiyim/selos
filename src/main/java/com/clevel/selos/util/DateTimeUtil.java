@@ -73,6 +73,16 @@ public class DateTimeUtil implements Serializable {
         }
     }
 
+    public static String convertToStringDDMMYYYYHHmmss(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        if (Util.isNull(date)){
+            return "";
+        } else {
+            String dateString = simpleDateFormat.format(date);
+            return dateString;
+        }
+    }
+
     public static String convertToStringDDMMYYYY(Date date,Locale locale){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy",locale);
         String dateString = simpleDateFormat.format(date);
