@@ -5,105 +5,105 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 <h:form id="appraisalComsDlgForm">
-    <table class="content_form" style="width:650px;">
+<table class="content_form" style="width:650px;">
+    <tr>
+        <td class="title">Job ID :</td>
+        <td>
+            <p:inputText id="jobID" value="#{appraisalResult.newCollateralView.jobID}"
+                         required="#{not empty param[searchButton.clientId]}"
+                         readonly="#{appraisalResult.flagReadOnly}"
+                    />
+        </td>
+        <td>
+            <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"
+                             binding="#{searchButton}"
+                             process="@form"
+                             action="#{appraisalResult.onCallRetrieveAppraisalReportInfo()}"
+                             update=":msgBoxSystemMessagePanel,:appraisalComsDlgForm"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="separate"></div>
+        </td>
+    </tr>
+</table>
+<p:panel id="pnlComs" styleClass="panel">
+    <table>
+        <colgroup>
+            <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+            <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+            <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+            <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+        </colgroup>
         <tr>
-            <td class="title">Job ID :</td>
             <td>
-                <p:inputText id="jobID" value="#{appraisalResult.newCollateralView.jobID}"
-                             required="#{not empty param[searchButton.clientId]}"
-                             readonly="#{appraisalResult.flagReadOnly}"
-                        />
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
             </td>
             <td>
-                <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"
-                                 binding="#{searchButton}"
-                                 process="@form"
-                                 action="#{appraisalResult.onCallRetrieveAppraisalReportInfo()}"
-                                 update=":msgBoxSystemMessagePanel,:appraisalComsDlgForm"/>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.jobID}"/>
             </td>
         </tr>
         <tr>
             <td>
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
+            </td>
+            <td>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.appraisalDate}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                </p:outputLabel>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
+            </td>
+            <td>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecision}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
+            </td>
+            <td>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecisionReason}"/>
+            </td>
+            <td>
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
+            </td>
+            <td>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecisionReasonDetail}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
+            </td>
+            <td>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.mortgageCondition}"/>
+            </td>
+            <td>
+                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
+            </td>
+            <td>
+                <p:outputLabel value="#{appraisalResult.newCollateralView.mortgageConditionDetail}"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
                 <div class="separate"></div>
             </td>
         </tr>
     </table>
-    <p:panel id="pnlComs" styleClass="panel">
-        <table>
-            <colgroup>
-                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
-                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
-                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
-                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
-            </colgroup>
-            <tr>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.jobID}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.appraisalDate}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                    </p:outputLabel>
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecision}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecisionReason}"/>
-                </td>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecisionReasonDetail}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.mortgageCondition}"/>
-                </td>
-                <td>
-                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
-                </td>
-                <td>
-                    <p:outputLabel value="#{appraisalResult.newCollateralView.mortgageConditionDetail}"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="separate"></div>
-                </td>
-            </tr>
-        </table>
-        <table style="width: 100%">
-            <colgroup>
-                <col style="width:180px"/>
-                <col style="width:auto"/>
-            </colgroup>
-            <ui:repeat value="#{appraisalResult.newCollateralView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView"
-                       rowIndexVar="rowIndex" >
+    <table style="width: 100%">
+        <colgroup>
+            <col style="width:180px"/>
+            <col style="width:auto"/>
+        </colgroup>
+        <ui:repeat value="#{appraisalResult.newCollateralView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView"
+                   rowIndexVar="rowIndex" >
             <tr>
                 <td>
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
@@ -196,18 +196,18 @@
                     <p:spacer width="5px"/>
                 </td>
             </tr>
-            </ui:repeat>
-        </table>
-    </p:panel>
-    <p:panel id="pnlButton" styleClass="center panel">
-        <p:commandButton id="btnSaveAppraisalComs"
-                         value="#{msg.get('app.button.ok')}"
-                         action="#{appraisalResult.onSaveCollateralDetailView()}"
-                         process="@form"
-                         update=":appraisalComsDlgForm,:frmMain,:msgBoxSystemMessagePanel"
-                         oncomplete="handleCollateralDetailRequest(xhr, status, args)"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalComsViewDlg.hide()"/>
-    </p:panel>
+        </ui:repeat>
+    </table>
+</p:panel>
+<p:panel id="pnlButton" styleClass="center panel">
+    <p:commandButton id="btnSaveAppraisalComs"
+                     value="#{msg.get('app.button.ok')}"
+                     action="#{appraisalResult.onSaveCollateralDetailView()}"
+                     process="@form"
+                     update=":appraisalComsDlgForm,:frmMain,:msgBoxSystemMessagePanel"
+                     oncomplete="handleCollateralDetailRequest(xhr, status, args)"/>
+    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalComsViewDlg.hide()"/>
+</p:panel>
 </h:form>
 <p:blockUI widgetVar="blockAppraisalComsDlgForm" block="appraisalComsDlgForm" trigger=":appraisalComsDlgForm:btnSaveAppraisalComs">
     LOADING<br />

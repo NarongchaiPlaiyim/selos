@@ -28,6 +28,7 @@ public class CSVService {
     private Logger log;
     private final String EMPTY = "";
     private final String UTF_8 = "UTF-8";
+    private final String MS874 = "MS874";
     @Inject
     public CSVService() {
 
@@ -39,7 +40,7 @@ public class CSVService {
         CSVModel csvModel = null;
         List<CSVModel> csvModelList = null;
         try {
-            beanReader = new CsvBeanReader(new InputStreamReader(inputStream, UTF_8), CsvPreference.STANDARD_PREFERENCE);
+            beanReader = new CsvBeanReader(new InputStreamReader(inputStream, MS874), CsvPreference.STANDARD_PREFERENCE);
             final String[] header = beanReader.getHeader(true);
             csvModelList = new ArrayList<CSVModel>();
             while( (csvModel = beanReader.read(CSVModel.class, header)) != null ) {
@@ -68,7 +69,7 @@ public class CSVService {
         ICsvBeanWriter beanWriter = null;
         try {
             File fileDir = new File(fullPath);
-            Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), UTF_8));
+            Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), MS874));
             beanWriter = new CsvBeanWriter(out, CsvPreference.STANDARD_PREFERENCE);
 //            final String[] header = new String[] {
 //                    "userId", "userName", "active", "role",
