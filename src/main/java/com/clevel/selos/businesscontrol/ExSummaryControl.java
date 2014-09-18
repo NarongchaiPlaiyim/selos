@@ -640,6 +640,14 @@ public class ExSummaryControl extends BusinessControl {
         calGroupSaleBorrowerCharacteristic(workCaseId);
     }
 
+    public void calForBasicInfo(long workCaseId) {
+        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+    }
+
+    public void calForWC(long workCaseId) {
+        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+    }
+
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ---------------------------------------------------          Calculation Function          ---------------------------------------------------- //
