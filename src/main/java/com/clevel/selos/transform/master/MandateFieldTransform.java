@@ -55,6 +55,7 @@ public class MandateFieldTransform extends Transform {
         mandateFieldView.setFieldName(mandateField.getFieldName());
         mandateFieldView.setFieldDesc(mandateField.getFieldDescription());
         mandateFieldView.setPage(mandateField.getPage());
+        mandateFieldView.setCheckFieldDetail(mandateField.isCheckFieldDetail());
         mandateFieldView.setMinValue(mandateField.getMinValue());
         mandateFieldView.setMaxValue(mandateField.getMaxValue());
         mandateFieldView.setMatchedValue(mandateField.getMatchedValue());
@@ -241,6 +242,7 @@ public class MandateFieldTransform extends Transform {
         mandateField.setFieldDescription(mandateFieldView.getFieldDesc());
         mandateField.setFieldName(mandateFieldView.getFieldName());
         mandateField.setMandateFieldClass(mandateFieldClass);
+        mandateField.setCheckFieldDetail(mandateFieldView.isCheckFieldDetail());
         mandateField.setMinValue(mandateFieldView.getMinValue());
         mandateField.setMaxValue(mandateFieldView.getMaxValue());
 

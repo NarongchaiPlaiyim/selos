@@ -33,11 +33,11 @@ public class MandateFieldCondition implements Serializable{
     @JoinColumn(name = "class_id")
     private MandateFieldClass mandateFieldClass;
 
-    @Column(name = "depend_type", length = 100)
+    @Column(name = "depend_type", columnDefinition = "int default 0")
     @Enumerated(EnumType.ORDINAL)
     private MandateDependType dependType;
 
-    @Column(name = "depend_con_type")
+    @Column(name = "depend_con_type", columnDefinition = "int default 0")
     @Enumerated(EnumType.ORDINAL)
     private MandateDependConType dependConType;
 

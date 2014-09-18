@@ -20,6 +20,7 @@ public class MandateFieldView implements Serializable{
     private String fieldDesc;
     private String page;
     private MandateFieldType mandateFieldType;
+    private boolean checkFieldDetail;
     private String minValue;
     private String maxValue;
     private String matchedValue;
@@ -91,6 +92,14 @@ public class MandateFieldView implements Serializable{
 
     public void setMandateFieldType(MandateFieldType mandateFieldType) {
         this.mandateFieldType = mandateFieldType;
+    }
+
+    public boolean isCheckFieldDetail() {
+        return checkFieldDetail;
+    }
+
+    public void setCheckFieldDetail(boolean checkFieldDetail) {
+        this.checkFieldDetail = checkFieldDetail;
     }
 
     public String getMinValue() {

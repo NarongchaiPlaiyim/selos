@@ -1,9 +1,14 @@
 package com.clevel.selos.controller.admin;
 
+import com.clevel.selos.businesscontrol.ActionValidationControl;
 import com.clevel.selos.businesscontrol.master.MandateFieldControl;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependType;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.view.ActionValidationResult;
+import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.model.view.master.MandateFieldClassView;
 import com.clevel.selos.model.view.master.MandateFieldConditionDetailView;
 import com.clevel.selos.model.view.master.MandateFieldConditionView;
@@ -49,8 +54,18 @@ public class MandateField implements Serializable {
 
     private boolean preRenderCheck = false;
     private String message = "";
+    private String messageHeader;
+    private List<MandateFieldMessageView> mandateFieldMessageViewList;
+    private long workCaseId;
+
     private List<MandateFieldClassView> mandateFieldClassViewList;
     private MandateFieldClassView selectedMandateClassView;
+
+    @Inject
+    private CustomerDAO customerDAO;
+
+    @Inject
+    private ActionValidationControl actionValidationControl;
 
     @Inject
     public MandateField(){}
@@ -143,5 +158,47 @@ public class MandateField implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+
+    //For Testing Mandate Doc//
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public List<MandateFieldMessageView> getMandateFieldMessageViewList() {
+        return mandateFieldMessageViewList;
+    }
+
+    public void setMandateFieldMessageViewList(List<MandateFieldMessageView> mandateFieldMessageViewList) {
+        this.mandateFieldMessageViewList = mandateFieldMessageViewList;
+    }
+
+    public long getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public void onTestMandateField(){
+        log.info("-- onTestMandateField: {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findCustomerByWorkCaseId(workCaseId);
+
+        actionValidationControl.loadActionValidation(2001, 1009);
+        actionValidationControl.validate(customerList, Customer.class);
+        ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
+        messageHeader = actionValidationResult.getActionResult().name();
+        message = actionValidationResult.getActionResult().toString();
+        mandateFieldMessageViewList = actionValidationResult.getMandateFieldMessageViewList();
+        log.info("validation message: {}", actionValidationResult.getMandateFieldMessageViewList());
+        RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
+        log.info("-- end Test MandateField");
     }
 }

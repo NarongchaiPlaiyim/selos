@@ -37,6 +37,19 @@
                             <div id="content_form">
                                 <!-- start content -->
                                 <table class="content_table_form">
+                                    <tr style="vertical-align: middle">
+                                        <td colspan="100%">
+                                                <p:inputText id="workcase_id" value="#{mandateFieldSum.workCaseId}"></p:inputText>
+                                                <p:spacer width="5" height="5"/>
+                                                <p:commandButton id="testBtn" value="Test"
+                                                                     styleClass="medium"
+                                                                     onclick="PF('blockUI').show()"
+                                                                     oncomplete="blockUI.hide()"
+                                                                     actionListener="#{mandateFieldSum.onTestMandateField}"
+                                                                     update=":frmMain:msgBoxMandateMessagePanel"/>
+
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td colspan="100%">
                                             <p:dataTable id='className_tbl' value="#{mandateFieldSum.mandateFieldClassViewList}" var="mandateClassView" rowIndexVar="rowIndex">
@@ -57,16 +70,19 @@
                                                       headerText="#{msg.get('app.mandateField.class.pageName')}">
                                                 #{mandateClassView.pageName}
                                             </p:column>
-                                            <p:column styleClass="center" style="width:60px;">
+                                            <p:column styleClass="center" style="width:50px;">
                                                 <p:commandButton title="#{msg.get('app.mandate.button.config.field')}"
                                                                  icon="ui-icon-wrench"
                                                                  action="#{mandateFieldSum.onLinkEditMandateFieldDetail()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{mandateClassView}"
                                                                                  target="#{mandateFieldSum.selectedMandateClassView}"/>
                                                 </p:commandButton>
+                                            </p:column>
+                                            <p:column styleClass="center" style="width:50px;">
                                                 <p:commandButton title="#{msg.get('app.mandate.button.config.condition')}"
                                                                  icon="ui-icon-link"
-                                                                 action="#{mandateFieldSum.onLinkUpdateMandateFieldCondition()}" onclick="blockUI.show()">
+                                                                 action="#{mandateFieldSum.onLinkUpdateMandateFieldCondition()}" onclick="blockUI.show()"
+                                                                 rendered="#{mandateClassView.id gt 0}">
                                                     <f:setPropertyActionListener value="#{mandateClassView}"
                                                                                  target="#{mandateFieldSum.selectedMandateClassView}"/>
                                                 </p:commandButton>
@@ -92,6 +108,12 @@
                     <!-- Start Footer -->
                     <ui:include src="include/footer_admin.xhtml" />
                     <!-- End Footer -->
+                    <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
+                        <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="mandateFieldDialog" resizable="false"
+                                  header="#{mandateFieldSum.messageHeader}" closable="false" modal="true">
+                            <ui:include src="/admin/dialog/testMandateFieldDialog.xhtml"/>
+                        </p:dialog>
+                    </p:panel>
                 </div>
             </h:form>
         </p:panel>

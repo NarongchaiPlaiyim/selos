@@ -1,12 +1,15 @@
 package com.clevel.selos.businesscontrol.master;
 
 
+import com.clevel.selos.businesscontrol.ActionValidationControl;
 import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.transform.ActionTransform;
@@ -18,7 +21,6 @@ import javax.ejb.Stateless;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.*;
 
 @Stateless
@@ -240,13 +242,13 @@ public class MandateFieldControl extends BusinessControl {
                     }
                 }
 
-                if(condition.getDependConType().equals(MandateDependConType.INTERNAL)){
+                if(MandateDependConType.INTERNAL.equals(condition.getDependConType())){
                     for(MandateFieldConditionView view : mandateFieldConditionViewList){
                         if(condition.getDependCondition() == view.getId()) {
                             _toDepend = view;
                         }
                     }
-                } else if(condition.getDependConType().equals(MandateDependConType.EXTERNAL)){
+                } else if(MandateDependConType.EXTERNAL.equals(condition.getDependConType())){
                     MandateFieldCondition _tmpCondition = mandateFieldConditionDAO.findById(condition.getDependCondition());
                     _toDepend = mandateFieldTransform.transformToView(_tmpCondition);
                 }

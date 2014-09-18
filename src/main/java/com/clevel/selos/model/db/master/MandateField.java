@@ -36,6 +36,9 @@ public class MandateField implements Serializable{
     @Column(name = "page_name", length = 100)
     private String page;
 
+    @Column(name = "check_field_detail", columnDefinition = "int default 0")
+    private boolean checkFieldDetail;
+
     @Column(name = "min_value", length = 100)
     private String minValue;
 
@@ -94,6 +97,14 @@ public class MandateField implements Serializable{
 
     public void setPage(String page) {
         this.page = page;
+    }
+
+    public boolean isCheckFieldDetail() {
+        return checkFieldDetail;
+    }
+
+    public void setCheckFieldDetail(boolean checkFieldDetail) {
+        this.checkFieldDetail = checkFieldDetail;
     }
 
     public String getMinValue() {

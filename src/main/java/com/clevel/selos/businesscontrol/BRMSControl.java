@@ -434,7 +434,7 @@ public class BRMSControl extends BusinessControl {
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
 
-        actionValidationControl.validate(customerInfoList, Customer.class);
+        actionValidationControl.validate(customerList, Customer.class);
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(basicInfo, BasicInfo.class);

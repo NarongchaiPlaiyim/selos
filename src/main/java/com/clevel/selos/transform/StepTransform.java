@@ -91,7 +91,7 @@ public class StepTransform extends Transform {
         for(Step step : stepList){
             SelectItem selectItem = new SelectItem();
             selectItem.setValue(step.getId());
-            selectItem.setLabel(step.getName());
+            selectItem.setLabel(step.getId() + "-" + step.getName());
             selectItem.setDescription(step.getDescription());
             selectItemList.add(selectItem);
         }
