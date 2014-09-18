@@ -1454,6 +1454,12 @@ public class CustomerInfoIndividual implements Serializable {
                             }
                         }
 
+                        if(Util.isTrue(customerInfoView.getMaritalStatus().getSpouseFlag())){
+                            maritalStatusFlag = true;
+                        } else {
+                            maritalStatusFlag = false;
+                        }
+
                         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
