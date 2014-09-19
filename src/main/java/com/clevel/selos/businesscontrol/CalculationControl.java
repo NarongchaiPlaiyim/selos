@@ -490,7 +490,6 @@ public class CalculationControl extends BusinessControl{
         BigDecimal onePointTwoFive = BigDecimal.valueOf(1.25);
         BigDecimal onePointFive = BigDecimal.valueOf(1.50);
         BigDecimal thirtyFive = BigDecimal.valueOf(35);
-        BigDecimal fifty = BigDecimal.valueOf(50);
         BigDecimal oneHundred = BigDecimal.valueOf(100);
         BigDecimal two = BigDecimal.valueOf(2);
 
