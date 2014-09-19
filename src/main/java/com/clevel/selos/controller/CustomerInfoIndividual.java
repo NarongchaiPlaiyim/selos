@@ -1,20 +1,23 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.master.*;
-import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
-import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.District;
+import com.clevel.selos.model.db.master.Reference;
+import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.master.*;
+import com.clevel.selos.model.view.master.DistrictView;
+import com.clevel.selos.model.view.master.MaritalStatusView;
+import com.clevel.selos.model.view.master.ProvinceView;
+import com.clevel.selos.model.view.master.ReferenceView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -57,7 +60,7 @@ public class CustomerInfoIndividual implements Serializable {
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private DocumentTypeControl documentTypeControl;
     @Inject
@@ -1876,7 +1879,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         try{
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
-            exSummaryControl.calForCustomerInfo(workCaseId);
+            calculationControl.calForCustomerInfo(workCaseId);
             isFromSummaryParam = true;
             onAddNewIndividual();
             onEditIndividual();

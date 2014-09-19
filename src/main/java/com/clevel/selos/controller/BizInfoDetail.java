@@ -1,6 +1,9 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.*;
+import com.clevel.selos.businesscontrol.BizInfoDetailControl;
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.CalculationControl;
+import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
@@ -108,11 +111,9 @@ public class BizInfoDetail extends BaseController {
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    private ProposeLineControl proposeLineControl;
-    @Inject
     private DBRControl dbrControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
 
     public BizInfoDetail(){
 
@@ -687,7 +688,7 @@ public class BizInfoDetail extends BaseController {
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
                 bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId, stepId);
                 dbrControl.updateValueOfDBR(workCaseId);
-                exSummaryControl.calForBizInfoSummary(workCaseId);
+                calculationControl.calForBizInfoSummary(workCaseId);
                 messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
                 message = msg.get("app.bizInfoDetail.message.body.save.success");
 
@@ -698,7 +699,7 @@ public class BizInfoDetail extends BaseController {
                 session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
 
                 log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}", session.getAttribute("bizInfoDetailViewId"));
-                proposeLineControl.calWC(workCaseId);
+                calculationControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }

@@ -3,7 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
@@ -101,7 +101,7 @@ public class BizInfoSummary extends BaseController {
     @Inject
     BankStatementSummaryDAO bankStmtSummaryDAO;
     @Inject
-    ExSummaryControl exSummaryControl;
+    CalculationControl calculationControl;
 
     @Inject
     private Util util;
@@ -397,7 +397,7 @@ public class BizInfoSummary extends BaseController {
             log.info("onSaveBizInfoSummary begin");
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
-            exSummaryControl.calForBizInfoSummary(workCaseId);
+            calculationControl.calForBizInfoSummary(workCaseId);
                 log.info("after redirect method");
                 log.info("not have to redirect ");
                 onCreation();

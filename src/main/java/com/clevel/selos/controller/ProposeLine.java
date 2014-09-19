@@ -64,7 +64,7 @@ public class ProposeLine extends BaseController {
     @Inject
     private DisbursementTypeControl disbursementTypeControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
@@ -811,8 +811,8 @@ public class ProposeLine extends BaseController {
     public void onSaveProposeLine() {
         try {
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
-            proposeLineControl.calWC(workCaseId);
-            exSummaryControl.calForCreditFacility(workCaseId);
+            calculationControl.calWC(workCaseId);
+            calculationControl.calForProposeLine(workCaseId);
             fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P);
 
             onCreation();
