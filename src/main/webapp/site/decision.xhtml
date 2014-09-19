@@ -2643,7 +2643,7 @@
                                                              update=":collateralDlgForm"
                                                              process="@form"
                                                              oncomplete="proposeCollateralDlg.show();"
-                                                             disabled="#{decision.isDisabled('editApproveCollateralButton') or approveCollView.appraisalRequest != 0}">
+                                                             disabled="#{decision.isDisabled('editApproveCollateralButton')}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                                 <f:setPropertyActionListener value="#{collIndex.index}" target="#{decision.rowIndex}"/>
                                                 <p:resetInput target=":collateralDlgForm"/>
@@ -2653,7 +2653,7 @@
                                                              value="#{msg.get('app.button.delete')}"
                                                              process="@form" styleClass="small"
                                                              oncomplete="confirmDeleteAppProCollateralDlg.show()"
-                                                             disabled="#{decision.isDisabled('removeApproveCollateralButton') or approveCollView.appraisalRequest != 0}">
+                                                             disabled="#{decision.isDisabled('removeApproveCollateralButton')}">
                                                 <f:setPropertyActionListener value="#{approveCollView}" target="#{decision.approveCollateralInfoView}"/>
                                             </p:commandButton>
                                         </td>
