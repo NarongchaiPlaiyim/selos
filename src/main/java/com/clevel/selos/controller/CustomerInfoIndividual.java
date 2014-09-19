@@ -431,7 +431,6 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.getCurrentAddress().getCountry().setId(211);
         customerInfoView.getRegisterAddress().getCountry().setId(211);
         customerInfoView.getWorkAddress().getCountry().setId(211);
-        customerInfoView.getSourceIncome().setId(211);
 
         customerInfoView.getSpouse().getNationality().setId(1);
         customerInfoView.getSpouse().getCitizenCountry().setId(211);
@@ -1389,14 +1388,6 @@ public class CustomerInfoIndividual implements Serializable {
         int searchBy = customerInfoView.getSearchBy();
         String searchId = customerInfoView.getSearchId();
 
-        int searchBySpouse = 0;
-        String searchIdSpouse = "";
-
-        if(customerInfoView.getSpouse() != null && customerInfoView.getId() != 0){
-            searchBySpouse = customerInfoView.getSpouse().getSearchBy();
-            searchIdSpouse = customerInfoView.getSpouse().getSearchId();
-        }
-
         if(customerInfoView.getSearchFromRM() == 1) { // for main customer
             CustomerInfoResultView customerInfoResultView;
             try{
@@ -1462,6 +1453,19 @@ public class CustomerInfoIndividual implements Serializable {
                                     log.debug("refreshInterfaceInfo ::: customer found : {}", cusSpouseResultView.getCustomerInfoView());
                                     customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
                                     customerInfoView.getSpouse().setId(cusSpoId);
+
+                                    customerInfoView.getSpouse().setSearchBy(1);
+                                    customerInfoView.getSpouse().setSearchFromRM(1);
+                                    customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+                                    customerInfoView.getSpouse().getDocumentType().setId(1);
+                                    customerInfoView.getSpouse().setCollateralOwner(1);
+
+                                    maritalStatusFlag = true;
+                                    enableAllFieldCusSpouse = true;
+                                    isEditFormSpouse = true;
+                                    enableSpouseDocumentType = false;
+                                    enableSpouseCitizenId = false;
+
                                     Relation relationSpouse = new Relation();
                                     relationSpouse.setId(relSpoId);
                                     customerInfoView.getSpouse().setRelation(relationSpouse);
@@ -1509,14 +1513,13 @@ public class CustomerInfoIndividual implements Serializable {
                                     }
                                 }
                             }
-                            customerInfoView.getSpouse().setSearchFromRM(1);
-                            customerInfoView.getSpouse().setSearchBy(searchBySpouse);
-                            customerInfoView.getSpouse().setSearchId(searchIdSpouse);
                             onChangeDOBSpouse();
                             onChangeProvinceEditForm4();
                             onChangeDistrictEditForm4();
                             onChangeProvinceEditForm5();
                             onChangeDistrictEditForm5();
+                            onChangeProvinceEditForm6();
+                            onChangeDistrictEditForm6();
                         }
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
@@ -1583,21 +1586,22 @@ public class CustomerInfoIndividual implements Serializable {
                     message = cusSpouseResultView.getReason();
                     severity = "info";
                 }
+                customerInfoView.getSpouse().setSearchBy(1);
                 customerInfoView.getSpouse().setSearchFromRM(1);
-                customerInfoView.getSpouse().setSearchBy(searchBySpouse);
-                customerInfoView.getSpouse().setSearchId(searchIdSpouse);
+                customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                 onChangeDOBSpouse();
                 onChangeProvinceEditForm4();
                 onChangeProvinceEditForm5();
+                onChangeProvinceEditForm6();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
+                customerInfoView.getSpouse().setSearchBy(1);
                 customerInfoView.getSpouse().setSearchFromRM(1);
-                customerInfoView.getSpouse().setSearchBy(searchBySpouse);
-                customerInfoView.getSpouse().setSearchId(searchIdSpouse);
+                customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {

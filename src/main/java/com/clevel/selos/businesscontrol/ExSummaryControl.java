@@ -640,6 +640,21 @@ public class ExSummaryControl extends BusinessControl {
         calGroupSaleBorrowerCharacteristic(workCaseId);
     }
 
+    public void calForBasicInfo(long workCaseId) {
+        calIncomeBorrowerCharacteristic(workCaseId);
+        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+        calGroupSaleBorrowerCharacteristic(workCaseId);
+    }
+
+    public void calForTCG(long workCaseId) {
+        calIncomeBorrowerCharacteristic(workCaseId);
+    }
+
+    public void calForWC(long workCaseId) {
+        calIncomeBorrowerCharacteristic(workCaseId);
+        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+    }
+
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ---------------------------------------------------          Calculation Function          ---------------------------------------------------- //
@@ -723,39 +738,41 @@ public class ExSummaryControl extends BusinessControl {
 //    Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
     public void calRecommendedWCNeedBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose , Pls Call me !!
         log.debug("calRecommendedWCNeedBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
         BigDecimal recommendedWCNeed = BigDecimal.ZERO;
-        BigDecimal value1 = BigDecimal.ZERO;
-        BigDecimal value2 = BigDecimal.ZERO;
-        BigDecimal value3 = BigDecimal.ZERO;
-        BigDecimal value6 = BigDecimal.ZERO;
-        if(newCreditFacility != null && newCreditFacility.getId() != 0){
-            if(newCreditFacility.getCase1WCLimit() != null){
-                value1 = newCreditFacility.getCase1WCLimit();
-            }
-            if(newCreditFacility.getCase2WCLimit() != null){
-                value2 = newCreditFacility.getCase2WCLimit();
-            }
-            if(newCreditFacility.getCase3WCLimit() != null){
-                value3 = newCreditFacility.getCase3WCLimit();
-            }
-            value6 = Util.subtract(newCreditFacility.getWcNeed(), newCreditFacility.getTotalWCTmb());
-        }
 
-        if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null && newCreditFacility.getId() != 0){
-            if(basicInfo.getRefinanceIN() == RadioValue.YES.value()){
-                if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
-                    recommendedWCNeed = getMinBigDecimal(value2,value3);
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
+            BigDecimal value1 = BigDecimal.ZERO;
+            BigDecimal value2 = BigDecimal.ZERO;
+            BigDecimal value3 = BigDecimal.ZERO;
+
+            if(!Util.isNull(proposeLine.getCase1WCLimit())){
+                value1 = proposeLine.getCase1WCLimit();
+            }
+            if(!Util.isNull(proposeLine.getCase2WCLimit())){
+                value2 = proposeLine.getCase2WCLimit();
+            }
+            if(!Util.isNull(proposeLine.getCase3WCLimit())){
+                value3 = proposeLine.getCase3WCLimit();
+            }
+
+            BigDecimal value6 = Util.subtract(proposeLine.getWcNeed(), proposeLine.getTotalWCTmb());
+
+            if(!Util.isNull(basicInfo) && !Util.isZero(basicInfo.getId())) {
+                if(basicInfo.getRefinanceIN() == RadioValue.YES.value()){
+                    if(proposeLine.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
+                        recommendedWCNeed = getMinBigDecimal(value2,value3);
+                    } else {
+                        recommendedWCNeed = getMinBigDecimal(value1,value3);
+                    }
                 } else {
-                    recommendedWCNeed = getMinBigDecimal(value1,value3);
-                }
-            } else {
-                if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
-                    recommendedWCNeed = getMinBigDecimal(value2,value3,value6);
-                } else {
-                    recommendedWCNeed = getMinBigDecimal(value1,value3,value6);
+                    if(proposeLine.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
+                        recommendedWCNeed = getMinBigDecimal(value2,value3,value6);
+                    } else {
+                        recommendedWCNeed = getMinBigDecimal(value1,value3,value6);
+                    }
                 }
             }
         }
@@ -777,8 +794,6 @@ public class ExSummaryControl extends BusinessControl {
 //    Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
     public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
         log.debug("calActualWCBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-//        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-//        BigDecimal actualWC = newCreditFacility.getTotalApproveCredit();
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
         BigDecimal actualWC = null;
         if (decision != null) {
@@ -826,7 +841,6 @@ public class ExSummaryControl extends BusinessControl {
             }
 
             exSummaryDAO.persist(exSummary);
-
         }
     }
 
@@ -838,7 +852,6 @@ public class ExSummaryControl extends BusinessControl {
 //    - ใช้ Grand Total Income Gross จากหน้า Bank Statement คูณด้วย 12 แล้ว บวกกับ รายได้ตามงบการเงิน จากหน้า Customer ( Juristic ) ที่ Relation = Guarantor , Related ที่มี Flag Group Sale ใน Reference เป็น Y บวกกับ Approx. Income จาก Customer ( Individual ) ที่ Relation = Guarantor , Related ที่มี Flag Group Sale ใน Reference เป็น Y
     public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
         log.debug("calGroupSaleBorrowerCharacteristic :: workCaseId : {}",workCaseId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
         User user = getCurrentUser();
@@ -851,6 +864,8 @@ public class ExSummaryControl extends BusinessControl {
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
             exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
             exSummary.setWorkCase(workCase);
         }
 
@@ -954,7 +969,6 @@ public class ExSummaryControl extends BusinessControl {
         int month = 0;
         if(yearInBiz != null){
             year = DateTimeUtil.calYearMonth(yearInBiz);
-            //todo:yearInBizMonth To send to BRMS
             month = DateTimeUtil.calMonth(yearInBiz);
         }
 

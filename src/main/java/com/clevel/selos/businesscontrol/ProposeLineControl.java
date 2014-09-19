@@ -149,6 +149,8 @@ public class ProposeLineControl extends BusinessControl {
     private CreditFacExistingControl creditFacExistingControl;
     @Inject
     private BaseRateControl baseRateControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     @Inject
     private COMSInterface comsInterface;
@@ -1971,6 +1973,9 @@ public class ProposeLineControl extends BusinessControl {
         proposeLine.setCase3WC50CoreWC(case3Wc50CoreWc);
         proposeLine.setCase3WCDebitCoreWC(case3WcDebitCoreWc);
         proposeLineDAO.persist(proposeLine);
+
+        //Update for cal new WC to cal another method
+        exSummaryControl.calForWC(workCaseId);
     }
 
     public List<CustomerInfoView> getGuarantorByWorkCaseId(long workCaseId) {
