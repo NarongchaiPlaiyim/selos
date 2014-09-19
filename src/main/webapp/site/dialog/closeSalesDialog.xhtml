@@ -58,10 +58,10 @@
             </td>
         </tr>
     </table>
+    <p:blockUI widgetVar="blockCloseSalesDlgPanel" block="closeSalesDlgPanel"
+               trigger=":frmMain:dlgCloseSalesBtn">
+        <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
-<p:blockUI widgetVar="blockCloseSalesDlgPanel" block="closeSalesDlgPanel"
-           trigger=":frmMain:dlgCloseSalesBtn">
-    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 </ui:composition>

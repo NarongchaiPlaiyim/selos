@@ -2294,16 +2294,23 @@ public class PrescreenMaker extends BaseController {
             log.debug("previousStatusFlag : {}", previousStatusFlag);
 
             if (maritalStatusFlag == false && previousStatusFlag == true) {
-                Cloner cloner = new Cloner();
-                messageHeader = "Information.";
-                message = "Can not change marriage status to single or remove borrower at this step.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
+                if(borrowerInfo.getNcbFlag() == 2 && ( borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getNcbFlag() == 2)) {
+                    Cloner cloner = new Cloner();
+                    messageHeader = "Information.";
+                    message = "Can not change marriage status to single or remove borrower at this step.";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
+                }else{
+                    borrowerInfo.setMaritalStatus(maritalStatus);
+                    borrowerInfo.setSpouse(new CustomerInfoView());
+                }
             } else {
                 borrowerInfo.setMaritalStatus(maritalStatus);
+                borrowerInfo.setSpouse(new CustomerInfoView());
             }
         }else{
             borrowerInfo.setMaritalStatus(maritalStatus);
+            borrowerInfo.setSpouse(new CustomerInfoView());
         }
     }
 

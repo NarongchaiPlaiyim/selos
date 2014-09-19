@@ -95,8 +95,6 @@ public class BasicInfo extends BaseController {
     private BorrowingTypeControl borrowingTypeControl;
     @Inject
     private CustomerInfoControl customerInfoControl;
-    @Inject
-    private ExSummaryControl exSummaryControl;
 
     //*** Drop down List ***//
     private List<SelectItem> productGroupList;
