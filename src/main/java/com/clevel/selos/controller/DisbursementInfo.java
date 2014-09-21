@@ -656,6 +656,7 @@ public class DisbursementInfo implements Serializable {
 		disbursementControl
 				.deleteDisbursementDetail(disbursementMcDeleteList, disbursementDepositDeleteList, disbursementBahtnetDeleteList);
 		onCreate();
+		RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 	}
 
 	public int getSelectRowNumber() {
