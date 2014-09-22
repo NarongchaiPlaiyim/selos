@@ -760,6 +760,10 @@ public class CustomerInfoControl extends BusinessControl {
             List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findByCustomerId(customerId);
             List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList = proposeCollateralSubOwnerDAO.findByCustomerId(customerId);
             List<ExistingGuarantorDetail> existingGuarantorDetails = existingGuarantorDetailDAO.findByCustomerId(customerId);
+            log.debug("#### openAccountNameList size :: {}", openAccountNameList != null ? openAccountNameList.size() : "nul");
+            log.debug("#### proposeGuarantorInfoList size :: {}", proposeGuarantorInfoList != null ? proposeGuarantorInfoList.size() : "nul");
+            log.debug("#### proposeCollateralSubOwnerList size :: {}", proposeCollateralSubOwnerList != null ? proposeCollateralSubOwnerList.size() : "nul");
+            log.debug("#### existingGuarantorDetails size :: {}", existingGuarantorDetails != null ? existingGuarantorDetails.size() : "nul");
             if(openAccountNameList != null && openAccountNameList.size() > 0){
                 isExist = true;
                 return isExist;
