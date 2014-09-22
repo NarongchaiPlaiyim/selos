@@ -272,10 +272,32 @@ public class NCBBizTransform extends BusinessTransform {
                                             if (!Util.isEmpty(subjectAccountModel.getCreditlimit())) {
                                                 ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit()));
                                             }
+
                                             //set outstanding amount
-                                            if (!Util.isEmpty(subjectAccountModel.getAmountowed())) {
-                                                ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed()));
+                                            BigDecimal outstatndingAvg = BigDecimal.ZERO;
+                                            BigDecimal outStandingCredit = BigDecimal.ZERO;
+                                            int outStandingCreditMonth = 0;
+                                            if (!Util.isEmpty(subjectAccountModel.getAccounttype())
+                                                    && (subjectAccountModel.getAccounttype().equals("05") || subjectAccountModel.getAccounttype().equals("22"))) {
+                                                List<HistoryModel> historyModels = subjectAccountModel.getHistory();
+                                                for(HistoryModel historyModel : historyModels){
+                                                    if (isInMonthPeriodYYYYMMDD(historyModel.getAsofdate(), lastAsOfDate, SIX_MONTH)) {
+                                                        BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
+                                                        outStandingCredit = outStandingCredit.add(outstanding);
+                                                        outStandingCreditMonth = outStandingCreditMonth+1;
+                                                    }
+                                                }
+                                                if(outStandingCreditMonth>0){
+                                                    BigDecimal divider = new BigDecimal(outStandingCreditMonth);
+                                                    outstatndingAvg = outStandingCredit.divide(divider,2,BigDecimal.ROUND_HALF_UP);
+                                                }
+                                                ncbDetailView.setOutstanding(outstatndingAvg);
+                                            } else {
+                                                if (!Util.isEmpty(subjectAccountModel.getAmountowed())) {
+                                                    ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed()));
+                                                }
                                             }
+
                                             //set installment
                                             if (!Util.isEmpty(subjectAccountModel.getInstallmentamount())) {
                                                 BigDecimal installment = BigDecimal.ZERO;
