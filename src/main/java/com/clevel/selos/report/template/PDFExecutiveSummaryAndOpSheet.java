@@ -99,10 +99,18 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         exSummaryView = new ExSummaryView();
         if(workCaseId != 0){
-            exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-            decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
-            exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId, statusId);
-            bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            if (!Util.isNull(exSummaryDAO.findByWorkCaseId(workCaseId))){
+                exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+            }
+            if (!Util.isNull(decisionControl.findDecisionViewByWorkCaseId(workCaseId))){
+                decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
+            }
+            if (!Util.isNull(exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId, statusId))){
+                exSummaryView  = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId, statusId);
+            }
+            if (Util.isNull(bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId))){
+                bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            }
             log.debug("exSummary: {},exSummaryView: {}, decision: {},bizInfoSummaryView: {}",exSummary,exSummaryView,decisionView,bizInfoSummaryView);
         }else{
             log.debug("workCaseId is Null. {}", workCaseId);
@@ -112,10 +120,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<BorrowerExsumReport> fillBorrowerRelatedProfile(){
         List<BorrowerExsumReport> reports = new ArrayList<BorrowerExsumReport>();
         List<CustomerInfoView> customerInfoViewList = exSummaryView.getBorrowerListView();
+        log.debug("customerInfoViewList.size() {}",customerInfoViewList.size());
 
         int count = 1 ;
-        if(!Util.isNull(customerInfoViewList)){
-            for (CustomerInfoView view:customerInfoViewList){
+        if(Util.isSafetyList(customerInfoViewList)){
+            for (CustomerInfoView view : customerInfoViewList){
                 BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
                 borrowerExsumReport.setNo(count++);
                 borrowerExsumReport.setTitleTh(!Util.isNull(view.getTitleTh()) ? Util.checkNullString(view.getTitleTh().getTitleTh()) : SPACE);
@@ -135,7 +144,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 borrowerExsumReport.setJurLv(Util.checkNullString(view.getJurLv()));
                 borrowerExsumReport.setPercentShare(Util.convertNullToZERO(view.getPercentShare()));
                 borrowerExsumReport.setAge(view.getAge());
-                borrowerExsumReport.setKycLevel(view.getKycLevel().getKycLevel());
+                if (!Util.isNull(view.getKycLevel())){
+                    borrowerExsumReport.setKycLevel(view.getKycLevel().getKycLevel());
+                } else {
+                    borrowerExsumReport.setKycLevel(0);
+                }
 
                 if(view.getWorthiness() == 3){
                     borrowerExsumReport.setWorthiness("Pass");
@@ -148,22 +161,23 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 }
 
                 List<CustomerCSIView> customerCSIList = view.getCustomerCSIList();
+                log.debug("customerCSIList.size() {}",customerCSIList.size());
 
-                if (Util.safetyList(customerCSIList).size() > 0){
-                    for(CustomerCSIView csiView:customerCSIList){
+                if (Util.isSafetyList(customerCSIList)){
+                    for(CustomerCSIView csiView : customerCSIList){
                         borrowerExsumReport.setCustomerCSIList(!Util.isNull(csiView.getWarningCode()) ?
                                 Util.checkNullString(csiView.getWarningCode().getCode()) : SPACE);
                     }
                 } else {
                     borrowerExsumReport.setCustomerCSIList("-");
-                    log.debug("customerCSIList is Null. {}",customerCSIList);
                 }
+                log.debug("customerCSIList is Null. {}",customerCSIList.size());
                 reports.add(borrowerExsumReport);
             }
         } else {
             BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
             reports.add(borrowerExsumReport);
-            log.debug("customerInfoViewList in Method fillBorrowerRelatedProfile is Null. {}",customerInfoViewList);
+            log.debug("customerInfoViewList in Method fillBorrowerRelatedProfile is Null. {}",customerInfoViewList.size());
         }
 
         return reports;
@@ -178,8 +192,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         if (!Util.isNull(creditFacilityViews)){
             log.info("creditFacilityViews: {}",creditFacilityViews);
             newCreditFacilityViewArrayList.add(creditFacilityViews);
+            log.debug("newCreditFacilityViewArrayList.size() {}",newCreditFacilityViewArrayList.size());
 
-            if (Util.safetyList(newCreditFacilityViewArrayList).size() > 0) {
+            if (Util.isSafetyList(newCreditFacilityViewArrayList)) {
                 for (ProposeLineView facilityView : newCreditFacilityViewArrayList){
                     TradeFinanceExsumReport tradeFinanceExsumReport = new TradeFinanceExsumReport();
                     tradeFinanceExsumReport.setContactName(Util.checkNullString(facilityView.getContactName()));
@@ -198,7 +213,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 log.debug("--newCreditFacilityViewArrayList. {}",newCreditFacilityViewArrayList.size());
             }
         } else {
-            log.debug("newCreditFacilityViewArrayList in Method fillTradeFinance is Null. {}",newCreditFacilityViewArrayList);
+            log.debug("newCreditFacilityViewArrayList in Method fillTradeFinance is Null. {}",newCreditFacilityViewArrayList.size());
         }
         return financeExsumReports;
     }
@@ -206,9 +221,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<NCBRecordExsumReport> fillNCBRecord(){
         List<NCBRecordExsumReport> recordExsumReports = new ArrayList<NCBRecordExsumReport>();
         List<NCBInfoView> ncbInfoViewList = exSummaryView.getNcbInfoListView();
+        log.debug("ncbInfoViewList.size() {}",ncbInfoViewList.size());
 
-        if (!Util.isNull(ncbInfoViewList)){
-            for (NCBInfoView ncbInfoView:ncbInfoViewList){
+        if (Util.isSafetyList(ncbInfoViewList)){
+            for (NCBInfoView ncbInfoView : ncbInfoViewList){
                 NCBRecordExsumReport ncbRecordExsumReport = new NCBRecordExsumReport();
                 ncbRecordExsumReport.setNcbCusName(Util.checkNullString(ncbInfoView.getNcbCusName()));
                 ncbRecordExsumReport.setCheckIn6Month(ncbInfoView.getCheckIn6Month());
@@ -216,7 +232,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 ncbRecordExsumReport.setHistoryPaymentType(Util.checkNullString(ncbInfoView.getHistoryPaymentType()));
                 ncbRecordExsumReport.setNplFlagText(Util.checkNullString(ncbInfoView.getNplFlagText()));
                 ncbRecordExsumReport.setTdrFlagText(Util.checkNullString(ncbInfoView.getTdrFlagText()));
-                ncbRecordExsumReport.setDescription(Util.checkNullString(ncbInfoView.getTdrCondition().getDescription()));
+                if (!Util.isNull(ncbInfoView.getTdrCondition())){
+                    ncbRecordExsumReport.setDescription(Util.checkNullString(ncbInfoView.getTdrCondition().getDescription()));
+                } else {
+                    ncbRecordExsumReport.setDescription(SPACE);
+                }
                 ncbRecordExsumReport.setPaymentClass(Util.checkNullString(ncbInfoView.getPaymentClass()));
 
                 recordExsumReports.add(ncbRecordExsumReport);
@@ -301,9 +321,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public AccountMovementExSumReport fillAccountMovement(){
         AccountMovementExSumReport movementExSumReport = new AccountMovementExSumReport();
         List<ExSumAccountMovementView> movementViewList = exSummaryView.getExSumAccMovementViewList();
+        log.debug("movementViewList.size() {}",movementViewList.size());
 
-        if(!Util.isNull(movementViewList)){
-            for (ExSumAccountMovementView movementView:movementViewList){
+        if(Util.isSafetyList(movementViewList)){
+            for (ExSumAccountMovementView movementView : movementViewList){
                 movementExSumReport.setOdLimit(Util.convertNullToZERO(movementView.getOdLimit()));
                 movementExSumReport.setUtilization(Util.convertNullToZERO(movementView.getUtilization()));
                 movementExSumReport.setSwing(Util.convertNullToZERO(movementView.getSwing()));
@@ -359,18 +380,21 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<DecisionExSumReport> fillDecision(){
         List<DecisionExSumReport> exSumReportList = new ArrayList<DecisionExSumReport>();
         List<ExSumDecisionView> exSumDecisionView = exSummaryView.getExSumDecisionListView();
+        log.debug("exSumDecisionView.size() {}",exSumDecisionView.size());
         int id = 1;
-        if(!Util.isNull(exSumDecisionView)){
+        if(Util.isSafetyList(exSumDecisionView)){
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
                 decisionExSumReport.setId(id++);
 
-                if (decisionView.getFlag().code() == "Y"){
-                    decisionExSumReport.setFlag("YELLOW");
-                } else  if (decisionView.getFlag().code() == "R"){
-                    decisionExSumReport.setFlag("RED");
-                } else {
-                    decisionExSumReport.setFlag("GREEN");
+                if (!Util.isNull(decisionView.getFlag())){
+                    if ("Y".equalsIgnoreCase(decisionView.getFlag().code())){
+                        decisionExSumReport.setFlag("YELLOW");
+                    } else  if ("R".equalsIgnoreCase(decisionView.getFlag().code())){
+                        decisionExSumReport.setFlag("RED");
+                    } else if ("G".equalsIgnoreCase(decisionView.getFlag().code())){
+                        decisionExSumReport.setFlag("GREEN");
+                    }
                 }
 
                 decisionExSumReport.setGroup(Util.checkNullString(decisionView.getGroup()));
@@ -410,6 +434,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public UWDecisionExSumReport fillUWDecision(){
         UWDecisionExSumReport uwDecisionExSumReport = new UWDecisionExSumReport();
         List<ExSumReasonView> exSumReasonViews = exSummaryView.getDeviateCode();
+        log.debug("exSumReasonViews.size() {}",exSumReasonViews.size());
 
         if (!Util.isNull(exSummaryView)){
             uwDecisionExSumReport.setUwCode("6500000000");
@@ -420,7 +445,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             log.debug("exSummaryView in Method fillUWDecision is Null. {}",exSummaryView);
         }
 
-        if(!Util.isNull(exSumReasonViews)){
+        if(Util.isSafetyList(exSumReasonViews)){
             for (ExSumReasonView sumReasonView : exSumReasonViews) {
                 uwDecisionExSumReport.setCode(Util.checkNullString(sumReasonView.getCode()));
                 uwDecisionExSumReport.setDescription(Util.checkNullString(sumReasonView.getDescription()));
@@ -461,23 +486,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
             log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
 
-            for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
-                switch (i){
-                    case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
-                        report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
-                        break;
-                    case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
-                        report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
-                        break;
-                    case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
-                        report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
-                        break;
-                    case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
-                        report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
-                        break;
-                    case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
-                        report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
-                        break;
+            if (Util.isSafetyList(appHeaderView.getBorrowerHeaderViewList())){
+                for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
+                    switch (i){
+                        case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                    }
                 }
             }
 
@@ -508,10 +535,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillCreditBorrower. {}");
         List<ExistingCreditDetailView> existingCreditDetailViews = decisionView.getExtBorrowerComCreditList();
         List<BorrowerCreditDecisionReport> borrowerCreditDecisionReportList = new ArrayList<BorrowerCreditDecisionReport>();
+        log.debug("existingCreditDetailViews.size() {}",existingCreditDetailViews.size());
 
         int count = 1;
-        if (Util.safetyList(existingCreditDetailViews).size() > 0){
-            log.debug("existingCreditDetailViews by fillCreditBorrower. {}",existingCreditDetailViews);
+        if (Util.isSafetyList(existingCreditDetailViews)){
             for (ExistingCreditDetailView detailView : existingCreditDetailViews){
                 BorrowerCreditDecisionReport decisionReport = new BorrowerCreditDecisionReport();
                 decisionReport.setCount(count++);
@@ -572,10 +599,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillCondition. {}");
         List<ConditionDecisionReport> conditionDecisionReportList = new ArrayList<ConditionDecisionReport>();
         List<ExistingConditionDetailView> existingConditionDetailViews = decisionView.getExtConditionComCreditList();
+        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
         int count =1;
 
-        if(Util.safetyList(existingConditionDetailViews).size() > 0){
-            log.debug("existingConditionDetailViews by fillCondition. {}",existingConditionDetailViews);
+        if(Util.isSafetyList(existingConditionDetailViews)){
             for (ExistingConditionDetailView view : existingConditionDetailViews){
                 ConditionDecisionReport conditionDecisionReport = new ConditionDecisionReport();
                 conditionDecisionReport.setCount(count++);
@@ -595,10 +622,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillBorrowerRetail. {}");
         List<BorrowerRetailDecisionReport> retailDecisionReportList = new ArrayList<BorrowerRetailDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerRetailCreditList();
+        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
-        if(Util.safetyList(existingConditionDetailViews).size() > 0){
-            log.debug("existingConditionDetailViews by fillBorrowerRetail. {}",existingConditionDetailViews);
+        if(Util.isSafetyList(existingConditionDetailViews)){
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 BorrowerRetailDecisionReport borrowerRetailDecisionReport = new BorrowerRetailDecisionReport();
                 borrowerRetailDecisionReport.setCount(count++);
@@ -638,7 +665,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 borrowerRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 borrowerRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
-                borrowerRetailDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+
+                if (Util.isSafetyList(detailView.getExistingCreditTierDetailViewList())){
+                    borrowerRetailDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                } else {
+                    borrowerRetailDecisionReport.setExistingCreditTierDetailViewList(new ArrayList<ExistingCreditTierDetailView>());
+                }
                 retailDecisionReportList.add(borrowerRetailDecisionReport);
             }
         } else {
@@ -654,10 +686,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillAppInRLOS. {}");
         List<BorrowerAppInRLOSDecisionReport> borrowerAppInRLOSDecisionReportList = new ArrayList<BorrowerAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerAppInRLOSList();
+        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
-        if(Util.safetyList(existingConditionDetailViews).size() > 0){
-            log.debug("existingConditionDetailViews by fillAppInRLOS. {}",existingConditionDetailViews);
+        if(Util.isSafetyList(existingConditionDetailViews)){
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 BorrowerAppInRLOSDecisionReport borrowerAppInRLOSDecisionReport = new BorrowerAppInRLOSDecisionReport();
                 borrowerAppInRLOSDecisionReport.setCount(count++);
@@ -711,10 +743,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<RelatedCommercialDecisionReport> fillRelatedCommercial(String pathsub){
         List<RelatedCommercialDecisionReport> relatedCommercialDecisionReportList = new ArrayList<RelatedCommercialDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedComCreditList();
+        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
-        if(Util.safetyList(existingConditionDetailViews).size() > 0){
-            log.debug("existingConditionDetailViews by fillRelatedCommercial. {}",existingConditionDetailViews);
+        if(Util.isSafetyList(existingConditionDetailViews)){
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
                 relatedCommercialDecisionReport.setCount(count++);
@@ -754,8 +786,16 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 relatedCommercialDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedCommercialDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedCommercialDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
-                relatedCommercialDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
-                relatedCommercialDecisionReport.setExistingSplitLineDetailViewList(Util.safetyList(detailView.getExistingSplitLineDetailViewList()));
+                if (Util.isSafetyList(detailView.getExistingCreditTierDetailViewList())){
+                    relatedCommercialDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                } else {
+                    relatedCommercialDecisionReport.setExistingCreditTierDetailViewList(new ArrayList<ExistingCreditTierDetailView>());
+                }
+                if (Util.isSafetyList(detailView.getExistingSplitLineDetailViewList())){
+                    relatedCommercialDecisionReport.setExistingSplitLineDetailViewList(Util.safetyList(detailView.getExistingSplitLineDetailViewList()));
+                } else {
+                    relatedCommercialDecisionReport.setExistingSplitLineDetailViewList(new ArrayList<ExistingSplitLineDetailView>());
+                }
                 relatedCommercialDecisionReportList.add(relatedCommercialDecisionReport);
             }
         } else {
@@ -771,10 +811,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<RelatedRetailDecisionReport> fillRelatedRetail(String pathsub){
         List<RelatedRetailDecisionReport> relatedRetailDecisionReportList = new ArrayList<RelatedRetailDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedRetailCreditList();
+        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
-        if(Util.safetyList(existingConditionDetailViews).size() > 0){
-            log.debug("existingConditionDetailViews by fillRelatedRetail. {}",existingConditionDetailViews);
+        if(Util.isSafetyList(existingConditionDetailViews)){
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
                 relatedRetailDecisionReport.setCount(count++);
@@ -815,7 +855,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 relatedRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
-                relatedRetailDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                if (Util.isSafetyList(detailView.getExistingCreditTierDetailViewList())){
+                    relatedRetailDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                } else {
+                    relatedRetailDecisionReport.setExistingCreditTierDetailViewList(new ArrayList<ExistingCreditTierDetailView>());
+                }
                 relatedRetailDecisionReportList.add(relatedRetailDecisionReport);
             }
         } else {
@@ -831,10 +875,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<RelatedAppInRLOSDecisionReport> fillRelatedAppInRLOS(String pathsub){
         List<RelatedAppInRLOSDecisionReport> relatedAppInRLOSDecisionReportArrayList = new ArrayList<RelatedAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedAppInRLOSList();
+        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
         if(Util.safetyList(existingConditionDetailViews).size() > 0){
-            log.debug("existingConditionDetailViews by fillRelatedAppInRLOS. {}",existingConditionDetailViews);
             for (ExistingCreditDetailView detailView : decisionView.getExtRelatedAppInRLOSList()){
                 RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
                 relatedAppInRLOSDecisionReport.setCount(count++);
@@ -865,7 +909,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 relatedAppInRLOSDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedAppInRLOSDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedAppInRLOSDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
-                relatedAppInRLOSDecisionReport.setExistingCreditTierDetailViewList(Util.safetyList(detailView.getExistingCreditTierDetailViewList()));
+                if (Util.isSafetyList(detailView.getExistingCreditTierDetailViewList())){
+                    relatedAppInRLOSDecisionReport.setExistingCreditTierDetailViewList(detailView.getExistingCreditTierDetailViewList());
+                } else {
+                    relatedAppInRLOSDecisionReport.setExistingCreditTierDetailViewList(new ArrayList<ExistingCreditTierDetailView>());
+                }
                 relatedAppInRLOSDecisionReportArrayList.add(relatedAppInRLOSDecisionReport);
             }
         } else {
@@ -878,17 +926,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         return relatedAppInRLOSDecisionReportArrayList;
     }
 
-//    public static void main(String[] args) {
-//        System.out.println(DateTimeUtil.convertToStringDDMMYYYY(DateTimeUtil.getCurrentDateTH(new Date())));
-//    }
-
     public List<ExistingCollateralBorrowerDecisionReport> fillExistingCollateralBorrower(String path) throws UnsupportedEncodingException {
         List<ExistingCollateralBorrowerDecisionReport> collateralBorrowerDecisionReportList = new ArrayList<ExistingCollateralBorrowerDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtBorrowerCollateralList();
+        log.debug("conditionDetailViews.size() {}",conditionDetailViews.size());
 
         int count = 1;
-        if (Util.safetyList(conditionDetailViews).size() > 0){
-            log.debug("conditionDetailViews by fillExistingCollateralBorrower. {}",conditionDetailViews);
+        if (Util.isSafetyList(conditionDetailViews)){
             for (ExistingCollateralDetailView detailView : conditionDetailViews){
                 ExistingCollateralBorrowerDecisionReport collateralBorrowerDecisionReport = new ExistingCollateralBorrowerDecisionReport();
                 collateralBorrowerDecisionReport.setCount(count++);
@@ -910,7 +954,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 collateralBorrowerDecisionReport.setCollateralType(collateralType.toString());
                 collateralBorrowerDecisionReport.setCusName(Util.checkNullString(detailView.getCusName()));
-                collateralBorrowerDecisionReport.setExistingCreditTypeDetailViews(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
+                if (Util.isSafetyList(detailView.getExistingCreditTypeDetailViewList())){
+                    collateralBorrowerDecisionReport.setExistingCreditTypeDetailViews(detailView.getExistingCreditTypeDetailViewList());
+                } else {
+                    collateralBorrowerDecisionReport.setExistingCreditTypeDetailViews(new ArrayList<ExistingCreditTypeDetailView>());
+                }
                 collateralBorrowerDecisionReport.setProductProgram(Util.checkNullString(detailView.getProductProgram()));
                 collateralBorrowerDecisionReport.setCreditFacility(Util.checkNullString(detailView.getCreditFacility()));
                 collateralBorrowerDecisionReport.setMortgageType(!Util.isNull(detailView.getMortgageType()) ?
@@ -932,10 +980,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ExistingCollateralRelatedDecisionReport> fillExistingCollateralRelated(String path){
         List<ExistingCollateralRelatedDecisionReport> collateralRelatedDecisionReportArrayList = new ArrayList<ExistingCollateralRelatedDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtRelatedCollateralList();
+        log.debug("conditionDetailViews.size() {}",conditionDetailViews.size());
 
         int count = 1;
-        if (Util.safetyList(conditionDetailViews).size() > 0){
-            log.debug("conditionDetailViews by fillExistingCollateralRelated. {}",conditionDetailViews);
+        if (Util.isSafetyList(conditionDetailViews)){
             for (ExistingCollateralDetailView detailView : conditionDetailViews){
                 ExistingCollateralRelatedDecisionReport collateralRelatedDecisionReport = new ExistingCollateralRelatedDecisionReport();
                 collateralRelatedDecisionReport.setCount(count++);
@@ -953,7 +1001,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 collateralRelatedDecisionReport.setCollateralType(collateralType.toString());
                 collateralRelatedDecisionReport.setCusName(Util.checkNullString(detailView.getCusName()));
-                collateralRelatedDecisionReport.setExistingCreditTypeDetailViews(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
+                if (Util.isSafetyList(detailView.getExistingCreditTypeDetailViewList())){
+                    collateralRelatedDecisionReport.setExistingCreditTypeDetailViews(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
+                } else {
+                    collateralRelatedDecisionReport.setExistingCreditTypeDetailViews(new ArrayList<ExistingCreditTypeDetailView>());
+                }
                 collateralRelatedDecisionReport.setProductProgram(Util.checkNullString(detailView.getProductProgram()));
                 collateralRelatedDecisionReport.setCreditFacility(Util.checkNullString(detailView.getCreditFacility()));
                 collateralRelatedDecisionReport.setMortgageType(!Util.isNull(detailView.getMortgageType()) ? (Util.checkNullString(detailView.getMortgageType().getMortgage())) : SPACE);
@@ -974,9 +1026,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(String pathsub){
         List<GuarantorBorrowerDecisionReport> guarantorBorrowerDecisionReportList = new ArrayList<GuarantorBorrowerDecisionReport>();
         List<ExistingGuarantorDetailView> extGuarantorList = decisionView.getExtGuarantorList();
+        log.debug("extGuarantorList.size() {}",extGuarantorList.size());
         int count = 1;
-        if (Util.safetyList(extGuarantorList).size() > 0){
-            log.debug("extGuarantorList by fillGuarantorBorrower. {}",extGuarantorList);
+        if (Util.isSafetyList(extGuarantorList)){
             for (ExistingGuarantorDetailView detailView : extGuarantorList){
                 GuarantorBorrowerDecisionReport guarantorBorrowerDecisionReport = new GuarantorBorrowerDecisionReport();
                 guarantorBorrowerDecisionReport.setCount(count++);
@@ -989,7 +1041,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         .append(SPACE).append(!Util.isNull(detailView.getGuarantorName()) ? detailView.getGuarantorName().getLastNameTh() : SPACE);
                 guarantorBorrowerDecisionReport.setGuarantorName(name.toString());
                 guarantorBorrowerDecisionReport.setTcgLgNo(Util.checkNullString(detailView.getTcgLgNo()));
-                guarantorBorrowerDecisionReport.setExistingCreditTypeDetailViewList(Util.safetyList(detailView.getExistingCreditTypeDetailViewList()));
+                if (Util.isSafetyList(detailView.getExistingCreditTypeDetailViewList())){
+                    guarantorBorrowerDecisionReport.setExistingCreditTypeDetailViewList(detailView.getExistingCreditTypeDetailViewList());
+                } else {
+                    guarantorBorrowerDecisionReport.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
+                }
                 guarantorBorrowerDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(detailView.getTotalLimitGuaranteeAmount()));
                 guarantorBorrowerDecisionReportList.add(guarantorBorrowerDecisionReport);
             }
@@ -1006,10 +1062,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillProposedCredit. {}");
         newCreditDetailViewList = decisionView.getProposeCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
+        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
 
         int count = 1;
-        if (Util.safetyList(newCreditDetailViewList).size() > 0){
-            log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
+        if (Util.isSafetyList(newCreditDetailViewList)){
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
                 proposedView.setPath(pathsub);
@@ -1022,41 +1078,51 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 proposedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
                 proposedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                proposedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getProposeCreditInfoTierDetailViewList()));
+                if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
+                    proposedView.setNewCreditTierDetailViews(detailView.getProposeCreditInfoTierDetailViewList());
+                } else {
+                    proposedView.setNewCreditTierDetailViews(new ArrayList<ProposeCreditInfoTierDetailView>());
+                }
 
                 StringBuilder builder = new StringBuilder();
-                if (detailView.getRequestType() == RequestTypes.NEW.value()){
-                    builder = builder.append("Request Type : New    ");
-                } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
-                    builder = builder.append("Request Type : Change    ");
+                if (!Util.isNull(detailView.getRequestType())){
+                    if (detailView.getRequestType() == RequestTypes.NEW.value()){
+                        builder = builder.append("Request Type : New    ");
+                    } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
+                        builder = builder.append("Request Type : Change    ");
+                    }
                 }
 
-                if (detailView.getRefinance() == RadioValue.YES.value()){
-                    builder = builder.append("Refinance : Yes").append("\n");
-                    proposedView.setRefinance("Yes");
-                } else if (detailView.getRefinance() == RadioValue.NO.value()){
-                    builder = builder.append("Refinance : No").append("\n");
+                if (!Util.isNull(detailView.getRefinance())){
+                    if (detailView.getRefinance() == RadioValue.YES.value()){
+                        builder = builder.append("Refinance : Yes").append("\n");
+                        proposedView.setRefinance("Yes");
+                    } else if (detailView.getRefinance() == RadioValue.NO.value()){
+                        builder = builder.append("Refinance : No").append("\n");
+                    }
                 }
 
-                if (!Util.isNull(detailView.getLoanPurposeView())){
-                    builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
-                            Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : SPACE).append("\n");
-                } else {
-                    builder =builder.append("Purpose : ").append("\n");
-                }
+//                if (!Util.isNull(detailView.getLoanPurposeView())){
+                builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
+                        Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : SPACE).append("\n");
+//                } else {
+//                    builder =builder.append("Purpose : ").append("\n");
+//                }
 
                 builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
 
-                if (!Util.isNull(detailView.getDisbursementTypeView())){
-                    builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
-                            Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : SPACE)
-                            .append(SPACE);
-                } else {
-                    builder = builder.append("Disbursement : ").append(SPACE);
-                }
+//                if (!Util.isNull(detailView.getDisbursementTypeView())){
+                builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
+                        Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : SPACE)
+                        .append(SPACE);
+//                } else {
+//                    builder = builder.append("Disbursement : ").append(SPACE);
+//                }
                 builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
 
-                proposedView.setProposedDetail(builder.toString());
+                if (!Util.isNull(builder)){
+                    proposedView.setProposedDetail(builder.toString());
+                }
                 proposedCreditDecisionReportList.add(proposedView);
             }
         } else {
@@ -1073,10 +1139,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillProposedCredit. {}");
         newCreditDetailViewList = decisionView.getApproveCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
+        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
 
         int count = 1;
-        if (Util.safetyList(newCreditDetailViewList).size() > 0){
-            log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
+        if (Util.isSafetyList(newCreditDetailViewList)){
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 approvedView.setPath(pathsub);
@@ -1088,12 +1154,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedView.setProdName(!Util.isNull(detailView.getProductProgramView()) ?
                         Util.checkNullString(detailView.getProductProgramView().getName()) : SPACE);
 
-                if (detailView.getUwDecision() == DecisionType.APPROVED){
-                    approvedView.setUwDecision("APPROVED");
-                } else  if (detailView.getUwDecision() == DecisionType.REJECTED){
-                    approvedView.setUwDecision("REJECTED");
-                } else {
-                    approvedView.setUwDecision(SPACE);
+                if (!Util.isNull(detailView.getUwDecision())){
+                    if (detailView.getUwDecision() == DecisionType.APPROVED){
+                        approvedView.setUwDecision("APPROVED");
+                    } else  if (detailView.getUwDecision() == DecisionType.REJECTED){
+                        approvedView.setUwDecision("REJECTED");
+                    } else {
+                        approvedView.setUwDecision(SPACE);
+                    }
                 }
 
                 approvedView.setCredittypeName(!Util.isNull(detailView.getCreditTypeView()) ?
@@ -1102,42 +1170,52 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
                 approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
                 approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getProposeCreditInfoTierDetailViewList()));
+                if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
+                    approvedView.setNewCreditTierDetailViews(detailView.getProposeCreditInfoTierDetailViewList());
+                } else {
+                    approvedView.setNewCreditTierDetailViews(new ArrayList<ProposeCreditInfoTierDetailView>());
+                }
 
                 StringBuilder builder = new StringBuilder();
 
-                if (detailView.getRequestType() == RequestTypes.NEW.value()){
-                    builder = builder.append("Request Type : New    ");
-                } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
-                    builder = builder.append("Request Type : Change    ");
+                if (!Util.isNull(detailView.getRequestType())){
+                    if (detailView.getRequestType() == RequestTypes.NEW.value()){
+                        builder = builder.append("Request Type : New    ");
+                    } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
+                        builder = builder.append("Request Type : Change    ");
+                    }
                 }
 
-                if (detailView.getRefinance() == RadioValue.YES.value()){
-                    builder = builder.append("Refinance : Yes").append("\n");
-                    approvedView.setRefinance("Yes");
-                } else if (detailView.getRefinance() == RadioValue.NO.value()){
-                    builder = builder.append("Refinance : No").append("\n");
+                if (!Util.isNull(detailView.getRefinance())){
+                    if (detailView.getRefinance() == RadioValue.YES.value()){
+                        builder = builder.append("Refinance : Yes").append("\n");
+                        approvedView.setRefinance("Yes");
+                    } else if (detailView.getRefinance() == RadioValue.NO.value()){
+                        builder = builder.append("Refinance : No").append("\n");
+                    }
                 }
 
-                if (!Util.isNull(detailView.getLoanPurposeView())){
-                    builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
-                            Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : SPACE).append("\n");
-                } else {
-                    builder = builder.append("Purpose : ").append("\n");
-                }
+//                if (!Util.isNull(detailView.getLoanPurposeView())){
+                builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
+                        Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : SPACE).append("\n");
+//                } else {
+//                    builder = builder.append("Purpose : ").append("\n");
+//                }
 
                 builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
 
-                if (!Util.isNull(detailView.getDisbursementTypeView())){
-                    builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
-                            Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : SPACE)
-                            .append(SPACE);
-                } else {
-                    builder = builder.append("Disbursement : ").append(SPACE);
-                }
+//                if (!Util.isNull(detailView.getDisbursementTypeView())){
+                builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
+                        Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : SPACE)
+                        .append(SPACE);
+//                } else {
+//                    builder = builder.append("Disbursement : ").append(SPACE);
+//                }
                 builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
 
-                approvedView.setProposedDetail(builder.toString());
+                if (!Util.isNull(builder)){
+                    approvedView.setProposedDetail(builder.toString());
+                }
                 proposedCreditDecisionReportList.add(approvedView);
 //                } else {
 //                    proposedCreditDecisionReportList.add(approvedView);
@@ -1158,71 +1236,84 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillProposedCredit. {}");
         newCreditDetailViewList = decisionView.getApproveCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
+        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
 
         int count = 1;
-        if (Util.safetyList(newCreditDetailViewList).size() > 0){
-            log.debug("newCreditDetailViewList by fillProposedCredit. {}",newCreditDetailViewList);
+        if (Util.isSafetyList(newCreditDetailViewList)){
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 approvedView.setPath(pathsub);
 
-                if (detailView.getUwDecision() == DecisionType.APPROVED){
-                    log.debug("fillProposedCredit to APPROVED. {}",detailView.getUwDecision());
-                    approvedView.setCount(count++);
-
-                    approvedView.setProdName(!Util.isNull(detailView.getProductProgramView()) ?
-                            Util.checkNullString(detailView.getProductProgramView().getName()) : SPACE);
-
+                if (!Util.isNull(detailView.getUwDecision())){
                     if (detailView.getUwDecision() == DecisionType.APPROVED){
-                        approvedView.setUwDecision("APPROVED");
-                    }
+                        log.debug("fillProposedCredit to APPROVED. {}",detailView.getUwDecision());
+                        approvedView.setCount(count++);
 
-                    approvedView.setCredittypeName(!Util.isNull(detailView.getCreditTypeView()) ?
-                            Util.checkNullString(detailView.getCreditTypeView().getName()) : SPACE);
-                    approvedView.setProdCode(Util.checkNullString(detailView.getProductCode()));
-                    approvedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
-                    approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
-                    approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                    approvedView.setNewCreditTierDetailViews(Util.safetyList(detailView.getProposeCreditInfoTierDetailViewList()));
+                        approvedView.setProdName(!Util.isNull(detailView.getProductProgramView()) ?
+                                Util.checkNullString(detailView.getProductProgramView().getName()) : SPACE);
 
-                    StringBuilder builder = new StringBuilder();
+                        if (detailView.getUwDecision() == DecisionType.APPROVED){
+                            approvedView.setUwDecision("APPROVED");
+                        }
 
-                    if (detailView.getRequestType() == RequestTypes.NEW.value()){
-                        builder = builder.append("Request Type : New    ");
-                    } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
-                        builder = builder.append("Request Type : Change    ");
-                    }
+                        approvedView.setCredittypeName(!Util.isNull(detailView.getCreditTypeView()) ?
+                                Util.checkNullString(detailView.getCreditTypeView().getName()) : SPACE);
+                        approvedView.setProdCode(Util.checkNullString(detailView.getProductCode()));
+                        approvedView.setProjectCode(Util.checkNullString(detailView.getProjectCode()));
+                        approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                        approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
 
-                    if (detailView.getRefinance() == RadioValue.YES.value()){
-                        builder = builder.append("Refinance : Yes").append("\n");
-                        approvedView.setRefinance("Yes");
-                    } else if (detailView.getRefinance() == RadioValue.NO.value()){
-                        builder = builder.append("Refinance : No").append("\n");
-                    }
+                        if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
+                            approvedView.setNewCreditTierDetailViews(detailView.getProposeCreditInfoTierDetailViewList());
+                        } else {
+                            approvedView.setNewCreditTierDetailViews(new ArrayList<ProposeCreditInfoTierDetailView>());
+                        }
 
-                    if (!Util.isNull(detailView.getLoanPurposeView())){
+                        StringBuilder builder = new StringBuilder();
+
+                        if (!Util.isNull(detailView.getRequestType())){
+                            if (detailView.getRequestType() == RequestTypes.NEW.value()){
+                                builder = builder.append("Request Type : New    ");
+                            } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
+                                builder = builder.append("Request Type : Change    ");
+                            }
+                        }
+
+                        if (!Util.isNull(detailView.getRefinance())){
+                            if (detailView.getRefinance() == RadioValue.YES.value()){
+                                builder = builder.append("Refinance : Yes").append("\n");
+                                approvedView.setRefinance("Yes");
+                            } else if (detailView.getRefinance() == RadioValue.NO.value()){
+                                builder = builder.append("Refinance : No").append("\n");
+                            }
+                        }
+
+//                        if (!Util.isNull(detailView.getLoanPurposeView())){
                         builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
                                 Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : SPACE).append("\n");
-                    } else {
-                        builder = builder.append("Purpose : ").append("\n");
-                    }
+//                        } else {
+//                            builder = builder.append("Purpose : ").append("\n");
+//                        }
 
-                    builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
+                        builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append("\n");
 
-                    if (!Util.isNull(detailView.getDisbursementTypeView())){
+//                        if (!Util.isNull(detailView.getDisbursementTypeView())){
                         builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
                                 Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : SPACE)
                                 .append(SPACE);
-                    } else {
-                        builder = builder.append("Disbursement : ").append(SPACE);
-                    }
-                    builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
+//                        } else {
+//                            builder = builder.append("Disbursement : ").append(SPACE);
+//                        }
+                        builder = builder.append("Hold Amount : ").append(Util.convertNullToZERO(detailView.getHoldLimitAmount()));
 
-                    approvedView.setProposedDetail(builder.toString());
-                    proposedCreditDecisionReportList.add(approvedView);
-                } else {
-                    proposedCreditDecisionReportList.add(approvedView);
-                    log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
+                        if (!Util.isNull(builder)){
+                            approvedView.setProposedDetail(builder.toString());
+                        }
+                        proposedCreditDecisionReportList.add(approvedView);
+                    } else {
+                        proposedCreditDecisionReportList.add(approvedView);
+                        log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
+                    }
                 }
             }
         } else {
@@ -1237,10 +1328,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ProposeFeeInformationDecisionReport> fillProposeFeeInformation(){
         List<ProposeFeeInformationDecisionReport> proposeFeeInformationDecisionReportList = new ArrayList<ProposeFeeInformationDecisionReport>();
         List<ProposeFeeDetailView> feeDetailViewList = decisionView.getApproveFeeDetailViewList();
+        log.debug("feeDetailViewList.size() {}",feeDetailViewList.size());
 
         int count = 1;
-        if (Util.safetyList(feeDetailViewList).size() > 0){
-            log.debug("feeDetailViewList by fillProposeFeeInformation. {}",feeDetailViewList);
+        if (Util.isSafetyList(feeDetailViewList)){
             for (ProposeFeeDetailView view : feeDetailViewList){
                 ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
                 proposeFeeInformationDecisionReport.setCount(count++);
@@ -1308,10 +1399,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ProposedCollateralDecisionReport> fillProposedCollateral(String pathsub){
         List<ProposedCollateralDecisionReport> proposedCollateralDecisionReportList = new ArrayList<ProposedCollateralDecisionReport>();
         List<ProposeCollateralInfoView> newCollateralViews = decisionView.getProposeCollateralList();
+        log.debug("newCollateralViews.size() {}",newCollateralViews.size());
         List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
-        if (Util.safetyList(newCollateralViews).size() > 0){
-            log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
+        if (Util.isSafetyList(newCollateralViews)){
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
@@ -1326,7 +1417,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 collateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
                 collateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
-                if (Util.safetyList(view.getProposeCreditInfoDetailViewList()).size() > 0) {
+                if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
                     collateralDecisionReport.setDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
@@ -1334,8 +1425,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 }
 
                 collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
-                if (Util.safetyList(collateralHeadViewList).size() > 0){
-                    log.debug("collateralHeadViewList. {}",collateralHeadViewList);
+                log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
+                if (Util.isSafetyList(collateralHeadViewList)){
                     for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                         collateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
                                 (Util.checkNullString(headView.getPotentialCollateral().getDescription())) : SPACE);
@@ -1347,14 +1438,23 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         collateralDecisionReport.setAppraisalValue(Util.convertNullToZERO(headView.getAppraisalValue()));
                         collateralDecisionReport.setHeadCollTypeDescription(!Util.isNull(headView.getHeadCollType()) ?
                                 Util.checkNullString(headView.getHeadCollType().getDescription()) : SPACE);
-                        if (headView.getInsuranceCompany() == RadioValue.YES.value()){
-                            collateralDecisionReport.setInsuranceCompany("Partner");
-                        } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
-                            collateralDecisionReport.setInsuranceCompany("Non Partner");
-                        } else {
-                            collateralDecisionReport.setInsuranceCompany(SPACE);
+                        if (!Util.isNull(headView.getInsuranceCompany())){
+                            if (headView.getInsuranceCompany() == RadioValue.YES.value()){
+                                collateralDecisionReport.setInsuranceCompany("Partner");
+                            } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
+                                collateralDecisionReport.setInsuranceCompany("Non Partner");
+                            } else {
+                                collateralDecisionReport.setInsuranceCompany(SPACE);
+                            }
                         }
-                        collateralDecisionReport.setCollateralSubViewList(headView.getProposeCollateralInfoSubViewList());
+                        if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                            for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
+                                proposeCollateralInfoSubView.setPath(pathsub);
+                            }
+                            collateralDecisionReport.setCollateralSubViewList(headView.getProposeCollateralInfoSubViewList());
+                        } else {
+                            collateralDecisionReport.setCollateralSubViewList(new ArrayList<ProposeCollateralInfoSubView>());
+                        }
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
@@ -1373,15 +1473,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //ExSum
     public List<ApprovedCollateralDecisionReport> fillExSumApprovedCollaterral(final String pathsub){
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
-        List<ProposeCollateralInfoView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
+        List<ProposeCollateralInfoView> newCollateralViews = decisionView.getApproveCollateralList();
         List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
+        log.debug("newCollateralViews.size() {}",newCollateralViews.size());
 
-        if (!Util.isZero(newCollateralViews.size())){
-            log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
+        if (Util.isSafetyList(newCollateralViews)){
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
-                log.debug("--Path. {}",pathsub);
 //                if(view.getUwDecision() == DecisionType.APPROVED ){
 //                    log.debug("fillApprovedCollaterral to APPROVED. {}",view.getUwDecision());
 
@@ -1394,24 +1493,26 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                 approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
-                if(view.getUwDecision() == DecisionType.APPROVED ){
-                    approvedCollateralDecisionReport.setApproved("Yes");
-                } else {
-                    approvedCollateralDecisionReport.setApproved("No");
+                if (!Util.isNull(view.getUwDecision())){
+                    if(view.getUwDecision() == DecisionType.APPROVED ){
+                        approvedCollateralDecisionReport.setApproved("Yes");
+                    } else {
+                        approvedCollateralDecisionReport.setApproved("No");
+                    }
                 }
 
                 approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
-                if (Util.safetyList(view.getProposeCreditInfoDetailViewList()).size() > 0) {
+                if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
-                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
+                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
-                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditInfoDetailViewList());
+                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                 }
 
                 collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
-                if (Util.safetyList(collateralHeadViewList).size() > 0){
+                if (Util.isSafetyList(collateralHeadViewList)){
                     log.debug("collateralHeadViewList. {}",collateralHeadViewList);
                     for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                         approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
@@ -1424,14 +1525,23 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         approvedCollateralDecisionReport.setAppraisalValue(Util.convertNullToZERO(headView.getAppraisalValue()));
                         approvedCollateralDecisionReport.setHeadCollTypeDescription(!Util.isNull(headView.getHeadCollType()) ?
                                 Util.checkNullString(headView.getHeadCollType().getDescription()) : SPACE);
-                        if (headView.getInsuranceCompany() == RadioValue.YES.value()){
-                            approvedCollateralDecisionReport.setInsuranceCompany("Partner");
-                        } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
-                            approvedCollateralDecisionReport.setInsuranceCompany("Non Partner");
-                        } else {
-                            approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
+                        if (!Util.isNull(headView.getInsuranceCompany())){
+                            if (headView.getInsuranceCompany() == RadioValue.YES.value()){
+                                approvedCollateralDecisionReport.setInsuranceCompany("Partner");
+                            } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
+                                approvedCollateralDecisionReport.setInsuranceCompany("Non Partner");
+                            } else {
+                                approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
+                            }
                         }
-                        approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getProposeCollateralInfoSubViewList()));
+                        if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                            for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
+                                proposeCollateralInfoSubView.setPath(pathsub);
+                            }
+                            approvedCollateralDecisionReport.setSubViewList(headView.getProposeCollateralInfoSubViewList());
+                        } else {
+                            approvedCollateralDecisionReport.setSubViewList(new ArrayList<ProposeCollateralInfoSubView>());
+                        }
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
@@ -1454,69 +1564,81 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //Opsheet
     public List<ApprovedCollateralDecisionReport> fillApprovedCollaterral(final String pathsub){
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
-        List<ProposeCollateralInfoView> newCollateralViews = Util.safetyList(decisionView.getApproveCollateralList());
+        List<ProposeCollateralInfoView> newCollateralViews = decisionView.getApproveCollateralList();
         List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
+        log.debug("newCollateralViews.size() by fillProposedCollateral. {}",newCollateralViews.size());
 
-        if (!Util.isZero(newCollateralViews.size())){
-            log.debug("newCollateralViews by fillProposedCollateral. {}",newCollateralViews);
+        if (Util.isSafetyList(newCollateralViews)){
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
                 log.debug("--Path. {}",pathsub);
-                if(view.getUwDecision() == DecisionType.APPROVED ){
-                    log.debug("fillApprovedCollaterral to APPROVED. {}",view.getUwDecision());
+                if (!Util.isNull(view.getUwDecision())){
+                    if(view.getUwDecision() == DecisionType.APPROVED ){
+                        log.debug("fillApprovedCollaterral to APPROVED. {}",view.getUwDecision());
 
-                    approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
-                    approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
-                    approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
-                    approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
-                    approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-                    approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-                    approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
-                    approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
+                        approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
+                        approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
+                        approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
+                        approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
+                        approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
+                        approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
+                        approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+                        approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
-                    approvedCollateralDecisionReport.setApproved("Yes");
+                        approvedCollateralDecisionReport.setApproved("Yes");
 
-                    approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
-                    approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
+                        approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
+                        approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
-                    if (Util.safetyList(view.getProposeCreditInfoDetailViewList()).size() > 0) {
-                        log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
-                        approvedCollateralDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
-                    } else {
-                        log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditInfoDetailViewList());
-                    }
-
-                    collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
-                    if (Util.safetyList(collateralHeadViewList).size() > 0){
-                        log.debug("collateralHeadViewList. {}",collateralHeadViewList);
-                        for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
-                            approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
-                                    Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
-                            approvedCollateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
-                                    Util.checkNullString(headView.getTcgCollateralType().getDescription()) : SPACE);
-                            approvedCollateralDecisionReport.setExistingCredit(Util.convertNullToZERO(headView.getExistingCredit()));
-                            approvedCollateralDecisionReport.setTitleDeed(Util.checkNullString(headView.getTitleDeed()));
-                            approvedCollateralDecisionReport.setCollateralLocation(Util.checkNullString(headView.getCollateralLocation()));
-                            approvedCollateralDecisionReport.setAppraisalValue(Util.convertNullToZERO(headView.getAppraisalValue()));
-                            approvedCollateralDecisionReport.setHeadCollTypeDescription(!Util.isNull(headView.getHeadCollType()) ?
-                                    Util.checkNullString(headView.getHeadCollType().getDescription()) : SPACE);
-                            if (headView.getInsuranceCompany() == RadioValue.YES.value()){
-                                approvedCollateralDecisionReport.setInsuranceCompany("Partner");
-                            } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
-                                approvedCollateralDecisionReport.setInsuranceCompany("Non Partner");
-                            } else {
-                                approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
-                            }
-                            approvedCollateralDecisionReport.setSubViewList(Util.safetyList(headView.getProposeCollateralInfoSubViewList()));
+                        if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
+                            log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList());
+                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
+                        } else {
+                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                         }
+
+                        collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
+                        log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
+                        if (Util.isSafetyList(collateralHeadViewList)){
+                            for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
+                                approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
+                                        Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
+                                approvedCollateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
+                                        Util.checkNullString(headView.getTcgCollateralType().getDescription()) : SPACE);
+                                approvedCollateralDecisionReport.setExistingCredit(Util.convertNullToZERO(headView.getExistingCredit()));
+                                approvedCollateralDecisionReport.setTitleDeed(Util.checkNullString(headView.getTitleDeed()));
+                                approvedCollateralDecisionReport.setCollateralLocation(Util.checkNullString(headView.getCollateralLocation()));
+                                approvedCollateralDecisionReport.setAppraisalValue(Util.convertNullToZERO(headView.getAppraisalValue()));
+                                approvedCollateralDecisionReport.setHeadCollTypeDescription(!Util.isNull(headView.getHeadCollType()) ?
+                                        Util.checkNullString(headView.getHeadCollType().getDescription()) : SPACE);
+                                if (!Util.isNull(headView.getInsuranceCompany())){
+                                    if (headView.getInsuranceCompany() == RadioValue.YES.value()){
+                                        approvedCollateralDecisionReport.setInsuranceCompany("Partner");
+                                    } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
+                                        approvedCollateralDecisionReport.setInsuranceCompany("Non Partner");
+                                    } else {
+                                        approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
+                                    }
+                                }
+
+                                if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                                    for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
+                                        proposeCollateralInfoSubView.setPath(pathsub);
+                                    }
+                                    approvedCollateralDecisionReport.setSubViewList(headView.getProposeCollateralInfoSubViewList());
+                                } else {
+                                    approvedCollateralDecisionReport.setSubViewList(new ArrayList<ProposeCollateralInfoSubView>());
+                                }
+                            }
+                        } else {
+                            log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
+                        }
+                        approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                     } else {
-                        log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList);
+                        approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
+                        log.debug("fillApprovedCollaterral to Rejected. {}",view.getUwDecision());
                     }
-                    approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-                } else {
-                    approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-                    log.debug("fillApprovedCollaterral to Rejected. {}",view.getUwDecision());
                 }
             }
         } else {
@@ -1531,10 +1653,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ProposedGuarantorDecisionReport> fillProposedGuarantor(String pathsub){
         List<ProposedGuarantorDecisionReport> proposedGuarantorDecisionReportList = new ArrayList<ProposedGuarantorDecisionReport>();
         List<ProposeGuarantorInfoView> detailViews = decisionView.getApproveGuarantorList();
+        log.debug("detailViews.size() {}",detailViews.size());
 
         int count = 1;
-        if (Util.safetyList(detailViews).size() > 0){
-            log.debug("detailViews by fillProposedGuarantor. {}",detailViews);
+        if (Util.isSafetyList(detailViews)){
             for (ProposeGuarantorInfoView view : detailViews){
                 ProposedGuarantorDecisionReport guarantorDecisionReport = new ProposedGuarantorDecisionReport();
                 guarantorDecisionReport.setCount(count++);
@@ -1549,7 +1671,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 guarantorDecisionReport.setName(name.toString());
                 guarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
-                guarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
+                if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())){
+                    guarantorDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
+                } else {
+                    guarantorDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
+                }
                 guarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
                 proposedGuarantorDecisionReportList.add(guarantorDecisionReport);
             }
@@ -1566,10 +1692,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ApprovedGuarantorDecisionReport> fillExSumApprovedGuarantor(String pathsub){
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
         List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
+        log.debug("newGuarantorDetails.size() {]",newGuarantorDetails.size());
 
         int count = 1;
-        if (Util.safetyList(newGuarantorDetails).size() > 0){
-            log.debug("newGuarantorDetails by fillExSumApprovedGuarantor. {}",newGuarantorDetails);
+        if (Util.isSafetyList(newGuarantorDetails)){
             for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
@@ -1587,14 +1713,21 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 approvedGuarantorDecisionReport.setName(name.toString());
                 approvedGuarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
-                approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
-                approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
-                if (view.getUwDecision() == DecisionType.APPROVED){
-                    approvedGuarantorDecisionReport.setUwDecision("Approved");
-                } else if (view.getUwDecision() == DecisionType.REJECTED){
-                    approvedGuarantorDecisionReport.setUwDecision("Rejected");
+                if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())){
+                    approvedGuarantorDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
-                    approvedGuarantorDecisionReport.setUwDecision(SPACE);
+                    approvedGuarantorDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
+                }
+                approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
+
+                if (!Util.isNull(view.getUwDecision())){
+                    if (view.getUwDecision() == DecisionType.APPROVED){
+                        approvedGuarantorDecisionReport.setUwDecision("Approved");
+                    } else if (view.getUwDecision() == DecisionType.REJECTED){
+                        approvedGuarantorDecisionReport.setUwDecision("Rejected");
+                    } else {
+                        approvedGuarantorDecisionReport.setUwDecision(SPACE);
+                    }
                 }
 
                 if(Util.isNull(view.getGuaranteeAmount())){
@@ -1624,43 +1757,45 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ApprovedGuarantorDecisionReport> fillApprovedGuarantor(String pathsub){
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
         List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
+        log.debug("newGuarantorDetails.size() {}",newGuarantorDetails.size());
 
         int count = 1;
-        if (Util.safetyList(newGuarantorDetails).size() > 0){
-            log.debug("newGuarantorDetails by fillApprovedGuarantor. {}",newGuarantorDetails);
+        if (Util.isSafetyList(newGuarantorDetails)){
             for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
                 approvedGuarantorDecisionReport.setPath(pathsub);
-                if (view.getUwDecision() == DecisionType.APPROVED) {
-                    log.debug("fillApprovedGuarantor to APPROVED. {}",view.getUwDecision());
-                    approvedGuarantorDecisionReport.setCount(count++);
+                if (!Util.isNull(view.getUwDecision())){
+                    if (view.getUwDecision() == DecisionType.APPROVED) {
+                        log.debug("fillApprovedGuarantor to APPROVED. {}",view.getUwDecision());
+                        approvedGuarantorDecisionReport.setCount(count++);
 
-                    StringBuffer name = new StringBuffer();
-                    name = name.append(!Util.isNull(view.getGuarantorName()) ? !Util.isNull(view.getGuarantorName().getTitleTh()) ?
-                            Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh()) +
-                                    Util.checkNullString(view.getGuarantorName().getFirstNameTh()) : SPACE : SPACE)
-                            .append(SPACE).append(!Util.isNull(view.getGuarantorName()) ?
-                                    Util.checkNullString(view.getGuarantorName().getLastNameTh()) : SPACE );
+                        StringBuffer name = new StringBuffer();
+                        name = name.append(!Util.isNull(view.getGuarantorName()) ? !Util.isNull(view.getGuarantorName().getTitleTh()) ?
+                                Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh()) +
+                                        Util.checkNullString(view.getGuarantorName().getFirstNameTh()) : SPACE : SPACE)
+                                .append(SPACE).append(!Util.isNull(view.getGuarantorName()) ?
+                                        Util.checkNullString(view.getGuarantorName().getLastNameTh()) : SPACE );
 
-                    approvedGuarantorDecisionReport.setName(name.toString());
-                    approvedGuarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
-                    approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
-                    approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
-                    if (view.getUwDecision() == DecisionType.APPROVED){
-                        approvedGuarantorDecisionReport.setUwDecision("Approved");
-                    }
+                        approvedGuarantorDecisionReport.setName(name.toString());
+                        approvedGuarantorDecisionReport.setTcgLgNo(Util.checkNullString(view.getTcgLgNo()));
+                        approvedGuarantorDecisionReport.setProposeCreditDetailViewList(Util.safetyList(view.getProposeCreditInfoDetailViewList()));
+                        approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
+                        if (view.getUwDecision() == DecisionType.APPROVED){
+                            approvedGuarantorDecisionReport.setUwDecision("Approved");
+                        }
 
-                    if(Util.isNull(view.getGuaranteeAmount())){
-                        approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
+                        if(Util.isNull(view.getGuaranteeAmount())){
+                            approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.lessamt"));
+                        } else {
+                            approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
+                        }
+
+                        approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
                     } else {
-                        approvedGuarantorDecisionReport.setGuarantorType(msg.get("report.moreamt"));
+                        approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
+                        log.debug("fillApprovedGuarantor to REJECTED. {}",view.getUwDecision());
                     }
-
-                    approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
-                } else {
-                    approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
-                    log.debug("fillApprovedGuarantor to REJECTED. {}",view.getUwDecision());
                 }
             }
         } else {
@@ -1677,10 +1812,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<FollowUpConditionDecisionReport> fillFollowUpCondition(){
         List<FollowUpConditionDecisionReport> followUpConditionDecisionReportList = new ArrayList<FollowUpConditionDecisionReport>();
         List<DecisionFollowConditionView> decisionFollowConditionViews = decisionView.getDecisionFollowConditionViewList();
+        log.debug("decisionFollowConditionViews.size() {}",decisionFollowConditionViews.size());
 
         int count = 1;
-        if (Util.safetyList(decisionFollowConditionViews).size() > 0){
-            log.debug("decisionFollowConditionViews by fillFollowUpCondition. {}",decisionFollowConditionViews);
+        if (Util.isSafetyList(decisionFollowConditionViews)){
             for (DecisionFollowConditionView view : decisionFollowConditionViews){
                 FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
                 followUpConditionDecisionReport.setCount(count++);
@@ -1701,10 +1836,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ApprovalHistoryDecisionReport> fillApprovalHistory(){
         List<ApprovalHistoryDecisionReport> approvalHistoryDecisionReportArrayList = new ArrayList<ApprovalHistoryDecisionReport>();
         List<ApprovalHistoryView> approvalHistoryViews = decisionView.getApprovalHistoryList();
+        log.debug("approvalHistoryViews.size() {}",approvalHistoryViews.size());
 
         int count = 1;
-        if (Util.safetyList(approvalHistoryViews).size() > 0){
-            log.debug("approvalHistoryViews by fillApprovalHistory. {}",approvalHistoryViews);
+        if (Util.isSafetyList(approvalHistoryViews)){
             for (ApprovalHistoryView view : approvalHistoryViews){
                 ApprovalHistoryDecisionReport approvalHistoryDecisionReport = new ApprovalHistoryDecisionReport();
                 approvalHistoryDecisionReport.setCount(count++);
@@ -1777,25 +1912,37 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
         //Approved Propose Credit
         newCreditDetailViewList = decisionView.getApproveCreditList();
-        for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
-            if ((DecisionType.APPROVED).equals(detailView.getUwDecision()) && ("opsheet").equals(type)){
-                totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
-            } else if (("all").equals(type)){
-                totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
-            } else {
-                totalDecisionReport.setApproveTotalCreditLimit(BigDecimal.ZERO);
+        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
+        if (Util.isSafetyList(newCreditDetailViewList)){
+            for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
+                if (!Util.isNull(detailView.getUwDecision())){
+                    if ((DecisionType.APPROVED).equals(detailView.getUwDecision()) && ("opsheet").equals(type)){
+                        totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
+                    } else if (("all").equals(type)){
+                        totalDecisionReport.setApproveTotalCreditLimit(Util.convertNullToZERO(decisionView.getApproveTotalCreditLimit()));
+                    } else {
+                        totalDecisionReport.setApproveTotalCreditLimit(BigDecimal.ZERO);
+                    }
+                }
             }
         }
 
-        if (decisionView.getCreditCustomerType() == CreditCustomerType.NORMAL){
-            totalDecisionReport.setCreditCusType(1);
-        } else if (decisionView.getCreditCustomerType() == CreditCustomerType.PRIME){
-            totalDecisionReport.setCreditCusType(2);
-        } else {
-            totalDecisionReport.setCreditCusType(0);
+        if (!Util.isNull(decisionView.getCreditCustomerType())){
+            if (decisionView.getCreditCustomerType() == CreditCustomerType.NORMAL){
+                totalDecisionReport.setCreditCusType(1);
+            } else if (decisionView.getCreditCustomerType() == CreditCustomerType.PRIME){
+                totalDecisionReport.setCreditCusType(2);
+            } else {
+                totalDecisionReport.setCreditCusType(0);
+            }
         }
+
 //        totalDecisionReport.setCrdRequestTypeName(Util.checkNullString(decisionView.getLoanRequestType().getName()));
-        totalDecisionReport.setCountryName(Util.checkNullString(decisionView.getInvestedCountry().getName()));
+        if (!Util.isNull(decisionView.getInvestedCountry())){
+            totalDecisionReport.setCountryName(Util.checkNullString(decisionView.getInvestedCountry().getName()));
+        } else {
+            totalDecisionReport.setCountryName(SPACE);
+        }
         totalDecisionReport.setExistingSMELimit(Util.convertNullToZERO(decisionView.getExistingSMELimit()));
         totalDecisionReport.setMaximumSMELimit(Util.convertNullToZERO(decisionView.getMaximumSMELimit()));
 
@@ -1808,15 +1955,20 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         totalDecisionReport.setProposeTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getProposeTotalGuaranteeAmt()));
 
         //Approved Guarantor
-        List<ProposeGuarantorInfoView> newGuarantorDetails = Util.safetyList(decisionView.getApproveGuarantorList());
+        List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
+        log.debug("newGuarantorDetails.size() {}",newGuarantorDetails.size());
 
-        for (ProposeGuarantorInfoView view : newGuarantorDetails){
-            if ((DecisionType.APPROVED).equals(view.getUwDecision()) && ("opsheet").equals(type)){
-                totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
-            } else if (("all").equals(type)){
-                totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
-            } else {
-                totalDecisionReport.setApproveTotalGuaranteeAmt(BigDecimal.ZERO);
+        if (Util.isSafetyList(newGuarantorDetails)){
+            for (ProposeGuarantorInfoView view : newGuarantorDetails){
+                if (!Util.isNull(view.getUwDecision())){
+                    if ((DecisionType.APPROVED).equals(view.getUwDecision()) && ("opsheet").equals(type)){
+                        totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
+                    } else if (("all").equals(type)){
+                        totalDecisionReport.setApproveTotalGuaranteeAmt(Util.convertNullToZERO(decisionView.getApproveTotalGuaranteeAmt()));
+                    } else {
+                        totalDecisionReport.setApproveTotalGuaranteeAmt(BigDecimal.ZERO);
+                    }
+                }
             }
         }
 
@@ -1846,22 +1998,27 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     public FollowUpConditionDecisionReport fillFollowDetail(){
         FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
+        log.debug("decisionView.getDecisionFollowConditionViewList().size() {}",decisionView.getDecisionFollowConditionViewList().size());
 
-        for (DecisionFollowConditionView view : decisionView.getDecisionFollowConditionViewList()){
-            followUpConditionDecisionReport.setConditionView(!Util.isNull(view.getConditionView()) ?
-                    Util.checkNullString(view.getConditionView().getName()) : SPACE);
-            followUpConditionDecisionReport.setDetail(Util.checkNullString(view.getDetail()));
-            followUpConditionDecisionReport.setFollwDateDetaill(DateTimeUtil.getCurrentDateTH(view.getFollowDate()));
+        if (Util.isSafetyList(decisionView.getDecisionFollowConditionViewList())){
+            for (DecisionFollowConditionView view : decisionView.getDecisionFollowConditionViewList()){
+                followUpConditionDecisionReport.setConditionView(!Util.isNull(view.getConditionView()) ?
+                        Util.checkNullString(view.getConditionView().getName()) : SPACE);
+                followUpConditionDecisionReport.setDetail(Util.checkNullString(view.getDetail()));
+                followUpConditionDecisionReport.setFollwDateDetaill(DateTimeUtil.getCurrentDateTH(view.getFollowDate()));
+            }
         }
         return followUpConditionDecisionReport;
     }
 
     public PriceFeeDecisionReport fillPriceFee(){
         PriceFeeDecisionReport priceFeeDecisionReport = new PriceFeeDecisionReport();
-        priceFeeDecisionReport.setIntFeeDOA(Util.convertNullToZERO(decisionView.getIntFeeDOA()));
-        priceFeeDecisionReport.setFrontendFeeDOA(Util.convertNullToZERO(decisionView.getFrontendFeeDOA()));
-        priceFeeDecisionReport.setGuarantorBA(Util.convertNullToZERO(decisionView.getGuarantorBA()));
-        priceFeeDecisionReport.setReasonForReduction(Util.checkNullString(decisionView.getReasonForReduction()));
+        if (!Util.isNull(decisionView)){
+            priceFeeDecisionReport.setIntFeeDOA(Util.convertNullToZERO(decisionView.getIntFeeDOA()));
+            priceFeeDecisionReport.setFrontendFeeDOA(Util.convertNullToZERO(decisionView.getFrontendFeeDOA()));
+            priceFeeDecisionReport.setGuarantorBA(Util.convertNullToZERO(decisionView.getGuarantorBA()));
+            priceFeeDecisionReport.setReasonForReduction(Util.checkNullString(decisionView.getReasonForReduction()));
+        }
         return priceFeeDecisionReport;
     }
 }
