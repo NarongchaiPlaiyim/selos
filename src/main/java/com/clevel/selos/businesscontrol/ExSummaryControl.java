@@ -668,4 +668,5 @@ public class ExSummaryControl extends BusinessControl {
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findByWorkCaseId(workCaseId));
         return customerInfoViewList;
     }
+
 }

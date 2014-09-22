@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
@@ -16,6 +17,7 @@ import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -24,10 +26,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "customerAcceptancePre")
@@ -61,6 +60,10 @@ public class CustomerAcceptancePre extends BaseController {
     private int deletedRowId;
     private List<Reason> reasons;
     private boolean addDialog;
+
+    private String messageHeader;
+    private String message;
+    private String severity;
 
     public CustomerAcceptancePre() {
     }
@@ -115,6 +118,7 @@ public class CustomerAcceptancePre extends BaseController {
     public void onAddContactRecord() {
         Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
         contactRecord.setReason(reason);
+        contactRecord.updateNextCallingDate();
         contactRecordDetailViews.add(contactRecord);
         contactRecord = null;
 
@@ -149,9 +153,19 @@ public class CustomerAcceptancePre extends BaseController {
     }
 
     public void onSaveCustomerAcceptance() {
-        customerAcceptanceControl.saveCustomerContactRecords(workCaseId, customerAcceptanceView, tcgInfoView, contactRecordDetailViews, deleteList);
-        _loadInitData();
-        sendCallBackParam(true);
+        try {
+            customerAcceptanceControl.saveCustomerContactRecords(workCaseId, customerAcceptanceView, tcgInfoView, contactRecordDetailViews, deleteList);
+            _loadInitData();
+            messageHeader = "Information.";
+            message = "Save complete.";
+            severity = MessageDialogSeverity.INFO.severity();
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Exception while save data : " + Util.getMessageException(ex);
+            severity = MessageDialogSeverity.ALERT.severity();
+            log.error("Exception while save customer acceptance : ", ex);
+        }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancelCustomerAcceptance() {
@@ -162,6 +176,7 @@ public class CustomerAcceptancePre extends BaseController {
     /*
      * Private method
      */
+
     private Reason _retrieveReasonFromId(int id) {
         for (Reason reason : reasons) {
             if (reason.getId() == id)
@@ -258,5 +273,29 @@ public class CustomerAcceptancePre extends BaseController {
 
     public boolean isAddDialog() {
         return addDialog;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

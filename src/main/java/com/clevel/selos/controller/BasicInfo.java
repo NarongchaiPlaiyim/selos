@@ -319,6 +319,7 @@ public class BasicInfo extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
+            calculationControl.calculateBOTClass(workCaseId);
             calculationControl.calForBasicInfo(workCaseId);
             onCreation();
 

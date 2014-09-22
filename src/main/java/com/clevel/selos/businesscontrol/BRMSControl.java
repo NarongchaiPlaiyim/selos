@@ -353,6 +353,33 @@ public class BRMSControl extends BusinessControl {
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
 
         actionValidationControl.validate(prescreenFacilityList, PrescreenFacility.class);
+        //Check PreScreen Product Program
+        boolean validateFacility = true;
+        if(prescreenFacilityList == null){
+            validateFacility = false;
+        }else{
+            if(prescreenFacilityList.size() == 0){
+                validateFacility = false;
+            }
+        }
+
+        if(!validateFacility){
+            //logger.debug("Juristic should have at least one guarantor. mainBorrower : {}, numberOfGuarantor : {}", mainBorrower, numberOfGuarantor);
+            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
+            mandateFieldMessageView.setFieldName("Product Program");
+            mandateFieldMessageView.setFieldDesc("Product facility detail.");
+            mandateFieldMessageView.setMessage("Product facility should have at least one.");
+            mandateFieldMessageView.setPageName("Prescreen.");
+            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+            mandateFieldMessageViewList.add(mandateFieldMessageView);
+
+            uwRuleResponseView.setActionResult(ActionResult.FAILED);
+            uwRuleResponseView.setReason("Mandatory fields are missing!!");
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+
+            return uwRuleResponseView;
+        }
+
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
             accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
@@ -391,6 +418,9 @@ public class BRMSControl extends BusinessControl {
 
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
+
+        //TODO waiting to confirm with TMB
+        applicationInfo.setBotClass("");
 
         ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
         logger.info("actionValidationResult: {}", actionValidationResult);
@@ -540,6 +570,7 @@ public class BRMSControl extends BusinessControl {
         if(workCase.getStep() != null)
             _proposeType = workCase.getStep().getProposeType();
 
+        applicationInfo.setFinalGroupExposure(BigDecimal.ZERO);     //Set default for Aggregate
         if( _proposeType.equals(ProposeType.P)){
             if(newCreditFacility!=null){
                 if(newCreditFacility.getLoanRequestType() != null)
@@ -676,8 +707,10 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setBorrowerGroupIncome(BigDecimal.ZERO);
             applicationInfo.setTotalGroupIncome(BigDecimal.ZERO);
         }
-        if(exSummary!=null)
+        if(exSummary!=null) {
             applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
+            applicationInfo.setBotClass(exSummary.getCreditRiskBOTClass());
+        }
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         actionValidationControl.validate(existingCreditFacility, ExistingCreditFacility.class);

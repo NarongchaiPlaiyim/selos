@@ -201,6 +201,11 @@ public class ExSummary implements Serializable {
     @Column(name = "next_review_date")
     private Date nextReviewDate;
 
+    @Column(name = "credit_risk_bot_class", length = 10)
+    private String creditRiskBOTClass;
+
+    @Column(name = "credit_risk_reason", length = 500)
+    private String creditRiskReason;
     ///////////////////////////////////////////////////////////////
 
     //Business Overview and Support Decision
@@ -549,45 +554,64 @@ public class ExSummary implements Serializable {
         this.incomeFactorUW = incomeFactorUW;
     }
 
+
+    public String getCreditRiskBOTClass() {
+        return creditRiskBOTClass;
+    }
+
+    public void setCreditRiskBOTClass(String creditRiskBOTClass) {
+        this.creditRiskBOTClass = creditRiskBOTClass;
+    }
+
+    public String getCreditRiskReason() {
+        return creditRiskReason;
+    }
+
+    public void setCreditRiskReason(String creditRiskReason) {
+        this.creditRiskReason = creditRiskReason;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("workCase", workCase).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                append("income", income).
-                append("recommendedWCNeed", recommendedWCNeed).
-                append("actualWC", actualWC).
-                append("yearInBusiness", yearInBusiness).
-                append("salePerYearBDM", salePerYearBDM).
-                append("salePerYearUW", salePerYearUW).
-                append("groupSaleBDM", groupSaleBDM).
-                append("groupSaleUW", groupSaleUW).
-                append("groupExposureBDM", groupExposureBDM).
-                append("groupExposureUW", groupExposureUW).
-                append("incomeFactorBDM", incomeFactorBDM).
-                append("incomeFactorUW", incomeFactorUW).
-                append("lastReviewDate", lastReviewDate).
-                append("nextReviewDate", nextReviewDate).
-                append("natureOfBusiness", natureOfBusiness).
-                append("historicalAndReasonOfChange", historicalAndReasonOfChange).
-                append("tmbCreditHistory", tmbCreditHistory).
-                append("supportReason", supportReason).
-                append("rm008Code", rm008Code).
-                append("rm008Remark", rm008Remark).
-                append("rm204Code", rm204Code).
-                append("rm204Remark", rm204Remark).
-                append("rm020Code", rm020Code).
-                append("rm020Remark", rm020Remark).
-                append("approveAuthority", approveAuthority).
-                append("uwCode", uwCode).
-                append("decision", decision).
-                append("deviateCode", deviateCode).
-                append("uwComment", uwComment).
-                append("yearInBusinessMonth", yearInBusinessMonth).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCase", workCase)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("income", income)
+                .append("recommendedWCNeed", recommendedWCNeed)
+                .append("actualWC", actualWC)
+                .append("yearInBusiness", yearInBusiness)
+                .append("salePerYearBDM", salePerYearBDM)
+                .append("salePerYearUW", salePerYearUW)
+                .append("groupSaleBDM", groupSaleBDM)
+                .append("groupSaleUW", groupSaleUW)
+                .append("groupExposureBDM", groupExposureBDM)
+                .append("groupExposureUW", groupExposureUW)
+                .append("incomeFactorBDM", incomeFactorBDM)
+                .append("incomeFactorUW", incomeFactorUW)
+                .append("lastReviewDate", lastReviewDate)
+                .append("nextReviewDate", nextReviewDate)
+                .append("creditRiskBOTClass", creditRiskBOTClass)
+                .append("creditRiskReason", creditRiskReason)
+                .append("natureOfBusiness", natureOfBusiness)
+                .append("historicalAndReasonOfChange", historicalAndReasonOfChange)
+                .append("tmbCreditHistory", tmbCreditHistory)
+                .append("supportReason", supportReason)
+                .append("rm008Code", rm008Code)
+                .append("rm008Remark", rm008Remark)
+                .append("rm204Code", rm204Code)
+                .append("rm204Remark", rm204Remark)
+                .append("rm020Code", rm020Code)
+                .append("rm020Remark", rm020Remark)
+                .append("approveAuthority", approveAuthority)
+                .append("uwCode", uwCode)
+                .append("decision", decision)
+                .append("deviateCode", deviateCode)
+                .append("uwComment", uwComment)
+                .append("yearInBusinessMonth", yearInBusinessMonth)
+                .toString();
     }
 }
