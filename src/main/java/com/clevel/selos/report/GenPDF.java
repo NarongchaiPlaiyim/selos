@@ -334,44 +334,6 @@ public class GenPDF extends ReportService implements Serializable {
             /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy = 0  ||
                         exsumNCB = 0 && exsumIncome = 0 && exsumPolicy = 0*/
         }
-
-//        if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//            Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//            !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-//            Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                templateRejectLetter(4);
-//                /*uwResultNCB != 0 && uwResultIncome != 0 && uwResultPolicy != 0  ||
-//                uwResultNCB = 0 && uwResultIncome != 0 && uwResultPolicy != 0  ||
-//                exsumNCB != 0 && exsumIncome != 0 && exsumPolicy != 0 ||
-//                exsumNCB = 0 && exsumIncome != 0 && exsumPolicy != 0*/
-//                log.debug("--path4. {}",pathReportReject);
-//        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-//                   Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                        templateRejectLetter(3);
-//                         /*uwResultNCB != 0 && uwResultIncome != 0 && uwResultPolicy = 0  ||
-//                        uwResultNCB = 0 && uwResultIncome != 0 && uwResultPolicy = 0  ||
-//                        exsumNCB != 0 && exsumIncome != 0 && exsumPolicy = 0 ||
-//                        exsumNCB = 0 && exsumIncome != 0 && exsumPolicy = 0*/
-//                        log.debug("--path3. {}",pathReportReject);
-//        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-//                   Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                        templateRejectLetter(2);
-//                         /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy != 0  ||
-//                        uwResultNCB = 0 && uwResultIncome = 0 && uwResultPolicy != 0  ||
-//                        exsumNCB != 0 && exsumIncome = 0 && exsumPolicy !== 0 ||
-//                        exsumNCB = 0 && exsumIncome = 0 && exsumPolicy != 0*/
-//                        log.debug("--path2. {}",pathReportReject);
-//        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                        templateRejectLetter(1);
-//                         /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy = 0  ||
-//                        exsumNCB = 0 && exsumIncome = 0 && exsumPolicy = 0*/
-//                        log.debug("--path1. {}",pathReportReject);
-//        }
         log.debug("--End checkRejectGroupType.",pathReportReject);
     }
 
