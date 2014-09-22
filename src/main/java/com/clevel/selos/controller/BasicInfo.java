@@ -1,28 +1,29 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.businesscontrol.master.*;
-import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.SpecialProgram;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.master.BankAccountProductView;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
-import com.clevel.selos.model.view.master.SBFScoreView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.CustomerTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -72,7 +73,7 @@ public class BasicInfo extends BaseController {
     @Inject
     private BasicInfoControl basicInfoControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private OpenAccountControl openAccountControl;
     @Inject
@@ -318,7 +319,7 @@ public class BasicInfo extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
-            exSummaryControl.calForBasicInfo(workCaseId);
+            calculationControl.calForBasicInfo(workCaseId);
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");

@@ -52,7 +52,7 @@ public class DBRInfo extends BaseController {
     @Inject
     NCBInfoControl ncbInfoControl;
     @Inject
-    ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private ProposeLineControl proposeLineControl;
 
@@ -205,8 +205,8 @@ public class DBRInfo extends BaseController {
                 dbrDetails = dbr.getDbrDetailViews();
             }
 
-            exSummaryControl.calForDBR(workCaseId);
-            proposeLineControl.calWC(workCaseId);
+            calculationControl.calForDBR(workCaseId);
+            calculationControl.calWC(workCaseId);
         } catch (Exception e) {
             messageHeader = "Exception.";
             message = Util.getMessageException(e);

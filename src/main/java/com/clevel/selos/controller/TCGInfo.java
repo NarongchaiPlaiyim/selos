@@ -1,6 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
@@ -72,9 +72,9 @@ public class TCGInfo extends BaseController {
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
     @Inject
-    TCGInfoControl tcgInfoControl;
+    private TCGInfoControl tcgInfoControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
 
     public TCGInfo() {
     }
@@ -209,7 +209,7 @@ public class TCGInfo extends BaseController {
         log.info("onSaveTcgInfo ::: modeForDB  {}", modeForDB);
         try {
             tcgInfoControl.saveTCGInfo(TCGView, TCGDetailViewList, workCaseId);
-            exSummaryControl.calForTCG(workCaseId);
+            calculationControl.calForTCG(workCaseId);
 
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.tcg.response.save.success");
