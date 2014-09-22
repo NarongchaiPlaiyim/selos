@@ -2968,7 +2968,7 @@ public class ProposeLineControl extends BusinessControl {
                 workCaseDAO.persist(workCase);
             }
 
-            proposeLineView.setExistingSMELimit(existingCreditFacilityView.getTotalGroupComOBOD());
+            proposeLineView.setExistingSMELimit(existingCreditFacilityView.getTotalGroupCom());
             proposeLineView = calculateMaximumSMELimit(proposeLineView, workCaseId, workCase, basicInfoView, tcgView);
             proposeLine.setExistingSMELimit(proposeLineView.getExistingSMELimit());
             proposeLine.setMaximumSMELimit(proposeLineView.getMaximumSMELimit());
