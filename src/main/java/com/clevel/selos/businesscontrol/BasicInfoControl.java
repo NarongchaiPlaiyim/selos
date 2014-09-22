@@ -63,6 +63,9 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     BPMExecutor bpmExecutor;
 
+    /*@Inject
+    ExSummaryControl exSummaryControl;*/
+
     @Inject
     public BasicInfoControl(){
 
@@ -330,6 +333,8 @@ public class BasicInfoControl extends BusinessControl {
             }
         }
 
+        //Update BOT Class
+        //exSummaryControl.calculateBOTClass(workCaseId);
         //update product group to BPM
         //bpmExecutor.updateProductGroup(basicInfo.get)
     }

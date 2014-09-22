@@ -23,6 +23,8 @@ public class ProposeCollateralInfoSubView implements Serializable {
     private BigDecimal mortgageValue;
     private String subId;
 
+    private String path;
+
     public ProposeCollateralInfoSubView() {
         reset();
     }
@@ -135,6 +137,14 @@ public class ProposeCollateralInfoSubView implements Serializable {
 
     public void setSubId(String subId) {
         this.subId = subId;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

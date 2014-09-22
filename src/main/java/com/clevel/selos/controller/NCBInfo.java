@@ -1,9 +1,9 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
-import com.clevel.selos.businesscontrol.ProposeLineControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
@@ -110,7 +110,7 @@ public class NCBInfo extends BaseController {
     @Inject
     DBRControl dbrControl;
     @Inject
-    private ProposeLineControl proposeLineControl;
+    private CalculationControl calculationControl;
     @Inject
     SettlementStatusTransform settlementStatusTransform;
 
@@ -440,7 +440,7 @@ public class NCBInfo extends BaseController {
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");
-                proposeLineControl.calWC(workCaseId);
+                calculationControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             //} else {

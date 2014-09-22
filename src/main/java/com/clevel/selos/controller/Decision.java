@@ -63,7 +63,7 @@ public class Decision extends BaseController {
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private LoanPurposeControl loanPurposeControl;
     @Inject
@@ -916,7 +916,7 @@ public class Decision extends BaseController {
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 
-                exSummaryControl.calForDecision(workCaseId);
+                calculationControl.calForDecision(workCaseId);
 
                 fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A);
             }

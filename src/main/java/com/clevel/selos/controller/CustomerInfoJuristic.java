@@ -1,17 +1,13 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.master.*;
-import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.relation.RelationCustomerDAO;
-import com.clevel.selos.dao.working.JuristicDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -60,7 +56,7 @@ public class CustomerInfoJuristic extends BaseController {
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
-    ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private DocumentTypeControl documentTypeControl;
     @Inject
@@ -697,7 +693,7 @@ public class CustomerInfoJuristic extends BaseController {
 
         try{
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
-            exSummaryControl.calForCustomerInfo(workCaseId);
+            calculationControl.calForCustomerInfo(workCaseId);
             isFromSummaryParam = true;
             initial();
             onEditJuristic();

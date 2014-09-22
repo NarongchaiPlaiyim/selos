@@ -11,8 +11,8 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.transform.BankStmtTransform;
+import com.clevel.selos.transform.master.BankAccountTypeTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -54,7 +54,7 @@ public class BankStatementSummary extends BaseController {
     @Inject
     DBRControl dbrControl;
     @Inject
-    ExSummaryControl exSummaryControl;
+    CalculationControl calculationControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
@@ -451,7 +451,7 @@ public class BankStatementSummary extends BaseController {
                     summaryView = bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
                     // update related parts
                     dbrControl.updateValueOfDBR(workCaseId);
-                    exSummaryControl.calForBankStmtSummary(workCaseId);
+                    calculationControl.calForBankStmtSummary(workCaseId);
                     bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
                     onCreation();
@@ -541,7 +541,7 @@ public class BankStatementSummary extends BaseController {
 
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
-            exSummaryControl.calForBankStmtSummary(workCaseId);
+            calculationControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
             onCreation();

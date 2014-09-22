@@ -720,6 +720,23 @@ public class PrescreenBusinessControl extends BusinessControl {
                     customer = new Customer();
                 }
 
+                //Add default account name to check CSI
+                AccountInfoName accountInfoName = new AccountInfoName();
+                accountInfoName.setNameTh(customer.getNameTh());
+                accountInfoName.setNameEn(customer.getNameEn());
+                accountInfoName.setSurnameTh(customer.getLastNameTh());
+                accountInfoName.setSurnameEn(customer.getLastNameEn());
+
+                if(ncbView.getAccountInfoNameList() != null) {
+                    List<AccountInfoName> accountInfoNameList = ncbView.getAccountInfoNameList();
+                    accountInfoNameList.add(accountInfoName);
+                    ncbView.setAccountInfoNameList(accountInfoNameList);
+                }else{
+                    List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                    accountInfoNameList.add(accountInfoName);
+                    ncbView.setAccountInfoNameList(accountInfoNameList);
+                }
+
                 CSIInputData csiInputData = new CSIInputData();
                 csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                 csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
@@ -1015,7 +1032,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void saveCustomerData(List<CustomerInfoView> customerInfoDeleteList, List<CustomerInfoView> customerInfoViewList, WorkCasePrescreen workCasePrescreen){
         //Remove all Customer before add new
-        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null, getCurrentUser());
+        List<Customer> customerDeleteList = customerTransform.transformToModelDeleteList(customerInfoDeleteList, workCasePrescreen, null, getCurrentUser());
         /*log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());

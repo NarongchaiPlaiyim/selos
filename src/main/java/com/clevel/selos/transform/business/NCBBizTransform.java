@@ -218,6 +218,23 @@ public class NCBBizTransform extends BusinessTransform {
                                         }
                                     }
 
+                                    //Check all account closed ( wait for confirm NPL checking )
+                                    /*boolean allAccountClosed = true;
+                                    for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
+                                        AccountStatus tmpAccountStatus = accountStatusDAO.getIndividualByCode(subjectAccountModel.getAccountstatus());
+                                        if(!Util.isNull(tmpAccountStatus)){
+                                            if(Util.isTrue(tmpAccountStatus.getDbrFlag())){
+                                                allAccountClosed = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if(allAccountClosed){
+                                        lastAsOfDate = enquiryDateStr;
+                                    }*/
+
+
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
                                         isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel, lastAsOfDate);
                                         log.debug("isValidPayment {}",isValidPayment);
@@ -1313,6 +1330,7 @@ public class NCBBizTransform extends BusinessTransform {
                 AccountInfoName accountInfoName = new AccountInfoName();
                 AccountInfoId accountInfoId = new AccountInfoId();
 
+                //set default account ( from request model )
                 accountInfoName.setNameTh(nccrsModel.getCompanyName());
                 accountInfoId.setIdNumber(nccrsModel.getRegistId());
                 accountInfoId.setDocumentType(DocumentType.CORPORATE_ID);
@@ -1349,7 +1367,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     AccountInfoId accountInfoId2 = new AccountInfoId();
 
                                     accountInfoName2.setNameTh(profileModel.getThainame());
-                                    accountInfoName2.setNameTh(profileModel.getEngname());
+                                    accountInfoName2.setNameEn(profileModel.getEngname());
                                     accountInfoId2.setIdNumber(profileModel.getRegistid());
                                     accountInfoId2.setDocumentType(DocumentType.CORPORATE_ID);
                                     accountInfoNameList.add(accountInfoName2);
@@ -1361,6 +1379,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             for (ProfileNameModel profileNameModel : additionalModel.getName()) {
                                                 AccountInfoName ncbAccountInfoName = new AccountInfoName();
                                                 ncbAccountInfoName.setNameTh(profileNameModel.getThainame());
+                                                ncbAccountInfoName.setNameEn(profileNameModel.getEngname());
                                                 ncbAccountInfoName.setSurnameTh(profileNameModel.getEngname());
                                                 accountInfoNameList.add(ncbAccountInfoName);
                                             }

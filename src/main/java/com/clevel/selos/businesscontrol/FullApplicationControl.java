@@ -796,8 +796,6 @@ public class FullApplicationControl extends BusinessControl {
                 throw new Exception("Please make decision before submit.");
             } else {
                 decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
 
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 String appraisalRequired = workCase != null ? String.valueOf(workCase.getRequestAppraisalRequire()) : "0";
@@ -807,7 +805,11 @@ public class FullApplicationControl extends BusinessControl {
                 }
 
                 bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistoryDAO.persist(approvalHistory);
             }
         }else{
             throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -830,8 +832,6 @@ public class FullApplicationControl extends BusinessControl {
                 throw new Exception("Please make decision before submit.");
             } else {
                 decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
 
                 if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
                     haveRG001 = "Y";
@@ -846,8 +846,12 @@ public class FullApplicationControl extends BusinessControl {
 
                 mortgageSummaryControl.calculateMortgageSummary(workCaseId);
 
-                bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+                //bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
+                log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistoryDAO.persist(approvalHistory);
             }
         }else{
             throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -1978,6 +1982,7 @@ public class FullApplicationControl extends BusinessControl {
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         }
 
+        boolean rejectedNCB = false;
         if(!Util.isNull(uwRuleResultSummary)){
             if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
                 List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
@@ -1991,15 +1996,19 @@ public class FullApplicationControl extends BusinessControl {
                                     uwRuleResultDetail.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
                                 if(uwRuleResultDetail.getUwResultColor() == UWResultColor.RED){
                                     log.debug("NCB Result is RED without Deviate, auto reject case!");
-                                    ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
-                                    //Update ncb reject flag
-                                    updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
+                                    rejectedNCB = true;
+                                    break;
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+        if(rejectedNCB){
+            ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
+            //Update ncb reject flag
+            updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
         }
     }
 

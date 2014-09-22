@@ -281,7 +281,7 @@ public class DBRControl extends BusinessControl {
             else
                 monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetUW();
 
-        }else if(roleId == RoleValue.BDM.id()){
+        }else {
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
         return monthlyIncome;

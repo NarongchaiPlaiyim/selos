@@ -2,24 +2,27 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.DBRControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.AccountStatusView;
+import com.clevel.selos.model.view.BankStmtSummaryView;
+import com.clevel.selos.model.view.BankStmtView;
+import com.clevel.selos.model.view.BankView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.AccountStatusTransform;
+import com.clevel.selos.transform.BankTransform;
 import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.master.BankAccountTypeTransform;
-import com.clevel.selos.transform.BankTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -60,7 +63,7 @@ public class BankStatementDetail extends BaseController {
     @Inject
     DBRControl dbrControl;
     @Inject
-    ExSummaryControl exSummaryControl;
+    CalculationControl calculationControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
 
@@ -294,7 +297,7 @@ public class BankStatementDetail extends BaseController {
 
             // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
-            exSummaryControl.calForBankStmtSummary(workCaseId);
+            calculationControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
             messageHeader = msg.get("app.messageHeader.info");
