@@ -367,23 +367,25 @@ public class ProposeLineControl extends BusinessControl {
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
                                 ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
-                                proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
-                                ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
-                                if (!Util.isNull(productProgram)) {
-                                    proposeFeeDetailView.setProductProgram(productProgram.getName());
-                                }
-                                if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
-                                    proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                                    proposeCreditInfoDetailView.setFrontEndFeeOriginal(feeDetailView.getPercentFee());
-                                    proposeCreditInfoDetailView.setFrontEndFee(feeDetailView.getPercentFee());
-                                } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
-                                    proposeFeeDetailView.setPrepaymentFee(feeDetailView);
-                                } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
-                                    proposeFeeDetailView.setCancellationFee(feeDetailView);
-                                } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
-                                    proposeFeeDetailView.setExtensionFee(feeDetailView);
-                                } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
-                                    proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                if(!Util.isNull(proposeCreditInfoDetailView)) {
+                                    proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
+                                    ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
+                                    if (!Util.isNull(productProgram)) {
+                                        proposeFeeDetailView.setProductProgram(productProgram.getName());
+                                    }
+                                    if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                                        proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                                        proposeCreditInfoDetailView.setFrontEndFeeOriginal(feeDetailView.getPercentFee());
+                                        proposeCreditInfoDetailView.setFrontEndFee(feeDetailView.getPercentFee());
+                                    } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                                        proposeFeeDetailView.setPrepaymentFee(feeDetailView);
+                                    } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                                        proposeFeeDetailView.setCancellationFee(feeDetailView);
+                                    } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                                        proposeFeeDetailView.setExtensionFee(feeDetailView);
+                                    } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                                        proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                    }
                                 }
                             }
                         }
@@ -474,22 +476,24 @@ public class ProposeLineControl extends BusinessControl {
 
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
-                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
-                                proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
-                                ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
-                                if (!Util.isNull(productProgram)) {
-                                    proposeFeeDetailView.setProductProgram(productProgram.getName());
-                                }
-                                if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
-                                    proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                                } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
-                                    proposeFeeDetailView.setPrepaymentFee(feeDetailView);
-                                } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
-                                    proposeFeeDetailView.setCancellationFee(feeDetailView);
-                                } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
-                                    proposeFeeDetailView.setExtensionFee(feeDetailView);
-                                } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
-                                    proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.A);
+                                if(!Util.isNull(proposeCreditInfoDetailView)) {
+                                    proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
+                                    ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
+                                    if (!Util.isNull(productProgram)) {
+                                        proposeFeeDetailView.setProductProgram(productProgram.getName());
+                                    }
+                                    if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                                        proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                                    } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                                        proposeFeeDetailView.setPrepaymentFee(feeDetailView);
+                                    } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                                        proposeFeeDetailView.setCancellationFee(feeDetailView);
+                                    } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                                        proposeFeeDetailView.setExtensionFee(feeDetailView);
+                                    } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                                        proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                    }
                                 }
                             }
                         }

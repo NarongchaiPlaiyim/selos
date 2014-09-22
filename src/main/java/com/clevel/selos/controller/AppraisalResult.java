@@ -38,7 +38,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +46,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "appraisalResult")
-public class AppraisalResult extends BaseController implements Serializable {
+public class AppraisalResult extends BaseController {
 
     @Inject
     @SELOS
@@ -118,7 +117,6 @@ public class AppraisalResult extends BaseController implements Serializable {
 
     private AppraisalData appraisalData;
 
-    private List<HeadCollateralData> headCollateralDataList;
     private HeadCollateralData headCollateralData;
 
     private SubCollateralData subCollateralData;
@@ -144,16 +142,6 @@ public class AppraisalResult extends BaseController implements Serializable {
 
     public AppraisalResult() {
 
-    }
-
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
-                (Long)session.getAttribute("stepId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
     }
 
     private void init(){
@@ -219,19 +207,14 @@ public class AppraisalResult extends BaseController implements Serializable {
     }
 
     public void onChangePageCauseNoRequest(){
-        try{
-            log.info("onChangePageCauseNoRequest 1");
+        try {
             String url = "appraisalRequest.jsf";
-            log.info("onChangePageCauseNoRequest 2");
             FacesContext fc = FacesContext.getCurrentInstance();
-            log.info("onChangePageCauseNoRequest 3");
             ExternalContext ec = fc.getExternalContext();
-            log.info("redirect to new page");
             ec.redirect(url);
         } catch(Exception ex) {
             log.error("Exception : ", ex);
             messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
-
             if(ex.getCause() != null){
                 message = msg.get("app.appraisal.result.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
