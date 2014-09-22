@@ -9,10 +9,7 @@ import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.BizInfoDetailView;
-import com.clevel.selos.model.view.BizInfoSummaryView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.DBRView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
@@ -39,6 +36,10 @@ public class CalculationControl extends BusinessControl{
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private QualitativeControl qualitativeControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     @Inject
     private ProposeLineDAO proposeLineDAO;
@@ -655,5 +656,55 @@ public class CalculationControl extends BusinessControl{
 
         //Update for cal new WC to cal another method
         calForWC(workCaseId);
+    }
+
+    public void calculateBOTClass(long workCaseId){
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        int qualitative = 0;
+        if(basicInfo != null && basicInfo.getId() != 0){
+            qualitative = basicInfo.getQualitativeType(); // A = 1 , B = 2
+        }
+
+        QualitativeView qualitativeView;
+        if(qualitative == 1){ //todo: enum
+            qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
+        } else if (qualitative == 2) {
+            qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
+        } else {
+            qualitativeView = null;
+        }
+
+        String botClassReason = "";
+        String botClass = "";
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(Util.isNull(exSummary)){
+            exSummary = new ExSummary();
+        }
+
+        if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                botClassReason = qualitativeView.getQualityLevel() != null ? qualitativeView.getQualityLevel().getDescription() : "";
+                botClass = qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("") ? qualitativeView.getQualityResult() : "";
+            }
+        } else { // (Bot Class = P,SM,SS,D,DL) DL is the worst.
+            String tmpWorstCase = "";
+            String worstCase = "";
+            List<Customer> customerList = customerDAO.findBorrowerByWorkCaseId(workCaseId);
+            if(customerList != null && customerList.size() > 0){
+                for(Customer customer : customerList){
+                    tmpWorstCase = exSummaryControl.calWorstCaseBotClass(tmpWorstCase, customer.getCustomerOblInfo() != null ? customer.getCustomerOblInfo().getAdjustClass() : "");
+                }
+            }
+
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                botClassReason = qualitativeView.getQualityLevel() != null ? qualitativeView.getQualityLevel().getDescription() : "";
+                if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("")){
+                    botClass = exSummaryControl.calWorstCaseBotClass(tmpWorstCase, qualitativeView.getQualityResult());
+                }
+            }
+        }
+        exSummary.setCreditRiskReason(botClassReason);
+        exSummary.setCreditRiskBOTClass(botClass);
+        exSummaryDAO.persist(exSummary);
     }
 }

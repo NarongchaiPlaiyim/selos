@@ -319,8 +319,8 @@ public class BasicInfo extends BaseController {
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
-            exSummaryControl.calculateBOTClass(workCaseId);
-            exSummaryControl.calForBasicInfo(workCaseId);
+            calculationControl.calculateBOTClass(workCaseId);
+            calculationControl.calForBasicInfo(workCaseId);
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");

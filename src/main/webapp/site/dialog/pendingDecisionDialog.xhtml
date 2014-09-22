@@ -6,10 +6,10 @@
     <p:panel id="pendingDecisionDlgPanel" styleClass="panel-dialog">
         <table class="content_form">
             <tr>
-                <td class="title">Reason for Pending :</td>
-                <td>
+                <td class="title" style="width: 190px;">Reason for Pending :</td>
+                <td style="width: 300px;">
                     <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                     value="#{headerController.reasonId}"
+                                     value="#{headerController.pendingReasonId}"
                                      required="#{not empty param[btnSubmitPendingDecision.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{headerController.reasonList}"
@@ -20,14 +20,17 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">Remark :</td>
+                <td class="title top">Remark :</td>
                 <td>
                     <p:inputTextarea value="#{headerController.pendingRemark}"
+                                     maxlength="500"
                                      autoResize="false"
-                                     cols="35"
-                                     rows="5">
+                                     cols="35" rows="5">
                     </p:inputTextarea>
                 </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
             </tr>
             <tr>
                 <td colspan="2" class="center">
@@ -38,15 +41,15 @@
                                      actionListener="#{headerController.onSubmitPendingDecision()}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'pendingDecisionDlg')"
                                      process="@form"
-                                     update=":frmMain:pendingDecisionPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                     styleClass="small" onclick="pendingDecisionDlg.hide()"/>
+                                     update=":frmMain:pendingDecisionDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" process="@this"
+                                     styleClass="small" onclick="PF('pendingDecisionDlg').hide()"/>
                 </td>
             </tr>
         </table>
+        <p:blockUI block="pendingDecisionDlgPanel" trigger=":frmMain:btnSubmitPendingDecisionDlg">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </p:panel>
-    <p:blockUI block="pendingDecisionDlgPanel" trigger=":frmMain:btnSubmitPendingDecisionDlg">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
 </ui:composition>

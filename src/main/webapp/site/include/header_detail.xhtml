@@ -154,6 +154,7 @@
     <!--Cancel CA FullApplication-->
     <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel CA')}"
+                     onclick="PF('blockUI').show()"
                      actionListener="#{headerController.onOpenCancelCA()}"
                      oncomplete="cancelCADlg.show()"
                      update=":frmMain:cancelCAPanel">
@@ -436,7 +437,8 @@
     <p:commandButton id="btnCancelCA_Pre" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel CA')}"
                      actionListener="#{headerController.onOpenCancelCA()}"
-                     oncomplete="cancelCADlg.show()"
+                     onstart="blockUI.show()"
+                     oncomplete="cancelCADlg.show(), blockUI.hide()"
                      update=":frmMain:cancelCAPanel">
         <p:resetInput target=":frmMain:cancelCAPanel"/>
     </p:commandButton>
@@ -602,7 +604,7 @@
 <p:panel id="cancelCAPanel" styleClass="panel">
     <p:dialog id="cancelCADialog" widgetVar="cancelCADlg" header="Cancel CA"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="460" height="160" closable="false">
+              modal="true" width="460" height="170" closable="false">
         <ui:include src="/site/dialog/cancelCA.xhtml"/>
     </p:dialog>
 </p:panel>
@@ -770,7 +772,7 @@
          rendered="#{headerController.checkButton('Pending for Decision')}">
     <p:dialog id="pendingDecisionDialog" widgetVar="pendingDecisionDlg" header="Pending Decision Information"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="500" height="200" closable="false">
+              modal="true" width="500" height="170" closable="false">
         <ui:include src="/site/dialog/pendingDecisionDialog.xhtml"/>
     </p:dialog>
 </p:panel>

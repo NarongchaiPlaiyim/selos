@@ -12,6 +12,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
@@ -223,6 +224,7 @@ public class HeaderController extends BaseController {
     //Customer Acceptance
     private List<Reason> reasonList;
     private String pendingRemark;
+    private int pendingReasonId;
 
     //Request Appraisal ( After Customer Acceptance )
     private List<User> aadAdminList;
@@ -1627,32 +1629,27 @@ public class HeaderController extends BaseController {
     }
 
     public void onOpenPendingDecision(){
+        _loadSessionVariable();
+        pendingReasonId = 0;
+        pendingRemark = "";
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.PENDING_REASON);
         RequestContext.getCurrentInstance().execute("pendingDecisionDlg.show()");
     }
 
     public void onSubmitPendingDecision(){
-        String wobNumber = "";
-        String queueName = "";
         boolean complete = false;
-
-        HttpSession session = FacesUtil.getSession(false);
-        queueName = Util.parseString(session.getAttribute("queueName"), "");
-        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
-        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
+        if(!Util.isNull(pendingReasonId) && !Util.isZero(pendingReasonId)){
             try{
-                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, reasonId);
+                complete = true;
+                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, pendingReasonId);
                 messageHeader = "Information.";
                 message = "Submit case success.";
-                complete = true;
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                showMessageBox();
             } catch (Exception ex) {
                 log.error("Exception while submit pending decision, ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                complete = true;
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                showMessageBox();
             }
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
@@ -1660,10 +1657,7 @@ public class HeaderController extends BaseController {
 
     public void onRequestPriceReduction(){
         log.debug("onRequestPriceReduction ( in step Customer Acceptance )");
-        HttpSession session = FacesUtil.getSession(false);
-        String queueName = Util.parseString(session.getAttribute("queueName"), "");
-        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        _loadSessionVariable();
         requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
         if(requestPricing) {
             try {
@@ -1682,8 +1676,6 @@ public class HeaderController extends BaseController {
             message = "Can not Request for Price Reduction, cause this case has no Pricing Request.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
-
-
     }
 
     public void onOpenCancelRequestPriceReduction(){
@@ -2800,7 +2792,8 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("ENDSTAGE".equalsIgnoreCase(stageString)){
-            if(statusId == 0){
+            if(statusId == StatusValue.CANCEL_CA.value() || statusId == StatusValue.REJECT_CA.value() ||
+                    statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
                 accessible = true;
             }
         }
@@ -3700,5 +3693,13 @@ public class HeaderController extends BaseController {
 
     public void setReturnAADUWRemark(String returnAADUWRemark) {
         this.returnAADUWRemark = returnAADUWRemark;
+    }
+
+    public int getPendingReasonId() {
+        return pendingReasonId;
+    }
+
+    public void setPendingReasonId(int pendingReasonId) {
+        this.pendingReasonId = pendingReasonId;
     }
 }
