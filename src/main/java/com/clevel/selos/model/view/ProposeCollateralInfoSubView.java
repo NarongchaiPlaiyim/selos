@@ -1,9 +1,11 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.SubCollateralType;
+import com.clevel.selos.system.Config;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class ProposeCollateralInfoSubView implements Serializable {
 
     //create by bird
     private String path;
+    @Inject
+    @Config(name = "report.subreport")
+    String pathsub;
 
     public ProposeCollateralInfoSubView() {
         reset();
@@ -42,6 +47,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue = BigDecimal.ZERO;
         this.subId = "";
+        this.path = pathsub;
     }
 
     public long getId() {
