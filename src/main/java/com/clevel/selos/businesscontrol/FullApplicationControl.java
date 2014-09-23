@@ -782,6 +782,17 @@ public class FullApplicationControl extends BusinessControl {
     }
     //------ End Function for Submit CA BU ----------//
     //------ Function for Submit UW ----------------//
+    public boolean checkUWDecision(long workCaseId){
+        boolean isUWReject = false;
+        ApprovalHistory approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUser(workCaseId, getCurrentUserID());
+        if(!Util.isNull(approvalHistoryEndorseCA)){
+            if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
+                isUWReject = true;
+            }
+        }
+        return isUWReject;
+    }
+
     public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
         String decisionFlag;
         String haveRG001 = "N";

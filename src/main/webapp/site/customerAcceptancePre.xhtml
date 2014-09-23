@@ -55,13 +55,14 @@
                                     <table>
                                         <tr>
                                             <td class="title" style="width:200px;">
-                                                <p:outputLabel value="#{msg.get('app.approveType')}#{customerAcceptancePre.mandate('approvedType')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.approveType')}#{customerAcceptancePre.mandate('approveResult')}" styleClass="center"/>
                                             </td>
                                             <td style="width:200px;">
-                                                <p:selectOneRadio value="#{customerAcceptancePre.approveType}" disabled="true">
-                                                	<f:selectItems value="#{enumGeneralControl.approveTypes}"
-                                                                   var="approveType"
-                                                		           itemLabel="#{msg.get(approveType.msgKey)}" itemValue="#{approveType}"/>
+                                                <p:selectOneRadio value="#{customerAcceptancePre.approveResult}"
+                                                                  disabled="#{customerAcceptancePre.isDisabled('approveResult')}">
+                                                	<f:selectItems value="#{enumGeneralControl.approveResults}"
+                                                                   var="approveResult"
+                                                		           itemLabel="#{msg.get(approveResult.msgKey)}" itemValue="#{approveResult}"/>
                                                 </p:selectOneRadio>
                                             </td>
                                         </tr>
@@ -80,6 +81,7 @@
                                                      styleClass="medium"
                                                      process="@this"
                                                      action="#{customerAcceptancePre.onOpenAddContactRecordDialog()}"
+                                                     disabled="#{customerAcceptancePre.isDisabled('addContactRecordButton')}"
                                                      oncomplete="p_contactRecordDlg.show()"
                                                      update=":contactRecordDlg">
 										<p:resetInput target=":contactRecordDlg" />
@@ -142,20 +144,19 @@
 	                           						oncomplete="p_contactRecordDlg.show();"
 	                           						action="#{customerAcceptancePre.onOpenUpdateContactRecordDialog()}"
 	                           						update=":contactRecordDlg"
-	                           						style="margin-right:0px !important"
-
-	                           						>
+	                           						style="margin-right:0px !important">
 	                           						<p:resetInput target=":contactRecordDlg" />
 	                           						<f:setPropertyActionListener target="#{customerAcceptancePre.contactRecord}"
 	                           							 value="#{detail}" />
 	                           					</p:commandButton>
 	                                            
-	                                            <p:commandButton icon="ui-icon-trash"  title="#{msg.get('app.button.delete')}"
-	                                            	process="@this"
-	                           						oncomplete="p_delContactRecordDlg.show()"
-	                           						style="margin-right:0px !important">
+	                                            <!--<p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+                                                                 disabled="#{customerAcceptancePre.isDisabled('deleteButton')}"
+                                                                 process="@this"
+                                                                 oncomplete="p_delContactRecordDlg.show()"
+                                                                 style="margin-right:0px !important">
 	                                            	<f:setPropertyActionListener target="#{customerAcceptancePre.deletedRowId}" value="#{rowIdx}" />
-	                                            </p:commandButton>
+	                                            </p:commandButton>-->
 	                           				</h:panelGroup>
 	                           			</p:column>
 	                           		</p:dataTable>
@@ -173,10 +174,12 @@
 	                        <tr>
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}"
+                                                      disabled="#{customerAcceptancePre.isDisabled('saveButton')}"
                                                       actionListener="#{customerAcceptancePre.onSaveCustomerAcceptance()}"
                                                       styleClass="medium"
                                                       update=":frmMain :msgBoxSystemMessagePanel"/>
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}"
+                                                      disabled="#{customerAcceptancePre.isDisabled('cancelButton')}"
                                                       styleClass="medium"
                                                       oncomplete="p_cancelContactRecordDlg.show()"/>
 	                             </td>

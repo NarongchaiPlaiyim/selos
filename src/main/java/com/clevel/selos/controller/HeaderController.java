@@ -133,6 +133,7 @@ public class HeaderController extends BaseController {
     private boolean isSubmitForBDM;
     private boolean isSubmitForUW;
     private boolean isSubmitForUW2;
+    private boolean isUWRejected;
 
     private int submitPricingLevel;
     private int submitOverSLA;
@@ -1085,7 +1086,11 @@ public class HeaderController extends BaseController {
                     selectedUW2User = "";
                     selectedDOALevel = 0;
 
-                    authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    isUWRejected = fullApplicationControl.checkUWDecision(workCaseId);
+
+                    if(!isUWRejected){
+                        authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    }
                     log.debug("authorizationDOAList : {}", authorizationDOAList.size());
                 }
                 RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
@@ -1098,6 +1103,7 @@ public class HeaderController extends BaseController {
         }catch(Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
+            log.error("Exception while open submit uw : ", ex);
             showMessageBox();
         }
     }
@@ -2792,7 +2798,7 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("ENDSTAGE".equalsIgnoreCase(stageString)){
-            if(statusId == StatusValue.CANCEL_CA.value() || statusId == StatusValue.REJECT_CA.value() ||
+            if(statusId == 0 || statusId == StatusValue.CANCEL_CA.value() || statusId == StatusValue.REJECT_CA.value() ||
                     statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
                 accessible = true;
             }
@@ -3701,5 +3707,13 @@ public class HeaderController extends BaseController {
 
     public void setPendingReasonId(int pendingReasonId) {
         this.pendingReasonId = pendingReasonId;
+    }
+
+    public boolean isUWRejected() {
+        return isUWRejected;
+    }
+
+    public void setUWRejected(boolean isUWRejected) {
+        this.isUWRejected = isUWRejected;
     }
 }
