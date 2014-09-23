@@ -915,17 +915,19 @@ public class CustomerTransform extends Transform {
                     }
                 }
 
-                customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
-                customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
-                customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
-                customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
-                customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
-                customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
-                customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
-                customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
-                customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
-                customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
-                customerOblAccountInfo.setCustomer(customer);
+                if(customerOblAccountInfo != null) {
+                    customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
+                    customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
+                    customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
+                    customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
+                    customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
+                    customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
+                    customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
+                    customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
+                    customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
+                    customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
+                    customerOblAccountInfo.setCustomer(customer);
+                }
             }
         }
         return customerOblAccountInfoList;
