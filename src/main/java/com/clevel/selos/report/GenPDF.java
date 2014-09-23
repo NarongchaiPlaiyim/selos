@@ -165,6 +165,7 @@ public class GenPDF extends ReportService implements Serializable {
         init();
         reportView = new ReportView();        
         user = (User)session.getAttribute("user");
+        log.debug("-----Role [{}]",user.getRole().getId());
         log.debug("GenPDF onCreation and New ReportView");
         onCheckRole();
     }
@@ -251,11 +252,15 @@ public class GenPDF extends ReportService implements Serializable {
                 {"C040", "C040"}};
         Map code = ArrayUtils.toMap(cancelCode);
         rejectType = false;
+        exsumType = false;
+        opshectType = false;
+        appraisalType = false;
 
         // ###### Role AAD Can not print Opshect And Exsum , Role UW Can not print Appraisal Request And Reject Letter ######
         if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
             exsumType = true;
             opshectType = true;
+            rejectType = true;
             log.debug("Is role AAD Admin. [{}], Is role AAD Committee. [{}]",readonlyIsAAD_ADMIN,readonlyIsAAD_COMMITTEE);
         } else if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
                 readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
