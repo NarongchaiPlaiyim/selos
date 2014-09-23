@@ -106,7 +106,7 @@
                 </h:selectOneMenu>
 
                     <p:spacer width="15px"/>
-                    <p:commandButton  id="btnSearchFacility" styleClass="medium" value="Search" action="#{change.changOwnerSearchQuery()}" ajax="false"></p:commandButton> </td>
+                    <p:commandButton  id="btnSearchFacility" binding="#{validateChangeOwnerSearch}" styleClass="medium" value="Search" action="#{change.changOwnerSearchQuery()}" ajax="false"></p:commandButton> </td>
             </tr>
 
         </table>
