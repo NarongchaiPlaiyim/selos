@@ -1414,7 +1414,7 @@ public class CustomerInfoIndividual implements Serializable {
 
                         customerInfoView.setCollateralOwner(1);
 
-                        customerInfoView.setSpouseId(1);
+                        customerInfoView.setSpouseId(spoId);
 
                         //set default country
                         if(customerInfoView.getCitizenCountry() != null){
