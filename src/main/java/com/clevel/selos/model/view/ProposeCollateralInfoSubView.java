@@ -23,6 +23,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
     private BigDecimal mortgageValue;
     private String subId;
 
+    //create by bird
     private String path;
 
     public ProposeCollateralInfoSubView() {
