@@ -1405,6 +1405,8 @@ public class CustomerInfoIndividual implements Serializable {
                         reference.setId(refId);
                         customerInfoView.setReference(reference);
 
+                        customerInfoView.setCollateralOwner(1);
+
                         //set default country
                         if(customerInfoView.getCitizenCountry() != null){
                             customerInfoView.getCitizenCountry().setId(211);
@@ -1445,7 +1447,9 @@ public class CustomerInfoIndividual implements Serializable {
                         }
 
                         if(customerInfoView.getSpouse() != null){
-                            log.debug("############## Spouse != null ##############");
+                            customerInfoView.getSpouse().setDocumentType(customerInfoView.getDocumentType());
+                            customerInfoView.getSpouse().setSearchBy(1);
+                            customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
@@ -1457,7 +1461,7 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.getSpouse().setSearchBy(1);
                                     customerInfoView.getSpouse().setSearchFromRM(1);
                                     customerInfoView.getSpouse().setSearchId(cusSpouseResultView.getCustomerInfoView().getCitizenId());
-                                    customerInfoView.getSpouse().setDocumentType(cusSpouseResultView.getCustomerInfoView().getDocumentType());
+                                    customerInfoView.getSpouse().setDocumentType(customerInfoView.getDocumentType());
                                     customerInfoView.getSpouse().setCollateralOwner(1);
 
                                     maritalStatusFlag = true;
@@ -1539,6 +1543,7 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
                 onChangeDOB();
+                onChangeMaritalStatusInitial();
                 onChangeProvinceEditForm1();
                 onChangeDistrictEditForm1();
                 onChangeProvinceEditForm2();

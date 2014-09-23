@@ -8,7 +8,9 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.OpenAccountFullView;
+import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.master.BankAccountProductView;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
@@ -71,6 +73,7 @@ public class OpenAccountTransform extends Transform {
                 OpenAccountName openAccountName = new OpenAccountName();
                 Customer customer = customerDAO.findById(civ.getId());
                 openAccountName.setCustomer(customer);
+                openAccountName.setOpenAccount(openAccount);
                 openAccountNameList.add(openAccountName);
             }
             openAccount.setOpenAccountNameList(openAccountNameList);
@@ -83,6 +86,7 @@ public class OpenAccountTransform extends Transform {
             for (BankAccountPurposeView bpv : openAccountView.getBankAccountPurposeView()){
                 OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
                 openAccountPurpose.setAccountPurpose(bankAccountPurposeTransform.transformToModel(bpv));
+                openAccountPurpose.setOpenAccount(openAccount);
                 openAccountPurposeList.add(openAccountPurpose);
             }
             openAccount.setOpenAccountPurposeList(openAccountPurposeList);
