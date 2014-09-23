@@ -47,7 +47,7 @@
                                     mindate="#{customerAcceptancePre.minDate}"
                                     autocomplete="false"
                                     required="#{customerAcceptancePre.isDialogMandate('record.nextCallingDate')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
-                                    disabled="#{customerAcceptancePre.isDialogDisable('record.nextCallingDate')}"/>
+                                    disabled="#{customerAcceptancePre.isDisabled('record.nextCallingDate')}"/>
                        
                 </td>
             </tr>
@@ -58,12 +58,12 @@
                     <p:spinner value="#{customerAcceptancePre.contactRecord.nextCallingHour}"
                                min="0" max="23" size="3" style="margin-right : 5px"
                                required="#{customerAcceptancePre.isDialogMandate('record.nextCallingTime')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
-                               disabled="#{customerAcceptancePre.isDialogDisable('record.nextCallingTime')}"/>
+                               disabled="#{customerAcceptancePre.isDisabled('record.nextCallingTime')}"/>
                     :
-                    <p:spinner value="#{customerAcceptance.contactRecord.nextCallingMin}"
+                    <p:spinner value="#{customerAcceptancePre.contactRecord.nextCallingMin}"
                                min="0" max="59"  size="3" style="margin-left:5px"
-                               required="#{customerAcceptance.isDialogMandate('record.nextCallingTime')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
-                               disabled="#{customerAcceptance.isDialogDisable('record.nextCallingTime')}"/>
+                               required="#{customerAcceptancePre.isDialogMandate('record.nextCallingTime')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
+                               disabled="#{customerAcceptancePre.isDisabled('record.nextCallingTime')}"/>
                 </td>
             </tr>
             <tr>
@@ -91,7 +91,7 @@
                                      value="#{customerAcceptancePre.contactRecord.remark}"
                                      autoResize="false"
                                      required="#{customerAcceptancePre.isDialogMandate('record.remark')}"  requiredMessage="#{msg.get('app.cusaccept.validate.remark')}"
-                                     readonly="#{customerAcceptancePre.isDialogDisable('record.remark')}"
+                                     readonly="#{customerAcceptancePre.isDisabled('record.remark')}"
                                      rows="3" cols="40" />
                 </td>
             </tr>

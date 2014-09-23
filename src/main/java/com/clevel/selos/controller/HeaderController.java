@@ -1087,7 +1087,7 @@ public class HeaderController extends BaseController {
                     selectedDOALevel = 0;
 
                     isUWRejected = fullApplicationControl.checkUWDecision(workCaseId);
-
+                    authorizationDOAList = new ArrayList<AuthorizationDOA>();
                     if(!isUWRejected){
                         authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
                     }
@@ -1125,8 +1125,17 @@ public class HeaderController extends BaseController {
     private void submitForUW(){
         log.debug("submitForUW :: Start..");
         boolean complete = false;
+        boolean checkUW = true;
         try{
-            if(selectedUW2User != null && !selectedUW2User.equals("")){
+            if(!isUWRejected){
+                if(selectedUW2User != null && !selectedUW2User.equals("")){
+                    checkUW = true;
+                }else{
+                    checkUW = false;
+                }
+            }
+
+            if(checkUW){
                 if(canSubmitWithoutReturn()){
                     fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
@@ -1229,12 +1238,17 @@ public class HeaderController extends BaseController {
         else if(workCaseId != 0)
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
 
-        if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
-            reasonList = reasonToStepDAO.getRejectReason(stepId);
-            cancelReasonId = reasonDAO.getBRMSReasonId();
-        } else {
+        if(stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value()){
             reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
             cancelReasonId = 0;
+        } else {
+            if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
+                reasonList = reasonToStepDAO.getRejectReason(stepId);
+                cancelReasonId = reasonDAO.getBRMSReasonId();
+            } else {
+                reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
+                cancelReasonId = 0;
+            }
         }
 
         log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());

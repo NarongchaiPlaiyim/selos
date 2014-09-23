@@ -11,11 +11,11 @@
     <title>#{msg.get('app.cusaccept.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
     <f:event type="preRenderView" listener="#{customerAcceptancePre.preRender()}" />
-    
     <p:panel id="pnl_maincontainer" styleClass="panel">
         <h:form id="frmMain">
             <div id="main_container">
@@ -150,13 +150,13 @@
 	                           							 value="#{detail}" />
 	                           					</p:commandButton>
 	                                            
-	                                            <!--<p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+	                                            <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
                                                                  disabled="#{customerAcceptancePre.isDisabled('deleteButton')}"
                                                                  process="@this"
                                                                  oncomplete="p_delContactRecordDlg.show()"
                                                                  style="margin-right:0px !important">
 	                                            	<f:setPropertyActionListener target="#{customerAcceptancePre.deletedRowId}" value="#{rowIdx}" />
-	                                            </p:commandButton>-->
+	                                            </p:commandButton>
 	                           				</h:panelGroup>
 	                           			</p:column>
 	                           		</p:dataTable>
