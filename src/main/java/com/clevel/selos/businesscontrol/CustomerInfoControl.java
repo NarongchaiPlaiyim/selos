@@ -187,8 +187,8 @@ public class CustomerInfoControl extends BusinessControl {
 
             individualDAO.persist(spouse.getIndividual());
             addressDAO.persist(spouse.getAddressesList());
-        }else if(customer.getIndividual().getMaritalStatus() != null
-                && customer.getIndividual().getMaritalStatus().getSpouseFlag() != 1){
+        } else if(customer.getIndividual().getMaritalStatus() != null
+                && customer.getIndividual().getMaritalStatus().getSpouseFlag() != 1) {
             if(customer.getSpouseId() != 0){
                 Customer cus = customerDAO.findById(customer.getSpouseId());
                 if(cus != null){

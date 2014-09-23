@@ -1064,6 +1064,8 @@ public class CustomerInfoIndividual implements Serializable {
                 isEditFormSpouse = false;
                 enableAllFieldCusSpouse = false;
             }
+        } else {
+            customerInfoView.getMaritalStatus().setSpouseFlag(0);
         }
 
         maritalStatusFlagTmp = maritalStatusFlag;
@@ -1091,6 +1093,8 @@ public class CustomerInfoIndividual implements Serializable {
                 isEditFormSpouse = false;
                 enableAllFieldCusSpouse = false;
             }
+        } else {
+            customerInfoView.getMaritalStatus().setSpouseFlag(0);
         }
 
         updateRmtCmdSpouse01();
@@ -1540,9 +1544,11 @@ public class CustomerInfoIndividual implements Serializable {
                     message = customerInfoResultView.getReason();
                     severity = "info";
                 }
+
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
+
                 onChangeDOB();
 
                 MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
@@ -1899,8 +1905,6 @@ public class CustomerInfoIndividual implements Serializable {
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             calculationControl.calForCustomerInfo(workCaseId);
             isFromSummaryParam = true;
-            onAddNewIndividual();
-            onEditIndividual();
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
