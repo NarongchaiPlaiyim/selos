@@ -313,6 +313,12 @@
 </p:panel>
 <!--############ Stage for Appraisal ############-->
 <p:panel id="header_panel_appraisal" rendered="#{headerController.checkAccessStage('APPRAISAL')}" styleClass="panel">
+    <!--Print Report-->
+    <p:commandButton id="btnPrintReportonStageAppraisal" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
+                     actionListener="#{report.setNameReport()}"
+                     oncomplete="PF('printReportDlg').show()"
+                     update=":frmMain:printReportPanel">
+    </p:commandButton>
     <!-- Request Appraisal [ After Customer Accepted ]-->
     <p:commandButton id="btnReqAppr_BDM" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.stepId == 2032}"
@@ -558,13 +564,11 @@
 </p:confirmDialog>
 
 <p:panel id="printReportPanel" styleClass="panel">
-    <c:if test="#{headerController.checkAccessStage('ENDSTAGE')}">
-        <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
-                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                  modal="true" width="700" height="200" closable="false">
-            <ui:include src="/site/dialog/printReportDialog.xhtml"/>
-        </p:dialog>
-    </c:if>
+    <p:dialog id="printReportDialog" widgetVar="printReportDlg" header="Print To Report"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="700" height="200" closable="false">
+        <ui:include src="/site/dialog/printReportDialog.xhtml"/>
+    </p:dialog>
 </p:panel>
 
 <p:panel id="assignABDMPanel" styleClass="panel">
