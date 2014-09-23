@@ -1376,6 +1376,8 @@ public class CustomerInfoIndividual implements Serializable {
         int refId = 0;
         int refSpoId = 0;
 
+        long spoId = customerInfoView.getSpouseId();
+
         if(customerInfoView.getSpouse() != null){
             cusSpoId = customerInfoView.getSpouse().getId();
             if(relationSpouseCusId == RelationValue.BORROWER.value()){
@@ -1411,6 +1413,8 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.setReference(reference);
 
                         customerInfoView.setCollateralOwner(1);
+
+                        customerInfoView.setSpouseId(1);
 
                         //set default country
                         if(customerInfoView.getCitizenCountry() != null){
