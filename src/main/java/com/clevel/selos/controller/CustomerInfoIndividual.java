@@ -1042,11 +1042,12 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeMaritalStatusInitial(){
-        if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
+        if(customerInfoView != null && customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getId() == 0){
             return;
         }
 
         MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
+
         if(Util.isTrue(maritalStatusView.getSpouseFlag())){
             maritalStatusFlag = true;
         } else {
@@ -1543,7 +1544,7 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
                 onChangeDOB();
-                onChangeMaritalStatusInitial();
+                onChangeMaritalStatus();
                 onChangeProvinceEditForm1();
                 onChangeDistrictEditForm1();
                 onChangeProvinceEditForm2();
