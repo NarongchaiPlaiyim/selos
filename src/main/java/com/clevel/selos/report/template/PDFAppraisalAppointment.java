@@ -142,8 +142,6 @@ public class PDFAppraisalAppointment implements Serializable {
             }
         }
 
-
-
         log.debug("--fillAppraisalContactDetailViewReport. {}",report);
         return report;
     }
