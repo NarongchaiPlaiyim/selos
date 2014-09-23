@@ -45,7 +45,7 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td class="title">
+                                            <td class="title" style="min-width: 250px; width: 250px; max-width: 250px">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}"/>
                                                 <h:outputText value="#{dbrInfo.mandate('incomeFactor')}" styleClass="require-field"/>
                                                 <h:outputText value=" :"/>
@@ -57,13 +57,13 @@
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
-                                            <td style="min-width: 250px; width: 250px; max-width: 250px"></td>
-                                           <td class="title">
+                                            <td style="min-width: 100px; width: 100px; max-width: 100px"></td>
+                                            <td class="title" style="min-width: 300px; width: 300px; max-width: 300px">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrMarketableFlag')}" styleClass="center"/>
                                                 <h:outputText value="#{dbrInfo.mandate('DBRMarketableFlag')}" styleClass="require-field"/>
                                                 <h:outputText value=" :"/>
                                             </td>
-                                            <td >
+                                            <td>
                                                 <p:selectOneMenu id="dbrMarketableFlag"
                                                                  value="#{dbrInfo.dbr.dbrMarketableFlag}"
                                                                  disabled="#{dbrInfo.isDisabled('DBRMarketableFlag')}">
