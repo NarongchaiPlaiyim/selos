@@ -1544,7 +1544,19 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
                 onChangeDOB();
-                onChangeMaritalStatus();
+
+                MaritalStatusView maritalStatusView = maritalStatusControl.getMaritalStatusById(customerInfoView.getMaritalStatus().getId());
+
+                if(maritalStatusFlag) { //edit when have spouse && retrieve cust not have spouse
+                    if(!Util.isTrue(maritalStatusView.getSpouseFlag())){
+                        onChangeMaritalStatus();
+                    }
+                } else { //edit when not have spouse && retrieve cust have spouse
+                    if(Util.isTrue(maritalStatusView.getSpouseFlag())){
+                        onChangeMaritalStatusInitial();
+                    }
+                }
+
                 onChangeProvinceEditForm1();
                 onChangeDistrictEditForm1();
                 onChangeProvinceEditForm2();
