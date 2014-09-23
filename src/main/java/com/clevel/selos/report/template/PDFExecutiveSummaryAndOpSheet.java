@@ -1464,6 +1464,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
             ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
             collateralDecisionReport.setPath(pathsub);
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubView = new ArrayList<ProposeCollateralInfoSubView>();
+            proposeCollateralInfoSubView.set(0,new ProposeCollateralInfoSubView()).setPath(pathsub);
             proposedCollateralDecisionReportList.add(collateralDecisionReport);
         }
         return proposedCollateralDecisionReportList;
@@ -1554,6 +1556,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
             approvedCollateralDecisionReport.setPath(pathsub);
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubView = new ArrayList<ProposeCollateralInfoSubView>();
+            proposeCollateralInfoSubView.set(0,new ProposeCollateralInfoSubView()).setPath(pathsub);
+            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubView);
             approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
         }
@@ -1643,6 +1648,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
             approvedCollateralDecisionReport.setPath(pathsub);
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubView = new ArrayList<ProposeCollateralInfoSubView>();
+            proposeCollateralInfoSubView.set(0,new ProposeCollateralInfoSubView()).setPath(pathsub);
             approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
         }
