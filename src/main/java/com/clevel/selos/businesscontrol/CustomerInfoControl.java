@@ -765,8 +765,14 @@ public class CustomerInfoControl extends BusinessControl {
             log.debug("#### proposeCollateralSubOwnerList size :: {}", proposeCollateralSubOwnerList != null ? proposeCollateralSubOwnerList.size() : "nul");
             log.debug("#### existingGuarantorDetails size :: {}", existingGuarantorDetails != null ? existingGuarantorDetails.size() : "nul");
             if(openAccountNameList != null && openAccountNameList.size() > 0){
-                isExist = true;
-                return isExist;
+                for(OpenAccountName openAccountName : openAccountNameList) {
+                    if(openAccountName.getOpenAccount() != null && openAccountName.getOpenAccount().getId() != 0) {
+                        isExist = true;
+                        return isExist;
+                    } else {
+                        openAccountNameDAO.delete(openAccountName);
+                    }
+                }
             } else if(proposeGuarantorInfoList != null && proposeGuarantorInfoList.size() > 0) {
                 isExist = true;
                 return isExist;
@@ -779,9 +785,9 @@ public class CustomerInfoControl extends BusinessControl {
             } else {
                 return isExist;
             }
-        } else {
-            return isExist;
         }
+
+        return isExist;
     }
 
     public CustomerInfoView getCustomerInfoViewById(long id, List<CustomerInfoView> customerInfoViewList) {
