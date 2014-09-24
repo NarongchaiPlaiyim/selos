@@ -36,10 +36,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Stateless
 public class FullApplicationControl extends BusinessControl {
@@ -1716,6 +1713,8 @@ public class FullApplicationControl extends BusinessControl {
                     List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
                     List<CustomerCSI> customerCSIListDel = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
                     customerCSIDAO.delete(customerCSIListDel);
+
+                    customer.setCustomerCSIList(Collections.<CustomerCSI>emptyList());
 
                     if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
