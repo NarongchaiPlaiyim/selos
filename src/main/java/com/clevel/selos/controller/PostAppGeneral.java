@@ -150,10 +150,12 @@ public class PostAppGeneral implements Serializable  {
 	}
 	
 	public void onOpenReturnDialog() {
+		
 		//loading prelist
 		returnList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,0);
 		if (returnList == null)
 			returnList = new ArrayList<ReturnInfoView>();
+		log.debug("On Open Return Dialog ["+returnList.size()+"]");
 		return01_Remark = "";
 		return01_SelectedReasonId = -1;
 		selectedReturnInfo = null;
@@ -175,6 +177,7 @@ public class PostAppGeneral implements Serializable  {
 			FacesContext.getCurrentInstance().addMessage(null,msg); 
 			return;
 		}
+		log.debug("On Save Return Reason");
 		if (selectedReturnInfo == null) {
 			selectedReturnInfo = new ReturnInfoView();
 			returnList.add(selectedReturnInfo);

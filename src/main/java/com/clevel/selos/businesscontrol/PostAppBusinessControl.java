@@ -412,8 +412,9 @@ public class PostAppBusinessControl extends BusinessControl {
 			List<PledgeInfo> pledges = pledgeInfoDAO.findAllByWorkCaseId(workCase.getId());
 			List<MortgageInfo> mortgages = mortgageInfoDAO.findAllByWorkCaseId(workCase.getId());
 			TCGInfo tcg = tcgInfoDAO.findByWorkCaseId(workCase.getId());
-			
-			checkDate = _getMaxDate(checkDate, tcg.getApproveDate());
+			if (tcg != null) {
+				checkDate = _getMaxDate(checkDate, tcg.getApproveDate());
+			}
 			if (pledges != null && !pledges.isEmpty()) {
 				for (PledgeInfo pledge : pledges) {
 					checkDate = _getMaxDate(checkDate, pledge.getPledgeSigningDate());
