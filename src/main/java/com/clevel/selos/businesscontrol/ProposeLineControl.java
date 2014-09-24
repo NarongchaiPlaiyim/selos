@@ -1266,24 +1266,28 @@ public class ProposeLineControl extends BusinessControl {
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
         List<ProposeCreditInfoDetailView> proCreInfDetViewList = new ArrayList<ProposeCreditInfoDetailView>();
-        if(!Util.isNull(proposeCreditInfoDetailViewList) && !Util.isZero(proposeCreditInfoDetailViewList.size())) {
-            int checkList = 0;
-            for(ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeCreditInfoDetailViewList) {
-                if(!Util.isNull(proposeCreditInfoDetailView) && proposeCreditInfoDetailView.isNoFlag()) {
-                    proCreInfDetViewList.add(proposeCreditInfoDetailView);
-                    checkList++;
+        if(proposeCollateralInfoView.getUwDecision() == DecisionType.APPROVED) {
+            if(!Util.isNull(proposeCreditInfoDetailViewList) && !Util.isZero(proposeCreditInfoDetailViewList.size())) {
+                int checkList = 0;
+                for(ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeCreditInfoDetailViewList) {
+                    if(!Util.isNull(proposeCreditInfoDetailView) && proposeCreditInfoDetailView.isNoFlag()) {
+                        proCreInfDetViewList.add(proposeCreditInfoDetailView);
+                        checkList++;
+                    }
                 }
-            }
 
-            if(checkList > 0){
-                returnMapVal.put("notCheckNoFlag", false);
+                if(checkList > 0){
+                    returnMapVal.put("notCheckNoFlag", false);
+                } else {
+                    returnMapVal.put("notCheckNoFlag", true); // not have check on credit
+                    return returnMapVal;
+                }
             } else {
                 returnMapVal.put("notCheckNoFlag", true); // not have check on credit
                 return returnMapVal;
             }
-        } else {
-            returnMapVal.put("notCheckNoFlag", true); // not have check on credit
-            return returnMapVal;
+        } else  {
+            returnMapVal.put("notCheckNoFlag", false);
         }
 
         returnMapVal.put("notHaveSub", false);
