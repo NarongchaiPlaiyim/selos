@@ -2438,12 +2438,16 @@ public class NCBBizTransform extends BusinessTransform {
     }
 
     private boolean isIgnoreCode(String code){
-        if(!Util.isEmpty(code)
+        /*if(!Util.isEmpty(code)
                 && !code.equalsIgnoreCase(NCBPaymentCode.CODE_XXX.toString())
-                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_999.toString())) {
+                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_999.toString())
+                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_na.toString())) {
             return false;
         }
-        return true;
+        return true;*/
+
+        //These codes are using to get worst data
+        return false;
     }
 
     private boolean compareDateYYYMMDD(String currentDateStr, String compareDateStr){
@@ -2553,7 +2557,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isOutStandingPayment(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 4) { //code >= 004
+            if (value >= NCBPaymentCode.CODE___Y.value()) { //code >= Y
                 return true;
             }
         }
@@ -2563,7 +2567,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isOverLimit(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value == 3) { //code == __Y
+            if (value == NCBPaymentCode.CODE___Y.value()) { //code == __Y
                 return true;
             }
         }
@@ -2573,7 +2577,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isNPLIndividual(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 6) {
+            if (value >= NCBPaymentCode.CODE_003.value()) {
                 return true;
             }
         }
@@ -2583,7 +2587,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isNPLJuristic(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 7) {
+            if (value >= NCBPaymentCode.CODE_004.value()) {
                 return true;
             }
         }
