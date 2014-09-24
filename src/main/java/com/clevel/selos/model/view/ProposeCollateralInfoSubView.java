@@ -1,9 +1,11 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.SubCollateralType;
+import com.clevel.selos.system.Config;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue = BigDecimal.ZERO;
         this.subId = "";
+        this.path = "aaaaaaaaaaaaaaaa";
     }
 
     public long getId() {
@@ -150,19 +153,20 @@ public class ProposeCollateralInfoSubView implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("subCollateralType", subCollateralType).
-                append("address", address).
-                append("landOffice", landOffice).
-                append("titleDeed", titleDeed).
-                append("collateralOwnerAAD", collateralOwnerAAD).
-                append("collateralOwnerUWList", collateralOwnerUWList).
-                append("mortgageList", mortgageList).
-                append("relatedWithList", relatedWithList).
-                append("appraisalValue", appraisalValue).
-                append("mortgageValue", mortgageValue).
-                append("subId", subId).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("subCollateralType", subCollateralType)
+                .append("titleDeed", titleDeed)
+                .append("address", address)
+                .append("landOffice", landOffice)
+                .append("collateralOwnerAAD", collateralOwnerAAD)
+                .append("collateralOwnerUWList", collateralOwnerUWList)
+                .append("mortgageList", mortgageList)
+                .append("relatedWithList", relatedWithList)
+                .append("appraisalValue", appraisalValue)
+                .append("mortgageValue", mortgageValue)
+                .append("subId", subId)
+                .append("path", path)
+                .toString();
     }
 }

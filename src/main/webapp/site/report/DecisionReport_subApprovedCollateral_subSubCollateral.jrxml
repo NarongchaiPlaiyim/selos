@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedCollateral_subSubCollateral" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0e516ec7-21dc-48ec-a688-1c26f9f5e17c">
-	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.zoom" value="1.210000000000001"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -22,9 +22,6 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:/ProjectSELOS/selos/src/main/webapp/site/report/"]]></defaultValueExpression>
 	</parameter>
-	<field name="no" class="java.lang.Integer">
-		<fieldDescription><![CDATA[no]]></fieldDescription>
-	</field>
 	<field name="subCollateralType" class="java.lang.Object">
 		<fieldDescription><![CDATA[subCollateralType.description]]></fieldDescription>
 	</field>
@@ -55,6 +52,10 @@
 	<field name="relatedWithList" class="java.util.List">
 		<fieldDescription><![CDATA[relatedWithList]]></fieldDescription>
 	</field>
+	<field name="path" class="java.lang.String"/>
+	<variable name="no" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{titleDeed}]]></variableExpression>
+	</variable>
 	<columnHeader>
 		<band height="21" splitType="Stretch">
 			<staticText>
@@ -131,7 +132,8 @@
 				<textElement verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{no}+1]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{no}.intValue() == 0 ?
+"" : $V{no}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="3edd9b1d-ea42-447e-b513-4f18b24ec27c" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="125" height="10"/>
@@ -182,21 +184,21 @@
 				<dataSourceExpression><![CDATA[$F{collateralOwnerUWList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{collateralOwnerUWList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral_subcollateralOwnerUWList.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral_subcollateralOwnerUWList.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement uuid="dde47143-4ce3-486e-85ea-a5f54f2b460c" x="343" y="0" width="55" height="31"/>
 				<dataSourceExpression><![CDATA[$F{mortgageList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{mortgageList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral_submortgageList.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral_submortgageList.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement uuid="638b8b2b-69df-4c7d-a407-e88d2ce7d750" x="398" y="0" width="57" height="31"/>
 				<dataSourceExpression><![CDATA[$F{relatedWithList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{relatedWithList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral_subrelatedWithList.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral_subrelatedWithList.jasper"]]></subreportExpression>
 			</subreport>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="901e901e-f0e7-4ac2-9f98-892bb9e0d051" style="detail" stretchType="RelativeToBandHeight" x="25" y="10" width="125" height="10"/>

@@ -277,7 +277,7 @@
 				<subreport>
 					<reportElement uuid="3a7f13c0-0237-400b-a48f-bb1ad213da98" x="66" y="95" width="489" height="39"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
@@ -417,7 +417,7 @@
 					<dataSourceExpression><![CDATA[$F{subViewList}.isEmpty() ?
 new net.sf.jasperreports.engine.JREmptyDataSource() :
 new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{subViewList})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DecisionReport_subApprovedCollateral_subSubCollateral.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subSubCollateral.jasper"]]></subreportExpression>
 				</subreport>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="34164a13-7434-435d-8444-53b63c79eded" x="111" y="0" width="133" height="14"/>
