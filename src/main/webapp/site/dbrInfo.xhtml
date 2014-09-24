@@ -45,7 +45,7 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td class="title">
+                                            <td class="title" style="min-width: 250px; width: 250px; max-width: 250px">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}"/>
                                                 <h:outputText value="#{dbrInfo.mandate('incomeFactor')}" styleClass="require-field"/>
                                                 <h:outputText value=" :"/>
@@ -57,25 +57,25 @@
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
-                                            <td style="min-width: 250px; width: 250px; max-width: 250px"></td>
-                                           <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrMarketableFlag')}" styleClass="center"/>
+                                            <td style="min-width: 150px; width: 150px; max-width: 150px"></td>
+                                            <td class="title" style="min-width: 350px; width: 350px; max-width: 350px">
+                                                <!--<p:outputLabel value="#{msg.get('app.dbr.label.dbrMarketableFlag')}" styleClass="center"/>
                                                 <h:outputText value="#{dbrInfo.mandate('DBRMarketableFlag')}" styleClass="require-field"/>
-                                                <h:outputText value=" :"/>
+                                                <h:outputText value=" :"/>-->
                                             </td>
-                                            <td >
-                                                <p:selectOneMenu id="dbrMarketableFlag"
+                                            <td>
+                                                <!--<p:selectOneMenu id="dbrMarketableFlag"
                                                                  value="#{dbrInfo.dbr.dbrMarketableFlag}"
                                                                  disabled="#{dbrInfo.isDisabled('DBRMarketableFlag')}">
                                                     <f:selectItem itemLabel="#{msg.get('app.label.no')}" itemValue="1"/>
                                                     <f:selectItem itemLabel="#{msg.get('app.label.yes')}" itemValue="2"/>
                                                     <p:ajax event="change" process="@this" update="@this"/>
-                                                </p:selectOneMenu>
+                                                </p:selectOneMenu>-->
                                             </td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td rowspan="5">
+                                            <!--<td rowspan="5">
                                                 <table style="border: 1px solid #acacac; border-spacing: 0; margin-top: 10px;">
                                                     <tr>
                                                         <td style="min-width: 300px; width: 300px; max-width: 300px; margin-left: 2px;">
@@ -83,7 +83,7 @@
                                                         </td>
                                                     </tr>
                                                 </table>
-                                            </td>
+                                            </td>-->
                                             <td></td>
                                         </tr>
                                         <tr>

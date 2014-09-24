@@ -120,10 +120,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<BorrowerExsumReport> fillBorrowerRelatedProfile(){
         List<BorrowerExsumReport> reports = new ArrayList<BorrowerExsumReport>();
         List<CustomerInfoView> customerInfoViewList = exSummaryView.getBorrowerListView();
-        log.debug("customerInfoViewList.size() {}",customerInfoViewList.size());
 
         int count = 1 ;
         if(Util.isSafetyList(customerInfoViewList)){
+            log.debug("customerInfoViewList.size() {}",customerInfoViewList.size());
             for (CustomerInfoView view : customerInfoViewList){
                 BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
                 borrowerExsumReport.setNo(count++);
@@ -161,9 +161,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 }
 
                 List<CustomerCSIView> customerCSIList = view.getCustomerCSIList();
-                log.debug("customerCSIList.size() {}",customerCSIList.size());
 
                 if (Util.isSafetyList(customerCSIList)){
+                    log.debug("customerCSIList.size() {}",customerCSIList.size());
                     for(CustomerCSIView csiView : customerCSIList){
                         borrowerExsumReport.setCustomerCSIList(!Util.isNull(csiView.getWarningCode()) ?
                                 Util.checkNullString(csiView.getWarningCode().getCode()) : SPACE);
@@ -185,12 +185,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     public List<TradeFinanceExsumReport> fillTradeFinance(){
         List<TradeFinanceExsumReport> financeExsumReports = new ArrayList<TradeFinanceExsumReport>();
-
         List<ProposeLineView>  newCreditFacilityViewArrayList = new ArrayList<ProposeLineView>();
         ProposeLineView creditFacilityViews = exSummaryView.getTradeFinance();
+        log.info("creditFacilityViews: {}",creditFacilityViews);
 
         if (!Util.isNull(creditFacilityViews)){
-            log.info("creditFacilityViews: {}",creditFacilityViews);
             newCreditFacilityViewArrayList.add(creditFacilityViews);
             log.debug("newCreditFacilityViewArrayList.size() {}",newCreditFacilityViewArrayList.size());
 
@@ -221,9 +220,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<NCBRecordExsumReport> fillNCBRecord(){
         List<NCBRecordExsumReport> recordExsumReports = new ArrayList<NCBRecordExsumReport>();
         List<NCBInfoView> ncbInfoViewList = exSummaryView.getNcbInfoListView();
-        log.debug("ncbInfoViewList.size() {}",ncbInfoViewList.size());
 
         if (Util.isSafetyList(ncbInfoViewList)){
+            log.debug("ncbInfoViewList.size() {}",ncbInfoViewList.size());
             for (NCBInfoView ncbInfoView : ncbInfoViewList){
                 NCBRecordExsumReport ncbRecordExsumReport = new NCBRecordExsumReport();
                 ncbRecordExsumReport.setNcbCusName(Util.checkNullString(ncbInfoView.getNcbCusName()));
@@ -321,9 +320,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public AccountMovementExSumReport fillAccountMovement(){
         AccountMovementExSumReport movementExSumReport = new AccountMovementExSumReport();
         List<ExSumAccountMovementView> movementViewList = exSummaryView.getExSumAccMovementViewList();
-        log.debug("movementViewList.size() {}",movementViewList.size());
 
         if(Util.isSafetyList(movementViewList)){
+            log.debug("movementViewList.size() {}",movementViewList.size());
             for (ExSumAccountMovementView movementView : movementViewList){
                 movementExSumReport.setOdLimit(Util.convertNullToZERO(movementView.getOdLimit()));
                 movementExSumReport.setUtilization(Util.convertNullToZERO(movementView.getUtilization()));
@@ -380,9 +379,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<DecisionExSumReport> fillDecision(){
         List<DecisionExSumReport> exSumReportList = new ArrayList<DecisionExSumReport>();
         List<ExSumDecisionView> exSumDecisionView = exSummaryView.getExSumDecisionListView();
-        log.debug("exSumDecisionView.size() {}",exSumDecisionView.size());
         int id = 1;
         if(Util.isSafetyList(exSumDecisionView)){
+            log.debug("exSumDecisionView.size() {}",exSumDecisionView.size());
             for (ExSumDecisionView decisionView : exSumDecisionView){
                 DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
                 decisionExSumReport.setId(id++);
@@ -434,7 +433,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public UWDecisionExSumReport fillUWDecision(){
         UWDecisionExSumReport uwDecisionExSumReport = new UWDecisionExSumReport();
         List<ExSumReasonView> exSumReasonViews = exSummaryView.getDeviateCode();
-        log.debug("exSumReasonViews.size() {}",exSumReasonViews.size());
 
         if (!Util.isNull(exSummaryView)){
             uwDecisionExSumReport.setUwCode("6500000000");
@@ -446,6 +444,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         }
 
         if(Util.isSafetyList(exSumReasonViews)){
+            log.debug("exSumReasonViews.size() {}",exSumReasonViews.size());
             for (ExSumReasonView sumReasonView : exSumReasonViews) {
                 uwDecisionExSumReport.setCode(Util.checkNullString(sumReasonView.getCode()));
                 uwDecisionExSumReport.setDescription(Util.checkNullString(sumReasonView.getDescription()));
@@ -484,9 +483,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
 
 
-            log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
 
             if (Util.isSafetyList(appHeaderView.getBorrowerHeaderViewList())){
+                log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
                 for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
                     switch (i){
                         case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
@@ -535,10 +534,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillCreditBorrower. {}");
         List<ExistingCreditDetailView> existingCreditDetailViews = decisionView.getExtBorrowerComCreditList();
         List<BorrowerCreditDecisionReport> borrowerCreditDecisionReportList = new ArrayList<BorrowerCreditDecisionReport>();
-        log.debug("existingCreditDetailViews.size() {}",existingCreditDetailViews.size());
 
         int count = 1;
         if (Util.isSafetyList(existingCreditDetailViews)){
+            log.debug("existingCreditDetailViews.size() {}",existingCreditDetailViews.size());
             for (ExistingCreditDetailView detailView : existingCreditDetailViews){
                 BorrowerCreditDecisionReport decisionReport = new BorrowerCreditDecisionReport();
                 decisionReport.setCount(count++);
@@ -599,10 +598,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillCondition. {}");
         List<ConditionDecisionReport> conditionDecisionReportList = new ArrayList<ConditionDecisionReport>();
         List<ExistingConditionDetailView> existingConditionDetailViews = decisionView.getExtConditionComCreditList();
-        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
         int count =1;
 
         if(Util.isSafetyList(existingConditionDetailViews)){
+            log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
             for (ExistingConditionDetailView view : existingConditionDetailViews){
                 ConditionDecisionReport conditionDecisionReport = new ConditionDecisionReport();
                 conditionDecisionReport.setCount(count++);
@@ -622,10 +621,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillBorrowerRetail. {}");
         List<BorrowerRetailDecisionReport> retailDecisionReportList = new ArrayList<BorrowerRetailDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerRetailCreditList();
-        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
         if(Util.isSafetyList(existingConditionDetailViews)){
+            log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 BorrowerRetailDecisionReport borrowerRetailDecisionReport = new BorrowerRetailDecisionReport();
                 borrowerRetailDecisionReport.setCount(count++);
@@ -686,10 +685,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillAppInRLOS. {}");
         List<BorrowerAppInRLOSDecisionReport> borrowerAppInRLOSDecisionReportList = new ArrayList<BorrowerAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtBorrowerAppInRLOSList();
-        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
         if(Util.isSafetyList(existingConditionDetailViews)){
+            log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 BorrowerAppInRLOSDecisionReport borrowerAppInRLOSDecisionReport = new BorrowerAppInRLOSDecisionReport();
                 borrowerAppInRLOSDecisionReport.setCount(count++);
@@ -743,10 +742,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<RelatedCommercialDecisionReport> fillRelatedCommercial(String pathsub){
         List<RelatedCommercialDecisionReport> relatedCommercialDecisionReportList = new ArrayList<RelatedCommercialDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedComCreditList();
-        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
         if(Util.isSafetyList(existingConditionDetailViews)){
+            log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
                 relatedCommercialDecisionReport.setCount(count++);
@@ -811,10 +810,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<RelatedRetailDecisionReport> fillRelatedRetail(String pathsub){
         List<RelatedRetailDecisionReport> relatedRetailDecisionReportList = new ArrayList<RelatedRetailDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedRetailCreditList();
-        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
         if(Util.isSafetyList(existingConditionDetailViews)){
+            log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
             for (ExistingCreditDetailView detailView : existingConditionDetailViews){
                 RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
                 relatedRetailDecisionReport.setCount(count++);
@@ -875,10 +874,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<RelatedAppInRLOSDecisionReport> fillRelatedAppInRLOS(String pathsub){
         List<RelatedAppInRLOSDecisionReport> relatedAppInRLOSDecisionReportArrayList = new ArrayList<RelatedAppInRLOSDecisionReport>();
         List<ExistingCreditDetailView> existingConditionDetailViews = decisionView.getExtRelatedAppInRLOSList();
-        log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
 
         int count = 1;
-        if(Util.safetyList(existingConditionDetailViews).size() > 0){
+        if(Util.isSafetyList(existingConditionDetailViews)){
+            log.debug("existingConditionDetailViews.size() {}",existingConditionDetailViews.size());
             for (ExistingCreditDetailView detailView : decisionView.getExtRelatedAppInRLOSList()){
                 RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
                 relatedAppInRLOSDecisionReport.setCount(count++);
@@ -929,10 +928,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ExistingCollateralBorrowerDecisionReport> fillExistingCollateralBorrower(String path) throws UnsupportedEncodingException {
         List<ExistingCollateralBorrowerDecisionReport> collateralBorrowerDecisionReportList = new ArrayList<ExistingCollateralBorrowerDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtBorrowerCollateralList();
-        log.debug("conditionDetailViews.size() {}",conditionDetailViews.size());
 
         int count = 1;
         if (Util.isSafetyList(conditionDetailViews)){
+            log.debug("conditionDetailViews.size() {}",conditionDetailViews.size());
             for (ExistingCollateralDetailView detailView : conditionDetailViews){
                 ExistingCollateralBorrowerDecisionReport collateralBorrowerDecisionReport = new ExistingCollateralBorrowerDecisionReport();
                 collateralBorrowerDecisionReport.setCount(count++);
@@ -980,10 +979,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ExistingCollateralRelatedDecisionReport> fillExistingCollateralRelated(String path){
         List<ExistingCollateralRelatedDecisionReport> collateralRelatedDecisionReportArrayList = new ArrayList<ExistingCollateralRelatedDecisionReport>();
         List<ExistingCollateralDetailView> conditionDetailViews = decisionView.getExtRelatedCollateralList();
-        log.debug("conditionDetailViews.size() {}",conditionDetailViews.size());
 
         int count = 1;
         if (Util.isSafetyList(conditionDetailViews)){
+            log.debug("conditionDetailViews.size() {}",conditionDetailViews.size());
             for (ExistingCollateralDetailView detailView : conditionDetailViews){
                 ExistingCollateralRelatedDecisionReport collateralRelatedDecisionReport = new ExistingCollateralRelatedDecisionReport();
                 collateralRelatedDecisionReport.setCount(count++);
@@ -1026,9 +1025,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<GuarantorBorrowerDecisionReport> fillGuarantorBorrower(String pathsub){
         List<GuarantorBorrowerDecisionReport> guarantorBorrowerDecisionReportList = new ArrayList<GuarantorBorrowerDecisionReport>();
         List<ExistingGuarantorDetailView> extGuarantorList = decisionView.getExtGuarantorList();
-        log.debug("extGuarantorList.size() {}",extGuarantorList.size());
         int count = 1;
         if (Util.isSafetyList(extGuarantorList)){
+            log.debug("extGuarantorList.size() {}",extGuarantorList.size());
             for (ExistingGuarantorDetailView detailView : extGuarantorList){
                 GuarantorBorrowerDecisionReport guarantorBorrowerDecisionReport = new GuarantorBorrowerDecisionReport();
                 guarantorBorrowerDecisionReport.setCount(count++);
@@ -1062,10 +1061,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         log.debug("on fillProposedCredit. {}");
         newCreditDetailViewList = decisionView.getProposeCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
-        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
 
         int count = 1;
         if (Util.isSafetyList(newCreditDetailViewList)){
+            log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
                 proposedView.setPath(pathsub);
@@ -1136,13 +1135,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     //ExSum
     public List<ProposedCreditDecisionReport> fillExSumApprovedCredit(String pathsub){
-        log.debug("on fillProposedCredit. {}");
+        log.debug("on fillExSumApprovedCredit. {}");
         newCreditDetailViewList = decisionView.getApproveCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
-        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
 
         int count = 1;
         if (Util.isSafetyList(newCreditDetailViewList)){
+            log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 approvedView.setPath(pathsub);
@@ -1162,6 +1161,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     } else {
                         approvedView.setUwDecision(SPACE);
                     }
+                } else {
+                    approvedView.setUwDecision(SPACE);
                 }
 
                 approvedView.setCredittypeName(!Util.isNull(detailView.getCreditTypeView()) ?
@@ -1226,20 +1227,20 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
             approvedView.setPath(pathsub);
             proposedCreditDecisionReportList.add(approvedView);
-            log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}",newCreditDetailViewList);
+            log.debug("newCreditDetailViewList is Null by fillExSumApprovedCredit. {}",newCreditDetailViewList);
         }
         return proposedCreditDecisionReportList;
     }
 
     //Opsheet
     public List<ProposedCreditDecisionReport> fillApprovedCredit(String pathsub){
-        log.debug("on fillProposedCredit. {}");
+        log.debug("on fillApprovedCredit. {}");
         newCreditDetailViewList = decisionView.getApproveCreditList();
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
-        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
 
         int count = 1;
         if (Util.isSafetyList(newCreditDetailViewList)){
+            log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 approvedView.setPath(pathsub);
@@ -1320,7 +1321,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
             approvedView.setPath(pathsub);
             proposedCreditDecisionReportList.add(approvedView);
-            log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}",newCreditDetailViewList);
+            log.debug("newCreditDetailViewList is Null by fillApprovedCredit. {}",newCreditDetailViewList);
         }
         return proposedCreditDecisionReportList;
     }
@@ -1328,10 +1329,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ProposeFeeInformationDecisionReport> fillProposeFeeInformation(){
         List<ProposeFeeInformationDecisionReport> proposeFeeInformationDecisionReportList = new ArrayList<ProposeFeeInformationDecisionReport>();
         List<ProposeFeeDetailView> feeDetailViewList = decisionView.getApproveFeeDetailViewList();
-        log.debug("feeDetailViewList.size() {}",feeDetailViewList.size());
 
         int count = 1;
         if (Util.isSafetyList(feeDetailViewList)){
+            log.debug("feeDetailViewList.size() {}",feeDetailViewList.size());
             for (ProposeFeeDetailView view : feeDetailViewList){
                 ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
                 proposeFeeInformationDecisionReport.setCount(count++);
@@ -1399,10 +1400,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ProposedCollateralDecisionReport> fillProposedCollateral(String pathsub){
         List<ProposedCollateralDecisionReport> proposedCollateralDecisionReportList = new ArrayList<ProposedCollateralDecisionReport>();
         List<ProposeCollateralInfoView> newCollateralViews = decisionView.getProposeCollateralList();
-        log.debug("newCollateralViews.size() {}",newCollateralViews.size());
         List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
 
         if (Util.isSafetyList(newCollateralViews)){
+            log.debug("newCollateralViews.size() {}",newCollateralViews.size());
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
                 collateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
@@ -1425,8 +1426,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 }
 
                 collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
-                log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
                 if (Util.isSafetyList(collateralHeadViewList)){
+                    log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
                     for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                         collateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
                                 (Util.checkNullString(headView.getPotentialCollateral().getDescription())) : SPACE);
@@ -1464,20 +1465,40 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
             ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
             collateralDecisionReport.setPath(pathsub);
+            proposeCollateralInfoSubView.setPath(pathsub);
+            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
             proposedCollateralDecisionReportList.add(collateralDecisionReport);
         }
         return proposedCollateralDecisionReportList;
     }
+
+//    public static void main(String[] args) {
+//        String a = "aaaa";
+//        List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
+//        ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
+//        ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//        List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//        proposeCollateralInfoSubView.setPath("aaaaaaaaaaaaaaaaaaaa");
+//        proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//
+//        approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+//        approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
+//        System.out.println(approvedCollateralDecisionReportArrayList);
+//
+//    }
 
     //ExSum
     public List<ApprovedCollateralDecisionReport> fillExSumApprovedCollaterral(final String pathsub){
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
         List<ProposeCollateralInfoView> newCollateralViews = decisionView.getApproveCollateralList();
         List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
-        log.debug("newCollateralViews.size() {}",newCollateralViews.size());
 
         if (Util.isSafetyList(newCollateralViews)){
+            log.debug("newCollateralViews.size() {}",newCollateralViews.size());
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
@@ -1499,6 +1520,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     } else {
                         approvedCollateralDecisionReport.setApproved("No");
                     }
+                } else {
+                    approvedCollateralDecisionReport.setApproved("No");
                 }
 
                 approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
@@ -1554,7 +1577,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             }
         } else {
             ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
+            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
             approvedCollateralDecisionReport.setPath(pathsub);
+            proposeCollateralInfoSubView.setPath(pathsub);
+            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
             approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
         }
@@ -1566,9 +1594,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         List<ApprovedCollateralDecisionReport> approvedCollateralDecisionReportArrayList = new ArrayList<ApprovedCollateralDecisionReport>();
         List<ProposeCollateralInfoView> newCollateralViews = decisionView.getApproveCollateralList();
         List<ProposeCollateralInfoHeadView> collateralHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
-        log.debug("newCollateralViews.size() by fillProposedCollateral. {}",newCollateralViews.size());
 
         if (Util.isSafetyList(newCollateralViews)){
+            log.debug("newCollateralViews.size() by fillProposedCollateral. {}",newCollateralViews.size());
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
@@ -1599,8 +1627,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         }
 
                         collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
-                        log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
                         if (Util.isSafetyList(collateralHeadViewList)){
+                            log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
                             for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
                                 approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
                                         Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
@@ -1643,7 +1671,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             }
         } else {
             ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
+            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
             approvedCollateralDecisionReport.setPath(pathsub);
+            proposeCollateralInfoSubView.setPath(pathsub);
+            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
             approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews);
         }
@@ -1653,10 +1686,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ProposedGuarantorDecisionReport> fillProposedGuarantor(String pathsub){
         List<ProposedGuarantorDecisionReport> proposedGuarantorDecisionReportList = new ArrayList<ProposedGuarantorDecisionReport>();
         List<ProposeGuarantorInfoView> detailViews = decisionView.getApproveGuarantorList();
-        log.debug("detailViews.size() {}",detailViews.size());
 
         int count = 1;
         if (Util.isSafetyList(detailViews)){
+            log.debug("detailViews.size() {}",detailViews.size());
             for (ProposeGuarantorInfoView view : detailViews){
                 ProposedGuarantorDecisionReport guarantorDecisionReport = new ProposedGuarantorDecisionReport();
                 guarantorDecisionReport.setCount(count++);
@@ -1692,10 +1725,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ApprovedGuarantorDecisionReport> fillExSumApprovedGuarantor(String pathsub){
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
         List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
-        log.debug("newGuarantorDetails.size() {]",newGuarantorDetails.size());
 
         int count = 1;
         if (Util.isSafetyList(newGuarantorDetails)){
+            log.debug("newGuarantorDetails.size() {]",newGuarantorDetails.size());
             for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
@@ -1728,6 +1761,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     } else {
                         approvedGuarantorDecisionReport.setUwDecision(SPACE);
                     }
+                } else {
+                    approvedGuarantorDecisionReport.setUwDecision(SPACE);
                 }
 
                 if(Util.isNull(view.getGuaranteeAmount())){
@@ -1757,10 +1792,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ApprovedGuarantorDecisionReport> fillApprovedGuarantor(String pathsub){
         List<ApprovedGuarantorDecisionReport> approvedGuarantorDecisionReportList = new ArrayList<ApprovedGuarantorDecisionReport>();
         List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
-        log.debug("newGuarantorDetails.size() {}",newGuarantorDetails.size());
 
         int count = 1;
         if (Util.isSafetyList(newGuarantorDetails)){
+            log.debug("newGuarantorDetails.size() {}",newGuarantorDetails.size());
             for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
 
@@ -1812,10 +1847,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<FollowUpConditionDecisionReport> fillFollowUpCondition(){
         List<FollowUpConditionDecisionReport> followUpConditionDecisionReportList = new ArrayList<FollowUpConditionDecisionReport>();
         List<DecisionFollowConditionView> decisionFollowConditionViews = decisionView.getDecisionFollowConditionViewList();
-        log.debug("decisionFollowConditionViews.size() {}",decisionFollowConditionViews.size());
 
         int count = 1;
         if (Util.isSafetyList(decisionFollowConditionViews)){
+            log.debug("decisionFollowConditionViews.size() {}",decisionFollowConditionViews.size());
             for (DecisionFollowConditionView view : decisionFollowConditionViews){
                 FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
                 followUpConditionDecisionReport.setCount(count++);
@@ -1836,10 +1871,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     public List<ApprovalHistoryDecisionReport> fillApprovalHistory(){
         List<ApprovalHistoryDecisionReport> approvalHistoryDecisionReportArrayList = new ArrayList<ApprovalHistoryDecisionReport>();
         List<ApprovalHistoryView> approvalHistoryViews = decisionView.getApprovalHistoryList();
-        log.debug("approvalHistoryViews.size() {}",approvalHistoryViews.size());
 
         int count = 1;
         if (Util.isSafetyList(approvalHistoryViews)){
+            log.debug("approvalHistoryViews.size() {}",approvalHistoryViews.size());
             for (ApprovalHistoryView view : approvalHistoryViews){
                 ApprovalHistoryDecisionReport approvalHistoryDecisionReport = new ApprovalHistoryDecisionReport();
                 approvalHistoryDecisionReport.setCount(count++);
@@ -1912,8 +1947,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
         //Approved Propose Credit
         newCreditDetailViewList = decisionView.getApproveCreditList();
-        log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
         if (Util.isSafetyList(newCreditDetailViewList)){
+            log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 if (!Util.isNull(detailView.getUwDecision())){
                     if ((DecisionType.APPROVED).equals(detailView.getUwDecision()) && ("opsheet").equals(type)){
@@ -1923,6 +1958,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     } else {
                         totalDecisionReport.setApproveTotalCreditLimit(BigDecimal.ZERO);
                     }
+                } else {
+                    totalDecisionReport.setApproveTotalCreditLimit(BigDecimal.ZERO);
                 }
             }
         }
@@ -1956,9 +1993,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
         //Approved Guarantor
         List<ProposeGuarantorInfoView> newGuarantorDetails = decisionView.getApproveGuarantorList();
-        log.debug("newGuarantorDetails.size() {}",newGuarantorDetails.size());
 
         if (Util.isSafetyList(newGuarantorDetails)){
+            log.debug("newGuarantorDetails.size() {}",newGuarantorDetails.size());
             for (ProposeGuarantorInfoView view : newGuarantorDetails){
                 if (!Util.isNull(view.getUwDecision())){
                     if ((DecisionType.APPROVED).equals(view.getUwDecision()) && ("opsheet").equals(type)){
@@ -1968,6 +2005,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     } else {
                         totalDecisionReport.setApproveTotalGuaranteeAmt(BigDecimal.ZERO);
                     }
+                } else {
+                    totalDecisionReport.setApproveTotalGuaranteeAmt(BigDecimal.ZERO);
                 }
             }
         }
@@ -1998,9 +2037,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     public FollowUpConditionDecisionReport fillFollowDetail(){
         FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
-        log.debug("decisionView.getDecisionFollowConditionViewList().size() {}",decisionView.getDecisionFollowConditionViewList().size());
 
         if (Util.isSafetyList(decisionView.getDecisionFollowConditionViewList())){
+            log.debug("decisionView.getDecisionFollowConditionViewList().size() {}",decisionView.getDecisionFollowConditionViewList().size());
             for (DecisionFollowConditionView view : decisionView.getDecisionFollowConditionViewList()){
                 followUpConditionDecisionReport.setConditionView(!Util.isNull(view.getConditionView()) ?
                         Util.checkNullString(view.getConditionView().getName()) : SPACE);

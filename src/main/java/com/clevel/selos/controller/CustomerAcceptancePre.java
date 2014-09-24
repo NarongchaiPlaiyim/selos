@@ -4,10 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveResult;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.MessageDialogSeverity;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
@@ -80,6 +77,10 @@ public class CustomerAcceptancePre extends BaseController {
             stepId = getCurrentStep(session);
             //stageId = getCurrent
             user = (User) session.getAttribute("user");
+
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+
+            loadFieldControl(workCaseId, Screen.CUSTOMER_ACCEPTANCE_PRE, ownerCaseUserId);
         }
         _loadInitData();
     }

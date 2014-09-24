@@ -426,12 +426,12 @@ public class CustomerTransform extends Transform {
         //for show indLv
         if(customer.getIsSpouse() == 1){ // is spouse
             Customer mainCus = customerDAO.findMainCustomerBySpouseId(customer.getId());
-            if(customer.getReference() != null){
+            if(customer.getReference() != null && mainCus != null){
                 customerInfoView.setIndLv(customer.getReference().getDescription()+" of "+mainCus.getNameTh()+" "+mainCus.getLastNameTh());
             }
-            if(mainCus.getIsCommittee() == 1){ // is customer from spouse is committee
+            if(mainCus != null && mainCus.getIsCommittee() == 1){ // is customer from spouse is committee
                 Customer mainJur = customerDAO.findById(mainCus.getJuristicId());
-                if(mainCus.getReference() != null){
+                if(mainCus.getReference() != null && mainJur != null){
                     customerInfoView.setJurLv(mainCus.getReference().getDescription()+" of "+mainJur.getNameTh());
                 }
             }
@@ -915,17 +915,19 @@ public class CustomerTransform extends Transform {
                     }
                 }
 
-                customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
-                customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
-                customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
-                customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
-                customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
-                customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
-                customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
-                customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
-                customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
-                customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
-                customerOblAccountInfo.setCustomer(customer);
+                if(customerOblAccountInfo != null) {
+                    customerOblAccountInfo.setAccountRef(customerOblAccountInfoView.getAccountRef());
+                    customerOblAccountInfo.setAccountActiveFlag(customerOblAccountInfoView.isAccountActiveFlag());
+                    customerOblAccountInfo.setCardBlockCode(customerOblAccountInfoView.getCardBlockCode());
+                    customerOblAccountInfo.setTmbDelIntDay(customerOblAccountInfoView.getTmbDelIntDay());
+                    customerOblAccountInfo.setCusRelAccount(customerOblAccountInfoView.getCusRelAccount());
+                    customerOblAccountInfo.setDataSource(customerOblAccountInfoView.getDataSource());
+                    customerOblAccountInfo.setNumMonthIntPastDue(customerOblAccountInfoView.getNumMonthIntPastDue());
+                    customerOblAccountInfo.setNumMonthIntPastDueTDRAcc(customerOblAccountInfoView.getNumMonthIntPastDueTDRAcc());
+                    customerOblAccountInfo.setTdrFlag(customerOblAccountInfoView.getTdrFlag());
+                    customerOblAccountInfo.setTmbDelPriDay(customerOblAccountInfoView.getTmbDelPriDay());
+                    customerOblAccountInfo.setCustomer(customer);
+                }
             }
         }
         return customerOblAccountInfoList;

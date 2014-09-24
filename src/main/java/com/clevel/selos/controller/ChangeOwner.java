@@ -402,6 +402,10 @@ public class ChangeOwner implements Serializable {
         teamNamesForChangeOwerTo =new ArrayList<ChangeOwnerView>();
         teamNamesForChangeOwerTo = userDAO.getTeamUserForChangeOwner(teamId);
 
+        Collections.sort(teamNamesForChangeOwerTo);
+
+        Collections.sort(teamTypeName);
+
         if(userTeamDAO.findById(teamId).getTeam_type()== 2 && teamNamesForChangeOwerTo.size()==1)
         {
             selectTeamNameChangeOwner = teamNamesForChangeOwerTo.get(0).getId();
@@ -431,18 +435,22 @@ public class ChangeOwner implements Serializable {
     {
 
         rolSet = null;
+        selectRole = "";
+        log.debug("in getRoleNameForSelectedTeam");
         //rolSet = new TreeSet<ChangeOwnerView>();
         rolSet = new ArrayList<ChangeOwnerView>();
         selectTeam = event.getNewValue().toString();
+        log.debug("Selected Team : {}",selectTeam);
 
         if(selectTeam != null && selectTeam.trim().length()>0)
         {
-        selectedTeamId = Integer.parseInt(selectTeam);
+            selectedTeamId = Integer.parseInt(selectTeam);
         }
         if(selectTeam != null)
         {
             rolSet = userDAO.getRoleList(selectedTeamId, teamId);
         }
+        usersIdNameList = new ArrayList<User>();
 
         userList1 = null;
         return rolSet;

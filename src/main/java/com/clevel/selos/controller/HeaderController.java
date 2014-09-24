@@ -133,6 +133,7 @@ public class HeaderController extends BaseController {
     private boolean isSubmitForBDM;
     private boolean isSubmitForUW;
     private boolean isSubmitForUW2;
+    private boolean isUWRejected;
 
     private int submitPricingLevel;
     private int submitOverSLA;
@@ -1085,7 +1086,11 @@ public class HeaderController extends BaseController {
                     selectedUW2User = "";
                     selectedDOALevel = 0;
 
-                    authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    isUWRejected = fullApplicationControl.checkUWDecision(workCaseId);
+                    authorizationDOAList = new ArrayList<AuthorizationDOA>();
+                    if(!isUWRejected){
+                        authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    }
                     log.debug("authorizationDOAList : {}", authorizationDOAList.size());
                 }
                 RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
@@ -1098,6 +1103,7 @@ public class HeaderController extends BaseController {
         }catch(Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
+            log.error("Exception while open submit uw : ", ex);
             showMessageBox();
         }
     }
@@ -1119,8 +1125,17 @@ public class HeaderController extends BaseController {
     private void submitForUW(){
         log.debug("submitForUW :: Start..");
         boolean complete = false;
+        boolean checkUW = true;
         try{
-            if(selectedUW2User != null && !selectedUW2User.equals("")){
+            if(!isUWRejected){
+                if(selectedUW2User != null && !selectedUW2User.equals("")){
+                    checkUW = true;
+                }else{
+                    checkUW = false;
+                }
+            }
+
+            if(checkUW){
                 if(canSubmitWithoutReturn()){
                     fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
@@ -1223,12 +1238,17 @@ public class HeaderController extends BaseController {
         else if(workCaseId != 0)
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
 
-        if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
-            reasonList = reasonToStepDAO.getRejectReason(stepId);
-            cancelReasonId = reasonDAO.getBRMSReasonId();
-        } else {
+        if(stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value()){
             reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
             cancelReasonId = 0;
+        } else {
+            if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
+                reasonList = reasonToStepDAO.getRejectReason(stepId);
+                cancelReasonId = reasonDAO.getBRMSReasonId();
+            } else {
+                reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
+                cancelReasonId = 0;
+            }
         }
 
         log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());
@@ -2792,7 +2812,7 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("ENDSTAGE".equalsIgnoreCase(stageString)){
-            if(statusId == StatusValue.CANCEL_CA.value() || statusId == StatusValue.REJECT_CA.value() ||
+            if(statusId == 0 || statusId == StatusValue.CANCEL_CA.value() || statusId == StatusValue.REJECT_CA.value() ||
                     statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
                 accessible = true;
             }
@@ -3701,5 +3721,13 @@ public class HeaderController extends BaseController {
 
     public void setPendingReasonId(int pendingReasonId) {
         this.pendingReasonId = pendingReasonId;
+    }
+
+    public boolean isUWRejected() {
+        return isUWRejected;
+    }
+
+    public void setUWRejected(boolean isUWRejected) {
+        this.isUWRejected = isUWRejected;
     }
 }
