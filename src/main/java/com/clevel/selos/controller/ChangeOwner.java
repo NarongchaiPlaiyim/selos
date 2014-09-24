@@ -522,13 +522,10 @@ public class ChangeOwner implements Serializable {
 
             log.info("in Change Owner if else 1 ");
         }
-        if(changeOwnerQueryList != null && changeOwnerQueryList.length() > 0)
-        {
-            changeOwerViewList = pedbExecute.queryForChangeOwner(changeOwnerQueryList,selectuser);
 
-            log.info("in Change Owner if 2 ");
+        changeOwerViewList = pedbExecute.queryForChangeOwner(changeOwnerQueryList,selectuser);
 
-        }
+        log.info("Change Owner View cases :  {} ",changeOwerViewList.size());
 
         checked.clear();
 

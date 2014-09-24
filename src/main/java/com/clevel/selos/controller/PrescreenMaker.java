@@ -2302,11 +2302,17 @@ public class PrescreenMaker extends BaseController {
                     borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
                 }else{
                     borrowerInfo.setMaritalStatus(maritalStatus);
-                    borrowerInfo.setSpouse(new CustomerInfoView());
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    spouse.setSpouse(null);
+                    borrowerInfo.setSpouse(spouse);
                 }
             } else {
                 borrowerInfo.setMaritalStatus(maritalStatus);
-                borrowerInfo.setSpouse(new CustomerInfoView());
+                CustomerInfoView spouse = new CustomerInfoView();
+                spouse.reset();
+                spouse.setSpouse(null);
+                borrowerInfo.setSpouse(spouse);
             }
         }else{
             borrowerInfo.setMaritalStatus(maritalStatus);

@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.RoleInboxDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.InboxType;
 import com.clevel.selos.model.db.relation.RelRoleBasedInbox;
 import com.clevel.selos.security.UserDetail;
@@ -9,6 +10,8 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -16,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +59,7 @@ public class Inbox implements Serializable {
     private List<RelRoleBasedInbox> relReturnInboxList;
 
     private ArrayList<InboxType> inboxTypeArrayList;
+
 
     public Inbox() {
 
@@ -96,6 +101,15 @@ public class Inbox implements Serializable {
         log.info("inboxTypeArrayList ::::::: {}", inboxTypeArrayList);
     }
 
+    private boolean showInbox(int roleId){
+        boolean showInbox = true;
+        if(roleId == RoleValue.VIEWER.id()){
+            showInbox = false;
+        }
+
+        return showInbox;
+    }
+
     public UserDetail getUserDetail() {
         return userDetail;
     }
@@ -111,5 +125,4 @@ public class Inbox implements Serializable {
     public void setInboxTypeArrayList(ArrayList<InboxType> inboxTypeArrayList) {
         this.inboxTypeArrayList = inboxTypeArrayList;
     }
-
 }

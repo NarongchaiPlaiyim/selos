@@ -4,10 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ApproveResult;
-import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.MessageDialogSeverity;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
@@ -15,8 +12,10 @@ import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.model.view.TCGInfoView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -80,6 +79,10 @@ public class CustomerAcceptancePre extends BaseController {
             stepId = getCurrentStep(session);
             //stageId = getCurrent
             user = (User) session.getAttribute("user");
+
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+
+            loadFieldControl(workCaseId, Screen.CUSTOMER_ACCEPTANCE_PRE, ownerCaseUserId);
         }
         _loadInitData();
     }
@@ -128,6 +131,7 @@ public class CustomerAcceptancePre extends BaseController {
     public void onUpdateContactRecord() {
         Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
         contactRecord.setReason(reason);
+        contactRecord.updateNextCallingDate();
         contactRecord.setNeedUpdate(true);
         contactRecord = null;
 
@@ -238,9 +242,15 @@ public class CustomerAcceptancePre extends BaseController {
         //DO NOTHING
     }
 
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
     public String getMinDate() {
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy", new Locale("th", "TH"));
-        return dFmt.format(new Date());
+        log.debug("current date : {}", getCurrentDate());
+        return DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+        /*SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy", new Locale("th", "TH"));
+        return dFmt.format(new Date());*/
     }
 
     public List<ContactRecordDetailView> getContactRecordDetailViews() {
