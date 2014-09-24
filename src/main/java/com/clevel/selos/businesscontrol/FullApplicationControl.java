@@ -782,12 +782,26 @@ public class FullApplicationControl extends BusinessControl {
     }
     //------ End Function for Submit CA BU ----------//
     //------ Function for Submit UW ----------------//
+    public boolean checkUWDecision(long workCaseId){
+        boolean isUWReject = false;
+        ApprovalHistory approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUser(workCaseId, getCurrentUserID());
+        if(!Util.isNull(approvalHistoryEndorseCA)){
+            if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
+                isUWReject = true;
+            }
+        }
+        return isUWReject;
+    }
+
     public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
         String decisionFlag;
         String haveRG001 = "N";
         ApprovalHistory approvalHistoryEndorseCA = null;
+        AuthorizationDOA authorizationDOA = null;
 
-        AuthorizationDOA authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
+        if(uw2DOALevelId != 0) {
+            authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
+        }
 
         if(workCaseId != 0){
             approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
@@ -804,7 +818,7 @@ public class FullApplicationControl extends BusinessControl {
                     haveRG001 = "Y";
                 }
 
-                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
+                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA != null ? authorizationDOA.getDescription() : "", decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
 
                 ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
                 approvalHistory.setSubmit(1);
@@ -844,9 +858,11 @@ public class FullApplicationControl extends BusinessControl {
                     insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
                 }
 
-                mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                if(!decisionFlag.equals("R")) {
+                    mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                }
 
-                //bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
+                bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
                 log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
                 ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
                 approvalHistory.setSubmit(1);

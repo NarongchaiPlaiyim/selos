@@ -240,7 +240,7 @@ public class PESearch implements Serializable
 
             log.debug("User Role IsNull : {}, User :{},  Role : {}",!Util.isNull(user.getRole()) ,user,user.getRole().getId());
 
-            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.UW.id())) {
+            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.VIEWER.id() || user.getRole().getId() == RoleValue.UW.id())) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
