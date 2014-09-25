@@ -102,7 +102,15 @@ public class FullApplicationConverter extends Converter{
             collateralType.setCollateralType(getValueForInterface(brmsCollInfo.getCollateralType()));
 
             List<AttributeType> collAttributeList = collateralType.getAttribute();
-            collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, brmsCollInfo.getSubCollateralType()));
+            //Add sub collateral list
+            if(brmsCollInfo.getSubCollateralTypeList() != null && brmsCollInfo.getSubCollateralTypeList().size() > 0){
+                for(String subColCode : brmsCollInfo.getSubCollateralTypeList()) {
+                    collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, subColCode));
+                }
+            }else{
+                collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, ""));
+            }
+            //collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, brmsCollInfo.getSubCollateralType()));
             collAttributeList.add(getAttributeType(BRMSFieldAttributes.APPRAISAL_FLAG, brmsCollInfo.isAppraisalFlag()));
             collAttributeList.add(getAttributeType(BRMSFieldAttributes.AAD_COMMENT, brmsCollInfo.getAadDecision()));
             collAttributeList.add(getAttributeType(BRMSFieldAttributes.LENGTH_OF_APPRAISAL_MONTHS, brmsCollInfo.getNumberOfMonthsApprDate()));

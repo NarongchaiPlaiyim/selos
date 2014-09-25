@@ -2859,6 +2859,14 @@ public class HeaderController extends BaseController {
         this.stepId = stepId;
     }
 
+    public long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(long statusId) {
+        this.statusId = statusId;
+    }
+
     public List<User> getAbdmUserList() {
         return abdmUserList;
     }
