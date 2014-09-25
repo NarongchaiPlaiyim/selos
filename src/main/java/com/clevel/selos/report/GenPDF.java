@@ -240,7 +240,7 @@ public class GenPDF extends ReportService implements Serializable {
 
         // ###### Role BU and Viewer Can not print AAD Report ######
         if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
-            if (checkPricing() || Util.isNull(workCase)){
+            if (checkPricing() || Util.isNull(workCase) || checkStepApproved()){
                 log.debug("On Request Pricing by Rold BU or Viewer");
                 opshectType = true;
                 exsumType = true;
@@ -251,8 +251,8 @@ public class GenPDF extends ReportService implements Serializable {
 
         // ###### Role UW and OPS Can not print AAD Report And Reject Letter Report ######
         if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
-                readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
-            if (checkPricing() || Util.isNull(workCase)){
+            readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
+            if (checkPricing() || Util.isNull(workCase) || checkStepApproved()){
                 log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
                 exsumType = true;
@@ -290,6 +290,14 @@ public class GenPDF extends ReportService implements Serializable {
             return true;
         }
         return false;
+    }
+
+    private boolean checkStepApproved(){
+        log.debug("On checkStepApproved. {}",statusId);
+        if (statusId == 90006L)
+            return false;
+        else
+            return true;
     }
 
     private void disableButtomPrintReject(){
@@ -474,6 +482,7 @@ public class GenPDF extends ReportService implements Serializable {
 
     HashMap map = new HashMap<String, Object>();
     map.put("path", pathsub);
+    map.put("fillHeader",pdfAppraisalAppointment.fillHeader());
     map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
     map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport(pathsub));
     map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());

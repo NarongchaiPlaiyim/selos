@@ -114,6 +114,7 @@
                                                          rows="2"
                                                          id="replyDetail" autoResize="false"
                                                          disabled="#{returnReply.isDisabled('replyDetail')}"
+                                                         required="#{not empty param[saveBtn.clientId]}"
                                                          value="#{returnInfoVar.replyDetail}">
                                         </p:inputTextarea>
                                     </p:column>

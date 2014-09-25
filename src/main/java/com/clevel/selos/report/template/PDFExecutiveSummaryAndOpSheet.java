@@ -179,7 +179,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             reports.add(borrowerExsumReport);
             log.debug("customerInfoViewList in Method fillBorrowerRelatedProfile is Null. {}",customerInfoViewList.size());
         }
-
         return reports;
     }
 
@@ -482,8 +481,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             report.setProductGroup(Util.checkNullString(appHeaderView.getProductGroup()));
             report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
 
-
-
             if (Util.isSafetyList(appHeaderView.getBorrowerHeaderViewList())){
                 log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
                 for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
@@ -567,7 +564,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 } else {
                     decisionReport.setCreditTypeName(SPACE);
                 }
-
 
                 StringBuilder code =new StringBuilder();
                 code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append("\n");
@@ -1315,6 +1311,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         proposedCreditDecisionReportList.add(approvedView);
                         log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
                     }
+                } else {
+                    proposedCreditDecisionReportList.add(approvedView);
+                    log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
                 }
             }
         } else {
