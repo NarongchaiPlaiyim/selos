@@ -2,11 +2,11 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.report.AppraisalContactDetailViewReport;
-import com.clevel.selos.model.report.AppraisalDetailViewReport;
-import com.clevel.selos.model.report.AppraisalViewReport;
-import com.clevel.selos.model.report.ContactRecordDetailViewReport;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.report.*;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
@@ -39,11 +39,14 @@ public class PDFAppraisalAppointment implements Serializable {
     String pathsub;
 
     @Inject AppraisalAppointmentControl appraisalAppointmentControl;
+    @Inject private AppHeaderView appHeaderView;
+    @Inject private WorkCaseDAO workCaseDAO;
 
     private AppraisalView appraisalView;
     private long workCaseId;
     private long workCasePreScreenId;
     private final String SPACE = " ";
+    private WorkCase workCase;
 
     public PDFAppraisalAppointment() {
     }
@@ -71,7 +74,6 @@ public class PDFAppraisalAppointment implements Serializable {
         } else {
             log.debug("--workcase is Null. {}",workCaseId);
         }
-
     }
 
     public AppraisalViewReport fillAppraisalDetailReport(){
@@ -183,5 +185,66 @@ public class PDFAppraisalAppointment implements Serializable {
             log.debug("--detailViewList is Null.");
         }
         return contactRecordDetailViewReports;
+    }
+
+    public HeaderAndFooterReport fillHeader(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        HttpSession session = FacesUtil.getSession(false);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+        workCase = workCaseDAO.findById(workCaseId);
+        //Detail 1
+        if (!Util.isNull(appHeaderView)){
+            log.debug("--Header. {}",appHeaderView);
+            report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
+            report.setBdmName(Util.checkNullString(appHeaderView.getBdmName()));
+            report.setBdmPhoneNumber(Util.checkNullString(appHeaderView.getBdmPhoneNumber()));
+            report.setBdmPhoneExtNumber(Util.checkNullString(appHeaderView.getBdmPhoneExtNumber()));
+            report.setBdmZoneName(Util.checkNullString(appHeaderView.getBdmZoneName()));
+            report.setBdmRegionName(Util.checkNullString(appHeaderView.getBdmRegionName()));
+            report.setSubmitDate(Util.checkNullString(appHeaderView.getSubmitDate()));
+            report.setUwName(Util.checkNullString(appHeaderView.getUwName()));
+            report.setUwPhoneNumber(Util.checkNullString(appHeaderView.getUwPhoneNumber()));
+            report.setUwPhoneExtNumber(Util.checkNullString(appHeaderView.getUwPhoneExtNumber()));
+            report.setUwTeamName(Util.checkNullString(appHeaderView.getUwTeamName()));
+            report.setRequestType(Util.checkNullString(appHeaderView.getRequestType()));
+            report.setAppNo(Util.checkNullString(appHeaderView.getAppNo()));
+            report.setAppRefNo(Util.checkNullString(appHeaderView.getAppRefNo()));
+            report.setAppRefDate(Util.checkNullString(appHeaderView.getAppRefDate()));
+            report.setProductGroup(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
+
+
+
+            if (Util.isSafetyList(appHeaderView.getBorrowerHeaderViewList())){
+                log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
+                for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
+                    switch (i){
+                        case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                    }
+                }
+            }
+
+            report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setApprovedDate(workCase.getCompleteDate());
+
+        } else {
+            log.debug("--Header is Null. {}",appHeaderView);
+        }
+        return report;
     }
 }
