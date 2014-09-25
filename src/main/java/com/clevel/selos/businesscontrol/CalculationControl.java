@@ -707,4 +707,26 @@ public class CalculationControl extends BusinessControl{
         exSummary.setCreditRiskBOTClass(botClass);
         exSummaryDAO.persist(exSummary);
     }
+
+    public void calculateFinalDBR(long workCaseId){
+
+        DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+        if(Util.isNull(dbr)){
+            dbr = new DBR();
+        }
+
+        BigDecimal totalMonthDebtBorrowerFinal = dbr.getTotalMonthDebtBorrowerFinal();
+        BigDecimal totalMonthDebtRelated = dbr.getTotalMonthDebtRelated();
+        BigDecimal netMonthlyIncome = dbr.getNetMonthlyIncome();
+
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        BigDecimal totalProposeLoanDBR = BigDecimal.ZERO;
+        if(!Util.isNull(proposeLine)) {
+            totalProposeLoanDBR = proposeLine.getTotalProposeLoanDBR();
+        }
+
+        dbr.setFinalDBR(Util.multiply(Util.divide(Util.add(Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated),totalProposeLoanDBR), netMonthlyIncome), BigDecimal.valueOf(100)));
+
+        dbrDAO.persist(dbr);
+    }
 }

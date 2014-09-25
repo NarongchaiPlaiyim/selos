@@ -77,6 +77,9 @@ public class DBR implements Serializable {
     @Column(name = "TOTAL_MONTH_DEBT_RELATED_WC")
     private BigDecimal totalMonthDebtRelatedWc;
 
+    @Column(name = "TOTAL_MONTH_DEBT_RELATED")
+    private BigDecimal totalMonthDebtRelated;
+
     @Column(name = "marketable_flag", columnDefinition = "int default 0")
     private int marketableFlag;
 
@@ -244,25 +247,38 @@ public class DBR implements Serializable {
         this.marketableFlag = marketableFlag;
     }
 
+    public BigDecimal getTotalMonthDebtRelated() {
+        return totalMonthDebtRelated;
+    }
+
+    public void setTotalMonthDebtRelated(BigDecimal totalMonthDebtRelated) {
+        this.totalMonthDebtRelated = totalMonthDebtRelated;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("dbrDetails", dbrDetails)
-                .append("incomeFactor", incomeFactor)
-                .append("monthlyIncome", monthlyIncome)
-                .append("monthlyIncomeAdjust", monthlyIncomeAdjust)
-                .append("monthlyIncomePerMonth", monthlyIncomePerMonth)
-                .append("netMonthlyIncome", netMonthlyIncome)
-                .append("currentDBR", currentDBR)
-                .append("dbrBeforeRequest", dbrBeforeRequest)
-                .append("dbrInterest", dbrInterest)
-                .append("finalDBR", finalDBR)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("dbrDetails", dbrDetails).
+                append("incomeFactor", incomeFactor).
+                append("monthlyIncome", monthlyIncome).
+                append("monthlyIncomeAdjust", monthlyIncomeAdjust).
+                append("monthlyIncomePerMonth", monthlyIncomePerMonth).
+                append("netMonthlyIncome", netMonthlyIncome).
+                append("currentDBR", currentDBR).
+                append("dbrBeforeRequest", dbrBeforeRequest).
+                append("dbrInterest", dbrInterest).
+                append("finalDBR", finalDBR).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("totalMonthDebtBorrowerStart", totalMonthDebtBorrowerStart).
+                append("totalMonthDebtBorrowerFinal", totalMonthDebtBorrowerFinal).
+                append("totalMonthDebtRelatedWc", totalMonthDebtRelatedWc).
+                append("totalMonthDebtRelated", totalMonthDebtRelated).
+                append("marketableFlag", marketableFlag).
+                toString();
     }
 }

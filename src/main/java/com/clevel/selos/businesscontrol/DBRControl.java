@@ -205,8 +205,13 @@ public class DBRControl extends BusinessControl {
 
         //Ex summary Final DBR BigDecimal debt = BigDecimal.ZERO;
 
-        BigDecimal finalDBR = BigDecimal.ZERO;
-        finalDBR = calculateFinalDBR(totalMonthDebtBorrowerFinal, totalMonthDebtRelated, netMonthlyIncome, workCase);
+        BigDecimal finalDBR;
+        ProposeLine proposeLine = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
+        BigDecimal totalProposeLoanDBR = BigDecimal.ZERO;
+        if(!Util.isNull(proposeLine)) {
+            totalProposeLoanDBR = proposeLine.getTotalProposeLoanDBR();
+        }
+        finalDBR = calculateFinalDBR(totalMonthDebtBorrowerFinal, totalMonthDebtRelated, netMonthlyIncome, totalProposeLoanDBR);
 
         // update dbr
         dbr.setNetMonthlyIncome(netMonthlyIncome);
@@ -215,10 +220,15 @@ public class DBRControl extends BusinessControl {
         dbr.setDbrDetails(dbrDetails);
         dbr.setFinalDBR(finalDBR);
         dbr.setTotalMonthDebtBorrowerStart(totalMonthDebtBorrowerStart);
-        dbr.setTotalMonthDebtRelatedWc(totalMonthDebtRelatedWc);
         dbr.setTotalMonthDebtBorrowerFinal(totalMonthDebtBorrowerFinal);
+        dbr.setTotalMonthDebtRelatedWc(totalMonthDebtRelatedWc);
+        dbr.setTotalMonthDebtRelated(totalMonthDebtRelated);
         log.debug("calculateDBR complete");
         return dbr;
+    }
+
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrowerFinal, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, BigDecimal totalProposeLoanDBR){
+        return Util.multiply(Util.divide(Util.add(Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated),totalProposeLoanDBR), netMonthlyIncome), BigDecimal.valueOf(100));
     }
 
     public ActionResult updateValueOfDBR(long workCaseId){
@@ -251,30 +261,6 @@ public class DBRControl extends BusinessControl {
         log.debug("complete updateValueOfDBR");
         }
         return ActionResult.SUCCESS;
-    }
-
-
-
-    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrowerFinal, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
-        BigDecimal result;
-        BigDecimal debt;
-        BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
-        ProposeLine proposeLine = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
-        debt = Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated);
-        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId()))  {
-            totalPurposeForDBR = proposeLine.getTotalProposeLoanDBR();
-        }
-        log.debug("### totalMonthDebtBorrowerFinal :: {} ", totalMonthDebtBorrowerFinal);
-        log.debug("### totalMonthDebtRelated :: {} ", totalMonthDebtRelated);
-        log.debug("### totalPurposeForDBR :: {} ", totalPurposeForDBR);
-
-        debt = Util.add(debt, totalPurposeForDBR);
-        result = Util.divide(debt, netMonthlyIncome);
-        result = Util.multiply(result, BigDecimal.valueOf(100));
-
-        log.debug("### result :: {} ", result);
-
-        return result;
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
