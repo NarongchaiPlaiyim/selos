@@ -147,7 +147,7 @@ public class DBRControl extends BusinessControl {
         //**NCB Borrower totalDebtForCalculate
         for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
             totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
-            if(ncbDetailView.getRefinanceFlag() == 2){
+            if(ncbDetailView.getRefinanceFlag() == 1){
                 totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
             }
         }
