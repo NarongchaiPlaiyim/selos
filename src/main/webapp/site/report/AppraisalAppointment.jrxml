@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AppraisalAppointment" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8626b90-09bf-4ee1-8d9e-eb95ce1ef9db">
-	<property name="ireport.zoom" value="1.4641000000000022"/>
+	<property name="ireport.zoom" value="1.1000000000000016"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="124"/>
+	<property name="ireport.y" value="164"/>
 	<style name="text" vAlign="Middle" isBlankWhenNull="true" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<pen lineColor="#000000"/>
@@ -70,7 +70,7 @@
 				<text><![CDATA[Appraisal Type :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="aac2c820-368e-4c61-a5e4-2db223ef1e9e" x="0" y="44" width="85" height="20"/>
+				<reportElement uuid="aac2c820-368e-4c61-a5e4-2db223ef1e9e" x="0" y="44" width="97" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -78,7 +78,7 @@
 				<text><![CDATA[Appraisal Company :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a880b81e-4e76-4c81-a70d-2cefea88ef95" x="0" y="66" width="74" height="20"/>
+				<reportElement uuid="a880b81e-4e76-4c81-a70d-2cefea88ef95" x="0" y="66" width="99" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -86,7 +86,7 @@
 				<text><![CDATA[Appraisal Name :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fdccfb0d-9b0e-436a-a265-81888f2658ff" x="0" y="88" width="85" height="20"/>
+				<reportElement uuid="fdccfb0d-9b0e-436a-a265-81888f2658ff" x="0" y="88" width="99" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -94,7 +94,7 @@
 				<text><![CDATA[Received task Date :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e7e8eda8-633b-4e29-b854-e28b64eaf134" x="0" y="110" width="85" height="20"/>
+				<reportElement uuid="e7e8eda8-633b-4e29-b854-e28b64eaf134" x="0" y="110" width="99" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -102,7 +102,7 @@
 				<text><![CDATA[Location of Property :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="0ec116ff-88e7-4bba-b968-5753ad6fe066" x="0" y="132" width="85" height="20"/>
+				<reportElement uuid="0ec116ff-88e7-4bba-b968-5753ad6fe066" x="0" y="132" width="99" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -110,7 +110,7 @@
 				<text><![CDATA[Appraisal Date :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="aee22bb2-0cc7-4935-97dd-27ec08e564ba" x="0" y="154" width="85" height="20"/>
+				<reportElement uuid="aee22bb2-0cc7-4935-97dd-27ec08e564ba" x="0" y="154" width="99" height="20"/>
 				<textElement verticalAlignment="Top">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -118,7 +118,7 @@
 				<text><![CDATA[Remark :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="df2ca24d-9f08-487b-a854-5fbf7e98a935" x="328" y="44" width="90" height="20"/>
+				<reportElement uuid="df2ca24d-9f08-487b-a854-5fbf7e98a935" x="282" y="44" width="94" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -126,7 +126,7 @@
 				<text><![CDATA[Appraisal Division :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="85607b08-fddc-4d86-813e-2dcba64db5be" x="328" y="110" width="90" height="20"/>
+				<reportElement uuid="85607b08-fddc-4d86-813e-2dcba64db5be" x="282" y="110" width="94" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -134,7 +134,7 @@
 				<text><![CDATA[Province of Property :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7b4bbcd5-21eb-4978-9368-0ee89d60d89d" x="328" y="132" width="90" height="20"/>
+				<reportElement uuid="7b4bbcd5-21eb-4978-9368-0ee89d60d89d" x="282" y="132" width="94" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
@@ -142,64 +142,64 @@
 				<text><![CDATA[Due Date :]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="4daa5c08-f686-485b-8d30-7005f1d2c2ab" style="text" x="85" y="44" width="152" height="20"/>
+				<reportElement uuid="4daa5c08-f686-485b-8d30-7005f1d2c2ab" style="text" x="99" y="44" width="152" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppraisalCompany()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="f8eabf2b-026b-4b3c-90b8-3a2ed724ea5b" style="text" x="85" y="66" width="152" height="20"/>
+				<reportElement uuid="f8eabf2b-026b-4b3c-90b8-3a2ed724ea5b" style="text" x="99" y="66" width="152" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppraisalName()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="26559e57-9950-414a-912b-013b02b14f24" style="text" x="85" y="88" width="152" height="20"/>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement uuid="26559e57-9950-414a-912b-013b02b14f24" style="text" x="99" y="88" width="152" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getReceivedTaskDate()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="82dee59d-f9ac-414b-8688-d67ce964cbff" style="text" x="85" y="110" width="152" height="20"/>
+				<reportElement uuid="82dee59d-f9ac-414b-8688-d67ce964cbff" style="text" x="99" y="110" width="152" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getLocationOfProperty()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="2faf220c-ff28-4425-93d8-bf58de4b382a" style="text" x="85" y="132" width="152" height="20"/>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement uuid="2faf220c-ff28-4425-93d8-bf58de4b382a" style="text" x="99" y="132" width="152" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppraisalDate()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="5be13e91-6fc2-4a22-a3dd-3a28ca1cbbfa" style="text" x="85" y="154" width="219" height="56"/>
+				<reportElement uuid="5be13e91-6fc2-4a22-a3dd-3a28ca1cbbfa" style="text" x="99" y="154" width="219" height="56"/>
 				<textElement verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2" spacingBefore="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getAADAdminRemark()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3d5c1ae9-1587-489f-a572-505d8a0d0fd6" style="text" x="418" y="45" width="100" height="20"/>
+				<reportElement uuid="3d5c1ae9-1587-489f-a572-505d8a0d0fd6" style="text" x="376" y="45" width="145" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppraisalDivision()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="b360adb7-1474-468d-a49c-0579a466ccb5" style="text" x="418" y="111" width="100" height="20"/>
+				<reportElement uuid="b360adb7-1474-468d-a49c-0579a466ccb5" style="text" x="376" y="111" width="145" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getProvinceOfProperty()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="bad511a0-9603-4b27-9b1f-837d637cf2f1" style="text" x="418" y="133" width="100" height="20"/>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement uuid="bad511a0-9603-4b27-9b1f-837d637cf2f1" style="text" x="376" y="133" width="145" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 				</textElement>
@@ -380,7 +380,7 @@ $P{path} + "false.jpg"]]></imageExpression>
 				</textElement>
 				<text><![CDATA[Remark :]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="MM/dd/yyyy">
 				<reportElement uuid="f23c8a47-6692-47e5-aab7-84e3c89419bd" style="text" x="89" y="0" width="148" height="20"/>
 				<textElement>
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
@@ -398,7 +398,7 @@ $P{path} + "false.jpg"]]></imageExpression>
 				<reportElement uuid="f966719f-dcd0-4142-9f30-aeed67d54716" style="text" x="89" y="44" width="215" height="56"/>
 				<textElement verticalAlignment="Top">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2" spacingBefore="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{fillAppraisalDetailReport}.getAppointmentRemark()]]></textFieldExpression>
 			</textField>

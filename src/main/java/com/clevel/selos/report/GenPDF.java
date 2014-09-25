@@ -233,17 +233,17 @@ public class GenPDF extends ReportService implements Serializable {
 
     private void checkButtomPrint(){
         log.debug("On checkButtomPrint.");
-        rejectType = true;
+        rejectType = false;
         exsumType = false;
         opshectType = false;
         appraisalType = false;
 
         // ###### Role BU and Viewer Can not print AAD Report ######
         if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
-            if (checkPricing()){
+            if (checkPricing() || Util.isNull(workCase)){
                 log.debug("On Request Pricing by Rold BU or Viewer");
                 opshectType = true;
-                rejectType = true;
+                exsumType = true;
             }
             appraisalType = true;
             disableButtomPrintReject();
@@ -252,17 +252,17 @@ public class GenPDF extends ReportService implements Serializable {
         // ###### Role UW and OPS Can not print AAD Report And Reject Letter Report ######
         if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
                 readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
-            if (checkPricing()){
+            if (checkPricing() || Util.isNull(workCase)){
                 log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
-                rejectType = true;
+                exsumType = true;
             }
 
             appraisalType = true;
             rejectType = true;
         }
 
-        // ###### Role AAD Can not print Opshect And Exsum , Role UW Can not print Appraisal Request And Reject Letter ######
+        // ###### Role AAD Can not print Opshect,Exsum and Reject Letter ######
         if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
             if(!Util.isNull(workCase)){
                 log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
@@ -276,6 +276,7 @@ public class GenPDF extends ReportService implements Serializable {
                 }
             }
             opshectType = true;
+            exsumType = true;
             rejectType = true;
         }
     }
