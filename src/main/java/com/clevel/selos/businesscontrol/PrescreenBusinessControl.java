@@ -770,6 +770,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                 List<CustomerCSI> customerCSIs = customerCSIDAO.getCustomerCSIByCustomer(customer);
                 customerCSIDAO.delete(customerCSIs);
 
+                customer.setCustomerCSIList(Collections.<CustomerCSI>emptyList());
+
                 List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
                 if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
@@ -1286,6 +1288,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                     List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
                     customerAccountDAO.delete(customerAccountList);
 
+                    customer.setCustomerAccountList(Collections.<CustomerAccount>emptyList());
+
                     if(ncbView.getAccountInfoIdList() != null && ncbView.getAccountInfoIdList().size() > 0){
                         for(AccountInfoId accountInfoId : ncbView.getAccountInfoIdList()){
                             CustomerAccount customerAccount = new CustomerAccount();
@@ -1309,9 +1313,19 @@ public class PrescreenBusinessControl extends BusinessControl {
                     List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
                     customerAccountNameDAO.delete(customerAccountNameList);
 
+                    customer.setCustomerAccountNameList(Collections.<CustomerAccountName>emptyList());
+
+                    CustomerAccountName customerAccountName = new CustomerAccountName();
+                    customerAccountName.setCustomer(customer);
+                    customerAccountName.setNameTh(customer.getNameTh());
+                    customerAccountName.setSurnameTh(customer.getLastNameTh());
+                    customerAccountName.setNameEn(customer.getNameEn());
+                    customerAccountName.setSurnameEn(customer.getLastNameEn());
+                    customerAccountNameDAO.persist(customerAccountName);
+
                     if(ncbView.getAccountInfoNameList() != null && ncbView.getAccountInfoNameList().size() > 0){
                         for(AccountInfoName accountInfoName : ncbView.getAccountInfoNameList()){
-                            CustomerAccountName customerAccountName = new CustomerAccountName();
+                            customerAccountName = new CustomerAccountName();
                             customerAccountName.setCustomer(customer);
                             customerAccountName.setNameTh(accountInfoName.getNameTh());
                             customerAccountName.setSurnameTh(accountInfoName.getSurnameTh());
@@ -1656,6 +1670,14 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                 List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
                 //-- if customer never check NCB ( eg. guarantor and related person ) manual add customer account name and customer account--//
+                /*//Add default account name to check CSI
+                AccountInfoName accountInfoName = new AccountInfoName();
+                accountInfoName.setNameTh(customer.getNameTh());
+                accountInfoName.setNameEn(customer.getNameEn());
+                accountInfoName.setSurnameTh(customer.getLastNameTh());
+                accountInfoName.setSurnameEn(customer.getLastNameEn());
+                accountInfoNameList.add(accountInfoName);*/
+
                 if(customerAccountNameList != null && customerAccountNameList.size() > 0){
                     for(CustomerAccountName customerAccountName : customerAccountNameList){
                         AccountInfoName accountInfoName = new AccountInfoName();
@@ -1667,15 +1689,6 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                         accountInfoNameList.add(accountInfoName);
                     }
-                } else {
-                    AccountInfoName accountInfoName = new AccountInfoName();
-
-                    accountInfoName.setNameTh(customer.getNameTh());
-                    accountInfoName.setNameEn(customer.getNameEn());
-                    accountInfoName.setSurnameTh(customer.getLastNameTh());
-                    accountInfoName.setSurnameEn(customer.getLastNameEn());
-
-                    accountInfoNameList.add(accountInfoName);
                 }
 
 
@@ -1714,6 +1727,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                     List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
                     List<CustomerCSI> customerCSIListDel = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
                     customerCSIDAO.delete(customerCSIListDel);
+
+                    customer.setCustomerCSIList(Collections.<CustomerCSI>emptyList());
 
                     if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){

@@ -11,6 +11,8 @@ import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -27,6 +29,10 @@ public class PDFAppraisalAppointment implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     @Config(name = "report.subreport")
@@ -76,16 +82,20 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setAppraisalCompany(Util.checkNullString(!Util.isNull(appraisalView.getAppraisalCompany()) ? appraisalView.getAppraisalCompany().getName() : SPACE));
             report.setAppraisalDivision(Util.checkNullString(!Util.isNull(appraisalView.getAppraisalDivision()) ? appraisalView.getAppraisalDivision().getName() : SPACE));
             report.setAppraisalName(Util.checkNullString(appraisalView.getAppraisalName()));
-            report.setReceivedTaskDate(appraisalView.getReceivedTaskDate());
+            report.setReceivedTaskDate(DateTimeUtil.getCurrentDateTH(appraisalView.getReceivedTaskDate()));
             report.setLocationOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getLocationOfProperty()) ? appraisalView.getLocationOfProperty().getName() : SPACE));
             report.setProvinceOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getProvinceOfProperty()) ? appraisalView.getProvinceOfProperty().getName() : SPACE));
-            report.setAppraisalDate( appraisalView.getAppraisalDate());
-            report.setDueDate(appraisalView.getDueDate());
+            report.setAppraisalDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppraisalDate()));
+            report.setDueDate(DateTimeUtil.getCurrentDateTH(appraisalView.getDueDate()));
             report.setAADAdminRemark(Util.checkNullString(appraisalView.getAADAdminRemark()));
 
-            report.setAppointmentDate(appraisalView.getAppointmentDate());
+            report.setAppointmentDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppointmentDate()));
             report.setAppointmentCusName(Util.checkNullString(appraisalView.getAppointmentCusName()));
-            report.setCancelAppointment(Util.checkNullString(appraisalView.getCancelAppointment()));
+            if ("0".equalsIgnoreCase(appraisalView.getCancelAppointment())){
+                report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.postpone"));
+            } else {
+                report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.abort"));
+            }
             report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
 
             report.setZoneLocation(Util.checkNullString(appraisalView.getZoneLocation()));
@@ -160,7 +170,7 @@ public class PDFAppraisalAppointment implements Serializable {
                 report.setCallingDate(DateTimeUtil.getCurrentDateTH(view.getCallingDate()));
                 report.setCallingResult(view.getCallingResult());
                 report.setAcceptResult(view.getAcceptResult());
-                report.setNextCallingDate(view.getNextCallingDate());
+                report.setNextCallingDate(DateTimeUtil.getCurrentDateTH(view.getNextCallingDate()));
                 report.setReasonDescription(Util.checkNullString(!Util.isNull(view.getReason()) ? view.getReason().getDescription() : SPACE));
                 report.setRemark(Util.checkNullString(view.getRemark()));
                 report.setStatusDescription(Util.checkNullString(!Util.isNull(view.getStatus()) ? view.getStatus().getDescription() : SPACE));

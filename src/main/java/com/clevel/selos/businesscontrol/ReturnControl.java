@@ -220,6 +220,25 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
+    public List<ReturnInfoView> getReturnNoReplyDetailList(long workCaseId, long workCasePrescreenId){
+        List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findByNotReplyDetailList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findByNotReplyDetailListPrescreen(workCasePrescreenId);
+            }
+
+            for(ReturnInfo returnInfo: returnInfoList){
+                ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
+                returnInfoViews.add(returnInfoView);
+            }
+        }
+
+        return returnInfoViews;
+    }
+
     public List<ReturnInfoView> getReturnNoReviewList(long workCaseId, long workCasePrescreenId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         if(workCaseId!=0 || workCasePrescreenId!=0){
