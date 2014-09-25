@@ -1664,6 +1664,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         }
                         approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                     } else {
+                        ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+                        List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+                        proposeCollateralInfoSubView.setPath(pathsub);
+                        proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+                        approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                         approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                         log.debug("fillApprovedCollaterral to Rejected. {}",view.getUwDecision());
                     }
