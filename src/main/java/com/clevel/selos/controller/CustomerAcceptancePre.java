@@ -12,8 +12,10 @@ import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.model.view.TCGInfoView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -129,6 +131,7 @@ public class CustomerAcceptancePre extends BaseController {
     public void onUpdateContactRecord() {
         Reason reason = _retrieveReasonFromId(contactRecord.getUpdReasonId());
         contactRecord.setReason(reason);
+        contactRecord.updateNextCallingDate();
         contactRecord.setNeedUpdate(true);
         contactRecord = null;
 
@@ -239,9 +242,15 @@ public class CustomerAcceptancePre extends BaseController {
         //DO NOTHING
     }
 
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
     public String getMinDate() {
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy", new Locale("th", "TH"));
-        return dFmt.format(new Date());
+        log.debug("current date : {}", getCurrentDate());
+        return DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+        /*SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy", new Locale("th", "TH"));
+        return dFmt.format(new Date());*/
     }
 
     public List<ContactRecordDetailView> getContactRecordDetailViews() {
