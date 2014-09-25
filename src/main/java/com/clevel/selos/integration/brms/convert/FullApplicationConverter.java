@@ -180,6 +180,7 @@ public class FullApplicationConverter extends Converter{
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_CHEQUE_RETURN, accountStmtInfo.getCheckReturn()));
+            //accAttributeList.add(getAttributeType(BRMSFieldAttributes.TRADE_CHEQUE_RETURN_PERCENT, accountStmtInfo.getCheckReturnPercent()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.OD_OVER_LIMIT_DAYS, accountStmtInfo.getOverLimitDays()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.CASH_INFLOW, accountStmtInfo.getAvgIncomeGross()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));

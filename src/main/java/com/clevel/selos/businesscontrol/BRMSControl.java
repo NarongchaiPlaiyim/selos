@@ -1173,12 +1173,23 @@ public class BRMSControl extends BusinessControl {
         accountStmtInfo.setAvgSwingPercent(bankStatement.getAvgSwingPercent());
         accountStmtInfo.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
         accountStmtInfo.setAvgGrossInflowPerLimit(bankStatement.getAvgGrossInflowPerLimit());
-        accountStmtInfo.setTotalTransaction(bankStatement.getTotalTransaction());
+        BigDecimal minTransaction = BigDecimal.ZERO;
+        if(bankStatement.getBankStatementDetailList() != null && bankStatement.getBankStatementDetailList().size() > 0) {
+            int tmpMinTransaction = 9999999;
+            for (BankStatementDetail bankDetail : bankStatement.getBankStatementDetailList()){
+                if(bankDetail.getTotalTransaction() < tmpMinTransaction){
+                    tmpMinTransaction = bankDetail.getTotalTransaction();
+                }
+            }
+            minTransaction = new BigDecimal(tmpMinTransaction);
+        }
+        accountStmtInfo.setTotalTransaction(minTransaction);
         accountStmtInfo.setMainAccount(getRadioBoolean(bankStatement.getMainAccount()));
         accountStmtInfo.setHighestInflow(toBoolean(bankStatement.getHighestInflow()));
         accountStmtInfo.setTmb(toBoolean(bankStatement.getTMB()));
         accountStmtInfo.setNotCountIncome(isActive(bankStatement.getNotCountIncome()));
         accountStmtInfo.setOverLimitDays(bankStatement.getOverLimitDays());
+        accountStmtInfo.setCheckReturn(bankStatement.getChequeReturn());
         logger.debug("transform Result {}", accountStmtInfo);
         return accountStmtInfo;
     }
