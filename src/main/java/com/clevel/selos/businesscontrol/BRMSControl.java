@@ -1179,7 +1179,7 @@ public class BRMSControl extends BusinessControl {
         else
             ncbAccountInfo.setLoanAccountStatus(ncbDetail.getAccountStatus() == null ? "" : ncbDetail.getAccountStatus().getNcbCodeJur());
         ncbAccountInfo.setLoanAccountType(ncbDetail.getAccountType() == null ? "" : ncbDetail.getAccountType().getNcbCode());
-        ncbAccountInfo.setTmbFlag(getRadioBoolean(ncbDetail.getAccountTMBFlag()));
+        ncbAccountInfo.setTmbFlag(Util.isTrue(ncbDetail.getAccountTMBFlag()));
         ncbAccountInfo.setNplFlag(getRadioBoolean(ncbDetail.getNplFlag()));
         ncbAccountInfo.setCreditAmtAtNPLDate(ncbDetail.getNplCreditAmount());
         ncbAccountInfo.setTdrFlag(getRadioBoolean(ncbDetail.getTdrFlag()));
