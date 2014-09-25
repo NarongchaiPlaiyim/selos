@@ -299,9 +299,16 @@ public class NCBBizTransform extends BusinessTransform {
                                             int outStandingCreditMonth = 0;
                                             if (!Util.isEmpty(subjectAccountModel.getAccounttype())
                                                     && (subjectAccountModel.getAccounttype().equals("05") || subjectAccountModel.getAccounttype().equals("22"))) {
+                                                if(subjectAccountModel.getAmountowed()!=null){
+                                                    outStandingCredit = new BigDecimal(subjectAccountModel.getAmountowed());
+                                                    outStandingCreditMonth = outStandingCreditMonth+1;
+                                                }
+
                                                 List<HistoryModel> historyModels = subjectAccountModel.getHistory();
                                                 for(HistoryModel historyModel : historyModels){
-                                                    if (isInMonthPeriodYYYYMMDD(historyModel.getAsofdate(), lastAsOfDate, SIX_MONTH)) {
+                                                    if(outStandingCreditMonth == 6){
+                                                        break;
+                                                    } else {
                                                         if(historyModel.getAmountowed()!=null){
                                                             BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
                                                             outStandingCredit = outStandingCredit.add(outstanding);
