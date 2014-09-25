@@ -256,19 +256,24 @@ public class DBRControl extends BusinessControl {
 
 
     private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrowerFinal, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
-        BigDecimal result = BigDecimal.ZERO;
+        BigDecimal result;
+        BigDecimal debt;
         BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
-        int roleId = getCurrentUser().getRole().getId();
-        ProposeLine newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
-        //todo not confirm
-        BigDecimal debt = BigDecimal.ZERO;
+        ProposeLine proposeLine = newCreditFacilityDAO.findByWorkCaseId(workCase.getId());
         debt = Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated);
-        if(newCreditFacility != null && newCreditFacility.getId() > 0)  {
-            totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId()))  {
+            totalPurposeForDBR = proposeLine.getTotalProposeLoanDBR();
         }
+        log.debug("### totalMonthDebtBorrowerFinal :: {} ", totalMonthDebtBorrowerFinal);
+        log.debug("### totalMonthDebtRelated :: {} ", totalMonthDebtRelated);
+        log.debug("### totalPurposeForDBR :: {} ", totalPurposeForDBR);
+
         debt = Util.add(debt, totalPurposeForDBR);
         result = Util.divide(debt, netMonthlyIncome);
         result = Util.multiply(result, BigDecimal.valueOf(100));
+
+        log.debug("### result :: {} ", result);
+
         return result;
     }
 
