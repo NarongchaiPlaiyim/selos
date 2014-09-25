@@ -1178,6 +1178,7 @@ public class BRMSControl extends BusinessControl {
         accountStmtInfo.setHighestInflow(toBoolean(bankStatement.getHighestInflow()));
         accountStmtInfo.setTmb(toBoolean(bankStatement.getTMB()));
         accountStmtInfo.setNotCountIncome(isActive(bankStatement.getNotCountIncome()));
+        accountStmtInfo.setOverLimitDays(bankStatement.getOverLimitDays());
         logger.debug("transform Result {}", accountStmtInfo);
         return accountStmtInfo;
     }

@@ -449,12 +449,6 @@
 <!--############ Customer Acceptance Stage ############-->
 <p:panel id="header_panel_customer_accept" rendered="#{headerController.checkAccessStage('CUSTOMERACCEPTANCE')}" styleClass="panel">
     <c:if test="#{headerController.checkAccessStage('CUSTOMERACCEPTANCE')}">
-        <!--Print Report-->
-        <p:commandButton id="btnPrintReportCustomperAccept" value="#{msg.get('app.header.button.printReport')}" title="#{msg.get('app.header.button.printReport')}" styleClass="blueButton"
-                         actionListener="#{report.setNameReport()}"
-                         oncomplete="PF('printReportDlg').show()"
-                         update=":frmMain:printReportPanel">
-        </p:commandButton>
         <!--Cancel CA-->
         <p:commandButton id="btnCancelCA_Pre" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                          rendered="#{headerController.checkButton('Cancel CA')}"

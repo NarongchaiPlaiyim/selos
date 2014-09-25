@@ -93,7 +93,7 @@ public class MandatoryFieldsControl extends BusinessControl {
     //FULLAPP
     public List<FieldsControlView> getFieldsControlView(long workCaseId, long stepId, long statusId, Screen screen, String caseOwnerUserId) {
         String currentUserId = getCurrentUserID();
-        log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, role : {}, currentUserId : {}, caseOwnerUserId : {}", screen, stepId, statusId, user.getRole(), currentUserId, caseOwnerUserId);
+        log.debug("get Field control for screen : {}, stepId : {}, statusId : {}, currentUserId : {}, caseOwnerUserId : {}", screen, stepId, statusId, currentUserId, caseOwnerUserId);
         if(caseOwnerUserId.toLowerCase().equalsIgnoreCase(currentUserId.toLowerCase())) {
             if (stepId <= 0 || workCaseId <= 0 || screen == null)
                 return Collections.emptyList();

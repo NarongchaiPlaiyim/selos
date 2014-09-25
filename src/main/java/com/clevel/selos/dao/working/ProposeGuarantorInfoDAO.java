@@ -47,8 +47,8 @@ public class ProposeGuarantorInfoDAO extends GenericDAO<ProposeGuarantorInfo, Lo
 
     public List<ProposeGuarantorInfo> findApprovedTCGGuarantor(long workCaseId){
         Criteria criteria = createCriteria();
-        criteria.createAlias("guarantorName", "cus");
-        criteria.createAlias("cus.workCase", "wrk");
+        criteria.createAlias("proposeLine", "propose");
+        criteria.createAlias("propose.workCase", "wrk");
         criteria.add(Restrictions.eq("wrk.id", workCaseId));
         criteria.add(Restrictions.eq("proposeType", ProposeType.A));
         criteria.add(Restrictions.eq("uwDecision", DecisionType.APPROVED));

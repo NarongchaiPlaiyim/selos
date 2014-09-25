@@ -1073,6 +1073,8 @@ public class HeaderController extends BaseController {
             }
 
             if (!checkForCheckCriteria) {
+                submitRemark = "";
+                slaReasonId = 0;
                 submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
                 if (submitOverSLA == 1) {
                     slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
