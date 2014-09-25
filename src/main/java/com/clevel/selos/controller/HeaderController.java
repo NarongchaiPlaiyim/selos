@@ -594,16 +594,22 @@ public class HeaderController extends BaseController {
         log.debug("onAssignToChecker ::: starting...");
         boolean complete = false;
         try {
-            if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
-                prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
-                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
-                complete = true;
-                messageHeader = "Information.";
-                message = "Assign to checker complete.";
-                showMessageRedirect();
+            if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
+                    prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
+                    returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                    complete = true;
+                    messageHeader = "Information.";
+                    message = "Assign to checker complete.";
+                    showMessageRedirect();
+                }
             } else {
-                complete = false;
+                messageHeader = "Assign to checker failed.";
+                message = "Please update reply detail before submit.";
+                showMessageBox();
+                RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
             }
+
             RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
             log.debug("onAssignToChecker ::: complete");
         } catch (Exception ex) {
@@ -798,15 +804,22 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
-                fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
-                log.debug("submitForBDM ::: success.");
-                log.debug("submitForBDM ::: Backup return info to History Start...");
-                returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
-                log.debug("submitForBDM ::: Backup return info to History Success...");
-                messageHeader = msg.get("app.messageHeader.info");
-                message = msg.get("app.message.dialog.submit.success");
-                showMessageRedirect();
-                complete = true;
+                if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                    fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+                    log.debug("submitForBDM ::: success.");
+                    log.debug("submitForBDM ::: Backup return info to History Start...");
+                    returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
+                    log.debug("submitForBDM ::: Backup return info to History Success...");
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = msg.get("app.message.dialog.submit.success");
+                    showMessageRedirect();
+                    complete = true;
+                } else {
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "Please update return reply detail before submit.";
+                    showMessageBox();
+                    log.error("submitForBDM ::: submit failed (reply detail invalid)");
+                }
             } catch (Exception ex){
                 messageHeader = msg.get("app.messageHeader.exception");
                 message = Util.getMessageException(ex);
@@ -1331,17 +1344,32 @@ public class HeaderController extends BaseController {
     public void onSubmitAADCommittee(){
         log.debug("onSubmitAADCommittee ( submit to AAD committee )");
         _loadSessionVariable();
+        boolean canSubmit = false;
         try{
             if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId==StatusValue.REPLY_FROM_BDM.value()){
                 log.debug("onSubmitAADCommittee ( save Return History For Restart )");
                 returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                canSubmit = true;
             } else {
-                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                    returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                    canSubmit = true;
+                } else {
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "Please update return reply detail before submit.";
+                    showMessageBox();
+                    log.error("onSubmitAADCommittee ::: submit failed (reply detail invalid)");
+                }
+
             }
-            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
-            messageHeader = "Information.";
-            message = "Request for appraisal success.";
-            showMessageRedirect();
+
+            if(canSubmit){
+                fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+                messageHeader = "Information.";
+                message = "Request for appraisal success.";
+                showMessageRedirect();
+            }
+
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -2599,11 +2627,18 @@ public class HeaderController extends BaseController {
 
     public boolean canSubmitWithoutReply(long workCaseId, long workCasePreScreenId) throws Exception{
         List<ReturnInfoView> returnInfoViews;
-        if(workCaseId!=0) {
-            returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,0);
+        returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,workCasePreScreenId);
+
+        if(returnInfoViews!=null && returnInfoViews.size()>0){
+            return false;
         } else {
-            returnInfoViews = returnControl.getReturnNoReplyList(0,workCasePreScreenId);
+            return true;
         }
+    }
+
+    public boolean canSubmitWithoutReplyDetail(long workCaseId, long workCasePreScreenId) throws Exception{
+        List<ReturnInfoView> returnInfoViews;
+        returnInfoViews = returnControl.getReturnNoReplyDetailList(workCaseId,workCasePreScreenId);
 
         if(returnInfoViews!=null && returnInfoViews.size()>0){
             return false;
@@ -2643,18 +2678,24 @@ public class HeaderController extends BaseController {
         log.debug("onReturnToAADAdminByBDM");
 
         try {
-            HttpSession session = FacesUtil.getSession(false);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                HttpSession session = FacesUtil.getSession(false);
+                String queueName = Util.parseString(session.getAttribute("queueName"), "");
+                String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            messageHeader = "Information.";
-            message = "Return to AAD Admin success.";
+                messageHeader = "Information.";
+                message = "Return to AAD Admin success.";
 
-            fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
-            returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
 
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            } else {
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "Please update return reply detail before submit.";
+                log.error("submitForBDM ::: submit failed (reply detail invalid)");
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            }
         } catch (Exception ex) {
             log.debug("Exception while Return to AAD Admin : ", ex);
             messageHeader = "Exception.";
