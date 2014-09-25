@@ -2058,7 +2058,7 @@ public class CreditFacExisting extends BaseController {
         for(CustomerInfoView item : customerInfoViews){
             customerInfoList.add(item);
             if(item.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getSpouseFlag() == 1){
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse = item.getSpouse();
                     if(spouse != null){
