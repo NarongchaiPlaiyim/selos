@@ -151,6 +151,7 @@ public class PrescreenConverter extends Converter{
                     List<AttributeType> ncbAccAttributeList = ncbAccountType.getAttribute();
                     ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, ncbAccountInfo.isTmbFlag()));
                     ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, ncbAccountInfo.isNplFlag()));
+                    ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.NCB_TDR_FLAG, ncbAccountInfo.isNplFlag()));
                     ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, ncbAccountInfo.getCreditAmtAtNPLDate()));
                     if(customerInfo.isIndividual()){
                         ncbAccAttributeList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, ncbAccountInfo.getCurrentPaymentType()));

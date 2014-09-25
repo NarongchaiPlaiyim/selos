@@ -240,6 +240,7 @@ public class FullApplicationConverter extends Converter{
                 List<AttributeType> ncbAccountAttrList = ncbAccount.getAttribute();
                 ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, brmsNCBAccountInfo.isTmbFlag()));
                 ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, brmsNCBAccountInfo.isNplFlag()));
+                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_TDR_FLAG, brmsNCBAccountInfo.isTdrFlag()));
                 ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, brmsNCBAccountInfo.getCreditAmtAtNPLDate()));
                 if(customerInfo.isIndividual()){
                     ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, brmsNCBAccountInfo.getCurrentPaymentType()));
