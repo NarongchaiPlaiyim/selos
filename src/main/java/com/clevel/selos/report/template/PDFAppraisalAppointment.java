@@ -11,6 +11,8 @@ import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -27,6 +29,10 @@ public class PDFAppraisalAppointment implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     @Config(name = "report.subreport")
@@ -85,7 +91,11 @@ public class PDFAppraisalAppointment implements Serializable {
 
             report.setAppointmentDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppointmentDate()));
             report.setAppointmentCusName(Util.checkNullString(appraisalView.getAppointmentCusName()));
-            report.setCancelAppointment(Util.checkNullString(appraisalView.getCancelAppointment()));
+            if ("0".equalsIgnoreCase(appraisalView.getCancelAppointment())){
+                report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.postpone"));
+            } else {
+                report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.abort"));
+            }
             report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
 
             report.setZoneLocation(Util.checkNullString(appraisalView.getZoneLocation()));
