@@ -813,6 +813,7 @@ public class ProposeLine extends BaseController {
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
             calculationControl.calWC(workCaseId);
             calculationControl.calForProposeLine(workCaseId);
+            calculationControl.calculateFinalDBR(workCaseId);
             fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P);
 
             onCreation();
