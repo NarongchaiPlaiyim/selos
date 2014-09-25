@@ -80,8 +80,7 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.add(Restrictions.eq("challenge", 0));
-        criteria.add(Restrictions.eq("replyDetail", ""));
+        criteria.add(Restrictions.or(Restrictions.eq("challenge", 0),Restrictions.isNull("replyDetail")));
         criteria.addOrder(Order.asc("id"));
         List<ReturnInfo> returnInfoList = criteria.list();
 
@@ -95,7 +94,7 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.add(Restrictions.eq("replyDetail", ""));
+        criteria.add(Restrictions.isNull("replyDetail"));
         criteria.addOrder(Order.asc("id"));
         List<ReturnInfo> returnInfoList = criteria.list();
 
@@ -109,7 +108,7 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
-        criteria.add(Restrictions.eq("challenge", 0));
+        criteria.add(Restrictions.or(Restrictions.eq("challenge", 0),Restrictions.isNull("replyDetail")));
         criteria.addOrder(Order.asc("id"));
         List<ReturnInfo> returnInfoList = criteria.list();
 
@@ -123,8 +122,7 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
-        criteria.add(Restrictions.eq("challenge", 0));
-        criteria.add(Restrictions.eq("replyDetail", ""));
+        criteria.add(Restrictions.isNull("replyDetail"));
         criteria.addOrder(Order.asc("id"));
         List<ReturnInfo> returnInfoList = criteria.list();
 
