@@ -292,6 +292,11 @@ public class GenPDF extends ReportService implements Serializable {
         return false;
     }
 
+    private boolean checkStepApproved(){
+
+        return false;
+    }
+
     private void disableButtomPrintReject(){
         log.debug("On disableButtomPrintReject.");
 

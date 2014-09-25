@@ -1315,6 +1315,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         proposedCreditDecisionReportList.add(approvedView);
                         log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
                     }
+                } else {
+                    proposedCreditDecisionReportList.add(approvedView);
+                    log.debug("fillApprovedCredit to REJECTED. {}",detailView.getUwDecision());
                 }
             }
         } else {
