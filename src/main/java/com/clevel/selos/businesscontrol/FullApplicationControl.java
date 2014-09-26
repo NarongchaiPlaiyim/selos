@@ -36,10 +36,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Stateless
 public class FullApplicationControl extends BusinessControl {
@@ -125,6 +122,8 @@ public class FullApplicationControl extends BusinessControl {
     private TCGDAO tcgDAO;
     @Inject
     ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    private ProposeGuarantorInfoDAO proposeGuarantorInfoDAO;
 
     @Inject
     private ReturnInfoTransform returnInfoTransform;
@@ -419,7 +418,7 @@ public class FullApplicationControl extends BusinessControl {
 
                 ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                 if(existingCreditFacility != null) {
-                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                 }
 
                 UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
@@ -495,12 +494,12 @@ public class FullApplicationControl extends BusinessControl {
 
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                     if(proposeLine != null) {
-                        totalCommercial = proposeLine.getTotalExposure();
+                        totalCommercial = proposeLine.getTotalExposure() != null ? proposeLine.getTotalExposure() : BigDecimal.ZERO;
                     }
 
                     ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                     if(existingCreditFacility != null) {
-                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit();
+                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                     }
 
 
@@ -780,12 +779,26 @@ public class FullApplicationControl extends BusinessControl {
     }
     //------ End Function for Submit CA BU ----------//
     //------ Function for Submit UW ----------------//
+    public boolean checkUWDecision(long workCaseId){
+        boolean isUWReject = false;
+        ApprovalHistory approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUser(workCaseId, getCurrentUserID());
+        if(!Util.isNull(approvalHistoryEndorseCA)){
+            if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
+                isUWReject = true;
+            }
+        }
+        return isUWReject;
+    }
+
     public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
         String decisionFlag;
         String haveRG001 = "N";
         ApprovalHistory approvalHistoryEndorseCA = null;
+        AuthorizationDOA authorizationDOA = null;
 
-        AuthorizationDOA authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
+        if(uw2DOALevelId != 0) {
+            authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
+        }
 
         if(workCaseId != 0){
             approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
@@ -794,8 +807,6 @@ public class FullApplicationControl extends BusinessControl {
                 throw new Exception("Please make decision before submit.");
             } else {
                 decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
 
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 String appraisalRequired = workCase != null ? String.valueOf(workCase.getRequestAppraisalRequire()) : "0";
@@ -804,8 +815,12 @@ public class FullApplicationControl extends BusinessControl {
                     haveRG001 = "Y";
                 }
 
-                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA != null ? authorizationDOA.getDescription() : "", decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
+
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistoryDAO.persist(approvalHistory);
             }
         }else{
             throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -828,8 +843,6 @@ public class FullApplicationControl extends BusinessControl {
                 throw new Exception("Please make decision before submit.");
             } else {
                 decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
 
                 if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
                     haveRG001 = "Y";
@@ -842,10 +855,16 @@ public class FullApplicationControl extends BusinessControl {
                     insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
                 }
 
-                mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                if(!decisionFlag.equals("R")) {
+                    mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                }
 
                 bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+                log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistoryDAO.persist(approvalHistory);
             }
         }else{
             throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -1695,6 +1714,8 @@ public class FullApplicationControl extends BusinessControl {
                     List<CustomerCSI> customerCSIListDel = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
                     customerCSIDAO.delete(customerCSIListDel);
 
+                    customer.setCustomerCSIList(Collections.<CustomerCSI>emptyList());
+
                     if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
                             log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
@@ -1920,12 +1941,18 @@ public class FullApplicationControl extends BusinessControl {
     public int calculateTCGFlag(long workCaseId){
         int tcgFlag = 0;
 
-        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+        //Get all Approve Guarantor to find TCG As Guarantor
+        List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findApprovedTCGGuarantor(workCaseId);
+        if(Util.isSafetyList(proposeGuarantorInfoList) && proposeGuarantorInfoList.size() > 0){
+            tcgFlag = 1;
+        }
+
+        /*TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
         if(!Util.isNull(tcg)){
             if(tcg.getTcgFlag() == RadioValue.YES.value())
                 tcgFlag = 1;
-        }
+        }*/
 
         return tcgFlag;
     }
@@ -1970,6 +1997,7 @@ public class FullApplicationControl extends BusinessControl {
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
         }
 
+        boolean rejectedNCB = false;
         if(!Util.isNull(uwRuleResultSummary)){
             if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
                 List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
@@ -1983,15 +2011,19 @@ public class FullApplicationControl extends BusinessControl {
                                     uwRuleResultDetail.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
                                 if(uwRuleResultDetail.getUwResultColor() == UWResultColor.RED){
                                     log.debug("NCB Result is RED without Deviate, auto reject case!");
-                                    ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
-                                    //Update ncb reject flag
-                                    updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
+                                    rejectedNCB = true;
+                                    break;
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+        if(rejectedNCB){
+            ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
+            //Update ncb reject flag
+            updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
         }
     }
 

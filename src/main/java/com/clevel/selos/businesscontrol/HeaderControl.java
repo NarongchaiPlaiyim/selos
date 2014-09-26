@@ -18,6 +18,7 @@ import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.UWRuleResultDetailView;
 import com.clevel.selos.model.view.UWRuleResultSummaryView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -88,7 +89,7 @@ public class HeaderControl extends BusinessControl {
             }
             appHeaderView.setAppNo(workCase.getAppNumber());
             appHeaderView.setAppRefNo(workCase.getRefAppNumber());
-            appHeaderView.setAppRefDate("");
+            appHeaderView.setAppRefDate(DateTimeUtil.convertToStringDDMMYYYY(workCase.getRefAppDate()));
             appHeaderView.setProductGroup(workCase.getProductGroup().getName());
             appHeaderView.setCaseStatus(status != null ? status.getName() : "");
             appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
@@ -109,7 +110,7 @@ public class HeaderControl extends BusinessControl {
                 appHeaderView.setCaNo(workCasePrescreen.getCaNumber());
                 appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
                 appHeaderView.setAppRefNo(workCasePrescreen.getRefAppNumber());
-                appHeaderView.setAppRefDate("");
+                appHeaderView.setAppRefDate(DateTimeUtil.convertToStringDDMMYYYY(workCasePrescreen.getRefAppDate()));
                 appHeaderView.setProductGroup(workCasePrescreen.getProductGroup() != null ? workCasePrescreen.getProductGroup().getName() : "");
                 appHeaderView.setCaseStatus(status != null ? status.getName() : "");
                 appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
@@ -270,7 +271,7 @@ public class HeaderControl extends BusinessControl {
         return requestAppraisal;
     }
 
-    public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
+    /*public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
         log.debug("ncbResultValidation()");
         if(uwRuleResultSummaryView!=null){
             if(uwRuleResultSummaryView.getUwDeviationFlagView().getBrmsCode().equalsIgnoreCase("ND")) {
@@ -295,7 +296,7 @@ public class HeaderControl extends BusinessControl {
             }
         }
         return true;
-    }
+    }*/
 
     public void updateNCBRejectFlag(long workCasePreScreenId, boolean canCheckPreScreen){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);

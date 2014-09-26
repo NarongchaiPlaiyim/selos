@@ -82,6 +82,8 @@ public class FullApplicationConverter extends Converter{
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.TRADE_CHEQUE_RETURN_PERCENT, applicationInfo.getTradeChequeReturnPercent()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.REFERENCE_DOCUMENT_TYPE, applicationInfo.getReferredDocType()));
         attributeTypeList.add(getAttributeType(BRMSFieldAttributes.EXISTING_GROUP_EXPOSURE, applicationInfo.getExistingGroupExposure()));
+        attributeTypeList.add(getAttributeType(BRMSFieldAttributes.BOT_CLASS, applicationInfo.getBotClass()));
+
 
         List<ProductType> productTypeList = applicationType.getProduct();
         ProductType productType = new ProductType();
@@ -100,7 +102,15 @@ public class FullApplicationConverter extends Converter{
             collateralType.setCollateralType(getValueForInterface(brmsCollInfo.getCollateralType()));
 
             List<AttributeType> collAttributeList = collateralType.getAttribute();
-            collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, brmsCollInfo.getSubCollateralType()));
+            //Add sub collateral list
+            if(brmsCollInfo.getSubCollateralTypeList() != null && brmsCollInfo.getSubCollateralTypeList().size() > 0){
+                for(String subColCode : brmsCollInfo.getSubCollateralTypeList()) {
+                    collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, subColCode));
+                }
+            }else{
+                collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, ""));
+            }
+            //collAttributeList.add(getAttributeType(BRMSFieldAttributes.SUB_COLLATERAL_TYPE, brmsCollInfo.getSubCollateralType()));
             collAttributeList.add(getAttributeType(BRMSFieldAttributes.APPRAISAL_FLAG, brmsCollInfo.isAppraisalFlag()));
             collAttributeList.add(getAttributeType(BRMSFieldAttributes.AAD_COMMENT, brmsCollInfo.getAadDecision()));
             collAttributeList.add(getAttributeType(BRMSFieldAttributes.LENGTH_OF_APPRAISAL_MONTHS, brmsCollInfo.getNumberOfMonthsApprDate()));
@@ -170,6 +180,7 @@ public class FullApplicationConverter extends Converter{
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.AVG_LAST_6_MONTHS_INFLOW_LIMIT, accountStmtInfo.getAvgGrossInflowPerLimit()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_TRANSACTION, accountStmtInfo.getTotalTransaction()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_CHEQUE_RETURN, accountStmtInfo.getCheckReturn()));
+            //accAttributeList.add(getAttributeType(BRMSFieldAttributes.TRADE_CHEQUE_RETURN_PERCENT, accountStmtInfo.getCheckReturnPercent()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.OD_OVER_LIMIT_DAYS, accountStmtInfo.getOverLimitDays()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.CASH_INFLOW, accountStmtInfo.getAvgIncomeGross()));
             accAttributeList.add(getAttributeType(BRMSFieldAttributes.MAIN_ACCOUNT_FLAG, accountStmtInfo.isMainAccount()));
@@ -238,6 +249,7 @@ public class FullApplicationConverter extends Converter{
                 List<AttributeType> ncbAccountAttrList = ncbAccount.getAttribute();
                 ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, brmsNCBAccountInfo.isTmbFlag()));
                 ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, brmsNCBAccountInfo.isNplFlag()));
+                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_TDR_FLAG, brmsNCBAccountInfo.isTdrFlag()));
                 ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, brmsNCBAccountInfo.getCreditAmtAtNPLDate()));
                 if(customerInfo.isIndividual()){
                     ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, brmsNCBAccountInfo.getCurrentPaymentType()));

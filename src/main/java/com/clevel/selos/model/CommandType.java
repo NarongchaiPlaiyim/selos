@@ -1,9 +1,9 @@
 package com.clevel.selos.model;
 public enum CommandType {
-    INSERT{
+    CREATE{
         @Override
         public boolean equals(final String string) {
-            return "INSERT".equalsIgnoreCase(string);
+            return "CREATE".equalsIgnoreCase(string);
         }
     },
     UPDATE{

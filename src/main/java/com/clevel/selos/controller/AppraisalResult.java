@@ -38,7 +38,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +46,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "appraisalResult")
-public class AppraisalResult implements Serializable {
+public class AppraisalResult extends BaseController {
 
     @Inject
     @SELOS
@@ -118,7 +117,6 @@ public class AppraisalResult implements Serializable {
 
     private AppraisalData appraisalData;
 
-    private List<HeadCollateralData> headCollateralDataList;
     private HeadCollateralData headCollateralData;
 
     private SubCollateralData subCollateralData;
@@ -144,16 +142,6 @@ public class AppraisalResult implements Serializable {
 
     public AppraisalResult() {
 
-    }
-
-    public boolean checkSession(HttpSession session){
-        boolean checkSession = false;
-        if(( (Long)session.getAttribute("workCaseId") != 0 || (Long)session.getAttribute("workCasePreScreenId") != 0 ) &&
-                (Long)session.getAttribute("stepId") != 0){
-            checkSession = true;
-        }
-
-        return checkSession;
     }
 
     private void init(){
@@ -219,19 +207,14 @@ public class AppraisalResult implements Serializable {
     }
 
     public void onChangePageCauseNoRequest(){
-        try{
-            log.info("onChangePageCauseNoRequest 1");
+        try {
             String url = "appraisalRequest.jsf";
-            log.info("onChangePageCauseNoRequest 2");
             FacesContext fc = FacesContext.getCurrentInstance();
-            log.info("onChangePageCauseNoRequest 3");
             ExternalContext ec = fc.getExternalContext();
-            log.info("redirect to new page");
             ec.redirect(url);
         } catch(Exception ex) {
             log.error("Exception : ", ex);
             messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
-
             if(ex.getCause() != null){
                 message = msg.get("app.appraisal.result.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
@@ -240,6 +223,7 @@ public class AppraisalResult implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
+
     public void onAddCollateralDetailView(){
         log.info("-- onAddCollateralDetailView >>> begin ");
         modeForButton = ModeForButton.ADD;
@@ -249,6 +233,7 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setJobID("");
         log.debug("-- NewCollateralView[New] created");
     }
+
     public void onCallRetrieveAppraisalReportInfo() {
         String jobID = newCollateralView.getJobID();
         log.info("-- onCallRetrieveAppraisalReportInfo  NewCollateralView.jobIDSearch[{}]", jobID);
@@ -325,6 +310,7 @@ public class AppraisalResult implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
+
     private boolean checkJobIdExist(final List<ProposeCollateralInfoView> viewList, String jobIDSearch){
         for(ProposeCollateralInfoView view : viewList){
             if(Util.equals(view.getJobID(), jobIDSearch)){
@@ -333,10 +319,12 @@ public class AppraisalResult implements Serializable {
         }
         return true;
     }
+
     private AppraisalDataResult callCOM_S(final String jobID) throws COMSInterfaceException{
         AppraisalDataResult appraisalDataResult = appraisalResultControl.retrieveDataFromCOMS(jobID);
         return appraisalDataResult;
     }
+
     public void onSaveCollateralDetailView(){
         log.debug("-- onSaveCollateralDetailView()");
         boolean complete = false;
@@ -371,6 +359,7 @@ public class AppraisalResult implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
     }
+
     public void onEditCollateralDetailView(){
         log.info("-- onEditCollateralDetailView {}",  newCollateralViewList.size());
         modeForButton = ModeForButton.EDIT;
@@ -413,10 +402,12 @@ public class AppraisalResult implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
+
     public void onCancelAppraisalResult(){
         log.info("onCancelAppraisalResult::::  ");
         onCreation();
     }
+
     public void onChangeAppraisalDate(){
         log.info("onChangeAppraisalDate");
         int locate = appraisalView.getLocationOfProperty().getId();

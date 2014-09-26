@@ -30,6 +30,11 @@ public class ISAViewReport {
     private String newData;
     private String adminName;
     private Date lastLogOn;
+    private String active;
+    private String department;
+    private String division;
+    private String region;
+    private String title;
 
     public ISAViewReport() {
     }
@@ -218,6 +223,46 @@ public class ISAViewReport {
         this.lastLogOn = lastLogOn;
     }
 
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -244,6 +289,11 @@ public class ISAViewReport {
                 .append("newData", newData)
                 .append("adminName", adminName)
                 .append("lastLogOn", lastLogOn)
+                .append("active", active)
+                .append("department", department)
+                .append("division", division)
+                .append("region", region)
+                .append("title", title)
                 .toString();
     }
 }

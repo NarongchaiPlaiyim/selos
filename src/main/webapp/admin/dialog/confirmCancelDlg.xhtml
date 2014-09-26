@@ -3,7 +3,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui">
     <p:confirmDialog id="#{id}" header="#{msg.get('app.messageHeader.info')}" message="#{msg.get('dialog.cancel.confirm.message')}"
-                     showEffect="fade" hideEffect="fade" width="250"
+                     showEffect="fade" hideEffect="fade" width="250" closable="false" closeOnEscape="false"
                      severity="alert" widgetVar="#{name}">
         <h:form id="#{formId}">
             <div class="onRight">

@@ -1111,7 +1111,7 @@ public class PrescreenMaker extends BaseController {
                             }
 
                             //Case when update customer add change citizen id (spouse) same another.
-                            if (borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2) {
+                            if (borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getSpouseFlag() == 1) {
                                 if (borrowerInfo.getSpouse() != null && customerInfoView.getSpouse() != null) {
                                     if (borrowerInfo.getSpouse().getListIndex() != 0) {
                                         //Update old spouse check with out old index
@@ -1329,7 +1329,7 @@ public class PrescreenMaker extends BaseController {
                         }
 
                         //Case when Borrower add citizen duplicate with spouse
-                        if (customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getId() == 2) {
+                        if (customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1) {
                             if (customerInfoView.getSpouse() != null) {
                                 if (customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase(borrowerInfo.getCitizenId())) {
                                     validateCitizen = false;
@@ -1610,6 +1610,7 @@ public class PrescreenMaker extends BaseController {
                                     relatedInfoViewList.remove(oldSpouse.getSubIndex());
                                     reIndexCustomerList(ListCustomerName.RELATED);
                                 }
+                                deleteCustomerInfoViewList.add(oldSpouse);
                             }
                         }
                         customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
@@ -1617,7 +1618,7 @@ public class PrescreenMaker extends BaseController {
                         complete = false;
                     }
 
-                } else if (borrowerInfo.getCustomerEntity().getId() == 2) {    //Juristic
+                } else if (borrowerInfo.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {    //Juristic
                     //--- Validate Registration Id ---//
                     DocumentType documentType = new DocumentType();
                     documentType.setId(3);
@@ -1809,17 +1810,18 @@ public class PrescreenMaker extends BaseController {
             customerInfoView.setSpouse(blankCustomerInfo);
             customerInfoViewList.set(customerInfoView.getListIndex(), customerInfoView);
 
-            if (selectCustomerInfoItem.getRelation().getId() == 1) {
+            if (selectCustomerInfoItem.getRelation().getId() == RelationValue.BORROWER.value()) {
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
                 //Add flag for popup when save
                 customerModifyFlag = customerModifyFlag + 1;
-            } else if (selectCustomerInfoItem.getRelation().getId() == 2) {
+            } else if (selectCustomerInfoItem.getRelation().getId() == RelationValue.GUARANTOR.value()) {
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.GUARANTOR);
                 //Add flag for popup when save
                 customerModifyFlag = customerModifyFlag + 1;
-            } else if (selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4) {
+            } else if (selectCustomerInfoItem.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                    || selectCustomerInfoItem.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()) {
                 relatedInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.RELATED);
                 //Add flag for popup when save
@@ -1861,7 +1863,7 @@ public class PrescreenMaker extends BaseController {
 
             if (selectCustomerInfoItem.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
 
-                if (selectCustomerInfoItem.getMaritalStatus().getSpouseFlag() == 1) {
+                if (Util.isTrue(selectCustomerInfoItem.getMaritalStatus().getSpouseFlag())) {
                     if (selectCustomerInfoItem.getSpouse() != null) {
                         CustomerInfoView spouse = selectCustomerInfoItem.getSpouse();
                         //Add to delete for delete from database
@@ -2004,12 +2006,12 @@ public class PrescreenMaker extends BaseController {
                     if (borrowerInfo.getCustomerEntity() != null && borrowerInfo.getCustomerEntity().getId() != 0) {
                         onChangeProvinceBorrower();
                         onChangeDistrictBorrower();
-                        if (borrowerInfo.getCustomerEntity().getId() == 1) {
+                        if (borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
                             onChangeDate("borrower");
                             if (Util.isEmpty(borrowerInfo.getCitizenId())) {
                                 enableCitizenId = true;
                             }
-                        } else if (borrowerInfo.getCustomerEntity().getId() == 2) {
+                        } else if (borrowerInfo.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
                             onChangeDate("juristic");
                             if (Util.isEmpty(borrowerInfo.getRegistrationId())) {
                                 enableCitizenId = true;
@@ -2279,20 +2281,42 @@ public class PrescreenMaker extends BaseController {
         }
 
         if(previousMaritalStatus != null && borrowerInfo.getRelation() != null && borrowerInfo.getRelation().getId() == RelationValue.BORROWER.value()) {
-            MaritalStatus prvMaritalStatus = maritalStatusDAO.findById(previousMaritalStatus.getId());
-            if (prvMaritalStatus != null && prvMaritalStatus.getSpouseFlag() == 1) {
-                previousStatusFlag = true;
-            } else {
+            if(borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()) {
+                MaritalStatus prvMaritalStatus = maritalStatusDAO.findById(previousMaritalStatus.getId());
+                if (prvMaritalStatus != null && prvMaritalStatus.getSpouseFlag() == 1) {
+                    previousStatusFlag = true;
+                } else {
+                    previousStatusFlag = false;
+                }
+            }else{
                 previousStatusFlag = false;
             }
+            log.debug("previousStatusFlag : {}", previousStatusFlag);
 
             if (maritalStatusFlag == false && previousStatusFlag == true) {
-                Cloner cloner = new Cloner();
-                messageHeader = "Information.";
-                message = "Can not change marriage status to single or remove borrower at this step.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
+                if(borrowerInfo.getNcbFlag() == 2 && ( borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getNcbFlag() == 2)) {
+                    Cloner cloner = new Cloner();
+                    messageHeader = "Information.";
+                    message = "Can not change marriage status to single or remove borrower at this step.";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
+                }else{
+                    borrowerInfo.setMaritalStatus(maritalStatus);
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    spouse.setSpouse(null);
+                    borrowerInfo.setSpouse(spouse);
+                }
+            } else {
+                borrowerInfo.setMaritalStatus(maritalStatus);
+                CustomerInfoView spouse = new CustomerInfoView();
+                spouse.reset();
+                spouse.setSpouse(null);
+                borrowerInfo.setSpouse(spouse);
             }
+        }else{
+            borrowerInfo.setMaritalStatus(maritalStatus);
+            borrowerInfo.setSpouse(new CustomerInfoView());
         }
     }
 

@@ -1,7 +1,8 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
 
     <h:outputStylesheet name="css/jquery.menu.css" />
     <h:outputScript library="js" name="jquery.menu.js" />
@@ -20,6 +21,7 @@
 
     <div id="selosmenu" class="selosmenu">
         <ul>
+            <c:if test="#{index.isCheckInboxVisible()}">
             <h:panelGroup id="pnl_menu_inbox" styleClass="panel">
                 <li id="mnuinbox">
                     <a href="inbox.jsf" title="#{msg.get('app.menu.inbox')}">#{msg.get('app.menu.inbox')}</a>
@@ -32,14 +34,17 @@
                     </ul>
                 </li>
             </h:panelGroup>
+            </c:if>
             <h:panelGroup id="pnl_menu_search" styleClass="panel">
                 <li id="mnusearch">
                     <a href="generic_search.jsf" title="Search">Search</a>
                     <ul>
                         <li id="submnu_search"><a href="generic_search.jsf" title="Search">Search</a></li>
-                        <li id="submnu_reassign"><a href="generic_reassign.jsf" title="Reassign">Reassign</a></li>
-                        <li id="submnu_changeowner"><a href="generic_changeowner.jsf" title="Change Owner">Change Owner</a></li>
-                        <li id="submnu_trackca"><a href="generic_track_ca.jsf" title="Track CA">Track CA</a></li>
+                        <c:if test="#{index.isCheckInboxVisible()}">
+                            <li id="submnu_reassign"><a href="generic_reassign.jsf" title="Reassign">Reassign</a></li>
+                            <li id="submnu_changeowner"><a href="generic_changeowner.jsf" title="Change Owner">Change Owner</a></li>
+                            <li id="submnu_trackca"><a href="generic_track_ca.jsf" title="Track CA">Track CA</a></li>
+                        </c:if>
                     </ul>
                 </li>
             </h:panelGroup>

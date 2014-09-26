@@ -16,418 +16,418 @@
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
 <h:form id="frmMain">
-    <div id="main_container">
-        <!-- Start Header Logo -->
-        <ui:include src="include/header_logo.xhtml" />
-        <!-- End Header Logo -->
-        <!-- Start Header Detail -->
-        <ui:include src="include/header_detail.xhtml" />
-        <!-- End Header Detail -->
-        <!-- Start Menu -->
-        <ui:include src="include/menubar.xhtml" />
-        <!-- End Menu -->
-        <div id="content_container">
-            <div id="content_name"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisalRequest.header')}"/></div>
-            <div id="content">
-                <div id="content_info">
-                    <div id="content_trackchange">[ View Track Change ]</div>
-                    <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalResult.appraisalView.modifyBy.userName}"/> ,
-                        <h:outputText value="#{appraisalResult.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" />
-                        </h:outputText>
-                    </div>
-                </div>
-                <!--<div id="content_form">-->
+<div id="main_container">
+<!-- Start Header Logo -->
+<ui:include src="include/header_logo.xhtml" />
+<!-- End Header Logo -->
+<!-- Start Header Detail -->
+<ui:include src="include/header_detail.xhtml" />
+<!-- End Header Detail -->
+<!-- Start Menu -->
+<ui:include src="include/menubar.xhtml" />
+<!-- End Menu -->
+<div id="content_container">
+<div id="content_name"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisalRequest.header')}"/></div>
+<div id="content">
+<div id="content_info">
+    <div id="content_trackchange">[ View Track Change ]</div>
+    <div id="content_lastupdate">Last update by <h:outputText value="#{appraisalResult.appraisalView.modifyBy.userName}"/> ,
+        <h:outputText value="#{appraisalResult.appraisalView.modifyDate}"><f:convertDateTime pattern="dd MMMM yyyy HH:mm:ss" locale="th_TH" />
+        </h:outputText>
+    </div>
+</div>
+<!--<div id="content_form">-->
 
-                <!--</div>-->
-                <table id="table_content" style="width: 100%;" class="content_table_form" border="0">
-                    <tr>
-                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
-                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
-                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
-                    </tr>
+<!--</div>-->
+<table id="table_content" style="width: 100%;" class="content_table_form" border="0">
+<tr>
+    <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+    <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+    <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+    <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+    <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+</tr>
 
 
-                    <tr>
-                        <td colspan="4"><div class="separate"><!-- --></div></td>
-                    </tr>
+<tr>
+    <td colspan="4"><div class="separate"><!-- --></div></td>
+</tr>
 
-                    <tr>
-                        <td colspan="4" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
-                    </tr>
+<tr>
+    <td colspan="4" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+</tr>
 
+<tr>
+    <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
+    <td colspan="3">
+        <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}" disabled="true">
+            <f:selectItem itemLabel="Internal" itemValue="0" />
+            <f:selectItem itemLabel="External" itemValue="1" />
+        </p:selectOneRadio>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
+    </td>
+    <td >
+        <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}"
+                         disabled="true">
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{appraisalResult.appraisalCompanyList}"
+                           var="appraisalCompany"
+                           itemLabel="#{appraisalCompany.name}"
+                           itemValue="#{appraisalCompany.id}"/>
+        </p:selectOneMenu>
+    </td>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
+    </td>
+    <td>
+        <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}"
+                         disabled="true">
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{appraisalResult.appraisalDivisionList}"
+                           var="appraisalDivision"
+                           itemLabel="#{appraisalDivision.name}"
+                           itemValue="#{appraisalDivision.id}"/>
+        </p:selectOneMenu>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
+    </td>
+    <td colspan="3">
+        <p:inputText value="#{appraisalResult.appraisalView.appraisalName}" readonly="true" />
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
+    </td>
+    <td colspan="3">
+        <p:inputText value="#{appraisalResult.appraisalView.receivedTaskDate}" readonly="true" >
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+        </p:inputText>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
+    </td>
+    <td>
+        <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}"
+                         disabled="true" >
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{appraisalResult.locationPropertyList}"
+                           var="locationProperty"
+                           itemLabel="#{locationProperty.name}"
+                           itemValue="#{locationProperty.id}"/>
+        </p:selectOneMenu>
+    </td>
+    <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
+    </td>
+    <td>
+        <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}" disabled="true" >
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{appraisalResult.provinceList}"
+                           var="province"
+                           itemLabel="#{province.name}"
+                           itemValue="#{province.code}"/>
+        </p:selectOneMenu>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
+    </td>
+    <td>
+        <p:inputText value="#{appraisalResult.appraisalView.appraisalDate}" readonly="true" >
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+        </p:inputText>
+    </td>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
+    </td>
+    <td>
+        <p:inputText value="#{appraisalResult.appraisalView.dueDate}" readonly="true" >
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+        </p:inputText>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}" />
+    </td>
+    <td colspan="3">
+        <p:inputTextarea cols="69" rows="4" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="true" />
+    </td>
+</tr>
+
+<tr>
+    <td colspan="6"><p:spacer width="5px"/> </td>
+</tr>
+<tr>
+    <td colspan="6"><div class="separate"><!-- --></div></td>
+</tr>
+
+
+<tr>
+    <td class="title">
+        <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalReport')}"/>
+    </td>
+    <td class="left" colspan="6">
+        <p:commandButton id="btnAddCollateralDetail"
+                         value="#{msg.get('app.button.add')}"
+                         styleClass="smaller"
+                         style="width: 150px"
+                         process="@this"
+                         actionListener="#{appraisalResult.onAddCollateralDetailView()}"
+                         update=":appraisalComsDlgForm"
+                         oncomplete="appraisalComsViewDlg.show()"/>
+    </td>
+</tr>
+<ui:repeat value="#{appraisalResult.newCollateralViewList}" var="collateralDetailView" id="collateralDetailViewRepeat" varStatus="rowIndex" >
+    <tr>
+        <td colspan="6"><div class="separate"><!-- --></div></td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p:panel styleClass="panel">
+                <table style="width: 80%" border="0">
+                    <colgroup>
+                        <col style="width:150px"/>
+                        <col style="width:250px"/>
+                        <col style="width:200px"/>
+                        <col style="width:250px"/>
+                    </colgroup>
                     <tr>
-                        <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
-                        <td colspan="3">
-                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}" disabled="true">
-                                <f:selectItem itemLabel="Internal" itemValue="0" />
-                                <f:selectItem itemLabel="External" itemValue="1" />
-                            </p:selectOneRadio>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
-                        </td>
-                        <td >
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}"
-                                             disabled="true">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalResult.appraisalCompanyList}"
-                                               var="appraisalCompany"
-                                               itemLabel="#{appraisalCompany.name}"
-                                               itemValue="#{appraisalCompany.id}"/>
-                            </p:selectOneMenu>
-                        </td>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}"
-                                             disabled="true">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalResult.appraisalDivisionList}"
-                                               var="appraisalDivision"
-                                               itemLabel="#{appraisalDivision.name}"
-                                               itemValue="#{appraisalDivision.id}"/>
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
-                        </td>
-                        <td colspan="3">
-                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}" readonly="true" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
-                        </td>
-                        <td colspan="3">
-                            <p:inputText value="#{appraisalResult.appraisalView.receivedTaskDate}" readonly="true" >
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:inputText>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
+                            <p:outputLabel value="#{collateralDetailView.jobID}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}"
-                                             disabled="true" >
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalResult.locationPropertyList}"
-                                               var="locationProperty"
-                                               itemLabel="#{locationProperty.name}"
-                                               itemValue="#{locationProperty.id}"/>
-                            </p:selectOneMenu>
-                        </td>
-                        <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
-                        </td>
-                        <td>
-                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}" disabled="true" >
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{appraisalResult.provinceList}"
-                                               var="province"
-                                               itemLabel="#{province.name}"
-                                               itemValue="#{province.code}"/>
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
-                        </td>
-                        <td>
-                            <p:inputText value="#{appraisalResult.appraisalView.appraisalDate}" readonly="true" >
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:inputText>
-                        </td>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
-                        </td>
-                        <td>
-                            <p:inputText value="#{appraisalResult.appraisalView.dueDate}" readonly="true" >
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:inputText>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}" />
-                        </td>
-                        <td colspan="3">
-                            <p:inputTextarea cols="69" rows="4" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="true" />
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="6"><p:spacer width="5px"/> </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
-                    </tr>
-
-
-                    <tr>
-                        <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalReport')}"/>
-                        </td>
-                        <td class="left" colspan="6">
-                            <p:commandButton id="btnAddCollateralDetail"
-                                             value="#{msg.get('app.button.add')}"
-                                             styleClass="smaller"
-                                             style="width: 150px"
-                                             process="@this"
-                                             actionListener="#{appraisalResult.onAddCollateralDetailView()}"
+                            <p:commandButton value="#{msg.get('app.button.edit')}"
+                                             action="#{appraisalResult.onEditCollateralDetailView()}"
                                              update=":appraisalComsDlgForm"
-                                             oncomplete="appraisalComsViewDlg.show()"/>
-                        </td>
-                    </tr>
-                    <ui:repeat value="#{appraisalResult.newCollateralViewList}" var="collateralDetailView" id="collateralDetailViewRepeat" varStatus="rowIndex" >
-                    <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6">
-                            <p:panel styleClass="panel">
-                                 <table style="width: 80%" border="0">
-                                     <colgroup>
-                                         <col style="width:150px"/>
-                                         <col style="width:250px"/>
-                                         <col style="width:200px"/>
-                                         <col style="width:250px"/>
-                                     </colgroup>
-                                     <tr>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.jobID}"/>
-                                         </td>
-                                         <td>
-                                             <p:commandButton value="#{msg.get('app.button.edit')}"
-                                                              action="#{appraisalResult.onEditCollateralDetailView()}"
-                                                              update=":appraisalComsDlgForm"
-                                                              process=":frmMain"
-                                                              oncomplete="appraisalComsViewDlg.show();">
-                                                 <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}" />
-                                                 <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
-                                             </p:commandButton>
-                                             <p:commandButton value="Remove" process="@this"
-                                                              oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >
-                                                 <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}"/>
-                                                 <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
-                                             </p:commandButton>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.appraisalDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                             </p:outputLabel>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.aadDecision}"/>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.aadDecisionReason}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.aadDecisionReasonDetail}"/>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.usage')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.usage}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.typeOfUsage')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.typeOfUsage}"/>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.mortgageCondition}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
-                                         </td>
-                                         <td>
-                                             <p:outputLabel value="#{collateralDetailView.mortgageConditionDetail}"/>
-                                         </td>
-                                     </tr>
-                                     <tr>
-                                         <td colspan="4">
-                                             <div class="separate"></div>
-                                         </td>
-                                     </tr>
-                                 </table>
-                                 <ui:repeat value="#{collateralDetailView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView">
-                                     <table style="width: 100%" border="0">
-                                         <colgroup>
-                                             <col style="width:250px"/>
-                                             <col style="width:auto"/>
-                                         </colgroup>
-                                         <tr>
-                                             <td>
-                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
-                                             </td>
-                                             <td>
-                                                 <p:outputLabel value="#{collateralHeadDetailView.titleDeed}"/>
-                                             </td>
-                                         </tr>
-                                         <tr>
-                                             <td>
-                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.collateralLocation')}"/>
-                                             </td>
-                                             <td>
-                                                 <p:outputLabel value="#{collateralHeadDetailView.collateralLocation}"/>
-                                             </td>
-                                         </tr>
-                                         <tr>
-                                             <td>
-                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.appraisalValue')}"/>
-                                             </td>
-                                             <td>
-                                                 <p:outputLabel value="#{collateralHeadDetailView.appraisalValue}">
-                                                     <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                                 </p:outputLabel>
-                                             </td>
-                                         </tr>
-                                         <tr>
-                                             <td>
-                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.headCollType')}"/>
-                                             </td>
-                                             <td>
-                                                 <p:outputLabel value="#{collateralHeadDetailView.headCollType.description}"/>
-                                             </td>
-                                         </tr>
-                                         <tr>
-                                             <td colspan="2">
-                                                 <p:dataTable style="width: auto"
-                                                              id="subCollateralDetailViewTable"
-                                                              var="subCollateralDetailView"
-                                                              value="#{collateralHeadDetailView.proposeCollateralInfoSubViewList}"
-                                                              paginator="false"
-                                                              rowKey="#{subCollateralDetailView}"
-                                                              rowIndexVar="rowIndex" >
-                                                     <p:columnGroup type="header">
-                                                         <p:row>
-                                                             <p:column />
-                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.subCollateralType')}"/>
-                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.titleDeed')}" />
-                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.CollateralOwner')}"/>
-                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.appraisalValue')}"/>
-                                                         </p:row>
-                                                     </p:columnGroup>
-                                                     <p:column styleClass="center" style="width: 50px">
-                                                         <p:outputLabel value="#{rowIndex+1}"/>
-                                                     </p:column>
-                                                     <p:column  styleClass="left" style="width: 500px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
-                                                         <p:outputLabel value="#{subCollateralDetailView.address}"/><br/>
-                                                         <p:outputLabel value="#{subCollateralDetailView.landOffice}"/>
-                                                     </p:column>
-                                                     <p:column  styleClass="left" style="width: 150px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.titleDeed}"/> <br/>
-                                                     </p:column>
-                                                     <p:column styleClass="left" style="width: 250px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.collateralOwnerUWList}" />
-                                                     </p:column>
-                                                     <p:column styleClass="right" style="width: 150px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
-                                                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                                         </p:outputLabel>
-                                                     </p:column>
-                                                 </p:dataTable>
-                                             </td>
-                                         </tr>
-                                         <tr>
-                                             <td colspan="2">
-                                                 <p:spacer width="5px"/>
-                                             </td>
-                                         </tr>
-                                     </table>
-                                 </ui:repeat>
-                            </p:panel>
+                                             process=":frmMain"
+                                             oncomplete="appraisalComsViewDlg.show();">
+                                <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}" />
+                                <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
+                            </p:commandButton>
+                            <p:commandButton value="Remove" process="@this"
+                                             oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >
+                                <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}"/>
+                                <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
+                            </p:commandButton>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6">
-                            <p:spacer width="5px"/>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                         </td>
-                    </tr>
-                     </ui:repeat>
-                    <tr>
-                        <td colspan="6">
-                            <div class="separate"><!-- --></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6">
-                            <p:spacer width="5px"/>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.appraisalDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                            </p:outputLabel>
                         </td>
                     </tr>
                     <tr>
-                        <td class="center" colspan="6">
-                            <p:commandButton id="btnSave"
-                                     value="#{msg.get('app.button.save')}"
-                                     styleClass="medium"
-                                     process=":frmMain"
-                                     action="#{appraisalResult.onSaveAppraisalResult()}"
-                                     update=":msgBoxSystemMessagePanel"/>
-
-                            <p:commandButton value="#{msg.get('app.button.cancel')}"
-                                     id="btnCancel"
-                                     styleClass="medium"
-                                     process=":frmMain"
-                                     action="#{appraisalResult.onCancelAppraisalResult()}"
-                                     update=":frmMain"/>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.aadDecision}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.aadDecisionReason}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.aadDecisionReasonDetail}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.usage')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.usage}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.typeOfUsage')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.typeOfUsage}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.mortgageCondition}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
+                        </td>
+                        <td>
+                            <p:outputLabel value="#{collateralDetailView.mortgageConditionDetail}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="separate"></div>
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div class="bottom_line"><!-- --></div>
-        </div>
-        <div class="clear"></div>
-        <!-- Start Footer -->
-        <ui:include src="include/footer.xhtml" />
-        <!-- End Footer -->
-    </div>
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+                <ui:repeat value="#{collateralDetailView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView">
+                    <table style="width: 100%" border="0">
+                        <colgroup>
+                            <col style="width:250px"/>
+                            <col style="width:auto"/>
+                        </colgroup>
+                        <tr>
+                            <td>
+                                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
+                            </td>
+                            <td>
+                                <p:outputLabel value="#{collateralHeadDetailView.titleDeed}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.collateralLocation')}"/>
+                            </td>
+                            <td>
+                                <p:outputLabel value="#{collateralHeadDetailView.collateralLocation}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.appraisalValue')}"/>
+                            </td>
+                            <td>
+                                <p:outputLabel value="#{collateralHeadDetailView.appraisalValue}">
+                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                </p:outputLabel>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.headCollType')}"/>
+                            </td>
+                            <td>
+                                <p:outputLabel value="#{collateralHeadDetailView.headCollType.description}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable style="width: auto"
+                                             id="subCollateralDetailViewTable"
+                                             var="subCollateralDetailView"
+                                             value="#{collateralHeadDetailView.proposeCollateralInfoSubViewList}"
+                                             paginator="false"
+                                             rowKey="#{subCollateralDetailView}"
+                                             rowIndexVar="rowIndex" >
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column />
+                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.subCollateralType')}"/>
+                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.titleDeed')}" />
+                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.CollateralOwner')}"/>
+                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.appraisalValue')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                    <p:column styleClass="center" style="width: 50px">
+                                        <p:outputLabel value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column  styleClass="left" style="width: 500px">
+                                        <p:outputLabel value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
+                                        <p:outputLabel value="#{subCollateralDetailView.address}"/><br/>
+                                        <p:outputLabel value="#{subCollateralDetailView.landOffice}"/>
+                                    </p:column>
+                                    <p:column  styleClass="left" style="width: 150px">
+                                        <p:outputLabel value="#{subCollateralDetailView.titleDeed}"/> <br/>
+                                    </p:column>
+                                    <p:column styleClass="left" style="width: 250px">
+                                        <p:outputLabel value="#{subCollateralDetailView.collateralOwnerAAD}" />
+                                    </p:column>
+                                    <p:column styleClass="right" style="width: 150px">
+                                        <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:spacer width="5px"/>
+                            </td>
+                        </tr>
+                    </table>
+                </ui:repeat>
+            </p:panel>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <p:spacer width="5px"/>
+        </td>
+    </tr>
+</ui:repeat>
+<tr>
+    <td colspan="6">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+<tr>
+    <td colspan="6">
+        <p:spacer width="5px"/>
+    </td>
+</tr>
+<tr>
+    <td class="center" colspan="6">
+        <p:commandButton id="btnSave"
+                         value="#{msg.get('app.button.save')}"
+                         styleClass="medium"
+                         process=":frmMain"
+                         action="#{appraisalResult.onSaveAppraisalResult()}"
+                         update=":msgBoxSystemMessagePanel"/>
+
+        <p:commandButton value="#{msg.get('app.button.cancel')}"
+                         id="btnCancel"
+                         styleClass="medium"
+                         process=":frmMain"
+                         action="#{appraisalResult.onCancelAppraisalResult()}"
+                         update=":frmMain"/>
+    </td>
+</tr>
+</table>
+</div>
+<div class="bottom_line"><!-- --></div>
+</div>
+<div class="clear"></div>
+<!-- Start Footer -->
+<ui:include src="include/footer.xhtml" />
+<!-- End Footer -->
+</div>
+<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </h:form>
 </p:panel>
 

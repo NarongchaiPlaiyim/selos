@@ -8,16 +8,17 @@
                      message="#{msg.get('dialog.cancel.confirm.message')}"
                      showEffect="fade" hideEffect="fade"
 					 width="380" severity="alert"
-                    >
+                     closable="false" closeOnEscape="false">
         <h:form id="#{formId}">
             <div class="onRight">
-                <p:commandButton id="#{id}OkBtn"
+                <p:commandButton id="#{id}OkBtn" widgetVar="#{id}wOkBtn" styleClass="smallest"
                                  value="#{msg.get('app.button.ok')}"
                                  update="#{update}"
-                                 oncomplete="#{name}.hide()"
+                                 oncomplete="#{name}.hide(); #{id}wOkBtn.enable(); #{id}wCancelBtn.enable()"
+                                 onclick="#{id}wOkBtn.disable(); #{id}wCancelBtn.disable()"
                                  action="#{controller[action]}"/>
-
-                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                <p:commandButton widgetVar="#{id}wCancelBtn" styleClass="smaller"
+                                 value="#{msg.get('app.button.cancel')}"
                                  onclick="#{name}.hide()"/>
             </div>
         </h:form>

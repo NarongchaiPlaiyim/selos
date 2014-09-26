@@ -3,6 +3,7 @@ package com.clevel.selos.dao.working;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.GuarantorCategory;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.ProposeGuarantorInfo;
 import org.hibernate.Criteria;
@@ -40,6 +41,18 @@ public class ProposeGuarantorInfoDAO extends GenericDAO<ProposeGuarantorInfo, Lo
         criteria.add(Restrictions.eq("wrk.id", workCaseId));
         criteria.add(Restrictions.eq("proposeType",proposeType));
         criteria.add(Restrictions.eq("uwDecision", DecisionType.APPROVED));
+        criteria.addOrder(Order.asc("id"));
+        return criteria.list();
+    }
+
+    public List<ProposeGuarantorInfo> findApprovedTCGGuarantor(long workCaseId){
+        Criteria criteria = createCriteria();
+        criteria.createAlias("proposeLine", "propose");
+        criteria.createAlias("propose.workCase", "wrk");
+        criteria.add(Restrictions.eq("wrk.id", workCaseId));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.A));
+        criteria.add(Restrictions.eq("uwDecision", DecisionType.APPROVED));
+        criteria.add(Restrictions.eq("guarantorCategory", GuarantorCategory.TCG));
         criteria.addOrder(Order.asc("id"));
         return criteria.list();
     }
