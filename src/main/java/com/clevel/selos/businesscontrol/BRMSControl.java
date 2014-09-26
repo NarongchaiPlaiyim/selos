@@ -355,9 +355,9 @@ public class BRMSControl extends BusinessControl {
         List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
 
-        actionValidationControl.validate(prescreenFacilityList, PrescreenFacility.class);
+        mandateFieldValidationControl.validate(prescreenFacilityList, PrescreenFacility.class.getName());
         //Check PreScreen Product Program
-        boolean validateFacility = true;
+        /*boolean validateFacility = true;
         if(prescreenFacilityList == null){
             validateFacility = false;
         }else{
@@ -381,7 +381,7 @@ public class BRMSControl extends BusinessControl {
             uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
 
             return uwRuleResponseView;
-        }
+        }*/
 
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
