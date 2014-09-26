@@ -13,8 +13,6 @@ import java.io.Serializable;
 
 public class MandateFieldView implements Serializable{
     private long id;
-    private ActionView actionView;
-    private StepView stepView;
     private MandateFieldClassView mandateFieldClassView;
     private String fieldName;
     private String fieldDesc;
@@ -28,7 +26,6 @@ public class MandateFieldView implements Serializable{
     private String notMatchedValue;
     private int notMatchedEmpty;
     private boolean needUpdate;
-    private String parameterizedName;
 
     public long getId() {
         return id;
@@ -36,22 +33,6 @@ public class MandateFieldView implements Serializable{
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public ActionView getActionView() {
-        return actionView;
-    }
-
-    public void setActionView(ActionView actionView) {
-        this.actionView = actionView;
-    }
-
-    public StepView getStepView() {
-        return stepView;
-    }
-
-    public void setStepView(StepView stepView) {
-        this.stepView = stepView;
     }
 
     public MandateFieldClassView getMandateFieldClassView() {
@@ -158,14 +139,6 @@ public class MandateFieldView implements Serializable{
         this.needUpdate = needUpdate;
     }
 
-    public String getParameterizedName() {
-        return parameterizedName;
-    }
-
-    public void setParameterizedName(String parameterizedName) {
-        this.parameterizedName = parameterizedName;
-    }
-
     public void updateValues(MandateFieldView view){
         id = view.id;
         fieldName = view.fieldName;
@@ -173,6 +146,7 @@ public class MandateFieldView implements Serializable{
         page = view.page;
         minValue = view.minValue;
         maxValue = view.maxValue;
+        checkFieldDetail = view.checkFieldDetail;
 
         matchedEmpty = view.matchedEmpty;
         if(view.matchedEmpty == RadioValue.YES.value()){
@@ -194,8 +168,6 @@ public class MandateFieldView implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("actionView", actionView)
-                .append("stepView", stepView)
                 .append("mandateFieldClassView", mandateFieldClassView)
                 .append("fieldName", fieldName)
                 .append("fieldDesc", fieldDesc)

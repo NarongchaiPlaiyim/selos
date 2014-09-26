@@ -129,6 +129,7 @@ public class MandateFieldStepAction implements Serializable {
         if(selectedMandateFieldSAAdminId >= 0){
             if(mandateFieldStepActionView.getClassSAAdminViewList() != null){
                 wrkMandateFieldClassSAAdminView = mandateFieldStepActionView.getClassSAAdminViewList().get((int)selectedMandateFieldSAAdminId);
+                log.debug("wrkMandateFieldClassSAAdminView: {}", wrkMandateFieldClassSAAdminView);
                 selectedClassViewId = wrkMandateFieldClassSAAdminView.getId();
                 updatedMode = true;
             }
@@ -188,6 +189,7 @@ public class MandateFieldStepAction implements Serializable {
         mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
         for(MandateFieldConditionView mstConditionView : _tempMandateConditionViewDBList){
             boolean isMatched = false;
+            log.debug("wrk xxx: " + wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList());
             for(MandateFieldConditionView selectedConditionView : wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList()){
 
                 if(selectedConditionView.getId() == mstConditionView.getId()){

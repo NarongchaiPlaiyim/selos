@@ -103,8 +103,11 @@ public class BRMSControl extends BusinessControl {
     @Inject
     private UWRuleResultTransform uwRuleResultTransform;
 
+    //@Inject
+    //private ActionValidationControl actionValidationControl;
+
     @Inject
-    private ActionValidationControl actionValidationControl;
+    private MandateFieldValidationControl mandateFieldValidationControl;
 
     @Inject
     public BRMSControl(){}
@@ -249,10 +252,10 @@ public class BRMSControl extends BusinessControl {
 
         CustomerEntity mainBorrower = workCasePrescreen.getBorrowerType();
 
-        actionValidationControl.loadActionValidation(workCasePrescreen.getStep().getId(), actionId);
+        mandateFieldValidationControl.loadMandateField(workCasePrescreen.getStep().getId(), actionId);
         logger.info("-- load Action Validation");
-        actionValidationControl.validate(workCasePrescreen, WorkCasePrescreen.class);
-        actionValidationControl.validate(prescreen, Prescreen.class);
+        mandateFieldValidationControl.validate(workCasePrescreen, WorkCasePrescreen.class.getName());
+        mandateFieldValidationControl.validate(prescreen, Prescreen.class.getName());
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         applicationInfo.setApplicationNo(workCasePrescreen.getAppNumber());
@@ -288,7 +291,7 @@ public class BRMSControl extends BusinessControl {
 
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workcasePrescreenId);
         //Validate Customer List
-        actionValidationControl.validate(customerList, Customer.class);
+        mandateFieldValidationControl.validate(customerList, Customer.class.getName());
         int numberOfGuarantor = 0;
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         for(Customer customer : customerList) {
@@ -334,7 +337,7 @@ public class BRMSControl extends BusinessControl {
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkcasePrescreenId(workcasePrescreenId);
         //validate bankStatementSummary
-        actionValidationControl.validate(bankStatementSummary, BankStatement.class);
+        mandateFieldValidationControl.validate(bankStatementSummary, BankStatement.class.getName());
         if(bankStatementSummary != null){
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
             for(BankStatement bankStatement : bankStatementList){
@@ -352,7 +355,7 @@ public class BRMSControl extends BusinessControl {
         List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
 
-        actionValidationControl.validate(prescreenFacilityList, PrescreenFacility.class);
+        mandateFieldValidationControl.validate(prescreenFacilityList, PrescreenFacility.class.getName());
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
             accountRequested.setCreditDetailId(String.valueOf(prescreenFacility.getId()));
@@ -375,7 +378,7 @@ public class BRMSControl extends BusinessControl {
 
         /*Start Set Business Info List*/
         List<PrescreenBusiness> businessList = prescreenBusinessDAO.findByPreScreenId(prescreen.getId());
-        actionValidationControl.validate(businessList, PrescreenBusiness.class);
+        mandateFieldValidationControl.validate(businessList, PrescreenBusiness.class.getName());
 
         List<BRMSBizInfo> bizInfoList = new ArrayList<BRMSBizInfo>();
         for(PrescreenBusiness prescreenBusiness : businessList){
@@ -392,9 +395,9 @@ public class BRMSControl extends BusinessControl {
         if(prescreen.getReferredExperience() != null)
             applicationInfo.setReferredDocType(prescreen.getReferredExperience().getBrmsCode());
 
-        ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
-        logger.info("actionValidationResult: {}", actionValidationResult);
-        if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
+        MandateFieldValidationResult mandateFieldValidationResult = mandateFieldValidationControl.getMandateFieldValidationResult();
+        logger.info("actionValidationResult: {}", mandateFieldValidationResult);
+        if(mandateFieldValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
             /** To Change to use test Data using second line**/
             UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
@@ -408,9 +411,9 @@ public class BRMSControl extends BusinessControl {
                 uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
             }
         } else {
-            uwRuleResponseView.setActionResult(actionValidationResult.getActionResult());
+            uwRuleResponseView.setActionResult(mandateFieldValidationResult.getActionResult());
             uwRuleResponseView.setReason("Mandatory fields are missing!!");
-            uwRuleResponseView.setMandateFieldMessageViewList(actionValidationResult.getMandateFieldMessageViewList());
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldValidationResult.getMandateFieldMessageViewList());
         }
         return uwRuleResponseView;
     }
@@ -424,8 +427,8 @@ public class BRMSControl extends BusinessControl {
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        actionValidationControl.loadActionValidation(workCase.getStep().getId(), actionId);
-        actionValidationControl.validate(workCase, WorkCase.class);
+        mandateFieldValidationControl.loadMandateField(workCase.getStep().getId(), actionId);
+        mandateFieldValidationControl.validate(workCase, WorkCase.class.getName());
 
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
         //1. Set Customer Information, NCB Account, TMB Account Info, Customer CSI (Warning List)
@@ -434,10 +437,10 @@ public class BRMSControl extends BusinessControl {
         List<BRMSCustomerInfo> customerInfoList = new ArrayList<BRMSCustomerInfo>();
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
 
-        actionValidationControl.validate(customerList, Customer.class);
+        mandateFieldValidationControl.validate(customerList, Customer.class.getName());
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(basicInfo, BasicInfo.class);
+        mandateFieldValidationControl.validate(basicInfo, BasicInfo.class.getName());
 
         CustomerEntity mainBorrower = basicInfo != null ? basicInfo.getBorrowerType() : new CustomerEntity();
         String newQualitativeClass = "";
@@ -499,7 +502,7 @@ public class BRMSControl extends BusinessControl {
         //2. Set BankStatement Info
         List<BRMSAccountStmtInfo> accountStmtInfoList = new ArrayList<BRMSAccountStmtInfo>();
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(bankStatementSummary, BankStatement.class);
+        mandateFieldValidationControl.validate(bankStatementSummary, BankStatement.class.getName());
         if(bankStatementSummary!=null){
             List<BankStatement> bankStatementList = bankStatementSummary.getBankStmtList();
             if(bankStatementList != null) {
@@ -513,7 +516,7 @@ public class BRMSControl extends BusinessControl {
         //3. Set Biz Info
         List<BRMSBizInfo> brmsBizInfoList = new ArrayList<BRMSBizInfo>();
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(bizInfoSummary, BizInfoSummary.class);
+        mandateFieldValidationControl.validate(bizInfoSummary, BizInfoSummary.class.getName());
         if(bizInfoSummary!=null){
             List<BizInfoDetail> bizInfoDetailList = bizInfoSummary.getBizInfoDetailList();
             if(bizInfoDetailList != null) {
@@ -526,7 +529,7 @@ public class BRMSControl extends BusinessControl {
 
         //4. Set TMB Account Request
         ProposeLine newCreditFacility = creditFacilityDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(newCreditFacility, ProposeLine.class);
+        mandateFieldValidationControl.validate(newCreditFacility, ProposeLine.class.getName());
         BigDecimal discountFrontEndFeeRate = BigDecimal.ZERO;
 
         if(newCreditFacility!=null)
@@ -534,7 +537,7 @@ public class BRMSControl extends BusinessControl {
 
 
         Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(decision, Decision.class);
+        mandateFieldValidationControl.validate(decision, Decision.class.getName());
 
         ProposeType _proposeType = ProposeType.P;
         if(workCase.getStep() != null)
@@ -559,7 +562,7 @@ public class BRMSControl extends BusinessControl {
 
         BigDecimal totalApprovedCredit = BigDecimal.ZERO;
         List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
-        actionValidationControl.validate(newCreditDetailList, ProposeCreditInfo.class);
+        mandateFieldValidationControl.validate(newCreditDetailList, ProposeCreditInfo.class.getName());
 
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
@@ -574,7 +577,7 @@ public class BRMSControl extends BusinessControl {
 
         //5. Set TMB Coll Level
         List<ProposeCollateralInfo> newCollateralList = newCollateralDAO.findNewCollateral(workCaseId, _proposeType);
-        actionValidationControl.validate(newCollateralList, ProposeCollateralInfo.class);
+        mandateFieldValidationControl.validate(newCollateralList, ProposeCollateralInfo.class.getName());
 
         List<BRMSCollateralInfo> collateralInfoList = new ArrayList<BRMSCollateralInfo>();
         for(ProposeCollateralInfo newCollateral : newCollateralList){
@@ -617,8 +620,8 @@ public class BRMSControl extends BusinessControl {
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
         DBR dbr = dbrdao.findByWorkCaseId(workCaseId);
 
-        actionValidationControl.validate(tcg, TCG.class);
-        actionValidationControl.validate(dbr, DBR.class);
+        mandateFieldValidationControl.validate(tcg, TCG.class.getName());
+        mandateFieldValidationControl.validate(dbr, DBR.class.getName());
 
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
@@ -640,7 +643,7 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setRequestTCG(getRadioBoolean(tcg.getTcgFlag()));
 
         WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByWorkcaseId(workCaseId);
-        actionValidationControl.validate(workCaseAppraisal, WorkCaseAppraisal.class);
+        mandateFieldValidationControl.validate(workCaseAppraisal, WorkCaseAppraisal.class.getName());
 
         if(workCaseAppraisal != null){
             AppraisalStatus appraisalStatus = AppraisalStatus.lookup(workCaseAppraisal.getAppraisalResult());
@@ -660,7 +663,7 @@ public class BRMSControl extends BusinessControl {
 
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(exSummary, ExSummary.class);
+        mandateFieldValidationControl.validate(exSummary, ExSummary.class.getName());
 
         if(ProposeType.P.equals(_proposeType)){
             if(bankStatementSummary!=null)
@@ -680,7 +683,7 @@ public class BRMSControl extends BusinessControl {
             applicationInfo.setYearInBusinessMonth(new BigDecimal(exSummary.getYearInBusinessMonth()));
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        actionValidationControl.validate(existingCreditFacility, ExistingCreditFacility.class);
+        mandateFieldValidationControl.validate(existingCreditFacility, ExistingCreditFacility.class.getName());
 
         if(existingCreditFacility!=null){
             applicationInfo.setExistingGroupExposure(existingCreditFacility.getTotalGroupExposure());
@@ -755,8 +758,8 @@ public class BRMSControl extends BusinessControl {
         if(bizInfoSummary!=null)
             applicationInfo.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 
-        ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
-        if(actionValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
+        MandateFieldValidationResult mandateFieldValidationResult = mandateFieldValidationControl.getMandateFieldValidationResult();
+        if(mandateFieldValidationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
             UWRulesResponse uwRulesResponse = brmsInterface.checkFullApplicationRule(applicationInfo);
 
@@ -770,9 +773,9 @@ public class BRMSControl extends BusinessControl {
                 uwRuleResponseView.setUwRuleResultSummaryView(uwRuleResultSummaryView);
             }
         } else {
-            uwRuleResponseView.setActionResult(actionValidationResult.getActionResult());
+            uwRuleResponseView.setActionResult(mandateFieldValidationResult.getActionResult());
             uwRuleResponseView.setReason("Mandatory fields are missing!!");
-            uwRuleResponseView.setMandateFieldMessageViewList(actionValidationResult.getMandateFieldMessageViewList());
+            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldValidationResult.getMandateFieldMessageViewList());
         }
 
         //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();

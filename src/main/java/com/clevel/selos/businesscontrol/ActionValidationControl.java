@@ -69,7 +69,7 @@ public class ActionValidationControl extends BusinessControl{
     private Map<String, List<MandateFieldView>> mandateFieldViewMap;
     private Map<String, MandateFieldView> listMandateFieldViewMap;
     private Map<String, MandateFieldClassView> listMandateClassViewMap;
-    private ActionValidationResult actionValidationResult;
+    private MandateFieldValidationResult mandateFieldValidationResult;
 
     private Map<Long, ConditionResult> conditionResultMap;
     private Map<Long, ConditionResult> dependedConditionMap;
@@ -89,7 +89,7 @@ public class ActionValidationControl extends BusinessControl{
             MandateField mandateField = mandateFieldStepAction.getMandateField();
             if(mandateField != null){
                 if(ArrayList.class.getName().equals(mandateField.getMandateFieldClass().getClassName())){
-                    listMandateFieldViewMap.put(mandateField.getParameterizedName(), mandateFieldTransform.transformToView(mandateField));
+                    listMandateFieldViewMap.put(mandateField.getFieldName(), mandateFieldTransform.transformToView(mandateField));
                     logger.info("listMandateFieldViewMap {}", listMandateFieldViewMap);
                 } else {
                     MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateFieldStepAction.getMandateField());
@@ -103,13 +103,13 @@ public class ActionValidationControl extends BusinessControl{
             }
         }
 
-        List<MandateFieldClassStepAction> classStepActionList = mandateFieldClassStepActionDAO.findByActionAndCon(stepId, actionId);
+        List<MandateFieldClassStepAction> classStepActionList = mandateFieldClassStepActionDAO.findByStepAction(stepId, actionId);
         for(MandateFieldClassStepAction classStepAction : classStepActionList){
             listMandateClassViewMap.put(classStepAction.getMandateFieldClass().getClassName(), mandateFieldTransform.transformToView(classStepAction.getMandateFieldClass()));
         }
-        actionValidationResult = new ActionValidationResult();
+        mandateFieldValidationResult = new MandateFieldValidationResult();
         List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
-        actionValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+        mandateFieldValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
         return mandateFieldViewMap.size();
     }
 
@@ -774,7 +774,7 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldMessageView.setFieldDesc(mandateFieldView.getFieldDesc());
         mandateFieldMessageView.setMessage(validationResult.message);
         mandateFieldMessageView.setPageName(mandateFieldView.getPage());
-        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+        mandateFieldValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
     private void addMandateFieldMessageView(MandateFieldConditionView conditionView, String message){
@@ -782,7 +782,7 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldMessageView.setFieldName("Condition " + conditionView.getMandateConditionType().name());
         mandateFieldMessageView.setFieldDesc(conditionView.getConditionDesc());
         mandateFieldMessageView.setMessage(message);
-        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+        mandateFieldValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
     private void addMandateFieldMessageView(MandateFieldClassView mandateFieldClassView, String message){
@@ -791,17 +791,17 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldMessageView.setPageName(mandateFieldClassView.getPageName());
         mandateFieldMessageView.setFieldDesc(mandateFieldClassView.getClassDescription());
         mandateFieldMessageView.setMessage(message);
-        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+        mandateFieldValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
-    public ActionValidationResult getFinalValidationResult(){
-        if(actionValidationResult.getMandateFieldMessageViewList().size() > 0){
-            actionValidationResult.setActionResult(ActionResult.FAILED);
+    public MandateFieldValidationResult getFinalValidationResult(){
+        if(mandateFieldValidationResult.getMandateFieldMessageViewList().size() > 0){
+            mandateFieldValidationResult.setActionResult(ActionResult.FAILED);
 
         } else {
-            actionValidationResult.setActionResult(ActionResult.SUCCESS);
+            mandateFieldValidationResult.setActionResult(ActionResult.SUCCESS);
         }
-        return actionValidationResult;
+        return mandateFieldValidationResult;
     }
 
     private class ValidationResult{

@@ -1,20 +1,15 @@
 package com.clevel.selos.controller.admin;
 
 import com.clevel.selos.businesscontrol.ActionValidationControl;
+import com.clevel.selos.businesscontrol.MandateFieldValidationControl;
 import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.ADMIN;
-import com.clevel.selos.model.MandateConditionType;
-import com.clevel.selos.model.MandateDependType;
 import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.view.ActionValidationResult;
+import com.clevel.selos.model.view.MandateFieldValidationResult;
 import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.model.view.master.MandateFieldClassView;
-import com.clevel.selos.model.view.master.MandateFieldConditionDetailView;
-import com.clevel.selos.model.view.master.MandateFieldConditionView;
-import com.clevel.selos.model.view.master.MandateFieldView;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -29,14 +24,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -65,7 +57,7 @@ public class MandateField implements Serializable {
     private CustomerDAO customerDAO;
 
     @Inject
-    private ActionValidationControl actionValidationControl;
+    private MandateFieldValidationControl mandateFieldValidationControl;
 
     @Inject
     public MandateField(){}
@@ -191,13 +183,13 @@ public class MandateField implements Serializable {
 
         List<Customer> customerList = customerDAO.findCustomerByWorkCaseId(workCaseId);
 
-        actionValidationControl.loadActionValidation(2001, 1009);
-        actionValidationControl.validate(customerList, Customer.class);
-        ActionValidationResult actionValidationResult = actionValidationControl.getFinalValidationResult();
-        messageHeader = actionValidationResult.getActionResult().name();
-        message = actionValidationResult.getActionResult().toString();
-        mandateFieldMessageViewList = actionValidationResult.getMandateFieldMessageViewList();
-        log.info("validation message: {}", actionValidationResult.getMandateFieldMessageViewList());
+        mandateFieldValidationControl.loadMandateField(2001, 1009);
+        mandateFieldValidationControl.validate(customerList, Customer.class.getName());
+        MandateFieldValidationResult mandateFieldValidationResult = mandateFieldValidationControl.getMandateFieldValidationResult();
+        messageHeader = mandateFieldValidationResult.getActionResult().name();
+        message = mandateFieldValidationResult.getActionResult().toString();
+        mandateFieldMessageViewList = mandateFieldValidationResult.getMandateFieldMessageViewList();
+        log.info("validation message: {}", mandateFieldValidationResult.getMandateFieldMessageViewList());
         RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
         log.info("-- end Test MandateField");
     }

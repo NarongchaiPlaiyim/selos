@@ -20,9 +20,6 @@ public class MandateField implements Serializable{
     @JoinColumn(name = "class_name_id")
     private MandateFieldClass mandateFieldClass;
 
-    @Column(name = "parameterized_name", length = 150)
-    private String parameterizedName;
-
     @Column(name = "field_name", length = 50)
     private String fieldName;
 
@@ -65,14 +62,6 @@ public class MandateField implements Serializable{
 
     public void setMandateFieldClass(MandateFieldClass mandateFieldClass) {
         this.mandateFieldClass = mandateFieldClass;
-    }
-
-    public String getParameterizedName() {
-        return parameterizedName;
-    }
-
-    public void setParameterizedName(String parameterizedName) {
-        this.parameterizedName = parameterizedName;
     }
 
     public String getFieldName() {
