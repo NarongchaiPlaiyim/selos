@@ -260,8 +260,8 @@ public class GenPDF extends ReportService implements Serializable {
 //                log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkPricing()){
-                log.debug("On Request Pricing by Rold BU or Viewer");
+            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
+                log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
                 exsumType = true;
             }
@@ -274,7 +274,7 @@ public class GenPDF extends ReportService implements Serializable {
         if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
             if(!Util.isNull(workCase)){
                 log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
-                if (Util.isZero(workCase.getRequestAppraisal())){
+                if (Util.isZero(workCase.getRequestAppraisal()) || checkStepApproved()){
                     appraisalType = true;
                 }
             } else if(!Util.isNull(workCasePrescreen)){
