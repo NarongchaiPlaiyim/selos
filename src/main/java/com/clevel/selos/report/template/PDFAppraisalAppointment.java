@@ -3,8 +3,10 @@ package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.AppraisalDetailView;
@@ -41,12 +43,14 @@ public class PDFAppraisalAppointment implements Serializable {
     @Inject AppraisalAppointmentControl appraisalAppointmentControl;
     @Inject private AppHeaderView appHeaderView;
     @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
 
     private AppraisalView appraisalView;
     private long workCaseId;
     private long workCasePreScreenId;
     private final String SPACE = " ";
     private WorkCase workCase;
+    private WorkCasePrescreen workCasePrescreen;
 
     public PDFAppraisalAppointment() {
     }
@@ -192,7 +196,13 @@ public class PDFAppraisalAppointment implements Serializable {
 
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-        workCase = workCaseDAO.findById(workCaseId);
+
+        if (!Util.isZero(workCaseId)){
+            workCase = workCaseDAO.findById(workCaseId);
+
+        } else {
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        }
         //Detail 1
         if (!Util.isNull(appHeaderView)){
             log.debug("--Header. {}",appHeaderView);
@@ -240,7 +250,12 @@ public class PDFAppraisalAppointment implements Serializable {
             }
 
             report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
-            report.setApprovedDate(workCase.getCompleteDate());
+
+            if (!Util.isNull(workCase)){
+                report.setApprovedDate(DateTimeUtil.getCurrentDateTH(workCase.getCompleteDate()));
+            } else {
+                report.setApprovedDate(DateTimeUtil.getCurrentDateTH(workCasePrescreen.getCompleteDate()));
+            }
 
         } else {
             log.debug("--Header is Null. {}",appHeaderView);
