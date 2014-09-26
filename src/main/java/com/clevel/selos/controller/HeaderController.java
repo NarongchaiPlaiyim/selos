@@ -1152,6 +1152,7 @@ public class HeaderController extends BaseController {
 
             if(checkUW){
                 if(canSubmitWithoutReturn()){
+                    fullApplicationControl.calculateApprovedResult(workCaseId);
                     fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
                     message = msg.get("app.message.dialog.submit.success");

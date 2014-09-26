@@ -309,7 +309,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         if(!Util.isNull(exSummaryView)){
             characteristicExSumReport.setBusinessOperationActivity(Util.checkNullString(exSummaryView.getBusinessOperationActivity()));
             characteristicExSumReport.setBusinessPermission(Util.checkNullString(exSummaryView.getBusinessPermission()));
-            characteristicExSumReport.setExpiryDate(exSummaryView.getExpiryDate());
+            characteristicExSumReport.setExpiryDate(DateTimeUtil.getCurrentDateTH(exSummaryView.getExpiryDate()));
         } else {
             log.debug("exSummaryView in Method fillBorrowerCharacteristic is Null. {}",exSummaryView);
         }
