@@ -2,6 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -87,7 +88,7 @@ public class AppraisalRequestControl extends BusinessControl {
         }
     }
 	
-	public AppraisalView getAppraisalRequest(long workCaseId, long workCasePreScreenId){
+	public AppraisalView getAppraisalRequest(long workCaseId, long workCasePreScreenId, ProposeType proposeType){
         log.info("-- getAppraisalRequest WorkCaseId : {}, workCasePreScreenId : {}, User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
         init();
         String bdmUserId = "";
@@ -123,7 +124,7 @@ public class AppraisalRequestControl extends BusinessControl {
         log.debug("getAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
 
         if(!Util.isNull(newCreditFacility)){
-            newCollateralList = safetyList(newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility));
+            newCollateralList = safetyList(newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType));
             log.debug("getAppraisalRequest ::: newCollateralList : {}", newCollateralList);
             appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);

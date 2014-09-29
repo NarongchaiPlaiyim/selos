@@ -1763,11 +1763,11 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         if(!Util.isZero(workCaseId)){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
-            workCase.setParallelAppraisalFlag(1);
+            workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTING_PARALLEL.value());
             workCaseDAO.persist(workCase);
         } else if(!Util.isZero(workCasePreScreenId)){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            workCasePrescreen.setParallelAppraisalFlag(1);
+            workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTING_PARALLEL.value());
             workCasePrescreenDAO.persist(workCasePrescreen);
         }
     }
