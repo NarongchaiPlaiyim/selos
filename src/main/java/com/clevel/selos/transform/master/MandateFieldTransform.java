@@ -92,6 +92,7 @@ public class MandateFieldTransform extends Transform {
         mandateFieldClassView.setClassName(mandateFieldClass.getClassName());
         mandateFieldClassView.setPageName(mandateFieldClass.getPageName());
         mandateFieldClassView.setClassDescription(mandateFieldClass.getClassDescription());
+        mandateFieldClassView.setActive(mandateFieldClass.isActive());
 
         logger.debug("-- end transformToView return MandateFieldClassView: {}", mandateFieldClassView);
         return mandateFieldClassView;
