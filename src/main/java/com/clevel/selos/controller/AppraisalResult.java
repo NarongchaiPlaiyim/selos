@@ -98,6 +98,7 @@ public class AppraisalResult extends BaseController {
     private long workCaseId;
     private long workCasePreScreenId;
     private long stepId;
+    private long statusId;
     private AppraisalView appraisalView;
 
     //collateralDetailViewList
@@ -144,28 +145,32 @@ public class AppraisalResult extends BaseController {
 
     }
 
-    private void init(){
-        log.debug("-- init");
+    private void _initial(HttpSession session){
+        log.debug("-- _initial");
         modeForButton = ModeForButton.ADD;
-        appraisalCompanyList = appraisalCompanyDAO.findAll();
-        appraisalDivisionList= appraisalDivisionDAO.findAll();
-        locationPropertyList= locationPropertyDAO.findAll();
-        provinceList= provinceDAO.findAll();
+
+        appraisalCompanyList = appraisalCompanyDAO.findActiveAll();
+        appraisalDivisionList= appraisalDivisionDAO.findActiveAll();
+        locationPropertyList= locationPropertyDAO.findActiveAll();
+        provinceList= provinceDAO.findActiveAll();
 
         newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
-//        newCollateralViewList.add(newCollateralViewForTest());
-//        newCollateralViewList.add(newCollateralViewForTest2());
-
         appraisalView = new AppraisalView();
+
         flagReadOnly = false;
         saveAndEditFlag = false;
+
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
     }
 
     public void preRender(){
         log.info("preRender...");
         HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
-            stepId = (Long)session.getAttribute("stepId");
+            stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value()){
                 log.debug("preRender ::: Invalid stepId");
@@ -181,17 +186,12 @@ public class AppraisalResult extends BaseController {
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation...");
-        init();
         HttpSession session = FacesUtil.getSession(false);
+        log.info("onCreation...");
+        _initial(session);
         if(checkSession(session)){
-            if((Long)session.getAttribute("workCaseId") != 0){
-                workCaseId = (Long)session.getAttribute("workCaseId");
-            } else if((Long)session.getAttribute("workCasePreScreenId") != 0){
-                workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
-            }
 
-            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
+            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId, statusId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
             if(!Util.isNull(appraisalView)){
                 newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
@@ -203,6 +203,8 @@ public class AppraisalResult extends BaseController {
                 appraisalView = new AppraisalView();
                 log.debug("-- AppraisalView[New] created");
             }
+        }else{
+            //TODO show message exception
         }
     }
 
@@ -385,7 +387,7 @@ public class AppraisalResult extends BaseController {
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
             log.debug("## appraisalView.getNewCollateralViewList().size() ## [{}]",appraisalView.getNewCollateralViewList().size());
-            appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId);
+            appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId, statusId);
 
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");

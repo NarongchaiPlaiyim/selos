@@ -582,6 +582,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                     closable="false" closeOnEscape="false"
                      header="#{appraisalAppointment.messageHeader}" >
         <f:facet name="message">
             <h:outputText value="#{appraisalAppointment.message}" escape="false"/>
@@ -594,6 +595,7 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                     closable="false" closeOnEscape="false"
                      header="#{appraisalAppointment.messageHeader}" >
         <f:facet name="message">
             <h:outputText value="#{appraisalAppointment.message}" escape="false"/>
@@ -606,6 +608,7 @@
 
 <p:panel id="msgBoxNoRequestMessagePanel" styleClass="panel" rendered="#{appraisalAppointment.showNoRequest}">
     <p:confirmDialog id="msgBoxNoRequestMessageDialog" widgetVar="msgBoxNoRequestMessageDlg"
+                     closable="false" closeOnEscape="false"
                      header="#{appraisalAppointment.messageHeader}" message="#{appraisalAppointment.message}" >
         <p:commandButton value="OK"
                          styleClass="medium"

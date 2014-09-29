@@ -45,6 +45,7 @@ public class PDFAppraisalAppointment implements Serializable {
     private AppraisalView appraisalView;
     private long workCaseId;
     private long workCasePreScreenId;
+    private long statusId;
     private final String SPACE = " ";
     private WorkCase workCase;
 
@@ -55,24 +56,20 @@ public class PDFAppraisalAppointment implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         appraisalView = new AppraisalView();
 
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            log.debug("workCaseId. {}",workCaseId);
-        }else if (!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        }
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
         if (!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             log.info("workCaseID: {}",workCaseId);
 
-            if (!Util.isNull(appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId))) {
-                appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId);
-            } else {
-                log.debug("--appraisalView is Null",appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId));
-            }
-            log.debug("--appraisalView. {}",appraisalView);
+            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId, statusId);
+            log.debug("--appraisalView. {}", appraisalView);
+
+            if(appraisalView == null)
+                appraisalView = new AppraisalView();
         } else {
-            log.debug("--workcase is Null. {}",workCaseId);
+            log.debug("--workcase is Null. {}", workCaseId);
         }
     }
 
