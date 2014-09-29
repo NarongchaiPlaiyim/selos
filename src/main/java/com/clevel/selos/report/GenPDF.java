@@ -274,7 +274,7 @@ public class GenPDF extends ReportService implements Serializable {
         if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
             if(!Util.isNull(workCase)){
                 log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
-                if (Util.isZero(workCase.getRequestAppraisal()) || checkStepApproved()){
+                if (Util.isZero(workCase.getRequestAppraisal())){
                     appraisalType = true;
                 }
             } else if(!Util.isNull(workCasePrescreen)){

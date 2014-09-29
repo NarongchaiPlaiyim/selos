@@ -203,6 +203,8 @@ public class MandateFieldTransform extends Transform {
                 }
             }
 
+        } else {
+
         }
 
         MandateFieldStepActionView mandateFieldStepActionView = null;
