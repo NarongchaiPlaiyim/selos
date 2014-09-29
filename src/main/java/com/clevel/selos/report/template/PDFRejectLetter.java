@@ -305,7 +305,12 @@ public class PDFRejectLetter implements Serializable {
         } else if (!Util.isNull(workCasePrescreen)){
             userView = userDAO.findByUserName(workCasePrescreen.getCreateBy().getUserName());
         }
-        userTeam = userTeamDAO.findByID(userView.getTeam().getId());
+
+        if (!Util.isNull(userView.getTeam())){
+            userTeam = userTeamDAO.findByID(userView.getTeam().getId());
+        } else {
+            userTeam = new UserTeam();
+        }
 
         RejectLetterReport letterReport = new RejectLetterReport();
         String date = Util.createDateTh(new Date());

@@ -58,7 +58,7 @@ public class PDFAppraisalAppointment implements Serializable {
 
     public void init(){
         HttpSession session = FacesUtil.getSession(false);
-        appraisalView = new AppraisalView();
+//        appraisalView = new AppraisalView();
 
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
@@ -70,8 +70,9 @@ public class PDFAppraisalAppointment implements Serializable {
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId, statusId);
             log.debug("--appraisalView. {}", appraisalView);
 
-            if(appraisalView == null)
+            if(appraisalView == null){
                 appraisalView = new AppraisalView();
+            }
         } else {
             log.debug("--workcase is Null. {}", workCaseId);
         }
