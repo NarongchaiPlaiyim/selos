@@ -184,7 +184,7 @@ public class PDFAppraisalAppointment implements Serializable {
         } else {
             ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
             contactRecordDetailViewReports.add(report);
-            log.debug("--detailViewList is Null.");
+            log.debug("--appraisalView.getContactRecordDetailViewList() is Null.");
         }
         return contactRecordDetailViewReports;
     }
