@@ -232,6 +232,7 @@ public class MandateFieldValidationControl extends BusinessControl{
                     logger.debug("combineMandateResult, Field Result: {}", fieldResult.getMessage());
                 }
             }
+
         }
 
         for(ConditionResult conditionResult : classResult.conditionResultMap.values()){
@@ -676,7 +677,7 @@ public class MandateFieldValidationControl extends BusinessControl{
         Boolean isPassNotMatched = null;
 
         ClassResult parentClassResult = null;
-        Boolean isDepended = null;
+        Boolean isDepended = Boolean.FALSE;
 
         public FieldResult(MandateFieldView in){
             mandateFieldView = in;
