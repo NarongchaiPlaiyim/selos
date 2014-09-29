@@ -58,7 +58,7 @@ public class PDFAppraisalAppointment implements Serializable {
 
     public void init(){
         HttpSession session = FacesUtil.getSession(false);
-        appraisalView = new AppraisalView();
+//        appraisalView = new AppraisalView();
 
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
@@ -70,8 +70,9 @@ public class PDFAppraisalAppointment implements Serializable {
             appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId, statusId);
             log.debug("--appraisalView. {}", appraisalView);
 
-            if(appraisalView == null)
+            if(appraisalView == null){
                 appraisalView = new AppraisalView();
+            }
         } else {
             log.debug("--workcase is Null. {}", workCaseId);
         }
@@ -114,8 +115,8 @@ public class PDFAppraisalAppointment implements Serializable {
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-        if (!Util.isNull(appraisalView.getAppraisalDetailViewList()) && !Util.isZero(appraisalView.getAppraisalDetailViewList().size())){
-            log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
+        if (!Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
+            log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList().size());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();
                 report.setCount(count++);
@@ -164,8 +165,8 @@ public class PDFAppraisalAppointment implements Serializable {
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
         int count = 1;
 
-        if (Util.safetyList(appraisalView.getContactRecordDetailViewList()).size() > 0){
-            log.debug("--detailViewList. {}",detailViewList);
+        if (Util.isSafetyList(appraisalView.getContactRecordDetailViewList())){
+            log.debug("--appraisalView.getContactRecordDetailViewList(). {}",appraisalView.getContactRecordDetailViewList().size());
             for (ContactRecordDetailView view : appraisalView.getContactRecordDetailViewList()){
                 ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
                 report.setCount(count++);
