@@ -217,7 +217,14 @@ public class MandateFieldValidationControl extends BusinessControl{
 
     private List<MandateFieldMessageView> combineMandateResult(ClassResult classResult){
         logger.debug("-- begin combineMandateResult, ClassResult: {}", classResult);
+
         List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
+        if(!classResult.isPassRequired){
+            mandateFieldMessageViewList.add(classResult.getMessage());
+            logger.debug("combineMandateResult, Mandate Class {} ", classResult.getMessage());
+            return mandateFieldMessageViewList;
+        }
+
         for (FieldResult fieldResult : classResult.fieldResultMap.values()){
             if(fieldResult.isDepended != null && !fieldResult.isDepended){
                 if(!fieldResult.getFinalResult()){
@@ -642,7 +649,7 @@ public class MandateFieldValidationControl extends BusinessControl{
                 mandateFieldMessageView.setFieldDesc(mandateFieldClassView.getClassDescription());
                 mandateFieldMessageView.setFieldName(mandateFieldClassView.getClassName());
 
-                mandateFieldMessageView.setMessage(new StringBuilder("Class ").append(mandateFieldClassView.getClassName()).append(" is Required").toString());
+                mandateFieldMessageView.setMessage(validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldClassView.getClassDescription()));
                 return mandateFieldMessageView;
             }
             return null;
@@ -693,26 +700,21 @@ public class MandateFieldValidationControl extends BusinessControl{
             if(isPassMin != null && isPassMax != null){
                 if(!isPassMin || !isPassMax)
                     stringBuilder.append(validationMsg.get(ACTION_DATA_MIN_MAX_INCORRECT, mandateFieldView.getFieldDesc(), mandateFieldView.getMinValue(), mandateFieldView.getMaxValue()));
-                    //stringBuilder.append("value should be more than " + mandateFieldView.getMinValue() + " and less than " + mandateFieldView.getMaxValue());
             }
             else if(isPassMin != null && !isPassMin) {
                 stringBuilder.append(validationMsg.get(ACTION_DATA_MIN_INCORRECT, mandateFieldView.getFieldDesc(), mandateFieldView.getMinValue()));
-                //stringBuilder.append("value should be more than " + mandateFieldView.getMinValue());
             } else if(isPassMax != null && !isPassMax){
                 stringBuilder.append(validationMsg.get(ACTION_DATA_MAX_INCORRECT, mandateFieldView.getFieldDesc(), mandateFieldView.getMaxValue()));
-                //stringBuilder.append("value should be less than " + mandateFieldView.getMaxValue());
             }
 
             if(isPassMatched != null && !isPassMatched){
                 stringBuilder.append(stringBuilder.length() > 0?",":"");
                 stringBuilder.append(validationMsg.get(ACTION_DATA_MATCHED_INCORRECT, mandateFieldView.getFieldDesc(), mandateFieldView.getMatchedValue()));
-                //stringBuilder.append(" should be matched "+ mandateFieldView.getMatchedValue());
             }
 
             if(isPassNotMatched != null && !isPassNotMatched){
                 stringBuilder.append(stringBuilder.length() > 0?",":"");
                 stringBuilder.append(validationMsg.get(ACTION_DATA_NOT_MATCHED_INCORRECT, mandateFieldView.getFieldDesc(), mandateFieldView.getNotMatchedValue()));
-                //stringBuilder.append(" should NOT be matched "+ mandateFieldView.getMatchedValue());
             }
 
             if(stringBuilder.length() > 0){
@@ -757,18 +759,16 @@ public class MandateFieldValidationControl extends BusinessControl{
                 MandateFieldClassView mandateFieldClassView = conditionView.getMandateFieldClassView();
                 MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
                 mandateFieldMessageView.setPageName(mandateFieldClassView.getPageName());
-                mandateFieldMessageView.setFieldDesc(conditionView.getConditionDesc());
+                mandateFieldMessageView.setFieldDesc(conditionView.getConditionDesc() == null? conditionView.getName(): conditionView.getConditionDesc());
                 mandateFieldMessageView.setFieldName(conditionView.getName());
                 StringBuilder stringBuilder = new StringBuilder();
                 for(MandateFieldConditionDetailView conditionDetailView : conditionView.getConditionDetailViewList()){
                     MandateFieldView mandateFiedView = conditionDetailView.getMandateFieldView();
-                    FieldResult fieldResult = parentClassResult.fieldResultMap.get(mandateFiedView.getId());
                     if(stringBuilder.length() > 0){
                         stringBuilder.append(" ").append(validationMsg.get(conditionView.getMandateConditionType().getDesc()));
                     }
-                    stringBuilder.append(fieldResult.getMessage());
+                    stringBuilder.append(" ").append(validationMsg.get(ACTION_DATA_INCORRECT, mandateFiedView.getFieldName()));
                 }
-                stringBuilder.append(validationMsg.get(CONDITION_BASE, conditionView.getConditionDesc()));
                 mandateFieldMessageView.setMessage(stringBuilder.toString());
                 return mandateFieldMessageView;
             }

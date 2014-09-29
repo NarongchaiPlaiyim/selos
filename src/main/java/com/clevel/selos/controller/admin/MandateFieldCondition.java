@@ -135,6 +135,29 @@ public class MandateFieldCondition implements Serializable {
     }
 
     /**
+     * onOpenAddMandateConditionDetail is performed when user click 'ADD' button from 'Mandate Condition Dialog - Add button before the condition detail screen'
+     */
+    public void onOpenUpdateMandateConditionDetail(){
+        wrkMandateConditionDetView = new MandateFieldConditionDetailView();
+        logger.info("-- begin onOpenUpdateMandateConditionDetail");
+        MandateFieldConditionDetailView toUpd = null;
+
+        if(selectedMandateConDetailViewId >= 0 && selectedMandateConDetailViewId < wrkMandateConditionView.getConditionDetailViewList().size()){
+            toUpd = wrkMandateConditionView.getConditionDetailViewList().get(selectedMandateConViewId);
+        }
+
+        if(toUpd == null){
+            return;
+        }
+
+        wrkMandateConditionDetView = new MandateFieldConditionDetailView();
+        wrkMandateConditionDetView.updateValues(toUpd);
+
+        logger.info("-- end onOpenUpdateMandateConditionDetail {}", wrkMandateConditionDetView);
+
+    }
+
+    /**
      * onAddMandateCondition is performed when user click 'OK' button to on 'Mandate Condition Dialog'
      */
     public void onAddMandateCondition(){
@@ -252,6 +275,7 @@ public class MandateFieldCondition implements Serializable {
      * onDeleteMandateConditionDetail is performed when user click 'Delete(trash)' icon within 'Mandate Condition Dialog - condition detail table'
      */
     public void onDeleteMandateConditionDetail(){
+        logger.debug("-- begin onDeleteMandateConditionDetail");
         if(selectedMandateConDetailViewId < 0)
             return;
 
