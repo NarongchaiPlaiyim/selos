@@ -292,7 +292,7 @@
                         </td>
                     </tr>
                 </table>
-                <ui:repeat value="#{collateralDetailView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView">
+                <ui:repeat value="#{collateralDetailView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView" varStatus="loopItem">
                     <table style="width: 100%" border="0">
                         <colgroup>
                             <col style="width:250px"/>
@@ -343,28 +343,28 @@
                                              rowIndexVar="rowIndex" >
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column />
-                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.subCollateralType')}"/>
-                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.titleDeed')}" />
-                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.CollateralOwner')}"/>
-                                            <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.appraisalValue')}"/>
+                                            <p:column style="width: 25px;" />
+                                            <p:column style="width: 260px;" headerText="#{msg.get('app.appraisal.subCollateral.label.tb.subCollateralType')}"/>
+                                            <p:column style="width: 150px;" headerText="#{msg.get('app.appraisal.subCollateral.label.tb.titleDeed')}" />
+                                            <p:column style="width: 290px;" headerText="#{msg.get('app.appraisal.subCollateral.label.tb.CollateralOwner')}"/>
+                                            <p:column style="width: 140px;" headerText="#{msg.get('app.appraisal.subCollateral.label.tb.appraisalValue')}"/>
                                         </p:row>
                                     </p:columnGroup>
-                                    <p:column styleClass="center" style="width: 50px">
+                                    <p:column styleClass="center">
                                         <p:outputLabel value="#{rowIndex+1}"/>
                                     </p:column>
-                                    <p:column  styleClass="left" style="width: 500px">
+                                    <p:column  styleClass="left">
                                         <p:outputLabel value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
                                         <p:outputLabel value="#{subCollateralDetailView.address}"/><br/>
                                         <p:outputLabel value="#{subCollateralDetailView.landOffice}"/>
                                     </p:column>
-                                    <p:column  styleClass="left" style="width: 150px">
+                                    <p:column  styleClass="left">
                                         <p:outputLabel value="#{subCollateralDetailView.titleDeed}"/> <br/>
                                     </p:column>
-                                    <p:column styleClass="left" style="width: 250px">
+                                    <p:column styleClass="left">
                                         <p:outputLabel value="#{subCollateralDetailView.collateralOwnerAAD}" />
                                     </p:column>
-                                    <p:column styleClass="right" style="width: 150px">
+                                    <p:column styleClass="right">
                                         <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
                                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         </p:outputLabel>
@@ -432,7 +432,7 @@
 </p:panel>
 
 <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-          modal="true" width="900" height="700" closable="false">
+          modal="true" width="920" height="700" closable="false">
     <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
 </p:dialog>
 

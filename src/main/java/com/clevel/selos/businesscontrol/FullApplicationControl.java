@@ -1755,9 +1755,12 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    public void requestAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
+
+    }
+
     public void requestParallelAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
         log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
-
         if(!Util.isZero(workCaseId)){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setParallelAppraisalFlag(1);

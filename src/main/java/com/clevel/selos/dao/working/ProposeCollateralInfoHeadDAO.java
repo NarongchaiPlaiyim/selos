@@ -42,7 +42,7 @@ public class ProposeCollateralInfoHeadDAO extends GenericDAO<ProposeCollateralIn
         return newCollateralHeadDetails;
     }
 
-    public boolean setAppraisalRequest(final List<ProposeCollateralInfoHead> newCollateralHeadList){
+    /*public boolean setAppraisalRequest(final List<ProposeCollateralInfoHead> newCollateralHeadList){
         log.debug("-- setAppraisalRequest");
         boolean result = false;
         if(Util.isNull(newCollateralHeadList) || Util.isZero(newCollateralHeadList.size())){
@@ -58,7 +58,7 @@ public class ProposeCollateralInfoHeadDAO extends GenericDAO<ProposeCollateralIn
         persist(newCollateralHeadList);
         log.debug("-- saved");
         return !result;
-    }
+    }*/
 
     public List<ProposeCollateralInfoHead> findByNewCollateralIdAndPurpose(final long newCollateralId) {
         log.info("---- findByNewCollateral NewCollateral.id[{}]", newCollateralId);
