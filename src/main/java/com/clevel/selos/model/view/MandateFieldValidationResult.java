@@ -4,9 +4,10 @@ import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ActionValidationResult {
+public class MandateFieldValidationResult implements Serializable{
     private ActionResult actionResult;
     private List<MandateFieldMessageView> mandateFieldMessageViewList;
 

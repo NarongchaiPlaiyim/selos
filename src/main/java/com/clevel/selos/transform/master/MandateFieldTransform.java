@@ -55,6 +55,7 @@ public class MandateFieldTransform extends Transform {
         mandateFieldView.setFieldName(mandateField.getFieldName());
         mandateFieldView.setFieldDesc(mandateField.getFieldDescription());
         mandateFieldView.setPage(mandateField.getPage());
+        mandateFieldView.setCheckFieldDetail(mandateField.isCheckFieldDetail());
         mandateFieldView.setMinValue(mandateField.getMinValue());
         mandateFieldView.setMaxValue(mandateField.getMaxValue());
         mandateFieldView.setMatchedValue(mandateField.getMatchedValue());
@@ -109,6 +110,7 @@ public class MandateFieldTransform extends Transform {
         mandateFieldConditionView.setConditionDesc(mandateFieldCondition.getConditionDesc());
 
         mandateFieldConditionView.setDependType(mandateFieldCondition.getDependType());
+        mandateFieldConditionView.setDependConType(mandateFieldCondition.getDependConType());
         mandateFieldConditionView.setMandateConditionType(mandateFieldCondition.getMandateConditionType());
 
         List<MandateFieldConditionDetailView> conditionDetailViewList = new ArrayList<MandateFieldConditionDetailView>();
@@ -240,6 +242,7 @@ public class MandateFieldTransform extends Transform {
         mandateField.setFieldDescription(mandateFieldView.getFieldDesc());
         mandateField.setFieldName(mandateFieldView.getFieldName());
         mandateField.setMandateFieldClass(mandateFieldClass);
+        mandateField.setCheckFieldDetail(mandateFieldView.isCheckFieldDetail());
         mandateField.setMinValue(mandateFieldView.getMinValue());
         mandateField.setMaxValue(mandateFieldView.getMaxValue());
 
@@ -284,6 +287,7 @@ public class MandateFieldTransform extends Transform {
         mandateFieldCondition.setMandateConditionType(mandateFieldConditionView.getMandateConditionType());
         mandateFieldCondition.setConditionDesc(mandateFieldConditionView.getConditionDesc());
         mandateFieldCondition.setDependType(mandateFieldConditionView.getDependType());
+        mandateFieldCondition.setDependConType(mandateFieldConditionView.getDependConType());
         return mandateFieldCondition;
     }
 

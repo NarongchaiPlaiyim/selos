@@ -18,8 +18,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -71,7 +69,7 @@ public class ActionValidationControl extends BusinessControl{
     private Map<String, List<MandateFieldView>> mandateFieldViewMap;
     private Map<String, MandateFieldView> listMandateFieldViewMap;
     private Map<String, MandateFieldClassView> listMandateClassViewMap;
-    private ActionValidationResult actionValidationResult;
+    private MandateFieldValidationResult mandateFieldValidationResult;
 
     private Map<Long, ConditionResult> conditionResultMap;
     private Map<Long, ConditionResult> dependedConditionMap;
@@ -91,7 +89,7 @@ public class ActionValidationControl extends BusinessControl{
             MandateField mandateField = mandateFieldStepAction.getMandateField();
             if(mandateField != null){
                 if(ArrayList.class.getName().equals(mandateField.getMandateFieldClass().getClassName())){
-                    listMandateFieldViewMap.put(mandateField.getParameterizedName(), mandateFieldTransform.transformToView(mandateField));
+                    listMandateFieldViewMap.put(mandateField.getFieldName(), mandateFieldTransform.transformToView(mandateField));
                     logger.info("listMandateFieldViewMap {}", listMandateFieldViewMap);
                 } else {
                     MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateFieldStepAction.getMandateField());
@@ -105,22 +103,22 @@ public class ActionValidationControl extends BusinessControl{
             }
         }
 
-        List<MandateFieldClassStepAction> classStepActionList = mandateFieldClassStepActionDAO.findByActionAndCon(stepId, actionId);
+        List<MandateFieldClassStepAction> classStepActionList = mandateFieldClassStepActionDAO.findByStepAction(stepId, actionId);
         for(MandateFieldClassStepAction classStepAction : classStepActionList){
             listMandateClassViewMap.put(classStepAction.getMandateFieldClass().getClassName(), mandateFieldTransform.transformToView(classStepAction.getMandateFieldClass()));
         }
-        actionValidationResult = new ActionValidationResult();
+        mandateFieldValidationResult = new MandateFieldValidationResult();
         List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
-        actionValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
+        mandateFieldValidationResult.setMandateFieldMessageViewList(mandateFieldMessageViewList);
         return mandateFieldViewMap.size();
     }
 
     public void validate(Object object, Class parameterizedClass){
-        logger.debug("-- begin valide(object:{}, paramenterizedName:{}", object, parameterizedClass.getName());
+        logger.info("-- begin valide(object:{}, paramenterizedName:{}", object, parameterizedClass.getName());
         String parameterizedName = parameterizedClass.getName();
 
         if(parameterizedName != null){
-            MandateFieldView mandateFieldView = listMandateFieldViewMap.get(parameterizedName);
+            //MandateFieldView mandateFieldView = listMandateFieldViewMap.get(parameterizedName);
             MandateFieldClassView mandateFieldClassView = listMandateClassViewMap.get(parameterizedName);
             if(mandateFieldClassView != null){
                 if(object == null){
@@ -147,21 +145,31 @@ public class ActionValidationControl extends BusinessControl{
                 if(arrayList != null && arrayList.size() > 0){
                     for(Object objectInArray : arrayList){
                         logger.info("objectInArray is a class of {}", objectInArray.getClass().getName());
+                        validationResultMap = new HashMap<Long, ValidationResult>();
+                        dependedValidationMap = new HashMap<Long, ValidationResult>();
+
+                        conditionResultMap = new HashMap<Long, ConditionResult>();
+                        dependedConditionMap = new HashMap<Long, ConditionResult>();
+
                         validate(objectInArray);
                     }
                 }
             } else {
+                validationResultMap = new HashMap<Long, ValidationResult>();
+                dependedValidationMap = new HashMap<Long, ValidationResult>();
+
+                conditionResultMap = new HashMap<Long, ConditionResult>();
+                dependedConditionMap = new HashMap<Long, ConditionResult>();
+
                 validate(object);
             }
         }
-        logger.debug("-- end validate()");
+        logger.info("-- end validate()");
     }
 
     private void validate(Object object){
         logger.info("-- begin validate object: {}", object);
         if(object != null){
-            validationResultMap = new HashMap<Long, ValidationResult>();
-            dependedValidationMap = new HashMap<Long, ValidationResult>();
             Class objectClass = object.getClass();
             Type type = objectClass.getGenericSuperclass();
             logger.info("Type of {}, object Class Name {}", type, objectClass.getName());
@@ -193,42 +201,45 @@ public class ActionValidationControl extends BusinessControl{
                 logger.info("No validation configure for class {}", _compareClassName);
             }
         }
-        logger.debug("-- end validate");
+        logger.info("-- end validate");
     }
 
     private ValidationResult validateField(Object object, Class objectClass, MandateFieldView mandateFieldView){
-        logger.debug("-- begin validateField object: {}, Class: {}, MandateFieldView: {}", object, objectClass.getName(), mandateFieldView);
+        logger.info("-- begin validateField object: {}, Class: {}, MandateFieldView: {}", object, objectClass.getName(), mandateFieldView);
         Field field = null;
         try{
             field = objectClass.getDeclaredField(mandateFieldView.getFieldName());
         }catch (NoSuchFieldException ex){
-            logger.debug("Cannot find field from original class {}", mandateFieldView.getFieldName());
+            logger.info("Cannot find field from original class {}", mandateFieldView.getFieldName());
             try{
                 if(objectClass.getSuperclass() != null){
                     field = objectClass.getSuperclass().getDeclaredField(mandateFieldView.getFieldName());
                 }
             } catch (NoSuchFieldException sex){
-                logger.debug("Also not found field in super class {}", mandateFieldView.getFieldName());
+                logger.info("Also not found field in super class {}", mandateFieldView.getFieldName());
             }
         }
+        try{
+            if(field != null) {
+                field.setAccessible(true);
+                Object _fieldObj = field.get(object);
 
-        if(field != null) {
-            field.setAccessible(true);
-            if(field.getName().startsWith(mandateFieldView.getFieldName())){
+                if(field.getName().startsWith(mandateFieldView.getFieldName())){
                 logger.info("found name matched field: {}, {}", field.getName(), mandateFieldView.getFieldName());
 
-                try{
-                    Object _fieldObj = field.get(object);
                     if(_fieldObj == null){
                         return validateNullObject(mandateFieldView);
                     } else {
                         Class _fieldObjClass = _fieldObj.getClass();
+                        logger.debug("__fieldObjClass: {}", _fieldObj.getClass());
                         if(_fieldObjClass.isEnum()){
                             logger.info("----- object is enum -------", _fieldObj.getClass());
                         } else if(_fieldObjClass.equals(Integer.class.getName())){
                             return validate(mandateFieldView, (Integer)_fieldObj);
                         } else if(_fieldObjClass.equals(Long.class.getName())){
                             return validate(mandateFieldView, (Long)_fieldObj);
+                        } else if(_fieldObjClass.equals(Number.class.getName())){
+                                return validate(mandateFieldView, (Long)_fieldObj);
                         } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
                             return validate(mandateFieldView, (BigDecimal)_fieldObj);
                         } else if(_fieldObjClass.equals(Boolean.class.getName())){
@@ -240,94 +251,41 @@ public class ActionValidationControl extends BusinessControl{
                                 return validate(mandateFieldView, (ArrayList<?>)_fieldObj);
                             } else {
                                 if(_fieldObjClass.getName().contains(".master.")){
-                                    logger.debug("check for field which is a master table");
+                                    logger.info("check for field which is a master table");
                                     validateMaster(mandateFieldView, _fieldObj);
                                 } else {
-                                    logger.debug("check for field is not an primitive and expected value");
+                                    logger.info("check for field is not an primitive and expected value");
                                     validate(_fieldObj);
                                 }
                             }
                         }
                     }
-                } catch (IllegalAccessException iae){
-                    logger.debug("Cannot access Field to validate Field {}", field.getName());
-                    return getValidationResult(mandateFieldView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldDesc()));
+                } else if(field.getType().getName().contains("db.working.")){
+                    logger.info("check for field is not an primitive and expected value");
+                    validate(_fieldObj);
                 }
             }
+        } catch (IllegalAccessException iae){
+            logger.info("Cannot access Field to validate Field {}", field.getName());
+            return getValidationResult(mandateFieldView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldDesc()));
         }
-        return null;
-    }
-
-    private ValidationResult validateMethod(Object object, Class objectClass, MandateFieldView mandateFieldView){
-        logger.debug("-- begin validateMethod object: {}, Class: {}, MandateFieldView: {}", object, objectClass.getName(), mandateFieldView);
-        Method method = null;
-        try{
-            method = objectClass.getDeclaredMethod(mandateFieldView.getFieldName());
-        }catch (NoSuchMethodException ex){
-            logger.debug("Cannot find method from original class {}", mandateFieldView.getFieldName());
-            try{
-                if(objectClass.getSuperclass() != null){
-                    method = objectClass.getSuperclass().getDeclaredMethod(mandateFieldView.getFieldName());
-                }
-            } catch (NoSuchMethodException sex){
-                logger.debug("Also not found method in super class {}", mandateFieldView.getFieldName());
-            }
-        }
-
-        if(method != null){
-            method.setAccessible(true);
-            if(method.getName().startsWith(mandateFieldView.getFieldName())){
-                logger.info("found name matched field: {}, {}", method.getName(), mandateFieldView.getFieldName());
-
-                try{
-                    Object _methodReturn = method.invoke(object);
-                    if(_methodReturn == null){
-                        return validateNullObject(mandateFieldView);
-                    } else {
-                        Class _fieldObjClass = _methodReturn.getClass();
-                        if(_fieldObjClass.equals(Integer.class.getName())){
-                            return validate(mandateFieldView, (Integer)_methodReturn);
-                        } else if(_fieldObjClass.equals(Long.class.getName())){
-                            return validate(mandateFieldView, (Long)_methodReturn);
-                        } else if(_fieldObjClass.equals(BigDecimal.class.getName())){
-                            return validate(mandateFieldView, (BigDecimal)_methodReturn);
-                        }
-                    }
-                } catch (IllegalAccessException iae){
-                    logger.debug("Cannot access Field to validate Field {}", method.getName());
-                    return getValidationResult(mandateFieldView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldDesc()));
-                }  catch (IllegalArgumentException iae){
-                    logger.debug("Cannot access Field to validate Field {}", method.getName());
-                    return getValidationResult(mandateFieldView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldDesc()));
-                }  catch (InvocationTargetException iae){
-                    logger.debug("Cannot access Field to validate Field {}", method.getName());
-                    return getValidationResult(mandateFieldView, validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldDesc()));
-                }
-            }
-        }
-
         return null;
     }
 
     private void checkCondition(Object object){
-        logger.debug("-- begin checkCondition object: {}, ", object);
+        logger.info("-- begin checkCondition object: {}, ", object);
 
-
-        conditionResultMap = new HashMap<Long, ConditionResult>();
-        dependedConditionMap = new HashMap<Long, ConditionResult>();
         String className = object.getClass().getName();
 
         MandateFieldClassView mandateFieldClass = mandateFieldTransform.transformToView(mandateFieldClassDAO.findByClassName(className));
         List<MandateFieldConditionView> mandateFieldConditionViewList = mandateFieldControl.getMandateConditionList(mandateFieldClass);
 
-
-
         if(mandateFieldConditionViewList != null && mandateFieldConditionViewList.size() > 0){
             for(MandateFieldConditionView conditionView : mandateFieldConditionViewList){
-                checkCondition(object, conditionView);
+                checkConditionAndDependCondition(object, conditionView);
             }
 
-            ArrayList<ConditionResult> _failedConResultList = new ArrayList<ConditionResult>();
+            List<ConditionResult> _failedConResultList = new ArrayList<ConditionResult>();
             for(ConditionResult conditionResult : conditionResultMap.values()){
                 if(combineConditionResult(conditionResult)){
                     _failedConResultList.add(conditionResult);
@@ -343,6 +301,39 @@ public class ActionValidationControl extends BusinessControl{
             if(!validationResult.isPass && (dependedValidationMap.get(validationResult.mandateFieldView.getId()) == null)){
                 logger.info("add mandate field result {}", validationResult);
                 addMandateFieldMessageView(validationResult);
+            }
+        }
+    }
+
+    private void checkConditionAndDependCondition(Object object, MandateFieldConditionView conditionView){
+        logger.info("-- begin checkConditionAndDependCondition: object: {}", object);
+        logger.info("-- MandateFieldConditionView: {}", conditionView);
+
+        checkCondition(object, conditionView);
+
+        if(conditionView.getDependConType() == MandateDependConType.EXTERNAL){
+            logger.info("depend Condition is External Class: {}", conditionView.getDependConType());
+            MandateFieldConditionView externalDependCondition = conditionView.getDependCondition();
+            MandateFieldClassView extDependConClassView = externalDependCondition.getMandateFieldClassView();
+            try{
+                Class objectClazz = object.getClass();
+                Field[] fields = objectClazz.getFields();
+                for(Field field : fields){
+                    field.setAccessible(true);
+                    logger.info("Field.getType: {}", field.getType().getName());
+                    if(field.getType().getName().equals(extDependConClassView.getClassName())){
+                        Object dependObject = field.get(object);
+                        logger.info("Loop for checking depend condition: {}", object);
+                        checkConditionAndDependCondition(dependObject, externalDependCondition);
+                    }
+                }
+            } catch (IllegalAccessException iaex){
+                ConditionResult conditionResult = new ConditionResult();
+                conditionResult.isPass = false;
+                conditionResult.id = conditionView.getId();
+                conditionResult.message = "cannot access field";
+                conditionResult.conditionView = conditionView;
+                conditionResultMap.put(conditionResult.id, conditionResult);
             }
         }
     }
@@ -469,11 +460,11 @@ public class ActionValidationControl extends BusinessControl{
                             }
                         } catch (NoSuchFieldException nse){
                             stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldName()));
-                            logger.debug("cannot find field {}", mandateFieldView.getFieldName());
+                            logger.info("cannot find field {}", mandateFieldView.getFieldName());
                         } catch (IllegalAccessException nse){
                             isPassCondition = Boolean.FALSE;
                             stringBuilder.append(validationMsg.get(ACTION_DATA_REQUIRED, mandateFieldView.getFieldName()));
-                            logger.debug("cannot access field {}", mandateFieldView.getFieldName());
+                            logger.info("cannot access field {}", mandateFieldView.getFieldName());
                         }
                     }
                 }
@@ -680,7 +671,7 @@ public class ActionValidationControl extends BusinessControl{
             if(mandateFieldView.getMatchedValue().equals(UserSysParameterKey.STATIC_EMPTY.toString())){
                 isPassMatched = (_fieldObj == null);
             } else {
-                isPassNotMatched = isContainValue(mandateFieldView.getNotMatchedValue(), _fieldObj);
+                isPassMatched = isContainValue(mandateFieldView.getMatchedValue(), _fieldObj);
 
             }
         }
@@ -783,7 +774,7 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldMessageView.setFieldDesc(mandateFieldView.getFieldDesc());
         mandateFieldMessageView.setMessage(validationResult.message);
         mandateFieldMessageView.setPageName(mandateFieldView.getPage());
-        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+        mandateFieldValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
     private void addMandateFieldMessageView(MandateFieldConditionView conditionView, String message){
@@ -791,7 +782,7 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldMessageView.setFieldName("Condition " + conditionView.getMandateConditionType().name());
         mandateFieldMessageView.setFieldDesc(conditionView.getConditionDesc());
         mandateFieldMessageView.setMessage(message);
-        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+        mandateFieldValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
     private void addMandateFieldMessageView(MandateFieldClassView mandateFieldClassView, String message){
@@ -800,17 +791,17 @@ public class ActionValidationControl extends BusinessControl{
         mandateFieldMessageView.setPageName(mandateFieldClassView.getPageName());
         mandateFieldMessageView.setFieldDesc(mandateFieldClassView.getClassDescription());
         mandateFieldMessageView.setMessage(message);
-        actionValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
+        mandateFieldValidationResult.getMandateFieldMessageViewList().add(mandateFieldMessageView);
     }
 
-    public ActionValidationResult getFinalValidationResult(){
-        if(actionValidationResult.getMandateFieldMessageViewList().size() > 0){
-            actionValidationResult.setActionResult(ActionResult.FAILED);
+    public MandateFieldValidationResult getFinalValidationResult(){
+        if(mandateFieldValidationResult.getMandateFieldMessageViewList().size() > 0){
+            mandateFieldValidationResult.setActionResult(ActionResult.FAILED);
 
         } else {
-            actionValidationResult.setActionResult(ActionResult.SUCCESS);
+            mandateFieldValidationResult.setActionResult(ActionResult.SUCCESS);
         }
-        return actionValidationResult;
+        return mandateFieldValidationResult;
     }
 
     private class ValidationResult{
@@ -844,6 +835,5 @@ public class ActionValidationControl extends BusinessControl{
                     .toString();
         }
     }
-
 
 }

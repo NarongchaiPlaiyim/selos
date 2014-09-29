@@ -305,17 +305,20 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
 
                                                 List<HistoryModel> historyModels = subjectAccountModel.getHistory();
-                                                for(HistoryModel historyModel : historyModels){
-                                                    if(outStandingCreditMonth == 6){
-                                                        break;
-                                                    } else {
-                                                        if(historyModel.getAmountowed()!=null){
-                                                            BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
-                                                            outStandingCredit = outStandingCredit.add(outstanding);
+                                                if(historyModels!=null){
+                                                    for(HistoryModel historyModel : historyModels){
+                                                        if(outStandingCreditMonth == 6){
+                                                            break;
+                                                        } else {
+                                                            if(historyModel.getAmountowed()!=null){
+                                                                BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
+                                                                outStandingCredit = outStandingCredit.add(outstanding);
+                                                            }
+                                                            outStandingCreditMonth = outStandingCreditMonth+1;
                                                         }
-                                                        outStandingCreditMonth = outStandingCreditMonth+1;
                                                     }
                                                 }
+
                                                 if(outStandingCreditMonth>0){
                                                     BigDecimal divider = new BigDecimal(outStandingCreditMonth);
                                                     outstatndingAvg = outStandingCredit.divide(divider,2,BigDecimal.ROUND_HALF_UP);

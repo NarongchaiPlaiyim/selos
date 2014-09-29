@@ -240,7 +240,11 @@ public class GenPDF extends ReportService implements Serializable {
 
         // ###### Role BU and Viewer Can not print AAD Report ######
         if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
-            if (checkPricing() || Util.isNull(workCase) || checkStepApproved()){
+            if (Util.isNull(workCase) || checkStepApproved()){
+//                log.debug("On Request Pricing by Rold BU or Viewer");
+                opshectType = true;
+                exsumType = true;
+            } else if (!Util.isNull(workCase) && checkPricing()){
                 log.debug("On Request Pricing by Rold BU or Viewer");
                 opshectType = true;
                 exsumType = true;
@@ -252,7 +256,11 @@ public class GenPDF extends ReportService implements Serializable {
         // ###### Role UW and OPS Can not print AAD Report And Reject Letter Report ######
         if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
             readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
-            if (checkPricing() || Util.isNull(workCase) || checkStepApproved()){
+            if (Util.isNull(workCase) || checkStepApproved()){
+//                log.debug("On Request Pricing by Rold UW or OPS");
+                opshectType = true;
+                exsumType = true;
+            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
                 log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
                 exsumType = true;
@@ -266,7 +274,7 @@ public class GenPDF extends ReportService implements Serializable {
         if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
             if(!Util.isNull(workCase)){
                 log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
-                if (Util.isZero(workCase.getRequestAppraisal())){
+                if (Util.isZero(workCase.getRequestAppraisal()) || checkStepApproved()){
                     appraisalType = true;
                 }
             } else if(!Util.isNull(workCasePrescreen)){
@@ -294,7 +302,7 @@ public class GenPDF extends ReportService implements Serializable {
 
     private boolean checkStepApproved(){
         log.debug("On checkStepApproved. {}",statusId);
-        if (statusId == 90006L)
+        if (statusId == 90006L || statusId == 90005L)
             return false;
         else
             return true;
