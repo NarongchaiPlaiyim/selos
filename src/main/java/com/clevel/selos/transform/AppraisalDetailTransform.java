@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.ProposeCollateralInfoDAO;
 import com.clevel.selos.dao.working.ProposeCollateralInfoHeadDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
@@ -45,7 +46,7 @@ public class AppraisalDetailTransform extends Transform {
     public AppraisalDetailTransform() {
     }
 
-    public List<ProposeCollateralInfo> transformToModel(final List<AppraisalDetailView> appraisalDetailViewList, final ProposeLine newCreditFacility, final User user){
+    public List<ProposeCollateralInfo> transformToModel(final List<AppraisalDetailView> appraisalDetailViewList, final ProposeLine newCreditFacility, final User user, RequestAppraisalValue requestAppraisalValue){
         log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", appraisalDetailViewList.size());
 
         long newCollateralId = 0;
@@ -53,6 +54,7 @@ public class AppraisalDetailTransform extends Transform {
         boolean createNewCollateralFlag = true;
 
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
+            //Find all Collateral in Application
             newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
         }else{
             newCollateralList = new ArrayList<ProposeCollateralInfo>();
@@ -87,7 +89,7 @@ public class AppraisalDetailTransform extends Transform {
                                 newCollateralHead.setNumberOfDocuments(view.getNumberOfDocuments());
                                 newCollateralHead.setModifyBy(user);
                                 newCollateralHead.setModifyDate(DateTime.now().toDate());
-                                newCollateralHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                                newCollateralHead.setAppraisalRequest(requestAppraisalValue.value());
                                 newCollateralHead.setProposeType(ProposeType.P);
 
                                 newCollateralHeadForAdd.add(newCollateralHead);
@@ -95,6 +97,7 @@ public class AppraisalDetailTransform extends Transform {
                                 continue;
                             }
                         }
+                        newCollateral.setAppraisalRequest(requestAppraisalValue.value());
                         newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadForAdd);
                         newCollateralListForReturn.add(newCollateral);
                         continue;
@@ -112,8 +115,10 @@ public class AppraisalDetailTransform extends Transform {
                 newCollateral.setCreateDate(DateTime.now().toDate());
                 newCollateral.setCreateBy(user);
                 newCollateral.setProposeLine(newCreditFacility);
-                newCollateral.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
+                newCollateral.setWorkCase(newCreditFacility.getWorkCase());
+                newCollateral.setAppraisalRequest(requestAppraisalValue.value());
                 newCollateral.setProposeType(ProposeType.P);
+                newCollateral.setUwDecision(DecisionType.NO_DECISION);
                 log.debug("transformToModel ::: newCollateral : {}", newCollateral);
 
                 newCollateralHeadListForNewCollateralHead = new ArrayList<ProposeCollateralInfoHead>();
@@ -129,7 +134,7 @@ public class AppraisalDetailTransform extends Transform {
                 newCollateralHeadForNewCollateralHead.setModifyDate(view.getModifyDate());
                 newCollateralHeadForNewCollateralHead.setCreateDate(DateTime.now().toDate());
                 newCollateralHeadForNewCollateralHead.setCreateBy(user);
-                newCollateralHeadForNewCollateralHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                newCollateralHeadForNewCollateralHead.setAppraisalRequest(requestAppraisalValue.value());
                 newCollateralHeadForNewCollateralHead.setProposeType(ProposeType.P);
                 newCollateralHeadForNewCollateralHead.setProposeCollateral(newCollateral);
 

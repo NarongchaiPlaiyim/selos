@@ -92,24 +92,32 @@ public class AppraisalRequest extends BaseController {
 
     }
 
-    private void init(){
-        log.debug("init...");
+    private void _initial(HttpSession session){
+        log.debug("initial... set default for appraisal request.");
+
         modeForButton = ModeForButton.ADD;
+
         appraisalDetailView = new AppraisalDetailView();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
+
         titleDeedFlag = false;
         purposeFlag = false;
         numberOfDocumentsFlag = false;
         contactFlag = false;
         contactFlag2 = false;
         contactFlag3 = false;
+
+        stepId = (Long)session.getAttribute("stepId");
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
     }
 
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
+            //TODO Check Step is PreScreen, PreScreenMaker, Prepare FullApp ( 1001, 1003, 2001 )
             /*stepId = getCurrentStep(session);
             if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
                 log.debug("preRender ::: Invalid step id : {}", stepId);
@@ -125,21 +133,19 @@ public class AppraisalRequest extends BaseController {
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation...");
-        init();
         HttpSession session = FacesUtil.getSession(false);
-        String bdmUserId = "";
-        if(checkSession(session)){
-            stepId = (Long)session.getAttribute("stepId");
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        log.debug("onCreation...");
 
+        _initial(session);
+        String bdmUserId = "";
+
+        if(checkSession(session)){
             if (!Util.isZero(workCaseId)){
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
-                bdmUserId = workCase.getCreateBy().getId();
+                bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePreScreenDAO.findById(workCasePreScreenId);
-                bdmUserId = workCasePrescreen.getCreateBy().getId();
+                bdmUserId = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
             }
 
             log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}]", workCasePreScreenId, workCaseId);
@@ -240,11 +246,7 @@ public class AppraisalRequest extends BaseController {
                 } catch(Exception ex){
                     log.error("Exception : {}", ex);
                     messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                    if(ex.getCause() != null){
-                        message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-                    } else {
-                        message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
-                    }
+                    message = Util.getMessageException(ex);
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {

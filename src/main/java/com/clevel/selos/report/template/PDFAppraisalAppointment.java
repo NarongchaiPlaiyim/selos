@@ -48,6 +48,7 @@ public class PDFAppraisalAppointment implements Serializable {
     private AppraisalView appraisalView;
     private long workCaseId;
     private long workCasePreScreenId;
+    private long statusId;
     private final String SPACE = " ";
     private WorkCase workCase;
     private WorkCasePrescreen workCasePrescreen;
@@ -57,26 +58,23 @@ public class PDFAppraisalAppointment implements Serializable {
 
     public void init(){
         HttpSession session = FacesUtil.getSession(false);
-        appraisalView = new AppraisalView();
+//        appraisalView = new AppraisalView();
 
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            log.debug("workCaseId. {}",workCaseId);
-        }else if (!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        }
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
         if (!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             log.info("workCaseID: {}",workCaseId);
 
-            if (!Util.isNull(appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId))) {
-                appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId);
-            } else {
-                log.debug("--appraisalView is Null",appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId));
+            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId, statusId);
+            log.debug("--appraisalView. {}", appraisalView);
+
+            if(appraisalView == null){
+                appraisalView = new AppraisalView();
             }
-            log.debug("--appraisalView. {}",appraisalView);
         } else {
-            log.debug("--workcase is Null. {}",workCaseId);
+            log.debug("--workcase is Null. {}", workCaseId);
         }
     }
 
@@ -117,8 +115,8 @@ public class PDFAppraisalAppointment implements Serializable {
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-        if (!Util.isNull(appraisalView.getAppraisalDetailViewList()) && !Util.isZero(appraisalView.getAppraisalDetailViewList().size())){
-            log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
+        if (!Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
+            log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList().size());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();
                 report.setCount(count++);
@@ -167,8 +165,8 @@ public class PDFAppraisalAppointment implements Serializable {
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
         int count = 1;
 
-        if (Util.safetyList(appraisalView.getContactRecordDetailViewList()).size() > 0){
-            log.debug("--detailViewList. {}",detailViewList);
+        if (Util.isSafetyList(appraisalView.getContactRecordDetailViewList())){
+            log.debug("--appraisalView.getContactRecordDetailViewList(). {}",appraisalView.getContactRecordDetailViewList().size());
             for (ContactRecordDetailView view : appraisalView.getContactRecordDetailViewList()){
                 ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
                 report.setCount(count++);
@@ -186,7 +184,7 @@ public class PDFAppraisalAppointment implements Serializable {
         } else {
             ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
             contactRecordDetailViewReports.add(report);
-            log.debug("--detailViewList is Null.");
+            log.debug("--appraisalView.getContactRecordDetailViewList() is Null.");
         }
         return contactRecordDetailViewReports;
     }

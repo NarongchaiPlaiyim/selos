@@ -6,7 +6,9 @@ import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
+import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.db.master.AppraisalCompany;
 import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.master.User;
@@ -116,36 +118,27 @@ public class AppraisalAppointmentControl extends BusinessControl {
         }
     }
 
-	public AppraisalView getAppraisalAppointment(final long workCaseId, final long workCasePreScreenId){
+	public AppraisalView getAppraisalAppointment(long workCaseId, long workCasePreScreenId, long statusId){
         log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
-        if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+        if(!Util.isZero(workCaseId)){
             appraisal  = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
             customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCaseId(workCaseId);
-            if(!Util.isNull(customerAcceptance)){
-                log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance);
-                log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
-            }
+            log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance);
             contactRecordDetailList = contactRecordDetailDAO.findByWorkCaseId(workCaseId);
-            if(!Util.isNull(contactRecordDetailList)){
-                log.debug("getAppraisalAppointment by workCaseId - ContactRecordDetailList.size()[{}]", contactRecordDetailList.size());
-            }
-        }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            log.debug("getAppraisalAppointment by workCaseId - ContactRecordDetailList.size() : [{}]", contactRecordDetailList != null ? contactRecordDetailList.size() : null);
+
+        }else if(!Util.isZero(workCasePreScreenId)){
             appraisal  = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId : {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId - creditFacility : {}", newCreditFacility);
             customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreenId(workCasePreScreenId);
-            if(!Util.isNull(customerAcceptance)){
-                log.debug("getAppraisalAppointment by workCasePreScreenId - CustomerAcceptance : {}", customerAcceptance);
-                log.debug("-- CustomerAcceptance.id[{}]", customerAcceptance.getId());
-            }
+            log.debug("getAppraisalAppointment by workCasePreScreenId - CustomerAcceptance : {}", customerAcceptance);
             contactRecordDetailList = contactRecordDetailDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-            if(!Util.isNull(contactRecordDetailList)){
-                log.debug("getAppraisalAppointment by workCasePreScreenId - ContactRecordDetailList.size()[{}]", contactRecordDetailList.size());
-            }
+            log.debug("getAppraisalAppointment by workCasePreScreenId - ContactRecordDetailList.size()[{}]", contactRecordDetailList != null ? contactRecordDetailList.size() : null);
         }
 
         if(!Util.isNull(appraisal)){
@@ -154,11 +147,14 @@ public class AppraisalAppointmentControl extends BusinessControl {
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
 
             if(!Util.isNull(newCreditFacility)){
-                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
-                for(ProposeCollateralInfo newCollateral : newCollateralList){
-                    //newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
-                    newCollateral.setProposeCollateralInfoHeadList(newCollateralHeadDAO.findByCollateralProposeTypeRequestAppraisalType(newCollateral.getId(), RequestAppraisalValue.NOT_REQUEST));
+                ProposeType proposeType;
+                if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
+                    proposeType = ProposeType.P;
+                }else{
+                    proposeType = ProposeType.A;
                 }
+
+                newCollateralList = Util.safetyList(newCollateralDAO.findCollateralForAppraisalAppointment(newCreditFacility, proposeType));
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
 
@@ -186,7 +182,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
         }
     }
 
-    public void onSaveAppraisalAppointment(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId, final List<ContactRecordDetailView> contactRecordDetailViewList, final CustomerAcceptanceView cusAcceptView){
+    public void onSaveAppraisalAppointment(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId, List<ContactRecordDetailView> contactRecordDetailViewList, CustomerAcceptanceView cusAcceptView, long statusId){
         log.info("-- onSaveAppraisalAppointment");
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
             workCase = workCaseDAO.findById(workCaseId);
@@ -204,18 +200,14 @@ public class AppraisalAppointmentControl extends BusinessControl {
         log.debug("onSaveAppraisalAppointment ::: newCreditFacility : {}", newCreditFacility);
 
         if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
-
             appraisal = appraisalTransform.transformToModel(appraisalView, workCase, workCasePrescreen, getCurrentUser());
 
             //remove all appraisalContactDetailList
             List<AppraisalContactDetail> appraisalContactDetailDeleteList = Util.safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
             appraisalContactDetailDAO.delete(appraisalContactDetailDeleteList);
-
             log.debug("onSaveAppraisalAppointment ::: before persist appraisal : {}", appraisal);
             appraisalDAO.persist(appraisal);
             log.debug("onSaveAppraisalAppointment ::: after persist appraisal : {}", appraisal);
-
-
 
             if(Util.isNull(newCreditFacility)){
                 newCreditFacility = new ProposeLine();
@@ -224,100 +216,38 @@ public class AppraisalAppointmentControl extends BusinessControl {
             }
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
 
-            //From P'LK CustomerAcceptanceControl
-            CustomerAcceptance cusAccept = null;
-            //            if (cusAcceptView.getId() <= 0) { //new
-//                cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, workCasePrescreen, getCurrentUser());
-//                customerAcceptanceDAO.save(cusAccept);
-//                customerAcceptance = cusAccept;
-//            } else {
-//                cusAccept = customerAcceptanceDAO.findById(cusAcceptView.getId());
-//                cusAccept.setModifyBy(getCurrentUser());
-//                cusAccept.setModifyDate(new Date());
-//                customerAcceptanceDAO.persist(cusAccept);
-//                customerAcceptance = cusAccept;
-//            }
-
-            //Add and update first
-//            for (ContactRecordDetailView view : contactRecordDetailViewList) {
-//                if (view.isNew()) {
-//                    ContactRecordDetail model = contactRecordDetailTransform.transformToNewModel(view, getCurrentUser(), cusAccept);
-//                    contactRecordDetailDAO.save(model);
-//                } else if (view.isNeedUpdate()) {
-//                    //get from db
-//                    ContactRecordDetail model = contactRecordDetailDAO.findById(view.getId());
-//                    contactRecordDetailTransform.updateModelFromView(model, view, getCurrentUser());
-//                    contactRecordDetailDAO.persist(model);
-//                }
-//            }
-            //Delete
-//            for (ContactRecordDetailView view : contactRecordDetailViewList) {
-//                if (view.isNew())
-//                    continue;
-//                contactRecordDetailDAO.deleteById(view.getId());
-//            }
+            /*//From P'LK CustomerAcceptanceControl
+            CustomerAcceptance cusAccept = null;*/
 
             appraisalDetailViewList = Util.safetyList(appraisalView.getAppraisalDetailViewList());
             log.debug("onSaveAppraisalAppointment ::: appraisalDetailViewList : {}", appraisalDetailViewList);
 
             //remove all collateral head from list in database
             if(newCreditFacility.getId() != 0){
-                newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
-                log.debug("-- newCollateralList.size()[{}]", newCollateralList.size());
-                try {
-                    for(ProposeCollateralInfo newCollateral : newCollateralList){
-                        log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
-                        newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
-                        newCollateralHeadDAO.setAppraisalRequest(newCollateralHeadList);
-                    }
-                } catch (Exception e) {
-                    log.debug("-- Exception while call NewCollateralHeadDAO ", e);
+                ProposeType proposeType;
+                if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
+                    proposeType = ProposeType.P;
+                }else{
+                    proposeType = ProposeType.A;
                 }
-
+                newCollateralList = newCollateralDAO.findCollateralForAppraisalAppointment(newCreditFacility, proposeType);
                 //set flag 0 for all collateral
-//                try {
-//                    log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
-//                    for(NewCollateral newCollateral : newCollateralList){
-//                        log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
-//                        newCollateralHeadList = newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId());
-//                        log.debug("-- NewCollateralHeadList.size()[{}]", newCollateralHeadList.size());
-//                        if(!Util.isNull(newCollateralHeadList) && !Util.isZero(newCollateralHeadList.size())){
-//                            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-//                                log.debug("-- NewCollateralHead.id[{}]", newCollateralHead.getId());
-//                                newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-//                                log.debug("-- NewCollateralHead.AppraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
-//                                newCollateralHeadDAO.persist(newCollateralHead);
-//                                log.debug("-- Saved");
-//                            }
-//                        }
-////                    if(!Util.isNull(newCollateralHeadList) && !Util.isZero(newCollateralHeadList.size())){
-////                        newCollateralHeadDAO.persist(newCollateralHeadList);
-////                        log.debug("-- NewCollateralHeadList.size()[{}] saved", newCollateralHeadList.size());
-////                    }
-//                    }
-//
-//                } catch (Exception e) {
-//                    log.debug("-- Exception while call NewCollateralHeadDAO ", e);
-//                }
+                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
+                for(ProposeCollateralInfo newCollateral : newCollateralList){
+                    newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+                    for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    }
+                    newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    newCollateralDAO.persist(newCollateral);
+                }
             }else{
                 newCollateralList = new ArrayList<ProposeCollateralInfo>();
             }
 
             try {
-                //transform collateral head from view
                 newCollateralList.clear();
-                newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser()));
-                log.debug("onSaveAppraisalAppointment ::: before persist newCreditfacility : {}", newCreditFacility);
-                if(!Util.isNull(newCreditFacility)){
-                    newCreditFacilityDAO.persist(newCreditFacility);
-                    log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
-                }
-                log.debug("onSaveAppraisalAppointment ::: after persist newCreditfacility : {}", newCreditFacility);
-            } catch (Exception e) {
-                log.debug("-- Exception while call NewCreditFacilityDAO ", e);
-            }
-
-            try {
+                newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED));
                 log.debug("onSaveAppraisalAppointment ::: before persist newCollateralList : {}", newCollateralList);
                 if(!Util.isNull(newCollateralList) && !Util.isZero(newCollateralList.size())){
                     newCollateralDAO.persist(newCollateralList);
@@ -327,7 +257,6 @@ public class AppraisalAppointmentControl extends BusinessControl {
             } catch (Exception e) {
                 log.debug("-- Exception while call NewCollateralDAO ", e);
             }
-
 
             if(!Util.isNull(customerAcceptance) && !Util.isZero(customerAcceptance.getId())){
                 customerAcceptanceDAO.delete(customerAcceptance);

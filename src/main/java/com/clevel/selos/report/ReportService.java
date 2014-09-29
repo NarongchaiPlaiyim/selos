@@ -5,11 +5,13 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.slf4j.Logger;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
@@ -45,10 +47,13 @@ public class ReportService implements Serializable {
         log.debug("--Pring report.");
 
         try {
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
-            ServletOutputStream servletOutputStream=response.getOutputStream();
-            JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
+//            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+//            ServletOutputStream servletOutputStream=response.getOutputStream();
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            externalContext.addResponseHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+            OutputStream outputStream =  externalContext.getResponseOutputStream();
+            JasperExportManager.exportReportToPdfStream(print, outputStream);
             FacesContext.getCurrentInstance().responseComplete();
             log.debug("generatePDF completed.");
 

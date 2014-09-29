@@ -106,15 +106,6 @@
                                 <h:outputText value="#{conditionDetail.baseValue}"/>
                             </p:column>
                             <p:column style='width:50px' styleClass="center">
-                                <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                                                 process="@this"
-                                                 oncomplete="p_mandateConditionDetailDlg.show();"
-                                                 action="#{mandateFieldCondition.onOpenUpdateMandateConditionDetail}"
-                                                 update=":mandateConditionDetailDlg"
-                                                 style="margin-right:0px !important">
-                                    <f:setPropertyActionListener target="#{mandateFieldCondition.selectedMandateConDetailViewId}" value="#{conditionRowIndex}" />
-                                    <p:resetInput target=":mandateConditionDetailDlg" />
-                                </p:commandButton>
                                 <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
                                                  process="@this"
                                                  action="#{mandateFieldCondition.onDeleteMandateConditionDetail}"
