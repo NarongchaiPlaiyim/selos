@@ -306,17 +306,22 @@ public class NCBBizTransform extends BusinessTransform {
 
                                                 List<HistoryModel> historyModels = subjectAccountModel.getHistory();
                                                 if(historyModels!=null){
-                                                    for(HistoryModel historyModel : historyModels){
-                                                        if(outStandingCreditMonth == 6){
-                                                            break;
-                                                        } else {
-                                                            if(historyModel.getAmountowed()!=null){
-                                                                BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
-                                                                outStandingCredit = outStandingCredit.add(outstanding);
+                                                    int listSize = historyModels.size();
+                                                    if(listSize>0){
+                                                        for(int i=listSize-1; i>=0; i--){
+                                                            if(outStandingCreditMonth == 6){
+                                                                break;
+                                                            } else {
+                                                                HistoryModel historyModel = historyModels.get(i);
+                                                                if(historyModel.getAmountowed()!=null){
+                                                                    BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
+                                                                    outStandingCredit = outStandingCredit.add(outstanding);
+                                                                }
+                                                                outStandingCreditMonth = outStandingCreditMonth+1;
                                                             }
-                                                            outStandingCreditMonth = outStandingCreditMonth+1;
                                                         }
                                                     }
+
                                                 }
 
                                                 if(outStandingCreditMonth>0){
