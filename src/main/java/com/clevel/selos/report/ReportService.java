@@ -51,7 +51,9 @@ public class ReportService implements Serializable {
 //            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
 //            ServletOutputStream servletOutputStream=response.getOutputStream();
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            externalContext.responseReset();
             externalContext.addResponseHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+
             OutputStream outputStream =  externalContext.getResponseOutputStream();
             JasperExportManager.exportReportToPdfStream(print, outputStream);
             FacesContext.getCurrentInstance().responseComplete();
