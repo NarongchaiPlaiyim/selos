@@ -201,19 +201,19 @@ public class GenPDF extends ReportService implements Serializable {
             }
 
             StringBuilder nameOpShect = new StringBuilder();
-            nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
+            nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet");
 
             StringBuilder nameExSum = new StringBuilder();
-            nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
+            nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum");
 
             StringBuilder nameRejectLetter = new StringBuilder();
-            nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
+            nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter");
 
             StringBuilder nameAppraisal = new StringBuilder();
-            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest.pdf");
+            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest");
 
             StringBuilder nameOfferLetter = new StringBuilder();
-            nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
+            nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter");
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
