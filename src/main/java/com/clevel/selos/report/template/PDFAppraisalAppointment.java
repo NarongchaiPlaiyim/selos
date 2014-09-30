@@ -180,10 +180,6 @@ public class PDFAppraisalAppointment implements Serializable {
         return report;
     }
 
-    public static void main(String[] args) {
-        System.out.println(DateTimeUtil.getCurrentDateTimeTH(new Date()));
-    }
-
     public List<ContactRecordDetailViewReport> fillContactRecordDetailViewReport(){
         List<ContactRecordDetailViewReport> contactRecordDetailViewReports = new ArrayList<ContactRecordDetailViewReport>();
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
