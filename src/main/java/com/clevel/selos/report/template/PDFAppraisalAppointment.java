@@ -117,8 +117,10 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setAppointmentCusName(Util.checkNullString(appraisalView.getAppointmentCusName()));
             if ("0".equalsIgnoreCase(appraisalView.getCancelAppointment())){
                 report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.postpone"));
-            } else {
+            } else if("1".equalsIgnoreCase(appraisalView.getCancelAppointment())){
                 report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.abort"));
+            } else {
+                report.setCancelAppointment(SPACE);
             }
             report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
 
