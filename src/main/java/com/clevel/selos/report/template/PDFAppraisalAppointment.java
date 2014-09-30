@@ -2,6 +2,7 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
+import com.clevel.selos.businesscontrol.AppraisalRequestControl;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
@@ -44,6 +45,7 @@ public class PDFAppraisalAppointment implements Serializable {
     @Inject private AppHeaderView appHeaderView;
     @Inject private WorkCaseDAO workCaseDAO;
     @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject private AppraisalRequestControl appraisalRequestControl;
 
     private AppraisalView appraisalView;
     private long workCaseId;
@@ -73,9 +75,27 @@ public class PDFAppraisalAppointment implements Serializable {
             if(appraisalView == null){
                 appraisalView = new AppraisalView();
             }
+
+            if (!Util.isZero(workCaseId)){
+                workCase = workCaseDAO.findById(workCaseId);
+
+            } else {
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            }
         } else {
             log.debug("--workcase is Null. {}", workCaseId);
         }
+    }
+
+    private String getZoneLocation(){
+        String bdmUserId = "";
+        if (!Util.isZero(workCaseId) && !Util.isNull(workCase)){
+            bdmUserId = !Util.isNull(workCase.getCreateBy()) ? workCase.getCreateBy().getId() : "";
+        } else if (!Util.isZero(workCasePreScreenId) && !Util.isNull(workCasePrescreen)){
+            bdmUserId = !Util.isNull(workCasePrescreen.getCreateBy()) ? workCasePrescreen.getCreateBy().getId() : "";
+        }
+
+        return appraisalRequestControl.getZoneLocation(bdmUserId);
     }
 
     public AppraisalViewReport fillAppraisalDetailReport(){
@@ -97,12 +117,14 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setAppointmentCusName(Util.checkNullString(appraisalView.getAppointmentCusName()));
             if ("0".equalsIgnoreCase(appraisalView.getCancelAppointment())){
                 report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.postpone"));
-            } else {
+            } else if("1".equalsIgnoreCase(appraisalView.getCancelAppointment())){
                 report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.abort"));
+            } else {
+                report.setCancelAppointment(SPACE);
             }
             report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
 
-            report.setZoneLocation(Util.checkNullString(appraisalView.getZoneLocation()));
+            report.setZoneLocation(Util.checkNullString(getZoneLocation()));
         } else {
             log.debug("--fillAppraisalDetailReport is Null.");
         }
@@ -110,11 +132,10 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public List<AppraisalDetailViewReport> fillAppraisalDetailViewReport(String pathsub){
-//        init();
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-        if (!Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
+        if (Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
             log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList().size());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();
@@ -193,12 +214,7 @@ public class PDFAppraisalAppointment implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
-        if (!Util.isZero(workCaseId)){
-            workCase = workCaseDAO.findById(workCaseId);
 
-        } else {
-            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        }
         //Detail 1
         if (!Util.isNull(appHeaderView)){
             log.debug("--Header. {}",appHeaderView);
