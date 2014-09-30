@@ -134,15 +134,12 @@ public class GenPDF extends ReportService implements Serializable {
             if (!Util.isZero(workCaseId)){
                 cancelRejectInfo = cancelRejectInfoDAO.findByWorkCaseId(workCaseId);
             }
-            log.debug("workCaseId. {}",workCaseId);
         }else if (!Util.isZero((Long)session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             if (!Util.isZero(workCasePreScreenId)){
                 cancelRejectInfo = cancelRejectInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             }
-            log.debug("workCasePreScreenId. {}",workCasePreScreenId);
         }else{
-            log.debug("workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
             }catch (Exception ex){
@@ -157,7 +154,6 @@ public class GenPDF extends ReportService implements Serializable {
         init();
         reportView = new ReportView();        
         user = (User)session.getAttribute("user");
-        log.debug("-----Role [{}]",user.getRole().getId());
         log.debug("GenPDF onCreation and New ReportView");
         onCheckRole();
     }
@@ -195,14 +191,12 @@ public class GenPDF extends ReportService implements Serializable {
                 if(!Util.isNull(workCase)){
                     appNumber = workCase.getAppNumber();
                     statusId = workCase.getStatus().getId();
-                    log.debug("--statusId by workcase. {}",statusId);
                 }
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
                 if(!Util.isNull(workCasePrescreen)){
                     appNumber = workCasePrescreen.getAppNumber();
                     statusId = workCasePrescreen.getStatus().getId();
-                    log.debug("--statusId by workCasePrescreen. {}",statusId);
                 }
             }
 
@@ -241,11 +235,9 @@ public class GenPDF extends ReportService implements Serializable {
         // ###### Role BU and Viewer Can not print AAD Report ######
         if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
             if (Util.isNull(workCase) || checkStepApproved()){
-//                log.debug("On Request Pricing by Rold BU or Viewer");
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkPricing()){
-                log.debug("On Request Pricing by Rold BU or Viewer");
+            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
                 opshectType = true;
                 exsumType = true;
             }
@@ -261,7 +253,6 @@ public class GenPDF extends ReportService implements Serializable {
                 opshectType = true;
                 exsumType = true;
             } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
-                log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
                 exsumType = true;
             }
@@ -323,7 +314,6 @@ public class GenPDF extends ReportService implements Serializable {
             log.debug("--statusId by CANCEL CA = {}",statusId);
         } else if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
             if (Util.isZero(pdfReject_letter.getTypeNCB()) && Util.isZero(pdfReject_letter.getTypeIncome()) && Util.isZero(pdfReject_letter.getTypePolicy())){
-                log.debug("CancelCode by ExSum and CancelCode by UWResult is Null.");
                 rejectType = true;
             }
             log.debug("--statusId by Reject UW = {}",statusId);
@@ -342,10 +332,8 @@ public class GenPDF extends ReportService implements Serializable {
 
     private void checkPathReject(){
         if (pdfReject_letter.getTypeReject() == 1){
-            log.debug("--Type Reject Is One. {}",pdfReject_letter.getTypeReject());
             checkRejectGroupType();
         } else if (pdfReject_letter.getTypeReject() == 2){
-            log.debug("--Type Reject Is Two Print Template Policy Only. {}",pdfReject_letter.getTypeReject());
             templateRejectLetter(pdfReject_letter.getTypeReject());
         }
     }

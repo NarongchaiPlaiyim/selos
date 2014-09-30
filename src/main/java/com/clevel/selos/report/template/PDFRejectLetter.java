@@ -127,7 +127,6 @@ public class PDFRejectLetter implements Serializable {
             workCase = workCaseDAO.findById(workCaseId);
                 if (!Util.isNull(workCase)){
                     statusId = workCase.getStatus().getId();
-                    log.debug("--statusId from workcase. {}",statusId);
                 }
         } else if (!Util.isZero(workCasePreScreenId)){
             customers = customerDAO.findBorrowerByWorkCasePreScreenId(workCasePreScreenId);
@@ -136,7 +135,6 @@ public class PDFRejectLetter implements Serializable {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
                 if (!Util.isNull(workCasePrescreen)){
                     statusId = workCasePrescreen.getStatus().getId();
-                    log.debug("--statusId from workCasePrescreen. {}",statusId);
                 }
         }
         findCancelCodeByUWResult();
@@ -150,17 +148,13 @@ public class PDFRejectLetter implements Serializable {
         if (!Util.isNull(uwRuleResultSummary)){
            if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
                colorCode = 0;
-               log.debug("UWResultColor is Red");
            } else if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor())){
                colorCode = 1;
-               log.debug("UWResultColor is GREEN");
            } else if ((UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor())){
                colorCode = 2;
-               log.debug("UWResultColor is YELLOW");
            }
         } else {
             colorCode = 4;
-            log.debug("UWResultColor is No Result");
         }
         log.debug("--Color is value. {}",colorCode);
         return colorCode;
@@ -171,11 +165,8 @@ public class PDFRejectLetter implements Serializable {
         uwRuleResultDetails = new ArrayList<UWRuleResultDetail>();
 
         if (!Util.isNull(uwRuleResultSummary)){
-            log.debug("--UwRuleResultSummary ID. {}",uwRuleResultSummary.getId());
             if (!Util.isZero(uwRuleResultSummary.getId())){
-                log.debug("--UwRuldResult id is not Zero",uwRuleResultSummary.getId());
                 uwRuleResultDetails = uwRuleResultDetailDAO.findByUWRuleSummaryId(uwRuleResultSummary.getId());
-                log.debug("--uwRuleResultDetails. {}",uwRuleResultDetails.size());
                 if (!Util.isNull(uwRuleResultDetails)){
                     for (UWRuleResultDetail ruleResultDetail : uwRuleResultDetails){
                         if (!Util.isNull(ruleResultDetail.getRejectGroup())){
@@ -199,7 +190,6 @@ public class PDFRejectLetter implements Serializable {
         reason = new Reason();
         if (!Util.isNull(exSummary)){
             if (Util.isSafetyList(exSumDeviate)){
-                log.debug("--exSumDeviate is not null. {}",exSumDeviate.size());
                 for (ExSumDeviate sumDeviate : exSumDeviate){
                     reason = reasonDAO.findById(sumDeviate.getDeviateCode().getId());
                     if (!Util.isNull(reason.getUwRejectGroup())){
@@ -231,41 +221,31 @@ public class PDFRejectLetter implements Serializable {
         log.debug("OnCeckLogic.");
 
         if (!Util.isZero(workCaseId) || !Util.isZero(workCasePreScreenId)){
-            log.debug("--Status is value. {}",statusId);
 
             //##### status 90001
             if (statusId == StatusValue.CANCEL_CA.value()){
-                log.debug("#### CANCEL CA ####",statusId);
                 if (Util.isNull(uwRuleResultSummary) || (UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) || (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor())){
                     if (!Util.isNull(cancelRejectInfo)){
                         if (cancelCode().containsKey(cancelRejectInfo.getReason().getCode())){
-                            log.debug("Reason Code In C034-C040. [{}]",cancelRejectInfo.getReason().getCode());
                             typeReject = 2;
                         }
                     }
                 } else {
-                    log.debug("UwRuleResuleSummary Red Color in StatusId 90001. {}",uwRuleResultSummary.getUwResultColor());
                     typeReject = 1;
                 }
             }
 
             //##### status 90002/90007
             if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
-                log.debug("#### REJECT UW1/UW2 ####",statusId);
                 typeReject = 1;
-                log.debug("--rejectLetterReport. {}",rejectLetterReport);
             }
 
             //##### status 90004
             if (statusId == StatusValue.REJECT_CA.value()){
-                log.debug("#### REJECT CA ####",statusId);
                 if ((UWResultColor.GREEN).equals(uwRuleResultSummary.getUwResultColor()) || (UWResultColor.YELLOW).equals(uwRuleResultSummary.getUwResultColor())){
-                    log.debug("UwRuleResuleSummary GREEN or YELLOW Color in StatusId 90004. {}",uwRuleResultSummary.getUwResultColor());
                     typeReject = 2;
                 } else if ((UWResultColor.RED).equals(uwRuleResultSummary.getUwResultColor())){
-                    log.debug("--Result is Red on statusID 90004");
                     typeReject = 1;
-                    log.debug("UwRuleResuleSummary Red Color in StatusId 90004. {}",uwRuleResultSummary.getUwResultColor());
                 }
             }
         }
@@ -281,12 +261,10 @@ public class PDFRejectLetter implements Serializable {
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
         if(Util.safetyList(appHeaderView.getBorrowerHeaderViewList()).size() > 0){
-            log.debug("appHeaderView.getBorrowerHeaderViewList. {}",appHeaderView.getBorrowerHeaderViewList());
             for (AppBorrowerHeaderView view : appHeaderView.getBorrowerHeaderViewList()){
                 RejectLetterReport report = new RejectLetterReport();
                 report.setName(view.getBorrowerName());
                 reportList.add(report);
-                log.debug("--reportList. {}",reportList);
             }
         } else {
             RejectLetterReport report = new RejectLetterReport();
@@ -320,7 +298,6 @@ public class PDFRejectLetter implements Serializable {
         StringBuilder addressTH = null;
 
         if(!Util.isZero(workCaseId) || !Util.isZero(workCasePreScreenId)){
-            log.debug("--customers. {}",customers.size());
             if (!Util.isNull(workCase)){
                 letterReport.setAppNumber(workCase.getAppNumber());
             } else {
@@ -329,7 +306,6 @@ public class PDFRejectLetter implements Serializable {
 
             for (Customer view : customers){
                 Customer customer = customerDAO.findById(view.getId());
-                log.debug("--getAddressesList. {}",customer.getAddressesList().size());
 
                 if(!Util.isNull(customer.getAddressesList()) && customer.getAddressesList().size() > 0){
                     addressTH = new StringBuilder();
@@ -393,8 +369,6 @@ public class PDFRejectLetter implements Serializable {
 
             //PHONE_TEAM From NCB Reject Letter
             letterReport.setTeam_phone(!Util.isNull(userTeam.getTeam_phone()) ? userTeam.getTeam_phone() : "-");
-            log.debug("--them_phone. {}",userTeam.getTeam_phone());
-            log.debug("--stringBuilder. {}",stringBuilder.toString());
         }
         return letterReport;
     }
