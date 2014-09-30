@@ -13,6 +13,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@RequestScoped
 public class MandateFieldValidationControl extends BusinessControl{
 
     @Inject
@@ -193,7 +196,7 @@ public class MandateFieldValidationControl extends BusinessControl{
 
     public MandateFieldValidationResult getMandateFieldValidationResult(){
         logger.debug("-- begin getMandateFieldValidationResult --");
-        if(mandateFieldValidationResult == null){
+        //if(mandateFieldValidationResult == null){
             logger.debug("-- mandateFieldValidationResult is NULL, start to combine a message");
             mandateFieldValidationResult = new MandateFieldValidationResult();
             List<MandateFieldMessageView> _tmpMessageViewList = new ArrayList<MandateFieldMessageView>();
@@ -209,7 +212,7 @@ public class MandateFieldValidationControl extends BusinessControl{
                 mandateFieldValidationResult.setActionResult(ActionResult.FAILED);
                 mandateFieldValidationResult.setMandateFieldMessageViewList(_tmpMessageViewList);
             }
-        }
+        //}
         logger.debug("-- end getMandateFieldValidationResult return: {}", mandateFieldValidationResult);
 
         return mandateFieldValidationResult;
@@ -232,6 +235,7 @@ public class MandateFieldValidationControl extends BusinessControl{
                     logger.debug("combineMandateResult, Field Result: {}", fieldResult.getMessage());
                 }
             }
+
         }
 
         for(ConditionResult conditionResult : classResult.conditionResultMap.values()){
@@ -676,7 +680,7 @@ public class MandateFieldValidationControl extends BusinessControl{
         Boolean isPassNotMatched = null;
 
         ClassResult parentClassResult = null;
-        Boolean isDepended = null;
+        Boolean isDepended = Boolean.FALSE;
 
         public FieldResult(MandateFieldView in){
             mandateFieldView = in;
