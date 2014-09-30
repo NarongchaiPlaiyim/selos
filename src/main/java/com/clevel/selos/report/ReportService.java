@@ -65,9 +65,7 @@ public class ReportService implements Serializable {
     private String getUserAgent(ExternalContext externalContext){
         Map<String, String> requestHeaderMap = externalContext.getRequestHeaderMap();
         for (String key : requestHeaderMap.keySet()){
-//            log.debug("key by UserAgent. {}",key);
             if (key.equalsIgnoreCase("User-Agent")){
-//                log.debug("UserAgent. {}",requestHeaderMap.get(key));
                 return requestHeaderMap.get(key);
             }
         }

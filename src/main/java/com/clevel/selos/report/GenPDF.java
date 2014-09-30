@@ -249,7 +249,6 @@ public class GenPDF extends ReportService implements Serializable {
         if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
             readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
             if (Util.isNull(workCase) || checkStepApproved()){
-//                log.debug("On Request Pricing by Rold UW or OPS");
                 opshectType = true;
                 exsumType = true;
             } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
@@ -462,8 +461,6 @@ public class GenPDF extends ReportService implements Serializable {
     public void onPrintRejectLetter() throws Exception {
         log.debug("--onPrintRejectLetter");
         HashMap map = new HashMap<String, Object>();
-
-//        pdfReject_letter.init();
 
         map.put("path", pathsub);
         map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
