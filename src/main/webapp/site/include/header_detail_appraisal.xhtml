@@ -1,0 +1,105 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<div id="header_detail">
+<div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
+<div id="header_button_bar">
+<p:panel id="header_panel" styleClass="panel">
+    <!-- Check Mandate Doc for Maker -->
+    <p:commandButton id="btnChkMandateAppraisalRequest" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     disabled="true">
+    </p:commandButton>
+    <p:commandButton id="btnCancelRequestAppraisal" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
+                     onclick="PF('confirmCancelReqAppraisal').show()"/>
+    <p:confirmDialog header="Confirmation" message="Please click 'OK' to Cancel Request Appraisal." styleClass="left"
+                     closable="false" closeOnEscape="false"
+                     icon="ui-icon-alert"
+                     widgetVar="confirmCancelReqAppraisal" global="false" showEffect="fade">
+        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                         actionListener="#{headerController.onCancelParallelRequestAppraisal()}"
+                         process="@this" widgetVar="conRetAADMSaveBtn"
+                         oncomplete="confirmCancelReqAppraisal.hide();"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmCancelReqAppraisal').hide()"
+                         styleClass="ui-confirmdialog-no"
+                         widgetVar="conRetAADMCancelBtn"/>
+    </p:confirmDialog>
+    <!-- Request Appraisal Prescreen -->
+    <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestForAppraisal')}" title="#{msg.get('app.header.button.requestForAppraisal')}" styleClass="blueButton"
+                     action="#{headerController.onOpenSubmitParallelRequestAppraisal}"
+                     update=":frmMain:requestParallelAppraisal_Panel"/>
+</p:panel>
+</div>
+<div class="clear"></div>
+<div id="header_information">
+    <ui:include src="header_information.xhtml"/>
+</div>
+</div>
+<div class="clear"></div>
+<!-- Start for Message Box -->
+<p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog" closable="false"
+                     header="#{headerController.messageHeader}">
+        <f:facet name="message">
+            <h:outputText value="#{headerController.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         onclick="showWindowsScrollBar()"
+                         process="@this"
+                         update=":frmMain"
+                         oncomplete="msgBoxBaseMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+<p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
+    <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="mandateFieldDialog" resizable="false"
+              header="#{headerController.messageHeader}" closable="false" modal="true">
+        <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
+    </p:dialog>
+</p:panel>
+<p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog" closable="false"
+                     header="#{headerController.messageHeader}">
+        <f:facet name="message">
+            <h:outputText value="#{headerController.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         onclick="PF('blockUI').show()"
+                         action="#{headerController.onGoToInbox}"/>
+    </p:confirmDialog>
+</p:panel>
+<p:panel id="msgBoxBaseRefreshPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxBaseRefreshDialog" widgetVar="msgBoxBaseRefreshDlg" styleClass="messageDialog"
+                     header="#{headerController.messageHeader}" closable="false">
+        <f:facet name="message">
+            <h:outputText value="#{headerController.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         process="@this"
+                         onclick="reload();"/>
+    </p:confirmDialog>
+</p:panel>
+<p:confirmDialog id="msgBoxNoPermissionDialog" widgetVar="msgBoxNoPermissionDlg" styleClass="messageDialog"
+                 header="Warning." closable="false">
+    <f:facet name="message">
+        <h:outputText value="You don't have permission to access this page. " escape="false"/>
+        <br/><br/>
+        <h:outputText value="Click 'OK' to redirect to Inbox. " escape="false"/>
+    </f:facet>
+    <p:commandButton value="OK"
+                     process="@this"
+                     action="#{headerController.onGoToInbox}"/>
+</p:confirmDialog>
+<p:panel id="requestParallelAppraisal_Panel" styleClass="panel">
+    <p:dialog id="requestParallelAppraisalDialog" widgetVar="requestParallelAppraisalDlg" header="Request for Appraisal"
+              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              modal="true" width="430" height="160" closable="false">
+        <ui:include src="/site/dialog/submitReqAppraisal.xhtml"/>
+    </p:dialog>
+</p:panel>
+</ui:composition>

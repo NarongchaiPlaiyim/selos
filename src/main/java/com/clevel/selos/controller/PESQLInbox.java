@@ -12,6 +12,7 @@ import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.ParallelAppraisalStatus;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -307,7 +308,13 @@ public class PESQLInbox implements Serializable
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
+            String landingPage;
+            log.debug("parallelRequestAppraisal : {}", parallelRequestAppraisal);
+            if(parallelRequestAppraisal == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                landingPage = "/site/appraisalRequest.jsf";
+            }else {
+                landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
+            }
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 

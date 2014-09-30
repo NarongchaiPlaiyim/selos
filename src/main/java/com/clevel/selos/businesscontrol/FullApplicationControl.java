@@ -17,9 +17,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.history.SubmitInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.UWRuleResultDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
@@ -1042,13 +1040,10 @@ public class FullApplicationControl extends BusinessControl {
         }
     }*/
 
-    public void requestAppraisal(AppraisalView appraisalView, long workCasePreScreenId, long workCaseId, long statusId) throws Exception{
+    public void requestAppraisal(long workCasePreScreenId, long workCaseId, long stepId) throws Exception{
         //Update Request Appraisal Flag
         WorkCasePrescreen workCasePrescreen;
         WorkCase workCase;
-        String appNumber = "";
-        ProductGroup productGroup = null;
-        RequestType requestType = null;
 
         //Create WorkCaseAppraisal
         WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(workCasePreScreenId, workCaseId);
@@ -1074,15 +1069,17 @@ public class FullApplicationControl extends BusinessControl {
             throw new Exception("Exception while Create Work Item for Appraisal.");
         }
 
+        ProposeLine newCreditFacility = null;
+
         if(workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
             if(workCasePrescreen != null){
                 workCasePrescreen.setRequestAppraisal(1);
-                appNumber = workCasePrescreen.getAppNumber();
-                productGroup = workCasePrescreen.getProductGroup();
-                requestType = workCasePrescreen.getRequestType();
+                workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTED_PARALLEL.value());
                 workCasePrescreenDAO.persist(workCasePrescreen);
+
+                newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             } else{
                 throw new Exception("exception while request appraisal, cause can not find data from prescreen");
             }
@@ -1091,10 +1088,10 @@ public class FullApplicationControl extends BusinessControl {
 
             if(workCase != null){
                 workCase.setRequestAppraisal(1);
-                appNumber = workCase.getAppNumber();
-                productGroup = workCase.getProductGroup();
-                requestType = workCase.getRequestType();
+                workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTED_PARALLEL.value());
                 workCaseDAO.persist(workCase);
+
+                newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
             } else{
                 throw new Exception("exception while request appraisal, cause can not find data from full application");
             }
@@ -1104,9 +1101,30 @@ public class FullApplicationControl extends BusinessControl {
         }
         log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
 
+        ProposeType proposeType;
+        if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            proposeType = ProposeType.P;
+        }else{
+            proposeType = ProposeType.A;
+        }
+
+        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
+            for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
+                proposeCol.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                if(proposeCol.getProposeCollateralInfoHeadList() != null && proposeCol.getProposeCollateralInfoHeadList().size() > 0){
+                    for(ProposeCollateralInfoHead proposeColHead : proposeCol.getProposeCollateralInfoHeadList()){
+                        if(proposeColHead.getAppraisalRequest() == RequestAppraisalValue.READY_FOR_REQUEST.value()) {
+                            proposeColHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                        }
+                    }
+                }
+                newCollateralDAO.persist(proposeCol);
+            }
+        }
         //Save Appraisal Request Detail
-        appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
-        log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
+        //appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
+        //log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
     }
 
     //Request appraisal after Customer Acceptance
@@ -1137,7 +1155,7 @@ public class FullApplicationControl extends BusinessControl {
         String appNumber = "";
         ProductGroup productGroup = null;
         RequestType requestType = null;
-        log.debug("requestAppraisal ::: start...");
+        log.debug("requestAppraisal ::: start... workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
         if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             log.debug("requestAppraisal ::: getAppNumber from workCasePrescreen : {}", workCasePrescreen);
@@ -1590,6 +1608,19 @@ public class FullApplicationControl extends BusinessControl {
         return authorizationDOAList;
     }
 
+    public void cancelParallelRequestAppraisal(long workCasePreScreenId, long workCaseId){
+        log.debug("cancelParallelRequestAppraisal : workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
+        if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.NO_REQUEST.value());
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        }else if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.NO_REQUEST.value());
+            workCaseDAO.persist(workCase);
+        }
+    }
+
     public void cancelRequestAppraisal(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_APPRAISAL.getVal(), getReasonDescription(reasonId), remark);
     }
@@ -1763,12 +1794,9 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
-    public void requestAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
-
-    }
-
     public void requestParallelAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
         log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+
         if(!Util.isZero(workCaseId)){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTING_PARALLEL.value());
@@ -1778,6 +1806,9 @@ public class FullApplicationControl extends BusinessControl {
             workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTING_PARALLEL.value());
             workCasePrescreenDAO.persist(workCasePrescreen);
         }
+
+        //Change Appraisal Status = REQUESTED
+
     }
 
     public void updateTimeOfCheckCriteria(long workCaseId, long stepId){

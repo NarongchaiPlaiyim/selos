@@ -74,19 +74,17 @@
     <p:commandButton id="btnReqApprPreScreenRedirect" value="#{msg.get('app.header.button.requestAppraisal')}2" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      disabled="#{not headerController.canRequestAppraisal}"
-                     update=":frmMain:confirmReqParallelAppraisal"
                      onclick="PF('confirmReqParallelAppraisal').show()">
     </p:commandButton>
     <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request Parallel Appraisal" styleClass="left"
-                     icon="ui-icon-alert"
-                     widgetVar="confirmReqParallelAppraisal" global="false" showEffect="fade"
-                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}">
+                     icon="ui-icon-alert" closable="false"
+                     widgetVar="confirmReqParallelAppraisal" global="false" showEffect="fade">
         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                          actionListener="#{headerController.onRequestParallelAppraisal()}"
                          process="@this" widgetVar="subParallelOkBtn"
                          oncomplete="confirmReqParallelAppraisal.hide(); subParallelOkBtn.enable(); subParallelCancelBtn.enable()"
-                         onclick="subParallelOkBtn.disable(); subParallelCancelBtn.disable()"/>
+                         onclick="PF('blockUI').show(); subParallelOkBtn.disable(); subParallelCancelBtn.disable()"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmReqParallelAppraisal').hide()"
                          styleClass="ui-confirmdialog-no"
                          widgetVar="subParallelCancelBtn"/>

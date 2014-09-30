@@ -183,6 +183,7 @@ public class AppraisalRequestControl extends BusinessControl {
                 newCreditFacility = new ProposeLine();
                 newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
                 newCreditFacility.setWorkCase(workCase);
+                newCreditFacilityDAO.persist(newCreditFacility);
             }
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
 
@@ -196,14 +197,16 @@ public class AppraisalRequestControl extends BusinessControl {
             }
 
             //set flag 0 for all collateral
-            log.debug("onSaveAppraisalRequest ::: newCollateralList from database : {}", newCollateralList);
-            for(ProposeCollateralInfo newCollateral : newCollateralList){
-                newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
-                for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+            if(!Util.isZero(newCreditFacility.getId())) {
+                log.debug("onSaveAppraisalRequest ::: newCollateralList from database : {}", newCollateralList);
+                for (ProposeCollateralInfo newCollateral : newCollateralList) {
+                    newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+                    for (ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList) {
+                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    }
+                    newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    newCollateralDAO.persist(newCollateral);
                 }
-                newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                newCollateralDAO.persist(newCollateral);
             }
 
             //transform collateral head from view
