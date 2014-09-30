@@ -129,8 +129,6 @@ public class DBRControl extends BusinessControl {
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
         }
 
-        dbr.setDbrInterest(baseRateControl.getDBRInterest());
-
         DBRView dbrView = dbrTransform.transformToView(dbr);
 
         return dbrView;
@@ -138,6 +136,11 @@ public class DBRControl extends BusinessControl {
 
     private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews) throws Exception{
         log.debug("Begin calculateDBR");
+        if(dbrView.getDbrMarketableFlag() == 2) {
+            dbrView.setDbrInterest(baseRateControl.getDBRInterest());
+        } else {
+            dbrView.setDbrInterest(baseRateControl.getMRRValue());
+        }
         DBR dbr = dbrTransform.transformToModel(dbrView, workCase, getCurrentUser());
         List<DBRDetail> dbrDetails = dbrDetailTransform.getDbrDetailModels(dbrView.getDbrDetailViews(), getCurrentUser(), dbr);
 
