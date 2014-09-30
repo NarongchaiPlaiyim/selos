@@ -297,13 +297,11 @@ public class PostAppBusinessControl extends BusinessControl {
 		log.debug("_Before_3029_GenerateAgreement");
 		String appointDateStr = "";
 		String mortgageRequired = "N";
-		if (actionId == ACTION_SUBMIT) {
-			if (mortgageInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
-				mortgageRequired = "Y";
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		if (mortgageInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
+			mortgageRequired = "Y";
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		
 		fields.put("AppointmentDate",appointDateStr);
@@ -312,59 +310,54 @@ public class PostAppBusinessControl extends BusinessControl {
 	private void _Before_3033_ConfirmMortgage(WorkCase workCase,long actionId, HashMap<String, String> fields) {
 		log.debug("_Before_3033_ConfirmMortgage");
 		String appointDateStr = "";
-		if (actionId == ACTION_SUBMIT) {
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		fields.put("AppointmentDate",appointDateStr);
 	}
 	private void _Before_3035_ConfirmSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		log.debug("_Before_3035_ConfirmSign");
 		String collectFee = "N";
-		if (actionId == ACTION_SUBMIT) {
-			//Checking from collect fee and is od or tcg ?
-			BigDecimal grandTotalAgreement = BigDecimal.ZERO;
-			List<List<FeeCollectionDetailView>> details = feeCalculationControl.getFeeCollectionDetails(workCase.getId());
-			for (List<FeeCollectionDetailView> detailList : details) {
-				if (detailList.isEmpty())
-					continue;
-				FeeCollectionDetailView firstView = detailList.get(0);
-				if (!firstView.isAgreementSign()) {
-					continue;
-				}
-				for (int i=0;i<detailList.size();i++) {
-					FeeCollectionDetailView view = detailList.get(i);
-					if (view.getAmount() != null)
-						grandTotalAgreement = grandTotalAgreement.add(view.getAmount());
-				}
+		//Checking from collect fee and is od or tcg ?
+		BigDecimal grandTotalAgreement = BigDecimal.ZERO;
+		List<List<FeeCollectionDetailView>> details = feeCalculationControl.getFeeCollectionDetails(workCase.getId());
+		for (List<FeeCollectionDetailView> detailList : details) {
+			if (detailList.isEmpty())
+				continue;
+			FeeCollectionDetailView firstView = detailList.get(0);
+			if (!firstView.isAgreementSign()) {
+				continue;
 			}
-			if (grandTotalAgreement.compareTo(BigDecimal.ZERO) > 0) {
-				//Checking from open account
-				collectFee = "Y";
-				List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
-				if (accounts != null && !accounts.isEmpty()) {
-					for (OpenAccount account : accounts) {
-						List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
-						if (purposes != null && !purposes.isEmpty()) {
-							boolean isOD = false;
-							boolean isTCG = false;
-							for (OpenAccountPurpose purpose : purposes) {
-								if (purpose.getAccountPurpose().isForOD())
-									isOD = true;
-								if (purpose.getAccountPurpose().isForTCG())
-									isTCG = true;
-							}
-							if (isOD && isTCG) {
-								collectFee = "N";
-								break;
-							}
+			for (int i=0;i<detailList.size();i++) {
+				FeeCollectionDetailView view = detailList.get(i);
+				if (view.getAmount() != null)
+					grandTotalAgreement = grandTotalAgreement.add(view.getAmount());
+			}
+		}
+		if (grandTotalAgreement.compareTo(BigDecimal.ZERO) > 0) {
+			//Checking from open account
+			collectFee = "Y";
+			List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
+			if (accounts != null && !accounts.isEmpty()) {
+				for (OpenAccount account : accounts) {
+					List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
+					if (purposes != null && !purposes.isEmpty()) {
+						boolean isOD = false;
+						boolean isTCG = false;
+						for (OpenAccountPurpose purpose : purposes) {
+							if (purpose.getAccountPurpose().isForOD())
+								isOD = true;
+							if (purpose.getAccountPurpose().isForTCG())
+								isTCG = true;
+						}
+						if (isOD && isTCG) {
+							collectFee = "N";
+							break;
 						}
 					}
 				}
 			}
-			
 		}
 		fields.put("CollecFeeRequired", collectFee);
 	}
@@ -372,21 +365,17 @@ public class PostAppBusinessControl extends BusinessControl {
 	private void _Before_3036_RegenAgree(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		log.debug("_Before_3036_RegenAgree");
 		String appointDateStr = "";
-		if (actionId == ACTION_SUBMIT) {
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		fields.put("AppointmentDate", appointDateStr);
 	}
 	private void _Before_3038_ReviewSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		log.debug("_Before_3038_ReviewSign");
 		String pledgeRequired = "N";
-		if (actionId == ACTION_SUBMIT) {
-			if (pledgeInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
-				pledgeRequired = "Y";
-		}
+		if (pledgeInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
+			pledgeRequired = "Y";
 		fields.put("PledgeRequired", pledgeRequired);
 	}
 	private void _Before_3045_ReviewPerfection(WorkCase workCase,long actionId,HashMap<String,String> fields) throws Exception {
@@ -439,11 +428,9 @@ public class PostAppBusinessControl extends BusinessControl {
 	private void _Before_3046_RegenAgree_PerfectReview(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		log.debug("_Before_3046_RegenAgree_PerfectReview");
 		String appointDateStr = "";
-		if (actionId == ACTION_SUBMIT) {
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		fields.put("AppointmentDate", appointDateStr);
 	}
@@ -452,12 +439,10 @@ public class PostAppBusinessControl extends BusinessControl {
 		log.debug("_Before_3049_SetupLimit");
 		String disbursementRequired = "N";
 		String basicCheckRequired = "N";
-		if (actionId == ACTION_SUBMIT) {
-			BigDecimal disbursementAmt = disbursementDAO.getTotalDisbursementAmount(workCase.getId());
-			if (disbursementAmt != null && disbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
-				disbursementRequired = "Y";
-			}	
-		}
+		BigDecimal disbursementAmt = disbursementDAO.getTotalDisbursementAmount(workCase.getId());
+		if (disbursementAmt != null && disbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
+			disbursementRequired = "Y";
+		}	
 		
 		//TODO -	BasicConditionCheckRequired
 		
