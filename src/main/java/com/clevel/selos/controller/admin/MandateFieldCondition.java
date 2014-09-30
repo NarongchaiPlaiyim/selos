@@ -97,10 +97,13 @@ public class MandateFieldCondition implements Serializable {
 
     public void onOpenAddMandateCondition(){
         logger.info("-- begin onOpenAddMandateCondition");
+        resetCon();
+        resetConDetail();
         wrkMandateConditionView = new MandateFieldConditionView();
         wrkMandateConditionView.setMandateConditionType(MandateConditionType.BASE);
         wrkMandateConditionView.setDependType(MandateDependType.NO_DEPENDENCY);
         wrkMandateConditionView.setConditionDetailViewList(new ArrayList<MandateFieldConditionDetailView>());
+
         logger.info("-- end onOpenAddMandateCondition");
     }
 
@@ -327,22 +330,32 @@ public class MandateFieldCondition implements Serializable {
     private void _loadDependConditionList(MandateDependConType mandateDependConType){
         dependConditionList = new ArrayList<SelectItem>();
         if(mandateDependConType == MandateDependConType.INTERNAL){
+            int countIndex = 0;
             for(MandateFieldConditionView conditionView : mandateFieldConViewList){
                 if(!conditionView.getName().equals(wrkMandateConditionView.getName())){
                     SelectItem selectItem = new SelectItem();
                     selectItem.setLabel(conditionView.getName());
-                    selectItem.setValue(mandateFieldConViewList.indexOf(conditionView));
+                    //selectItem.setValue(mandateFieldConViewList.indexOf(conditionView));
                     logger.debug("condition to add: {}", selectItem);
                     dependConditionList.add(selectItem);
+                    if(wrkMandateConditionView.getDependCondition() != null && conditionView.getName().equals(wrkMandateConditionView.getDependCondition().getName())){
+                        selectedMandateDependCondViewId = countIndex;
+                    }
                 }
+                countIndex++;
             }
         } else if(mandateDependConType == MandateDependConType.EXTERNAL){
+            int countIndex = 0;
             for(MandateFieldConditionView conditionView : externalMandateFieldConViewList){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(conditionView.getName());
                 selectItem.setValue(externalMandateFieldConViewList.indexOf(conditionView));
                 logger.debug("condition to add: {}", selectItem);
                 dependConditionList.add(selectItem);
+                if(wrkMandateConditionView.getDependCondition() != null && conditionView.getName().equals(wrkMandateConditionView.getDependCondition().getName())){
+                    selectedMandateDependCondViewId = countIndex;
+                }
+                countIndex++;
             }
         }
     }
