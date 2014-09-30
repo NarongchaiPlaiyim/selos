@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
+import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
@@ -137,7 +138,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
     }
 
-    public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId){
+    public void onSaveAppraisalRequest(AppraisalView appraisalView,long workCaseId, long workCasePreScreenId, long statusId){
         log.info("-- onSaveAppraisalRequest ::: workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
@@ -152,6 +153,14 @@ public class AppraisalRequestControl extends BusinessControl {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             workCase = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }
+
+        //remove all collateral head from list in database
+        ProposeType proposeType;
+        if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
+            proposeType = ProposeType.P;
+        }else{
+            proposeType = ProposeType.A;
         }
 
         log.debug("onSaveAppraisalRequest ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
@@ -199,7 +208,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
             //transform collateral head from view
             newCollateralList.clear();
-            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, currentUser, RequestAppraisalValue.READY_FOR_REQUEST));
+            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, currentUser, RequestAppraisalValue.READY_FOR_REQUEST, proposeType));
             /*log.debug("onSaveAppraisalRequest ::: before persist newCreditfacility : {}", newCreditFacility);
             newCreditFacilityDAO.persist(newCreditFacility);
             log.debug("onSaveAppraisalRequest ::: after persist newCreditfacility : {}", newCreditFacility);*/

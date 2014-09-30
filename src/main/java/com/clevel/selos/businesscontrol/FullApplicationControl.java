@@ -1042,7 +1042,7 @@ public class FullApplicationControl extends BusinessControl {
         }
     }*/
 
-    public void requestAppraisal(AppraisalView appraisalView, long workCasePreScreenId, long workCaseId) throws Exception{
+    public void requestAppraisal(AppraisalView appraisalView, long workCasePreScreenId, long workCaseId, long statusId) throws Exception{
         //Update Request Appraisal Flag
         WorkCasePrescreen workCasePrescreen;
         WorkCase workCase;
@@ -1105,7 +1105,7 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
 
         //Save Appraisal Request Detail
-        appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
+        appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
         log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
     }
 
@@ -1672,8 +1672,16 @@ public class FullApplicationControl extends BusinessControl {
                 }
 
                 List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                //Add default account name to check CSI
+                AccountInfoName accountInfoName = new AccountInfoName();
+                accountInfoName.setNameTh(customerInfoView.getFirstNameTh());
+                accountInfoName.setNameEn(customerInfoView.getFirstNameEn());
+                accountInfoName.setSurnameTh(customerInfoView.getLastNameTh());
+                accountInfoName.setSurnameEn(customerInfoView.getLastNameEn());
+                accountInfoNameList.add(accountInfoName);
+
                 for(CustomerAccountName customerAccountName : customerAccountNameList){
-                    AccountInfoName accountInfoName = new AccountInfoName();
+                    accountInfoName = new AccountInfoName();
 
                     accountInfoName.setNameTh(customerAccountName.getNameTh());
                     accountInfoName.setNameEn(customerAccountName.getNameEn());

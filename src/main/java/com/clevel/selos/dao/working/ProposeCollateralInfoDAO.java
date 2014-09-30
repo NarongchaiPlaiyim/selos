@@ -59,6 +59,16 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         return proposeCollateralInfoList;
     }
 
+    public List<ProposeCollateralInfo> findCollateralForAppraisal(ProposeLine proposeLine, ProposeType proposeType){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("proposeLine", proposeLine));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.addOrder(Order.asc("id"));
+        List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
+
+        return proposeCollateralInfoList;
+    }
+
     public List<ProposeCollateralInfo> findNewCollateralByNewCreditFacility(ProposeLine proposeLine) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", proposeLine));

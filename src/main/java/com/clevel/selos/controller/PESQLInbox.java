@@ -245,6 +245,7 @@ public class PESQLInbox implements Serializable
         long wrkCaseAppraisalId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
+        int parallelRequestAppraisal = 0;
         int fetchType = Util.parseInt(inboxViewSelectItem.getFetchType(), 0);
         String appNumber = Util.parseString(inboxViewSelectItem.getApplicationno(), "");
         String queueName = Util.parseString(inboxViewSelectItem.getQueuename(), "0");
@@ -276,10 +277,12 @@ public class PESQLInbox implements Serializable
             if(!Util.isNull(workCase)){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
+                parallelRequestAppraisal = workCase.getParallelAppraisalFlag();
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                parallelRequestAppraisal = workCasePrescreen.getParallelAppraisalFlag();
             }
 
             if(Util.isTrue(requestAppraisalFlag)){
@@ -291,6 +294,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("parallelRequestAppraisal", parallelRequestAppraisal);
             session.setAttribute("wobNumber", wobNumber);
             session.setAttribute("statusId", statusId);
             session.setAttribute("fetchType", fetchType);

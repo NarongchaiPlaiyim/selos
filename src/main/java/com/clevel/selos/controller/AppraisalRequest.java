@@ -72,6 +72,7 @@ public class AppraisalRequest extends BaseController {
     private long workCaseId;
     private long workCasePreScreenId;
     private long stepId;
+    private long statusId;
     private AppraisalView appraisalView;
 
     private AppraisalDetailView appraisalDetailView;
@@ -110,7 +111,8 @@ public class AppraisalRequest extends BaseController {
         contactFlag2 = false;
         contactFlag3 = false;
 
-        stepId = (Long)session.getAttribute("stepId");
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
     }
@@ -123,7 +125,7 @@ public class AppraisalRequest extends BaseController {
             stepId = getCurrentStep(session);
             if(!(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_MAKER.value() ||
                     stepId == StepValue.FULLAPP_BDM.value() || stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value() ||
-                        stepId == StepValue.REQUEST_APPRAISAL_RETURN.value())){
+                        stepId == StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId == StepValue.REQUEST_APPRAISAL.value())){
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
 
@@ -159,7 +161,7 @@ public class AppraisalRequest extends BaseController {
             }
 
             ProposeType proposeType;
-            if(stepId != StepValue.CUSTOMER_ACCEPTANCE_PRE.value()){
+            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
                 proposeType = ProposeType.P;
             }else{
                 proposeType = ProposeType.A;
@@ -254,7 +256,7 @@ public class AppraisalRequest extends BaseController {
                 try{
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");
