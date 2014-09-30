@@ -46,7 +46,7 @@ public class DBR implements Serializable {
     @Column(name = "dbr_before_request")
     private BigDecimal dbrBeforeRequest;
 
-    @Column(name = "dbr_interest")
+    @Column(name = "dbr_interest", scale = 3)
     private BigDecimal dbrInterest;
 
     @Column(name ="final_dbr")

@@ -136,7 +136,7 @@ public class DBRControl extends BusinessControl {
 
     private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews) throws Exception{
         log.debug("Begin calculateDBR");
-        if(dbrView.getDbrMarketableFlag() == 2) {
+        if(dbrView.getDbrMarketableFlag() != 2) {
             dbrView.setDbrInterest(baseRateControl.getDBRInterest());
         } else {
             dbrView.setDbrInterest(baseRateControl.getMRRValue());
