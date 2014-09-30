@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
@@ -26,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MandateFieldControl extends BusinessControl {
     private static final long serialVersionUID = -4625744349595576016L;
     @Inject
-    @SELOS
+    @ADMIN
     private Logger logger;
 
     public static final String PACKAGE_NAME = "com.clevel.selos.model.db.working";
