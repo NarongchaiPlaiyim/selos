@@ -103,7 +103,6 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
 
             report.setZoneLocation(Util.checkNullString(appraisalView.getZoneLocation()));
-            log.debug("--fillAppraisalDetailReport. {}",report);
         } else {
             log.debug("--fillAppraisalDetailReport is Null.");
         }
@@ -127,7 +126,6 @@ public class PDFAppraisalAppointment implements Serializable {
                 report.setNumberOfDocuments(view.getNumberOfDocuments());
                 appraisalDetailViewReportList.add(report);
             }
-            log.debug("--appraisalDetailViewReportList. {}",appraisalDetailViewReportList);
         } else {
             AppraisalDetailViewReport report = new AppraisalDetailViewReport();
             report.setPath(pathsub);
