@@ -511,6 +511,7 @@ public class BRMSControl extends BusinessControl {
             }
         }
         applicationInfo.setCustomerInfoList(customerInfoList);
+        applicationInfo.setExistingSMECustomer(getRadioBoolean(basicInfo.getExistingSMECustomer()));
 
         logger.debug("number of guarantor ({})", numberOfGuarantor);
         if(mainBorrower != null && mainBorrower.getId() == BorrowerType.JURISTIC.value() && numberOfGuarantor == 0){
