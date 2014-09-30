@@ -414,7 +414,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
-        generatePDF(pathExsum, map, reportView.getNameReportExSum(),null);
+        generatePDF(pathExsum, map, reportView.getNameReportExSum());
     }
 
     public void onPrintDecisionReport() throws Exception {
@@ -455,7 +455,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
         map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
 
-        generatePDF(pathDecision, map, reportView.getNameReportOpShect(),null);
+        generatePDF(pathDecision, map, reportView.getNameReportOpShect());
     }
 
     public void onPrintRejectLetter() throws Exception {
@@ -466,7 +466,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
         map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
-        generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter(),null);
+        generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter());
     }
 
     public void onPrintAppraisal() throws Exception {
@@ -481,7 +481,7 @@ public class GenPDF extends ReportService implements Serializable {
     map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
     map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
-    generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal(),null);
+    generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
 }
 
     public void onPrintOfferletter() throws Exception {
@@ -498,7 +498,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFeecalculationNonAgreement",pdfOfferLetter.fillFeecalculationNonAgreement());
         map.put("fillDisbursment",pdfOfferLetter.fillDisbursment());
 
-        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter(),null);
+        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter());
     }
 
     public void templateRejectLetter(int type){

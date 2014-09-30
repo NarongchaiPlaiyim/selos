@@ -30,7 +30,7 @@ public class ReportService implements Serializable {
 
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
 
