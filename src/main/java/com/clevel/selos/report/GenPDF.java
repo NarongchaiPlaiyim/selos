@@ -244,7 +244,7 @@ public class GenPDF extends ReportService implements Serializable {
 //                log.debug("On Request Pricing by Rold BU or Viewer");
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkPricing()){
+            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
                 log.debug("On Request Pricing by Rold BU or Viewer");
                 opshectType = true;
                 exsumType = true;
