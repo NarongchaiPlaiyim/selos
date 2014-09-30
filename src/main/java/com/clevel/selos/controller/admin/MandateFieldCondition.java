@@ -336,6 +336,7 @@ public class MandateFieldCondition implements Serializable {
                     SelectItem selectItem = new SelectItem();
                     selectItem.setLabel(conditionView.getName());
                     //selectItem.setValue(mandateFieldConViewList.indexOf(conditionView));
+                    selectItem.setValue(countIndex);
                     logger.debug("condition to add: {}", selectItem);
                     dependConditionList.add(selectItem);
                     if(wrkMandateConditionView.getDependCondition() != null && conditionView.getName().equals(wrkMandateConditionView.getDependCondition().getName())){
@@ -349,7 +350,8 @@ public class MandateFieldCondition implements Serializable {
             for(MandateFieldConditionView conditionView : externalMandateFieldConViewList){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(conditionView.getName());
-                selectItem.setValue(externalMandateFieldConViewList.indexOf(conditionView));
+                //selectItem.setValue(externalMandateFieldConViewList.indexOf(conditionView));
+                selectItem.setValue(countIndex);
                 logger.debug("condition to add: {}", selectItem);
                 dependConditionList.add(selectItem);
                 if(wrkMandateConditionView.getDependCondition() != null && conditionView.getName().equals(wrkMandateConditionView.getDependCondition().getName())){
