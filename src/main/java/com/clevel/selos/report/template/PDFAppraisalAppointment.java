@@ -133,7 +133,7 @@ public class PDFAppraisalAppointment implements Serializable {
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-        if (!Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
+        if (Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
             log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList().size());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();
