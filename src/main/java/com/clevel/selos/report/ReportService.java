@@ -38,20 +38,20 @@ public class ReportService implements Serializable {
 
         log.info("parameters: {}",parameters);
 
-//        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
-//        if(dataSource != null && reportList != null && reportList.size() > 0){
-//            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-//        } else {
-             print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-//        }
+        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
         log.debug("--Pring report.");
 
         try {
-//            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
-//            ServletOutputStream servletOutputStream=response.getOutputStream();
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            String userAgent = getUserAgent(externalContext);
+
+            if (userAgent.contains("MSIE 8")){
+                externalContext.responseReset();
+                externalContext.addResponseHeader("Cache-Control","max-age=0");
+            }
             externalContext.addResponseHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+
             OutputStream outputStream =  externalContext.getResponseOutputStream();
             JasperExportManager.exportReportToPdfStream(print, outputStream);
             FacesContext.getCurrentInstance().responseComplete();
@@ -60,5 +60,17 @@ public class ReportService implements Serializable {
         } catch (JRException e) {
             log.error("Error generating pdf report!", e);
         }
+    }
+
+    private String getUserAgent(ExternalContext externalContext){
+        Map<String, String> requestHeaderMap = externalContext.getRequestHeaderMap();
+        for (String key : requestHeaderMap.keySet()){
+//            log.debug("key by UserAgent. {}",key);
+            if (key.equalsIgnoreCase("User-Agent")){
+//                log.debug("UserAgent. {}",requestHeaderMap.get(key));
+                return requestHeaderMap.get(key);
+            }
+        }
+        return "";
     }
 }
