@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PDFAppraisalAppointment implements Serializable {
@@ -179,6 +180,10 @@ public class PDFAppraisalAppointment implements Serializable {
         return report;
     }
 
+    public static void main(String[] args) {
+        System.out.println(DateTimeUtil.getCurrentDateTimeTH(new Date()));
+    }
+
     public List<ContactRecordDetailViewReport> fillContactRecordDetailViewReport(){
         List<ContactRecordDetailViewReport> contactRecordDetailViewReports = new ArrayList<ContactRecordDetailViewReport>();
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
@@ -190,10 +195,10 @@ public class PDFAppraisalAppointment implements Serializable {
                 ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
                 report.setCount(count++);
                 report.setPath(pathsub);
-                report.setCallingDate(DateTimeUtil.getCurrentDateTH(view.getCallingDate()));
+                report.setCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getCallingDate()));
                 report.setCallingResult(view.getCallingResult());
                 report.setAcceptResult(view.getAcceptResult());
-                report.setNextCallingDate(DateTimeUtil.getCurrentDateTH(view.getNextCallingDate()));
+                report.setNextCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getNextCallingDate()));
                 report.setReasonDescription(Util.checkNullString(!Util.isNull(view.getReason()) ? view.getReason().getDescription() : SPACE));
                 report.setRemark(Util.checkNullString(view.getRemark()));
                 report.setStatusDescription(Util.checkNullString(!Util.isNull(view.getStatus()) ? view.getStatus().getDescription() : SPACE));
