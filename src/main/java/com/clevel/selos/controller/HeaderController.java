@@ -12,6 +12,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
@@ -132,6 +133,7 @@ public class HeaderController extends BaseController {
     private boolean isSubmitForBDM;
     private boolean isSubmitForUW;
     private boolean isSubmitForUW2;
+    private boolean isUWRejected;
 
     private int submitPricingLevel;
     private int submitOverSLA;
@@ -223,6 +225,7 @@ public class HeaderController extends BaseController {
     //Customer Acceptance
     private List<Reason> reasonList;
     private String pendingRemark;
+    private int pendingReasonId;
 
     //Request Appraisal ( After Customer Acceptance )
     private List<User> aadAdminList;
@@ -591,16 +594,22 @@ public class HeaderController extends BaseController {
         log.debug("onAssignToChecker ::: starting...");
         boolean complete = false;
         try {
-            if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
-                prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
-                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
-                complete = true;
-                messageHeader = "Information.";
-                message = "Assign to checker complete.";
-                showMessageRedirect();
+            if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
+                    prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
+                    returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                    complete = true;
+                    messageHeader = "Information.";
+                    message = "Assign to checker complete.";
+                    showMessageRedirect();
+                }
             } else {
-                complete = false;
+                messageHeader = "Assign to checker failed.";
+                message = "Please update reply detail before submit.";
+                showMessageBox();
+                RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
             }
+
             RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
             log.debug("onAssignToChecker ::: complete");
         } catch (Exception ex) {
@@ -795,15 +804,22 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         if(zmUserId != null && !zmUserId.equals("")){
             try{
-                fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
-                log.debug("submitForBDM ::: success.");
-                log.debug("submitForBDM ::: Backup return info to History Start...");
-                returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
-                log.debug("submitForBDM ::: Backup return info to History Success...");
-                messageHeader = msg.get("app.messageHeader.info");
-                message = msg.get("app.message.dialog.submit.success");
-                showMessageRedirect();
-                complete = true;
+                if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                    fullApplicationControl.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+                    log.debug("submitForBDM ::: success.");
+                    log.debug("submitForBDM ::: Backup return info to History Start...");
+                    returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
+                    log.debug("submitForBDM ::: Backup return info to History Success...");
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = msg.get("app.message.dialog.submit.success");
+                    showMessageRedirect();
+                    complete = true;
+                } else {
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "Please update return reply detail before submit.";
+                    showMessageBox();
+                    log.error("submitForBDM ::: submit failed (reply detail invalid)");
+                }
             } catch (Exception ex){
                 messageHeader = msg.get("app.messageHeader.exception");
                 message = Util.getMessageException(ex);
@@ -1061,7 +1077,17 @@ public class HeaderController extends BaseController {
     public void onOpenSubmitUW(){
         _loadSessionVariable();
         try {
-            if (!fullApplicationControl.checkCaseUpdate(workCaseId)) {
+            boolean checkForCheckCriteria = false;
+
+            if(checkButton("Check Criteria")){
+                if(fullApplicationControl.checkCaseUpdate(workCaseId)){
+                    checkForCheckCriteria = true;
+                }
+            }
+
+            if (!checkForCheckCriteria) {
+                submitRemark = "";
+                slaReasonId = 0;
                 submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
                 if (submitOverSLA == 1) {
                     slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
@@ -1075,7 +1101,11 @@ public class HeaderController extends BaseController {
                     selectedUW2User = "";
                     selectedDOALevel = 0;
 
-                    authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    isUWRejected = fullApplicationControl.checkUWDecision(workCaseId);
+                    authorizationDOAList = new ArrayList<AuthorizationDOA>();
+                    if(!isUWRejected){
+                        authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                    }
                     log.debug("authorizationDOAList : {}", authorizationDOAList.size());
                 }
                 RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
@@ -1088,6 +1118,7 @@ public class HeaderController extends BaseController {
         }catch(Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
             message = Util.getMessageException(ex);
+            log.error("Exception while open submit uw : ", ex);
             showMessageBox();
         }
     }
@@ -1109,9 +1140,19 @@ public class HeaderController extends BaseController {
     private void submitForUW(){
         log.debug("submitForUW :: Start..");
         boolean complete = false;
+        boolean checkUW = true;
         try{
-            if(selectedUW2User != null && !selectedUW2User.equals("")){
+            if(!isUWRejected){
+                if(selectedUW2User != null && !selectedUW2User.equals("")){
+                    checkUW = true;
+                }else{
+                    checkUW = false;
+                }
+            }
+
+            if(checkUW){
                 if(canSubmitWithoutReturn()){
+                    fullApplicationControl.calculateApprovedResult(workCaseId);
                     fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
                     message = msg.get("app.message.dialog.submit.success");
@@ -1213,12 +1254,17 @@ public class HeaderController extends BaseController {
         else if(workCaseId != 0)
             uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
 
-        if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
-            reasonList = reasonToStepDAO.getRejectReason(stepId);
-            cancelReasonId = reasonDAO.getBRMSReasonId();
-        } else {
+        if(stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value()){
             reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
             cancelReasonId = 0;
+        } else {
+            if(uwRuleResultSummary != null && uwRuleResultSummary.getUwResultColor() == UWResultColor.RED){
+                reasonList = reasonToStepDAO.getRejectReason(stepId);
+                cancelReasonId = reasonDAO.getBRMSReasonId();
+            } else {
+                reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_CA.getVal());
+                cancelReasonId = 0;
+            }
         }
 
         log.debug("onOpenCancelCA ::: reasonList.size() : {}", reasonList.size());
@@ -1299,17 +1345,32 @@ public class HeaderController extends BaseController {
     public void onSubmitAADCommittee(){
         log.debug("onSubmitAADCommittee ( submit to AAD committee )");
         _loadSessionVariable();
+        boolean canSubmit = false;
         try{
             if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId==StatusValue.REPLY_FROM_BDM.value()){
                 log.debug("onSubmitAADCommittee ( save Return History For Restart )");
                 returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                canSubmit = true;
             } else {
-                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                    returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                    canSubmit = true;
+                } else {
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "Please update return reply detail before submit.";
+                    showMessageBox();
+                    log.error("onSubmitAADCommittee ::: submit failed (reply detail invalid)");
+                }
+
             }
-            fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
-            messageHeader = "Information.";
-            message = "Request for appraisal success.";
-            showMessageRedirect();
+
+            if(canSubmit){
+                fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+                messageHeader = "Information.";
+                message = "Request for appraisal success.";
+                showMessageRedirect();
+            }
+
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -1356,16 +1417,9 @@ public class HeaderController extends BaseController {
     public void onSubmitRequestAppraisal(){
         log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
         log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
-        HttpSession session = FacesUtil.getSession(false);
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
-        long workCaseId = 0;
-        long workCasePreScreenId = 0;
-
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-
-        log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
+        _loadSessionVariable();
 
         if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
             if(checkAppraisalContact()){
@@ -1376,7 +1430,7 @@ public class HeaderController extends BaseController {
                         appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
 
                         //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
-                        fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
+                        fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, statusId);
                         log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
 
                         complete = true;
@@ -1619,32 +1673,27 @@ public class HeaderController extends BaseController {
     }
 
     public void onOpenPendingDecision(){
+        _loadSessionVariable();
+        pendingReasonId = 0;
+        pendingRemark = "";
         reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.PENDING_REASON);
         RequestContext.getCurrentInstance().execute("pendingDecisionDlg.show()");
     }
 
     public void onSubmitPendingDecision(){
-        String wobNumber = "";
-        String queueName = "";
         boolean complete = false;
-
-        HttpSession session = FacesUtil.getSession(false);
-        queueName = Util.parseString(session.getAttribute("queueName"), "");
-        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-
-        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
+        if(!Util.isNull(pendingReasonId) && !Util.isZero(pendingReasonId)){
             try{
-                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, reasonId);
+                complete = true;
+                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, pendingReasonId);
                 messageHeader = "Information.";
                 message = "Submit case success.";
-                complete = true;
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                showMessageBox();
             } catch (Exception ex) {
                 log.error("Exception while submit pending decision, ", ex);
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
-                complete = true;
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                showMessageBox();
             }
         }
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
@@ -1652,10 +1701,7 @@ public class HeaderController extends BaseController {
 
     public void onRequestPriceReduction(){
         log.debug("onRequestPriceReduction ( in step Customer Acceptance )");
-        HttpSession session = FacesUtil.getSession(false);
-        String queueName = Util.parseString(session.getAttribute("queueName"), "");
-        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        _loadSessionVariable();
         requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
         if(requestPricing) {
             try {
@@ -1674,8 +1720,6 @@ public class HeaderController extends BaseController {
             message = "Can not Request for Price Reduction, cause this case has no Pricing Request.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
         }
-
-
     }
 
     public void onOpenCancelRequestPriceReduction(){
@@ -2577,11 +2621,18 @@ public class HeaderController extends BaseController {
 
     public boolean canSubmitWithoutReply(long workCaseId, long workCasePreScreenId) throws Exception{
         List<ReturnInfoView> returnInfoViews;
-        if(workCaseId!=0) {
-            returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,0);
+        returnInfoViews = returnControl.getReturnNoReplyList(workCaseId,workCasePreScreenId);
+
+        if(returnInfoViews!=null && returnInfoViews.size()>0){
+            return false;
         } else {
-            returnInfoViews = returnControl.getReturnNoReplyList(0,workCasePreScreenId);
+            return true;
         }
+    }
+
+    public boolean canSubmitWithoutReplyDetail(long workCaseId, long workCasePreScreenId) throws Exception{
+        List<ReturnInfoView> returnInfoViews;
+        returnInfoViews = returnControl.getReturnNoReplyDetailList(workCaseId,workCasePreScreenId);
 
         if(returnInfoViews!=null && returnInfoViews.size()>0){
             return false;
@@ -2621,18 +2672,24 @@ public class HeaderController extends BaseController {
         log.debug("onReturnToAADAdminByBDM");
 
         try {
-            HttpSession session = FacesUtil.getSession(false);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+                HttpSession session = FacesUtil.getSession(false);
+                String queueName = Util.parseString(session.getAttribute("queueName"), "");
+                String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-            messageHeader = "Information.";
-            message = "Return to AAD Admin success.";
+                messageHeader = "Information.";
+                message = "Return to AAD Admin success.";
 
-            fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
-            returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+                returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
 
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+            } else {
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = "Please update return reply detail before submit.";
+                log.error("submitForBDM ::: submit failed (reply detail invalid)");
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            }
         } catch (Exception ex) {
             log.debug("Exception while Return to AAD Admin : ", ex);
             messageHeader = "Exception.";
@@ -2742,11 +2799,7 @@ public class HeaderController extends BaseController {
 
     //---- Function for Request Appraisal ( Parallel ) ----//
     public void onRequestParallelAppraisal(){
-        HttpSession session = FacesUtil.getSession(false);
-
-        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-
+        _loadSessionVariable();
         try {
             log.debug("onRequestParallelAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
             fullApplicationControl.requestParallelAppraisal(workCaseId, workCasePreScreenId);
@@ -2761,12 +2814,45 @@ public class HeaderController extends BaseController {
         }
     }
 
+    public void onOpenSubmitParallelRequestAppraisal(){
+        _loadSessionVariable();
+        slaReasonId = 0;
+        submitRemark = "";
+        slaRemark = "";
+        RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
+    }
+
+    public void onSubmitParallelRequestAppraisal(){
+        try{
+            fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, stepId);
+            messageHeader = "Information.";
+            message = "Request for Appraisal complete.";
+            showMessageRedirect();
+        }catch(Exception ex){
+            log.error("Exception while submit parallel request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+
+    }
+
+    public void onCancelParallelRequestAppraisal(){
+        _loadSessionVariable();
+        log.debug("onCancelParallelRequestAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+        fullApplicationControl.cancelParallelRequestAppraisal(workCasePreScreenId, workCaseId);
+        messageHeader = "Information.";
+        message = "Cancel request appraisal complete.";
+        showMessageRedirect();
+    }
+
 
     public boolean checkAccessStage(String stageString){
         boolean accessible = false;
         HttpSession session = FacesUtil.getSession(false);
 
         long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
+        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
 
@@ -2791,7 +2877,8 @@ public class HeaderController extends BaseController {
                 accessible = true;
             }
         } else if ("ENDSTAGE".equalsIgnoreCase(stageString)){
-            if(stageId == 0){
+            if(statusId == 0 || statusId == StatusValue.CANCEL_CA.value() || statusId == StatusValue.REJECT_CA.value() ||
+                    statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
                 accessible = true;
             }
         }
@@ -2835,6 +2922,14 @@ public class HeaderController extends BaseController {
 
     public void setStepId(long stepId) {
         this.stepId = stepId;
+    }
+
+    public long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(long statusId) {
+        this.statusId = statusId;
     }
 
     public List<User> getAbdmUserList() {
@@ -3691,5 +3786,21 @@ public class HeaderController extends BaseController {
 
     public void setReturnAADUWRemark(String returnAADUWRemark) {
         this.returnAADUWRemark = returnAADUWRemark;
+    }
+
+    public int getPendingReasonId() {
+        return pendingReasonId;
+    }
+
+    public void setPendingReasonId(int pendingReasonId) {
+        this.pendingReasonId = pendingReasonId;
+    }
+
+    public boolean isUWRejected() {
+        return isUWRejected;
+    }
+
+    public void setUWRejected(boolean isUWRejected) {
+        this.isUWRejected = isUWRejected;
     }
 }

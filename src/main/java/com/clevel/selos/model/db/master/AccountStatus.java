@@ -25,6 +25,8 @@ public class AccountStatus implements Serializable {
     private String ncbCodeInd;
     @Column(name = "ncb_code_jur", length = 5)
     private String ncbCodeJur;
+    @Column(name = "closed_flag")
+    private int closedFlag;
 
     public AccountStatus() {
     }
@@ -77,6 +79,14 @@ public class AccountStatus implements Serializable {
         this.ncbCodeJur = ncbCodeJur;
     }
 
+    public int getClosedFlag() {
+        return closedFlag;
+    }
+
+    public void setClosedFlag(int closedFlag) {
+        this.closedFlag = closedFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -86,6 +96,7 @@ public class AccountStatus implements Serializable {
                 append("active", active).
                 append("ncbCodeInd", active).
                 append("ncbCodeJur", active).
+                append("closedFlag", closedFlag).
                 toString();
     }
 }

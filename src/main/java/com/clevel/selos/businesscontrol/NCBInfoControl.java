@@ -123,6 +123,8 @@ public class NCBInfoControl extends BusinessControl {
             Date lastInfoDate = null;
 
             for(NCBDetailView ncbDetailView: ncbDetailViewList){
+                boolean isTDRFlag = false;
+                boolean isNPLFlag = false;
                 //get current payment
                 if(ncbDetailView.getCurrentPayment()!=null && ncbDetailView.getCurrentPayment().getNcbCode()!=null) {
                     if((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()) !=null)
@@ -143,6 +145,7 @@ public class NCBInfoControl extends BusinessControl {
 
                 //get TDR
                 if(ncbDetailView.getDateOfDebtRestructuring()!=null){
+                    isTDRFlag = true;
                     if(ncbDetailView.getTmbCheck()){
                         isTDRTMB = true;
                         if(lastTDRDateTMB!=null){
@@ -179,6 +182,7 @@ public class NCBInfoControl extends BusinessControl {
                         if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 6)
                                 || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 6))
                                 && ncbDetailView.getDateOfInfo()!=null) {
+                            isNPLFlag = true;
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
@@ -214,6 +218,7 @@ public class NCBInfoControl extends BusinessControl {
                         if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 7)
                                 || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 7))
                                 && ncbDetailView.getDateOfInfo()!=null) {
+                            isNPLFlag =true;
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
@@ -252,6 +257,18 @@ public class NCBInfoControl extends BusinessControl {
                     }
                 } else {
                     lastInfoDate = ncbDetailView.getDateOfInfo();
+                }
+
+                if(isNPLFlag){
+                    ncbDetailView.setNplFlag(RadioValue.YES.value());
+                } else {
+                    ncbDetailView.setNplFlag(RadioValue.NO.value());
+                }
+
+                if(isTDRFlag){
+                    ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                } else {
+                    ncbDetailView.setTdrFlag(RadioValue.NO.value());
                 }
             }
 

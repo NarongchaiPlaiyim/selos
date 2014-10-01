@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.isa.DownloadService;
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
@@ -93,16 +94,30 @@ public class IsaReport implements Serializable {
         StringBuilder nameISAUserProfile = new StringBuilder();
         nameISAUserProfile = nameISAUserProfile.append("USERPROFILE_").append(Util.getFileNameForISA());
 
+//        StringBuilder builder =  new StringBuilder();
+//        builder.append("Seq"); builder.append(COMMA_DELIMITED);
+//        builder.append("EmployeeID"); builder.append(COMMA_DELIMITED);
+//        builder.append("EmployeeName"); builder.append(COMMA_DELIMITED);
+//        builder.append("TeamID"); builder.append(COMMA_DELIMITED);
+//        builder.append("TeamName"); builder.append(COMMA_DELIMITED);
+//        builder.append("CreateDate"); builder.append(COMMA_DELIMITED);
+//        builder.append("LastSignOnDate"); builder.append(COMMA_DELIMITED);
+//        builder.append("Status"); builder.append(COMMA_DELIMITED);
+//        builder.append("NumberOfDays"); builder.append('\n');
+
         StringBuilder builder =  new StringBuilder();
         builder.append("Seq"); builder.append(COMMA_DELIMITED);
-        builder.append("EmployeeID"); builder.append(COMMA_DELIMITED);
-        builder.append("EmployeeName"); builder.append(COMMA_DELIMITED);
-        builder.append("TeamID"); builder.append(COMMA_DELIMITED);
-        builder.append("TeamName"); builder.append(COMMA_DELIMITED);
-        builder.append("CreateDate"); builder.append(COMMA_DELIMITED);
-        builder.append("LastSignOnDate"); builder.append(COMMA_DELIMITED);
-        builder.append("Status"); builder.append(COMMA_DELIMITED);
-        builder.append("NumberOfDays"); builder.append('\n');
+        builder.append("User Id"); builder.append(COMMA_DELIMITED);
+        builder.append("User Name"); builder.append(COMMA_DELIMITED);
+        builder.append("Active"); builder.append(COMMA_DELIMITED);
+        builder.append("Role"); builder.append(COMMA_DELIMITED);
+        builder.append("Team"); builder.append(COMMA_DELIMITED);
+        builder.append("Department"); builder.append(COMMA_DELIMITED);
+        builder.append("Division"); builder.append(COMMA_DELIMITED);
+        builder.append("Region"); builder.append(COMMA_DELIMITED);
+        builder.append("Title"); builder.append(COMMA_DELIMITED);
+        builder.append("Cteate date"); builder.append(COMMA_DELIMITED);
+        builder.append("Last sign on date"); builder.append('\n');
 
         try {
             viewReportList = isaBusinessControl.getUserProFileByUser();
@@ -115,15 +130,26 @@ public class IsaReport implements Serializable {
         if (!Util.isNull(viewReportList)){
             log.debug("--viewReportList is not null. [{}]",viewReportList.size());
             for (ISAViewReport report : viewReportList){
-                builder.append('"' + rowNumber + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getEmpID() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getEmpName() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getTestId() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getTeam() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + DateTimeUtil.convertToStringDDMMYYYY(report.getCreateDate()) + '"').append(COMMA_DELIMITED);
-                builder.append('"' + DateTimeUtil.convertToStringDDMMYYYY(report.getCreateDate()) + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getStatus() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getNumberOfDay() + '"').append('\n');
+                builder.append(rowNumber).append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getUserId()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getUserName()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getActive()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getRole()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getTeam()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getDepartment()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getDivision()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getRegion()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getTitle()) + '"').append(COMMA_DELIMITED);
+                if (!Util.isNull(report.getCreateDate())){
+                    builder.append('"' + DateTimeUtil.convertToStringDDMMYYYYHHmmss(report.getCreateDate()) + '"').append(COMMA_DELIMITED);
+                } else {
+                    builder.append(COMMA_DELIMITED);
+                }
+                if (!Util.isNull(report.getLastLogOn())){
+                    builder.append('"' + DateTimeUtil.convertToStringDDMMYYYYHHmmss(report.getLastLogOn()) + '"').append('\n');
+                } else {
+                    builder.append(COMMA_DELIMITED).append('\n');
+                }
 
                 rowNumber++;
             }
@@ -131,9 +157,14 @@ public class IsaReport implements Serializable {
         }
     }
 
-    public void onPrintUserProFile(){
+//    public static void main(String[] args) {
+//        System.out.println("ACTIVE".equalsIgnoreCase("ACtive"));
+//    }
+
+    public void onPrintActivity(){
         List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
         StringBuilder nameISAUserProfile = new StringBuilder();
+        HashMap map = new HashMap<String, Object>();
         nameISAUserProfile = nameISAUserProfile.append("Activity_").append(Util.getFileNameForISA());
 
         StringBuilder builder =  new StringBuilder();
@@ -148,7 +179,9 @@ public class IsaReport implements Serializable {
         builder.append("ADMIN_NAME"); builder.append('\n');
 
         try {
-            viewReportList = isaBusinessControl.getUserProFileByISA();
+            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom,Locale.ENGLISH));
+            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo,Locale.ENGLISH));
+            viewReportList = isaBusinessControl.getUserProFileByISA(map);
         } catch (SQLException e) {
             log.debug("--on getuserProfile. {}",e.getMessage());
         }
@@ -158,15 +191,15 @@ public class IsaReport implements Serializable {
         if (!Util.isNull(viewReportList)){
             log.debug("--viewReportList is not null. [{}]",viewReportList.size());
             for (ISAViewReport report : viewReportList){
-                builder.append('"' + rowNumber + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getAdminTask() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getEmpID() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getEmpName() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getOldData() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getNewData() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getModifyDate().toString() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getModifyBy() + '"').append(COMMA_DELIMITED);
-                builder.append('"' + report.getAdminName() + '"').append('\n');
+                builder.append(rowNumber).append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getAdminTask()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getEmpID()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getEmpName()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getOldData()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getNewData()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(DateTimeUtil.convertToStringDDMMYYYY(report.getModifyDate())) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getModifyBy()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getAdminName()) + '"').append('\n');
 
                 rowNumber++;
             }

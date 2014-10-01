@@ -28,6 +28,9 @@ public enum Screen {
 
     //Decision
     DECISION(2920),
+
+    //Customer Accept Pre
+    CUSTOMER_ACCEPTANCE_PRE(2930),
     
     //Step 301 Screen 
     InsuranceInfo(3100),

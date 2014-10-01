@@ -3,7 +3,10 @@ package com.clevel.selos.businesscontrol.master;
 
 import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MandateDependConType;
+import com.clevel.selos.model.MandateDependType;
 import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
@@ -18,32 +21,35 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Stateless
 public class MandateFieldControl extends BusinessControl {
     private static final long serialVersionUID = -4625744349595576016L;
     @Inject
-    @SELOS
-    Logger logger;
+    @ADMIN
+    private Logger logger;
+
+    public static final String PACKAGE_NAME = "com.clevel.selos.model.db.working";
 
     @Inject
-    MandateFieldClassDAO mandateFieldClassDAO;
+    private MandateFieldClassDAO mandateFieldClassDAO;
     @Inject
-    MandateFieldDAO mandateFieldDAO;
+    private MandateFieldDAO mandateFieldDAO;
     @Inject
-    MandateFieldConditionDAO mandateFieldConditionDAO;
+    private MandateFieldConditionDAO mandateFieldConditionDAO;
     @Inject
-    MandateFieldConditionDetailDAO mandateFieldConditionDetailDAO;
+    private MandateFieldConditionDetailDAO mandateFieldConditionDetailDAO;
     @Inject
-    MandateFieldStepActionDAO mandateFieldStepActionDAO;
+    private MandateFieldStepActionDAO mandateFieldStepActionDAO;
     @Inject
-    MandateFieldConStepActionDAO mandateFieldConStepActionDAO;
+    private MandateFieldConStepActionDAO mandateFieldConStepActionDAO;
     @Inject
-    MandateFieldClassStepActionDAO mandateFieldClassStepActionDAO;
+    private MandateFieldClassStepActionDAO mandateFieldClassStepActionDAO;
     @Inject
-    StepDAO stepDAO;
+    private StepDAO stepDAO;
     @Inject
-    ActionDAO actionDAO;
+    private ActionDAO actionDAO;
 
     @Inject
     MandateFieldTransform mandateFieldTransform;
@@ -59,7 +65,7 @@ public class MandateFieldControl extends BusinessControl {
         logger.debug("-- begin getMandateFieldClass class size{} + ", classSet == null?0:classSet.size());
         List<MandateFieldClass> mandateFieldClassList = mandateFieldClassDAO.findAll();
 
-        logger.info("number of mandateFieldClass: {}", mandateFieldClassList.size());
+        logger.debug("number of mandateFieldClass: {}", mandateFieldClassList.size());
         Map<String, MandateFieldClassView> mandateFieldClassViewMap = new TreeMap<String, MandateFieldClassView>();
         for(Class clazz : classSet){
             if(!(clazz.getName().contains("Abstract")||clazz.getName().endsWith("_"))){
@@ -75,7 +81,7 @@ public class MandateFieldControl extends BusinessControl {
                 if(mandateFieldClassView != null){
                     if(matchedClass != null){
                         mandateFieldClassList.remove(matchedClass);
-                        logger.info("number of mandateFieldClass: {}", mandateFieldClassList.size());
+                        logger.debug("number of mandateFieldClass: {}", mandateFieldClassList.size());
                     }
                 } else {
                     mandateFieldClassView = new MandateFieldClassView();
@@ -106,6 +112,11 @@ public class MandateFieldControl extends BusinessControl {
         return mandateFieldClassViewList;
     }
 
+    public MandateFieldClassView getMandateFieldClassView(String className){
+        MandateFieldClass mandateFieldClass = mandateFieldClassDAO.findByClassName(className);
+        return mandateFieldTransform.transformToView(mandateFieldClass);
+    }
+
     public List<MandateFieldView> getMandateFieldDB(MandateFieldClassView mandateFieldClassView){
         List<MandateField> mandateFieldList = mandateFieldDAO.findByClass(mandateFieldClassView.getId());
         List<MandateFieldView> mandateFieldViewList = new ArrayList<MandateFieldView>();
@@ -117,7 +128,7 @@ public class MandateFieldControl extends BusinessControl {
     }
 
     public List<MandateFieldView> getMandateField(MandateFieldClassView mandateFieldClassView) throws Exception{
-        logger.info("-- begin getMandateField: {}", mandateFieldClassView);
+        logger.debug("-- begin getMandateField: {}", mandateFieldClassView);
 
         List<MandateFieldView> mandateFieldViewList = new ArrayList<MandateFieldView>();
         if(mandateFieldClassView == null){
@@ -133,7 +144,7 @@ public class MandateFieldControl extends BusinessControl {
                 fields = combinedFields(fields, clazz.getSuperclass().getDeclaredFields());
             }
 
-            logger.info("fields {}", fields.length);
+            logger.debug("fields {}", fields.length);
             List<MandateField> mandateFieldList = new ArrayList<MandateField>();
             if(mandateFieldClassView.getId() != 0)
                 mandateFieldList = mandateFieldDAO.findByClass(mandateFieldClassView.getId());
@@ -163,12 +174,35 @@ public class MandateFieldControl extends BusinessControl {
             logger.error("Class Not Found Exception: {}", cnf);
             throw cnf;
         }
-        logger.info("-- end getMandateField return size: {}", mandateFieldViewList);
+        logger.debug("-- end getMandateField return size: {}", mandateFieldViewList);
         return mandateFieldViewList;
     }
 
+    public List<MandateFieldConditionView> getExternalDependCondition(MandateFieldClassView mandateFieldClassView){
+        List<MandateFieldConditionView> _tmpList = new ArrayList<MandateFieldConditionView>();
+
+        try{
+            Class clazz = Class.forName(mandateFieldClassView.getClassName());
+            Field[] fieldList = clazz.getDeclaredFields();
+            for(Field field : fieldList){
+                Class typeClazz = field.getType();
+                logger.debug("field: {}, type: {}", field.getName(), typeClazz.getName());
+                if(typeClazz.getName().contains(PACKAGE_NAME)){
+                    MandateFieldClass mandateFieldClass = mandateFieldClassDAO.findByClassName(typeClazz.getName());
+                    if(mandateFieldClass != null && mandateFieldClass.getId() > 0){
+                        List<MandateFieldConditionView> mandateConditionList = getMandateConditionList(mandateFieldClass.getId());
+                        _tmpList.addAll(mandateConditionList);
+                    }
+                }
+            }
+        } catch(ClassNotFoundException cnf){
+            logger.debug("Class Not Found, external Depend List return empty", cnf);
+        }
+        return _tmpList;
+    }
+
     private Field[] combinedFields(Field[] fields1, Field[] fields2){
-        logger.info("begin combinedFields {}, {}", fields1, fields2);
+        logger.debug("begin combinedFields {}, {}", fields1, fields2);
         List<Field> _combinedList = new ArrayList<Field>();
         for(Field field : fields1){
             _combinedList.add(field);
@@ -183,46 +217,60 @@ public class MandateFieldControl extends BusinessControl {
     }
 
     public List<MandateFieldConditionView> getMandateConditionList(MandateFieldClassView mandateFieldClassView){
-        logger.info("-- begin getMandateConditionList: {}", mandateFieldClassView);
+        return getMandateConditionList(mandateFieldClassView.getId());
+
+    }
+
+    public List<MandateFieldConditionView> getMandateConditionList(long mandateClassId){
+        logger.debug("-- begin getMandateConditionList: {}", mandateClassId);
         List<MandateFieldConditionView> mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
-        if(mandateFieldClassView.getId() > 0){
-            List<MandateFieldCondition> mandateFieldConditionList = mandateFieldConditionDAO.findByClass(mandateFieldClassView.getId());
+        if(mandateClassId > 0){
+            List<MandateFieldCondition> mandateFieldConditionList = mandateFieldConditionDAO.findByClass(mandateClassId);
             for(MandateFieldCondition mandateFieldCondition : mandateFieldConditionList){
                 MandateFieldConditionView mandateFieldConditionView = mandateFieldTransform.transformToView(mandateFieldCondition);
                 mandateFieldConditionViewList.add(mandateFieldConditionView);
             }
+            logger.debug("Mandate FieldCondition: {}", mandateFieldConditionList);
 
-            for(MandateFieldCondition mandateFieldCondition : mandateFieldConditionList){
-                if(mandateFieldCondition.getDependCondition() > 0){
-                    MandateFieldConditionView _toUpdate = null;
-                    MandateFieldConditionView _toDepend = null;
-                    for(MandateFieldConditionView conditionView : mandateFieldConditionViewList){
-                        if(conditionView.getId() == mandateFieldCondition.getId()){
-                            _toUpdate = conditionView;
-                        }
-                        if(conditionView.getId() == mandateFieldCondition.getDependCondition()){
-                            _toDepend = conditionView;
+            for(MandateFieldCondition condition : mandateFieldConditionList) {
+                if(condition.getDependCondition() > 0){
+                MandateFieldConditionView _toUpdate = null;
+                MandateFieldConditionView _toDepend = null;
+                for(MandateFieldConditionView view : mandateFieldConditionViewList){
+                    if(condition.getId() == view.getId()){
+                        _toUpdate = view;
+                        break;
+                    }
+                }
+
+                if(MandateDependConType.INTERNAL.equals(condition.getDependConType())){
+                    for(MandateFieldConditionView view : mandateFieldConditionViewList){
+                        if(condition.getDependCondition() == view.getId()) {
+                            _toDepend = view;
                         }
                     }
-                    if(_toUpdate != null && _toDepend != null)
+                } else if(MandateDependConType.EXTERNAL.equals(condition.getDependConType())){
+                    MandateFieldCondition _tmpCondition = mandateFieldConditionDAO.findById(condition.getDependCondition());
+                    _toDepend = mandateFieldTransform.transformToView(_tmpCondition);
+                }
+
+                if(_toUpdate != null && _toDepend != null)
                         _toUpdate.setDependCondition(_toDepend);
                 }
             }
-
         }
-        logger.info("-- end getMandateConditionList return {}", mandateFieldConditionViewList);
+        logger.debug("-- end getMandateConditionList return {}", mandateFieldConditionViewList);
         return mandateFieldConditionViewList;
     }
 
-    public void saveAllMandateField(MandateFieldClassView mandateFieldClassView, List<MandateFieldView> mandateFieldViewList, List<MandateFieldConditionView> mandateFieldConditionViewList){
-        logger.debug("-- begin saveAllMandateField");
+    public void saveMandateField(MandateFieldClassView mandateFieldClassView, List<MandateFieldView> mandateFieldViewList) {
+        logger.debug("-- begin saveMandateField");
         MandateFieldClass mandateFieldClass = saveMandateFieldClass(mandateFieldClassView);
-        List<MandateField> mandateFieldList = saveMandateField(mandateFieldClass, mandateFieldViewList);
-        saveMandateCondition(mandateFieldClass, mandateFieldList, mandateFieldConditionViewList);
-        logger.debug("-- end saveAllMandateField");
+        List<MandateField> mandateFieldList = saveMandateFieldDetail(mandateFieldClass, mandateFieldViewList);
+        logger.debug("-- end saveMandateField");
     }
 
-    private MandateFieldClass saveMandateFieldClass(MandateFieldClassView mandateFieldClassView){
+    public MandateFieldClass saveMandateFieldClass(MandateFieldClassView mandateFieldClassView) {
         logger.debug("-- begin saveMandateFieldClass {}", mandateFieldClassView);
         MandateFieldClass mandateFieldClass = null;
 
@@ -234,7 +282,7 @@ public class MandateFieldControl extends BusinessControl {
         return mandateFieldClass;
     }
 
-    private List<MandateField> saveMandateField(MandateFieldClass mandateFieldClass, List<MandateFieldView> mandateFieldViewList){
+    public List<MandateField> saveMandateFieldDetail(MandateFieldClass mandateFieldClass, List<MandateFieldView> mandateFieldViewList){
         List<MandateField> mandateFieldList = new ArrayList<MandateField>();
         if(mandateFieldViewList != null){
             for(MandateFieldView mandateFieldView : mandateFieldViewList){
@@ -246,12 +294,17 @@ public class MandateFieldControl extends BusinessControl {
                 mandateFieldList.add(mandateField);
             }
         }
-        logger.info("-- end saveMandateField: {}", mandateFieldList);
+        logger.debug("-- end saveMandateField: {}", mandateFieldList);
         return mandateFieldList;
     }
 
-    private void saveMandateCondition(MandateFieldClass mandateFieldClass, List<MandateField> mandateFieldList, List<MandateFieldConditionView> mandateFieldConditionViewList){
+    public void saveMandateCondition(MandateFieldClassView mandateFieldClassView, List<MandateFieldView> mandateFieldViewList, List<MandateFieldConditionView> mandateFieldConditionViewList){
         List<MandateFieldCondition> mandateFieldConditionList = new ArrayList<MandateFieldCondition>();
+        MandateFieldClass mandateFieldClass = mandateFieldClassDAO.findById(mandateFieldClassView.getId());
+        List<MandateField> mandateFieldList = new ArrayList<MandateField>();
+        for(MandateFieldView mandateFieldView : mandateFieldViewList){
+            mandateFieldList.add(mandateFieldDAO.findById(mandateFieldView.getId()));
+        }
         for(MandateFieldConditionView mandateFieldConditionView : mandateFieldConditionViewList){
 
             MandateFieldCondition mandateFieldCondition = mandateFieldTransform.transformToModel(mandateFieldConditionView);
@@ -266,8 +319,8 @@ public class MandateFieldControl extends BusinessControl {
 
                 if(mandateFieldConditionDetailView.getMandateFieldView() != null){
                     for(MandateField mandateField : mandateFieldList){
-                        logger.info("mandateField {}", mandateField);
-                        logger.info("mandateFieldList {}", mandateFieldConditionDetailView.getMandateFieldView());
+                        logger.debug("mandateField {}", mandateField);
+                        logger.debug("mandateFieldList {}", mandateFieldConditionDetailView.getMandateFieldView());
                         if(mandateField.getFieldName().equals(mandateFieldConditionDetailView.getMandateFieldView().getFieldName())){
                             mandateFieldConditionDetail.setMandateField(mandateField);
                             break;
@@ -287,23 +340,38 @@ public class MandateFieldControl extends BusinessControl {
             if(mandateFieldConditionView.getDependCondition() != null){
                 MandateFieldCondition toUpdate = null;
                 MandateFieldCondition toDepend = null;
+
                 for(MandateFieldCondition mandateFieldCondition : mandateFieldConditionList){
                     if(mandateFieldCondition.getName().equals(mandateFieldConditionView.getName())){
                         toUpdate = mandateFieldCondition;
-                    }
-                    if(mandateFieldCondition.getName().equals(mandateFieldConditionView.getDependCondition().getName())){
-                        toDepend = mandateFieldCondition;
+                        logger.debug("to Update: {}", toUpdate);
+                        break;
                     }
                 }
+
+                if(mandateFieldConditionView.getDependConType().equals(MandateDependConType.INTERNAL)){
+                    for(MandateFieldCondition mandateFieldCondition : mandateFieldConditionList){
+                        if(mandateFieldCondition.getName().equals(mandateFieldConditionView.getDependCondition().getName())){
+                            toDepend = mandateFieldCondition;
+                            logger.debug(" to Depend Internal: {}", toDepend);
+                            break;
+                        }
+                    }
+                }else if(mandateFieldConditionView.getDependConType().equals(MandateDependConType.EXTERNAL)){
+                    toDepend = mandateFieldConditionDAO.findById(mandateFieldConditionView.getDependCondition().getId());
+                    logger.debug(" to Depend External: {}", toDepend);
+                }
+
                 if(toUpdate != null && toDepend != null){
                     toUpdate.setDependCondition(toDepend.getId());
                     mandateFieldConditionDAO.persist(toUpdate);
                 }
+
             }
         }
     }
 
-    public void deleteAllMandateField(List<MandateFieldConditionView> deletedMandateFieldConditionViewList, List<MandateFieldConditionDetailView> deletedMandateFieldConditionDetailView){
+    public void deleteMandateFieldCondition(List<MandateFieldConditionView> deletedMandateFieldConditionViewList, List<MandateFieldConditionDetailView> deletedMandateFieldConditionDetailView){
         if(deletedMandateFieldConditionDetailView != null){
             for(MandateFieldConditionDetailView mandateFieldConditionDetailView : deletedMandateFieldConditionDetailView){
                 mandateFieldConditionDetailDAO.deleteById(mandateFieldConditionDetailView.getId());
@@ -321,26 +389,86 @@ public class MandateFieldControl extends BusinessControl {
         }
     }
 
-    public MandateFieldStepActionView getMandateFieldStepAction(SelectItem step, SelectItem action){
-        logger.info("-- begin getMandateFieldStepAction step: {}, action:{}", step, action);
-        List<MandateFieldStepAction> mandateFieldStepActionList = mandateFieldStepActionDAO.findByAction((Long)step.getValue(), (Long)action.getValue());
-        List<MandateFieldConStepAction> mandateFieldConStepActionList = mandateFieldConStepActionDAO.findByAction((Long)step.getValue(), (Long)action.getValue());
+    public MandateFieldStepActionView getMandateFieldStepAction(long stepId, long actionId){
+
+        logger.debug("-- begin getMandateFieldStepAction step: {}, action:{}", stepId, actionId);
+        List<MandateFieldStepAction> mandateFieldStepActionList = mandateFieldStepActionDAO.findByAction(stepId, actionId);
+        List<MandateFieldConStepAction> mandateFieldConStepActionList = mandateFieldConStepActionDAO.findByAction(stepId, actionId);
 
         MandateFieldStepActionView mandateFieldStepActionView = mandateFieldTransform.transformToView(mandateFieldStepActionList, mandateFieldConStepActionList);
+
+        logger.debug("-- end getMandateFieldStepAction return {}", mandateFieldStepActionView);
+        return mandateFieldStepActionView;
+
+    }
+
+    public MandateFieldStepActionView getMandateFieldStepAction(SelectItem step, SelectItem action){
+        logger.debug("-- begin getMandateFieldStepAction step: {}, action:{}", step, action);
+
+        MandateFieldStepActionView mandateFieldStepActionView = getMandateFieldStepAction((Long)step.getValue(), (Long)action.getValue());
 
         if(mandateFieldStepActionView == null){
             mandateFieldStepActionView = new MandateFieldStepActionView();
             mandateFieldStepActionView.setStepView(stepTransform.transformToView(step));
             mandateFieldStepActionView.setActionView(actionTransform.transformToView(action));
         }
-        logger.info("-- end getMandateFieldStepAction return {}", mandateFieldStepActionView);
+        logger.debug("-- end getMandateFieldStepAction return {}", mandateFieldStepActionView);
         return mandateFieldStepActionView;
     }
 
-    public void saveMandateFieldClassStepAction(MandateFieldClassStepActionView mandateFieldClassStepActionView){
-        logger.info("-- begin saveMandateFieldClassStepAction: {}", mandateFieldClassStepActionView);
+    public Map<String, List<MandateFieldView>> getMandateFieldByStepAction(long step, long action){
+        List<MandateFieldStepAction> mandateFieldStepActionList = mandateFieldStepActionDAO.findByAction(step, action);
 
+        Map<String, List<MandateFieldView>> _tmpClassMap = new ConcurrentHashMap<String, List<MandateFieldView>>();
+        for(MandateFieldStepAction mandateFieldStepAction : mandateFieldStepActionList){
+            MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateFieldStepAction.getMandateField());
+            logger.debug("Mandate Field View: {}", mandateFieldView);
 
+            MandateFieldClassView mandateFieldClassView = mandateFieldView.getMandateFieldClassView();
+            String className = mandateFieldClassView.getClassName();
+            List<MandateFieldView> _tmpFieldList = _tmpClassMap.get(className);
+            if(_tmpFieldList == null){
+                _tmpFieldList = new ArrayList<MandateFieldView>();
+            }
+            _tmpFieldList.add(mandateFieldView);
+            _tmpClassMap.put(className, _tmpFieldList);
+        }
+        return _tmpClassMap;
+    }
+
+    public Map<Long, MandateFieldConditionView> getMandateConditionByStepAction(long step, long action){
+        List<MandateFieldConStepAction> mandateFieldConStepActionList = mandateFieldConStepActionDAO.findByAction(step, action);
+        Map<Long, MandateFieldConditionView> _tmpMap = new ConcurrentHashMap<Long, MandateFieldConditionView>();
+        for(MandateFieldConStepAction mandateFieldConStepAction : mandateFieldConStepActionList){
+            MandateFieldConditionView mandateFieldConditionView = mandateFieldTransform.transformToView(mandateFieldConStepAction.getMandateFieldCondition());
+            _tmpMap.put(mandateFieldConditionView.getId(), mandateFieldConditionView);
+        }
+
+        //Set Depend Condition
+        for(MandateFieldConStepAction mandateFieldConStepAction : mandateFieldConStepActionList){
+            MandateFieldCondition mandateFieldCondition = mandateFieldConStepAction.getMandateFieldCondition();
+            if(!mandateFieldCondition.getDependType().equals(MandateDependType.NO_DEPENDENCY)){
+                if(mandateFieldCondition.getDependCondition() > 0){
+                    MandateFieldConditionView _toUpdate = _tmpMap.get(mandateFieldCondition.getId());
+                    MandateFieldConditionView _toDepend = _tmpMap.get(mandateFieldCondition.getDependCondition());
+                    _toUpdate.setDependCondition(_toDepend);
+                    _tmpMap.put(_toUpdate.getId(), _toUpdate);
+                }
+            }
+        }
+        return _tmpMap;
+    }
+
+    public Map<String, MandateFieldClassStepActionView> getMandateFieldClassStepAction(long stepId, long actionId){
+        Map<String, MandateFieldClassStepActionView> _tmpMap = new ConcurrentHashMap<String, MandateFieldClassStepActionView>();
+        List<MandateFieldClassStepAction> mandateFieldClassStepActionList = mandateFieldClassStepActionDAO.findByStepAction(stepId, actionId);
+        for(MandateFieldClassStepAction mandateFieldClassStepAction : mandateFieldClassStepActionList){
+            MandateFieldClassStepActionView mandateFieldClassStepActionView = new MandateFieldClassStepActionView();
+            mandateFieldClassStepActionView.setRequired(mandateFieldClassStepAction.isRequired());
+            mandateFieldClassStepActionView.setMandateFieldClassView(mandateFieldTransform.transformToView(mandateFieldClassStepAction.getMandateFieldClass()));
+            _tmpMap.put(mandateFieldClassStepActionView.getMandateFieldClassView().getClassName(), mandateFieldClassStepActionView);
+        }
+        return _tmpMap;
     }
 
     public void saveMandateFieldClassSAAdmin(MandateFieldClassSAAdminView mandateFieldClassSAAdminView, StepView stepView, ActionView actionView){
@@ -354,26 +482,28 @@ public class MandateFieldControl extends BusinessControl {
     }
 
     public void saveMandateClassRequiredStepAction(MandateFieldClassSAAdminView classSAAdminView, Step step, Action action){
-        logger.info("-- begin saveMandateClassRequiredStepAction: {}", classSAAdminView);
+        logger.debug("-- begin saveMandateClassRequiredStepAction: {}", classSAAdminView);
         if(classSAAdminView != null){
             MandateFieldClassStepAction mandateFieldClassStepAction = mandateFieldClassStepActionDAO.findByActionAndClass(step.getId(), action.getId(), classSAAdminView.getId());
-            if(classSAAdminView.isClassRequired()){
+            if(classSAAdminView.isNeedUpdate()){
                 if(mandateFieldClassStepAction == null){
                     mandateFieldClassStepAction = new MandateFieldClassStepAction();
-                    mandateFieldClassStepAction.setAction(action);
-                    mandateFieldClassStepAction.setStep(step);
-                    mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
                 }
+                mandateFieldClassStepAction.setAction(action);
+                mandateFieldClassStepAction.setStep(step);
+                mandateFieldClassStepAction.setRequired(classSAAdminView.isClassRequired());
+                mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
                 mandateFieldClassStepActionDAO.persist(mandateFieldClassStepAction);
-            } else {
+            }
+            /*else {
                 if(mandateFieldClassStepAction != null)
                     mandateFieldClassStepActionDAO.delete(mandateFieldClassStepAction);
-            }
+            }*/
         }
     }
 
     public void saveMandateFieldStepAction(List<MandateFieldView> mandateFieldViewList, Step step, Action action){
-        logger.info("-- begin saveMandateFieldStepAction {}, {}, {}", mandateFieldViewList, step, action);
+        logger.debug("-- begin saveMandateFieldStepAction {}, {}, {}", mandateFieldViewList, step, action);
         if(mandateFieldViewList != null && mandateFieldViewList.size() > 0){
 
             List<MandateFieldStepAction> mandateFieldStepActionList = new ArrayList<MandateFieldStepAction>();
@@ -381,49 +511,49 @@ public class MandateFieldControl extends BusinessControl {
             for(MandateFieldView mandateFieldView : mandateFieldViewList){
                 MandateFieldStepAction mandateFieldStepAction = mandateFieldStepActionDAO.findByActionAndField(step.getId(), action.getId(), mandateFieldView.getId());
                 if(mandateFieldStepAction == null){
-                    MandateField mandateField = mandateFieldTransform.transformToModel(mandateFieldView);
                     mandateFieldStepAction = new MandateFieldStepAction();
-                    mandateFieldStepAction.setAction(action);
-                    mandateFieldStepAction.setStep(step);
-                    mandateFieldStepAction.setMandateField(mandateField);
                 }
+                MandateField mandateField = mandateFieldTransform.transformToModel(mandateFieldView);
+                mandateFieldStepAction.setAction(action);
+                mandateFieldStepAction.setStep(step);
+                mandateFieldStepAction.setMandateField(mandateField);
                 mandateFieldStepActionList.add(mandateFieldStepAction);
             }
             if(mandateFieldStepActionList.size() > 0) {
-                logger.info("-- saving mandateFieldStepActionList {}", mandateFieldStepActionList);
+                logger.debug("-- saving mandateFieldStepActionList {}", mandateFieldStepActionList);
                 mandateFieldStepActionDAO.persist(mandateFieldStepActionList);
 
             }
         }
-        logger.info("-- end saveMandateFieldStepAction");
+        logger.debug("-- end saveMandateFieldStepAction");
     }
 
     public void saveMandateFieldConStepAction(List<MandateFieldConditionView> mandateFieldConditionViewList, Step step, Action action){
-        logger.info("-- begin saveMandateFieldConStepAction {}, {}, {}", mandateFieldConditionViewList, step, action);
+        logger.debug("-- begin saveMandateFieldConStepAction {}, {}, {}", mandateFieldConditionViewList, step, action);
         if(mandateFieldConditionViewList != null && mandateFieldConditionViewList.size() > 0) {
         List<MandateFieldConStepAction> conStepActionList = new ArrayList<MandateFieldConStepAction>();
             for(MandateFieldConditionView conditionView : mandateFieldConditionViewList){
                 MandateFieldConStepAction mandateFieldConStepAction = mandateFieldConStepActionDAO.findByActionAndCon(step.getId(), action.getId(), conditionView.getId());
                 if(mandateFieldConStepAction == null){
-                    MandateFieldCondition mandateFieldCondition = mandateFieldConditionDAO.findById(conditionView.getId());
                     mandateFieldConStepAction = new MandateFieldConStepAction();
-                    mandateFieldConStepAction.setStep(step);
-                    mandateFieldConStepAction.setAction(action);
-                    mandateFieldConStepAction.setMandateFieldCondition(mandateFieldCondition);
                 }
+                MandateFieldCondition mandateFieldCondition = mandateFieldConditionDAO.findById(conditionView.getId());
+                mandateFieldConStepAction.setStep(step);
+                mandateFieldConStepAction.setAction(action);
+                mandateFieldConStepAction.setMandateFieldCondition(mandateFieldCondition);
                 conStepActionList.add(mandateFieldConStepAction);
             }
 
             if(conStepActionList.size() > 0) {
-                logger.info("-- saving conStepActionList {}", conStepActionList);
+                logger.debug("-- saving conStepActionList {}", conStepActionList);
                 mandateFieldConStepActionDAO.persist(conStepActionList);
             }
         }
-        logger.info("-- end saveMandateFieldConStepAction");
+        logger.debug("-- end saveMandateFieldConStepAction");
     }
 
     public void deleteMandateFieldStepAction(List<MandateFieldView> deletedMandateFieldViewList, StepView stepView, ActionView actionView){
-        logger.info("-- begin deleteMandateFieldStepAction {}", deletedMandateFieldViewList);
+        logger.debug("-- begin deleteMandateFieldStepAction {}", deletedMandateFieldViewList);
         if(deletedMandateFieldViewList != null && deletedMandateFieldViewList.size() > 0){
             for(MandateFieldView mandateFieldView : deletedMandateFieldViewList){
                 MandateFieldStepAction mandateFieldStepAction = mandateFieldStepActionDAO.findByActionAndField(stepView.getId(), actionView.getId(), mandateFieldView.getId());
@@ -431,11 +561,11 @@ public class MandateFieldControl extends BusinessControl {
                     mandateFieldStepActionDAO.delete(mandateFieldStepAction);
             }
         }
-        logger.info("-- end deleteMandateFieldStepAction");
+        logger.debug("-- end deleteMandateFieldStepAction");
     }
 
     public void deleteMandateFieldConStepAction(List<MandateFieldConditionView> delectedMandateConViewList, StepView stepView, ActionView actionView){
-        logger.info("-- begin deleteMandateFieldConStepAction {}, {}, {}", delectedMandateConViewList, stepView, actionView);
+        logger.debug("-- begin deleteMandateFieldConStepAction {}, {}, {}", delectedMandateConViewList, stepView, actionView);
         if(delectedMandateConViewList != null && delectedMandateConViewList.size() > 0){
             for(MandateFieldConditionView conditionView : delectedMandateConViewList){
                 MandateFieldConStepAction mandateFieldConStepAction = mandateFieldConStepActionDAO.findByActionAndCon(stepView.getId(), actionView.getId(), conditionView.getId());
@@ -443,7 +573,7 @@ public class MandateFieldControl extends BusinessControl {
                     mandateFieldConStepActionDAO.delete(mandateFieldConStepAction);
             }
         }
-        logger.info("-- end deleteMandateFieldConStepAction");
+        logger.debug("-- end deleteMandateFieldConStepAction");
 
     }
 

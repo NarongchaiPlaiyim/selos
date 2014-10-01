@@ -12,6 +12,7 @@ public interface ExceptionMapping {
     public static final String LDAP_EMPTY_USERNAME = "008";
     public static final String USER_OR_PASS_INCORRECT = "009";
     public static final String USER_LOCKED = "099";
+    public static final String USER_OTHER_EXCEPTION = "999";
 
 
     //BPM exception

@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view.master;
 
 import com.clevel.selos.model.MandateConditionType;
+import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,6 +18,7 @@ public class MandateFieldConditionView implements Serializable {
     private MandateFieldClassView mandateFieldClassView;
     private MandateDependType dependType;
     private MandateFieldConditionView dependCondition;
+    private MandateDependConType dependConType;
     private List<MandateFieldConditionDetailView> conditionDetailViewList;
     private boolean needUpdate;
 
@@ -68,6 +70,14 @@ public class MandateFieldConditionView implements Serializable {
         this.dependType = dependType;
     }
 
+    public MandateDependConType getDependConType() {
+        return dependConType;
+    }
+
+    public void setDependConType(MandateDependConType dependConType) {
+        this.dependConType = dependConType;
+    }
+
     public MandateFieldConditionView getDependCondition() {
         return dependCondition;
     }
@@ -100,6 +110,7 @@ public class MandateFieldConditionView implements Serializable {
         mandateFieldClassView = view.mandateFieldClassView;
         dependType = view.dependType;
         dependCondition = view.dependCondition;
+        dependConType = view.dependConType;
         conditionDetailViewList = view.conditionDetailViewList;
     }
 
@@ -108,10 +119,12 @@ public class MandateFieldConditionView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("mandateConditionType", mandateConditionType)
+                .append("name", name)
                 .append("conditionDesc", conditionDesc)
                 .append("mandateFieldClassView", mandateFieldClassView)
                 .append("dependType", dependType)
                 .append("dependCondition", dependCondition)
+                .append("dependConType", dependConType)
                 .append("conditionDetailViewList", conditionDetailViewList)
                 .append("needUpdate", needUpdate)
                 .toString();

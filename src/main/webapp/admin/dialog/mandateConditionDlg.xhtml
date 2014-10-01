@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui">
     <h:form id="mandateConditionFrm">
         <p:scrollPanel style="height:360px" styleClass="panel-dialog" id="mandateConditionPanel"
-                       mode="native" rendered="#{not empty mandateFieldSubmit.wrkMandateConditionView}">
+                       mode="native" rendered="#{not empty mandateFieldCondition.wrkMandateConditionView}">
             <p:messages />
             <table class="content_form" style="width:100%">
                 <tr>
@@ -13,7 +13,7 @@
                         <p:outputLabel for="conditionName" value="#{msg.get('app.mandateField.condition.name')}" />
                     </td>
                     <td>
-                        <p:inputText id="conditionName" styleClass="largest_m" maxlength="30" required="true" value="#{mandateFieldSubmit.wrkMandateConditionView.name}"/>
+                        <p:inputText id="conditionName" styleClass="largest_m" maxlength="30" required="true" value="#{mandateFieldCondition.wrkMandateConditionView.name}"/>
                     </td>
                 </tr>
                 <tr>
@@ -21,7 +21,7 @@
                         <p:outputLabel for="conditionDesc" value="#{msg.get('app.mandateField.condition.desc')}" />
                     </td>
                     <td>
-                        <p:inputText id="conditionDesc" styleClass="largest_l" value="#{mandateFieldSubmit.wrkMandateConditionView.conditionDesc}"/>
+                        <p:inputText id="conditionDesc" styleClass="largest_l" value="#{mandateFieldCondition.wrkMandateConditionView.conditionDesc}"/>
                     </td>
                 </tr>
                 <tr>
@@ -30,10 +30,38 @@
                     </td>
                     <td>
                         <p:selectOneMenu id="mandateConditionType" size="1" styleClass="largest_l"
-                                          value="#{mandateFieldSubmit.wrkMandateConditionView.mandateConditionType}" required="true">
-                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                                          value="#{mandateFieldCondition.wrkMandateConditionView.mandateConditionType}" required="true">
+                            <f:selectItem itemLabel="- Please Select -"/>
                             <f:selectItems value="#{enumGeneralControl.mandateConditionType}" var="mandateConditionType"
                                            itemLabel="#{msg.get(mandateConditionType.desc)}" itemValue="#{mandateConditionType}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="mandateDependCondType" value="#{msg.get('app.mandateField.condition.depend.con.type')}" />
+                    </td>
+                    <td>
+                        <p:selectOneRadio id="mandateDependCondType" size="1" styleClass="largest_l"
+                                         value="#{mandateFieldCondition.wrkMandateConditionView.dependConType}">
+                            <f:selectItems value="#{enumGeneralControl.mandateDependConType}" var="mandateDependCondType"
+                                           itemLabel="#{msg.get(mandateDependCondType.desc)}" itemValue="#{mandateDependCondType}"/>
+                            <p:ajax event="click" listener="#{mandateFieldCondition.onChangeDependConType}"
+                                    process=":mandateConditionFrm:mandateDependCondType"
+                                    update=":mandateConditionFrm:dependCondition"/>
+                        </p:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="dependCondition" value="#{msg.get('app.mandateField.condition.depend.condition')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="dependCondition" size="1" styleClass="largest"
+                                         value="#{mandateFieldCondition.selectedMandateDependCondViewId}">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
+                            <f:selectItems value="#{mandateFieldCondition.dependConditionList}" var="condition"
+                                    itemLabel="#{condition.label}" itemValue="#{condition.value}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -43,22 +71,9 @@
                     </td>
                     <td>
                         <p:selectOneMenu id="mandateDependType" size="1" styleClass="largest_l"
-                                          value="#{mandateFieldSubmit.wrkMandateConditionView.dependType}">
-                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                                         value="#{mandateFieldCondition.wrkMandateConditionView.dependType}">
                             <f:selectItems value="#{enumGeneralControl.mandateDependType}" var="mandateDependType"
                                            itemLabel="#{msg.get(mandateDependType.desc)}" itemValue="#{mandateDependType}"/>
-                        </p:selectOneMenu>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="title">
-                        <p:outputLabel for="dependCondition" value="#{msg.get('app.mandateField.condition.depend.condition')}" />
-                    </td>
-                    <td>
-                        <p:selectOneMenu id="dependCondition" size="1" styleClass="largest"
-                                         value="#{mandateFieldSubmit.selectedMandateDependCondViewId}">
-                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="-1"/>
-                            <f:selectItems value="#{mandateFieldSubmit.conditionList}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -68,7 +83,7 @@
                         <p:commandButton id="addConditionDetailButton" value="#{msg.get('app.button.add')}"
                                          process="@this"
                                          oncomplete="p_mandateConditionDetailDlg.show();"
-                                         action="#{mandateFieldSubmit.onOpenAddMandateConditionDetail}"
+                                         action="#{mandateFieldCondition.onOpenAddMandateConditionDetail}"
                                          update=":mandateConditionDetailDlg">
 
                             <p:resetInput target=":mandateConditionDetailDlg" />
@@ -78,7 +93,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <p:dataTable id='conditionDetail_tble' styleClass="full_table" value="#{mandateFieldSubmit.wrkMandateConditionView.conditionDetailViewList}" var="conditionDetail" rowIndexVar="conditionRowIndex">
+                        <p:dataTable id='conditionDetail_tble' styleClass="full_table" value="#{mandateFieldCondition.wrkMandateConditionView.conditionDetailViewList}" var="conditionDetail" rowIndexVar="conditionRowIndex">
                             <p:column styleClass="center">
                                 <h:outputText value="#{conditionRowIndex+1}"
                                               style="min-width: 20px; max-width: 20px; width: 20px;"/>
@@ -91,21 +106,12 @@
                                 <h:outputText value="#{conditionDetail.baseValue}"/>
                             </p:column>
                             <p:column style='width:50px' styleClass="center">
-                                <p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                                                 process="@this"
-                                                 oncomplete="p_mandateConditionDetailDlg.show();"
-                                                 action="#{mandateFieldSubmit.onOpenUpdateMandateConditionDetail}"
-                                                 update=":mandateConditionDetailDlg"
-                                                 style="margin-right:0px !important">
-                                    <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateConDetailViewId}" value="#{conditionRowIndex}" />
-                                    <p:resetInput target=":mandateConditionDetailDlg" />
-                                </p:commandButton>
                                 <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
                                                  process="@this"
-                                                 action="#{mandateFieldSubmit.onDeleteMandateConditionDetail}"
+                                                 action="#{mandateFieldCondition.onDeleteMandateConditionDetail}"
                                                  update=":mandateConditionFrm:conditionDetail_tble"
                                                  style="margin-right:0px !important">
-                                    <f:setPropertyActionListener target="#{mandateFieldSubmit.selectedMandateConDetailViewId}" value="#{conditionRowIndex}" />
+                                    <f:setPropertyActionListener target="#{mandateFieldCondition.selectedMandateConDetailViewId}" value="#{conditionRowIndex}" />
                                     <p:resetInput target=":mandateConditionDetailDlg" />
                                 </p:commandButton>
                             </p:column>
@@ -121,7 +127,7 @@
                     <td colspan="2" class="center">
                         <p:commandButton id="okBtn" styleClass="small"
                                          value="#{msg.get('app.button.ok')}"
-                                         actionListener="#{mandateFieldSubmit.onAddMandateCondition()}"
+                                         actionListener="#{mandateFieldCondition.onAddMandateCondition()}"
                                          process="@form"
                                          update=":mandateConditionFrm,:frmMain:condition_tbl"
                                          oncomplete="handleDialogRequest(xhr, status, args,'p_mandateConditionDlg')"

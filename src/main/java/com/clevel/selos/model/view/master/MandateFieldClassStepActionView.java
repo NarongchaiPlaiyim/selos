@@ -14,6 +14,7 @@ public class MandateFieldClassStepActionView implements Serializable{
     private ActionView actionView;
     private StepView stepView;
     private MandateFieldClassView mandateFieldClassView;
+    private boolean isRequired = false;
     private boolean needUpdate = false;
 
     public long getId() {
@@ -48,6 +49,14 @@ public class MandateFieldClassStepActionView implements Serializable{
         this.mandateFieldClassView = mandateFieldClassView;
     }
 
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
+
     public boolean isNeedUpdate() {
         return needUpdate;
     }
@@ -63,6 +72,7 @@ public class MandateFieldClassStepActionView implements Serializable{
                 .append("actionView", actionView)
                 .append("stepView", stepView)
                 .append("mandateFieldClassView", mandateFieldClassView)
+                .append("isRequired", isRequired)
                 .append("needUpdate", needUpdate)
                 .toString();
     }

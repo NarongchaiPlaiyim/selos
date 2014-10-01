@@ -71,6 +71,8 @@ public class BRMSApplicationInfo implements Serializable{
     private BigDecimal totalMortgageValue;
     private BigDecimal totalRedeemTransaction;
 
+    private String botClass;
+
     private List<BRMSCustomerInfo> customerInfoList;
     private List<BRMSAccountStmtInfo> accountStmtInfoList;
     private List<BRMSBizInfo> bizInfoList;
@@ -598,6 +600,14 @@ public class BRMSApplicationInfo implements Serializable{
         this.collateralInfoList = collateralInfoList;
     }
 
+    public String getBotClass() {
+        return botClass;
+    }
+
+    public void setBotClass(String botClass) {
+        this.botClass = botClass;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -666,6 +676,7 @@ public class BRMSApplicationInfo implements Serializable{
                 .append("bizInfoList", bizInfoList)
                 .append("accountRequestedList", accountRequestedList)
                 .append("collateralInfoList", collateralInfoList)
+                .append("botClass", botClass)
                 .toString();
     }
 }

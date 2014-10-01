@@ -384,12 +384,12 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                 }
 
                 //TODO: validate product program
-                if (ValidationUtil.isEmpty(ssoId) || ValidationUtil.isGreaterThan(10, ssoId)) { //Required
+                /*if (ValidationUtil.isEmpty(ssoId) || ValidationUtil.isGreaterThan(10, ssoId)) { //Required
                     wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"));
                     response.setValue(WSResponse.VALIDATION_FAILED, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"), "");
                     log.debug("{}", response);
                     return response;
-                }
+                }*/
             } /*else {
                 if (ValidationUtil.isNotNullAndGreaterThan(10, uwId)) { //Optional
                     wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"));

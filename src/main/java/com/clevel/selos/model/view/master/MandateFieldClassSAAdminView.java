@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MandateFieldClassSAAdminView extends MandateFieldClassView implements Serializable{
@@ -54,8 +55,14 @@ public class MandateFieldClassSAAdminView extends MandateFieldClassView implemen
 
         pageName = view.pageName;
         active = view.active;
-        mandateFieldViewList = view.mandateFieldViewList;
-        mandateFieldConditionViewList = view.mandateFieldConditionViewList;
+        if(view.mandateFieldViewList == null)
+            mandateFieldViewList = new ArrayList<MandateFieldView>();
+        else
+            mandateFieldViewList = view.mandateFieldViewList;
+        if(view.mandateFieldConditionViewList == null)
+            mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
+        else
+            mandateFieldConditionViewList = view.mandateFieldConditionViewList;
     }
 
     @Override

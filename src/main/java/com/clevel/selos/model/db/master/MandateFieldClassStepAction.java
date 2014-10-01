@@ -27,6 +27,9 @@ public class MandateFieldClassStepAction implements Serializable{
     @JoinColumn(name = "mandate_class_id")
     private MandateFieldClass mandateFieldClass;
 
+    @Column(name = "is_required", length = 1, columnDefinition = "int default 0")
+    private boolean isRequired;
+
     public long getId() {
         return id;
     }
@@ -59,6 +62,14 @@ public class MandateFieldClassStepAction implements Serializable{
         this.mandateFieldClass = mandateFieldClass;
     }
 
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -66,6 +77,7 @@ public class MandateFieldClassStepAction implements Serializable{
                 .append("action", action)
                 .append("step", step)
                 .append("mandateFieldClass", mandateFieldClass)
+                .append("isRequired", isRequired)
                 .toString();
     }
 }

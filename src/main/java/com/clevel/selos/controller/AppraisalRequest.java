@@ -6,6 +6,8 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
@@ -70,6 +72,7 @@ public class AppraisalRequest extends BaseController {
     private long workCaseId;
     private long workCasePreScreenId;
     private long stepId;
+    private long statusId;
     private AppraisalView appraisalView;
 
     private AppraisalDetailView appraisalDetailView;
@@ -92,24 +95,41 @@ public class AppraisalRequest extends BaseController {
 
     }
 
-    private void init(){
-        log.debug("init...");
+    private void _initial(HttpSession session){
+        log.debug("initial... set default for appraisal request.");
+
         modeForButton = ModeForButton.ADD;
+
         appraisalDetailView = new AppraisalDetailView();
         appraisalDetailViewDialog = new AppraisalDetailView();
         appraisalDetailViewSelected = new AppraisalDetailView();
+
         titleDeedFlag = false;
         purposeFlag = false;
         numberOfDocumentsFlag = false;
         contactFlag = false;
         contactFlag2 = false;
         contactFlag3 = false;
+
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
     }
 
     public void preRender(){
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
+            //Check Step is PreScreen, PreScreenMaker, Prepare FullApp ( 1001, 1003, 2001, 2011 )
+            stepId = getCurrentStep(session);
+            if(!(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_MAKER.value() ||
+                    stepId == StepValue.FULLAPP_BDM.value() || stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value() ||
+                        stepId == StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId == StepValue.REQUEST_APPRAISAL.value())){
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+
+            }
             /*stepId = getCurrentStep(session);
             if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
                 log.debug("preRender ::: Invalid step id : {}", stepId);
@@ -125,26 +145,31 @@ public class AppraisalRequest extends BaseController {
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation...");
-        init();
         HttpSession session = FacesUtil.getSession(false);
-        String bdmUserId = "";
-        if(checkSession(session)){
-            stepId = (Long)session.getAttribute("stepId");
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        log.debug("onCreation...");
 
+        _initial(session);
+        String bdmUserId = "";
+
+        if(checkSession(session)){
             if (!Util.isZero(workCaseId)){
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
-                bdmUserId = workCase.getCreateBy().getId();
+                bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePreScreenDAO.findById(workCasePreScreenId);
-                bdmUserId = workCasePrescreen.getCreateBy().getId();
+                bdmUserId = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
             }
 
-            log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}]", workCasePreScreenId, workCaseId);
+            ProposeType proposeType;
+            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+                proposeType = ProposeType.P;
+            }else{
+                proposeType = ProposeType.A;
+            }
 
-            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
+            log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}], proposeType : [{}]", workCasePreScreenId, workCaseId, proposeType);
+
+            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId, proposeType);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
 
             if(!Util.isNull(appraisalView)){
@@ -231,7 +256,7 @@ public class AppraisalRequest extends BaseController {
                 try{
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");
@@ -240,11 +265,7 @@ public class AppraisalRequest extends BaseController {
                 } catch(Exception ex){
                     log.error("Exception : {}", ex);
                     messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                    if(ex.getCause() != null){
-                        message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-                    } else {
-                        message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
-                    }
+                    message = Util.getMessageException(ex);
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {

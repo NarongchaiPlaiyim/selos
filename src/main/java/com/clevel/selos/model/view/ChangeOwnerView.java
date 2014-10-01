@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Time: 1:38 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ChangeOwnerView implements Serializable {
+public class ChangeOwnerView implements Serializable,Comparable {
     private String user;
     private String id;
     private String roleName;
@@ -47,6 +47,11 @@ public class ChangeOwnerView implements Serializable {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public int compareTo(Object obj){
+        ChangeOwnerView p = (ChangeOwnerView)obj;
+        return this.id.compareTo(p.id);
     }
 
 

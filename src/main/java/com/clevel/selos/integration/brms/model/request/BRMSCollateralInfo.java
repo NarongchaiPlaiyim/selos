@@ -2,10 +2,12 @@ package com.clevel.selos.integration.brms.model.request;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class BRMSCollateralInfo implements Serializable{
     private String collateralType;
     private String subCollateralType;
+    private List<String> subCollateralTypeList;
     private boolean appraisalFlag;
     private String aadDecision;
     private BigDecimal numberOfMonthsApprDate;
@@ -57,5 +59,13 @@ public class BRMSCollateralInfo implements Serializable{
 
     public void setCollId(String collId) {
         this.collId = collId;
+    }
+
+    public List<String> getSubCollateralTypeList() {
+        return subCollateralTypeList;
+    }
+
+    public void setSubCollateralTypeList(List<String> subCollateralTypeList) {
+        this.subCollateralTypeList = subCollateralTypeList;
     }
 }
