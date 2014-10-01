@@ -1310,7 +1310,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         boolean complete = false;
         try{
-            fullApplicationControl.cancelRequestAppraisal(queueName, wobNumber, cancelRequestReasonId, cancelRequestRemark);
+            fullApplicationControl.cancelRequestAppraisal(queueName, wobNumber, cancelRequestReasonId, cancelRequestRemark, workCasePreScreenId, workCaseId, stepId);
             messageHeader =  msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.cancel.success");
             showMessageRedirect();
@@ -1584,7 +1584,7 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onSubmitFCashZM(){
+    /*public void onSubmitFCashZM(){
         log.debug("onSubmitFCashZM ::: starting...");
         _loadSessionVariable();
         boolean complete = false;
@@ -1602,7 +1602,7 @@ public class HeaderController extends BaseController {
             log.error("onSubmitFCashZM ::: exception occurred : ", ex);
         }
         sendCallBackParam(complete);
-    }
+    }*/
 
     public void onReturnBDMByBU(){
         log.debug("onReturnBDMByZM ( return to BDM from ZM )");
@@ -2797,7 +2797,9 @@ public class HeaderController extends BaseController {
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
-    //---- Function for Request Appraisal ( Parallel ) ----//
+    //---------------- Function for Request Appraisal ( Parallel ) -----------------//
+    //*** For BDM Request from PreScreen/FullApplication
+    //*   Flag for Parallel flag to REQUESTING_PARALLEL
     public void onRequestParallelAppraisal(){
         _loadSessionVariable();
         try {
@@ -2814,6 +2816,8 @@ public class HeaderController extends BaseController {
         }
     }
 
+    //*** For BDM Request from RequestAppraisal Screen
+    //*   Show Dialog for Submit Request Parallel
     public void onOpenSubmitParallelRequestAppraisal(){
         _loadSessionVariable();
         slaReasonId = 0;
@@ -2822,6 +2826,8 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
     }
 
+    //*** For BDM Request from RequestAppraisal Screen
+    //*   Submit case and Create parallel Case for Appraisal
     public void onSubmitParallelRequestAppraisal(){
         try{
             fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, stepId);
@@ -2837,15 +2843,17 @@ public class HeaderController extends BaseController {
 
     }
 
+    //--- For BDM Cancel Request from RequestAppraisal Screen
     public void onCancelParallelRequestAppraisal(){
         _loadSessionVariable();
-        log.debug("onCancelParallelRequestAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
-        fullApplicationControl.cancelParallelRequestAppraisal(workCasePreScreenId, workCaseId);
+        log.debug("onCancelParallelRequestAppraisal : workCaseId : {}, workCasePreScreenId : {}, stepId : {}", workCaseId, workCasePreScreenId, stepId);
+        fullApplicationControl.cancelParallelRequestAppraisal(workCasePreScreenId, workCaseId, stepId);
         messageHeader = "Information.";
         message = "Cancel request appraisal complete.";
         showMessageRedirect();
     }
 
+    //------------------ End function for Appraisal ---------------------------//
 
     public boolean checkAccessStage(String stageString){
         boolean accessible = false;
