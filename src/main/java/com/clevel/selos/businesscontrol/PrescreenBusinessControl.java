@@ -1670,17 +1670,17 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                 List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
                 //-- if customer never check NCB ( eg. guarantor and related person ) manual add customer account name and customer account--//
-                /*//Add default account name to check CSI
+                //Add default account name to check CSI
                 AccountInfoName accountInfoName = new AccountInfoName();
                 accountInfoName.setNameTh(customer.getNameTh());
                 accountInfoName.setNameEn(customer.getNameEn());
                 accountInfoName.setSurnameTh(customer.getLastNameTh());
                 accountInfoName.setSurnameEn(customer.getLastNameEn());
-                accountInfoNameList.add(accountInfoName);*/
+                accountInfoNameList.add(accountInfoName);
 
                 if(customerAccountNameList != null && customerAccountNameList.size() > 0){
                     for(CustomerAccountName customerAccountName : customerAccountNameList){
-                        AccountInfoName accountInfoName = new AccountInfoName();
+                        accountInfoName = new AccountInfoName();
 
                         accountInfoName.setNameTh(customerAccountName.getNameTh());
                         accountInfoName.setNameEn(customerAccountName.getNameEn());

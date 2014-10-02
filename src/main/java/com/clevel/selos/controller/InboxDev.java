@@ -3,9 +3,14 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.InboxDevControl;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ParallelAppraisalStatus;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
@@ -61,6 +66,11 @@ public class InboxDev implements Serializable {
     private List<InboxView> inboxPoolViewList;
     private boolean renderedPool;
 
+    @Inject
+    WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
+
     private InboxView inboxViewSelectItem;
 
     public InboxDev() {
@@ -101,15 +111,24 @@ public class InboxDev implements Serializable {
         }
 
         HttpSession session = FacesUtil.getSession(false);
+        int parallelRequestAppraisal = 0;
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
         if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCasePreScreenId()))){
             session.setAttribute("workCasePreScreenId", inboxViewSelectItem.getWorkCasePreScreenId());
+            if(!Util.isZero(Util.parseLong(inboxViewSelectItem.getWorkCasePreScreenId(), 0))) {
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(inboxViewSelectItem.getWorkCasePreScreenId());
+                parallelRequestAppraisal = workCasePrescreen.getParallelAppraisalFlag();
+            }
         } else {
             session.setAttribute("workCasePreScreenId", 0);
         }
         if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCaseId()))){
             session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
+            if(!Util.isZero(Util.parseLong(inboxViewSelectItem.getWorkCaseId(), 0))) {
+                WorkCase workCase = workCaseDAO.findById(inboxViewSelectItem.getWorkCaseId());
+                parallelRequestAppraisal = workCase.getParallelAppraisalFlag();
+            }
         } else {
             session.setAttribute("workCaseId", 0);
         }
@@ -133,8 +152,13 @@ public class InboxDev implements Serializable {
         session.setAttribute("appHeaderInfo", appHeaderView);
 
         long selectedStepId = inboxViewSelectItem.getStepId();
-        String landingPage = inboxDevControl.getLandingPage(selectedStepId);
-
+        String landingPage;
+        log.debug("parallelRequestAppraisal : {}", parallelRequestAppraisal);
+        if(parallelRequestAppraisal == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+            landingPage = "/site/appraisalRequest.jsf";
+        }else {
+            landingPage = inboxDevControl.getLandingPage(selectedStepId);
+        }
         if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
             FacesUtil.redirect(landingPage);
             return;

@@ -12,6 +12,7 @@ import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.ParallelAppraisalStatus;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -245,6 +246,7 @@ public class PESQLInbox implements Serializable
         long wrkCaseAppraisalId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
+        int parallelRequestAppraisal = 0;
         int fetchType = Util.parseInt(inboxViewSelectItem.getFetchType(), 0);
         String appNumber = Util.parseString(inboxViewSelectItem.getApplicationno(), "");
         String queueName = Util.parseString(inboxViewSelectItem.getQueuename(), "0");
@@ -276,10 +278,12 @@ public class PESQLInbox implements Serializable
             if(!Util.isNull(workCase)){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
+                parallelRequestAppraisal = workCase.getParallelAppraisalFlag();
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                parallelRequestAppraisal = workCasePrescreen.getParallelAppraisalFlag();
             }
 
             if(Util.isTrue(requestAppraisalFlag)){
@@ -291,6 +295,7 @@ public class PESQLInbox implements Serializable
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);
             session.setAttribute("requestAppraisal", requestAppraisalFlag);
+            session.setAttribute("parallelRequestAppraisal", parallelRequestAppraisal);
             session.setAttribute("wobNumber", wobNumber);
             session.setAttribute("statusId", statusId);
             session.setAttribute("fetchType", fetchType);
@@ -303,7 +308,13 @@ public class PESQLInbox implements Serializable
             AppHeaderView appHeaderView = headerControl.getHeaderInformation(stepId, statusId, inboxViewSelectItem.getApplicationno());
             session.setAttribute("appHeaderInfo", appHeaderView);
 
-            String landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
+            String landingPage;
+            log.debug("parallelRequestAppraisal : {}", parallelRequestAppraisal);
+            if(parallelRequestAppraisal == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                landingPage = "/site/appraisalRequest.jsf";
+            }else {
+                landingPage = inboxControl.getLandingPage(stepId,Util.parseLong(inboxViewSelectItem.getStatuscode(), 0));
+            }
 
             log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
 

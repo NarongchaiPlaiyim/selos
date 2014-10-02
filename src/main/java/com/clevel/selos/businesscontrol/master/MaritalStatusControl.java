@@ -49,7 +49,6 @@ public class MaritalStatusControl extends BusinessControl{
             SelectItem selectItem = new SelectItem();
             selectItem.setLabel(maritalStatusView.getName());
             selectItem.setValue(maritalStatusView.getId());
-            logger.debug("add SelectItem: {}", selectItem);
             selectItemList.add(selectItem);
         }
         logger.debug("getMaritalStatusSelectItemList return maritalStatusView size: {}", selectItemList.size());
