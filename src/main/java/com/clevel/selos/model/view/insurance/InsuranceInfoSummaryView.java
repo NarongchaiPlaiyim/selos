@@ -8,7 +8,7 @@ import com.clevel.selos.model.db.master.User;
 
 public class InsuranceInfoSummaryView implements Serializable {
     private long id;
-    private BigDecimal totalPremiumAmount;
+    private BigDecimal totalPremiumAmount = BigDecimal.ZERO;
     private Date modifyDate;
     private User modifyBy;
     

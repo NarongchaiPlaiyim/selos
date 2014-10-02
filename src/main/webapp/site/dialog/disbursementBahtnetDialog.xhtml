@@ -53,7 +53,12 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.disburseAmount')}">
-                            <p:inputText value="#{item.disburseAmount}" style="#{item.componentFlag? 'border-color:blank;' : 'border-color:red;'}"/>
+                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" >
+                            	<f:convertNumber pattern="#,##0"
+                                                 minFractionDigits="2"
+                                                 maxFractionDigits="2"
+                                                 maxIntegerDigits="14"/>
+							</p:inputText>
                         </p:column>
                     </p:dataTable>
                 </td>
