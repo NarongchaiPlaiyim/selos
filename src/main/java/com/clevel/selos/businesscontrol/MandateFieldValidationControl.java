@@ -251,7 +251,7 @@ public class MandateFieldValidationControl extends BusinessControl{
         }
 
         for(ConditionResult conditionResult : classResult.conditionResultMap.values()){
-            combineConditionResult(conditionResult);
+            conditionResult.isPassCombine = combineConditionResult(conditionResult);
             logger.debug("combineMandateResult, conditionResult: {}", conditionResult);
         }
 
