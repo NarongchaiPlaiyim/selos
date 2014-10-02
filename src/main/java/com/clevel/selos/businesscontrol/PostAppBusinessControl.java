@@ -119,47 +119,47 @@ public class PostAppBusinessControl extends BusinessControl {
 	private InsuranceInfoDAO insuranceInfoDAO;
 	
 	
-	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1015, -1, remark);
+	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1015, -1, remark, stepId);
 	}
-	public void returnToBDM(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
-		_returnBPM(workCaseId, queueName,wobNumber, 1005, returnInfos);
+	public void returnToBDM(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos, long stepId) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1005, returnInfos, stepId);
 	}
-	public void returnToUW2(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
-		_returnBPM(workCaseId, queueName,wobNumber, 1033, returnInfos);
+	public void returnToUW2(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos, long stepId) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1033, returnInfos, stepId);
 	}
-	public void returnToDataEntry(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
-		_returnBPM(workCaseId, queueName,wobNumber, 1034, returnInfos);
+	public void returnToDataEntry(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos, long stepId) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1034, returnInfos, stepId);
 	}
-	public void returnToContactCenter(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
-		_returnBPM(workCaseId, queueName,wobNumber, 1037, returnInfos);
+	public void returnToContactCenter(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos, long stepId) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1037, returnInfos, stepId);
 	}
-	public void returnToLARBC(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos) throws Exception {
-		_returnBPM(workCaseId, queueName,wobNumber, 1038, returnInfos);
+	public void returnToLARBC(long workCaseId, String queueName,String wobNumber,List<ReturnInfoView> returnInfos, long stepId) throws Exception {
+		_returnBPM(workCaseId, queueName,wobNumber, 1038, returnInfos, stepId);
 	}
-	public void cancelCA(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1003, reasonId, remark);
+	public void cancelCA(long workCaseId, String queueName,String wobNumber,int reasonId,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1003, reasonId, remark, stepId);
 	}
-	public void cancelDisbursement(long workCaseId, String queueName,String wobNumber,int reasonId,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1040, reasonId, remark);
+	public void cancelDisbursement(long workCaseId, String queueName,String wobNumber,int reasonId,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1040, reasonId, remark, stepId);
 	}
-	public void requestPriceReduction(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1028, -1, remark);
+	public void requestPriceReduction(long workCaseId,String queueName,String wobNumber,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1028, -1, remark, stepId);
 	}
-	public void generateAgreement(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1036, -1, remark);
+	public void generateAgreement(long workCaseId,String queueName,String wobNumber,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1036, -1, remark, stepId);
 	}
-	public void regenerateAgreement(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1039, -1, remark);
+	public void regenerateAgreement(long workCaseId,String queueName,String wobNumber,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1039, -1, remark, stepId);
 	}
-	public void dataEntryComplete(long workCaseId,String queueName,String wobNumber,String remark) throws Exception {
-		_executeBPM(workCaseId, queueName,wobNumber, 1035, -1, remark);
+	public void dataEntryComplete(long workCaseId,String queueName,String wobNumber,String remark, long stepId) throws Exception {
+		_executeBPM(workCaseId, queueName,wobNumber, 1035, -1, remark, stepId);
 	}
 	
 	/**
 	 * @return true if it has return code RG001
 	 */
-	private void _returnBPM(long workCaseId,String queueName,String wobNumber,long actionId,List<ReturnInfoView> returnInfos) throws Exception {
+	private void _returnBPM(long workCaseId,String queueName,String wobNumber,long actionId,List<ReturnInfoView> returnInfos, long stepId) throws Exception {
 		WorkCase workCase = workCaseDAO.findById(workCaseId);
 		Action action = actionDAO.findById(actionId);
 		
@@ -182,17 +182,17 @@ public class PostAppBusinessControl extends BusinessControl {
 		}
 		returnInfoDAO.persist(models);
 		
-		_callBPM(workCase, action,queueName,wobNumber, -1, null, new HashSet<String>());
+		_callBPM(workCase, action,queueName,wobNumber, -1, null, new HashSet<String>(), stepId);
 	}
 	
-	private void _executeBPM(long workCaseId,String queueName,String wobNumber,long actionId,int reasonId,String remark) throws Exception {
+	private void _executeBPM(long workCaseId,String queueName,String wobNumber,long actionId,int reasonId,String remark, long stepId) throws Exception {
 		WorkCase workCase = workCaseDAO.findById(workCaseId);
 		Action action = actionDAO.findById(actionId);
 		
-		_callBPM(workCase, action,queueName,wobNumber, reasonId, remark, new HashSet<String>());
+		_callBPM(workCase, action,queueName,wobNumber, reasonId, remark, new HashSet<String>(), stepId);
 	}
 	
-	private void _callBPM(WorkCase workCase,Action action,String queueName,String wobNumber,int reasonId,String remark,HashSet<String> returnCodeSet) throws Exception{
+	private void _callBPM(WorkCase workCase,Action action,String queueName,String wobNumber,int reasonId,String remark,HashSet<String> returnCodeSet, long stepId) throws Exception{
 		HashMap<String, String> fields = new HashMap<String, String>();
 		fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getDescription());
@@ -209,11 +209,7 @@ public class PostAppBusinessControl extends BusinessControl {
         if (!Util.isEmpty(remark))
         	fields.put("Remarks", remark);
         
-        String stepCode = workCase.getStep().getCode();
-        if (stepCode == null)
-        	stepCode = "";
-        else
-        	stepCode = stepCode.trim();
+        String stepCode = stepId+"";
         long actionId = action.getId();
         
         log.debug("Call BPM "+workCase.getId());
