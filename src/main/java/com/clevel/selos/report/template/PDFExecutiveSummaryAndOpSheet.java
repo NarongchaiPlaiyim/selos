@@ -1381,7 +1381,20 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                    collateralDecisionReport.setDetailViewList(view.getProposeCreditInfoDetailViewList());
+                    int count = 1;
+                    List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViews = new ArrayList<ProposeCreditInfoDetailView>();
+                    for (ProposeCreditInfoDetailView detailView : view.getProposeCreditInfoDetailViewList()){
+                        ProposeCreditInfoDetailView infoDetailView = new ProposeCreditInfoDetailView();
+                        infoDetailView.setSeq(count++);
+                        infoDetailView.setAccountName(Util.checkNullString(detailView.getAccountName()));
+                        infoDetailView.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
+                        infoDetailView.setRequestType(detailView.getRequestType());
+                        infoDetailView.setProductProgramView(detailView.getProductProgramView());
+                        infoDetailView.setCreditTypeView(detailView.getCreditTypeView());
+                        infoDetailView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                        proposeCreditInfoDetailViews.add(infoDetailView);
+                    }
+                    collateralDecisionReport.setDetailViewList(proposeCreditInfoDetailViews);
                 } else {
                     log.debug("getProposeCreditDetailViewList is Null. {}");
                 }
@@ -1410,10 +1423,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             }
                         }
                         if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                            int count = 1;
+                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                             for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                proposeCollateralInfoSubView.setPath(pathsub);
+                                ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                subView.setPath(pathsub);
+                                subView.setNo(count++);
+                                subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                proposeCollateralInfoSubViewList.add(subView);
                             }
-                            collateralDecisionReport.setCollateralSubViewList(headView.getProposeCollateralInfoSubViewList());
+                            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
                         } else {
                             ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                             List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
@@ -1452,7 +1480,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
-
                 approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                 approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
@@ -1477,7 +1504,20 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
+                    int count = 1;
+                    List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViews = new ArrayList<ProposeCreditInfoDetailView>();
+                    for (ProposeCreditInfoDetailView detailView : view.getProposeCreditInfoDetailViewList()){
+                        ProposeCreditInfoDetailView infoDetailView = new ProposeCreditInfoDetailView();
+                        infoDetailView.setSeq(count++);
+                        infoDetailView.setAccountName(Util.checkNullString(detailView.getAccountName()));
+                        infoDetailView.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
+                        infoDetailView.setRequestType(detailView.getRequestType());
+                        infoDetailView.setProductProgramView(detailView.getProductProgramView());
+                        infoDetailView.setCreditTypeView(detailView.getCreditTypeView());
+                        infoDetailView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                        proposeCreditInfoDetailViews.add(infoDetailView);
+                    }
+                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(proposeCreditInfoDetailViews);
                 } else {
                     approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                 }
@@ -1506,10 +1546,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             }
                         }
                         if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                            int count = 1;
+                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                             for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                proposeCollateralInfoSubView.setPath(pathsub);
+                                ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                subView.setPath(pathsub);
+                                subView.setNo(count++);
+                                subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                proposeCollateralInfoSubViewList.add(subView);
                             }
-                            approvedCollateralDecisionReport.setSubViewList(headView.getProposeCollateralInfoSubViewList());
+                            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                         } else {
                             ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                             List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
@@ -1566,7 +1621,20 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                             log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
+                            int count = 1;
+                            List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViews = new ArrayList<ProposeCreditInfoDetailView>();
+                            for (ProposeCreditInfoDetailView detailView : view.getProposeCreditInfoDetailViewList()){
+                                ProposeCreditInfoDetailView infoDetailView = new ProposeCreditInfoDetailView();
+                                infoDetailView.setSeq(count++);
+                                infoDetailView.setAccountName(Util.checkNullString(detailView.getAccountName()));
+                                infoDetailView.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
+                                infoDetailView.setRequestType(detailView.getRequestType());
+                                infoDetailView.setProductProgramView(detailView.getProductProgramView());
+                                infoDetailView.setCreditTypeView(detailView.getCreditTypeView());
+                                infoDetailView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                                proposeCreditInfoDetailViews.add(infoDetailView);
+                            }
+                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(proposeCreditInfoDetailViews);
                         } else {
                             approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                         }
@@ -1596,10 +1664,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 }
 
                                 if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                                    int count = 1;
+                                    List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                                     for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                        proposeCollateralInfoSubView.setPath(pathsub);
+                                        ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                        subView.setPath(pathsub);
+                                        subView.setNo(count++);
+                                        subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                        subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                        subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                        subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                        subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                        subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                        subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                        subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                        subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                        subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                        proposeCollateralInfoSubViewList.add(subView);
                                     }
-                                    approvedCollateralDecisionReport.setSubViewList(headView.getProposeCollateralInfoSubViewList());
+                                    approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                                 } else {
                                     ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                                     List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
