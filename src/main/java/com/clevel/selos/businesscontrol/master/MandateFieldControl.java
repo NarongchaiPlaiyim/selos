@@ -421,7 +421,6 @@ public class MandateFieldControl extends BusinessControl {
         Map<String, List<MandateFieldView>> _tmpClassMap = new ConcurrentHashMap<String, List<MandateFieldView>>();
         for(MandateFieldStepAction mandateFieldStepAction : mandateFieldStepActionList){
             MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateFieldStepAction.getMandateField());
-            logger.debug("Mandate Field View: {}", mandateFieldView);
 
             MandateFieldClassView mandateFieldClassView = mandateFieldView.getMandateFieldClassView();
             String className = mandateFieldClassView.getClassName();
@@ -484,20 +483,14 @@ public class MandateFieldControl extends BusinessControl {
         logger.debug("-- begin saveMandateClassRequiredStepAction: {}", classSAAdminView);
         if(classSAAdminView != null){
             MandateFieldClassStepAction mandateFieldClassStepAction = mandateFieldClassStepActionDAO.findByActionAndClass(step.getId(), action.getId(), classSAAdminView.getId());
-            //if(classSAAdminView.isNeedUpdate()){
-                if(mandateFieldClassStepAction == null){
-                    mandateFieldClassStepAction = new MandateFieldClassStepAction();
-                }
-                mandateFieldClassStepAction.setAction(action);
-                mandateFieldClassStepAction.setStep(step);
-                mandateFieldClassStepAction.setRequired(classSAAdminView.isClassRequired());
-                mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
-                mandateFieldClassStepActionDAO.persist(mandateFieldClassStepAction);
-            //}
-            /*else {
-                if(mandateFieldClassStepAction != null)
-                    mandateFieldClassStepActionDAO.delete(mandateFieldClassStepAction);
-            }*/
+            if(mandateFieldClassStepAction == null){
+                mandateFieldClassStepAction = new MandateFieldClassStepAction();
+            }
+            mandateFieldClassStepAction.setAction(action);
+            mandateFieldClassStepAction.setStep(step);
+            mandateFieldClassStepAction.setRequired(classSAAdminView.isClassRequired());
+            mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
+            mandateFieldClassStepActionDAO.persist(mandateFieldClassStepAction);
         }
     }
 
