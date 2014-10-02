@@ -27,6 +27,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
 
     //create by bird
     private String path;
+    private int no;
 
     public ProposeCollateralInfoSubView() {
         reset();
@@ -151,6 +152,14 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.path = path;
     }
 
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -167,6 +176,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
                 .append("mortgageValue", mortgageValue)
                 .append("subId", subId)
                 .append("path", path)
+                .append("no", no)
                 .toString();
     }
 }

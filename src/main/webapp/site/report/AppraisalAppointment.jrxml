@@ -584,7 +584,7 @@ $P{path} + "false.jpg"]]></imageExpression>
 				<text><![CDATA[Internal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="300dad6b-2a16-495a-afe1-b567f994772b" x="163" y="23" width="45" height="20"/>
+				<reportElement uuid="300dad6b-2a16-495a-afe1-b567f994772b" x="163" y="27" width="45" height="16"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
