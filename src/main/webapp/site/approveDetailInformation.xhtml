@@ -172,7 +172,7 @@
 																	<!-- Standard price  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText
@@ -185,7 +185,7 @@
 																	<!-- Suggest price  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText
@@ -198,7 +198,7 @@
 																	<!-- Final price  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText
@@ -211,7 +211,7 @@
 																	<!--  installment  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText value="#{creditItem.installment}" />
@@ -310,7 +310,7 @@
 										</tr>
 										<tr>
 											<td colspan="100%"><p:dataTable
-													value="#{approveDetailInformation.approveDetailInformationView.newCreditFacilityView.newConditionDetailViewList}"
+													value="#{approveDetailInformation.approveDetailInformationView.newCreditFacilityView.proposeConditionInfoViewList}"
 													var="item" rowIndexVar="rowIdx" styleClass="full_table">
 													<p:column style="width:30px" styleClass="center">
 	                        				#{rowIdx+1}
