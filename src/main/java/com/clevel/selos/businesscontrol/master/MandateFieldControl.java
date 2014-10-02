@@ -484,7 +484,7 @@ public class MandateFieldControl extends BusinessControl {
         logger.debug("-- begin saveMandateClassRequiredStepAction: {}", classSAAdminView);
         if(classSAAdminView != null){
             MandateFieldClassStepAction mandateFieldClassStepAction = mandateFieldClassStepActionDAO.findByActionAndClass(step.getId(), action.getId(), classSAAdminView.getId());
-            if(classSAAdminView.isNeedUpdate()){
+            //if(classSAAdminView.isNeedUpdate()){
                 if(mandateFieldClassStepAction == null){
                     mandateFieldClassStepAction = new MandateFieldClassStepAction();
                 }
@@ -493,7 +493,7 @@ public class MandateFieldControl extends BusinessControl {
                 mandateFieldClassStepAction.setRequired(classSAAdminView.isClassRequired());
                 mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
                 mandateFieldClassStepActionDAO.persist(mandateFieldClassStepAction);
-            }
+            //}
             /*else {
                 if(mandateFieldClassStepAction != null)
                     mandateFieldClassStepActionDAO.delete(mandateFieldClassStepAction);

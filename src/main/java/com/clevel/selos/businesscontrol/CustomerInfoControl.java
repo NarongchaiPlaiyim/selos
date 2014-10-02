@@ -321,10 +321,10 @@ public class CustomerInfoControl extends BusinessControl {
                 if(!Util.isZero(cusInd.getSpouseId())){
                     Customer spouse = customerDAO.findById(cusInd.getSpouseId());
                     CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
+                    spouseInfoView.setListIndex(index);
+                    cusIndView.setSpouse(spouseInfoView);
                     if(!Util.isNull(spouseInfoView) && !Util.isNull(spouseInfoView.getReference())) {
                         if(checkSpouseForShowOnJuristicScreen(spouseInfoView.getReference().getId())) {
-                            cusIndView.setSpouse(spouseInfoView);
-                            spouseInfoView.setListIndex(index);
                             cusIndViewShowList.add(spouseInfoView);
                         }
                     }

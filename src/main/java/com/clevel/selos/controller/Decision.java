@@ -918,6 +918,8 @@ public class Decision extends BaseController {
                 // Calculate Total Propose Loan DBR
                 proposeLineControl.calculateTotalProposeAmountForExisting(null, workCaseId);
 
+                calculationControl.calculateFinalDBR(workCaseId);
+
                 calculationControl.calForDecision(workCaseId);
 
                 fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A, stepId);

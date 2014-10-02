@@ -12,7 +12,6 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
-import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.UWRuleResultSummary;
@@ -1325,30 +1324,27 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
-    public void onOpenSubmitAADCommittee(){
-        log.debug("onOpenSubmitAADCommittee ( submit to AAD committee )");
-        HttpSession session = FacesUtil.getSession(false);
-        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+    public void onOpenSubmitForAADAdmin(){
+        log.debug("onOpenSubmitForAADAdmin ( submit to AAD committee )");
+        _loadSessionVariable();
         if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
             //List AAD Admin by team structure
             aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
             RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
         } else {
-            //TO show error
             messageHeader = "Exception.";
             message = "Please input Appointment Date first.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            showMessageBox();
         }
     }
 
-    public void onSubmitAADCommittee(){
-        log.debug("onSubmitAADCommittee ( submit to AAD committee )");
+    public void onSubmitForAADAdmin(){
+        log.debug("onSubmitForAADAdmin ( submit to AAD committee )");
         _loadSessionVariable();
         boolean canSubmit = false;
         try{
             if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId==StatusValue.REPLY_FROM_BDM.value()){
-                log.debug("onSubmitAADCommittee ( save Return History For Restart )");
+                log.debug("onSubmitForAADAdmin ( save Return History For Restart )");
                 returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 canSubmit = true;
             } else {
@@ -1359,18 +1355,17 @@ public class HeaderController extends BaseController {
                     messageHeader = msg.get("app.messageHeader.exception");
                     message = "Please update return reply detail before submit.";
                     showMessageBox();
-                    log.error("onSubmitAADCommittee ::: submit failed (reply detail invalid)");
+                    log.error("onSubmitForAADAdmin ::: submit failed (reply detail invalid)");
                 }
 
             }
 
             if(canSubmit){
-                fullApplicationControl.submitToAADCommittee(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+                fullApplicationControl.submitForAADAdmin(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
                 messageHeader = "Information.";
                 message = "Request for appraisal success.";
                 showMessageRedirect();
             }
-
         } catch (Exception ex){
             log.error("exception while request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -1379,12 +1374,18 @@ public class HeaderController extends BaseController {
         }
     }
 
-    public void onSubmitAppraisalToUW(){
+    public void onOpenSubmitForAADCommittee(){
         _loadSessionVariable();
-        log.debug("onSubmitAppraisalToUW ( appraisal to uw )");
+        log.debug("onOpenSubmitForAADCommittee");
+
+    }
+
+    public void onSubmitForAADCommittee(){
+        _loadSessionVariable();
+        log.debug("onSubmitForAADCommittee ( appraisal to uw )");
         try{
             returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-            fullApplicationControl.submitToUWFromCommittee(queueName, wobNumber);
+            fullApplicationControl.submitForAADCommittee(queueName, wobNumber, workCaseId, workCasePreScreenId);
 
             messageHeader = "Information.";
             message = "Submit case success.";

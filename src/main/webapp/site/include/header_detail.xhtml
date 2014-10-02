@@ -369,17 +369,17 @@
                      actionListener="#{headerController.onOpenRequestAppraisalCustomerAccepted()}" process="@this"
                      update=":frmMain:reqAppr_BDMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
     </p:commandButton>
-    <!-- Cancel Parallel Appraisal -->
+    <!-- Cancel Parallel Appraisal [ Return from AAD ] -->
     <p:commandButton id="btnCancelReqAppr_BDM" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel Appraisal Request') and headerController.stepId == 2007}"
                      actionListener="#{headerController.onOpenCancelAppraisalRequest()}"
                      oncomplete="cancelReqApprDlg.show()"
                      update=":frmMain:cancelReqApprPanel, :frmMain:msgBoxBaseMessagePanel">
     </p:commandButton>
-    <!-- Submit to AAD Admin [ From BDM ] -->
+    <!-- Return to AAD Admin [ From BDM ] -->
     <p:commandButton id="btnReturnAADM_BDM" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2007}"
-                     onclick="confirmReturnAADM_BDM.show()"/>
+                     onclick="PF('confirmReturnAADM_BDM').show()"/>
     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                      icon="ui-icon-alert"
                      widgetVar="confirmReturnAADM_BDM" global="false" showEffect="fade"
@@ -388,8 +388,8 @@
                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                          actionListener="#{headerController.onReturnToAADAdminByBDM()}"
                          process="@this" widgetVar="conRetAADMSaveBtn"
-                         oncomplete="confirmReturnAADM_BDM.hide();conRetAADMSaveBtn.enable();conRetAADMCancelBtn.enable()"
-                         onclick="conRetAADMSaveBtn.disable();conRetAADMCancelBtn.disable()"/>
+                         oncomplete="confirmReturnAADM_BDM.hide(); conRetAADMSaveBtn.enable(); conRetAADMCancelBtn.enable();"
+                         onclick="conRetAADMSaveBtn.disable(); conRetAADMCancelBtn.disable()"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmReturnAADM_BDM.hide()"
                          styleClass="ui-confirmdialog-no"
                          widgetVar="conRetAADMCancelBtn"/>
@@ -447,13 +447,13 @@
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
-    <!-- Submit to AAD Committee [ From AAD Admin ]-->
+    <!-- Submit to AAD Committee [ From AAD Admin to AAD Committee ]-->
     <p:commandButton id="btnSubmitAADC_AADM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}"
-                     actionListener="#{headerController.onOpenSubmitAADCommittee()}"
+                     actionListener="#{headerController.onOpenSubmitForAADAdmin()}"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
     </p:commandButton>
-    <!-- Return to AAD Admin [ FROM AAD Committee ]-->
+    <!-- Return to AAD Admin [ From AAD Committee to AAD Admin ]-->
     <p:commandButton id="btnReturnAADM_AADC" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                      title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2008}"
@@ -472,7 +472,7 @@
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}">
         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitAppraisalToUW()}"
+                         actionListener="#{headerController.onSubmitForAADCommittee()}"
                          process="@this" widgetVar="conSubAppUWSaveBtn"
                          oncomplete="confirmSubmitApprToUw.hide();conSubAppUWSaveBtn.enable();conSubAppUWCancelBtn.enable()"
                          onclick="conSubAppUWSaveBtn.disable();conSubAppUWCancelBtn.disable()"/>
@@ -571,6 +571,7 @@
 </p:panel>
 <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
     <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="mandateFieldDialog" resizable="false"
+              dynamic="true" height="500" width="900"
               header="#{headerController.messageHeader}" closable="false" modal="true">
         <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
     </p:dialog>
