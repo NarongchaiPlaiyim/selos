@@ -103,7 +103,7 @@ public class MandateFieldCondition implements Serializable {
         wrkMandateConditionView.setMandateConditionType(MandateConditionType.CHECK_RESULT);
         wrkMandateConditionView.setDependType(MandateDependType.NO_DEPENDENCY);
         wrkMandateConditionView.setConditionDetailViewList(new ArrayList<MandateFieldConditionDetailView>());
-
+        selectedMandateDependCondViewId = -1;
         logger.info("-- end onOpenAddMandateCondition");
     }
 
@@ -113,7 +113,8 @@ public class MandateFieldCondition implements Serializable {
     public void onOpenUpdateMandateCondition(){
         logger.info("-- begin onOpenUpdateMandateCondition");
         MandateFieldConditionView toUpd = null;
-
+        selectedMandateConDetailViewId = -1;
+        selectedMandateDependCondViewId = -1;
         if(selectedMandateConViewId >= 0 && selectedMandateConViewId < mandateFieldConViewList.size()){
             toUpd = mandateFieldConViewList.get(selectedMandateConViewId);
         }

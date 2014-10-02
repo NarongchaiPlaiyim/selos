@@ -251,23 +251,24 @@ public class MandateFieldValidationControl extends BusinessControl{
         }
 
         for(ConditionResult conditionResult : classResult.conditionResultMap.values()){
-            conditionResult.isPassCombine = combineConditionResult(conditionResult);
+            combineConditionResult(conditionResult);
             logger.debug("combineMandateResult, conditionResult: {}", conditionResult);
         }
 
         for(ConditionResult conditionResult : classResult.conditionResultMap.values()){
             if(conditionResult.conditionView.getMandateConditionType().equals(MandateConditionType.CHECK_RESULT)){
-                if(conditionResult.isDepended != null){
-                    if(!conditionResult.isDepended && !conditionResult.isPassCombine){
-                        mandateFieldMessageViewList.addAll(conditionResult.getMessage());
-                        logger.debug("combine message: {}", conditionResult.getMessage());
+                if(conditionResult.isPassCombine != null){
+                    if(conditionResult.isDepended != null){
+                        if(!conditionResult.isDepended && !conditionResult.isPassCombine){
+                            mandateFieldMessageViewList.addAll(conditionResult.getMessage());
+                            logger.debug("combine message: {}", conditionResult.getMessage());
+                        }
+                    } else {
+                        if(!conditionResult.isPassCombine){
+                            mandateFieldMessageViewList.addAll(conditionResult.getMessage());
+                            logger.debug("combine message: {}", conditionResult.getMessage());
+                        }
                     }
-                } else {
-                    if(!conditionResult.isPassCombine){
-                        mandateFieldMessageViewList.addAll(conditionResult.getMessage());
-                        logger.debug("combine message: {}", conditionResult.getMessage());
-                    }
-
                 }
             }
         }
@@ -275,7 +276,7 @@ public class MandateFieldValidationControl extends BusinessControl{
         return mandateFieldMessageViewList;
     }
 
-    private boolean combineConditionResult(ConditionResult conditionResult){
+    private Boolean combineConditionResult(ConditionResult conditionResult){
         logger.debug("-- begin combineConditionResult :: {}", conditionResult);
 
         MandateFieldConditionView conditionView = conditionResult.conditionView;
@@ -310,6 +311,8 @@ public class MandateFieldValidationControl extends BusinessControl{
                 logger.debug("-- DependConditionResult: {}", dependConditionResult);
                 conditionResult.parentClassResult.conditionResultMap.put(dependConditionResult.conditionView.getId(), dependConditionResult);
             }
+            if(combineResult == null)
+                return null;
 
             if(conditionView.getDependType().equals(MandateDependType.DEPEND_TRUE) && combineResult){
                 logger.debug("-- MandateDependType.DEPEND_TRUE: return {}", conditionResult.isPass);
@@ -318,7 +321,7 @@ public class MandateFieldValidationControl extends BusinessControl{
                 logger.debug("-- MandateDependType.DEPEND_FALSE: return {}", conditionResult.isPass);
                 return conditionResult.isPass;
             } else{
-                return true;
+                return null;
             }
         }
     }
@@ -337,7 +340,6 @@ public class MandateFieldValidationControl extends BusinessControl{
             if(conditionDetailView.getBaseValue() != null && !"".equals(conditionDetailView.getBaseValue())){
                 logger.debug("validate BASE condition");
                 try{
-
                     Field field = clazz.getDeclaredField(_fieldView.getFieldName());
                     field.setAccessible(true);
                     Object fieldObj = field.get(classObj);
