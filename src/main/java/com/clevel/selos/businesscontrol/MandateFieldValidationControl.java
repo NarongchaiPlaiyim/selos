@@ -256,17 +256,19 @@ public class MandateFieldValidationControl extends BusinessControl{
         }
 
         for(ConditionResult conditionResult : classResult.conditionResultMap.values()){
-            if(conditionResult.isDepended != null){
-                if(!conditionResult.isDepended && !conditionResult.isPassCombine){
-                    mandateFieldMessageViewList.addAll(conditionResult.getMessage());
-                    logger.debug("combine message: {}", conditionResult.getMessage());
-                }
-            } else {
-                if(!conditionResult.isPassCombine){
-                    mandateFieldMessageViewList.addAll(conditionResult.getMessage());
-                    logger.debug("combine message: {}", conditionResult.getMessage());
-                }
+            if(conditionResult.conditionView.getMandateConditionType().equals(MandateConditionType.CHECK_RESULT)){
+                if(conditionResult.isDepended != null){
+                    if(!conditionResult.isDepended && !conditionResult.isPassCombine){
+                        mandateFieldMessageViewList.addAll(conditionResult.getMessage());
+                        logger.debug("combine message: {}", conditionResult.getMessage());
+                    }
+                } else {
+                    if(!conditionResult.isPassCombine){
+                        mandateFieldMessageViewList.addAll(conditionResult.getMessage());
+                        logger.debug("combine message: {}", conditionResult.getMessage());
+                    }
 
+                }
             }
         }
         logger.debug("-- end combineMandateResult return: message size {}", mandateFieldMessageViewList.size());
