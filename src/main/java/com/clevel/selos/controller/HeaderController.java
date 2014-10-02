@@ -2785,7 +2785,7 @@ public class HeaderController extends BaseController {
                 messageHeader = "Exception.";
                 message = Util.getMessageException(ex);
             }
-
+            log.debug("mandateFieldMessageViewList: {}", mandateFieldMessageViewList);
             if(mandateFieldMessageViewList == null || mandateFieldMessageViewList.size() == 0)
                 if(success)
                     showMessageRefresh();
