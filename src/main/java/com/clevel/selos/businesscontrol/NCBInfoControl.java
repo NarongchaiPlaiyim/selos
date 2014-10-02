@@ -17,6 +17,7 @@ import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
@@ -52,6 +53,8 @@ public class NCBInfoControl extends BusinessControl {
     private CustomerDAO customerDAO;
     @Inject
     private BaseRateControl baseRateControl;
+    @Inject
+    UserSysParameterControl userSysParameterControl;
 
     @Inject
     NCBDetailTransform ncbDetailTransform;
@@ -482,7 +485,13 @@ public class NCBInfoControl extends BusinessControl {
                 ncbDetailView.setInstallment(ncbDetail.getInstallment());
                 BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                BigDecimal dbrInterest = baseRateControl.getDBRInterest();
+                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+                int dbrInt = 0;
+                if(!Util.isNull(userSysParameterView)){
+                    dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
+                }
+                BigDecimal dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
+
                 switch (accountType.getCalculateType()){
                     case 1:
                         if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
