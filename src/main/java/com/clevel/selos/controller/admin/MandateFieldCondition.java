@@ -3,6 +3,7 @@ package com.clevel.selos.controller.admin;
 import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.model.MandateConDetailType;
+import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import com.clevel.selos.model.view.master.MandateFieldClassView;
@@ -99,6 +100,7 @@ public class MandateFieldCondition implements Serializable {
         resetConDetail();
         wrkMandateConditionView = new MandateFieldConditionView();
         wrkMandateConditionView.setMandateConDetailType(MandateConDetailType.AND);
+        wrkMandateConditionView.setMandateConditionType(MandateConditionType.CHECK_RESULT);
         wrkMandateConditionView.setDependType(MandateDependType.NO_DEPENDENCY);
         wrkMandateConditionView.setConditionDetailViewList(new ArrayList<MandateFieldConditionDetailView>());
 

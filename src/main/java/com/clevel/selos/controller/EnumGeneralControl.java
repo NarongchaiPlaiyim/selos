@@ -50,4 +50,7 @@ public class EnumGeneralControl implements Serializable{
     public MandateDependConType[] getMandateDependConType(){
         return MandateDependConType.values();
     }
+    public MandateConditionType[] getMandateConditionType(){
+        return MandateConditionType.values();
+    }
 }

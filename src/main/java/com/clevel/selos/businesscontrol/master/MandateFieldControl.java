@@ -7,7 +7,7 @@ import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
-import com.clevel.selos.model.MandateFieldType;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
@@ -164,7 +164,6 @@ public class MandateFieldControl extends BusinessControl {
                 } else {
                     mandateFieldView = new MandateFieldView();
                     mandateFieldView.setMandateFieldClassView(mandateFieldClassView);
-                    mandateFieldView.setMandateFieldType(MandateFieldType.FIELD_TYPE);
                     mandateFieldView.setFieldName(field.getName());
                 }
                 mandateFieldViewList.add(mandateFieldView);
