@@ -152,41 +152,50 @@ public class CustomerInfoControl extends BusinessControl {
         if(customer.getIndividual().getMaritalStatus() != null
                 && customer.getIndividual().getMaritalStatus().getSpouseFlag() == 1){
 
-            customerInfoView.getSpouse().getCustomerEntity().setId(1);
+            if(!Util.isNull(customerInfoView.getSpouse())) {
 
-            //set marital status for spouse
-            customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
-            Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase, getCurrentUser());
+                if(!Util.isNull(customerInfoView.getSpouse().getCustomerEntity())) {
+                    customerInfoView.getSpouse().getCustomerEntity().setId(1);
+                } else {
+                    CustomerEntity customerEntity = new CustomerEntity();
+                    customerEntity.setId(1);
+                    customerInfoView.getSpouse().setCustomerEntity(customerEntity);
+                }
 
-            if(spouse.getCustomerOblInfo() != null){
-                customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
+                //set marital status for spouse
+                customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
+                Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase, getCurrentUser());
 
-                if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
-                    List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customer);
-                    if(customerOblAccountInfoList.size() > 0){
-                        deleteCustomerOblAccountInfo(customer);
-                        customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                if(spouse.getCustomerOblInfo() != null){
+                    customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
+
+                    if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+                        List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customer);
+                        if(customerOblAccountInfoList.size() > 0){
+                            deleteCustomerOblAccountInfo(customer);
+                            customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                        }
                     }
                 }
+
+                if(spouse.getIsCommittee() == 1){
+                    Customer cusJuristic = customerDAO.findById(spouse.getJuristicId());
+                    BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
+                    BigDecimal share = spouse.getShares();
+                    BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
+                    spouse.setPercentShare(percentShare);
+                }
+
+                spouse.setIsSpouse(1);
+                spouse.setSpouseId(0);
+                customerDAO.persist(spouse);
+
+                customer.setSpouseId(spouse.getId());
+                customerDAO.persist(customer);
+
+                individualDAO.persist(spouse.getIndividual());
+                addressDAO.persist(spouse.getAddressesList());
             }
-
-            if(spouse.getIsCommittee() == 1){
-                Customer cusJuristic = customerDAO.findById(spouse.getJuristicId());
-                BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
-                BigDecimal share = spouse.getShares();
-                BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
-                spouse.setPercentShare(percentShare);
-            }
-
-            spouse.setIsSpouse(1);
-            spouse.setSpouseId(0);
-            customerDAO.persist(spouse);
-
-            customer.setSpouseId(spouse.getId());
-            customerDAO.persist(customer);
-
-            individualDAO.persist(spouse.getIndividual());
-            addressDAO.persist(spouse.getAddressesList());
         } else if(customer.getIndividual().getMaritalStatus() != null
                 && customer.getIndividual().getMaritalStatus().getSpouseFlag() != 1) {
             if(customer.getSpouseId() != 0){
@@ -309,13 +318,16 @@ public class CustomerInfoControl extends BusinessControl {
                 cusIndView.setListIndex(index);
                 cusIndViewShowList.add(cusIndView);
 
-                if(cusInd.getSpouseId() != 0){
+                if(!Util.isZero(cusInd.getSpouseId())){
                     Customer spouse = customerDAO.findById(cusInd.getSpouseId());
                     CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
-                    cusIndView.setSpouse(spouseInfoView);
-
-                    spouseInfoView.setListIndex(index);
-                    cusIndViewShowList.add(spouseInfoView);
+                    if(!Util.isNull(spouseInfoView) && !Util.isNull(spouseInfoView.getReference())) {
+                        if(checkSpouseForShowOnJuristicScreen(spouseInfoView.getReference().getId())) {
+                            cusIndView.setSpouse(spouseInfoView);
+                            spouseInfoView.setListIndex(index);
+                            cusIndViewShowList.add(spouseInfoView);
+                        }
+                    }
                 }
 
                 cusIndViewList.add(index, cusIndView);
@@ -838,6 +850,14 @@ public class CustomerInfoControl extends BusinessControl {
         if(customer != null && customer.getId() != 0) {
             if(customer.getId() != customerId)
                 return true;
+        }
+        return false;
+    }
+
+    public boolean checkSpouseForShowOnJuristicScreen(int refId) {
+        //Juristic as Borrower
+        if(refId == 4 || refId == 5 || refId == 6 || refId == 7 || refId == 12 || refId == 13 || refId == 14 || refId == 18) {
+            return true;
         }
         return false;
     }

@@ -2114,7 +2114,7 @@ public class CustomerInfoIndividual implements Serializable {
                 cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView);
                 if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
                     log.debug("spouse != null");
-                    if(checkSpouseForShowOnJuristicScreen(referenceSpouseCusId)) {
+                    if(customerInfoControl.checkSpouseForShowOnJuristicScreen(referenceSpouseCusId)) {
                         customerInfoView.getSpouse().setListIndex(listIndex);
                         cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView.getSpouse());
                     }
@@ -2129,7 +2129,7 @@ public class CustomerInfoIndividual implements Serializable {
                 cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView);
                 if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
                     log.debug("spouse != null");
-                    if(checkSpouseForShowOnJuristicScreen(referenceSpouseCusId)) {
+                    if(customerInfoControl.checkSpouseForShowOnJuristicScreen(referenceSpouseCusId)) {
                         customerInfoView.getSpouse().setListIndex(cusInfoJuristic.getIndividualViewList().size() - 1);
                         cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView.getSpouse());
                     }
@@ -2309,14 +2309,6 @@ public class CustomerInfoIndividual implements Serializable {
         }
 //        onCreation();
 //        onLoadComplete();
-    }
-
-    public boolean checkSpouseForShowOnJuristicScreen(int refId) {
-        //Juristic as Borrower
-        if(refId == 4 || refId == 5 || refId == 6 || refId == 7 || refId == 12 || refId == 13 || refId == 14 || refId == 18) {
-            return true;
-        }
-        return false;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

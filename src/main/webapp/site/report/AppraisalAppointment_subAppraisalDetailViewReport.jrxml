@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AppraisalAppointment_subAppraisalDetailViewReport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d7bd690d-1b61-4def-911b-89c3b99d2b09">
-	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.zoom" value="1.4641000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -109,58 +109,71 @@
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{numberOfDocuments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numberOfDocuments}.intValue() == 0 ? "" : $F{numberOfDocuments}]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement uuid="cc608743-cd0f-44ce-9d39-f5b3fa61ce31" x="328" y="1" width="11" height="13"/>
 				<box>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
-				<imageExpression><![CDATA[$F{characteristic}.intValue() == 0 ?
-$F{path}+"true.jpg" : $F{path}+"false.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[$F{titleDeed}.equals( null ) ? null :
+($F{characteristic}.intValue() == 0  ?
+$F{path}+"true.jpg" : $F{path}+"false.jpg")]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement uuid="e23609f6-ba4e-402f-a7eb-4064ff8ffe7a" x="339" y="0" width="59" height="14"/>
-				<box>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
-				</textElement>
-				<text><![CDATA[เป็นที่ดินเปล่า]]></text>
-			</staticText>
 			<image>
 				<reportElement uuid="12dd9954-5bf9-48c1-8987-dafc41a497c9" x="398" y="1" width="11" height="13"/>
 				<box>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 				</box>
-				<imageExpression><![CDATA[$F{characteristic}.intValue() == 1 ?
-$F{path}+"true.jpg" : $F{path}+"false.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[$F{titleDeed}.equals( null ) ? null :
+($F{characteristic}.intValue() == 1  ?
+$F{path}+"true.jpg" : $F{path}+"false.jpg")]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement uuid="9f71b4fa-07d5-4831-bf27-a8b4db797353" x="409" y="0" width="59" height="14"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="56912aea-6be4-486d-8382-2f95b1f53682" stretchType="RelativeToBandHeight" mode="Transparent" x="323" y="0" width="145" height="14"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
-				</textElement>
-				<text><![CDATA[ไม่เป็นที่ดินเปล่า]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="56912aea-6be4-486d-8382-2f95b1f53682" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="323" y="0" width="145" height="14"/>
 				<textElement textAlignment="Right">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2"/>
 				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5f4671ba-186a-4a78-8c23-88d665a6df1d" stretchType="RelativeToBandHeight" mode="Transparent" x="339" y="0" width="59" height="14"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2" spacingBefore="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titleDeed}.equals( null ) ?
+"" : "เป็นที่ดินเปล่า"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3d3452e2-cac6-40fd-ba43-51ad3658645a" stretchType="RelativeToBandHeight" mode="Transparent" x="409" y="0" width="59" height="14"/>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2" spacingBefore="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titleDeed}.equals( null ) ?
+"" : "ไม่เป็นที่ดินเปล่า"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

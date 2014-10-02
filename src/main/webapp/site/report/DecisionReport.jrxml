@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
 	<property name="ireport.zoom" value="1.2396694214876263"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1776"/>
+	<property name="ireport.y" value="987"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -2775,7 +2775,9 @@ $P{path}+"true.jpg" : $P{path}+"false.jpg"]]></imageExpression>
 					</box>
 					<textElement>
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1">
+							<tabStop position="50" alignment="Left"/>
+						</paragraph>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{uwDecision}.getUwComment()]]></textFieldExpression>
 				</textField>
