@@ -309,13 +309,16 @@ public class CustomerInfoControl extends BusinessControl {
                 cusIndView.setListIndex(index);
                 cusIndViewShowList.add(cusIndView);
 
-                if(cusInd.getSpouseId() != 0){
+                if(!Util.isZero(cusInd.getSpouseId())){
                     Customer spouse = customerDAO.findById(cusInd.getSpouseId());
                     CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
-                    cusIndView.setSpouse(spouseInfoView);
-
-                    spouseInfoView.setListIndex(index);
-                    cusIndViewShowList.add(spouseInfoView);
+                    if(!Util.isNull(spouseInfoView) && !Util.isNull(spouseInfoView.getReference())) {
+                        if(checkSpouseForShowOnJuristicScreen(spouseInfoView.getReference().getId())) {
+                            cusIndView.setSpouse(spouseInfoView);
+                            spouseInfoView.setListIndex(index);
+                            cusIndViewShowList.add(spouseInfoView);
+                        }
+                    }
                 }
 
                 cusIndViewList.add(index, cusIndView);
@@ -838,6 +841,14 @@ public class CustomerInfoControl extends BusinessControl {
         if(customer != null && customer.getId() != 0) {
             if(customer.getId() != customerId)
                 return true;
+        }
+        return false;
+    }
+
+    public boolean checkSpouseForShowOnJuristicScreen(int refId) {
+        //Juristic as Borrower
+        if(refId == 4 || refId == 5 || refId == 6 || refId == 7 || refId == 12 || refId == 13 || refId == 14 || refId == 18) {
+            return true;
         }
         return false;
     }
