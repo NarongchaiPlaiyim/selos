@@ -62,7 +62,7 @@ public class MandateFieldControl extends BusinessControl {
     public MandateFieldControl(){}
 
     public List<MandateFieldClassView> getMandateFieldClass(Set<Class<?>> classSet){
-        logger.debug("-- begin getMandateFieldClass class size{} + ", classSet == null?0:classSet.size());
+        logger.debug("-- begin getMandateFieldClass class size {}", classSet == null?0:classSet.size());
         List<MandateFieldClass> mandateFieldClassList = mandateFieldClassDAO.findAll();
 
         logger.debug("number of mandateFieldClass: {}", mandateFieldClassList.size());
