@@ -9,6 +9,7 @@ import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.NCBDetailView;
+import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.transform.DBRDetailTransform;
 import com.clevel.selos.transform.DBRTransform;
 import com.clevel.selos.util.Util;
@@ -50,6 +51,8 @@ public class DBRControl extends BusinessControl {
     NCBInfoControl ncbInfoControl;
     @Inject
     BaseRateControl baseRateControl;
+    @Inject
+    UserSysParameterControl userSysParameterControl;
 
     @Inject
     public DBRControl() {
@@ -137,7 +140,12 @@ public class DBRControl extends BusinessControl {
     private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews) throws Exception{
         log.debug("Begin calculateDBR");
         if(dbrView.getDbrMarketableFlag() != 2) {
-            dbrView.setDbrInterest(baseRateControl.getDBRInterest());
+            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+            int dbrInterest = 0;
+            if(!Util.isNull(userSysParameterView)){
+                dbrInterest = Util.parseInt(userSysParameterView.getValue(), 0);
+            }
+            dbrView.setDbrInterest(Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInterest)));
         } else {
             dbrView.setDbrInterest(baseRateControl.getMRRValue());
         }
