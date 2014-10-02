@@ -1702,24 +1702,24 @@ public class HeaderController extends BaseController {
     public void onRequestPriceReduction(){
         log.debug("onRequestPriceReduction ( in step Customer Acceptance )");
         _loadSessionVariable();
-        requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-        if(requestPricing) {
-            try {
-                fullApplicationControl.submitRequestPriceReduction(queueName, wobNumber);
-                messageHeader = "Information.";
-                message = "Request for Price Reduction success.";
-                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-            } catch (Exception ex){
-                log.error("Exception while submit request price reduction, ", ex);
-                messageHeader = "Exception";
-                message = Util.getMessageException(ex);
-                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-            }
-        } else {
+        /*requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+        if(requestPricing) {*/
+        try {
+            fullApplicationControl.submitRequestPriceReduction(queueName, wobNumber);
+            messageHeader = "Information.";
+            message = "Request for Price Reduction success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("Exception while submit request price reduction, ", ex);
+            messageHeader = "Exception";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+        /*} else {
             messageHeader = "Information.";
             message = "Can not Request for Price Reduction, cause this case has no Pricing Request.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
+        }*/
     }
 
     public void onOpenCancelRequestPriceReduction(){

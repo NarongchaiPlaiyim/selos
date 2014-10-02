@@ -154,6 +154,15 @@ public class LoginBean {
         // find user profile in database
         User user = userDAO.findById(userName.trim());
 
+        if(user == null){
+            String message = msg.get(ExceptionMapping.USER_NOT_FOUND, userName.trim());
+            log.debug("{}", message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            loginExceptionMessage = message;
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
+            return "failed";
+        }
+
 //        log.info("user id :{} ",user.getId());
 
 

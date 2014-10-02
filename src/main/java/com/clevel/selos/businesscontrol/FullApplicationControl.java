@@ -14,7 +14,6 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.history.SubmitInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -34,7 +33,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class FullApplicationControl extends BusinessControl {
@@ -1144,14 +1146,18 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }*/
 
-    public void calculateApprovedPricingDOA(long workCaseId, ProposeType proposeType){
+    public void calculateApprovedPricingDOA(long workCaseId, ProposeType proposeType, long stepId){
+        boolean skipReduceFlag = false;
+        if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
+            skipReduceFlag = true;
+        }
         ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        workCase = calculatePricingDOA(workCase, newCreditFacility, proposeType);
+        workCase = calculatePricingDOA(workCase, newCreditFacility, proposeType, skipReduceFlag);
         workCaseDAO.persist(workCase);
     }
 
-    public WorkCase calculatePricingDOA(WorkCase workCase, ProposeLine newCreditFacility, ProposeType proposeType){
+    public WorkCase calculatePricingDOA(WorkCase workCase, ProposeLine newCreditFacility, ProposeType proposeType, boolean skipReduceFlag){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
 
@@ -1188,7 +1194,7 @@ public class FullApplicationControl extends BusinessControl {
                     int reducePricing = proposeCreditInfo.getReducePriceFlag();
                     //int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
                     if(proposeCreditInfo.getRequestType() == RequestTypes.NEW.value()) {
-                        if(proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1){
+                        if((proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1) || skipReduceFlag){
                             //Check for Final Price first...
                             if(proposeCreditInfo.getProposeCreditInfoTierDetailList() != null && proposeCreditInfo.getProposeCreditInfoTierDetailList().size() > 0) {
                                 if (finalPrice != null) {
