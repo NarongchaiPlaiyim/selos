@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
 	<property name="ireport.zoom" value="1.2396694214876238"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="2639"/>
+	<property name="ireport.y" value="288"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -742,7 +742,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getCustomer()]]></textFieldExpression>
@@ -757,7 +757,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getCurrentDBR()]]></textFieldExpression>
@@ -772,7 +772,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getFinalDBR()]]></textFieldExpression>
@@ -787,7 +787,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getIncome()]]></textFieldExpression>
@@ -802,7 +802,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getRecommendedWCNeed()]]></textFieldExpression>
@@ -817,7 +817,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getActualWC()]]></textFieldExpression>
@@ -832,7 +832,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getStartBusinessDate()]]></textFieldExpression>
@@ -847,7 +847,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getYearInBusiness()]]></textFieldExpression>
@@ -862,7 +862,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getSalePerYearBDM()]]></textFieldExpression>
@@ -877,7 +877,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getSalePerYearUW()]]></textFieldExpression>
@@ -892,7 +892,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupSaleUW()]]></textFieldExpression>
@@ -907,7 +907,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupSaleBDM()]]></textFieldExpression>
@@ -922,7 +922,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupExposureUW()]]></textFieldExpression>
@@ -937,7 +937,7 @@
 						<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
+						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{borrowerCharacteristic}.getGroupExposureBDM()]]></textFieldExpression>
