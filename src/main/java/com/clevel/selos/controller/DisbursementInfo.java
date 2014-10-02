@@ -43,15 +43,15 @@ public class DisbursementInfo implements Serializable {
 	private Message message;
 	@Inject
 	private BasicInfoControl basicInfoControl;
-	
+
 	@Inject
 	private UserAccessControl userAccessControl;
 
 	// Private variable
 	private boolean preRenderCheck = false;
- 	private long workCaseId = -1;
- 	private long stepId = -1;
- 	private User user;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private User user;
 	private BasicInfoView basicInfoView;
 
 	enum ModeForButton {
@@ -99,7 +99,7 @@ public class DisbursementInfo implements Serializable {
 		HttpSession session = FacesUtil.getSession(false);
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
-			
+
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		_loadInitData();
@@ -112,8 +112,9 @@ public class DisbursementInfo implements Serializable {
 		calculationSummary();
 		calculationSummaryTotalBa();
 	}
-	
+
 	public void preRender() {
+
 		if (preRenderCheck)
 			return;
 		preRenderCheck = true;
@@ -137,6 +138,7 @@ public class DisbursementInfo implements Serializable {
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to " + redirectPage, e);
 		}
+
 	}
 
 	private void _loadDropdown() {
@@ -383,61 +385,64 @@ public class DisbursementInfo implements Serializable {
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		RequestContext context = RequestContext.getCurrentInstance();
 		int falseCount = 0;
+		if (disbursementDepositDetailView.getOpenAccountId() > 0) {
+			if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-		if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+				if (disbursementDepositDetailView != null || disbursementDepositDetailView.getDisbursementCreditTypeView() != null) {
 
-			if (disbursementDepositDetailView != null || disbursementDepositDetailView.getDisbursementCreditTypeView() != null) {
+					for (int i = 0; i < disbursementDepositDetailView.getDisbursementCreditTypeView().size(); i++) {
+						if (disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount()
+								.compareTo(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
 
-				for (int i = 0; i < disbursementDepositDetailView.getDisbursementCreditTypeView().size(); i++) {
-					if (disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount()
-							.compareTo(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
-
-						disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
-						falseCount++;
-					} else {
-						disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
+							disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
+							falseCount++;
+						} else {
+							disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
+						}
+						totalAmount = totalAmount.add(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i)
+								.getDisburseAmount());
 					}
-					totalAmount = totalAmount.add(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
-				}
-				if (falseCount == 0) {
-					disbursementDepositDetailView.setTotalAmount(totalAmount);
-					this.disbursementInfoView.getDisburseDepositList().add(disbursementDepositDetailView);
-					complete = true;
+					if (falseCount == 0) {
+						disbursementDepositDetailView.setTotalAmount(totalAmount);
+						this.disbursementInfoView.getDisburseDepositList().add(disbursementDepositDetailView);
+						complete = true;
+					}
 				}
 			}
-		}
-		if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+			if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
 
-			if (disbursementDepositDetailView != null || disbursementDepositDetailView.getDisbursementCreditTypeView() != null) {
+				if (disbursementDepositDetailView != null || disbursementDepositDetailView.getDisbursementCreditTypeView() != null) {
 
-				for (int i = 0; i < disbursementDepositDetailView.getDisbursementCreditTypeView().size(); i++) {
-					if (disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount()
-							.compareTo(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
+					for (int i = 0; i < disbursementDepositDetailView.getDisbursementCreditTypeView().size(); i++) {
+						if (disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount()
+								.compareTo(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getLimitAmount()) > 0) {
 
-						disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
-						falseCount++;
-					} else {
-						disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
+							disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(false);
+							falseCount++;
+						} else {
+							disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).setComponentFlag(true);
+						}
+						totalAmount = totalAmount.add(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i)
+								.getDisburseAmount());
 					}
-					totalAmount = totalAmount.add(disbursementDepositDetailView.getDisbursementCreditTypeView().get(i).getDisburseAmount());
-				}
 
-				if (falseCount == 0) {
-					this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber)
-							.setAccountNumber(disbursementDepositDetailView.getAccountNumber());
-					this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber)
-							.setAccountName(disbursementDepositDetailView.getAccountName());
-					this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber)
-							.setDisbursementCreditTypeView(disbursementDepositDetailView.getDisbursementCreditTypeView());
-					this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).setTotalAmount(totalAmount);
-					complete = true;
+					if (falseCount == 0) {
+						this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber)
+								.setAccountNumber(disbursementDepositDetailView.getAccountNumber());
+						this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber)
+								.setAccountName(disbursementDepositDetailView.getAccountName());
+						this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber)
+								.setDisbursementCreditTypeView(disbursementDepositDetailView.getDisbursementCreditTypeView());
+						this.disbursementInfoView.getDisburseDepositList().get(selectRowNumber).setTotalAmount(totalAmount);
+						complete = true;
+					}
 				}
 			}
-		}
 
-		calculationSummaryTotalDeposit();
-		calculationSummary();
-		context.addCallbackParam("functionComplete", complete);
+			calculationSummaryTotalDeposit();
+			calculationSummary();
+			context.addCallbackParam("functionComplete", complete);
+		}
 	}
 
 	public void onSubmitDisbursementBahtnet() {
@@ -649,6 +654,7 @@ public class DisbursementInfo implements Serializable {
 		disbursementControl
 				.deleteDisbursementDetail(disbursementMcDeleteList, disbursementDepositDeleteList, disbursementBahtnetDeleteList);
 		onCreate();
+		RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 	}
 
 	public int getSelectRowNumber() {
@@ -746,7 +752,7 @@ public class DisbursementInfo implements Serializable {
 	public void setAccountList(List<SelectItem> accountList) {
 		this.accountList = accountList;
 	}
-	
+
 	private void _loadInitData() {
 		preRenderCheck = false;
 		if (workCaseId > 0) {
