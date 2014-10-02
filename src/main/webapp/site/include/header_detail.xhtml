@@ -63,15 +63,15 @@
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel">
     </p:commandButton>
     <!-- Request Appraisal Prescreen -->
-    <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
                      disabled="#{not headerController.canRequestAppraisal}"
                      oncomplete="reqApprDlg.show()"
                      update=":frmMain:reqApprDialogPanel">
         <p:resetInput target=":frmMain:reqApprDialogPanel"/>
-    </p:commandButton>
-    <p:commandButton id="btnReqApprPreScreenRedirect" value="#{msg.get('app.header.button.requestAppraisal')}2" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+    </p:commandButton>-->
+    <p:commandButton id="btnReqApprPreScreenRedirect" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      disabled="#{not headerController.canRequestAppraisal}"
                      onclick="PF('confirmReqParallelAppraisal').show()">
@@ -169,14 +169,32 @@
         <p:resetInput target=":frmMain:returnInfoPanel"/>
     </p:commandButton>
     <!--Request Appraisal Fullapp-->
-    <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
                      disabled="#{not headerController.canRequestAppraisal}"
                      oncomplete="reqApprDlg.show()"
                      update=":frmMain:reqApprDialogPanel">
         <p:resetInput target=":frmMain:reqApprDialogPanel"/>
+    </p:commandButton>-->
+    <p:commandButton id="btnReqApprFullAppRedirect" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                     disabled="#{not headerController.canRequestAppraisal}"
+                     onclick="PF('confirmFullAppReqParallelAppraisal').show()">
     </p:commandButton>
+    <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request Parallel Appraisal" styleClass="left"
+                     icon="ui-icon-alert" closable="false"
+                     widgetVar="confirmFullAppReqParallelAppraisal" global="false" showEffect="fade">
+        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                         actionListener="#{headerController.onRequestParallelAppraisal()}"
+                         process="@this" widgetVar="subParallelOkBtn"
+                         oncomplete="confirmFullAppReqParallelAppraisal.hide(); subParallelOkBtn.enable(); subParallelCancelBtn.enable()"
+                         onclick="PF('blockUI').show(); subParallelOkBtn.disable(); subParallelCancelBtn.disable()"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmFullAppReqParallelAppraisal').hide()"
+                         styleClass="ui-confirmdialog-no"
+                         widgetVar="subParallelCancelBtn"/>
+    </p:confirmDialog>
     <!--Cancel CA FullApplication-->
     <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel CA')}"

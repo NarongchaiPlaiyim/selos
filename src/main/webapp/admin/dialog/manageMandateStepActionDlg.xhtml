@@ -80,9 +80,9 @@
                             <p:column headerText="#{msg.get('app.mandateField.condition.name')}">
                                 <h:outputText value="#{mandateConditionView.name}"/>
                             </p:column>
-                            <p:column
+                            <p:column style="word-wrap: break-word;"
                                     headerText="#{msg.get('app.mandateField.condition.desc')}">
-                                <h:outputText value="#{mandateConditionView.conditionDesc}"/>
+                                <h:outputText style="word-wrap: break-word;" value="#{mandateConditionView.conditionDesc}"/>
                             </p:column>
                             <p:column style='width:50px' styleClass="center">
                                 <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"

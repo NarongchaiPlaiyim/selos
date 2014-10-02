@@ -47,9 +47,7 @@ public class PostAppGeneral implements Serializable  {
 	private ReturnControl returnControl;
 	@Inject
 	private ReasonDAO reasonDAO;
-	@Inject
-	private ActionValidationControl actionValidationControl;
-	
+
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private long statusId = -1;
