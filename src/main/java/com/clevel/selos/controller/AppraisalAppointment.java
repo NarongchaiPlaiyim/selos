@@ -262,6 +262,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
 //                }
             } else {
                 appraisalView = new AppraisalView();
+                appraisalView.reset();
                 getZoneTeamId(bdmUserId);
             }
         } else {

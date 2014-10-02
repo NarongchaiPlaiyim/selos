@@ -44,7 +44,7 @@
                             <li id="submnuappraisalrequest"><a href="appraisalRequest.jsf"
                                                               title="#{msg.get('app.menu.appraisalRequest')}">#{msg.get('app.menu.appraisalRequest')}</a></li>
                         </p:panel>
-                        <p:panel id="pnlMmenu_appraisal_appointment" rendered="#{headerController.stepId == 2006}" styleClass="panel">
+                        <p:panel id="pnlMmenu_appraisal_appointment" rendered="#{headerController.stepId == 2006 or headerController.stepId == 2008}" styleClass="panel">
                             <li id="submnuappraisalappointment"><a href="appraisalAppointment.jsf"
                                                                title="#{msg.get('app.menu.appraisalAppointment')}">#{msg.get('app.menu.appraisalAppointment')}</a></li>
                         </p:panel>
