@@ -242,7 +242,7 @@ public class DecisionControl extends BusinessControl {
         return decisionViewReturn;
     }*/
 
-    public void saveApproveAndCondition(DecisionView decisionView, long workCaseId, Hashtable hashSeqCredit) {
+    public void saveApproveAndCondition(DecisionView decisionView, long workCaseId, Hashtable hashSeqCredit, long stepId) {
         log.debug("saveApproveAndCondition :: workCaseId :: {}, decisionView :: {}",workCaseId, decisionView);
         ProposeType proposeType = ProposeType.A;
         User currentUser = getCurrentUser();
@@ -323,10 +323,14 @@ public class DecisionControl extends BusinessControl {
         }
 
         //Cal Installment
+        boolean skipReduceFlag = false;
+        if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
+            skipReduceFlag = true;
+        }
         if(!Util.isNull(decisionView.getApproveCreditList()) && !Util.isZero(decisionView.getApproveCreditList().size())) {
             List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
             for (ProposeCreditInfoDetailView proCreInfDetView : decisionView.getApproveCreditList()) {
-                proCreInfDetView = onCalInstallment(decisionView, proCreInfDetView, specialProgramId, applyTCG);
+                proCreInfDetView = onCalInstallment(decisionView, proCreInfDetView, specialProgramId, applyTCG, skipReduceFlag);
                 proposeCreditInfoDetailViewList.add(proCreInfDetView);
             }
             decisionView.setApproveCreditList(proposeCreditInfoDetailViewList);
@@ -539,7 +543,7 @@ public class DecisionControl extends BusinessControl {
         }
     }
 
-    public ProposeCreditInfoDetailView onCalInstallment(DecisionView decisionView, ProposeCreditInfoDetailView proposeCreditInfoDetailView, int specialProgramId, int applyTCG){
+    public ProposeCreditInfoDetailView onCalInstallment(DecisionView decisionView, ProposeCreditInfoDetailView proposeCreditInfoDetailView, int specialProgramId, int applyTCG, boolean skipReduceFlag){
         if(!Util.isNull(proposeCreditInfoDetailView) && !Util.isNull(proposeCreditInfoDetailView.getProposeCreditInfoTierDetailViewList()) && !Util.isZero(proposeCreditInfoDetailView.getProposeCreditInfoTierDetailViewList().size())) {
             if(proposeCreditInfoDetailView.getLimit().compareTo(BigDecimal.ZERO) < 0) { // limit < 0
                 return proposeCreditInfoDetailView;
@@ -550,10 +554,14 @@ public class DecisionControl extends BusinessControl {
                         return proposeCreditInfoDetailView;
                     }
 
-                    if(proposeCreditInfoDetailView.isReduceFrontEndFee()){ // on save front end fee to original only , cal save on front end fee only
-                        proposeCreditInfoDetailView.setFrontEndFee(Util.subtract(proposeCreditInfoDetailView.getFrontEndFeeOriginal(),decisionView.getFrontendFeeDOA()));
-                    } else {
-                        proposeCreditInfoDetailView.setFrontEndFee(proposeCreditInfoDetailView.getFrontEndFeeOriginal());
+                    if(skipReduceFlag){
+                        proposeCreditInfoDetailView.setFrontEndFee(Util.subtract(proposeCreditInfoDetailView.getFrontEndFeeOriginal(), decisionView.getFrontendFeeDOA()));
+                    }else {
+                        if (proposeCreditInfoDetailView.isReduceFrontEndFee()) { // on save front end fee to original only , cal save on front end fee only
+                            proposeCreditInfoDetailView.setFrontEndFee(Util.subtract(proposeCreditInfoDetailView.getFrontEndFeeOriginal(), decisionView.getFrontendFeeDOA()));
+                        } else {
+                            proposeCreditInfoDetailView.setFrontEndFee(proposeCreditInfoDetailView.getFrontEndFeeOriginal());
+                        }
                     }
 
                     BigDecimal standard = BigDecimal.ZERO;
@@ -575,8 +583,12 @@ public class DecisionControl extends BusinessControl {
                         proCreInfTieDetView.setFinalInterestOriginal(proposeCreditInfoDetailView.getSuggestInterest());
                     }
 
-                    if(proposeCreditInfoDetailView.isReducePriceFlag()){
+                    if(skipReduceFlag){
                         proCreInfTieDetView.setFinalInterest(Util.subtract(proCreInfTieDetView.getFinalInterestOriginal(),decisionView.getIntFeeDOA())); // reduce interest
+                    }else {
+                        if (proposeCreditInfoDetailView.isReducePriceFlag()) {
+                            proCreInfTieDetView.setFinalInterest(Util.subtract(proCreInfTieDetView.getFinalInterestOriginal(),decisionView.getIntFeeDOA())); // reduce interest
+                        }
                     }
 
                     BigDecimal twelve = new BigDecimal(12);

@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.master;
 
 import com.clevel.selos.model.MandateConDetailType;
+import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,9 +20,9 @@ public class MandateFieldCondition implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MST_MAN_FIELD_COND")
     private long id;
 
-    @Column(name = "condition_type", length = 100)
+    @Column(name = "condition_type", length = 1, columnDefinition = "int default 1")
     @Enumerated(EnumType.ORDINAL)
-    private MandateConDetailType mandateConDetailType;
+    private MandateConditionType mandateConditionType;
 
     @Column(name = "condition_name", length = 30)
     private String name;
@@ -44,6 +45,10 @@ public class MandateFieldCondition implements Serializable{
     @Column(name = "depend_con_id")
     private long dependCondition = 0;
 
+    @Column(name = "condition_detail_type", length = 1, columnDefinition = "int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private MandateConDetailType mandateConDetailType;
+
     @OneToMany(mappedBy = "mandateFieldCondition")
     private List<MandateFieldConditionDetail> mandateFieldConditionDetailList;
 
@@ -53,6 +58,14 @@ public class MandateFieldCondition implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public MandateConditionType getMandateConditionType() {
+        return mandateConditionType;
+    }
+
+    public void setMandateConditionType(MandateConditionType mandateConditionType) {
+        this.mandateConditionType = mandateConditionType;
     }
 
     public String getName() {
@@ -123,14 +136,15 @@ public class MandateFieldCondition implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("mandateConditionType", mandateConDetailType)
+                .append("mandateConditionType", mandateConditionType)
                 .append("name", name)
                 .append("conditionDesc", conditionDesc)
                 .append("mandateFieldClass", mandateFieldClass)
                 .append("dependType", dependType)
                 .append("dependConType", dependConType)
                 .append("dependCondition", dependCondition)
-                .append("mandateFieldConditionDetailList", mandateFieldConditionDetailList)
+                .append("mandateConDetailType", mandateConDetailType)
+                .append("mandateFieldConditionDetailList", mandateFieldConditionDetailList == null?0:mandateFieldConditionDetailList.size())
                 .toString();
     }
 }

@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view.master;
 
 import com.clevel.selos.model.MandateConDetailType;
+import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,13 +13,14 @@ import java.util.List;
 public class MandateFieldConditionView implements Serializable {
 
     private long id;
-    private MandateConDetailType mandateConDetailType;
     private String name;
+    private MandateConditionType mandateConditionType;
     private String conditionDesc;
     private MandateFieldClassView mandateFieldClassView;
     private MandateDependType dependType;
     private MandateFieldConditionView dependCondition;
     private MandateDependConType dependConType;
+    private MandateConDetailType mandateConDetailType;
     private List<MandateFieldConditionDetailView> conditionDetailViewList;
     private boolean needUpdate;
 
@@ -28,6 +30,14 @@ public class MandateFieldConditionView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public MandateConditionType getMandateConditionType() {
+        return mandateConditionType;
+    }
+
+    public void setMandateConditionType(MandateConditionType mandateConditionType) {
+        this.mandateConditionType = mandateConditionType;
     }
 
     public String getName() {
@@ -105,12 +115,13 @@ public class MandateFieldConditionView implements Serializable {
     public void updateValues(MandateFieldConditionView view){
         id = view.id;
         name = view.name;
-        mandateConDetailType = view.mandateConDetailType;
+        mandateConditionType = view.mandateConditionType;
         conditionDesc = view.conditionDesc;
         mandateFieldClassView = view.mandateFieldClassView;
         dependType = view.dependType;
         dependCondition = view.dependCondition;
         dependConType = view.dependConType;
+        mandateConDetailType = view.mandateConDetailType;
         conditionDetailViewList = view.conditionDetailViewList;
     }
 

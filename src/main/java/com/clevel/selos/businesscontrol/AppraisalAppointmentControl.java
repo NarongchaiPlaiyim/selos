@@ -120,6 +120,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
 	public AppraisalView getAppraisalAppointment(long workCaseId, long workCasePreScreenId, long statusId){
         log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
+        appraisalView = null;
         if(!Util.isZero(workCaseId)){
             appraisal  = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
