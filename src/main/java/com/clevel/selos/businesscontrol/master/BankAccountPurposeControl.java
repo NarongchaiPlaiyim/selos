@@ -52,9 +52,11 @@ public class BankAccountPurposeControl extends BusinessControl{
     public List<BankAccountPurposeView> getBankAccountPurposeViewActiveList(){
         logger.debug("-- begin getBankAccountPurposeViewActiveList --");
         Map<Long, BankAccountPurposeView> bankAccountPurposeViewMap = getInternalCacheMap();
+        logger.debug("-- bankAccountPurposeViewMap : {}", bankAccountPurposeViewMap);
 
         List<BankAccountPurposeView> bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
         for(BankAccountPurposeView bankAccountPurposeView : bankAccountPurposeViewMap.values()){
+            bankAccountPurposeView.setSelected(false);
             if(Util.isTrue(bankAccountPurposeView.getActive())){
                 bankAccountPurposeViewList.add(bankAccountPurposeView);
             }

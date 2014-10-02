@@ -5,7 +5,8 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:clv="http://clevel.com/ui">
+        xmlns:clv="http://clevel.com/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Juristic</title>
@@ -583,8 +584,9 @@
                                         </p:column>
 
                                         <p:column styleClass="center" style="min-width: 80px; max-width: 80px; width: 80px; white-space: normal!important;">
+                                            <h:outputText value="#{((not empty item.customerCSIList) and (fn:length(item.customerCSIList) gt 0)) ? '' : '-'}"/>
                                             <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
-                                                <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5" />
                                             </ui:repeat>
                                         </p:column>
 

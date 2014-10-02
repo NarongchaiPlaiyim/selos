@@ -139,9 +139,9 @@ public class DBExecute implements Serializable {
             nameEn = null;
         }
 
-        if(nameTh==null || nameEn==null){
+        /*if(nameTh==null || nameEn==null){
             return null;
-        }
+        }*/
 
         try{
             conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);

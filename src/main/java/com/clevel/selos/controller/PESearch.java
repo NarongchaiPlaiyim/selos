@@ -240,7 +240,7 @@ public class PESearch implements Serializable
 
             log.debug("User Role IsNull : {}, User :{},  Role : {}",!Util.isNull(user.getRole()) ,user,user.getRole().getId());
 
-            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.UW.id())) {
+            if(!Util.isNull(user.getRole()) && ( user.getRole().getId() == RoleValue.GH.id() || user.getRole().getId() == RoleValue.CSSO.id() || user.getRole().getId() == RoleValue.VIEWER.id() || user.getRole().getId() == RoleValue.UW.id())) {
                 accessAuthorize = true;
                 log.debug("onSelectSearch ::: after check by ROLE_GH, ROLE_CSSO ,, user role = : {}", user.getRole() != null ? user.getRole().getId() : "NULL");
                 log.debug("onSelectSearch ::: accessAuthorize : {}", accessAuthorize);
@@ -358,9 +358,11 @@ public class PESearch implements Serializable
                 if(stepId == 1) {
                     if (wrkCaseId != 0) {
                         session.setAttribute("stepId", 2001L);
+                        session.setAttribute("stageId", 201);
                         FacesUtil.redirect("/site/basicInfo.jsf");
                     } else {
                         session.setAttribute("stepId", 1003L);
+                        session.setAttribute("stageId", 101);
                         FacesUtil.redirect("/site/prescreenMaker.jsf");
                     }
                 }else{

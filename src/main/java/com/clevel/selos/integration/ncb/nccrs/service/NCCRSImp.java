@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.ncb.nccrs.service;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
@@ -14,6 +15,7 @@ import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -85,6 +87,9 @@ public class NCCRSImp implements NCCRS, Serializable {
     @Inject
     @NCB
     NCBResultImp resultImp;
+
+    @Inject
+    UserDAO userDAO;
 
     private String appRefNumber = null;
     private String userId = null;
@@ -238,6 +243,13 @@ public class NCCRSImp implements NCCRS, Serializable {
         String linkKey = null;
         NCCRSResponseModel responseModel = null;
         linkKey = Util.getLinkKey(userId);
+        //TO Add office code when call NCB
+        String officeCode = "";
+        if(!Util.isEmpty(userId)) {
+            User user = userDAO.findById(userId);
+            if(!Util.isNull(user))
+                officeCode = !Util.isNull(user.getTeam())?user.getTeam().getTeam_code():"";
+        }
         stringBuilder = new StringBuilder();
         stringBuilder.append("companyname = ").append(nccrsModel.getCompanyName());
         stringBuilder.append(" registtype = ").append(nccrsModel.getRegistType());
@@ -248,12 +260,12 @@ public class NCCRSImp implements NCCRS, Serializable {
         String action = this.action + " " + ONLINE;
         try {
             actionDate = new Date();
-            responseModel = checkOnlineResponseModel(request(nccrsModel, ONLINE));
+            responseModel = checkOnlineResponseModel(request(nccrsModel, ONLINE), officeCode);
             resultDate = new Date();
             log.debug("[{}] NCCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
-            saveNCBI(responseModel);
+            saveNCBI(responseModel, officeCode);
             return responseModel;
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
@@ -302,6 +314,13 @@ public class NCCRSImp implements NCCRS, Serializable {
         String linkKey = null;
         NCCRSResponseModel responseModel = null;
         linkKey = Util.getLinkKey(userId);
+        //TO Add office code when call NCB
+        String officeCode = "";
+        if(!Util.isEmpty(userId)) {
+            User user = userDAO.findById(userId);
+            if(!Util.isNull(user))
+                officeCode = !Util.isNull(user.getTeam())?user.getTeam().getTeam_code():"";
+        }
         stringBuilder = new StringBuilder();
         stringBuilder.append("companyname = ").append(nccrsModel.getCompanyName());
         stringBuilder.append(" registtype = ").append(nccrsModel.getRegistType());
@@ -327,7 +346,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                     actionDate = new Date();
                     actionDesc = trackingId;
                     action = this.action + " " + READ;
-                    responseModel = checkOfflineResponseModel(request(nccrsModel, READ));
+                    responseModel = checkOfflineResponseModel(request(nccrsModel, READ), officeCode);
                     if (null != responseModel.getBody().getTransaction().getUser()) {
                         log.debug("NCCRS get response offline");
                         String registId = nccrsModel.getRegistId();
@@ -337,7 +356,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                                 linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         resultImp.updateSUCCEED(appRefNumber, registId, trackingId);
-                        saveNCBI(responseModel); //TODO: to confirm, need to reconcile or not?
+                        saveNCBI(responseModel, officeCode); //TODO: to confirm, need to reconcile or not?
                         return responseModel;
                     } else {
                         resultDesc = "NCCRS NCB Exception Transaction is null";
@@ -399,7 +418,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         }
     }
 
-    private NCCRSResponseModel checkOnlineResponseModel(NCCRSResponseModel responseModel) throws Exception {
+    private NCCRSResponseModel checkOnlineResponseModel(NCCRSResponseModel responseModel, String officeCode) throws Exception {
         log.debug("NCCRS Call : checkOnlineResponseModel()");
         if (null != responseModel) {
             String resultDesc = responseModel.getHeader().getCommand();
@@ -415,7 +434,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                         resultDesc = responseModel.getBody().getTransaction().getH2herror().getErrormsg();
                         log.error("NCCRS NCB Exception TUEFERROR {}", resultDesc);
                         log.debug("save data to NCBI Export");
-                        saveNCBI(responseModel);
+                        saveNCBI(responseModel, officeCode);
                         throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                     } else if (null != responseModel.getBody().getTransaction().getH2hresponse()){
                         return responseModel;
@@ -438,7 +457,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         }
     }
 
-    private NCCRSResponseModel checkOfflineResponseModel(NCCRSResponseModel responseModel) throws Exception {
+    private NCCRSResponseModel checkOfflineResponseModel(NCCRSResponseModel responseModel, String officeCode) throws Exception {
         log.debug("NCCRS Call : checkOfflineResponseModel()");
         if (null != responseModel) {
             String resultDesc = responseModel.getHeader().getCommand();
@@ -454,7 +473,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                         resultDesc = responseModel.getBody().getTransaction().getH2herror().getErrormsg();
                         log.error("NCCRS NCB Exception TUEFERROR {}", resultDesc);
                         log.debug("save data to NCBI Export");
-                        saveNCBI(responseModel);
+                        saveNCBI(responseModel, officeCode);
                         throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                     } else if (null != responseModel.getBody().getTransaction().getH2hresponse()){
                         return responseModel;
@@ -503,10 +522,10 @@ public class NCCRSImp implements NCCRS, Serializable {
         }
     }
 
-    private void saveNCBI(NCCRSResponseModel responseModel) throws Exception {
+    private void saveNCBI(NCCRSResponseModel responseModel, String officeCode) throws Exception {
         NCBIExportModel exportModel = new NCBIExportModel();
 
-        exportModel.setOfficeCode("XXX"); //todo XXX
+        exportModel.setOfficeCode(officeCode);
 
         exportModel.setRequestNo(memberRef);
         exportModel.setStaffId(userId);

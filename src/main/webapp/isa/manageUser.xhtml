@@ -194,8 +194,7 @@
 
                         <p:dataTable id="dataTable" var="user" value="#{isa.userList}"
                                      selection="#{isa.selectUserDetail}" rowKey="#{user.id}"
-                                     rowIndexVar="rowIndex" rows="15" paginator="true"
-                                >
+                                     rowIndexVar="rowIndex" rows="15" paginator="true">
 
                             <p:column selectionMode="multiple"/>
 
@@ -206,7 +205,7 @@
                                 <h:outputText value="#{user.userName}"/>
                             </p:column>
                             <p:column headerText="Active">
-                                <h:outputText value="#{user.active}"/>
+                                <h:outputText value="#{user.active == 1 ? 'Active' : 'InActive'}"/>
                             </p:column>
                             <p:column headerText="Role">
                                 <h:outputText value="#{user.role.name}"/>
@@ -226,10 +225,20 @@
                             <p:column headerText="Title">
                                 <h:outputText value="#{user.title.name}"/>
                             </p:column>
-
-                            <p:column headerText="Status">
-                                <h:outputText value="#{user.userStatus}"/>
+                            <p:column headerText="Cteate date">
+                                <h:outputText value="#{user.createDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                                </h:outputText>
                             </p:column>
+                            <p:column headerText="Last sign on date">
+                                <h:outputText value="#{user.lastLogon}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <!--<p:column headerText="Status">-->
+                                <!--<h:outputText value="#{user.userStatus}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="Management">
                                 <p:commandButton icon="ui-icon-pencil"
                                                  title="${user.id}"
@@ -290,7 +299,7 @@
             <ui:param name="formId" value="frmConfirmDeleteUser"/>
             <ui:param name="controller" value="#{isa}"/>
             <ui:param name="action" value="onClickDelete"/>
-            <ui:param name="update" value=":userTableData"/>
+            <ui:param name="update" value=":userTableData,:msgBoxSystemMessagePanel"/>
         </ui:include>
 
         <ui:include src="../site/dialog/confirmDeleteDlg.xhtml">

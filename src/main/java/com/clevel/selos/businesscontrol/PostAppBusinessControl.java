@@ -70,6 +70,7 @@ public class PostAppBusinessControl extends BusinessControl {
 	@Inject
     @SELOS
     private Logger log;
+	
 	@Inject @NormalMessage
 	private Message message;
 	@Inject
@@ -209,7 +210,18 @@ public class PostAppBusinessControl extends BusinessControl {
         	fields.put("Remarks", remark);
         
         String stepCode = workCase.getStep().getCode();
+        if (stepCode == null)
+        	stepCode = "";
+        else
+        	stepCode = stepCode.trim();
         long actionId = action.getId();
+        
+        log.debug("Call BPM "+workCase.getId());
+        log.debug("Step = ["+stepCode+"]");
+        log.debug("Status = ["+workCase.getStatus().getCode()+"]");
+        log.debug("Action = ["+actionId+"]");
+        
+        
         //Add additional field
     	if ("3008".equals(stepCode)) { //Check Doc
     		_Before_3008_CheckDoc(workCase, actionId, fields, returnCodeSet);
@@ -234,6 +246,7 @@ public class PostAppBusinessControl extends BusinessControl {
     	}
         
         bpmExecutor.execute(queueName, wobNumber, fields);
+        log.debug("Done BPM "+workCase.getId());
         
         //After success
         if ("3002".equals(stepCode)) {
@@ -263,112 +276,110 @@ public class PostAppBusinessControl extends BusinessControl {
         } else if ("3047".equals(stepCode)) {
         	_3047_ReviewPerfection_Resign(workCase, actionId);
         }
+        log.debug("Finish Call BPM "+workCase.getId());
  	}
 	
 	/*
 	 * Before Case
 	 */
 	private void _Before_3008_CheckDoc(WorkCase workCase,long actionId, HashMap<String,String> fields,HashSet<String> returnCodeSet) {
+		log.debug("_Before_3008_CheckDoc");
 		boolean formC = returnCodeSet.contains("10100") && actionId == 1005;
 		String formCFlag = formC ? "Y" : "N" ;
 		fields.put("FormCFlag", formCFlag);
 	}
 	private void _Before_3023_CreateCustProfile(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3023_CreateCustProfile");
 		String accOpenRequired = "N";
 		fields.put("AccOpenRequired", accOpenRequired);
 	}
 	private void _Before_3029_GenerateAgreement(WorkCase workCase, long actionId,HashMap<String,String> fields) {
+		log.debug("_Before_3029_GenerateAgreement");
 		String appointDateStr = "";
 		String mortgageRequired = "N";
-		if (actionId == ACTION_SUBMIT) {
-			if (mortgageInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
-				mortgageRequired = "Y";
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		if (mortgageInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
+			mortgageRequired = "Y";
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		
 		fields.put("AppointmentDate",appointDateStr);
 		fields.put("MortgageRequired", mortgageRequired);
 	}
 	private void _Before_3033_ConfirmMortgage(WorkCase workCase,long actionId, HashMap<String, String> fields) {
+		log.debug("_Before_3033_ConfirmMortgage");
 		String appointDateStr = "";
-		if (actionId == ACTION_SUBMIT) {
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		fields.put("AppointmentDate",appointDateStr);
 	}
 	private void _Before_3035_ConfirmSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3035_ConfirmSign");
 		String collectFee = "N";
-		if (actionId == ACTION_SUBMIT) {
-			//Checking from collect fee and is od or tcg ?
-			BigDecimal grandTotalAgreement = BigDecimal.ZERO;
-			List<List<FeeCollectionDetailView>> details = feeCalculationControl.getFeeCollectionDetails(workCase.getId());
-			for (List<FeeCollectionDetailView> detailList : details) {
-				if (detailList.isEmpty())
-					continue;
-				FeeCollectionDetailView firstView = detailList.get(0);
-				if (!firstView.isAgreementSign()) {
-					continue;
-				}
-				for (int i=0;i<detailList.size();i++) {
-					FeeCollectionDetailView view = detailList.get(i);
-					if (view.getAmount() != null)
-						grandTotalAgreement = grandTotalAgreement.add(view.getAmount());
-				}
+		//Checking from collect fee and is od or tcg ?
+		BigDecimal grandTotalAgreement = BigDecimal.ZERO;
+		List<List<FeeCollectionDetailView>> details = feeCalculationControl.getFeeCollectionDetails(workCase.getId());
+		for (List<FeeCollectionDetailView> detailList : details) {
+			if (detailList.isEmpty())
+				continue;
+			FeeCollectionDetailView firstView = detailList.get(0);
+			if (!firstView.isAgreementSign()) {
+				continue;
 			}
-			if (grandTotalAgreement.compareTo(BigDecimal.ZERO) > 0) {
-				//Checking from open account
-				collectFee = "Y";
-				List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
-				if (accounts != null && !accounts.isEmpty()) {
-					for (OpenAccount account : accounts) {
-						List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
-						if (purposes != null && !purposes.isEmpty()) {
-							boolean isOD = false;
-							boolean isTCG = false;
-							for (OpenAccountPurpose purpose : purposes) {
-								if (purpose.getAccountPurpose().isForOD())
-									isOD = true;
-								if (purpose.getAccountPurpose().isForTCG())
-									isTCG = true;
-							}
-							if (isOD && isTCG) {
-								collectFee = "N";
-								break;
-							}
+			for (int i=0;i<detailList.size();i++) {
+				FeeCollectionDetailView view = detailList.get(i);
+				if (view.getAmount() != null)
+					grandTotalAgreement = grandTotalAgreement.add(view.getAmount());
+			}
+		}
+		if (grandTotalAgreement.compareTo(BigDecimal.ZERO) > 0) {
+			//Checking from open account
+			collectFee = "Y";
+			List<OpenAccount> accounts = openAccountDAO.findByWorkCaseId(workCase.getId());
+			if (accounts != null && !accounts.isEmpty()) {
+				for (OpenAccount account : accounts) {
+					List<OpenAccountPurpose> purposes = account.getOpenAccountPurposeList();
+					if (purposes != null && !purposes.isEmpty()) {
+						boolean isOD = false;
+						boolean isTCG = false;
+						for (OpenAccountPurpose purpose : purposes) {
+							if (purpose.getAccountPurpose().isForOD())
+								isOD = true;
+							if (purpose.getAccountPurpose().isForTCG())
+								isTCG = true;
+						}
+						if (isOD && isTCG) {
+							collectFee = "N";
+							break;
 						}
 					}
 				}
 			}
-			
 		}
 		fields.put("CollecFeeRequired", collectFee);
 	}
 	
 	private void _Before_3036_RegenAgree(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3036_RegenAgree");
 		String appointDateStr = "";
-		if (actionId == ACTION_SUBMIT) {
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		fields.put("AppointmentDate", appointDateStr);
 	}
 	private void _Before_3038_ReviewSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3038_ReviewSign");
 		String pledgeRequired = "N";
-		if (actionId == ACTION_SUBMIT) {
-			if (pledgeInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
-				pledgeRequired = "Y";
-		}
+		if (pledgeInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
+			pledgeRequired = "Y";
 		fields.put("PledgeRequired", pledgeRequired);
 	}
 	private void _Before_3045_ReviewPerfection(WorkCase workCase,long actionId,HashMap<String,String> fields) throws Exception {
+		log.debug("_Before_3045_ReviewPerfection");
 		//validate that can be submitted or not
 		if (actionId != ACTION_SUBMIT)
 			return;
@@ -390,8 +401,9 @@ public class PostAppBusinessControl extends BusinessControl {
 			List<PledgeInfo> pledges = pledgeInfoDAO.findAllByWorkCaseId(workCase.getId());
 			List<MortgageInfo> mortgages = mortgageInfoDAO.findAllByWorkCaseId(workCase.getId());
 			TCGInfo tcg = tcgInfoDAO.findByWorkCaseId(workCase.getId());
-			
-			checkDate = _getMaxDate(checkDate, tcg.getApproveDate());
+			if (tcg != null) {
+				checkDate = _getMaxDate(checkDate, tcg.getApproveDate());
+			}
 			if (pledges != null && !pledges.isEmpty()) {
 				for (PledgeInfo pledge : pledges) {
 					checkDate = _getMaxDate(checkDate, pledge.getPledgeSigningDate());
@@ -414,25 +426,23 @@ public class PostAppBusinessControl extends BusinessControl {
 		throw new Exception(msg);
 	}
 	private void _Before_3046_RegenAgree_PerfectReview(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3046_RegenAgree_PerfectReview");
 		String appointDateStr = "";
-		if (actionId == ACTION_SUBMIT) {
-			AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
-			if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
-				appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
-			}
+		AgreementInfo agreementInfo = agreementInfoDAO.findByWorkCaseId(workCase.getId());
+		if (agreementInfo != null && agreementInfo.getLoanContractDate() != null) {
+			appointDateStr = DateTimeUtil.convertDateWorkFlowFormat(agreementInfo.getLoanContractDate());
 		}
 		fields.put("AppointmentDate", appointDateStr);
 	}
 	
 	private void _Before_3049_SetupLimit(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3049_SetupLimit");
 		String disbursementRequired = "N";
 		String basicCheckRequired = "N";
-		if (actionId == ACTION_SUBMIT) {
-			BigDecimal disbursementAmt = disbursementDAO.getTotalDisbursementAmount(workCase.getId());
-			if (disbursementAmt != null && disbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
-				disbursementRequired = "Y";
-			}	
-		}
+		BigDecimal disbursementAmt = disbursementDAO.getTotalDisbursementAmount(workCase.getId());
+		if (disbursementAmt != null && disbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
+			disbursementRequired = "Y";
+		}	
 		
 		//TODO -	BasicConditionCheckRequired
 		
@@ -444,6 +454,7 @@ public class PostAppBusinessControl extends BusinessControl {
 	 * After success case
 	 */
 	private void _3002_InsurancePremiumQuote(WorkCase workCase,long actionId) {
+		log.debug("_3002_InsurancePremiumQuote");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Insurance Premium Quote (3002) , Action Submit CA (1015)
@@ -476,11 +487,13 @@ public class PostAppBusinessControl extends BusinessControl {
 		feeDetailDAO.save(model);
 	}
 	private void _3009_FixDataInDecision(WorkCase workCase,long actionId) {
+		log.debug("_3009_FixDataInDecision");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		mortgageSummaryControl.calculateMortgageSummary(workCase.getId());
 	}
 	private void _3023_CreateCustProfile(WorkCase workCase,long actionId) {
+		log.debug("_3023_CreateCustProfile");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Create/Update Customer Profile(3023), Action Submit CA (1015)
@@ -489,6 +502,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3026_OpenAccount(WorkCase workCase,long actionId) {
+		log.debug("_3026_OpenAccount");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Open Account(3026), Action Submit CA (1015)
@@ -497,12 +511,14 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3029_GenerateAgree(WorkCase workCase,long actionId) {
+		log.debug("_3029_GenerateAgree");
 		if (actionId != 1036) //Gen agreement
 			return;
 		//Step Generate Agreement(3029), Action Generate Agreement (1036)
 		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
 	}
 	private void _3034_ResignAgree(WorkCase workCase,long actionId) {
+		log.debug("_3034_ResignAgree");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Re-Sign Agreement(3034), Action Submit CA (1015)
@@ -511,6 +527,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3035_ConfirmSign(WorkCase workCase,long actionId) {
+		log.debug("_3035_ConfirmSign");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Confirm Agreement Sign & Collect Fee(3035), Action Submit CA (1015)
@@ -519,12 +536,14 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3036_RegenAgree(WorkCase workCase,long actionId) {
+		log.debug("_3036_RegenAgree");
 		if (actionId != 1036) //Gen agreement
 			return;
 		//Step Regenerate Agreement(3036), Action Generate Agreement (1036)
 		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
 	}
 	private void _3038_ReviewSign(WorkCase workCase,long actionId) {
+		log.debug("_3038_ReviewSign");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Reviewed Signed Agreement(Re-sign agreement)(3038), Action Submit CA (1015)
@@ -533,6 +552,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3040_PledgeCash(WorkCase workCase,long actionId) {
+		log.debug("_3040_PledgeCash");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Pledge Cash Collateral(3040), Action Submit CA (1015)
@@ -541,6 +561,8 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3042_CollectFee(WorkCase workCase,long actionId) {
+		log.debug("_3042_CollectFee");
+		
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Collect Fee (3042), Action Submit CA (1015)
@@ -549,12 +571,14 @@ public class PostAppBusinessControl extends BusinessControl {
 		persist(model);
 	}
 	private void _3046_RegenAgree_PerfectReview(WorkCase workCase,long actionId) {
+		log.debug("_3046_RegenAgree_PerfectReview");
 		if (actionId != 1036) //Gen agreement
 			return;
 		//Step Regenerate Agreement(3036), Action Generate Agreement (1036)
 		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
 	}
 	private void _3047_ReviewPerfection_Resign(WorkCase workCase,long actionId) {
+		log.debug("_3047_ReviewPerfection_Resign");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step 3047	Review Perfection (Re - Sign Agreement), Action Submit CA (1015)
@@ -564,10 +588,13 @@ public class PostAppBusinessControl extends BusinessControl {
 	}
 		
 	private void persist(PerfectionReview model) {
-		if (model.getId() <= 0)
+		if (model.getId() <= 0) {
 			perfectionReviewDAO.save(model);
-		else
+			log.debug("Create Perfection Review record "+model);
+		} else {
 			perfectionReviewDAO.update(model);
+			log.debug("Update Perfection Review record "+model);
+		}
 	}
 	private PerfectionReview createPerfectionReview(WorkCase workCase,PerfectReviewType type,PerfectReviewStatus status) {
 		Date currDate = new Date();

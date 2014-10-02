@@ -21,7 +21,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name="mandateFieldSubmitStep")
-public class MandateFieldSubmitStep implements Serializable {
+public class MandateFieldStepAction implements Serializable {
     @Inject
     @ADMIN
     private Logger log;
@@ -57,7 +57,7 @@ public class MandateFieldSubmitStep implements Serializable {
     private boolean updatedMode = false;
 
     @Inject
-    public MandateFieldSubmitStep(){}
+    public MandateFieldStepAction(){}
 
     @PostConstruct
     private void init() {
@@ -121,6 +121,8 @@ public class MandateFieldSubmitStep implements Serializable {
         selectedMandateFieldSAAdminId = -1;
         selectedClassViewId = -1;
         selectedFieldViewId = -1;
+        wrkMandateFieldClassSAAdminView.setMandateFieldConditionViewList(new ArrayList<MandateFieldConditionView>());
+        wrkMandateFieldClassSAAdminView.setMandateFieldViewList(new ArrayList<MandateFieldView>());
         _initFieldConditionDropdown();
     }
 
@@ -128,7 +130,10 @@ public class MandateFieldSubmitStep implements Serializable {
         log.info("-- begin onOpenUpdateStepActionField: {}", selectedMandateFieldSAAdminId);
         if(selectedMandateFieldSAAdminId >= 0){
             if(mandateFieldStepActionView.getClassSAAdminViewList() != null){
-                wrkMandateFieldClassSAAdminView = mandateFieldStepActionView.getClassSAAdminViewList().get((int)selectedMandateFieldSAAdminId);
+                wrkMandateFieldClassSAAdminView = new MandateFieldClassSAAdminView();
+                wrkMandateFieldClassSAAdminView.updateValues(mandateFieldStepActionView.getClassSAAdminViewList().get((int)selectedMandateFieldSAAdminId));
+                //wrkMandateFieldClassSAAdminView = mandateFieldStepActionView.getClassSAAdminViewList().get((int)selectedMandateFieldSAAdminId);
+                log.debug("wrkMandateFieldClassSAAdminView: {}", wrkMandateFieldClassSAAdminView);
                 selectedClassViewId = wrkMandateFieldClassSAAdminView.getId();
                 updatedMode = true;
             }
@@ -188,6 +193,7 @@ public class MandateFieldSubmitStep implements Serializable {
         mandateFieldConditionViewList = new ArrayList<MandateFieldConditionView>();
         for(MandateFieldConditionView mstConditionView : _tempMandateConditionViewDBList){
             boolean isMatched = false;
+            log.debug("wrk xxx: " + wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList());
             for(MandateFieldConditionView selectedConditionView : wrkMandateFieldClassSAAdminView.getMandateFieldConditionViewList()){
 
                 if(selectedConditionView.getId() == mstConditionView.getId()){

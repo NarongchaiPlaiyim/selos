@@ -7,7 +7,7 @@
 
     <p:panel id="submitCAUWDlgPanel" styleClass="panel-dialog">
         <p:panel id="submitCaseUW" styleClass="panel">
-            <h:panelGroup id="submitCA_UW" rendered="#{headerController.isSubmitForUW()}">
+            <h:panelGroup id="submitCA_UW" rendered="#{headerController.isSubmitForUW() and not headerController.isUWRejected()}">
                 <table class="content_table_form">
                     <tr>
                         <td class="title left" style="width: 170px;">UW2 DOA Level :</td>

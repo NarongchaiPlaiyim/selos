@@ -4,55 +4,46 @@
         xmlns:h="http://java.sun.com/jsf/html">
     <div id="footer">
         <div id="footer_container">
-            <span style="color:white; font-size:11px; font-weight:bold;">TMB SE-LOS application version. <h:outputText
-                    value="#{msg.get('app.version')}"/></span><br class="clear"/><br/><br/>
+            <span style="color:white; font-size:11px; font-weight:bold;">TMB SE-LOS application version. <h:outputText value="#{msg.get('app.version')}"/></span><br class="clear"/><br/><br/>
                 <table style="color:white; font-size:11px;">
                     <tr>
                         <td style="width:130px; font-weight:bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/inbox.jsf" title="Inbox">Inbox</h:outputLink></td>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel">
-                            <td style="width:130px; font-weight: bold;">Prescreen</td>
+                            <td style="width:130px; font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/prescreen.jsf" title="Prescreen">Prescreen</h:outputLink></td>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
-                            <td style="width:130px; font-weight: bold;">Basic Info.</td>
-                            <td style="width:130px; font-weight: bold;">Customer Info.</td>
-                            <td style="width:130px; font-weight: bold;">Business Info.</td>
-                            <td style="width:130px; font-weight: bold;">Financial Info.</td>
-                            <td style="width:130px; font-weight: bold;">Decision</td>
+                            <td style="width:130px; font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/basicInfo.jsf" title="Basic Info.">Basic Info.</h:outputLink></td>
+                            <td style="width:130px; font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/customerInfoSummary.jsf" title="Customer Info.">Customer Info.</h:outputLink></td>
+                            <td style="width:130px; font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/bizInfoSummary.jsf" title="Business Info.">Business Info.</h:outputLink></td>
+                            <td style="width:130px; font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/bankStatementSummary.jsf" title="Business Info.">Financial Info.</h:outputLink></td>
+                            <td style="width:130px; font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/exSummary.jsf" title="Decision">Decision</h:outputLink></td>
                         </h:panelGroup>
                     </tr>
                     <tr>
                         <td style="font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/generic_search.jsf" title="Search">Search</h:outputLink></td>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel">
-                            <td style="padding-left: 5px;">- Prescreen Maker</td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/prescreenMaker.jsf" title="Prescreen Maker">- Prescreen Maker</h:outputLink></td>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
                             <td><!-- basic info --></td>
-                            <td style="padding-left: 5px;">- Borrower Info.</td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/customerInfoSummary.jsf" title="Borrower Info.">- Borrower Info.</h:outputLink></td>
                             <td></td>
-                            <td style="padding-left: 5px;">- Bank Statement</td>
-                            <td style="padding-left: 5px;">- Ex Summary</td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/bankStatementSummary.jsf" title="Bank Statement">- Bank Statement</h:outputLink></td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/exSummary.jsf" title="Ex Summary">- Ex Summary</h:outputLink></td>
                         </h:panelGroup>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/download.jsf" title="Download">Download</h:outputLink></td>
+                        <td style="font-weight: bold;">
+                            <!--<h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/download.jsf" title="Download">Download</h:outputLink>-->
+                            <h:outputLink styleClass="bottom_menu" value="#" title="Download">Download</h:outputLink>
+                        </td>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel"><td></td></h:panelGroup>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
                             <td></td>
-                            <td style="padding-left: 5px;">- Credit History</td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/NCBSummary.jsf" title="Credit History">- Credit History</h:outputLink></td>
                             <td></td>
-                            <td style="padding-left: 5px;">- DBR</td>
-                            <td style="padding-left: 5px;">- Decision</td>
-                        </h:panelGroup>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <h:panelGroup rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel"><td></td></h:panelGroup>
-                        <h:panelGroup rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
-                            <td></td>
-                            <td style="padding-left: 5px;">- Qualitative</td>
-                            <td></td>
-                            <td style="padding-left: 5px;">- Existing Line</td>
-                            <td></td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/dbrInfo.jsf" title="DBR">- DBR</h:outputLink></td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/decision.jsf" title="Decision">- Decision</h:outputLink></td>
                         </h:panelGroup>
                     </tr>
                     <tr>
@@ -60,9 +51,20 @@
                         <h:panelGroup rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel"><td></td></h:panelGroup>
                         <h:panelGroup rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
                             <td></td>
-                            <td style="padding-left: 5px;">- TCG Calculation</td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/qualitative.jsf" title="Qualitative">- Qualitative</h:outputLink></td>
                             <td></td>
-                            <td style="padding-left: 5px;">- Propose Line</td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/creditFacExisting.jsf" title="Existing Line">- Existing Line</h:outputLink></td>
+                            <td></td>
+                        </h:panelGroup>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <h:panelGroup rendered="#{headerController.checkAccessStage('PRESCREEN')}" styleClass="panel"><td></td></h:panelGroup>
+                        <h:panelGroup rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
+                            <td></td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/TCGInfo.jsf" title="TCG Calculation">- TCG Calculation</h:outputLink></td>
+                            <td></td>
+                            <td style="padding-left: 5px;"><h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/proposeLine.jsf" title="Propose Line">- Propose Line</h:outputLink></td>
                             <td></td>
                         </h:panelGroup>
                     </tr>

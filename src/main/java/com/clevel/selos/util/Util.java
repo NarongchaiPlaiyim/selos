@@ -140,6 +140,10 @@ public class Util implements Serializable {
         return (field == null) || "".equalsIgnoreCase(field.trim());
     }
 
+    public static String EmptyString(String field) {
+        return Util.isNull(field) ? "" : field;
+    }
+
     public static boolean isTrue(String str) {
         return str != null && str.trim().matches("[tT]rue|[yY]es|1");
     }

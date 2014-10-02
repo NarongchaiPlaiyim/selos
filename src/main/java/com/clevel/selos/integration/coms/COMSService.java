@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Stateless
@@ -102,8 +103,8 @@ public class COMSService implements Serializable {
                             headCollateralData.setCollId(headCollateral.getColId());
                             headCollateralData.setTitleDeed(headCollateral.getColNo());
                             String location = "";
-                            if(headCollateral.getAddCity()!=null){
-                                location = location.concat(headCollateral.getAddCity()).concat(SPACE);
+                            if(headCollateral.getAddDistrict()!=null){
+                                location = location.concat(headCollateral.getAddDistrict()).concat(SPACE);
                             }
                             if(headCollateral.getCity()!=null){
                                 location = location.concat(headCollateral.getCity()).concat(SPACE);
@@ -163,6 +164,8 @@ public class COMSService implements Serializable {
                                     subCollateralData.setAppraisalValue(subAppraisalValue);
                                     //TODO: usage, typeOfUsage
 
+                                    HashMap<String,String> usageMap = new HashMap<String, String>();
+
                                     //Get Address
                                     String address = "";
                                     AddressType addressType = addressTypeMapping.getAddressType(subCollateralData.getHeadCollType(), subCollateralData.getSubCollType(), subCollateral.getOnlType());
@@ -180,8 +183,9 @@ public class COMSService implements Serializable {
                                             case TYPE4:
                                                 address = dbExecute.getAddressType4(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
                                                 break;
-                                            case TYPE5:
+                                            case TYPE5: //Building
                                                 address = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                usageMap = dbExecute.getUsageForBuilding(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
                                                 break;
                                             case TYPE6:
                                                 address = dbExecute.getAddressType6(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
@@ -210,6 +214,14 @@ public class COMSService implements Serializable {
                                     }
                                     subCollateralData.setAddress(address);
                                     subCollateralDataList.add(subCollateralData);
+
+                                    if(usageMap.containsKey("usages")){
+                                        subCollateralData.setUsage(usageMap.get("usages"));
+                                    }
+
+                                    if(usageMap.containsKey("usageType")){
+                                        subCollateralData.setTypeOfUsage(usageMap.get("usageType"));
+                                    }
                                 }
                             }
 

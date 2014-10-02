@@ -171,8 +171,12 @@ public class LoginBean {
         }
         try
         {
-            log.info("team id is ::: {}",user.getTeam().getId());
-            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name(),user.getRole().getId(),user.getTeam().getId());
+            int teamId = 0;
+            if(user.getTeam() != null){
+                teamId = user.getTeam().getId();
+            }
+            log.info("team id is ::: {}", teamId);
+            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name(),user.getRole().getId(),teamId);
         }
         catch (EntityNotFoundException e)
         {

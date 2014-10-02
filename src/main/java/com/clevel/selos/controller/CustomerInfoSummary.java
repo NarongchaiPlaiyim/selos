@@ -2,11 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.master.CustomerEntityControl;
-import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -212,7 +210,7 @@ public class CustomerInfoSummary extends BaseController {
                 message = msg.get("app.message.customer.existing.error2");
                 severity = "info";
             } else {
-            onDelete(selectedItemCustomerGuarantor);
+                onDelete(selectedItemCustomerGuarantor);
                 messageHeader = "Information.";
                 message = "Delete Customer Info Guarantor Success.";
                 severity = "info";

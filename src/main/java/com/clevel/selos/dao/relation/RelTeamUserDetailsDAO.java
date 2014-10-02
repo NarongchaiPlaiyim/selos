@@ -48,4 +48,16 @@ public class RelTeamUserDetailsDAO extends GenericDAO<RelTeamUserDetails, Intege
 
         return userTeamList;
     }
+
+    public int getTeamLeadHeadIdByTeamId(int teamId){
+        log.info("getTeamLeadHeadByTeamId (teamId : {})", teamId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("team_Id", teamId));
+        criteria.add(Restrictions.eq("teamFlag", "Y"));
+        List<RelTeamUserDetails> relTeamUserDetailsList = criteria.list();
+        if(relTeamUserDetailsList!=null && relTeamUserDetailsList.size() > 0){
+            return relTeamUserDetailsList.get(0).getTlThId();
+        }
+        return 0;
+    }
 }

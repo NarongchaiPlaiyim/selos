@@ -402,6 +402,10 @@ public class ChangeOwner implements Serializable {
         teamNamesForChangeOwerTo =new ArrayList<ChangeOwnerView>();
         teamNamesForChangeOwerTo = userDAO.getTeamUserForChangeOwner(teamId);
 
+        Collections.sort(teamNamesForChangeOwerTo);
+
+        Collections.sort(teamTypeName);
+
         if(userTeamDAO.findById(teamId).getTeam_type()== 2 && teamNamesForChangeOwerTo.size()==1)
         {
             selectTeamNameChangeOwner = teamNamesForChangeOwerTo.get(0).getId();
@@ -431,18 +435,22 @@ public class ChangeOwner implements Serializable {
     {
 
         rolSet = null;
+        selectRole = "";
+        log.debug("in getRoleNameForSelectedTeam");
         //rolSet = new TreeSet<ChangeOwnerView>();
         rolSet = new ArrayList<ChangeOwnerView>();
         selectTeam = event.getNewValue().toString();
+        log.debug("Selected Team : {}",selectTeam);
 
         if(selectTeam != null && selectTeam.trim().length()>0)
         {
-        selectedTeamId = Integer.parseInt(selectTeam);
+            selectedTeamId = Integer.parseInt(selectTeam);
         }
         if(selectTeam != null)
         {
             rolSet = userDAO.getRoleList(selectedTeamId, teamId);
         }
+        usersIdNameList = new ArrayList<User>();
 
         userList1 = null;
         return rolSet;
@@ -514,13 +522,10 @@ public class ChangeOwner implements Serializable {
 
             log.info("in Change Owner if else 1 ");
         }
-        if(changeOwnerQueryList != null && changeOwnerQueryList.length() > 0)
-        {
-            changeOwerViewList = pedbExecute.queryForChangeOwner(changeOwnerQueryList,selectuser);
 
-            log.info("in Change Owner if 2 ");
+        changeOwerViewList = pedbExecute.queryForChangeOwner(changeOwnerQueryList,selectuser);
 
-        }
+        log.info("Change Owner View cases :  {} ",changeOwerViewList.size());
 
         checked.clear();
 
@@ -690,6 +695,7 @@ public class ChangeOwner implements Serializable {
         long wrkCaseAppraisalId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
+        int parallelRequestAppraisal = 0;
         int fetchType = Util.parseInt(rosterViewSelectItem.getFetchType(), 0);
         String appNumber = Util.parseString(rosterViewSelectItem.getAppNumber(), "");
         String queueName = Util.parseString(rosterViewSelectItem.getQueuename(), "0");

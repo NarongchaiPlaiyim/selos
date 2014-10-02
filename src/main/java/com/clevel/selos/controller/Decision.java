@@ -63,7 +63,7 @@ public class Decision extends BaseController {
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private LoanPurposeControl loanPurposeControl;
     @Inject
@@ -912,11 +912,11 @@ public class Decision extends BaseController {
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit);
                 // Calculate Total Approve
-                decisionControl.calculateTotalApprove(decisionView);
+                decisionControl.calculateTotalApprove(decisionView, workCaseId);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
 
-                exSummaryControl.calForDecision(workCaseId);
+                calculationControl.calForDecision(workCaseId);
 
                 fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A);
             }

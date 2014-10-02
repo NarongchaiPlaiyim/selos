@@ -58,13 +58,13 @@
                     <td class="title left">Reason for over SLA :</td>
                     <td>
                         <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                         value="#{headerController.zmEndorseUserId}"
+                                         value="#{headerController.slaReasonId}"
                                          required="#{not empty param[btnSubmitCaseUW.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{headerController.zmUserList}"
-                                           var="zmItem"
-                                           itemLabel="#{zmItem.id} - #{zmItem.userName}"
-                                           itemValue="#{zmItem.id}"/>
+                            <f:selectItems value="#{headerController.slaReasonList}"
+                                           var="slaItem"
+                                           itemLabel="#{slaItem.code} - #{slaItem.description}"
+                                           itemValue="#{slaItem.id}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

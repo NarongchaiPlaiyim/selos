@@ -1258,7 +1258,7 @@
                                                                          update=":collateralDlgForm"
                                                                          process="@form"
                                                                          oncomplete="collateralInfoDlg.show();"
-                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton') or proposeCollView.appraisalRequest != 0}">
+                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton') or proposeCollView.appraisalRequest == 2}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                             <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
                                                             <p:resetInput target=":collateralDlgForm"/>
@@ -1267,7 +1267,7 @@
                                                         <p:commandButton value="Remove"
                                                                          process="@form" styleClass="small"
                                                                          oncomplete="confirmDeleteCollateralInfoDlg.show()"
-                                                                         disabled="#{proposeLine.isDisabled('removeProposeCollateralButton') or proposeCollView.appraisalRequest != 0}}">
+                                                                         disabled="#{proposeLine.isDisabled('removeProposeCollateralButton') or proposeCollView.appraisalRequest == 2}}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                         </p:commandButton>
                                                     </td>
@@ -1804,9 +1804,9 @@
                                             <p:columnGroup type="header">
                                                 <p:row>
                                                     <p:column style="width: 5%;"/>
-                                                    <p:column style="width: 35%;" headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.loanType')}"/>
-                                                    <p:column style="width: 65%;" headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.conditionDesc')}"/>
-                                                    <p:column style="width: 5%;"/>
+                                                    <p:column style="width: 30%;" headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.loanType')}"/>
+                                                    <p:column style="width: 55%;" headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.conditionDesc')}"/>
+                                                    <p:column style="width: 10%;"/>
                                                 </p:row>
                                             </p:columnGroup>
 

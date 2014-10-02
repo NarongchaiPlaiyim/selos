@@ -2,6 +2,8 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ManageUserActive;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.UserView;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
@@ -27,6 +29,7 @@ public class UserTransform extends Transform {
         userView.setUserName(user.getUserName());
         userView.setRoleDescription(user.getRole() != null ? user.getRole().getDescription() : "");
         userView.setTitleName(user.getTitle() != null ? user.getTitle().getName() : "");
+        userView.setPositionName(user.getPosition() != null ? user.getPosition().getName() : "");
         return userView;
     }
 
@@ -68,6 +71,100 @@ public class UserTransform extends Transform {
                 model.setTitle(view.getUserTitle());
             }
             model.setUserStatus(view.getUserStatus());
+        }
+        return model;
+    }
+
+    public User transformToModelAfterDelete(final IsaManageUserView view, final User user){
+        log.debug("-- transformToModel()");
+        User model = null;
+        if(!Util.isNull(view)){
+            if(!Util.isNull(view.getId()) && !Util.isZero(view.getId().length())){
+                model = userDAO.findById(view.getId());
+                model.setModifyBy(user);
+                model.setModifyDate(DateTime.now().toDate());
+            } else {
+                model = new User();
+                model.setId(view.getId());
+                model.setCreateBy(user);
+                model.setCreateDate(DateTime.now().toDate());
+            }
+            model.setUserName(view.getUsername());
+            model.setBuCode(view.getBuCode());
+            model.setPhoneExt(view.getPhoneExt());
+            model.setPhoneNumber(view.getPhoneNumber());
+            model.setEmailAddress(view.getEmailAddress());
+            if(!Util.isNull(view.getRole())){
+                model.setRole(view.getRole());
+            }
+            if(!Util.isNull(view.getUserTeam())){
+                model.setTeam(view.getUserTeam());
+            }
+            if(!Util.isNull(view.getUserDepartment()) && view.getUserDepartment().getId() != 0){
+                model.setDepartment(view.getUserDepartment());
+            } else {
+                model.setDepartment(null);
+            }
+            if(!Util.isNull(view.getUserDivision()) && view.getUserDivision().getId() != 0){
+                model.setDivision(view.getUserDivision());
+            } else {
+                model.setDivision(null);
+            }
+            if(!Util.isNull(view.getUserRegion()) && view.getUserRegion().getId() != 0){
+                model.setRegion(view.getUserRegion());
+            } else {
+                model.setRegion(null);
+            }
+            if(!Util.isNull(view.getUserTitle()) && view.getUserTitle().getId() != 0 ){
+                model.setTitle(view.getUserTitle());
+            } else {
+                model.setTitle(null);
+            }
+            model.setActive(ManageUserActive.ACTIVE.getValue());
+            model.setUserStatus(UserStatus.NORMAL);
+        }
+        return model;
+    }
+
+    public User transformToModelModify(final IsaManageUserView view, final User user){
+        log.debug("-- transformToModel()");
+        User model = null;
+        if(!Util.isNull(view)){
+            if(!Util.isNull(view.getId()) && !Util.isZero(view.getId().length())){
+                model = userDAO.findById(view.getId());
+                model.setModifyBy(user);
+                model.setModifyDate(DateTime.now().toDate());
+            } else {
+                model = new User();
+                model.setId(view.getId());
+                model.setCreateBy(user);
+                model.setCreateDate(DateTime.now().toDate());
+            }
+            model.setUserName(view.getUsername());
+            model.setBuCode(view.getBuCode());
+            model.setPhoneExt(view.getPhoneExt());
+            model.setPhoneNumber(view.getPhoneNumber());
+            model.setEmailAddress(view.getEmailAddress());
+            if(!Util.isNull(view.getRole())){
+                model.setRole(view.getRole());
+            }
+            if(!Util.isNull(view.getUserTeam())){
+                model.setTeam(view.getUserTeam());
+            }
+            if(!Util.isNull(view.getUserDepartment())){
+                model.setDepartment(view.getUserDepartment());
+            }
+            if(!Util.isNull(view.getUserDivision())){
+                model.setDivision(view.getUserDivision());
+            }
+            if(!Util.isNull(view.getUserRegion())){
+                model.setRegion(view.getUserRegion());
+            }
+            if(!Util.isNull(view.getUserTitle())){
+                model.setTitle(view.getUserTitle());
+            }
+            model.setActive(ManageUserActive.ACTIVE.getValue());
+            model.setUserStatus(UserStatus.NORMAL);
         }
         return model;
     }

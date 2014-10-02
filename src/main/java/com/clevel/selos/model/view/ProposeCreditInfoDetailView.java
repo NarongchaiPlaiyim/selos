@@ -72,7 +72,7 @@ public class ProposeCreditInfoDetailView implements Serializable {
         this.creditTypeView = new CreditTypeView();
         this.productCode = "";
         this.projectCode = "";
-        this.limit = BigDecimal.ZERO;
+        this.limit = null;
         this.PCEPercent = BigDecimal.ZERO;
         this.PCEAmount = BigDecimal.ZERO;
         this.reducePriceFlag = false;

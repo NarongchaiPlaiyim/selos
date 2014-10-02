@@ -12,6 +12,7 @@
                 <td class="title" style="width:145px;">Type Of Collateral :</td>
                 <td>
                     <p:selectOneMenu id="collateralTypeId" size="1" styleClass="largest"
+                                     disabled="#{prescreenMaker.isDisabled('collateral.typeOfCollateral')}"
                                      value="#{prescreenMaker.proposeCollateral.potentialCollateral.id}"
                                      required="true">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -26,19 +27,15 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <p:commandButton
-                            id="dlgSaveColBtn"
-                            value="#{msg.get('app.button.ok')}"
-                            styleClass="small"
+                    <p:commandButton id="dlgSaveColBtn" value="#{msg.get('app.button.ok')}" styleClass="small"
+                            disabled="#{prescreenMaker.isDisabled('collateral.saveButton')}"
                             action="#{prescreenMaker.onSaveProposeCollateral}"
                             process="@form"
                             update=":proposeCollateralDlgForm, :frmMain:resultTableProposeCollateral"
-                            oncomplete="handlePrescreenProposeCreditRequest(xhr, status, args)"/>
-                    <p:commandButton
-                            type="button"
-                            value="#{msg.get('app.button.cancel')}"
+                            oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}"
                             styleClass="small"
-                            onclick="proposeCollateralDlg.hide()"
+                            onclick="PF('proposeCollateralDlg').hide()"
                             update=":proposeCollateralDlgForm"/>
                 </td>
             </tr>

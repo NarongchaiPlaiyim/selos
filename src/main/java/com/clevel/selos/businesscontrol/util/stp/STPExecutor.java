@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol.util.stp;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.isa.CSVModel;
 import com.clevel.selos.util.Util;
@@ -22,6 +23,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
 @Stateless
@@ -62,22 +64,27 @@ public class STPExecutor implements Serializable {
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
                 callStmt.setString(2, Util.parseString(csv.getUserName(), EMPTY));
                 log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
-                callStmt.setInt(3, Util.parseInt(csv.getActive(), 0));
-                log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                if ("ACTIVE".equalsIgnoreCase(csv.getActive())){
+                    callStmt.setInt(3,1);
+                    log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                } else if ("INACTIVE".equalsIgnoreCase(csv.getActive())){
+                    callStmt.setInt(3,0);
+                    log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                }
                 callStmt.setString(4, Util.parseString(csv.getRole(), EMPTY));
                 log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
                 callStmt.setString(5, Util.parseString(csv.getTeam(), EMPTY));
                 log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
-                callStmt.setString(6, Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString(6, "NORMAL");
+                log.debug("-- IN_TEAM_NAME :  {NORMAL}");
+                callStmt.setString(7, Util.parseString(csv.getDepartment(), EMPTY));
                 log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
-                callStmt.setString(7, Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString(8, Util.parseString(csv.getDivision(), EMPTY));
                 log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
-                callStmt.setString(8, Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString(9, Util.parseString(csv.getRegion(), EMPTY));
                 log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
-                callStmt.setString(9, Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString(10, Util.parseString(csv.getTitle(), EMPTY));
                 log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
-                callStmt.setString(10, Util.parseString(csv.getStatus(), EMPTY));
-                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
                 callStmt.setString(11, user.getId());
                 log.debug("-- IN_CREATE_BY :  {}", user.getId());
                 callStmt.registerOutParameter(12, OracleTypes.VARCHAR);
@@ -100,22 +107,29 @@ public class STPExecutor implements Serializable {
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
                 callStmt.setString(2, Util.parseString(csv.getUserName(), EMPTY));
                 log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
-                callStmt.setInt(3, Util.parseInt(csv.getActive(), 0));
-                log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                if ("ACTIVE".equalsIgnoreCase(csv.getActive())){
+                    callStmt.setInt(3, 1);
+                    log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                } else if ("INACTIVE".equalsIgnoreCase(csv.getActive())){
+                    callStmt.setInt(3, 0);
+                    log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
+                }
                 callStmt.setString(4, Util.parseString(csv.getRole(), EMPTY));
                 log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
                 callStmt.setString(5, Util.parseString(csv.getTeam(), EMPTY));
                 log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
-                callStmt.setString(6, Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString(6, "NORMAL");
+                log.debug("-- IN_TEAM_NAME :  {NORMAL}");
+                callStmt.setString(7, Util.parseString(csv.getDepartment(), EMPTY));
                 log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
-                callStmt.setString(7, Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString(8, Util.parseString(csv.getDivision(), EMPTY));
                 log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
-                callStmt.setString(8, Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString(9, Util.parseString(csv.getRegion(), EMPTY));
                 log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
-                callStmt.setString(9, Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString(10, Util.parseString(csv.getTitle(), EMPTY));
                 log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
-                callStmt.setString(10, Util.parseString(csv.getStatus(), EMPTY));
-                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
+//                callStmt.setString(10, Util.parseString(csv.getStatus(), EMPTY));
+//                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
                 callStmt.setString(11, user.getId());
                 log.debug("-- IN_CREATE_BY :  {}", user.getId());
                 callStmt.registerOutParameter(12, OracleTypes.VARCHAR);
@@ -238,14 +252,42 @@ public class STPExecutor implements Serializable {
         return rs[0];
     }
 
-    public ResultSet getUserProfile(){
+    public ResultSet getActivity(final Map<String, Object> map){
         log.debug("on getViolation.");
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
                 try{
-                    CallableStatement callStmt = connection.prepareCall("call SLOS.userprofile (?)");
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.activity (?, ?, ?)");
+                    int round = 1;
+                    for (String key : map.keySet()){
+                        callStmt.setObject(round, map.get(key).toString());
+                        round++;
+                    }
+                    callStmt.registerOutParameter(3,OracleTypes.CURSOR);
+                    callStmt.executeUpdate();
+                    rs[0] = (ResultSet) callStmt.getObject(3);
+//                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
+//                    callStmt.executeUpdate();
+//                    rs[0] = (ResultSet) callStmt.getObject(1);
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
+            }
+        });
+        log.debug("--rs. {}",rs[0]);
+        return rs[0];
+    }
+
+    public ResultSet getUserProfileByUserMaster(){
+        log.debug("on getViolation.");
+        final ResultSet[] rs = {null};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                try{
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.userprofilebyusermaster (?)");
                     callStmt.registerOutParameter(1,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
                     rs[0] = (ResultSet) callStmt.getObject(1);

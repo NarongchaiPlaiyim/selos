@@ -72,6 +72,7 @@ public enum BRMSFieldAttributes {
     NCB_FLAG("NCB Flag"),
     TMB_BANK_FLAG("TMB Bank Flag"),
     NCB_NPL_FLAG("NCB NPL Flag"),
+    NCB_TDR_FLAG("NCB TDR Flag"),
     CREDIT_AMOUNT_AT_FIRST_NPL_DATE("Credit Amount At First NPL Date"),
     CURRENT_PAYMENT_PATTERN_INDV("Current Payment Pattern (Individual)"),
     CURRENT_PAYMENT_PATTERN_JURIS("Current Payment Pattern (Juristic)"),
@@ -135,7 +136,9 @@ public enum BRMSFieldAttributes {
     SHOW_FLAG("Show Flag"),
     OPER_MANDATORY_Flag("Oper Mandatory Flag"),
     OPER_STEP("Oper Step"),
-    OPER_SHOW_FLAG("Oper Show Flag");
+    OPER_SHOW_FLAG("Oper Show Flag"),
+
+    BOT_CLASS("botClass");
 
     String value;
 

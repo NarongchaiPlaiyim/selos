@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "wrk_case")
@@ -46,6 +47,10 @@ public class WorkCase extends AbstractWorkCase{
 
     @Column(name = "ref_app_number", length = 50)
     private String refAppNumber;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ref_app_date")
+    private Date refAppDate;
 
     @Column(name = "case_update_flag", columnDefinition = "int default 0")
     private int caseUpdateFlag;
@@ -177,6 +182,14 @@ public class WorkCase extends AbstractWorkCase{
 
     public void setNcbRejectFlag(int ncbRejectFlag) {
         this.ncbRejectFlag = ncbRejectFlag;
+    }
+
+    public Date getRefAppDate() {
+        return refAppDate;
+    }
+
+    public void setRefAppDate(Date refAppDate) {
+        this.refAppDate = refAppDate;
     }
 
     @Override

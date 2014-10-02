@@ -1269,8 +1269,6 @@ public class ProposeLineTransform extends Transform {
                 proposeCollateralInfoSub.setSubCollateralType(null);
             }
 
-
-
             proposeCollateralInfoSub.setTitleDeed(proposeCollateralInfoSubView.getTitleDeed());
             proposeCollateralInfoSub.setAddress(proposeCollateralInfoSubView.getAddress());
             proposeCollateralInfoSub.setLandOffice(proposeCollateralInfoSubView.getLandOffice());
@@ -1845,12 +1843,8 @@ public class ProposeLineTransform extends Transform {
         if(!Util.isNull(proposeCollateralInfoView)){
             proposeCollateralInfo = new ProposeCollateralInfo();
             log.debug("## proposeCollateralInfoView.getId() [{}] ##",proposeCollateralInfoView.getId());
-//            if (!Util.isZero(proposeCollateralInfoView.getId())) {
-//                proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoView.getId());
-//            } else {
-                proposeCollateralInfo.setCreateDate(new Date());
-                proposeCollateralInfo.setCreateBy(user);
-//            }
+            proposeCollateralInfo.setCreateDate(new Date());
+            proposeCollateralInfo.setCreateBy(user);
             proposeCollateralInfo.setModifyDate(new Date());
             proposeCollateralInfo.setModifyBy(user);
 
@@ -1917,13 +1911,8 @@ public class ProposeLineTransform extends Transform {
         ProposeCollateralInfoHead proposeCollateralInfoHead = null;
         if(!Util.isNull(proposeCollateralInfoHeadView)){
             proposeCollateralInfoHead = new ProposeCollateralInfoHead();
-//            if (!Util.isZero(proposeCollateralInfoHeadView.getId())) {
-//                proposeCollateralInfoHead = proposeCollateralInfoHeadDAO.findById(proposeCollateralInfoHeadView.getId());
-//            } else {
-                proposeCollateralInfoHead.setCreateDate(new Date());
-                proposeCollateralInfoHead.setCreateBy(user);
-//            }
-
+            proposeCollateralInfoHead.setCreateDate(new Date());
+            proposeCollateralInfoHead.setCreateBy(user);
             proposeCollateralInfoHead.setModifyDate(new Date());
             proposeCollateralInfoHead.setModifyBy(user);
             proposeCollateralInfoHead.setProposeType(proposeType);
@@ -1979,12 +1968,8 @@ public class ProposeLineTransform extends Transform {
         ProposeCollateralInfoSub proposeCollateralInfoSub = null;
         if(!Util.isNull(proposeCollateralInfoSubView)){
             proposeCollateralInfoSub = new ProposeCollateralInfoSub();
-//            if (!Util.isZero(proposeCollateralInfoSubView.getId())) {
-//                proposeCollateralInfoSub = proposeCollateralInfoSubDAO.findById(proposeCollateralInfoSubView.getId());
-//            } else {
-                proposeCollateralInfoSub.setCreateDate(new Date());
-                proposeCollateralInfoSub.setCreateBy(user);
-//            }
+            proposeCollateralInfoSub.setCreateDate(new Date());
+            proposeCollateralInfoSub.setCreateBy(user);
             proposeCollateralInfoSub.setModifyDate(new Date());
             proposeCollateralInfoSub.setModifyBy(user);
 
@@ -1994,15 +1979,15 @@ public class ProposeLineTransform extends Transform {
                 proposeCollateralInfoSub.setSubCollateralType(null);
             }
 
-
-
             proposeCollateralInfoSub.setTitleDeed(proposeCollateralInfoSubView.getTitleDeed());
             proposeCollateralInfoSub.setAddress(proposeCollateralInfoSubView.getAddress());
             proposeCollateralInfoSub.setLandOffice(proposeCollateralInfoSubView.getLandOffice());
             proposeCollateralInfoSub.setCollateralOwnerAAD(proposeCollateralInfoSubView.getCollateralOwnerAAD());
             proposeCollateralInfoSub.setAppraisalValue(proposeCollateralInfoSubView.getAppraisalValue());
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
-            proposeCollateralInfoSub.setSubId(proposeCollateralInfoSubView.getSubId());
+
+            UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+            proposeCollateralInfoSub.setSubId(uid.randomUUID().toString());
 
             proposeCollateralInfoSub.setProposeCollateralHead(proposeCollateralInfoHead);
 

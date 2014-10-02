@@ -36,6 +36,7 @@ public class DBRTransform extends Transform {
             dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
             dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
             dbrView.setModifyDate(dbr.getModifyDate());
+            dbrView.setDbrMarketableFlag(dbr.getMarketableFlag());
         }
 
         return dbrView;
@@ -65,6 +66,7 @@ public class DBRTransform extends Transform {
         dbr.setTotalMonthDebtBorrowerStart(dbrView.getTotalMonthDebtBorrowerStart());
         dbr.setTotalMonthDebtBorrowerFinal(dbrView.getTotalMonthDebtBorrowerFinal());
         dbr.setTotalMonthDebtRelatedWc(dbrView.getTotalMonthDebtRelatedWc());
+        dbr.setMarketableFlag(dbrView.getDbrMarketableFlag());
 
         return dbr;
     }

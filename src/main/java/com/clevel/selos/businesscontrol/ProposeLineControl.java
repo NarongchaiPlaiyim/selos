@@ -367,21 +367,25 @@ public class ProposeLineControl extends BusinessControl {
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
                                 ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
-                                proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
-                                ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
-                                if (!Util.isNull(productProgram)) {
-                                    proposeFeeDetailView.setProductProgram(productProgram.getName());
-                                }
-                                if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
-                                    proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                                } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
-                                    proposeFeeDetailView.setPrepaymentFee(feeDetailView);
-                                } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
-                                    proposeFeeDetailView.setCancellationFee(feeDetailView);
-                                } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
-                                    proposeFeeDetailView.setExtensionFee(feeDetailView);
-                                } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
-                                    proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                if(!Util.isNull(proposeCreditInfoDetailView)) {
+                                    proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
+                                    ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
+                                    if (!Util.isNull(productProgram)) {
+                                        proposeFeeDetailView.setProductProgram(productProgram.getName());
+                                    }
+                                    if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                                        proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                                        proposeCreditInfoDetailView.setFrontEndFeeOriginal(feeDetailView.getPercentFee());
+                                        proposeCreditInfoDetailView.setFrontEndFee(feeDetailView.getPercentFee());
+                                    } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                                        proposeFeeDetailView.setPrepaymentFee(feeDetailView);
+                                    } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                                        proposeFeeDetailView.setCancellationFee(feeDetailView);
+                                    } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                                        proposeFeeDetailView.setExtensionFee(feeDetailView);
+                                    } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                                        proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                    }
                                 }
                             }
                         }
@@ -422,6 +426,18 @@ public class ProposeLineControl extends BusinessControl {
                                 }
                             }
                         }
+                        for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
+                            if(pricingFee.getType().equals("9")) {
+                                String creditTypeId = pricingFee.getCreditDetailId();
+                                for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeLineView.getProposeCreditInfoDetailViewList()) {
+                                    if (creditTypeId.equals(proposeCreditInfoDetailView.getId() + "")) {
+                                        proposeCreditInfoDetailView.setFrontEndFee(pricingFee.getFeePercent());
+                                        proposeCreditInfoDetailView.setFrontEndFeeOriginal(pricingFee.getFeePercent());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                     returnMapVal.put("complete", 1);
                 } else if (ActionResult.FAILED.equals(standardPricingResponse.getActionResult())) {
@@ -450,6 +466,7 @@ public class ProposeLineControl extends BusinessControl {
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
+                            log.debug("feeLevel : CREDIT_LEVEL : feeDetailView : {}", feeDetailView);
                             if (newFeeDetailViewMap.containsKey(feeDetailView.getCreditDetailViewId())) {
                                 proposeFeeDetailView = newFeeDetailViewMap.get(feeDetailView.getCreditDetailViewId());
                             } else {
@@ -459,22 +476,24 @@ public class ProposeLineControl extends BusinessControl {
 
                             ProposeCreditInfo proposeCreditInfo = proposeCreditInfoDAO.findById(feeDetailView.getCreditDetailViewId());
                             if (!Util.isNull(proposeCreditInfo)) {
-                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.P);
-                                proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
-                                ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
-                                if (!Util.isNull(productProgram)) {
-                                    proposeFeeDetailView.setProductProgram(productProgram.getName());
-                                }
-                                if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
-                                    proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
-                                } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
-                                    proposeFeeDetailView.setPrepaymentFee(feeDetailView);
-                                } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
-                                    proposeFeeDetailView.setCancellationFee(feeDetailView);
-                                } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
-                                    proposeFeeDetailView.setExtensionFee(feeDetailView);
-                                } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
-                                    proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                ProposeCreditInfoDetailView proposeCreditInfoDetailView = proposeLineTransform.transformProposeCreditToView(proposeCreditInfo, ProposeType.A);
+                                if(!Util.isNull(proposeCreditInfoDetailView)) {
+                                    proposeFeeDetailView.setProposeCreditInfoDetailView(proposeCreditInfoDetailView);
+                                    ProductProgram productProgram = productProgramDAO.findById(proposeCreditInfoDetailView.getProductProgramView().getId());
+                                    if (!Util.isNull(productProgram)) {
+                                        proposeFeeDetailView.setProductProgram(productProgram.getName());
+                                    }
+                                    if ("9".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=9,(Front-End-Fee)
+                                        proposeFeeDetailView.setStandardFrontEndFee(feeDetailView);
+                                    } else if ("15".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=15,(Prepayment Fee)
+                                        proposeFeeDetailView.setPrepaymentFee(feeDetailView);
+                                    } else if ("20".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=20,(CancellationFee)
+                                        proposeFeeDetailView.setCancellationFee(feeDetailView);
+                                    } else if ("21".equals(feeDetailView.getFeeTypeView().getBrmsCode())) { //type=21,(ExtensionFee)
+                                        proposeFeeDetailView.setExtensionFee(feeDetailView);
+                                    } else if ("22".equals(feeDetailView.getFeeTypeView().getBrmsCode())) {//type=22,(CommitmentFee)
+                                        proposeFeeDetailView.setCommitmentFee(feeDetailView);
+                                    }
                                 }
                             }
                         }
@@ -536,6 +555,18 @@ public class ProposeLineControl extends BusinessControl {
                                 if (creditTypeId.equals(proposeCreditInfoDetailView.getId()+"")) {
                                     proposeCreditInfoDetailView = proposeLineTransform.transformPricingIntTierToView(pricingIntTierList, proposeCreditInfoDetailView);
                                     break;
+                                }
+                            }
+                        }
+                        for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()){
+                            if(pricingFee.getType().equals("9")) {
+                                String creditTypeId = pricingFee.getCreditDetailId();
+                                for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
+                                    if (creditTypeId.equals(proposeCreditInfoDetailView.getId() + "")) {
+                                        proposeCreditInfoDetailView.setFrontEndFee(pricingFee.getFeePercent());
+                                        proposeCreditInfoDetailView.setFrontEndFeeOriginal(pricingFee.getFeePercent());
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -1235,24 +1266,28 @@ public class ProposeLineControl extends BusinessControl {
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
         List<ProposeCreditInfoDetailView> proCreInfDetViewList = new ArrayList<ProposeCreditInfoDetailView>();
-        if(!Util.isNull(proposeCreditInfoDetailViewList) && !Util.isZero(proposeCreditInfoDetailViewList.size())) {
-            int checkList = 0;
-            for(ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeCreditInfoDetailViewList) {
-                if(!Util.isNull(proposeCreditInfoDetailView) && proposeCreditInfoDetailView.isNoFlag()) {
-                    proCreInfDetViewList.add(proposeCreditInfoDetailView);
-                    checkList++;
+        if(proposeCollateralInfoView.getUwDecision() == DecisionType.APPROVED) {
+            if(!Util.isNull(proposeCreditInfoDetailViewList) && !Util.isZero(proposeCreditInfoDetailViewList.size())) {
+                int checkList = 0;
+                for(ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeCreditInfoDetailViewList) {
+                    if(!Util.isNull(proposeCreditInfoDetailView) && proposeCreditInfoDetailView.isNoFlag()) {
+                        proCreInfDetViewList.add(proposeCreditInfoDetailView);
+                        checkList++;
+                    }
                 }
-            }
 
-            if(checkList > 0){
-                returnMapVal.put("notCheckNoFlag", false);
+                if(checkList > 0){
+                    returnMapVal.put("notCheckNoFlag", false);
+                } else {
+                    returnMapVal.put("notCheckNoFlag", true); // not have check on credit
+                    return returnMapVal;
+                }
             } else {
                 returnMapVal.put("notCheckNoFlag", true); // not have check on credit
                 return returnMapVal;
             }
-        } else {
-            returnMapVal.put("notCheckNoFlag", true); // not have check on credit
-            return returnMapVal;
+        } else  {
+            returnMapVal.put("notCheckNoFlag", false);
         }
 
         returnMapVal.put("notHaveSub", false);
@@ -1774,178 +1809,6 @@ public class ProposeLineControl extends BusinessControl {
         return proposeCreditInfoDetailViews;
     }
 
-    public void calWC(long workCaseId) {
-        log.debug("calWC ::: workCaseId : {}", workCaseId);
-        BigDecimal dayOfYear = BigDecimal.valueOf(365);
-        BigDecimal monthOfYear = BigDecimal.valueOf(12);
-        BigDecimal onePointTwoFive = BigDecimal.valueOf(1.25);
-        BigDecimal onePointFive = BigDecimal.valueOf(1.50);
-        BigDecimal thirtyFive = BigDecimal.valueOf(35);
-        BigDecimal fifty = BigDecimal.valueOf(50);
-        BigDecimal oneHundred = BigDecimal.valueOf(100);
-        BigDecimal two = BigDecimal.valueOf(2);
-
-        // ยอดขาย/รายได้
-        BigDecimal adjustDBR = BigDecimal.ZERO;
-        // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
-        BigDecimal revolvingCreditNCB = BigDecimal.ZERO;
-        // วงเงินสินเชื่อหมุนเวียนส่วนผู้เกี่ยวข้องในหน้า DBR
-        BigDecimal revolvingCreditDBR = BigDecimal.ZERO;
-        // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
-        BigDecimal loanBurdenWCFlag = BigDecimal.ZERO;
-        // วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB
-        BigDecimal revolvingCreditNCBTMBFlag = BigDecimal.ZERO;
-        // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
-        BigDecimal loanBurdenTMBFlag = BigDecimal.ZERO;
-
-        //how to check role and get ap ar inv !?
-        BigDecimal weightAP = BigDecimal.ZERO;
-        BigDecimal weightAR = BigDecimal.ZERO;
-        BigDecimal weightINV = BigDecimal.ZERO;
-        // Sum(weight cost of goods sold * businessProportion)
-        // cost of goods = business desc ( column COG )
-        // business proportion = สัดส่วนธุรกิจ ในแต่ละ business < %Income >
-        BigDecimal aaaValue = BigDecimal.ZERO;
-
-        //table 1
-        BigDecimal wcNeed;
-        BigDecimal totalWcDebit;
-        BigDecimal totalWcTmb;
-        BigDecimal wcNeedDiffer;
-
-        //table 2
-        BigDecimal case1WcLimit;
-        BigDecimal case1WcMinLimit;
-        BigDecimal case1Wc50CoreWc;
-        BigDecimal case1WcDebitCoreWc;
-
-        //table 3
-        BigDecimal case2WcLimit;
-        BigDecimal case2WcMinLimit;
-        BigDecimal case2Wc50CoreWc;
-        BigDecimal case2WcDebitCoreWc;
-
-        //table 4
-        BigDecimal case3WcLimit;
-        BigDecimal case3WcMinLimit;
-        BigDecimal case3Wc50CoreWc;
-        BigDecimal case3WcDebitCoreWc;
-
-        ////////////////////////////////////////////////////
-
-        DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
-        if (dbrView != null) {
-            adjustDBR = dbrView.getMonthlyIncomeAdjust();
-            revolvingCreditDBR = dbrView.getTotalMonthDebtRelatedWc();
-        }
-
-        List<NCB> ncbList = ncbInfoControl.getNCBByWorkCaseId(workCaseId);
-        if (ncbList != null && ncbList.size() > 0) {
-            for (NCB ncb : ncbList) {
-                revolvingCreditNCB = Util.add(revolvingCreditNCB, ncb.getLoanCreditNCB());
-                loanBurdenWCFlag = Util.add(loanBurdenWCFlag, ncb.getLoanCreditWC());
-                revolvingCreditNCBTMBFlag = Util.add(revolvingCreditNCBTMBFlag, ncb.getLoanCreditTMB());
-                loanBurdenTMBFlag = Util.add(loanBurdenTMBFlag, ncb.getLoanCreditWCTMB());
-            }
-        }
-
-
-        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-        if (bizInfoSummaryView != null) {
-            weightAR = bizInfoSummaryView.getSumWeightAR();
-            weightAP = bizInfoSummaryView.getSumWeightAP();
-            weightINV = bizInfoSummaryView.getSumWeightINV();
-            // Sum(weight cost of goods sold * businessProportion)
-            List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-            if (bizInfoSummaryView.getId() != 0) {
-                bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
-                if (bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
-                    for (BizInfoDetailView bidv : bizInfoDetailViewList) {
-                        BigDecimal cog = BigDecimal.ZERO;
-                        if (bidv.getBizDesc() != null) {
-                            cog = bidv.getBizDesc().getCog();
-                        }
-                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, bidv.getPercentBiz()), oneHundred));
-                    }
-                }
-            }
-        }
-
-        //*** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
-        BigDecimal salesIncome = Util.multiply(adjustDBR, monthOfYear);
-        //calculation
-        //(ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
-        wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(salesIncome, dayOfYear), weightAR), Util.multiply(Util.divide(aaaValue, dayOfYear), weightINV))), (Util.multiply(Util.divide(aaaValue, dayOfYear), weightAP)));
-        //Sum (วงเงินสินเชื่อหมุนเวียนจากหน้า NCB และ ส่วนผู้เกี่ยวข้องในหน้า DBR + ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes )
-        totalWcDebit = Util.add(Util.add(revolvingCreditNCB, revolvingCreditDBR), loanBurdenWCFlag);
-        //วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB + ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
-        totalWcTmb = Util.add(revolvingCreditNCBTMBFlag, loanBurdenTMBFlag);
-        //wcNeed - totalWcDebit
-        wcNeedDiffer = Util.subtract(wcNeed, totalWcDebit);
-
-        log.debug("Value ::: wcNeed : {}, totalWcDebit : {}, totalWcTmb : {}, wcNeedDiffer : {}", wcNeed, totalWcDebit, totalWcTmb, wcNeedDiffer);
-
-
-        //1.25 x wcNeed
-        case1WcLimit = Util.multiply(wcNeed, onePointTwoFive);
-        //case1WcLimit - totalWcDebit
-        case1WcMinLimit = Util.subtract(case1WcLimit, totalWcDebit);
-        //ไม่เกิน 50% ของ case1WcLimit และไม่เกิน case1WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case1Wc50CoreWc = Util.compareToFindLower(Util.divide(case1WcLimit, two), case1WcMinLimit);
-        //case1WcMinLimit - case1Wc50CoreWc
-        case1WcDebitCoreWc = Util.subtract(case1WcMinLimit, case1Wc50CoreWc);
-
-        log.debug("Value ::: case1WcLimit : {}, case1WcMinLimit : {}, case1Wc50CoreWc : {}, case1WcDebitCoreWc : {}", case1WcLimit, case1WcMinLimit, case1Wc50CoreWc, case1WcDebitCoreWc);
-
-        //1.5 x wcNeed
-        case2WcLimit = Util.multiply(wcNeed, onePointFive);
-        //case2WcLimit - totalWcDebit
-        case2WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
-        //ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case2Wc50CoreWc = Util.compareToFindLower(Util.divide(case2WcLimit, two), case2WcMinLimit);
-        //case2WcMinLimit - case2Wc50CoreWc
-        case2WcDebitCoreWc = Util.subtract(case2WcMinLimit, case2Wc50CoreWc);
-
-        log.debug("Value ::: case2WcLimit : {}, case2WcMinLimit : {}, case2Wc50CoreWc : {}, case2WcDebitCoreWc : {}", case2WcLimit, case2WcMinLimit, case2Wc50CoreWc, case2WcDebitCoreWc);
-
-        //ยอดขาย/รายได้ หาร 12 คูณ 35%
-        case3WcLimit = Util.divide(Util.multiply(Util.divide(salesIncome, monthOfYear), thirtyFive), oneHundred);
-        //case3WcLimit - totalWcDebit
-        case3WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
-        //ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case3Wc50CoreWc = Util.compareToFindLower(Util.divide(case3WcLimit, two), case3WcMinLimit);
-        //case3WcMinLimit - case3Wc50CoreWc
-        case3WcDebitCoreWc = Util.subtract(case3WcMinLimit, case3Wc50CoreWc);
-
-        log.debug("Value ::: case3WcLimit : {}, case3WcMinLimit : {}, case3Wc50CoreWc : {}, case3WcDebitCoreWc : {}", case3WcLimit, case3WcMinLimit, case3Wc50CoreWc, case3WcDebitCoreWc);
-
-        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
-        if(proposeLine == null){
-            proposeLine = new ProposeLine();
-            WorkCase workCase = new WorkCase();
-            workCase.setId(workCaseId);
-            proposeLine.setWorkCase(workCase);
-        }
-
-        proposeLine.setWcNeed(wcNeed);
-        proposeLine.setTotalWCDebit(totalWcDebit);
-        proposeLine.setTotalWCTmb(totalWcTmb);
-        proposeLine.setWcNeedDiffer(wcNeedDiffer);
-        proposeLine.setCase1WCLimit(case1WcLimit);
-        proposeLine.setCase1WCMinLimit(case1WcMinLimit);
-        proposeLine.setCase1WC50CoreWC(case1Wc50CoreWc);
-        proposeLine.setCase1WCDebitCoreWC(case1WcDebitCoreWc);
-        proposeLine.setCase2WCLimit(case2WcLimit);
-        proposeLine.setCase2WCMinLimit(case2WcMinLimit);
-        proposeLine.setCase2WC50CoreWC(case2Wc50CoreWc);
-        proposeLine.setCase2WCDebitCoreWC(case2WcDebitCoreWc);
-        proposeLine.setCase3WCLimit(case3WcLimit);
-        proposeLine.setCase3WCMinLimit(case3WcMinLimit);
-        proposeLine.setCase3WC50CoreWC(case3Wc50CoreWc);
-        proposeLine.setCase3WCDebitCoreWC(case3WcDebitCoreWc);
-        proposeLineDAO.persist(proposeLine);
-    }
-
     public List<CustomerInfoView> getGuarantorByWorkCaseId(long workCaseId) {
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToSelectList(customerDAO.findGuarantorByWorkCaseId(workCaseId));
         return customerInfoViewList;
@@ -1968,7 +1831,7 @@ public class ProposeLineControl extends BusinessControl {
         return returnBaseRateView;
     }
 
-    public ProposeCreditInfoDetailView onCalInstallment(ProposeLineView proposeLineView, ProposeCreditInfoDetailView proposeCreditInfoDetailView, int specialProgramId, int applyTCG){
+    public ProposeCreditInfoDetailView onCalInstallment(ProposeLineView proposeLineView, ProposeCreditInfoDetailView proposeCreditInfoDetailView, int specialProgramId, int applyTCG, int dbrMarketableFlag){
         if(!Util.isNull(proposeCreditInfoDetailView) && !Util.isNull(proposeCreditInfoDetailView.getProposeCreditInfoTierDetailViewList()) && !Util.isZero(proposeCreditInfoDetailView.getProposeCreditInfoTierDetailViewList().size())) {
             if(proposeCreditInfoDetailView.getLimit().compareTo(BigDecimal.ZERO) < 0) { // limit < 0
                 return proposeCreditInfoDetailView;
@@ -2017,55 +1880,60 @@ public class ProposeLineControl extends BusinessControl {
 
                     if((!Util.isNull(proposeCreditInfoDetailView.getProductProgramView()) && !Util.isZero(proposeCreditInfoDetailView.getProductProgramView().getId())) &&
                             (!Util.isNull(proposeCreditInfoDetailView.getCreditTypeView()) && !Util.isZero(proposeCreditInfoDetailView.getCreditTypeView().getId()))){
+                        PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(proposeCreditInfoDetailView.getCreditTypeView().getId(), proposeCreditInfoDetailView.getProductProgramView().getId());
 
-                    }
-
-                    PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(proposeCreditInfoDetailView.getCreditTypeView().getId(), proposeCreditInfoDetailView.getProductProgramView().getId());
-
-                    if(!Util.isNull(prdProgramToCreditType)){
-                        ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG);
-                        if(!Util.isNull(productFormula)){
-                            spread = productFormula.getDbrSpread();
+                        if(!Util.isNull(prdProgramToCreditType)){
+                            if (prdProgramToCreditType.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) { // check OD
+                                ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG, dbrMarketableFlag);
+                                if(!Util.isNull(productFormula)){
+                                    spread = productFormula.getDbrSpread();
+                                }
+                            } else {
+                                ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLineView.getCreditCustomerType().value(), specialProgramId, applyTCG);
+                                if(!Util.isNull(productFormula)){
+                                    spread = productFormula.getDbrSpread();
+                                }
+                            }
                         }
+
+                        if (proCreInfTieDetView.getFinalBasePrice() != null) {
+                            baseRate = proCreInfTieDetView.getFinalBasePrice().getValue();
+                        }
+                        if (proCreInfTieDetView.getFinalInterest() != null) {
+                            interest = proCreInfTieDetView.getFinalInterest();
+                            interestOriginal = proCreInfTieDetView.getFinalInterestOriginal();
+                        }
+
+                        BigDecimal interestPerMonth = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interest),oneHundred,100),twelve,100);
+                        BigDecimal interestPerMonthOriginal = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interestOriginal),oneHundred,100),twelve,100);
+                        BigDecimal limit = BigDecimal.ZERO;
+                        int tenor = proCreInfTieDetView.getTenor();
+                        BigDecimal installment;
+                        BigDecimal installmentOriginal;
+
+                        if (proposeCreditInfoDetailView.getLimit() != null) {
+                            limit = proposeCreditInfoDetailView.getLimit();
+                        }
+
+                        installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor)) ,
+                                Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
+
+                        installmentOriginal = Util.divide(Util.multiply(Util.multiply(interestPerMonthOriginal,limit),Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor)) ,
+                                Util.subtract(Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor),BigDecimal.ONE));
+
+                        if (installment != null) {
+                            installment.setScale(2, RoundingMode.HALF_UP);
+                        }
+
+                        if (installmentOriginal != null) {
+                            installmentOriginal.setScale(2, RoundingMode.HALF_UP);
+                        }
+
+                        proCreInfTieDetView.setInstallment(installment);
+                        proCreInfTieDetView.setInstallmentOriginal(installmentOriginal);
+                    } else {
+                        proCreInfTieDetView.setInstallmentOriginal(proCreInfTieDetView.getInstallment());
                     }
-
-                    if (proCreInfTieDetView.getFinalBasePrice() != null) {
-                        baseRate = proCreInfTieDetView.getFinalBasePrice().getValue();
-                    }
-                    if (proCreInfTieDetView.getFinalInterest() != null) {
-                        interest = proCreInfTieDetView.getFinalInterest();
-                        interestOriginal = proCreInfTieDetView.getFinalInterestOriginal();
-                    }
-
-                    BigDecimal interestPerMonth = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interest),oneHundred,100),twelve,100);
-                    BigDecimal interestPerMonthOriginal = Util.divide(Util.divide(Util.add(Util.add(spread,baseRate),interestOriginal),oneHundred,100),twelve,100);
-                    BigDecimal limit = BigDecimal.ZERO;
-                    int tenor = proCreInfTieDetView.getTenor();
-                    BigDecimal installment;
-                    BigDecimal installmentOriginal;
-
-                    if (proposeCreditInfoDetailView.getLimit() != null) {
-                        limit = proposeCreditInfoDetailView.getLimit();
-                    }
-
-                    installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor)) ,
-                            Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
-
-                    installmentOriginal = Util.divide(Util.multiply(Util.multiply(interestPerMonthOriginal,limit),Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor)) ,
-                            Util.subtract(Util.add(BigDecimal.ONE,interestPerMonthOriginal).pow(tenor),BigDecimal.ONE));
-
-                    if (installment != null) {
-                        installment.setScale(2, RoundingMode.HALF_UP);
-                    }
-
-                    if (installmentOriginal != null) {
-                        installmentOriginal.setScale(2, RoundingMode.HALF_UP);
-                    }
-
-                    proCreInfTieDetView.setInstallment(installment);
-                    proCreInfTieDetView.setInstallmentOriginal(installmentOriginal);
-                } else {
-                    proCreInfTieDetView.setInstallmentOriginal(proCreInfTieDetView.getInstallment());
                 }
             }
         }
@@ -2172,6 +2040,11 @@ public class ProposeLineControl extends BusinessControl {
         if (!Util.isNull(tcgView)) {
             applyTCG = tcgView.getTCG();
         }
+        DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
+        int dbrMarketableFlag = 0;
+        if(!Util.isNull(dbrView)){
+            dbrMarketableFlag = dbrView.getDbrMarketableFlag();
+        }
 
         if(!Util.isNull(proposeLineView)) {
             //Calculation
@@ -2249,7 +2122,7 @@ public class ProposeLineControl extends BusinessControl {
         if(!Util.isNull(proposeLineView.getProposeCreditInfoDetailViewList()) && !Util.isZero(proposeLineView.getProposeCreditInfoDetailViewList().size())) {
             List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
             for (ProposeCreditInfoDetailView proCreInfDetView : proposeLineView.getProposeCreditInfoDetailViewList()) {
-                proCreInfDetView = onCalInstallment(proposeLineView, proCreInfDetView, specialProgramId, applyTCG);
+                proCreInfDetView = onCalInstallment(proposeLineView, proCreInfDetView, specialProgramId, applyTCG, dbrMarketableFlag);
                 proposeCreditInfoDetailViewList.add(proCreInfDetView);
             }
             proposeLineView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
@@ -2542,7 +2415,7 @@ public class ProposeLineControl extends BusinessControl {
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfoDetailView.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
-                                            sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfoDetailView.getPCEAmount());
+                                            sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(proposeCreditInfoDetailView.getLimit(),proposeCreditInfoDetailView.getPCEPercent()),100));
                                         }
                                     } else {
                                         //ExposureMethod for check to use limit or limit*PCE%
@@ -2551,7 +2424,7 @@ public class ProposeLineControl extends BusinessControl {
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
                                             sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfoDetailView.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
-                                            sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfoDetailView.getPCEAmount());
+                                            sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(proposeCreditInfoDetailView.getLimit(),proposeCreditInfoDetailView.getPCEPercent()),100));
                                         }
                                     }
 
@@ -2611,104 +2484,6 @@ public class ProposeLineControl extends BusinessControl {
             }
         }
         return sumTotalLoanDbr;
-    }
-
-    public void calculateTotalProposeAmountForExisting(ExistingCreditFacilityView existingCreditFacilityView, long workCaseId) {
-        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
-        if (!Util.isNull(proposeLine)) {
-            BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
-            BigDecimal sumTotalCommercial = BigDecimal.ZERO;   // Commercial of Propose
-            BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
-            BigDecimal sumTotalBorrowerCommercial = BigDecimal.ZERO;   // Without : OBOD  Propose and Existing
-            BigDecimal sumTotalBorrowerCommercialAndOBOD = BigDecimal.ZERO;  //All Propose and Existing
-            BigDecimal sumTotalGroupExposure = BigDecimal.ZERO;
-            BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
-            BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
-            BigDecimal borrowerComOBOD = BigDecimal.ZERO;
-            BigDecimal borrowerCom = BigDecimal.ZERO;
-            BigDecimal groupExposure = BigDecimal.ZERO;
-
-            if (existingCreditFacilityView != null) {
-                borrowerComOBOD = existingCreditFacilityView.getTotalBorrowerComOBOD();
-                borrowerCom = existingCreditFacilityView.getTotalBorrowerCom();
-                groupExposure = existingCreditFacilityView.getTotalBorrowerExposure();
-            }
-
-            BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-            TCGView tcgView = tcgInfoControl.getTCGView(workCaseId);
-
-            if(!Util.isNull(basicInfoView) && !Util.isNull(basicInfoView.getSpecialProgram()) && !Util.isNull(tcgView)) {
-                List<ProposeCreditInfo> proposeCreditInfoList = proposeLine.getProposeCreditInfoList();
-                if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
-                    ProductProgram productProgram;
-                    CreditType creditType;
-                    PrdProgramToCreditType prdProgramToCreditType;
-                    ProductFormula productFormula;
-
-                    for (ProposeCreditInfo proposeCreditInfo : proposeCreditInfoList) {
-                        if (!Util.isNull(proposeCreditInfo.getProductProgram()) && !Util.isZero(proposeCreditInfo.getProductProgram().getId()) &&
-                                !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId()) &&
-                                proposeCreditInfo.getProposeType() == ProposeType.P) {
-                            productProgram = proposeCreditInfo.getProductProgram();
-                            creditType = proposeCreditInfo.getCreditType();
-
-                            if (productProgram != null && creditType != null) {
-                                prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
-                                productFormula = productFormulaDAO.findProductFormulaPropose(
-                                        prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
-                                if (productFormula != null) {
-                                    if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
-                                        //ExposureMethod for check to use limit or limit*PCE%
-                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfo.getLimit());
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
-                                            sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfo.getPceAmount());
-                                        }
-                                    } else {
-                                        //ExposureMethod for check to use limit or limit*PCE%
-                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getLimit());
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
-                                            sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getPceAmount());
-                                        }
-                                    }
-                                    sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
-
-                                    //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
-                                    if (productFormula.getDbrCalculate() == 1) {// No
-                                        sumTotalNonLoanDbr = BigDecimal.ZERO;
-                                    } else if (productFormula.getDbrCalculate() == 2) {// Yes
-                                        if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                            sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
-                                        } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                            sumTotalLoanDbr = sumTotalLoanDbr.add(proposeCreditInfo.getInstallment());
-                                        } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                            sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYearForExisting(proposeCreditInfo, productFormula.getDbrSpread()));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
-                    sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
-//                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
-                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalPropose); //ให้เปลี่ยนเป็น Total Exposure ของ Group  (จาก Existing credit) +  Total Propose Credit
-                }
-            }
-            proposeLine.setTotalPropose(sumTotalPropose);                 //sumTotalPropose All Credit in this case
-            proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);          //sumTotalLoanDbr
-            proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);    //sumTotalNonLoanDbr
-            proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);               //sum Commercial of Existing and Propose
-            proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD); //sum Commercial and OBOD of Existing and Propose
-            proposeLine.setTotalExposure(sumTotalGroupExposure);
-
-            proposeLineDAO.persist(proposeLine);
-        }
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYearForExisting(ProposeCreditInfo proposeCreditInfo, BigDecimal dbrSpread) {
@@ -3094,5 +2869,115 @@ public class ProposeLineControl extends BusinessControl {
             }
         }
         return ltvPercentBig;
+    }
+
+    public void calculateTotalProposeAmountForExisting(ExistingCreditFacilityView existingCreditFacilityView, long workCaseId) {
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        ProposeLineView proposeLineView = proposeLineTransform.transformProposeLineToView(proposeLine, ProposeType.P);
+        if (!Util.isNull(proposeLine)) {
+            BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
+            BigDecimal sumTotalCommercial = BigDecimal.ZERO;   // Commercial of Propose
+            BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
+            BigDecimal sumTotalBorrowerCommercial = BigDecimal.ZERO;   // Without : OBOD  Propose and Existing
+            BigDecimal sumTotalBorrowerCommercialAndOBOD = BigDecimal.ZERO;  //All Propose and Existing
+            BigDecimal sumTotalGroupExposure = BigDecimal.ZERO;
+            BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
+            BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
+            BigDecimal borrowerComOBOD = BigDecimal.ZERO;
+            BigDecimal borrowerCom = BigDecimal.ZERO;
+            BigDecimal groupExposure = BigDecimal.ZERO;
+
+            if (existingCreditFacilityView != null) {
+                borrowerComOBOD = existingCreditFacilityView.getTotalBorrowerComOBOD();
+                borrowerCom = existingCreditFacilityView.getTotalBorrowerCom();
+                groupExposure = existingCreditFacilityView.getTotalBorrowerExposure();
+            }
+
+            BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+            TCGView tcgView = tcgInfoControl.getTCGView(workCaseId);
+
+            if(!Util.isNull(basicInfoView) && !Util.isNull(basicInfoView.getSpecialProgram()) && !Util.isNull(tcgView)) {
+                List<ProposeCreditInfo> proposeCreditInfoList = proposeLine.getProposeCreditInfoList();
+                if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
+                    ProductProgram productProgram;
+                    CreditType creditType;
+                    PrdProgramToCreditType prdProgramToCreditType;
+                    ProductFormula productFormula;
+
+                    for (ProposeCreditInfo proposeCreditInfo : proposeCreditInfoList) {
+                        if (!Util.isNull(proposeCreditInfo.getProductProgram()) && !Util.isZero(proposeCreditInfo.getProductProgram().getId()) &&
+                                !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId()) &&
+                                proposeCreditInfo.getProposeType() == ProposeType.P) {
+                            productProgram = proposeCreditInfo.getProductProgram();
+                            creditType = proposeCreditInfo.getCreditType();
+
+                            if (productProgram != null && creditType != null) {
+                                prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
+                                productFormula = productFormulaDAO.findProductFormulaPropose(
+                                        prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
+                                if (productFormula != null) {
+                                    if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
+                                        //ExposureMethod for check to use limit or limit*PCE%
+                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                            sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                            sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfo.getLimit());
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
+                                            sumTotalOBOD = sumTotalOBOD.add(proposeCreditInfo.getPceAmount());
+                                        }
+                                    } else {
+                                        //ExposureMethod for check to use limit or limit*PCE%
+                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                            sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                            sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getLimit());
+                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                            sumTotalCommercial = sumTotalCommercial.add(proposeCreditInfo.getPceAmount());
+                                        }
+                                    }
+                                    sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
+
+                                    //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
+                                    if (productFormula.getDbrCalculate() == 1) {// No
+                                        sumTotalNonLoanDbr = BigDecimal.ZERO;
+                                    } else if (productFormula.getDbrCalculate() == 2) {// Yes
+                                        if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                            sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                        } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                            sumTotalLoanDbr = sumTotalLoanDbr.add(proposeCreditInfo.getInstallment());
+                                        } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+                                            sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYearForExisting(proposeCreditInfo, productFormula.getDbrSpread()));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
+                    sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
+//                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalBorrowerCommercialAndOBOD); //ได้มาจาก  Total Exposure ของ Group  (จาก Existing credit) +  Total Borrower Commercial&OBOD (Propose credit)
+                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalPropose); //ให้เปลี่ยนเป็น Total Exposure ของ Group  (จาก Existing credit) +  Total Propose Credit
+                }
+            }
+            proposeLine.setTotalPropose(sumTotalPropose);                 //sumTotalPropose All Credit in this case
+            proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);          //sumTotalLoanDbr
+            proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);    //sumTotalNonLoanDbr
+            proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);               //sum Commercial of Existing and Propose
+            proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD); //sum Commercial and OBOD of Existing and Propose
+            proposeLine.setTotalExposure(sumTotalGroupExposure);
+
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(!Util.isNull(workCase)){
+                workCase.setCaseUpdateFlag(1);
+                workCaseDAO.persist(workCase);
+            }
+
+            proposeLineView.setExistingSMELimit(existingCreditFacilityView.getTotalGroupCom());
+            proposeLineView = calculateMaximumSMELimit(proposeLineView, workCaseId, workCase, basicInfoView, tcgView);
+            proposeLine.setExistingSMELimit(proposeLineView.getExistingSMELimit());
+            proposeLine.setMaximumSMELimit(proposeLineView.getMaximumSMELimit());
+
+            proposeLineDAO.persist(proposeLine);
+        }
     }
 }

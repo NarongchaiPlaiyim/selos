@@ -18,6 +18,7 @@ public class ISAViewReport {
     private String descrition;
     private String buCode;
     private String team;
+    private String testId;
     private String role;
     private Date modifyDate;
     private String createBy;
@@ -28,6 +29,12 @@ public class ISAViewReport {
     private String oldData;
     private String newData;
     private String adminName;
+    private Date lastLogOn;
+    private String active;
+    private String department;
+    private String division;
+    private String region;
+    private String title;
 
     public ISAViewReport() {
     }
@@ -200,6 +207,62 @@ public class ISAViewReport {
         this.adminName = adminName;
     }
 
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
+    }
+
+    public Date getLastLogOn() {
+        return lastLogOn;
+    }
+
+    public void setLastLogOn(Date lastLogOn) {
+        this.lastLogOn = lastLogOn;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -214,6 +277,7 @@ public class ISAViewReport {
                 .append("descrition", descrition)
                 .append("buCode", buCode)
                 .append("team", team)
+                .append("testId", testId)
                 .append("role", role)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
@@ -224,6 +288,12 @@ public class ISAViewReport {
                 .append("oldData", oldData)
                 .append("newData", newData)
                 .append("adminName", adminName)
+                .append("lastLogOn", lastLogOn)
+                .append("active", active)
+                .append("department", department)
+                .append("division", division)
+                .append("region", region)
+                .append("title", title)
                 .toString();
     }
 }

@@ -10,8 +10,6 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.CancelRejectInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
-import com.clevel.selos.model.report.RejectLetterCancelCodeByExSum;
-import com.clevel.selos.model.report.RejectLetterReport;
 import com.clevel.selos.model.view.ReportView;
 import com.clevel.selos.report.template.PDFAppraisalAppointment;
 import com.clevel.selos.report.template.PDFExecutiveSummaryAndOpSheet;
@@ -20,8 +18,6 @@ import com.clevel.selos.report.template.PDFRejectLetter;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.apache.commons.lang3.ArrayUtils;
-import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -31,7 +27,6 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "report")
@@ -64,7 +59,6 @@ public class GenPDF extends ReportService implements Serializable {
     @Inject
     @Config(name = "report.rejectletter.policyincome")
     String pathPolicyIncomeRejectLetter;
-
 
     @Inject
     @Config(name = "report.appraisal")
@@ -122,8 +116,6 @@ public class GenPDF extends ReportService implements Serializable {
     private  String pathReportReject;
     private String messageHeader;
     private String message;
-//    private RejectLetterReport rejectLetterReport;
-//    private RejectLetterCancelCodeByExSum codeByExSum;
     HttpSession session;
 
     @Inject
@@ -142,15 +134,12 @@ public class GenPDF extends ReportService implements Serializable {
             if (!Util.isZero(workCaseId)){
                 cancelRejectInfo = cancelRejectInfoDAO.findByWorkCaseId(workCaseId);
             }
-            log.debug("workCaseId. {}",workCaseId);
         }else if (!Util.isZero((Long)session.getAttribute("workCasePreScreenId"))){
             workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
             if (!Util.isZero(workCasePreScreenId)){
                 cancelRejectInfo = cancelRejectInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             }
-            log.debug("workCasePreScreenId. {}",workCasePreScreenId);
         }else{
-            log.debug("workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
             }catch (Exception ex){
@@ -189,7 +178,6 @@ public class GenPDF extends ReportService implements Serializable {
         readonlyCO2 = user.getRole().getId() == RoleValue.CO2.id();
         readonlyLD = user.getRole().getId() == RoleValue.LD.id();
         readonlyViewer = user.getRole().getId() == RoleValue.VIEWER.id();
-
     }
 
     public void setNameReport(){
@@ -203,109 +191,153 @@ public class GenPDF extends ReportService implements Serializable {
                 if(!Util.isNull(workCase)){
                     appNumber = workCase.getAppNumber();
                     statusId = workCase.getStatus().getId();
-                    log.debug("--statusId by workcase. {}",statusId);
                 }
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
                 if(!Util.isNull(workCasePrescreen)){
                     appNumber = workCasePrescreen.getAppNumber();
                     statusId = workCasePrescreen.getStatus().getId();
-                    log.debug("--statusId by workCasePrescreen. {}",statusId);
                 }
             }
 
             StringBuilder nameOpShect = new StringBuilder();
-            nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet.pdf");
+            nameOpShect = nameOpShect.append(appNumber).append("_").append(date).append("_OpSheet");
 
             StringBuilder nameExSum = new StringBuilder();
-            nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum.pdf");
+            nameExSum = nameExSum.append(appNumber).append("_").append(date).append("_ExSum");
 
             StringBuilder nameRejectLetter = new StringBuilder();
-            nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter.pdf");
+            nameRejectLetter = nameRejectLetter.append(appNumber).append("_").append(date).append("_RejectLetter");
 
             StringBuilder nameAppraisal = new StringBuilder();
-            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest.pdf");
+            nameAppraisal = nameAppraisal.append(appNumber).append("_").append(date).append("_AADRequest");
 
             StringBuilder nameOfferLetter = new StringBuilder();
-            nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter.pdf");
-
-            pdfReject_letter.init();
-            checkButtomPrint();
+            nameOfferLetter = nameOfferLetter.append(appNumber).append("_").append(date).append("_OfferLetter");
 
             reportView.setNameReportOpShect(nameOpShect.toString());
             reportView.setNameReportExSum(nameExSum.toString());
             reportView.setNameReportAppralsal(nameAppraisal.toString());
             reportView.setNameReportOfferLetter(nameOfferLetter.toString());
             reportView.setNameReportRejectLetter(nameRejectLetter.toString());
+
+            checkButtomPrint();
         }
     }
 
-    public void checkButtomPrint(){
-        log.debug("On checkButtomPrint");
-        String[][] cancelCode = {{"C034", "C034"},
-                {"C035", "C035"},
-                {"C036", "C036"},
-                {"C037", "C037"},
-                {"C038", "C038"},
-                {"C039", "C039"},
-                {"C040", "C040"}};
-        Map code = ArrayUtils.toMap(cancelCode);
+    private void checkButtomPrint(){
+        log.debug("On checkButtomPrint.");
+        rejectType = false;
+        exsumType = false;
+        opshectType = false;
+        appraisalType = false;
 
-        // ###### Role AAD Can not print Opshect And Exsum , Role UW Can not print Appraisal Request And Reject Letter ######
-        if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
-            exsumType = true;
-            opshectType = true;
-            log.debug("Is role AAD Admin. [{}], Is role AAD Committee. [{}]",readonlyIsAAD_ADMIN,readonlyIsAAD_COMMITTEE);
-        } else if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
-                readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
+        // ###### Role BU and Viewer Can not print AAD Report ######
+        if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
+            if (Util.isNull(workCase) || checkStepApproved()){
+                opshectType = true;
+                exsumType = true;
+            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
+                opshectType = true;
+                exsumType = true;
+            }
+            appraisalType = true;
+            disableButtomPrintReject();
+        }
+
+        // ###### Role UW and OPS Can not print AAD Report And Reject Letter Report ######
+        if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
+            readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
+            if (Util.isNull(workCase) || checkStepApproved()){
+                opshectType = true;
+                exsumType = true;
+            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
+                opshectType = true;
+                exsumType = true;
+            }
+
             appraisalType = true;
             rejectType = true;
-            log.debug("Is role UW. [{}] ,Is role Contect Center. [{}] ,Is role Insurance Center. [{}] ,Is role Doc Check. [{}] ,Is role CDM. [{}] ,Is role LAR/BC. [{}] ," +
-                    "Is role CO1. [{}] ,Is role CO2. [{}] ,Is role LD. [{}]",readonlyIsUW,readonlyContec_Center,readonlyInsurance_Center,readonlyDoc_Check,readonlyCDM,
-                    readonlyLAR_BC,readonlyCO1,readonlyCO2,readonlyLD);
         }
 
-        // ###### Request Appraisal is Zero in WorkCase OR WorkCasePrcescreen can not print Appraisal Request
-        if(!Util.isNull(workCase)){
-            log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
-            if (Util.isZero(workCase.getRequestAppraisal())){
-                appraisalType = true;
+        // ###### Role AAD Can not print Opshect,Exsum and Reject Letter ######
+        if (readonlyIsAAD_ADMIN || readonlyIsAAD_COMMITTEE){
+            if(!Util.isNull(workCase)){
+                log.debug("No Submit Request Appraisal to WorkCase. [{}]", workCase.getRequestAppraisal());
+                if (Util.isZero(workCase.getRequestAppraisal())){
+                    appraisalType = true;
+                }
+            } else if(!Util.isNull(workCasePrescreen)){
+                log.debug("No Submit Request Appraisal to WorkCasePreScreen. [{}]", workCasePrescreen.getRequestAppraisal());
+                if (Util.isZero(workCasePrescreen.getRequestAppraisal())){
+                    appraisalType = true;
+                }
             }
-        } else if(!Util.isNull(workCasePrescreen)){
-            log.debug("No Submit Request Appraisal to WorkCasePreScreen. [{}]", workCasePrescreen.getRequestAppraisal());
-            if (Util.isZero(workCasePrescreen.getRequestAppraisal())){
-                appraisalType = true;
-            }
+            opshectType = true;
+            exsumType = true;
+            rejectType = true;
         }
+    }
+
+    private boolean checkPricing(){
+        log.debug("On checkPricing.");
+        // ###### On Process Pricing Reduction Can not print Opshect And Exsum ######
+        log.debug("RequestPricing = [{}]",workCase.getRequestPricing());
+
+        if (!Util.isZero(workCase.getRequestPricing())){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkStepApproved(){
+        log.debug("On checkStepApproved. {}",statusId);
+        if (statusId == 90006L || statusId == 90005L)
+            return false;
+        else
+            return true;
+    }
+
+    private void disableButtomPrintReject(){
+        log.debug("On disableButtomPrintReject.");
+
+        pdfReject_letter.init();
 
         // ###### Disable Buttom Print Reject Letter ######
         if (statusId == StatusValue.CANCEL_CA.value()){
             if (!Util.isNull(cancelRejectInfo)){
-                if (!Util.isZero(pdfReject_letter.getColorByUwRleResultSummary()) && !code.containsKey(cancelRejectInfo.getReason().getCode())){
+                if (!Util.isZero(pdfReject_letter.getColorByUwRleResultSummary()) && !pdfReject_letter.cancelCode().containsKey(cancelRejectInfo.getReason().getCode())){
                     rejectType = true;
                 }
             }
             log.debug("--statusId by CANCEL CA = {}",statusId);
         } else if (statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.REJECT_UW2.value()){
             if (Util.isZero(pdfReject_letter.getTypeNCB()) && Util.isZero(pdfReject_letter.getTypeIncome()) && Util.isZero(pdfReject_letter.getTypePolicy())){
-//                if ((Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy())) &&
-//                    (Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()))){
-                    log.debug("CancelCode by ExSum and CancelCode by UWResult is Null.");
-                    rejectType = true;
-                } else {
-                    rejectType = false;
-                }
+                rejectType = true;
+            }
             log.debug("--statusId by Reject UW = {}",statusId);
         } else if (statusId == StatusValue.REJECT_CA.value()){
-            rejectType = false;
+            if (Util.isZero(pdfReject_letter.getTypeNCB()) && Util.isZero(pdfReject_letter.getTypeIncome()) && Util.isZero(pdfReject_letter.getTypePolicy())){
+                rejectType = true;
+            }
             log.debug("--statusId by Reject CA = {}",statusId);
         }  else {
             rejectType = true;
             log.debug("--rejectType not in (90001,90002,90004,90007) {}",statusId);
         }
+
+        checkPathReject();
     }
 
-    public void checkRejectGroupType(){
+    private void checkPathReject(){
+        if (pdfReject_letter.getTypeReject() == 1){
+            checkRejectGroupType();
+        } else if (pdfReject_letter.getTypeReject() == 2){
+            templateRejectLetter(pdfReject_letter.getTypeReject());
+        }
+    }
+
+    private void checkRejectGroupType(){
         log.debug("On checkRejectGroupType");
         //NCB = 1 Income = 2 Policy = 3
 
@@ -335,51 +367,13 @@ public class GenPDF extends ReportService implements Serializable {
             /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy = 0  ||
                         exsumNCB = 0 && exsumIncome = 0 && exsumPolicy = 0*/
         }
-
-//        if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//            Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//            !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-//            Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                templateRejectLetter(4);
-//                /*uwResultNCB != 0 && uwResultIncome != 0 && uwResultPolicy != 0  ||
-//                uwResultNCB = 0 && uwResultIncome != 0 && uwResultPolicy != 0  ||
-//                exsumNCB != 0 && exsumIncome != 0 && exsumPolicy != 0 ||
-//                exsumNCB = 0 && exsumIncome != 0 && exsumPolicy != 0*/
-//                log.debug("--path4. {}",pathReportReject);
-//        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-//                   Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                        templateRejectLetter(3);
-//                         /*uwResultNCB != 0 && uwResultIncome != 0 && uwResultPolicy = 0  ||
-//                        uwResultNCB = 0 && uwResultIncome != 0 && uwResultPolicy = 0  ||
-//                        exsumNCB != 0 && exsumIncome != 0 && exsumPolicy = 0 ||
-//                        exsumNCB = 0 && exsumIncome != 0 && exsumPolicy = 0*/
-//                        log.debug("--path3. {}",pathReportReject);
-//        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && !Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy()) ||
-//                   Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                        templateRejectLetter(2);
-//                         /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy != 0  ||
-//                        uwResultNCB = 0 && uwResultIncome = 0 && uwResultPolicy != 0  ||
-//                        exsumNCB != 0 && exsumIncome = 0 && exsumPolicy !== 0 ||
-//                        exsumNCB = 0 && exsumIncome = 0 && exsumPolicy != 0*/
-//                        log.debug("--path2. {}",pathReportReject);
-//        } else if (!Util.isZero(pdfReject_letter.findRejectGroup().getTypeNCB()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypeIncome()) && Util.isZero(pdfReject_letter.findRejectGroup().getTypePolicy()) ||
-//                   !Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumNCB()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumIncome()) && Util.isZero(pdfReject_letter.getCancelCodeByExSum().getExSumPolicy())){
-//                        templateRejectLetter(1);
-//                         /*uwResultNCB != 0 && uwResultIncome = 0 && uwResultPolicy = 0  ||
-//                        exsumNCB = 0 && exsumIncome = 0 && exsumPolicy = 0*/
-//                        log.debug("--path1. {}",pathReportReject);
-//        }
         log.debug("--End checkRejectGroupType.",pathReportReject);
     }
 
     public void onPrintExsumReport() throws Exception {
         log.debug("onPrintExsumReport");
 
-//        pdfExecutiveSummary.init();
+        pdfExecutiveSummary.init();
 
         HashMap map = new HashMap<String, Object>();
         map.put("path", pathsub);
@@ -420,7 +414,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFollowDetail",pdfExecutiveSummary.fillFollowDetail());
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
 
-        generatePDF(pathExsum, map, reportView.getNameReportExSum(),null);
+        generatePDF(pathExsum, map, reportView.getNameReportExSum());
     }
 
     public void onPrintDecisionReport() throws Exception {
@@ -461,39 +455,33 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillPriceFee",pdfExecutiveSummary.fillPriceFee());
         map.put("fillApprovalHistory",pdfExecutiveSummary.fillApprovalHistory());
 
-        generatePDF(pathDecision, map, reportView.getNameReportOpShect(),null);
+        generatePDF(pathDecision, map, reportView.getNameReportOpShect());
     }
 
     public void onPrintRejectLetter() throws Exception {
         log.debug("--onPrintRejectLetter");
         HashMap map = new HashMap<String, Object>();
 
-//        pdfReject_letter.init();
-        if (pdfReject_letter.onCheckLogic() == 1){
-            log.debug("--Type Reject Is One. {}",pdfReject_letter.onCheckLogic());
-            checkRejectGroupType();
-        } else if (pdfReject_letter.onCheckLogic() == 2){
-            log.debug("--Type Reject Is Two Print Template Policy Only. {}",pdfReject_letter.onCheckLogic());
-            templateRejectLetter(pdfReject_letter.onCheckLogic());
-        }
         map.put("path", pathsub);
         map.put("fillAllNameReject", pdfReject_letter.fillAllNameReject());
         map.put("fillRejectLetter",pdfReject_letter.fillRejectLetter());
 
-        generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter(),null);
+        generatePDF(pathReportReject,map,reportView.getNameReportRejectLetter());
     }
+
     public void onPrintAppraisal() throws Exception {
         log.debug("--onPrintAppraisal");
         pdfAppraisalAppointment.init();
 
     HashMap map = new HashMap<String, Object>();
     map.put("path", pathsub);
+    map.put("fillHeader",pdfAppraisalAppointment.fillHeader());
     map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
     map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport(pathsub));
     map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
     map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
-    generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal(),null);
+    generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
 }
 
     public void onPrintOfferletter() throws Exception {
@@ -510,7 +498,7 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillFeecalculationNonAgreement",pdfOfferLetter.fillFeecalculationNonAgreement());
         map.put("fillDisbursment",pdfOfferLetter.fillDisbursment());
 
-        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter(),null);
+        generatePDF(pathOfferLetter, map, reportView.getNameReportOfferLetter());
     }
 
     public void templateRejectLetter(int type){

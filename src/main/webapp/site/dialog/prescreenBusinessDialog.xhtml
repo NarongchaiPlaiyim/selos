@@ -12,6 +12,7 @@
                     <td class="title" style="width:150px;">Business Group :</td>
                     <td>
                         <p:selectOneMenu style="min-width: 350px; width: 350px; max-width: 350px;" size="1"
+                                         disabled="#{prescreenMaker.isDisabled('business.businessGroup')}"
                                          value="#{prescreenMaker.bizInfoDetailView.bizGroup.id}"
                                          required="true">
                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
@@ -26,6 +27,7 @@
                     <td class="title">Business Description :</td>
                     <td>
                         <p:selectOneMenu style="min-width: 350px; width: 350px; max-width: 350px;" size="1"
+                                         disabled="#{prescreenMaker.isDisabled('business.businessDesc')}"
                                          value="#{prescreenMaker.bizInfoDetailView.bizDesc.id}"
                                          required="true">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -39,21 +41,19 @@
                 <tr>
                     <td class="title">Comment :</td>
                     <td class="left">
-                        <p:inputText styleClass="readonly" readonly="true"
+                        <p:inputText styleClass="readonly" readonly="true" disabled="#{prescreenMaker.isDisabled('business.businessDesc')}"
                                      value="#{prescreenMaker.bizInfoDetailView.bizDesc.comment}"/>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="center">
-                        <p:commandButton
-                                id="dlgSaveBizBtn"
-                                value="OK"
-                                styleClass="small"
+                        <p:commandButton id="dlgSaveBizBtn" value="OK" styleClass="small"
+                                disabled="#{prescreenMaker.isDisabled('business.saveButton')}"
                                 action="#{prescreenMaker.onSaveBusinessInfo()}"
                                 process=":businessDlgForm"
                                 update=":businessDlgForm :frmMain:resulttableBusinessInformation"
-                                oncomplete="handlePrescreenBusinessInfoRequest(xhr, status, args)"/>
-                        <p:commandButton value="Cancel" styleClass="small" onclick="businessDlg.hide()"/>
+                                oncomplete="handleDialogRequest(xhr, status, args, 'businessDlg')"/>
+                        <p:commandButton value="Cancel" styleClass="small" onclick="PF('businessDlg').hide()"/>
                     </td>
                 </tr>
             </table>

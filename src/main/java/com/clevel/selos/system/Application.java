@@ -34,11 +34,11 @@ public class Application {
         String[] str = values.split("\\|");
         RadioValue[] result = new RadioValue[str.length];
         RadioValue[] radioValue = RadioValue.values();
-        log.debug("radioValue length: {}",radioValue.length);
+        //log.debug("radioValue length: {}",radioValue.length);
         for (int i=0;i<str.length;i++) {
             for (RadioValue aRadioValue : radioValue) {
                 if (aRadioValue.name().equalsIgnoreCase(str[i])) {
-                    log.debug("assign value: {}", aRadioValue);
+                    //log.debug("assign value: {}", aRadioValue);
                     result[i] = aRadioValue;
                 }
             }
@@ -50,11 +50,11 @@ public class Application {
         String[] str = values.split("\\|");
         CreditCustomerType[] result = new CreditCustomerType[str.length];
         CreditCustomerType[] creditCustomerValue = CreditCustomerType.values();
-        log.debug("creditCustomerValue length: {}",creditCustomerValue.length);
+        //log.debug("creditCustomerValue length: {}",creditCustomerValue.length);
         for (int i=0;i<str.length;i++) {
             for (CreditCustomerType aCreditCustomerType : creditCustomerValue) {
                 if (aCreditCustomerType.name().equalsIgnoreCase(str[i])) {
-                    log.debug("assign value: {}", aCreditCustomerType);
+                    //log.debug("assign value: {}", aCreditCustomerType);
                     result[i] = aCreditCustomerType;
                 }
             }
@@ -66,11 +66,11 @@ public class Application {
         String[] str = values.split("\\|");
         BAPaymentMethodValue[] result = new BAPaymentMethodValue[str.length];
         BAPaymentMethodValue[] paymentMethodValue = BAPaymentMethodValue.values();
-        log.debug("paymentMethodValue length: {}",paymentMethodValue.length);
+        //log.debug("paymentMethodValue length: {}",paymentMethodValue.length);
         for (int i=0;i<str.length;i++) {
             for (BAPaymentMethodValue aPaymentMethodValue : paymentMethodValue) {
                 if (aPaymentMethodValue.name().equalsIgnoreCase(str[i])) {
-                    log.debug("assign value: {}", aPaymentMethodValue);
+                    //log.debug("assign value: {}", aPaymentMethodValue);
                     result[i] = aPaymentMethodValue;
                 }
             }
