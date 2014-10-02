@@ -1577,8 +1577,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
-                if (!Util.isNull(view.getUwDecision())){
-                    if(view.getUwDecision() == DecisionType.APPROVED ){
+                    if((DecisionType.APPROVED).equals(view.getUwDecision())){
                         approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                         approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                         approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
@@ -1665,7 +1664,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                         approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                     }
-                }
             }
         } else {
             ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
