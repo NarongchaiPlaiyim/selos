@@ -7,6 +7,7 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -152,12 +153,15 @@ public class AppraisalRequest extends BaseController {
         String bdmUserId = "";
 
         if(checkSession(session)){
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
             if (!Util.isZero(workCaseId)){
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
+                loadFieldControl(workCaseId, Screen.AppraisalRequest, ownerCaseUserId);
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePreScreenDAO.findById(workCasePreScreenId);
                 bdmUserId = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.AppraisalRequest, ownerCaseUserId);
             }
 
             ProposeType proposeType;

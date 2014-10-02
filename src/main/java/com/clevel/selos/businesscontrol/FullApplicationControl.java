@@ -1012,22 +1012,22 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     /** Appraisal [ Submit Appraisal Appointment to Committee ] **/
-    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
-        log.debug("submitToAADCommittee ::: starting...");
+    public void submitForAADAdmin(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
+        log.debug("submitForAADAdmin ::: starting...");
         String appNumber = "";
         Appraisal appraisal = null;
         if(!Util.isNull(workCaseId) && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             appNumber = workCase.getAppNumber();
-            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
-            log.debug("submitToAADCommittee ::: find workCase : {}", workCase);
+            log.debug("submitForAADAdmin ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitForAADAdmin ::: find workCase : {}", workCase);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             appNumber = workCasePrescreen.getAppNumber();
-            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
-            log.debug("submitToAADCommittee ::: find workCasePrescreen : {}", workCasePrescreen);
+            log.debug("submitForAADAdmin ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitForAADAdmin ::: find workCasePrescreen : {}", workCasePrescreen);
         }
 
         if(appraisal != null){
@@ -1037,26 +1037,27 @@ public class FullApplicationControl extends BusinessControl {
             //Save appointment date for appraisal work case
             if(!Util.isEmpty(appNumber)){
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-                log.debug("submitToAADCommittee ::: find workCaseAppraisal : {}", workCaseAppraisal);
+                log.debug("submitForAADAdmin ::: find workCaseAppraisal : {}", workCaseAppraisal);
                 if(!Util.isNull(workCaseAppraisal)) {
                     workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
                     workCaseAppraisalDAO.persist(workCaseAppraisal);
-                    log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                    log.debug("submitForAADAdmin ::: save workCaseAppraisal : {}", workCaseAppraisal);
                 }
                 long appraisalLocationCode = 0;
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
                 }
-                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
+                bpmExecutor.submitForAADAdmin(aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
             }
         } else {
             throw new Exception("Submit case failed, could not find appraisal data.");
         }
-        log.debug("submitToAADCommittee ::: end...");
+        log.debug("submitForAADAdmin ::: end...");
     }
 
     /** Appraisal [ Submit Appraisal Result to UW ] **/
-    public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
+    public void submitForAADCommittee(String queueName, String wobNumber, long workCaseId, long workCasePreScreenId) throws Exception{
+        //duplicateCollateralData(workCaseId, workCasePreScreenId);
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
     //---------- End Function for Appraisal ----------//
@@ -1071,11 +1072,11 @@ public class FullApplicationControl extends BusinessControl {
         if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             aadAdminName = appraisal.getAadAdmin()!=null?appraisal.getAadAdmin().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCase : {}", appraisal);
         }else if(!Util.isNull(workCasePreScreenId) && !Util.isZero(workCasePreScreenId)){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             aadAdminName = appraisal.getAadAdmin()!=null?appraisal.getAadAdmin().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCasePrescreen: {}", appraisal);
         }
 
         return aadAdminName;
@@ -1087,11 +1088,11 @@ public class FullApplicationControl extends BusinessControl {
         if(!Util.isNull(workCaseId) && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCase : {}", appraisal);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCasePrescreen: {}", appraisal);
         }
 
         return aadCommitteeName;
@@ -1772,6 +1773,14 @@ public class FullApplicationControl extends BusinessControl {
     public void duplicateFacilityData(long workCaseId){
         try {
             stpExecutor.duplicateFacilityData(workCaseId);
+        }catch (Exception ex){
+            log.error("Exception while duplicateFacilityData : ", ex);
+        }
+    }
+
+    public void duplicateCollateralData(long workCaseId, long workCasePreScreenId){
+        try {
+            stpExecutor.duplicateCollateralData(workCaseId, workCasePreScreenId);
         }catch (Exception ex){
             log.error("Exception while duplicateFacilityData : ", ex);
         }
