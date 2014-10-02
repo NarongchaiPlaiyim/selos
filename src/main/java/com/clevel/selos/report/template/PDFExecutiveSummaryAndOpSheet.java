@@ -1026,8 +1026,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 StringBuilder name = new StringBuilder();
                 name = name.append(!Util.isNull(detailView.getGuarantorName()) ? !Util.isNull(detailView.getGuarantorName().getTitleTh()) ?
                         Util.checkNullString(detailView.getGuarantorName().getTitleTh().getTitleTh()) : SPACE : SPACE)
-                        .append(!Util.isNull(detailView.getGuarantorName()) ? detailView.getGuarantorName().getFirstNameTh() : SPACE)
-                        .append(SPACE).append(!Util.isNull(detailView.getGuarantorName()) ? detailView.getGuarantorName().getLastNameTh() : SPACE);
+                        .append(!Util.isNull(detailView.getGuarantorName()) ? Util.checkNullString(detailView.getGuarantorName().getFirstNameTh()) : SPACE)
+                        .append(SPACE).append(!Util.isNull(detailView.getGuarantorName()) ? Util.checkNullString(detailView.getGuarantorName().getLastNameTh()) : SPACE);
                 guarantorBorrowerDecisionReport.setGuarantorName(name.toString());
                 guarantorBorrowerDecisionReport.setTcgLgNo(Util.checkNullString(detailView.getTcgLgNo()));
                 if (Util.isSafetyList(detailView.getExistingCreditTypeDetailViewList())){
@@ -1429,30 +1429,32 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 proposeCollateralInfoSubViewList.add(subView);
                             }
                             collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
-                        } else {
-                            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
-                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-                            proposeCollateralInfoSubView.setPath(pathsub);
-                            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
-                            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
                         }
+//                        else {
+//                            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//                            proposeCollateralInfoSubView.setPath(pathsub);
+//                            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//                            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
+//                        }
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}");
                 }
                 proposedCollateralDecisionReportList.add(collateralDecisionReport);
             }
-        } else {
-            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
-            ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
-            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
-            collateralDecisionReport.setPath(pathsub);
-            proposeCollateralInfoSubView.setPath(pathsub);
-            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
-            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
-            proposedCollateralDecisionReportList.add(collateralDecisionReport);
         }
+//        else {
+//            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
+//            ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
+//            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//            collateralDecisionReport.setPath(pathsub);
+//            proposeCollateralInfoSubView.setPath(pathsub);
+//            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
+//            proposedCollateralDecisionReportList.add(collateralDecisionReport);
+//        }
         return proposedCollateralDecisionReportList;
     }
 
@@ -1539,30 +1541,32 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 proposeCollateralInfoSubViewList.add(subView);
                             }
                             approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
-                        } else {
-                            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
-                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-                            proposeCollateralInfoSubView.setPath(pathsub);
-                            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
-                            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                         }
+//                        else {
+//                            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//                            proposeCollateralInfoSubView.setPath(pathsub);
+//                            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//                            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+//                        }
                     }
                 } else {
                     log.debug("collateralHeadViewList is Null. {}");
                 }
                 approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             }
-        } else {
-            ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
-            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
-            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-            approvedCollateralDecisionReport.setPath(pathsub);
-            proposeCollateralInfoSubView.setPath(pathsub);
-            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
-            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
-            approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
         }
+//        else {
+//            ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
+//            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//            approvedCollateralDecisionReport.setPath(pathsub);
+//            proposeCollateralInfoSubView.setPath(pathsub);
+//            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+//            approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
+//            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
+//        }
         return approvedCollateralDecisionReportArrayList;
     }
 
@@ -1576,99 +1580,107 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             log.debug("newCollateralViews.size() by fillApprovedCollaterral. {}",newCollateralViews.size());
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
-                approvedCollateralDecisionReport.setPath(pathsub);
-                if((DecisionType.APPROVED).equals(view.getUwDecision())){
-                    approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
-                    approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
-                    approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
-                    approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
-                    approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-                    approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-                    approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
-                    approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
+                    if((DecisionType.APPROVED).equals(view.getUwDecision())){
+                        approvedCollateralDecisionReport.setPath(pathsub);
+                        approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
+                        approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
+                        approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
+                        approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
+                        approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
+                        approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
+                        approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+                        approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
-                    approvedCollateralDecisionReport.setApproved("Yes");
+                        approvedCollateralDecisionReport.setApproved("Yes");
 
-                    approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
-                    approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
+                        approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
+                        approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
-                    if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
-                        log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                        approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
-                    } else {
-                        approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
-                    }
-
-                    collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
-                    if (Util.isSafetyList(collateralHeadViewList)){
-                        log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
-                        for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
-                            approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
-                                    Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
-                            approvedCollateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
-                                    Util.checkNullString(headView.getTcgCollateralType().getDescription()) : SPACE);
-                            approvedCollateralDecisionReport.setExistingCredit(Util.convertNullToZERO(headView.getExistingCredit()));
-                            approvedCollateralDecisionReport.setTitleDeed(Util.checkNullString(headView.getTitleDeed()));
-                            approvedCollateralDecisionReport.setCollateralLocation(Util.checkNullString(headView.getCollateralLocation()));
-                            approvedCollateralDecisionReport.setAppraisalValue(Util.convertNullToZERO(headView.getAppraisalValue()));
-                            approvedCollateralDecisionReport.setHeadCollTypeDescription(!Util.isNull(headView.getHeadCollType()) ?
-                                    Util.checkNullString(headView.getHeadCollType().getDescription()) : SPACE);
-                            if (!Util.isNull(headView.getInsuranceCompany())){
-                                if (headView.getInsuranceCompany() == RadioValue.YES.value()){
-                                    approvedCollateralDecisionReport.setInsuranceCompany("Partner");
-                                } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
-                                    approvedCollateralDecisionReport.setInsuranceCompany("Non Partner");
-                                } else {
-                                    approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
-                                }
-                            }
-
-                            if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
-                                int count = 1;
-                                List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-                                for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                    ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
-                                    subView.setPath(pathsub);
-                                    subView.setNo(count++);
-                                    subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
-                                    subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
-                                    subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
-                                    subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
-                                    subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
-                                    subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
-                                    subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
-                                    subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
-                                    subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
-                                    subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
-                                    proposeCollateralInfoSubViewList.add(subView);
-                                }
-                                approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
-                            } else {
-                                ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
-                                List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-                                proposeCollateralInfoSubView.setPath(pathsub);
-                                proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
-                                approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
-                                log.debug("proposeCollateralInfoSubView in fillApprovedCollaterral {}",proposeCollateralInfoSubView);
-                            }
+                        if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
+                            log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
+                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
+                        } else {
+                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                         }
-                    } else {
-                        log.debug("collateralHeadViewList is Null. {}");
+
+                        collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
+                        if (Util.isSafetyList(collateralHeadViewList)){
+                            log.debug("collateralHeadViewList.size() {}",collateralHeadViewList.size());
+                            for (ProposeCollateralInfoHeadView headView : collateralHeadViewList){
+                                approvedCollateralDecisionReport.setCollateralDescription(!Util.isNull(headView.getPotentialCollateral()) ?
+                                        Util.checkNullString(headView.getPotentialCollateral().getDescription()) : SPACE);
+                                approvedCollateralDecisionReport.setPercentLTVDescription(!Util.isNull(headView.getTcgCollateralType()) ?
+                                        Util.checkNullString(headView.getTcgCollateralType().getDescription()) : SPACE);
+                                approvedCollateralDecisionReport.setExistingCredit(Util.convertNullToZERO(headView.getExistingCredit()));
+                                approvedCollateralDecisionReport.setTitleDeed(Util.checkNullString(headView.getTitleDeed()));
+                                approvedCollateralDecisionReport.setCollateralLocation(Util.checkNullString(headView.getCollateralLocation()));
+                                approvedCollateralDecisionReport.setAppraisalValue(Util.convertNullToZERO(headView.getAppraisalValue()));
+                                approvedCollateralDecisionReport.setHeadCollTypeDescription(!Util.isNull(headView.getHeadCollType()) ?
+                                        Util.checkNullString(headView.getHeadCollType().getDescription()) : SPACE);
+                                if (!Util.isNull(headView.getInsuranceCompany())){
+                                    if (headView.getInsuranceCompany() == RadioValue.YES.value()){
+                                        approvedCollateralDecisionReport.setInsuranceCompany("Partner");
+                                    } else if (headView.getInsuranceCompany() == RadioValue.NO.value()){
+                                        approvedCollateralDecisionReport.setInsuranceCompany("Non Partner");
+                                    } else {
+                                        approvedCollateralDecisionReport.setInsuranceCompany(SPACE);
+                                    }
+                                }
+
+                                if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                                    int count = 1;
+                                    List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+                                    for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
+                                        ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                        subView.setPath(pathsub);
+                                        subView.setNo(count++);
+                                        subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                        subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                        subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                        subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                        subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                        subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                        subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                        subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                        subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                        subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                        proposeCollateralInfoSubViewList.add(subView);
+                                    }
+                                    approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+                                } else {
+                                    ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+                                    List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+                                    proposeCollateralInfoSubView.setPath(pathsub);
+                                    proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+                                    approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+                                    log.debug("proposeCollateralInfoSubView in fillApprovedCollaterral {}",proposeCollateralInfoSubView);
+                                }
+                            }
+                        } else {
+                            log.debug("collateralHeadViewList is Null. {}");
+                        }
+                        approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                     }
-                    approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-                }
+//                    else {
+//                        ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//                        List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//                        proposeCollateralInfoSubView.setPath(pathsub);
+//                        proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//                        approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+//                    }
             }
-        } else {
-            ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
-            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
-            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
-            approvedCollateralDecisionReport.setPath(pathsub);
-            proposeCollateralInfoSubView.setPath(pathsub);
-            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
-            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
-            approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
         }
+//        else {
+//            ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
+//            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
+//            ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
+//            approvedCollateralDecisionReport.setPath(pathsub);
+//            proposeCollateralInfoSubView.setPath(pathsub);
+//            proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
+//            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
+//            approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
+//            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
+//        }
         return approvedCollateralDecisionReportArrayList;
     }
 

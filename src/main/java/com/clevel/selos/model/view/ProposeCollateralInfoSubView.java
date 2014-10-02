@@ -45,7 +45,6 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue = BigDecimal.ZERO;
         this.subId = "";
-        this.path = "aaaaaaaaaaaaaaaa";
     }
 
     public long getId() {
