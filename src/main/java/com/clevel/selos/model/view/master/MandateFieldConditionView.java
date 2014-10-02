@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view.master;
 
-import com.clevel.selos.model.MandateConditionType;
+import com.clevel.selos.model.MandateConDetailType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,7 +12,7 @@ import java.util.List;
 public class MandateFieldConditionView implements Serializable {
 
     private long id;
-    private MandateConditionType mandateConditionType;
+    private MandateConDetailType mandateConDetailType;
     private String name;
     private String conditionDesc;
     private MandateFieldClassView mandateFieldClassView;
@@ -38,12 +38,12 @@ public class MandateFieldConditionView implements Serializable {
         this.name = name;
     }
 
-    public MandateConditionType getMandateConditionType() {
-        return mandateConditionType;
+    public MandateConDetailType getMandateConDetailType() {
+        return mandateConDetailType;
     }
 
-    public void setMandateConditionType(MandateConditionType mandateConditionType) {
-        this.mandateConditionType = mandateConditionType;
+    public void setMandateConDetailType(MandateConDetailType mandateConDetailType) {
+        this.mandateConDetailType = mandateConDetailType;
     }
 
     public String getConditionDesc() {
@@ -105,7 +105,7 @@ public class MandateFieldConditionView implements Serializable {
     public void updateValues(MandateFieldConditionView view){
         id = view.id;
         name = view.name;
-        mandateConditionType = view.mandateConditionType;
+        mandateConDetailType = view.mandateConDetailType;
         conditionDesc = view.conditionDesc;
         mandateFieldClassView = view.mandateFieldClassView;
         dependType = view.dependType;
@@ -118,7 +118,7 @@ public class MandateFieldConditionView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("mandateConditionType", mandateConditionType)
+                .append("mandateConditionType", mandateConDetailType)
                 .append("name", name)
                 .append("conditionDesc", conditionDesc)
                 .append("mandateFieldClassView", mandateFieldClassView)
