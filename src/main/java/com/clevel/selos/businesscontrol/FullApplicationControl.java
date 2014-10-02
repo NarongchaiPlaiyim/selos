@@ -1057,7 +1057,7 @@ public class FullApplicationControl extends BusinessControl {
 
     /** Appraisal [ Submit Appraisal Result to UW ] **/
     public void submitForAADCommittee(String queueName, String wobNumber, long workCaseId, long workCasePreScreenId) throws Exception{
-        //duplicateCollateralData(workCaseId, workCasePreScreenId);
+        duplicateCollateralData(workCaseId, workCasePreScreenId);
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
     //---------- End Function for Appraisal ----------//
