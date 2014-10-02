@@ -44,7 +44,6 @@ public class CountryControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(countryView.getName());
                 selectItem.setValue(countryView.getId());
-                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }

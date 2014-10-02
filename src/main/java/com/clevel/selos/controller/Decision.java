@@ -915,6 +915,8 @@ public class Decision extends BaseController {
                 decisionControl.calculateTotalApprove(decisionView, workCaseId);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
+                // Calculate Total Propose Loan DBR
+                proposeLineControl.calculateTotalProposeAmountForExisting(null, workCaseId);
 
                 calculationControl.calForDecision(workCaseId);
 
