@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.Flash;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -204,8 +203,7 @@ public class CustomerInfoJuristic extends BaseController {
 
             enableAllFieldCus = false;
 
-            Flash flash = FacesUtil.getFlash();
-            Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+            Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
             if (cusInfoParams != null) {
                 isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
                 isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
@@ -231,6 +229,7 @@ public class CustomerInfoJuristic extends BaseController {
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
+        customerInfoView.setIndividualViewForShowList(new ArrayList<CustomerInfoView>());
         customerInfoView.setCurrentAddress(null);
         customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
         customerInfoView.getWorkAddress().setAddressTypeFlag(3);
@@ -338,7 +337,10 @@ public class CustomerInfoJuristic extends BaseController {
         map.put("isEditFromJuristic", false);
         map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("cusInfoParams", map);
+
         return "customerInfoIndividual?faces-redirect=true";
     }
 
@@ -349,10 +351,22 @@ public class CustomerInfoJuristic extends BaseController {
         map.put("isEditFromJuristic", true);
         map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
-        map.put("rowIndex",rowIndex);
-        map.put("individualView", selectEditIndividual);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+        if(!Util.isNull(customerInfoView.getIndividualViewList())) {
+            for(CustomerInfoView cusView : customerInfoView.getIndividualViewList()) {
+                if(cusView.getListIndex() == selectEditIndividual.getListIndex()) {
+                    if(cusView.getIsSpouse() != 1) {
+                        map.put("individualView", cusView);
+                    }
+                    map.put("listIndex", selectEditIndividual.getListIndex());
+                }
+            }
+        }
+
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("cusInfoParams", map);
+
         return "customerInfoIndividual?faces-redirect=true";
+        //listIndex = original row
     }
 
     public void onChangeRelation(){
@@ -730,14 +744,72 @@ public class CustomerInfoJuristic extends BaseController {
                     message = msg.get("app.message.customer.existing.error2");
                     severity = "info";
                 } else {
-                    customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+                    List<CustomerInfoView> cusTmp = new ArrayList<CustomerInfoView>();
+                    if(selectEditIndividual.getIsSpouse() == 1) {
+                        for(CustomerInfoView cusView : customerInfoView.getIndividualViewForShowList()) {
+                            if(cusView.getListIndex() != selectEditIndividual.getListIndex()) {
+                                cusTmp.add(cusView);
+                            } else {
+                                if(!cusView.getCitizenId().equalsIgnoreCase(selectEditIndividual.getCitizenId())) {
+                                    cusTmp.add(cusView);
+                                }
+                            }
+                        }
+                        customerInfoView.setIndividualViewForShowList(cusTmp);
+                        CustomerInfoView cusView = new CustomerInfoView();
+                        cusView.reset();
+                        customerInfoView.getIndividualViewList().get(selectEditIndividual.getListIndex()).setSpouse(cusView);
+                    } else {
+                        for(CustomerInfoView cusView : customerInfoView.getIndividualViewForShowList()) {
+                            if(cusView.getListIndex() != selectEditIndividual.getListIndex()) {
+                                cusTmp.add(cusView);
+                            }
+                        }
+                        customerInfoView.setIndividualViewForShowList(cusTmp);
+                        customerInfoView.getIndividualViewList().remove(selectEditIndividual.getListIndex());
+                        //after remove on original list
+                        for(CustomerInfoView cusView : customerInfoView.getIndividualViewForShowList()) {
+                            if(cusView.getListIndex() > selectEditIndividual.getListIndex()) {
+                                cusView.setListIndex(cusView.getListIndex() - 1);
+                            }
+                        }
+                    }
                     customerInfoView.getRemoveIndividualIdList().add(selectEditIndividual.getId());
                     messageHeader = "Information.";
                     message = "Delete Customer Info Individual Success.";
                     severity = "info";
                 }
             } else {
-                customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+                List<CustomerInfoView> cusTmp = new ArrayList<CustomerInfoView>();
+                if(selectEditIndividual.getIsSpouse() == 1) {
+                    for(CustomerInfoView cusView : customerInfoView.getIndividualViewForShowList()) {
+                        if(cusView.getListIndex() != selectEditIndividual.getListIndex()) {
+                            cusTmp.add(cusView);
+                        } else {
+                            if(!cusView.getCitizenId().equalsIgnoreCase(selectEditIndividual.getCitizenId())) {
+                                cusTmp.add(cusView);
+                            }
+                        }
+                    }
+                    customerInfoView.setIndividualViewForShowList(cusTmp);
+                    CustomerInfoView cusView = new CustomerInfoView();
+                    cusView.reset();
+                    customerInfoView.getIndividualViewList().get(selectEditIndividual.getListIndex()).setSpouse(cusView);
+                } else {
+                    for(CustomerInfoView cusView : customerInfoView.getIndividualViewForShowList()) {
+                        if(cusView.getListIndex() != selectEditIndividual.getListIndex()) {
+                            cusTmp.add(cusView);
+                        }
+                    }
+                    customerInfoView.setIndividualViewForShowList(cusTmp);
+                    customerInfoView.getIndividualViewList().remove(selectEditIndividual.getListIndex());
+                    //after remove on original list
+                    for(CustomerInfoView cusView : customerInfoView.getIndividualViewForShowList()) {
+                        if(cusView.getListIndex() > selectEditIndividual.getListIndex()) {
+                            cusView.setListIndex(cusView.getListIndex() - 1);
+                        }
+                    }
+                }
                 messageHeader = "Information.";
                 message = "Delete Customer Info Individual Success.";
                 severity = "info";

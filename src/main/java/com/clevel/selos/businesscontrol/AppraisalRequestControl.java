@@ -2,7 +2,9 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
+import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
@@ -87,7 +89,7 @@ public class AppraisalRequestControl extends BusinessControl {
         }
     }
 	
-	public AppraisalView getAppraisalRequest(long workCaseId, long workCasePreScreenId){
+	public AppraisalView getAppraisalRequest(long workCaseId, long workCasePreScreenId, ProposeType proposeType){
         log.info("-- getAppraisalRequest WorkCaseId : {}, workCasePreScreenId : {}, User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
         init();
         String bdmUserId = "";
@@ -123,7 +125,7 @@ public class AppraisalRequestControl extends BusinessControl {
         log.debug("getAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
 
         if(!Util.isNull(newCreditFacility)){
-            newCollateralList = safetyList(newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility));
+            newCollateralList = safetyList(newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType));
             log.debug("getAppraisalRequest ::: newCollateralList : {}", newCollateralList);
             appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
@@ -136,7 +138,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
     }
 
-    public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId){
+    public void onSaveAppraisalRequest(AppraisalView appraisalView,long workCaseId, long workCasePreScreenId, long statusId){
         log.info("-- onSaveAppraisalRequest ::: workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
@@ -151,6 +153,14 @@ public class AppraisalRequestControl extends BusinessControl {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             workCase = null;
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }
+
+        //remove all collateral head from list in database
+        ProposeType proposeType;
+        if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
+            proposeType = ProposeType.P;
+        }else{
+            proposeType = ProposeType.A;
         }
 
         log.debug("onSaveAppraisalRequest ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
@@ -173,6 +183,7 @@ public class AppraisalRequestControl extends BusinessControl {
                 newCreditFacility = new ProposeLine();
                 newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
                 newCreditFacility.setWorkCase(workCase);
+                newCreditFacilityDAO.persist(newCreditFacility);
             }
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
 
@@ -186,19 +197,21 @@ public class AppraisalRequestControl extends BusinessControl {
             }
 
             //set flag 0 for all collateral
-            log.debug("onSaveAppraisalRequest ::: newCollateralList from database : {}", newCollateralList);
-            for(ProposeCollateralInfo newCollateral : newCollateralList){
-                newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
-                for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
-                    newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+            if(!Util.isZero(newCreditFacility.getId())) {
+                log.debug("onSaveAppraisalRequest ::: newCollateralList from database : {}", newCollateralList);
+                for (ProposeCollateralInfo newCollateral : newCollateralList) {
+                    newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+                    for (ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList) {
+                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    }
+                    newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    newCollateralDAO.persist(newCollateral);
                 }
-                newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                newCollateralDAO.persist(newCollateral);
             }
 
             //transform collateral head from view
             newCollateralList.clear();
-            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, currentUser, RequestAppraisalValue.READY_FOR_REQUEST));
+            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, currentUser, RequestAppraisalValue.READY_FOR_REQUEST, proposeType));
             /*log.debug("onSaveAppraisalRequest ::: before persist newCreditfacility : {}", newCreditFacility);
             newCreditFacilityDAO.persist(newCreditFacility);
             log.debug("onSaveAppraisalRequest ::: after persist newCreditfacility : {}", newCreditFacility);*/

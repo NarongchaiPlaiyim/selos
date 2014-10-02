@@ -300,18 +300,31 @@ public class CustomerInfoControl extends BusinessControl {
 
         List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId());
         List<CustomerInfoView> cusIndViewList = new ArrayList<CustomerInfoView>();
+        List<CustomerInfoView> cusIndViewShowList = new ArrayList<CustomerInfoView>();
         if(cusIndList != null && cusIndList.size() > 0){
+            int index = 0;
             for (Customer cusInd : cusIndList){
                 CustomerInfoView cusIndView = customerTransform.transformToView(cusInd);
+
+                cusIndView.setListIndex(index);
+                cusIndViewShowList.add(cusIndView);
+
                 if(cusInd.getSpouseId() != 0){
                     Customer spouse = customerDAO.findById(cusInd.getSpouseId());
                     CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
                     cusIndView.setSpouse(spouseInfoView);
+
+                    spouseInfoView.setListIndex(index);
+                    cusIndViewShowList.add(spouseInfoView);
                 }
-                cusIndViewList.add(cusIndView);
+
+                cusIndViewList.add(index, cusIndView);
+
+                index++;
             }
         }
         customerInfoView.setIndividualViewList(cusIndViewList);
+        customerInfoView.setIndividualViewForShowList(cusIndViewShowList);
         return customerInfoView;
     }
 
@@ -811,6 +824,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public boolean isDuplicateCustomerIndv(String citizenId, long customerId, long workCaseId){
+        log.debug("isDuplicateCustomerIndv :: citizenId : {}, customerId : {}, workCaseId : {}", citizenId, customerId, workCaseId);
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(citizenId, workCaseId);
         if(customer != null && customer.getId() != 0) {
             if(customer.getId() != customerId)

@@ -176,7 +176,9 @@ public class CustomerInfoSummary extends BaseController {
         CustomerInfoView cusView = new CustomerInfoView();
         cusView.reset();
         map.put("customerInfoView", cusView);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("cusInfoParams", map);
     }
 
     private void passParamsToJuristic(long customerId) {
@@ -189,7 +191,9 @@ public class CustomerInfoSummary extends BaseController {
         CustomerInfoView cusView = new CustomerInfoView();
         cusView.reset();
         map.put("customerInfoView", cusView);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("cusInfoParams", map);
     }
 
     public String onLinkToAddIndividual(){

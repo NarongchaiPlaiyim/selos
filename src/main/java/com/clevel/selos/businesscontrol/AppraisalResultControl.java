@@ -16,6 +16,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ProposeCollateralInfoView;
+import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.AppraisalTransform;
 import com.clevel.selos.transform.ProposeLineTransform;
 import com.clevel.selos.util.Util;
@@ -33,6 +34,7 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     @SELOS
     private Logger log;
+
     @Inject
     private WorkCaseDAO workCaseDAO;
     @Inject
@@ -55,10 +57,14 @@ public class AppraisalResultControl extends BusinessControl {
     private ProposeCollateralSubOwnerDAO proposeCollateralSubOwnerDAO;
     @Inject
     private ProposeCollateralSubRelatedDAO proposeCollateralSubRelatedDAO;
+
     @Inject
     private AppraisalTransform appraisalTransform;
     @Inject
     private ProposeLineTransform proposeLineTransform;
+    @Inject
+    private AppraisalDetailTransform appraisalDetailTransform;
+
     @Inject
     private COMSInterface comsInterface;
 
@@ -70,6 +76,8 @@ public class AppraisalResultControl extends BusinessControl {
     private WorkCasePrescreen workCasePrescreen;
 
     private List<ProposeCollateralInfo> newCollateralList;
+
+    private List<ProposeCollateralInfoHead> newCollateralHeadList;
 
     private List<ProposeCollateralInfoView> newCollateralViewList;
 
@@ -130,7 +138,27 @@ public class AppraisalResultControl extends BusinessControl {
                     proposeType = ProposeType.A;
                 }
 
-                List<ProposeCollateralInfo> newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, proposeType);
+                //Update All Collateral : Set appraisal flag = 0
+                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, proposeType);
+                //set flag 0 for all collateral
+                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
+                for(ProposeCollateralInfo newCollateral : newCollateralList){
+                    newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
+                    for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    }
+                    newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
+                    proposeCollateralInfoDAO.persist(newCollateral);
+                }
+
+                newCollateralList.clear();
+                newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, proposeType, null));
+
+                proposeCollateralInfoDAO.persist(newCollateralList);
+
+
+                //Do not delete old collateral .. update and add new only
+                /*List<ProposeCollateralInfo> newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, proposeType);
 
                 if (Util.isSafetyList(newCollateralList)){
                     log.debug("## newCollateralList.size() ## [{}]",newCollateralList.size());
@@ -163,18 +191,24 @@ public class AppraisalResultControl extends BusinessControl {
                         proposeCollateralInfoDAO.delete(proposeCollateralInfo);
                         log.debug("-- ProposeCollateralInfo.id[{}] was deleted", proposeCollateralInfo.getId());
                     }
-                }
+                }*/
+
             }
         }
 
-        if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
+        /*if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
             if(Util.isSafetyList(appraisalView.getNewCollateralViewList())){
                 log.debug("-- ProposeCollateralInfoViewList().size()[{}]", appraisalView.getNewCollateralViewList().size());
                 insertToDB(appraisalView.getNewCollateralViewList(), currentUser);
             }
-        }
+        }*/
 
         log.debug("-- done.");
+    }
+
+    public void saveCollateral(List<ProposeCollateralInfoView> proposeCollateralInfoViewList){
+        log.debug("saveCollateral ::: proposeCollateralInfoViewList : {}", proposeCollateralInfoViewList);
+
     }
 
     public void onSaveAppraisalResult(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
@@ -232,7 +266,7 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
 
-    private void insertToDB(final List<ProposeCollateralInfoView> newCollateralViewList, final User user){
+    private void insertToDB(List<ProposeCollateralInfoView> newCollateralViewList, final User user){
         log.debug("-- insertIntoDB(ProposeCollateralInfoViewList.size()[{}])", newCollateralViewList.size());
         final List<ProposeCollateralInfo> proposeCollateralInfoList = new ArrayList<ProposeCollateralInfo>();
         log.debug("-- User.id[{}]", user.getId());

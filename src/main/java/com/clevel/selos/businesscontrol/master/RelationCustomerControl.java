@@ -5,11 +5,9 @@ import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.relation.RelationCustomer;
-import com.clevel.selos.model.view.master.ReferenceView;
 import com.clevel.selos.model.view.master.RelationCustomerView;
 import com.clevel.selos.model.view.master.RelationView;
 import com.clevel.selos.transform.master.RelationCustomerTransform;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.faces.model.SelectItem;
@@ -47,7 +45,6 @@ public class RelationCustomerControl extends BusinessControl{
                     relationCustomerView.getBorrowerTypeCusEntityId() == borrowerTypeId &&
                     relationCustomerView.getSpouse() == spouse){
                 RelationView relationView = relationControl.getRelationViewById(relationCustomerView.getRelationId());
-                logger.debug("add RelationView: {}",relationView);
                 relationViewList.add(relationView);
             }
         }
