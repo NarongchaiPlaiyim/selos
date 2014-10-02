@@ -1417,16 +1417,9 @@ public class HeaderController extends BaseController {
     public void onSubmitRequestAppraisal(){
         log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
         log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
-        HttpSession session = FacesUtil.getSession(false);
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
-        long workCaseId = 0;
-        long workCasePreScreenId = 0;
-
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-
-        log.debug("onSubmitRequestAppraisal ::: workCaseId : {}, workCasePreScreenId : {}", session.getAttribute("workCaseId"), session.getAttribute("workCasePreScreenId"));
+        _loadSessionVariable();
 
         if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
             if(checkAppraisalContact()){
@@ -1437,7 +1430,7 @@ public class HeaderController extends BaseController {
                         appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
 
                         //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
-                        fullApplicationControl.requestAppraisal(appraisalView, workCasePreScreenId, workCaseId);
+                        fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, statusId);
                         log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
 
                         complete = true;
@@ -2806,11 +2799,7 @@ public class HeaderController extends BaseController {
 
     //---- Function for Request Appraisal ( Parallel ) ----//
     public void onRequestParallelAppraisal(){
-        HttpSession session = FacesUtil.getSession(false);
-
-        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-
+        _loadSessionVariable();
         try {
             log.debug("onRequestParallelAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
             fullApplicationControl.requestParallelAppraisal(workCaseId, workCasePreScreenId);
@@ -2823,6 +2812,38 @@ public class HeaderController extends BaseController {
             message = "Exception while request parallel appraisal, " + Util.getMessageException(ex);
             showMessageBox();
         }
+    }
+
+    public void onOpenSubmitParallelRequestAppraisal(){
+        _loadSessionVariable();
+        slaReasonId = 0;
+        submitRemark = "";
+        slaRemark = "";
+        RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
+    }
+
+    public void onSubmitParallelRequestAppraisal(){
+        try{
+            fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, stepId);
+            messageHeader = "Information.";
+            message = "Request for Appraisal complete.";
+            showMessageRedirect();
+        }catch(Exception ex){
+            log.error("Exception while submit parallel request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+
+    }
+
+    public void onCancelParallelRequestAppraisal(){
+        _loadSessionVariable();
+        log.debug("onCancelParallelRequestAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+        fullApplicationControl.cancelParallelRequestAppraisal(workCasePreScreenId, workCaseId);
+        messageHeader = "Information.";
+        message = "Cancel request appraisal complete.";
+        showMessageRedirect();
     }
 
 
