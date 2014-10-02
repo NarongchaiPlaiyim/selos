@@ -10,6 +10,7 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DayOff;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -217,12 +218,15 @@ public class AppraisalAppointment extends BaseController implements Serializable
         WorkCasePrescreen workCasePrescreen;
         String bdmUserId = "";
         if(checkSession(session)){
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
             if(!Util.isZero(workCaseId)){
                 workCase = workCaseDAO.findById(workCaseId);
                 bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
+                loadFieldControl(workCaseId, Screen.AppraisalAppointment, ownerCaseUserId);
             }else if(!Util.isZero(workCasePreScreenId)){
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
                 bdmUserId = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.AppraisalAppointment, ownerCaseUserId);
             }
 
             reasons = reasonToStepDAO.getAppraisalReason();

@@ -4,13 +4,14 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="MadateDetail" rendered="#{headerController.mandateFieldMessageViewList != null}" styleClass="panel" style="display: table">
+<p:panel id="MadateDetail" rendered="#{headerController.mandateFieldMessageViewList != null}" styleClass="panel-dialog" style="display: table; width: 850px; height: 450px;">
     <table class="content_table_form">
         <tr>
             <td>
-                <p:dataTable id="mandateField" var="msgItem" value="#{headerController.mandateFieldMessageViewList}"
-                             paginator="false" rowKey="#{msgItem.MandateFieldMessageView}" scrollable="true" scrollHeight="420px"
-                             rowIndexVar="msgRowIndex">
+                <p:dataTable id="mandateField" var="msgItem" value="#{mandateFieldSum.mandateFieldMessageViewList}"
+                             style="overflow: auto; max-height: 450px"
+                             rowKey="#{msgItem.MandateFieldMessageView}"
+                             rowIndexVar="msgRowIndex" >
 
                     <p:column headerText="No." styleClass="center" style="width:22px;">
                         <h:outputText value="#{msgRowIndex+1}"/>
@@ -18,22 +19,21 @@
 
                     <p:column headerText="#{msg.get('app.mandate.message.header.page')}"
                               styleClass="center"
-                              style="width: 150px;text-align: left">
-                        <h:outputText
-                                value="#{msgItem.pageName}"/>
+                              style="width: 190px; text-align: left;">
+                        <h:outputText style="word-wrap: break-word;" value="#{msgItem.pageName}"/>
                     </p:column>
 
                     <p:column
                             headerText="#{msg.get('app.mandate.message.header.field')}"
                             styleClass="center"
-                            style="width: 150px;">
-                        <h:outputText value="#{msgItem.fieldDesc}"/>
+                            style="width: 250px;">
+                        <h:outputText style="word-wrap: break-word;" value="#{msgItem.fieldDesc}"/>
                     </p:column>
 
                     <p:column
                             headerText="#{msg.get('app.mandate.message.header.desc')}"
-                            styleClass="center" style="width: 300px;">
-                        <h:outputText value="#{msgItem.message}"/>
+                            styleClass="center" style="width: 320px;">
+                        <h:outputText style="word-wrap: break-word;" value="#{msgItem.message}"/>
                     </p:column>
                 </p:dataTable>
             </td>
