@@ -1,8 +1,8 @@
 package com.clevel.selos.model;
 
 public enum MandateConDetailType {
-    AND("app.mandateCond.condition.type.AND"),
-    OR("app.mandateCond.condition.type.OR");
+    AND("app.mandateCond.condition.detail.type.AND"),
+    OR("app.mandateCond.condition.detail.type.OR");
 
     private String desc;
 
