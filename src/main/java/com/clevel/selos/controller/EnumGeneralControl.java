@@ -41,8 +41,8 @@ public class EnumGeneralControl implements Serializable{
 	public MortgageConfirmedType[] getMortgageConfirmedTypes() {
 		return MortgageConfirmedType.displayList();
 	}
-    public MandateConditionType[] getMandateConditionType(){
-        return MandateConditionType.values();
+    public MandateConDetailType[] getMandateConDetailType(){
+        return MandateConDetailType.values();
     }
     public MandateDependType[] getMandateDependType(){
         return MandateDependType.values();

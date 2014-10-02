@@ -1,9 +1,7 @@
 package com.clevel.selos.controller.admin;
 
-import com.clevel.selos.businesscontrol.ActionValidationControl;
 import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.integration.ADMIN;
-import com.clevel.selos.model.view.MandateFieldMessageView;
 import com.clevel.selos.model.view.master.MandateFieldClassView;
 import com.clevel.selos.model.view.master.MandateFieldView;
 import com.clevel.selos.util.FacesUtil;

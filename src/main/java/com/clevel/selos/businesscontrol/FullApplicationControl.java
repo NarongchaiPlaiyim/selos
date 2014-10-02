@@ -132,8 +132,7 @@ public class FullApplicationControl extends BusinessControl {
 
     @Inject
     private AppraisalRequestControl appraisalRequestControl;
-    @Inject
-    private ActionValidationControl actionValidationControl;
+
     @Inject
     private ReturnControl returnControl;
     @Inject
