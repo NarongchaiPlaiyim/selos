@@ -220,12 +220,22 @@
 																	</table>
 																</td>
 																<td class="right">
-																	<!--  tenor  --> <h:outputText value="#{item.tenor}">
-																		<f:convertNumber pattern="0" />
-																	</h:outputText>
+																	<!--  tenor  -->
+                                                                    <table class="table_noborder">
+                                                                        <ui:repeat varStatus="rowStatus"
+                                                                                   value="#{item.proposeCreditInfoTierDetailViewList}"
+                                                                                   var="creditItem">
+                                                                            <tr style="border-bottom: 1;">
+                                                                                <h:outputText value="#{creditItem.tenor}">
+                                                                                    <f:convertNumber pattern="0" />
+                                                                                </h:outputText>
+                                                                            </tr>
+                                                                        </ui:repeat>
+                                                                    </table>
 																</td>
 																<td class="right">
-																	<!--  tenor  --> <h:outputText
+																	<!--  frontEndFee  -->
+                                                                    <h:outputText
 																		value="#{item.frontEndFee}">
 																		<f:convertNumber pattern="#,##0.00" />
 																	</h:outputText>
@@ -258,7 +268,7 @@
 																				#{msg.get('app.approveDetail.approvedCredit.table.detail.purposeDetail')}
 																			</td>
 																			<td colspan="3"><h:outputText
-																					value="#{item.remark}" /></td>
+																					value="#{item.proposeDetail}" /></td>
 																		</tr>
 																		<tr>
 																			<td class="title">

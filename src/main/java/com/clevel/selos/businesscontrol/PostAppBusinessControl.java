@@ -244,9 +244,11 @@ public class PostAppBusinessControl extends BusinessControl {
     	} else if ("3049".equals(stepCode)) { //setup limit
     		_Before_3049_SetupLimit(workCase, actionId, fields);
     	}
-        
-        bpmExecutor.execute(queueName, wobNumber, fields);
-        log.debug("Done BPM "+workCase.getId());
+
+        if(action.getSubmitBPM()==1) {
+            bpmExecutor.execute(queueName, wobNumber, fields);
+            log.debug("Done BPM "+workCase.getId());
+        }
         
         //After success
         if ("3002".equals(stepCode)) {
