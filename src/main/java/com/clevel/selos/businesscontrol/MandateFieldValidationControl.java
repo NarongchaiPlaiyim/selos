@@ -649,7 +649,7 @@ public class MandateFieldValidationControl extends BusinessControl{
             logger.debug("-- end checkMasterValue, return: {}", result);
             return result;
         }catch (Exception ex){
-            logger.error("Error when parse master: {}", ex);
+            logger.debug("Warn Parsing when parse master: {}", ex);
             return false;
         }
 

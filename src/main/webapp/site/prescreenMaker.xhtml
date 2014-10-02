@@ -49,6 +49,7 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                        var="productGroupList"
+                                                       itemDescription="#{productGroupList.name}"
                                                        itemLabel="#{productGroupList.name}"
                                                        itemValue="#{productGroupList.id}"/>
                                         <p:ajax event="change" listener="#{prescreenMaker.checkOnChangeProductGroup()}" />
