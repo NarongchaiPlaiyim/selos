@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.Flash;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -263,7 +262,7 @@ public class CustomerInfoIndividual implements Serializable {
     private boolean isFromJuristicParam;
     private boolean isFromSummaryParam;
     private boolean isEditFromJuristic;
-    private int rowIndex;
+    private int listIndex;
 
     private boolean isEditBorrower;
     private boolean isEditSpouseBorrower;
@@ -329,8 +328,7 @@ public class CustomerInfoIndividual implements Serializable {
 
             onAddNewIndividual();
 
-            Flash flash = FacesUtil.getFlash();
-            Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+            Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
             if (cusInfoParams != null) {
                 isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
                 isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
@@ -338,7 +336,7 @@ public class CustomerInfoIndividual implements Serializable {
                 customerId = (Long) cusInfoParams.get("customerId");
                 cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
                 if(isEditFromJuristic){
-                    rowIndex = (Integer) cusInfoParams.get("rowIndex");
+                    listIndex = (Integer) cusInfoParams.get("listIndex");
                     individualView = (CustomerInfoView) cusInfoParams.get("individualView");
                 }
             }
@@ -1658,7 +1656,7 @@ public class CustomerInfoIndividual implements Serializable {
                     enableSpouseDocumentType = false;
                     enableSpouseCitizenId = false;
 
-                    if(customerInfoView.getSpouse() != null){
+                    if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
                         customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
                         customerInfoView.getSpouse().setSearchFromRM(1);
                         customerInfoView.getSpouse().setSearchBy(customerInfoSearchSpouse.getSearchBy());
@@ -1783,7 +1781,7 @@ public class CustomerInfoIndividual implements Serializable {
     public void onSave(){
         log.debug("onSave");
         if(maritalStatusFlag){
-            if(customerInfoView.getSpouse() != null){
+            if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
                 if(customerInfoView.getSpouse().getCitizenId().trim().equalsIgnoreCase("")){
                     return;
                 }
@@ -1793,7 +1791,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         //check citizen id
-        if(customerInfoView.getSpouse() != null){
+        if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
             if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
@@ -1892,17 +1890,18 @@ public class CustomerInfoIndividual implements Serializable {
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
-        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
-            customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
-        }
 
-        if(customerInfoView.getSpouse() != null){
+        if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
             Relation spouseRel = new Relation();
             spouseRel.setId(relationSpouseCusId);
             Reference spouseRef = new Reference();
             spouseRef.setId(referenceSpouseCusId);
             customerInfoView.getSpouse().setRelation(spouseRel);
             customerInfoView.getSpouse().setReference(spouseRef);
+
+            if(customerInfoView.getSpouse().getDateOfBirth() != null){
+                customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+            }
         }
 
         try{
@@ -1928,160 +1927,229 @@ public class CustomerInfoIndividual implements Serializable {
 
     public String onSaveFromJuristic(){
         log.debug("onSaveFromJuristic");
-        //check citizen id
-        if(customerInfoView.getSpouse() != null){
-            if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+        try {
+            //check citizen id
+            if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
+                if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                    messageHeader = "Information.";
+                    message = "Citizen Id is already exist";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return "";
+                }
+
+                if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getSpouse().getCitizenId(), customerInfoView.getSpouse().getId(),workCaseId)){
+                    messageHeader = "Information.";
+                    message = "Citizen Id is already exist";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return "";
+                }
+            }
+
+            if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getCitizenId(), customerInfoView.getId(),workCaseId)){
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return "";
             }
+                //for check citizen id form list
+            if(cusInfoJuristic.getIndividualViewList() != null && cusInfoJuristic.getIndividualViewList().size() > 0){
+                for(CustomerInfoView cusIndList : cusInfoJuristic.getIndividualViewList()){
+                    if(isEditFromJuristic) { // Edit
+                        if(cusIndList.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId()) && listIndex != cusIndList.getListIndex()){
+                            messageHeader = "Information.";
+                            message = "Citizen Id is already exist";
+                            severity = "info";
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                            return "";
+                        }
 
-            if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getSpouse().getCitizenId(), customerInfoView.getSpouse().getId(),workCaseId)){
-                messageHeader = "Information.";
-                message = "Citizen Id is already exist";
-                severity = "info";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                return "";
+                        if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1) {
+                            if(cusIndList.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId()) && listIndex != cusIndList.getListIndex()){
+                                messageHeader = "Information.";
+                                message = "Citizen Id is already exist";
+                                severity = "info";
+                                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                                return "";
+                            }
+                        }
+                    } else {
+                        if(cusIndList.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                            messageHeader = "Information.";
+                            message = "Citizen Id is already exist";
+                            severity = "info";
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                            return "";
+                        }
+
+                        if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1) {
+                            if(cusIndList.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                                messageHeader = "Information.";
+                                message = "Citizen Id is already exist";
+                                severity = "info";
+                                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                                return "";
+                            }
+                        }
+                    }
+                }
             }
-        }
 
-        if(customerInfoControl.isDuplicateCustomerIndv(customerInfoView.getCitizenId(), customerInfoView.getId(),workCaseId)){
-            messageHeader = "Information.";
-            message = "Citizen Id is already exist";
-            severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return "";
-        }
-            //for check citizen id form list
-        if(cusInfoJuristic.getIndividualViewList() != null && cusInfoJuristic.getIndividualViewList().size() > 0){
-            int indexList = 0;
-            for(CustomerInfoView cus : cusInfoJuristic.getIndividualViewList()){
-                if(isEditFromJuristic) {
-                    if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId()) && rowIndex != indexList){
+    //        update relation & reference
+            Relation mainRel = new Relation();
+            mainRel.setId(relationMainCusId);
+            Reference mainRef = new Reference();
+            mainRef.setId(referenceMainCusId);
+            customerInfoView.setRelation(mainRel);
+            customerInfoView.setReference(mainRef);
+
+            if(customerInfoView.getId() != 0){
+                boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
+                if(isExist){
+                    if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                            || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                         messageHeader = "Information.";
-                        message = "Citizen Id is already exist";
+                        message = msg.get("app.message.customer.existing.error");
                         severity = "info";
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         return "";
                     }
                 } else {
-                    if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
-                        messageHeader = "Information.";
-                        message = "Citizen Id is already exist";
-                        severity = "info";
-                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                        return "";
-                    }
-                }
-                indexList++;
-            }
-        }
-
-//        update relation & reference
-        Relation mainRel = new Relation();
-        mainRel.setId(relationMainCusId);
-        Reference mainRef = new Reference();
-        mainRef.setId(referenceMainCusId);
-        customerInfoView.setRelation(mainRel);
-        customerInfoView.setReference(mainRef);
-
-        if(customerInfoView.getId() != 0){
-            boolean isExist = customerInfoControl.checkExistingAll(customerInfoView.getId());
-            if(isExist){
-                if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
-                        || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
-                    messageHeader = "Information.";
-                    message = msg.get("app.message.customer.existing.error");
-                    severity = "info";
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    return "";
-                }
-            } else {
-                if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
-                    boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
-                    if(isExistSpouse){
-                        if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
-                                || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
-                            messageHeader = "Information.";
-                            message = msg.get("app.message.customer.existing.error");
-                            severity = "info";
-                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                            return "";
+                    if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
+                        boolean isExistSpouse = customerInfoControl.checkExistingAll(customerInfoView.getSpouse().getId());
+                        if(isExistSpouse){
+                            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                                    || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
+                                messageHeader = "Information.";
+                                message = msg.get("app.message.customer.existing.error");
+                                severity = "info";
+                                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                                return "";
+                            }
                         }
                     }
                 }
             }
-        }
 
-        //update address
-        if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
-            AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
-            addressView.setAddressTypeFlag(1);
-            customerInfoView.setRegisterAddress(addressView);
-        }
-
-        if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
-            AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
-            addressView.setAddressTypeFlag(1);
-            customerInfoView.setWorkAddress(addressView);
-        }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
-            AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
-            addressView.setAddressTypeFlag(2);
-            customerInfoView.setWorkAddress(addressView);
-        }
-
-        if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
-            customerInfoView.getSpouse().setIsSpouse(1);
-            if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
-                AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
+            //update address
+            if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
+                AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
                 addressView.setAddressTypeFlag(1);
-                customerInfoView.getSpouse().setRegisterAddress(addressView);
+                customerInfoView.setRegisterAddress(addressView);
             }
 
-            if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
-                AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+            if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
+                AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
                 addressView.setAddressTypeFlag(1);
-                customerInfoView.getSpouse().setWorkAddress(addressView);
-            }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
-                AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                customerInfoView.setWorkAddress(addressView);
+            }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
+                AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
                 addressView.setAddressTypeFlag(2);
-                customerInfoView.getSpouse().setWorkAddress(addressView);
+                customerInfoView.setWorkAddress(addressView);
             }
-        }
 
-        //calculate age
-        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
-        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
-            customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
-        }
+            if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
+                customerInfoView.getSpouse().setIsSpouse(1);
+                if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
+                    AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
+                    addressView.setAddressTypeFlag(1);
+                    customerInfoView.getSpouse().setRegisterAddress(addressView);
+                }
 
-        if(customerInfoView.getSpouse() != null){
-            Relation spouseRel = new Relation();
-            spouseRel.setId(relationSpouseCusId);
-            Reference spouseRef = new Reference();
-            spouseRef.setId(referenceSpouseCusId);
-            customerInfoView.getSpouse().setRelation(spouseRel);
-            customerInfoView.getSpouse().setReference(spouseRef);
-        }
+                if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
+                    AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                    addressView.setAddressTypeFlag(1);
+                    customerInfoView.getSpouse().setWorkAddress(addressView);
+                }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
+                    AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                    addressView.setAddressTypeFlag(2);
+                    customerInfoView.getSpouse().setWorkAddress(addressView);
+                }
+            }
 
-        //customerInfoView = individual
-        customerInfoView.getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getTitleTh().getId()).getTitleTh());
-        customerInfoView.getRelation().setDescription(relationControl.getRelationViewById(relationMainCusId).getDescription());
-        customerInfoView.getKycLevel().setKycLevel(kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId()).getKycLevel());
+            //calculate age
+            customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
 
-        if(isEditFromJuristic){
-            cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
-        } else {
-            cusInfoJuristic.getIndividualViewList().add(customerInfoView);
+            if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
+                Relation spouseRel = new Relation();
+                spouseRel.setId(relationSpouseCusId);
+                Reference spouseRef = new Reference();
+                spouseRef.setId(referenceSpouseCusId);
+                customerInfoView.getSpouse().setRelation(spouseRel);
+                customerInfoView.getSpouse().setReference(spouseRef);
+
+                if(customerInfoView.getSpouse().getDateOfBirth() != null){
+                    customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+                }
+
+                customerInfoView.getSpouse().getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getSpouse().getTitleTh().getId()).getTitleTh());
+                customerInfoView.getSpouse().getRelation().setDescription(relationControl.getRelationViewById(relationSpouseCusId).getDescription());
+                customerInfoView.getSpouse().getKycLevel().setKycLevel(kycLevelControl.getKYCLevelViewById(customerInfoView.getSpouse().getKycLevel().getId()).getKycLevel());
+                customerInfoView.getSpouse().setIndLv(referenceControl.getReferenceViewById(referenceSpouseCusId).getDescription()+" of "+customerInfoView.getFirstNameTh()+" "+customerInfoView.getLastNameTh());
+            }
+
+            //customerInfoView = individual
+            customerInfoView.getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getTitleTh().getId()).getTitleTh());
+            customerInfoView.getRelation().setDescription(relationControl.getRelationViewById(relationMainCusId).getDescription());
+            customerInfoView.getKycLevel().setKycLevel(kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId()).getKycLevel());
+
+            log.debug("############################### isEditFromJuristic :: {}",isEditFromJuristic);
+            log.debug("############################### reference spouse id :: {}",referenceSpouseCusId);
+            if(isEditFromJuristic){
+                log.debug("listIndex :: {}",listIndex);
+                customerInfoView.setListIndex(listIndex);
+                cusInfoJuristic.getIndividualViewList().set(listIndex,customerInfoView);
+
+                log.debug("cusInfoJuristic.getIndividualViewForShowList() size :: {}", cusInfoJuristic.getIndividualViewForShowList().size());
+                List<CustomerInfoView> cusTmp = new ArrayList<CustomerInfoView>();
+                for(CustomerInfoView cusView : cusInfoJuristic.getIndividualViewForShowList()) {
+                    if(listIndex != cusView.getListIndex()) {
+                        cusTmp.add(cusView);
+                    }
+                }
+                cusInfoJuristic.setIndividualViewForShowList(cusTmp);
+
+                cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView);
+                if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
+                    log.debug("spouse != null");
+                    if(customerInfoControl.checkSpouseForShowOnJuristicScreen(referenceSpouseCusId)) {
+                        customerInfoView.getSpouse().setListIndex(listIndex);
+                        cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView.getSpouse());
+                    }
+                }
+            } else {
+                log.debug("List Index for Original List :: {}",cusInfoJuristic.getIndividualViewList().size());
+                customerInfoView.setListIndex(cusInfoJuristic.getIndividualViewList().size());
+                cusInfoJuristic.getIndividualViewList().add(customerInfoView);
+
+                log.debug("List Index for Show List :: {}",cusInfoJuristic.getIndividualViewList().size() - 1);
+                customerInfoView.setListIndex(cusInfoJuristic.getIndividualViewList().size() - 1);
+                cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView);
+                if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
+                    log.debug("spouse != null");
+                    if(customerInfoControl.checkSpouseForShowOnJuristicScreen(referenceSpouseCusId)) {
+                        customerInfoView.getSpouse().setListIndex(cusInfoJuristic.getIndividualViewList().size() - 1);
+                        cusInfoJuristic.getIndividualViewForShowList().add(customerInfoView.getSpouse());
+                    }
+                }
+            }
+
+            log.debug("Cus Info Juristic Size 1 :: {}", cusInfoJuristic.getIndividualViewList().size());
+            log.debug("Cus Info Juristic Size 2 :: {}", cusInfoJuristic.getIndividualViewForShowList().size());
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("isFromIndividualParam",true);
+            map.put("isFromSummaryParam",false);
+            map.put("customerId", 0L);
+            map.put("customerInfoView", cusInfoJuristic);
+
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("cusInfoParams", map);
+        } catch (Exception ex) {
+            log.error("onSaveFromJuristic Exception : {}", ex);
         }
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("isFromIndividualParam",true);
-        map.put("isFromSummaryParam",false);
-        map.put("customerId", 0L);
-        map.put("customerInfoView", cusInfoJuristic);
-        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";
     }
 
@@ -2093,7 +2161,10 @@ public class CustomerInfoIndividual implements Serializable {
             map.put("isFromSummaryParam",false);
             map.put("customerId", 0L);
             map.put("customerInfoView", cusInfoJuristic);
-            FacesUtil.getFlash().put("cusInfoParams", map);
+
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("cusInfoParams", map);
+
             return "customerInfoJuristic?faces-redirect=true";
         } else {
             RequestContext.getCurrentInstance().execute("msgBoxCancelJurDlg.show()");

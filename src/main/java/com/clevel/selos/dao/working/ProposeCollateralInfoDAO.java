@@ -84,6 +84,7 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         criteria.add(Restrictions.eq("proposeLine.id", proposeLineId));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
+
         return proposeCollateralInfoList;
     }
 

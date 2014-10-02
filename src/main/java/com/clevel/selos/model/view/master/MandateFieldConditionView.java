@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view.master;
 
+import com.clevel.selos.model.MandateConDetailType;
 import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
@@ -12,13 +13,14 @@ import java.util.List;
 public class MandateFieldConditionView implements Serializable {
 
     private long id;
-    private MandateConditionType mandateConditionType;
     private String name;
+    private MandateConditionType mandateConditionType;
     private String conditionDesc;
     private MandateFieldClassView mandateFieldClassView;
     private MandateDependType dependType;
     private MandateFieldConditionView dependCondition;
     private MandateDependConType dependConType;
+    private MandateConDetailType mandateConDetailType;
     private List<MandateFieldConditionDetailView> conditionDetailViewList;
     private boolean needUpdate;
 
@@ -30,6 +32,14 @@ public class MandateFieldConditionView implements Serializable {
         this.id = id;
     }
 
+    public MandateConditionType getMandateConditionType() {
+        return mandateConditionType;
+    }
+
+    public void setMandateConditionType(MandateConditionType mandateConditionType) {
+        this.mandateConditionType = mandateConditionType;
+    }
+
     public String getName() {
         return name;
     }
@@ -38,12 +48,12 @@ public class MandateFieldConditionView implements Serializable {
         this.name = name;
     }
 
-    public MandateConditionType getMandateConditionType() {
-        return mandateConditionType;
+    public MandateConDetailType getMandateConDetailType() {
+        return mandateConDetailType;
     }
 
-    public void setMandateConditionType(MandateConditionType mandateConditionType) {
-        this.mandateConditionType = mandateConditionType;
+    public void setMandateConDetailType(MandateConDetailType mandateConDetailType) {
+        this.mandateConDetailType = mandateConDetailType;
     }
 
     public String getConditionDesc() {
@@ -111,6 +121,7 @@ public class MandateFieldConditionView implements Serializable {
         dependType = view.dependType;
         dependCondition = view.dependCondition;
         dependConType = view.dependConType;
+        mandateConDetailType = view.mandateConDetailType;
         conditionDetailViewList = view.conditionDetailViewList;
     }
 
@@ -118,7 +129,7 @@ public class MandateFieldConditionView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("mandateConditionType", mandateConditionType)
+                .append("mandateConditionType", mandateConDetailType)
                 .append("name", name)
                 .append("conditionDesc", conditionDesc)
                 .append("mandateFieldClassView", mandateFieldClassView)

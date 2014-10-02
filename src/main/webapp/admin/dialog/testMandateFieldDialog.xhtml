@@ -9,8 +9,8 @@
             <tr>
                 <td>
                     <p:dataTable id="mandateField" var="msgItem" value="#{mandateFieldSum.mandateFieldMessageViewList}"
-                                 paginator="false" rowKey="#{msgItem.MandateFieldMessageView}"
-                                 rowIndexVar="msgRowIndex">
+                                 paginator="false" rowKey="#{msgItem.MandateFieldMessageView}" scrollable="true" scrollHeight="420"
+                                 rowIndexVar="msgRowIndex" >
 
                         <p:column headerText="No." styleClass="center" style="width:22px;">
                             <h:outputText value="#{msgRowIndex+1}"/>

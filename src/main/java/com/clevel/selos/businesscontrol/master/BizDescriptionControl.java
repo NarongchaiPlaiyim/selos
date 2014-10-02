@@ -43,7 +43,6 @@ public class BizDescriptionControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(bizDescriptionView.getTmbCode() + " - " + bizDescriptionView.getDescription());
                 selectItem.setValue(bizDescriptionView.getId());
-                logger.debug("added SelectItem: {}", selectItem);
                 bizSelectItemList.add(selectItem);
             }
         }

@@ -2,7 +2,7 @@ package com.clevel.selos.controller.admin;
 
 import com.clevel.selos.businesscontrol.master.MandateFieldControl;
 import com.clevel.selos.integration.ADMIN;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MandateConDetailType;
 import com.clevel.selos.model.MandateConditionType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
@@ -11,7 +11,6 @@ import com.clevel.selos.model.view.master.MandateFieldConditionDetailView;
 import com.clevel.selos.model.view.master.MandateFieldConditionView;
 import com.clevel.selos.model.view.master.MandateFieldView;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -100,10 +99,11 @@ public class MandateFieldCondition implements Serializable {
         resetCon();
         resetConDetail();
         wrkMandateConditionView = new MandateFieldConditionView();
-        wrkMandateConditionView.setMandateConditionType(MandateConditionType.BASE);
+        wrkMandateConditionView.setMandateConDetailType(MandateConDetailType.AND);
+        wrkMandateConditionView.setMandateConditionType(MandateConditionType.CHECK_RESULT);
         wrkMandateConditionView.setDependType(MandateDependType.NO_DEPENDENCY);
         wrkMandateConditionView.setConditionDetailViewList(new ArrayList<MandateFieldConditionDetailView>());
-
+        selectedMandateDependCondViewId = -1;
         logger.info("-- end onOpenAddMandateCondition");
     }
 
@@ -113,7 +113,8 @@ public class MandateFieldCondition implements Serializable {
     public void onOpenUpdateMandateCondition(){
         logger.info("-- begin onOpenUpdateMandateCondition");
         MandateFieldConditionView toUpd = null;
-
+        selectedMandateConDetailViewId = -1;
+        selectedMandateDependCondViewId = -1;
         if(selectedMandateConViewId >= 0 && selectedMandateConViewId < mandateFieldConViewList.size()){
             toUpd = mandateFieldConViewList.get(selectedMandateConViewId);
         }
@@ -370,7 +371,7 @@ public class MandateFieldCondition implements Serializable {
             return false;
         if(wrkMandateConditionView.getConditionDetailViewList() == null || wrkMandateConditionView.getConditionDetailViewList().size() == 0)
             return false;
-        if(wrkMandateConditionView.getMandateConditionType() == null)
+        if(wrkMandateConditionView.getMandateConDetailType() == null)
             return false;
         return true;
     }
