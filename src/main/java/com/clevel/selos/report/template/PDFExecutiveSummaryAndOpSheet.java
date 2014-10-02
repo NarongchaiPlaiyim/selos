@@ -1381,20 +1381,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                    int count = 1;
-                    List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViews = new ArrayList<ProposeCreditInfoDetailView>();
-                    for (ProposeCreditInfoDetailView detailView : view.getProposeCreditInfoDetailViewList()){
-                        ProposeCreditInfoDetailView infoDetailView = new ProposeCreditInfoDetailView();
-                        infoDetailView.setSeq(count++);
-                        infoDetailView.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                        infoDetailView.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                        infoDetailView.setRequestType(detailView.getRequestType());
-                        infoDetailView.setProductProgramView(detailView.getProductProgramView());
-                        infoDetailView.setCreditTypeView(detailView.getCreditTypeView());
-                        infoDetailView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
-                        proposeCreditInfoDetailViews.add(infoDetailView);
-                    }
-                    collateralDecisionReport.setDetailViewList(proposeCreditInfoDetailViews);
+                    collateralDecisionReport.setDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
                     log.debug("getProposeCreditDetailViewList is Null. {}");
                 }
@@ -1504,20 +1491,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                    int count = 1;
-                    List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViews = new ArrayList<ProposeCreditInfoDetailView>();
-                    for (ProposeCreditInfoDetailView detailView : view.getProposeCreditInfoDetailViewList()){
-                        ProposeCreditInfoDetailView infoDetailView = new ProposeCreditInfoDetailView();
-                        infoDetailView.setSeq(count++);
-                        infoDetailView.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                        infoDetailView.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                        infoDetailView.setRequestType(detailView.getRequestType());
-                        infoDetailView.setProductProgramView(detailView.getProductProgramView());
-                        infoDetailView.setCreditTypeView(detailView.getCreditTypeView());
-                        infoDetailView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
-                        proposeCreditInfoDetailViews.add(infoDetailView);
-                    }
-                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(proposeCreditInfoDetailViews);
+                    approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
                     approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                 }
@@ -1621,20 +1595,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         if (Util.isSafetyList(view.getProposeCreditInfoDetailViewList())) {
                             log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
-                            int count = 1;
-                            List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViews = new ArrayList<ProposeCreditInfoDetailView>();
-                            for (ProposeCreditInfoDetailView detailView : view.getProposeCreditInfoDetailViewList()){
-                                ProposeCreditInfoDetailView infoDetailView = new ProposeCreditInfoDetailView();
-                                infoDetailView.setSeq(count++);
-                                infoDetailView.setAccountName(Util.checkNullString(detailView.getAccountName()));
-                                infoDetailView.setAccountNumber(Util.checkNullString(detailView.getAccountNumber()));
-                                infoDetailView.setRequestType(detailView.getRequestType());
-                                infoDetailView.setProductProgramView(detailView.getProductProgramView());
-                                infoDetailView.setCreditTypeView(detailView.getCreditTypeView());
-                                infoDetailView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
-                                proposeCreditInfoDetailViews.add(infoDetailView);
-                            }
-                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(proposeCreditInfoDetailViews);
+                            approvedCollateralDecisionReport.setProposeCreditDetailViewList(view.getProposeCreditInfoDetailViewList());
                         } else {
                             approvedCollateralDecisionReport.setProposeCreditDetailViewList(new ArrayList<ProposeCreditInfoDetailView>());
                         }
