@@ -50,7 +50,7 @@ public class ReportService implements Serializable {
                 externalContext.responseReset();
                 externalContext.addResponseHeader("Cache-Control","max-age=0");
             }
-            externalContext.addResponseHeader("Content-disposition", "attachment; filename="+pdfName);
+            externalContext.addResponseHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
 
             OutputStream outputStream =  externalContext.getResponseOutputStream();
             JasperExportManager.exportReportToPdfStream(print, outputStream);
