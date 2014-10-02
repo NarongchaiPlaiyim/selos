@@ -567,27 +567,110 @@ public class BankStmtControl extends BusinessControl {
         }
     }
 
-    public void updateMainAccAndHighestInflow(List<BankStmtView> bankStmtViewList) {
+    public void calculateHighestInflow(BankStmtSummaryView bankStmtSummaryView){
+        if(!Util.isNull(bankStmtSummaryView)){
+            // find highest inflow for TMB bank
+            BigDecimal maxTMBAvgGrossInflowPerLimit = BigDecimal.ZERO;
+            BankStmtView highestTMBBankStmtView = null;
+            int highestTMBAtIndex = 0;
+            BigDecimal maxOthAvgGrossInflowPerLimit = BigDecimal.ZERO;
+            BankStmtView highestOthBankStmtView = null;
+            int highestOthAtIndex = 0;
+
+            if (!Util.isNull(bankStmtSummaryView.getTmbBankStmtViewList())) {
+                for (int i=0; i<bankStmtSummaryView.getTmbBankStmtViewList().size(); i++) {
+                    // find MAX AvgGrossInflowPerLimit
+                    BankStmtView bankStmtView = bankStmtSummaryView.getTmbBankStmtViewList().get(i);
+                    if (bankStmtView.getAvgGrossInflowPerLimit() != null
+                            && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgGrossInflowPerLimit(), maxTMBAvgGrossInflowPerLimit, ValidationUtil.CompareMode.GREATER_THAN)) {
+                        maxTMBAvgGrossInflowPerLimit = bankStmtView.getAvgGrossInflowPerLimit();
+                        highestTMBBankStmtView = bankStmtView;
+                        highestTMBAtIndex = i;
+                    }
+                }
+            }
+
+            if (!Util.isNull(bankStmtSummaryView.getOthBankStmtViewList())) {
+                for (int i=0; i<bankStmtSummaryView.getOthBankStmtViewList().size(); i++) {
+                    // find MAX AvgGrossInflowPerLimit
+                    BankStmtView bankStmtView = bankStmtSummaryView.getOthBankStmtViewList().get(i);
+                    if (bankStmtView.getAvgGrossInflowPerLimit() != null
+                            && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgGrossInflowPerLimit(), maxOthAvgGrossInflowPerLimit, ValidationUtil.CompareMode.GREATER_THAN)) {
+                        maxOthAvgGrossInflowPerLimit = bankStmtView.getAvgGrossInflowPerLimit();
+                        highestOthBankStmtView = bankStmtView;
+                        highestOthAtIndex = i;
+                    }
+                }
+            }
+
+            log.debug("maxTMBAvgGrossInflowPerLimit : {} maxOthAvgGrossInflowPerLimit : {}", maxTMBAvgGrossInflowPerLimit, maxOthAvgGrossInflowPerLimit);
+            if(maxTMBAvgGrossInflowPerLimit.compareTo(maxOthAvgGrossInflowPerLimit) > 0){
+                //TMB Account is highest flow
+                // update isHighestInflow
+                if (highestTMBBankStmtView != null) {
+                    for (int i=0; i<bankStmtSummaryView.getTmbBankStmtViewList().size(); i++) {
+                        BankStmtView bankStmtView = bankStmtSummaryView.getTmbBankStmtViewList().get(i);
+                        if (highestTMBAtIndex == i) {
+                            bankStmtView.setHighestInflow("Y");
+                        } else {
+                            bankStmtView.setHighestInflow("N");
+                        }
+                    }
+                    if(!Util.isNull(bankStmtSummaryView.getOthBankStmtViewList())){
+                        for (int i=0; i<bankStmtSummaryView.getOthBankStmtViewList().size(); i++) {
+                            BankStmtView bankStmtView = bankStmtSummaryView.getOthBankStmtViewList().get(i);
+                            bankStmtView.setHighestInflow("N");
+                        }
+                    }
+                }
+            }else if(maxTMBAvgGrossInflowPerLimit.compareTo(maxOthAvgGrossInflowPerLimit) < 0){
+                //Other Account is highest flow
+                // update isHighestInflow
+                if (highestOthBankStmtView != null) {
+                    for (int i=0; i<bankStmtSummaryView.getOthBankStmtViewList().size(); i++) {
+                        BankStmtView bankStmtView = bankStmtSummaryView.getOthBankStmtViewList().get(i);
+                        if (highestOthAtIndex == i) {
+                            bankStmtView.setHighestInflow("Y");
+                        } else {
+                            bankStmtView.setHighestInflow("N");
+                        }
+                    }
+                    if(!Util.isNull(bankStmtSummaryView.getTmbBankStmtViewList())){
+                        for (int i=0; i<bankStmtSummaryView.getTmbBankStmtViewList().size(); i++) {
+                            BankStmtView bankStmtView = bankStmtSummaryView.getTmbBankStmtViewList().get(i);
+                            bankStmtView.setHighestInflow("N");
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
+    }
+
+    public void calculateMainAccount(List<BankStmtView> bankStmtViewList) {
 
         if (!Util.isNull(bankStmtViewList)) {
             List<BankStmtView> candidateMaxIncomeNetList = new ArrayList<BankStmtView>();
             BigDecimal maxValue = BigDecimal.ZERO;
             long atId = 0;
 
-            BigDecimal maxAvgGrossInflowPerLimit = BigDecimal.ZERO;
+            /*BigDecimal maxAvgGrossInflowPerLimit = BigDecimal.ZERO;
             BankStmtView highestBankStmtView = null;
-            int highestAtIndex = 0;
+            int highestAtIndex = 0;*/
 
             for (int i=0; i<bankStmtViewList.size(); i++) {
                 BankStmtView bankStmtView = bankStmtViewList.get(i);
                 log.debug("--toString. {}",bankStmtView.toString());
                 // find MAX AvgGrossInflowPerLimit
-                if (bankStmtView.getAvgGrossInflowPerLimit() != null
+                /*if (bankStmtView.getAvgGrossInflowPerLimit() != null
                     && ValidationUtil.isFirstCompareToSecond(bankStmtView.getAvgGrossInflowPerLimit(), maxAvgGrossInflowPerLimit, ValidationUtil.CompareMode.GREATER_THAN)) {
                     maxAvgGrossInflowPerLimit = bankStmtView.getAvgGrossInflowPerLimit();
                     highestBankStmtView = bankStmtView;
                     highestAtIndex = i;
-                }
+                }*/
 
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView))
@@ -630,17 +713,7 @@ public class BankStmtControl extends BusinessControl {
 //                }
 //            }
 
-            // update isHighestInflow
-            if (highestBankStmtView != null) {
-                for (int i=0; i<bankStmtViewList.size(); i++) {
-                    BankStmtView bankStmtView = bankStmtViewList.get(i);
-                    if (highestAtIndex == i) {
-                        bankStmtView.setHighestInflow("Y");
-                    } else {
-                        bankStmtView.setHighestInflow("N");
-                    }
-                }
-            }
+
 
             if (candidateMaxIncomeNetList.size() == 1) {
                 setMainAccountAtId(bankStmtViewList, atId);
@@ -723,9 +796,10 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void updateMainAccAndHighestInflow(BankStmtSummaryView bankStmtSummaryView) {
-        log.debug("updateMainAccAndHighestInflow()");
-        updateMainAccAndHighestInflow(bankStmtSummaryView.getTmbBankStmtViewList());
-        updateMainAccAndHighestInflow(bankStmtSummaryView.getOthBankStmtViewList());
+        log.debug("calculateMainAccount()");
+        calculateMainAccount(bankStmtSummaryView.getTmbBankStmtViewList());
+        calculateMainAccount(bankStmtSummaryView.getOthBankStmtViewList());
+        calculateHighestInflow(bankStmtSummaryView);
     }
 
     public void bankStmtDetailCalculation(BankStmtView bankStmtView, int seasonalFlag) {
