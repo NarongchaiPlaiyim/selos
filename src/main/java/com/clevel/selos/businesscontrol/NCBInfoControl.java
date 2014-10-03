@@ -15,6 +15,7 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.UserSysParameterView;
@@ -55,6 +56,8 @@ public class NCBInfoControl extends BusinessControl {
     private BaseRateControl baseRateControl;
     @Inject
     UserSysParameterControl userSysParameterControl;
+    @Inject
+    private DBRControl dbrControl;
 
     @Inject
     NCBDetailTransform ncbDetailTransform;
@@ -460,6 +463,7 @@ public class NCBInfoControl extends BusinessControl {
     public List<NCBDetailView> getNCBForCalDBR(long workcaseId){
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
+        DBRView dbrView = dbrControl.getDBRByWorkCase(workcaseId);
 
         /*List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
 
@@ -485,12 +489,15 @@ public class NCBInfoControl extends BusinessControl {
                 ncbDetailView.setInstallment(ncbDetail.getInstallment());
                 BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
-                int dbrInt = 0;
-                if(!Util.isNull(userSysParameterView)){
-                    dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
+                BigDecimal dbrInterest = baseRateControl.getMRRValue();
+                if(!Util.isNull(dbrView) && dbrView.getDbrMarketableFlag() != 2) {
+                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+                    int dbrInt = 0;
+                    if(!Util.isNull(userSysParameterView)){
+                        dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
+                    }
+                    dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
                 }
-                BigDecimal dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
 
                 switch (accountType.getCalculateType()){
                     case 1:
