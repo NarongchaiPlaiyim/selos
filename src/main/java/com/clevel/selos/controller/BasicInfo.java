@@ -633,7 +633,7 @@ public class BasicInfo extends BaseController {
         if(accountNameList.size() == 0){
             messageHeader = "Information.";
             message = "Please Add Account Name !!";
-            severity = "info";
+            severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg2.show()");
             return;
         }
