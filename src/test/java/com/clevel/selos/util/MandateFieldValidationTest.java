@@ -1,7 +1,7 @@
 package com.clevel.selos.util;
 
 import com.clevel.selos.businesscontrol.MandateFieldValidationControl;
-import com.clevel.selos.model.MandateConditionType;
+import com.clevel.selos.model.MandateConDetailType;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
 import com.clevel.selos.model.db.master.Education;
@@ -204,7 +204,7 @@ public class MandateFieldValidationTest {
         relationConView.setMandateFieldClassView(customerMandateFieldClassView);
         relationConView.setName("RELATION_ID_1");
         relationConView.setConditionDesc("when Relation id = 1");
-        relationConView.setMandateConditionType(MandateConditionType.BASE);
+        relationConView.setMandateConDetailType(MandateConDetailType.BASE);
 
         MandateFieldConditionDetailView relationConDetailView = new MandateFieldConditionDetailView();
         relationConDetailView.setMandateFieldView(relation);
@@ -222,7 +222,7 @@ public class MandateFieldValidationTest {
         referenceConView.setDependConType(MandateDependConType.INTERNAL);
         referenceConView.setDependCondition(relationConView);
         referenceConView.setMandateFieldClassView(customerMandateFieldClassView);
-        referenceConView.setMandateConditionType(MandateConditionType.BASE);
+        referenceConView.setMandateConDetailType(MandateConDetailType.BASE);
 
         MandateFieldConditionDetailView referenceConDetailView = new MandateFieldConditionDetailView();
         referenceConDetailView.setMandateFieldView(reference);
@@ -241,7 +241,7 @@ public class MandateFieldValidationTest {
         individualConView.setDependConType(MandateDependConType.EXTERNAL);
         individualConView.setDependCondition(referenceConView);
         individualConView.setMandateFieldClassView(indvMandateFieldClassView);
-        individualConView.setMandateConditionType(MandateConditionType.AND);
+        individualConView.setMandateConDetailType(MandateConDetailType.AND);
 
         MandateFieldConditionDetailView occupationDetCon = new MandateFieldConditionDetailView();
         occupationDetCon.setMandateFieldView(occu);

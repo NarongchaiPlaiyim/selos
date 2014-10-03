@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedCollateral_subCollateral" pageWidth="445" pageHeight="802" columnWidth="445" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8893297b-3270-4179-ae8d-73f118a64476">
-	<property name="ireport.zoom" value="2.3579476910000046"/>
+	<property name="ireport.zoom" value="1.7715610000000035"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -31,8 +31,8 @@
 	<field name="productProgramView" class="java.lang.Object">
 		<fieldDescription><![CDATA[productProgramView.name]]></fieldDescription>
 	</field>
-	<field name="creditFacilityView" class="java.lang.Object">
-		<fieldDescription><![CDATA[creditFacilityView.name]]></fieldDescription>
+	<field name="creditTypeView" class="java.lang.Object">
+		<fieldDescription><![CDATA[creditTypeView.name]]></fieldDescription>
 	</field>
 	<field name="limit" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[limit]]></fieldDescription>
@@ -133,7 +133,7 @@ $F{requestType}.intValue() == 2 ? "New" : ""]]></textFieldExpression>
 					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{creditFacilityView}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{creditTypeView}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="41737688-13c9-4545-996e-4096448a65a4" style="detail" stretchType="RelativeToBandHeight" x="25" y="0" width="143" height="10"/>

@@ -30,7 +30,7 @@
                     </td>
                     <td>
                         <p:selectOneMenu id="mandateConditionType" size="1" styleClass="largest_l"
-                                          value="#{mandateFieldCondition.wrkMandateConditionView.mandateConditionType}" required="true">
+                                         value="#{mandateFieldCondition.wrkMandateConditionView.mandateConditionType}" required="true">
                             <f:selectItem itemLabel="- Please Select -"/>
                             <f:selectItems value="#{enumGeneralControl.mandateConditionType}" var="mandateConditionType"
                                            itemLabel="#{msg.get(mandateConditionType.desc)}" itemValue="#{mandateConditionType}"/>
@@ -74,6 +74,19 @@
                                          value="#{mandateFieldCondition.wrkMandateConditionView.dependType}">
                             <f:selectItems value="#{enumGeneralControl.mandateDependType}" var="mandateDependType"
                                            itemLabel="#{msg.get(mandateDependType.desc)}" itemValue="#{mandateDependType}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel for="mandateConDetailType" value="#{msg.get('app.mandateField.condition.detail.type')}" />
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="mandateConDetailType" size="1" styleClass="largest_l"
+                                         value="#{mandateFieldCondition.wrkMandateConditionView.mandateConDetailType}" required="true">
+                            <f:selectItem itemLabel="- Please Select -"/>
+                            <f:selectItems value="#{enumGeneralControl.mandateConDetailType}" var="mandateConDetailType"
+                                           itemLabel="#{msg.get(mandateConDetailType.desc)}" itemValue="#{mandateConDetailType}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

@@ -175,7 +175,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
             reports.add(borrowerExsumReport);
-            log.debug("customerInfoViewList in Method fillBorrowerRelatedProfile is Null. {}",customerInfoViewList.size());
+            log.debug("customerInfoViewList in Method fillBorrowerRelatedProfile is Null. {}");
         }
         return reports;
     }
@@ -206,10 +206,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             } else {
                 TradeFinanceExsumReport tradeFinanceExsumReport = new TradeFinanceExsumReport();
                 financeExsumReports.add(tradeFinanceExsumReport);
-                log.debug("--newCreditFacilityViewArrayList. {}",newCreditFacilityViewArrayList.size());
+                log.debug("--newCreditFacilityViewArrayList is Null. {}");
             }
         } else {
-            log.debug("newCreditFacilityViewArrayList in Method fillTradeFinance is Null. {}",newCreditFacilityViewArrayList.size());
+            log.debug("newCreditFacilityViewArrayList in Method fillTradeFinance is Null. {}");
         }
         return financeExsumReports;
     }
@@ -240,7 +240,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             NCBRecordExsumReport ncbRecordExsumReport = new NCBRecordExsumReport();
             recordExsumReports.add(ncbRecordExsumReport);
-            log.debug("ncbInfoViewList in Method fillNCBRecord is Null. {}",ncbInfoViewList.size());
+            log.debug("ncbInfoViewList in Method fillNCBRecord is Null. {}");
         }
         return recordExsumReports;
     }
@@ -402,7 +402,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             DecisionExSumReport decisionExSumReport = new DecisionExSumReport();
             exSumReportList.add(decisionExSumReport);
-            log.debug("ExSumDecisionView in Method fillDecision is Null. {}",exSumReportList.size());
+            log.debug("ExSumDecisionView in Method fillDecision is Null. {}");
         }
         return exSumReportList;
     }
@@ -447,7 +447,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 uwDecisionExSumReport.setDescription(Util.checkNullString(sumReasonView.getDescription()));
             }
         } else {
-            log.debug("exSumReasonViews in Method fillUWDecision is Null. {}",exSumReasonViews.size());
+            log.debug("exSumReasonViews in Method fillUWDecision is Null. {}");
         }
         return uwDecisionExSumReport;
     }
@@ -582,7 +582,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             BorrowerCreditDecisionReport decisionReport = new BorrowerCreditDecisionReport();
             decisionReport.setPath(pathsub);
             borrowerCreditDecisionReportList.add(decisionReport);
-            log.debug("existingCreditDetailViews is Null by fillCreditBorrower. {}",existingCreditDetailViews.size());
+            log.debug("existingCreditDetailViews is Null by fillCreditBorrower. {}");
         }
         return borrowerCreditDecisionReportList;
     }
@@ -605,7 +605,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             ConditionDecisionReport conditionDecisionReport = new ConditionDecisionReport();
             conditionDecisionReportList.add(conditionDecisionReport);
-            log.debug("existingConditionDetailViews is Null by fillCondition. {}",existingConditionDetailViews.size());
+            log.debug("existingConditionDetailViews is Null by fillCondition. {}");
         }
         return conditionDecisionReportList;
     }
@@ -669,7 +669,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             BorrowerRetailDecisionReport borrowerRetailDecisionReport = new BorrowerRetailDecisionReport();
             borrowerRetailDecisionReport.setPath(pathsub);
             retailDecisionReportList.add(borrowerRetailDecisionReport);
-            log.debug("existingConditionDetailViews is Null by fillBorrowerRetail. {}",existingConditionDetailViews.size());
+            log.debug("existingConditionDetailViews is Null by fillBorrowerRetail. {}");
         }
         return retailDecisionReportList;
     }
@@ -727,7 +727,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             BorrowerAppInRLOSDecisionReport borrowerAppInRLOSDecisionReport = new BorrowerAppInRLOSDecisionReport();
             borrowerAppInRLOSDecisionReport.setPath(pathsub);
             borrowerAppInRLOSDecisionReportList.add(borrowerAppInRLOSDecisionReport);
-            log.debug("existingConditionDetailViews is Null by fillAppInRLOS. {}",existingConditionDetailViews.size());
+            log.debug("existingConditionDetailViews is Null by fillAppInRLOS. {}");
         }
         return borrowerAppInRLOSDecisionReportList;
     }
@@ -794,7 +794,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             RelatedCommercialDecisionReport relatedCommercialDecisionReport = new RelatedCommercialDecisionReport();
             relatedCommercialDecisionReport.setPath(pathsub);
             relatedCommercialDecisionReportList.add(relatedCommercialDecisionReport);
-            log.debug("existingConditionDetailViews is Null by fillRelatedCommercial. {}",existingConditionDetailViews.size());
+            log.debug("existingConditionDetailViews is Null by fillRelatedCommercial. {}");
         }
 
         return relatedCommercialDecisionReportList;
@@ -858,7 +858,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             RelatedRetailDecisionReport relatedRetailDecisionReport = new RelatedRetailDecisionReport();
             relatedRetailDecisionReport.setPath(pathsub);
             relatedRetailDecisionReportList.add(relatedRetailDecisionReport);
-            log.debug("existingConditionDetailViews is Null by fillRelatedRetail. {}",existingConditionDetailViews.size());
+            log.debug("existingConditionDetailViews is Null by fillRelatedRetail. {}");
         }
 
         return relatedRetailDecisionReportList;
@@ -912,7 +912,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             RelatedAppInRLOSDecisionReport relatedAppInRLOSDecisionReport = new RelatedAppInRLOSDecisionReport();
             relatedAppInRLOSDecisionReport.setPath(pathsub);
             relatedAppInRLOSDecisionReportArrayList.add(relatedAppInRLOSDecisionReport);
-            log.debug("existingConditionDetailViews is Null by fillRelatedAppInRLOS. {}",existingConditionDetailViews.size());
+            log.debug("existingConditionDetailViews is Null by fillRelatedAppInRLOS. {}");
         }
 
         return relatedAppInRLOSDecisionReportArrayList;
@@ -960,7 +960,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ExistingCollateralBorrowerDecisionReport collateralBorrowerDecisionReport = new ExistingCollateralBorrowerDecisionReport();
             collateralBorrowerDecisionReport.setPath(path);
             collateralBorrowerDecisionReportList.add(collateralBorrowerDecisionReport);
-            log.debug("conditionDetailViews is Null by fillExistingCollateralBorrower. {}",conditionDetailViews.size());
+            log.debug("conditionDetailViews is Null by fillExistingCollateralBorrower. {}");
         }
 
         return collateralBorrowerDecisionReportList;
@@ -1006,7 +1006,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ExistingCollateralRelatedDecisionReport collateralRelatedDecisionReport = new ExistingCollateralRelatedDecisionReport();
             collateralRelatedDecisionReport.setPath(path);
             collateralRelatedDecisionReportArrayList.add(collateralRelatedDecisionReport);
-            log.debug("conditionDetailViews is Null by fillExistingCollateralRelated. {}",conditionDetailViews.size());
+            log.debug("conditionDetailViews is Null by fillExistingCollateralRelated. {}");
         }
 
         return collateralRelatedDecisionReportArrayList;
@@ -1042,7 +1042,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             GuarantorBorrowerDecisionReport guarantorBorrowerDecisionReport = new GuarantorBorrowerDecisionReport();
             guarantorBorrowerDecisionReport.setPath(pathsub);
             guarantorBorrowerDecisionReportList.add(guarantorBorrowerDecisionReport);
-            log.debug("extGuarantorList is Null by fillGuarantorBorrower. {}",extGuarantorList.size());
+            log.debug("extGuarantorList is Null by fillGuarantorBorrower. {}");
         }
         return guarantorBorrowerDecisionReportList;
     }
@@ -1111,7 +1111,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
             proposedView.setPath(pathsub);
             proposedCreditDecisionReportList.add(proposedView);
-            log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}",newCreditDetailViewList.size());
+            log.debug("newCreditDetailViewList is Null by fillProposedCredit. {}");
         }
         return proposedCreditDecisionReportList;
     }
@@ -1196,7 +1196,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
             approvedView.setPath(pathsub);
             proposedCreditDecisionReportList.add(approvedView);
-            log.debug("newCreditDetailViewList is Null by fillExSumApprovedCredit. {}",newCreditDetailViewList.size());
+            log.debug("newCreditDetailViewList is Null by fillExSumApprovedCredit. {}");
         }
         return proposedCreditDecisionReportList;
     }
@@ -1282,7 +1282,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
             approvedView.setPath(pathsub);
             proposedCreditDecisionReportList.add(approvedView);
-            log.debug("newCreditDetailViewList is Null by fillApprovedCredit. {}",newCreditDetailViewList.size());
+            log.debug("newCreditDetailViewList is Null by fillApprovedCredit. {}");
         }
         return proposedCreditDecisionReportList;
     }
@@ -1353,7 +1353,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         } else {
             ProposeFeeInformationDecisionReport proposeFeeInformationDecisionReport = new ProposeFeeInformationDecisionReport();
             proposeFeeInformationDecisionReportList.add(proposeFeeInformationDecisionReport);
-            log.debug("feeDetailViewList is Null by fillProposeFeeInformation. {}",feeDetailViewList.size());
+            log.debug("feeDetailViewList is Null by fillProposeFeeInformation. {}");
         }
         return proposeFeeInformationDecisionReportList;
     }
@@ -1383,7 +1383,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     log.debug("getProposeCreditDetailViewList. {}",view.getProposeCreditInfoDetailViewList().size());
                     collateralDecisionReport.setDetailViewList(view.getProposeCreditInfoDetailViewList());
                 } else {
-                    log.debug("getProposeCreditDetailViewList is Null. {}",view.getProposeCreditInfoDetailViewList().size());
+                    log.debug("getProposeCreditDetailViewList is Null. {}");
                 }
 
                 collateralHeadViewList = view.getProposeCollateralInfoHeadViewList();
@@ -1410,10 +1410,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             }
                         }
                         if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                            int count = 1;
+                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                             for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                proposeCollateralInfoSubView.setPath(pathsub);
+                                ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                subView.setPath(pathsub);
+                                subView.setNo(count++);
+                                subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                proposeCollateralInfoSubViewList.add(subView);
                             }
-                            collateralDecisionReport.setCollateralSubViewList(headView.getProposeCollateralInfoSubViewList());
+                            collateralDecisionReport.setCollateralSubViewList(proposeCollateralInfoSubViewList);
                         } else {
                             ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                             List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
@@ -1423,12 +1438,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         }
                     }
                 } else {
-                    log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList.size());
+                    log.debug("collateralHeadViewList is Null. {}");
                 }
                 proposedCollateralDecisionReportList.add(collateralDecisionReport);
             }
         } else {
-            log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews.size());
+            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
             ProposedCollateralDecisionReport collateralDecisionReport = new ProposedCollateralDecisionReport();
             List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
             ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
@@ -1452,7 +1467,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             for (ProposeCollateralInfoView view : newCollateralViews){
                 ApprovedCollateralDecisionReport approvedCollateralDecisionReport = new ApprovedCollateralDecisionReport();
                 approvedCollateralDecisionReport.setPath(pathsub);
-
                 approvedCollateralDecisionReport.setJobID(Util.checkNullString(view.getJobID()));
                 approvedCollateralDecisionReport.setAppraisalDate(DateTimeUtil.getCurrentDateTH(view.getAppraisalDate()));
                 approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecision()));
@@ -1506,10 +1520,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             }
                         }
                         if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                            int count = 1;
+                            List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                             for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                proposeCollateralInfoSubView.setPath(pathsub);
+                                ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                subView.setPath(pathsub);
+                                subView.setNo(count++);
+                                subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                proposeCollateralInfoSubViewList.add(subView);
                             }
-                            approvedCollateralDecisionReport.setSubViewList(headView.getProposeCollateralInfoSubViewList());
+                            approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                         } else {
                             ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                             List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
@@ -1519,7 +1548,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         }
                     }
                 } else {
-                    log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList.size());
+                    log.debug("collateralHeadViewList is Null. {}");
                 }
                 approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
             }
@@ -1532,7 +1561,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
             approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
             approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-            log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews.size());
+            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
         }
         return approvedCollateralDecisionReportArrayList;
     }
@@ -1596,10 +1625,25 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 }
 
                                 if (Util.isSafetyList(headView.getProposeCollateralInfoSubViewList())){
+                                    int count = 1;
+                                    List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
                                     for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : headView.getProposeCollateralInfoSubViewList()){
-                                        proposeCollateralInfoSubView.setPath(pathsub);
+                                        ProposeCollateralInfoSubView subView = new ProposeCollateralInfoSubView();
+                                        subView.setPath(pathsub);
+                                        subView.setNo(count++);
+                                        subView.setSubCollateralType(proposeCollateralInfoSubView.getSubCollateralType());
+                                        subView.setAddress(Util.checkNullString(proposeCollateralInfoSubView.getAddress()));
+                                        subView.setLandOffice(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice()));
+                                        subView.setTitleDeed(Util.checkNullString(proposeCollateralInfoSubView.getTitleDeed()));
+                                        subView.setCollateralOwnerAAD(Util.checkNullString(proposeCollateralInfoSubView.getCollateralOwnerAAD()));
+                                        subView.setAppraisalValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getAppraisalValue()));
+                                        subView.setMortgageValue(Util.convertNullToZERO(proposeCollateralInfoSubView.getMortgageValue()));
+                                        subView.setCollateralOwnerUWList(Util.isSafetyList(proposeCollateralInfoSubView.getCollateralOwnerUWList()) ? proposeCollateralInfoSubView.getCollateralOwnerUWList() : new ArrayList<CustomerInfoView>());
+                                        subView.setMortgageList(Util.isSafetyList(proposeCollateralInfoSubView.getMortgageList()) ? proposeCollateralInfoSubView.getMortgageList() : new ArrayList<MortgageTypeView>());
+                                        subView.setRelatedWithList(Util.isSafetyList(proposeCollateralInfoSubView.getRelatedWithList()) ? proposeCollateralInfoSubView.getRelatedWithList() : new ArrayList<ProposeCollateralInfoSubView>());
+                                        proposeCollateralInfoSubViewList.add(subView);
                                     }
-                                    approvedCollateralDecisionReport.setSubViewList(headView.getProposeCollateralInfoSubViewList());
+                                    approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
                                 } else {
                                     ProposeCollateralInfoSubView proposeCollateralInfoSubView = new ProposeCollateralInfoSubView();
                                     List<ProposeCollateralInfoSubView> proposeCollateralInfoSubViewList = new ArrayList<ProposeCollateralInfoSubView>();
@@ -1610,7 +1654,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 }
                             }
                         } else {
-                            log.debug("collateralHeadViewList is Null. {}",collateralHeadViewList.size());
+                            log.debug("collateralHeadViewList is Null. {}");
                         }
                         approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
                     } else {
@@ -1632,7 +1676,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             proposeCollateralInfoSubViewList.add(proposeCollateralInfoSubView);
             approvedCollateralDecisionReport.setSubViewList(proposeCollateralInfoSubViewList);
             approvedCollateralDecisionReportArrayList.add(approvedCollateralDecisionReport);
-            log.debug("newCollateralViews is Null by fillProposedCollateral. {}",newCollateralViews.size());
+            log.debug("newCollateralViews is Null by fillProposedCollateral. {}");
         }
         return approvedCollateralDecisionReportArrayList;
     }
@@ -1667,7 +1711,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 proposedGuarantorDecisionReportList.add(guarantorDecisionReport);
             }
         } else {
-            log.debug("detailViews is Null by fillProposedGuarantor. {}",detailViews.size());
+            log.debug("detailViews is Null by fillProposedGuarantor. {}");
             ProposedGuarantorDecisionReport guarantorDecisionReport = new ProposedGuarantorDecisionReport();
             guarantorDecisionReport.setPath(pathsub);
             proposedGuarantorDecisionReportList.add(guarantorDecisionReport);
@@ -1726,7 +1770,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedGuarantorDecisionReportList.add(approvedGuarantorDecisionReport);
             }
         } else {
-            log.debug("newGuarantorDetails is Null by fillExSumApprovedGuarantor. {}",newGuarantorDetails.size());
+            log.debug("newGuarantorDetails is Null by fillExSumApprovedGuarantor. {}");
             ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
             approvedGuarantorDecisionReport.setPath(pathsub);
             approvedGuarantorDecisionReport.setProposeCreditDetailViewList(approvedGuarantorDecisionReport.getProposeCreditDetailViewList());
@@ -1780,7 +1824,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 }
             }
         } else {
-            log.debug("newGuarantorDetails is Null by fillApprovedGuarantor. {}",newGuarantorDetails.size());
+            log.debug("newGuarantorDetails is Null by fillApprovedGuarantor. {}");
             ApprovedGuarantorDecisionReport approvedGuarantorDecisionReport = new ApprovedGuarantorDecisionReport();
             approvedGuarantorDecisionReport.setPath(pathsub);
             approvedGuarantorDecisionReport.setProposeCreditDetailViewList(approvedGuarantorDecisionReport.getProposeCreditDetailViewList());
@@ -1807,7 +1851,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 followUpConditionDecisionReportList.add(followUpConditionDecisionReport);
             }
         } else {
-            log.debug("decisionFollowConditionViews is Null by fillFollowUpCondition. {}",decisionFollowConditionViews.size());
+            log.debug("decisionFollowConditionViews is Null by fillFollowUpCondition. {}");
             FollowUpConditionDecisionReport followUpConditionDecisionReport = new FollowUpConditionDecisionReport();
             followUpConditionDecisionReportList.add(followUpConditionDecisionReport);
         }
@@ -1837,7 +1881,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvalHistoryDecisionReportArrayList.add(approvalHistoryDecisionReport);
             }
         } else {
-            log.debug("approvalHistoryViews is Null by fillApprovalHistory. {}",approvalHistoryViews.size());
+            log.debug("approvalHistoryViews is Null by fillApprovalHistory. {}");
             ApprovalHistoryDecisionReport approvalHistoryDecisionReport = new ApprovalHistoryDecisionReport();
             approvalHistoryDecisionReportArrayList.add(approvalHistoryDecisionReport);
         }
