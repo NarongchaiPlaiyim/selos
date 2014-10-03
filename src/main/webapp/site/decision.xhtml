@@ -3204,7 +3204,9 @@
                                                              required="#{not empty param[addFollowUpCondButton.clientId]}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItems value="#{decision.followConditionViewList}" var="followCondition"
-                                                               itemLabel="#{followCondition.name}" itemValue="#{followCondition.id}"/>
+                                                               itemLabel="#{followCondition.name}"
+                                                               itemValue="#{followCondition.id}"
+                                                               itemDescription="#{followCondition.name}"/>
                                             </p:selectOneMenu>
                                          </td>
                                          <td class="left" style="border-style: none !important; padding-left: 5px">

@@ -245,6 +245,9 @@ public class NCBBizTransform extends BusinessTransform {
 
                                     if(isValidPayment){
                                         for (SubjectAccountModel subjectAccountModel : subjectAccountModelResults) {
+                                            boolean isTDRFlag = false;
+                                            boolean isNPLFlag = false;
+
                                             //check asOfDate < 12 Month?
                                             if (!isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), lastAsOfDate, TWELVE_MONTH)) {
                                                 continue;
@@ -296,16 +299,31 @@ public class NCBBizTransform extends BusinessTransform {
                                             int outStandingCreditMonth = 0;
                                             if (!Util.isEmpty(subjectAccountModel.getAccounttype())
                                                     && (subjectAccountModel.getAccounttype().equals("05") || subjectAccountModel.getAccounttype().equals("22"))) {
-                                                List<HistoryModel> historyModels = subjectAccountModel.getHistory();
-                                                for(HistoryModel historyModel : historyModels){
-                                                    if (isInMonthPeriodYYYYMMDD(historyModel.getAsofdate(), lastAsOfDate, SIX_MONTH)) {
-                                                        if(historyModel.getAmountowed()!=null){
-                                                            BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
-                                                            outStandingCredit = outStandingCredit.add(outstanding);
-                                                        }
-                                                        outStandingCreditMonth = outStandingCreditMonth+1;
-                                                    }
+                                                if(subjectAccountModel.getAmountowed()!=null){
+                                                    outStandingCredit = new BigDecimal(subjectAccountModel.getAmountowed());
+                                                    outStandingCreditMonth = outStandingCreditMonth+1;
                                                 }
+
+                                                List<HistoryModel> historyModels = subjectAccountModel.getHistory();
+                                                if(historyModels!=null){
+                                                    int listSize = historyModels.size();
+                                                    if(listSize>0){
+                                                        for(int i=listSize-1; i>=0; i--){
+                                                            if(outStandingCreditMonth == 6){
+                                                                break;
+                                                            } else {
+                                                                HistoryModel historyModel = historyModels.get(i);
+                                                                if(historyModel.getAmountowed()!=null){
+                                                                    BigDecimal outstanding = new BigDecimal(historyModel.getAmountowed());
+                                                                    outStandingCredit = outStandingCredit.add(outstanding);
+                                                                }
+                                                                outStandingCreditMonth = outStandingCreditMonth+1;
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+
                                                 if(outStandingCreditMonth>0){
                                                     BigDecimal divider = new BigDecimal(outStandingCreditMonth);
                                                     outstatndingAvg = outStandingCredit.divide(divider,2,BigDecimal.ROUND_HALF_UP);
@@ -335,6 +353,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate()));
                                                 ncbDetailView.setAccountClosedDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getCloseddate()));
                                                 //get TDR last date
+                                                isTDRFlag = true;
                                                 if (isTMBAccount) {
                                                     isTDRTMB = true;
                                                     if (!Util.isEmpty(lastTDRDateTMB)) {
@@ -388,6 +407,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                             numberOfOutStandingPayment++;
                                                         }
                                                         if (isNPLIndividual(subjectAccountModel.getPaymt01())) {
+                                                            isNPLFlag = true;
                                                             if (isTMBAccount) {
                                                                 isNPLTMB = true;
                                                                 if (Util.isEmpty(lastNPLDateTMB)) {
@@ -422,6 +442,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 numberOfOutStandingPayment++;
                                                             }
                                                             if (isNPLIndividual(subjectAccountModel.getPaymt02())) {
+                                                                isNPLFlag = true;
                                                                 if (isTMBAccount) {
                                                                     isNPLTMB = true;
                                                                     if (Util.isEmpty(lastNPLDateTMB)) {
@@ -456,6 +477,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOutStandingPayment++;
                                                                 }
                                                                 if (isNPLIndividual(subjectAccountModel.getPaymt03())) {
+                                                                    isNPLFlag = true;
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -489,6 +511,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         numberOfOutStandingPayment++;
                                                                     }
                                                                     if (isNPLIndividual(subjectAccountModel.getPaymt04())) {
+                                                                        isNPLFlag = true;
                                                                         if (isTMBAccount) {
                                                                             isNPLTMB = true;
                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -522,6 +545,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                             numberOfOutStandingPayment++;
                                                                         }
                                                                         if (isNPLIndividual(subjectAccountModel.getPaymt05())) {
+                                                                            isNPLFlag = true;
                                                                             if (isTMBAccount) {
                                                                                 isNPLTMB = true;
                                                                                 if (Util.isEmpty(lastNPLDateTMB)) {
@@ -555,6 +579,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                 numberOfOutStandingPayment++;
                                                                             }
                                                                             if (isNPLIndividual(subjectAccountModel.getPaymt06())) {
+                                                                                isNPLFlag = true;
                                                                                 if (isTMBAccount) {
                                                                                     isNPLTMB = true;
                                                                                     if (Util.isEmpty(lastNPLDateTMB)) {
@@ -588,6 +613,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                     numberOfOutStandingPayment++;
                                                                                 }
                                                                                 if (isNPLIndividual(subjectAccountModel.getPaymt07())) {
+                                                                                    isNPLFlag = true;
                                                                                     if (isTMBAccount) {
                                                                                         isNPLTMB = true;
                                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -621,6 +647,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                         numberOfOutStandingPayment++;
                                                                                     }
                                                                                     if (isNPLIndividual(subjectAccountModel.getPaymt08())) {
+                                                                                        isNPLFlag = true;
                                                                                         if (isTMBAccount) {
                                                                                             isNPLTMB = true;
                                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -654,6 +681,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                             numberOfOutStandingPayment++;
                                                                                         }
                                                                                         if (isNPLIndividual(subjectAccountModel.getPaymt09())) {
+                                                                                            isNPLFlag = true;
                                                                                             if (isTMBAccount) {
                                                                                                 isNPLTMB = true;
                                                                                                 if (Util.isEmpty(lastNPLDateTMB)) {
@@ -687,6 +715,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                 numberOfOutStandingPayment++;
                                                                                             }
                                                                                             if (isNPLIndividual(subjectAccountModel.getPaymt10())) {
+                                                                                                isNPLFlag = true;
                                                                                                 if (isTMBAccount) {
                                                                                                     isNPLTMB = true;
                                                                                                     if (Util.isEmpty(lastNPLDateTMB)) {
@@ -720,6 +749,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                     numberOfOutStandingPayment++;
                                                                                                 }
                                                                                                 if (isNPLIndividual(subjectAccountModel.getPaymt11())) {
+                                                                                                    isNPLFlag = true;
                                                                                                     if (isTMBAccount) {
                                                                                                         isNPLTMB = true;
                                                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -753,6 +783,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                         numberOfOutStandingPayment++;
                                                                                                     }
                                                                                                     if (isNPLIndividual(subjectAccountModel.getPaymt12())) {
+                                                                                                        isNPLFlag = true;
                                                                                                         if (isTMBAccount) {
                                                                                                             isNPLTMB = true;
                                                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -794,6 +825,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                         numberOfOverLimit++;
                                                     }
                                                     if (isNPLIndividual(subjectAccountModel.getPaymt01())) {
+                                                        isNPLFlag = true;
                                                         if (isTMBAccount) {
                                                             isNPLTMB = true;
                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -825,6 +857,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                             numberOfOverLimit++;
                                                         }
                                                         if (isNPLIndividual(subjectAccountModel.getPaymt02())) {
+                                                            isNPLFlag = true;
                                                             if (isTMBAccount) {
                                                                 isNPLTMB = true;
                                                                 if (Util.isEmpty(lastNPLDateTMB)) {
@@ -856,6 +889,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 numberOfOverLimit++;
                                                             }
                                                             if (isNPLIndividual(subjectAccountModel.getPaymt03())) {
+                                                                isNPLFlag = true;
                                                                 if (isTMBAccount) {
                                                                     isNPLTMB = true;
                                                                     if (Util.isEmpty(lastNPLDateTMB)) {
@@ -887,6 +921,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOverLimit++;
                                                                 }
                                                                 if (isNPLIndividual(subjectAccountModel.getPaymt04())) {
+                                                                    isNPLFlag = true;
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -918,6 +953,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         numberOfOverLimit++;
                                                                     }
                                                                     if (isNPLIndividual(subjectAccountModel.getPaymt05())) {
+                                                                        isNPLFlag = true;
                                                                         if (isTMBAccount) {
                                                                             isNPLTMB = true;
                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -949,6 +985,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                             numberOfOverLimit++;
                                                                         }
                                                                         if (isNPLIndividual(subjectAccountModel.getPaymt06())) {
+                                                                            isNPLFlag = true;
                                                                             if (isTMBAccount) {
                                                                                 isNPLTMB = true;
                                                                                 if (Util.isEmpty(lastNPLDateTMB)) {
@@ -980,6 +1017,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                 numberOfOverLimit++;
                                                                             }
                                                                             if (isNPLIndividual(subjectAccountModel.getPaymt07())) {
+                                                                                isNPLFlag = true;
                                                                                 if (isTMBAccount) {
                                                                                     isNPLTMB = true;
                                                                                     if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1011,6 +1049,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                     numberOfOverLimit++;
                                                                                 }
                                                                                 if (isNPLIndividual(subjectAccountModel.getPaymt08())) {
+                                                                                    isNPLFlag = true;
                                                                                     if (isTMBAccount) {
                                                                                         isNPLTMB = true;
                                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1042,6 +1081,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                         numberOfOverLimit++;
                                                                                     }
                                                                                     if (isNPLIndividual(subjectAccountModel.getPaymt09())) {
+                                                                                        isNPLFlag = true;
                                                                                         if (isTMBAccount) {
                                                                                             isNPLTMB = true;
                                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1073,6 +1113,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                             numberOfOverLimit++;
                                                                                         }
                                                                                         if (isNPLIndividual(subjectAccountModel.getPaymt10())) {
+                                                                                            isNPLFlag = true;
                                                                                             if (isTMBAccount) {
                                                                                                 isNPLTMB = true;
                                                                                                 if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1104,6 +1145,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                 numberOfOverLimit++;
                                                                                             }
                                                                                             if (isNPLIndividual(subjectAccountModel.getPaymt11())) {
+                                                                                                isNPLFlag = true;
                                                                                                 if (isTMBAccount) {
                                                                                                     isNPLTMB = true;
                                                                                                     if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1135,6 +1177,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                     numberOfOverLimit++;
                                                                                                 }
                                                                                                 if (isNPLIndividual(subjectAccountModel.getPaymt12())) {
+                                                                                                    isNPLFlag = true;
                                                                                                     if (isTMBAccount) {
                                                                                                         isNPLTMB = true;
                                                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1191,6 +1234,19 @@ public class NCBBizTransform extends BusinessTransform {
                                                     ncbDetailView.setNplInfoDate(Util.strYYYYMMDDtoDateFormat(lastNPLDateOther));
                                                 }
                                             }
+
+                                            if(isNPLFlag){
+                                                ncbDetailView.setNplFlag(RadioValue.YES.value());
+                                            } else {
+                                                ncbDetailView.setNplFlag(RadioValue.NO.value());
+                                            }
+
+                                            if(isTDRFlag){
+                                                ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                                            } else {
+                                                ncbDetailView.setTdrFlag(RadioValue.NO.value());
+                                            }
+
 
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
@@ -1458,6 +1514,8 @@ public class NCBBizTransform extends BusinessTransform {
 
                                         for (AccountModel accountModel : h2HResponseSubjectModel.getActiveaccounts().getAccount()) {
                                             boolean isTMBAccount = false;
+                                            boolean isNPLFlag = false;
+                                            boolean isTDRFlag = false;
                                             NCBDetailView ncbDetailView = new NCBDetailView();
                                             if (accountModel.getCreditinfo() != null) {
                                                 CreditInfoModel creditInfoModel = accountModel.getCreditinfo();
@@ -1504,6 +1562,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 ncbDetailView.setNplFlag(RadioValue.NO.value());
                                                 //set restructure date
                                                 if (!Util.isEmpty(creditInfoModel.getRestructuredate())) {
+                                                    isTDRFlag = true;
                                                     String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());
                                                     if (reStructureDate != null && reStructureDate.length > 0) {
                                                         ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(reStructureDate[0]));
@@ -1585,6 +1644,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOutStandingPayment++;
                                                                 }
                                                                 if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                                    isNPLFlag = true;
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1636,6 +1696,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOutStandingPayment++;
                                                                 }
                                                                 if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                                    isNPLFlag = true;
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1687,6 +1748,18 @@ public class NCBBizTransform extends BusinessTransform {
                                                 }
                                             }
 
+                                            if(isTDRFlag){
+                                                ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                                            } else {
+                                                ncbDetailView.setTdrFlag(RadioValue.NO.value());
+                                            }
+
+                                            if(isNPLFlag){
+                                                ncbDetailView.setNplFlag(RadioValue.YES.value());
+                                            } else {
+                                                ncbDetailView.setNplFlag(RadioValue.NO.value());
+                                            }
+
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
                                             ncbDetailViews.add(ncbDetailView);
@@ -1695,6 +1768,8 @@ public class NCBBizTransform extends BusinessTransform {
                                         if(haveClosedAccountData){
                                             for (ClosedAccountsAccountModel accountModel : h2HResponseSubjectModel.getClosedaccounts().getAccount()) {
                                                 boolean isTMBAccount = false;
+                                                boolean isTDRFlag = false;
+                                                boolean isNPLFlag = false;
                                                 NCBDetailView ncbDetailView = new NCBDetailView();
                                                 if (accountModel.getCreditinfo() != null) {
                                                     ClosedAccountsAccountCreditInfoModel creditInfoModel = accountModel.getCreditinfo();
@@ -1741,6 +1816,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     ncbDetailView.setNplFlag(RadioValue.NO.value());
                                                     //set restructure date
                                                     if (!Util.isEmpty(creditInfoModel.getRestructuredate())) {
+                                                        isTDRFlag = true;
                                                         String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());
                                                         if (reStructureDate != null && reStructureDate.length > 0) {
                                                             ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(reStructureDate[0]));
@@ -1822,6 +1898,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         numberOfOutStandingPayment++;
                                                                     }
                                                                     if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                                        isNPLFlag = true;
                                                                         if (isTMBAccount) {
                                                                             isNPLTMB = true;
                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1873,6 +1950,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         numberOfOutStandingPayment++;
                                                                     }
                                                                     if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                                        isNPLFlag = true;
                                                                         if (isTMBAccount) {
                                                                             isNPLTMB = true;
                                                                             if (Util.isEmpty(lastNPLDateTMB)) {
@@ -1924,6 +2002,18 @@ public class NCBBizTransform extends BusinessTransform {
                                                     }
                                                 }
 
+                                                if(isTDRFlag){
+                                                    ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                                                } else {
+                                                    ncbDetailView.setTdrFlag(RadioValue.NO.value());
+                                                }
+
+                                                if(isNPLFlag){
+                                                    ncbDetailView.setNplFlag(RadioValue.YES.value());
+                                                } else {
+                                                    ncbDetailView.setNplFlag(RadioValue.NO.value());
+                                                }
+
                                                 //add ncbDetailView to ncbDetailViewList
                                                 log.debug("Add ncbDetailView to list : {}", ncbDetailView);
                                                 ncbDetailViews.add(ncbDetailView);
@@ -1938,6 +2028,8 @@ public class NCBBizTransform extends BusinessTransform {
 
                                         for (ClosedAccountsAccountModel accountModel : h2HResponseSubjectModel.getClosedaccounts().getAccount()) {
                                             boolean isTMBAccount = false;
+                                            boolean isTDRFlag = false;
+                                            boolean isNPLFlag = false;
                                             NCBDetailView ncbDetailView = new NCBDetailView();
                                             if (accountModel.getCreditinfo() != null) {
                                                 ClosedAccountsAccountCreditInfoModel creditInfoModel = accountModel.getCreditinfo();
@@ -1983,6 +2075,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 //set restructure date
                                                 log.debug("creditInfoModel.getRestructuredate() : {}", creditInfoModel.getRestructuredate());
                                                 if (!Util.isEmpty(creditInfoModel.getRestructuredate())) {
+                                                    isTDRFlag = true;
                                                     String[] reStructureDate = Util.splitSpace(creditInfoModel.getRestructuredate());
                                                     if (reStructureDate != null && reStructureDate.length > 0) {
                                                         ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(reStructureDate[0]));
@@ -2064,6 +2157,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOutStandingPayment++;
                                                                 }
                                                                 if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                                    isNPLFlag = true;
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -2113,6 +2207,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOutStandingPayment++;
                                                                 }
                                                                 if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                                    isNPLFlag = true;
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
@@ -2162,6 +2257,18 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if(lastNPLDateOther!=null){
                                                     ncbDetailView.setNplInfoDate(Util.strYYYYMMtoDateFormat(lastNPLDateOther));
                                                 }
+                                            }
+
+                                            if(isTDRFlag){
+                                                ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                                            } else {
+                                                ncbDetailView.setTdrFlag(RadioValue.NO.value());
+                                            }
+
+                                            if(isNPLFlag){
+                                                ncbDetailView.setNplFlag(RadioValue.YES.value());
+                                            } else {
+                                                ncbDetailView.setNplFlag(RadioValue.NO.value());
                                             }
 
                                             //add ncbDetailView to ncbDetailViewList
@@ -2438,12 +2545,16 @@ public class NCBBizTransform extends BusinessTransform {
     }
 
     private boolean isIgnoreCode(String code){
-        if(!Util.isEmpty(code)
+        /*if(!Util.isEmpty(code)
                 && !code.equalsIgnoreCase(NCBPaymentCode.CODE_XXX.toString())
-                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_999.toString())) {
+                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_999.toString())
+                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_na.toString())) {
             return false;
         }
-        return true;
+        return true;*/
+
+        //These codes are using to get worst data
+        return false;
     }
 
     private boolean compareDateYYYMMDD(String currentDateStr, String compareDateStr){
@@ -2553,7 +2664,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isOutStandingPayment(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 4) { //code >= 004
+            if (value >= NCBPaymentCode.CODE___Y.value()) { //code >= Y
                 return true;
             }
         }
@@ -2563,7 +2674,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isOverLimit(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value == 3) { //code == __Y
+            if (value == NCBPaymentCode.CODE___Y.value()) { //code == __Y
                 return true;
             }
         }
@@ -2573,7 +2684,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isNPLIndividual(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 6) {
+            if (value >= NCBPaymentCode.CODE_003.value()) {
                 return true;
             }
         }
@@ -2583,7 +2694,7 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isNPLJuristic(String paymentCode) {
         if (!Util.isEmpty(paymentCode)) {
             int value = NCBPaymentCode.getValue(paymentCode).value();
-            if (value >= 7) {
+            if (value >= NCBPaymentCode.CODE_004.value()) {
                 return true;
             }
         }

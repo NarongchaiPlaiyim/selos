@@ -695,6 +695,7 @@ public class ChangeOwner implements Serializable {
         long wrkCaseAppraisalId = 0L;
         int stageId = 0;
         int requestAppraisalFlag = 0;
+        int parallelRequestAppraisal = 0;
         int fetchType = Util.parseInt(rosterViewSelectItem.getFetchType(), 0);
         String appNumber = Util.parseString(rosterViewSelectItem.getAppNumber(), "");
         String queueName = Util.parseString(rosterViewSelectItem.getQueuename(), "0");

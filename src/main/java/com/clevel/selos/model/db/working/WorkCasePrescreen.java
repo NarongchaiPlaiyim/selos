@@ -5,6 +5,7 @@ import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,10 @@ public class WorkCasePrescreen extends AbstractWorkCase {
 
     @Column(name = "ref_app_number")
     protected String refAppNumber;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ref_app_date")
+    private Date refAppDate;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "borrower_type_id")
@@ -143,5 +148,13 @@ public class WorkCasePrescreen extends AbstractWorkCase {
 
     public void setAppealResubmitReason(Reason appealResubmitReason) {
         this.appealResubmitReason = appealResubmitReason;
+    }
+
+    public Date getRefAppDate() {
+        return refAppDate;
+    }
+
+    public void setRefAppDate(Date refAppDate) {
+        this.refAppDate = refAppDate;
     }
 }

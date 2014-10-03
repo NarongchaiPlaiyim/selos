@@ -41,7 +41,6 @@ public class EducationControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(educationView.getNameTh());
                 selectItem.setValue(educationView.getId());
-                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }

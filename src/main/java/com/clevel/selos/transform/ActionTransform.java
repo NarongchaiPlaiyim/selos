@@ -38,7 +38,7 @@ public class ActionTransform extends Transform{
         for(Action action : actionList){
             SelectItem selectItem = new SelectItem();
             selectItem.setValue(action.getId());
-            selectItem.setLabel(action.getName());
+            selectItem.setLabel(action.getId() + "-" + action.getName());
             selectItem.setDescription(action.getDescription());
             selectItemList.add(selectItem);
         }

@@ -40,7 +40,6 @@ public class OccupationControl extends BusinessControl{
                 selectItem.setLabel(occupationView.getCode() + " - " + occupationView.getDescription());
                 selectItem.setValue(occupationView.getId());
                 selectItemList.add(selectItem);
-                logger.debug("add SelectItem: {}", selectItem);
             }
         }
         logger.debug("getOccupationSelectItemActiveList return occupationView size: {}", selectItemList.size());

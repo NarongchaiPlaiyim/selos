@@ -810,10 +810,12 @@ public class ProposeLine extends BaseController {
 
     public void onSaveProposeLine() {
         try {
+            HttpSession session = FacesUtil.getSession(false);
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
             calculationControl.calWC(workCaseId);
             calculationControl.calForProposeLine(workCaseId);
-            fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P);
+            calculationControl.calculateFinalDBR(workCaseId);
+            fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P, getCurrentStep(session));
 
             onCreation();
 

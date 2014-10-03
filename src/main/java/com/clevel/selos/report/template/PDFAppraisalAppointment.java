@@ -2,15 +2,20 @@ package com.clevel.selos.report.template;
 
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
+import com.clevel.selos.businesscontrol.AppraisalRequestControl;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.report.AppraisalContactDetailViewReport;
-import com.clevel.selos.model.report.AppraisalDetailViewReport;
-import com.clevel.selos.model.report.AppraisalViewReport;
-import com.clevel.selos.model.report.ContactRecordDetailViewReport;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.report.*;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -20,6 +25,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PDFAppraisalAppointment implements Serializable {
@@ -29,43 +35,68 @@ public class PDFAppraisalAppointment implements Serializable {
     Logger log;
 
     @Inject
+    @NormalMessage
+    Message msg;
+
+    @Inject
     @Config(name = "report.subreport")
     String pathsub;
 
     @Inject AppraisalAppointmentControl appraisalAppointmentControl;
+    @Inject private AppHeaderView appHeaderView;
+    @Inject private WorkCaseDAO workCaseDAO;
+    @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject private AppraisalRequestControl appraisalRequestControl;
 
     private AppraisalView appraisalView;
     private long workCaseId;
     private long workCasePreScreenId;
+    private long statusId;
     private final String SPACE = " ";
+    private WorkCase workCase;
+    private WorkCasePrescreen workCasePrescreen;
 
     public PDFAppraisalAppointment() {
     }
 
     public void init(){
         HttpSession session = FacesUtil.getSession(false);
-        appraisalView = new AppraisalView();
+//        appraisalView = new AppraisalView();
 
-        if(!Util.isNull(session.getAttribute("workCaseId"))){
-            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-            log.debug("workCaseId. {}",workCaseId);
-        }else if (!Util.isNull(session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        }
+        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
 
         if (!Util.isNull(workCaseId) || !Util.isNull(workCasePreScreenId)){
             log.info("workCaseID: {}",workCaseId);
 
-            if (!Util.isNull(appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId))) {
-                appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId);
-            } else {
-                log.debug("--appraisalView is Null",appraisalAppointmentControl.getAppraisalAppointment(workCaseId,workCasePreScreenId));
+            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, workCasePreScreenId, statusId);
+            log.debug("--appraisalView. {}", appraisalView);
+
+            if(appraisalView == null){
+                appraisalView = new AppraisalView();
             }
-            log.debug("--appraisalView. {}",appraisalView);
+
+            if (!Util.isZero(workCaseId)){
+                workCase = workCaseDAO.findById(workCaseId);
+
+            } else {
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            }
         } else {
-            log.debug("--workcase is Null. {}",workCaseId);
+            log.debug("--workcase is Null. {}", workCaseId);
+        }
+    }
+
+    private String getZoneLocation(){
+        String bdmUserId = "";
+        if (!Util.isZero(workCaseId) && !Util.isNull(workCase)){
+            bdmUserId = !Util.isNull(workCase.getCreateBy()) ? workCase.getCreateBy().getId() : "";
+        } else if (!Util.isZero(workCasePreScreenId) && !Util.isNull(workCasePrescreen)){
+            bdmUserId = !Util.isNull(workCasePrescreen.getCreateBy()) ? workCasePrescreen.getCreateBy().getId() : "";
         }
 
+        return appraisalRequestControl.getZoneLocation(bdmUserId);
     }
 
     public AppraisalViewReport fillAppraisalDetailReport(){
@@ -76,20 +107,25 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setAppraisalCompany(Util.checkNullString(!Util.isNull(appraisalView.getAppraisalCompany()) ? appraisalView.getAppraisalCompany().getName() : SPACE));
             report.setAppraisalDivision(Util.checkNullString(!Util.isNull(appraisalView.getAppraisalDivision()) ? appraisalView.getAppraisalDivision().getName() : SPACE));
             report.setAppraisalName(Util.checkNullString(appraisalView.getAppraisalName()));
-            report.setReceivedTaskDate(appraisalView.getReceivedTaskDate());
+            report.setReceivedTaskDate(DateTimeUtil.getCurrentDateTH(appraisalView.getReceivedTaskDate()));
             report.setLocationOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getLocationOfProperty()) ? appraisalView.getLocationOfProperty().getName() : SPACE));
             report.setProvinceOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getProvinceOfProperty()) ? appraisalView.getProvinceOfProperty().getName() : SPACE));
-            report.setAppraisalDate( appraisalView.getAppraisalDate());
-            report.setDueDate(appraisalView.getDueDate());
+            report.setAppraisalDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppraisalDate()));
+            report.setDueDate(DateTimeUtil.getCurrentDateTH(appraisalView.getDueDate()));
             report.setAADAdminRemark(Util.checkNullString(appraisalView.getAADAdminRemark()));
 
-            report.setAppointmentDate(appraisalView.getAppointmentDate());
+            report.setAppointmentDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppointmentDate()));
             report.setAppointmentCusName(Util.checkNullString(appraisalView.getAppointmentCusName()));
-            report.setCancelAppointment(Util.checkNullString(appraisalView.getCancelAppointment()));
+            if ("0".equalsIgnoreCase(appraisalView.getCancelAppointment())){
+                report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.postpone"));
+            } else if("1".equalsIgnoreCase(appraisalView.getCancelAppointment())){
+                report.setCancelAppointment(msg.get("app.appraisal.label.cancelAppointment.select.abort"));
+            } else {
+                report.setCancelAppointment(SPACE);
+            }
             report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
 
-            report.setZoneLocation(Util.checkNullString(appraisalView.getZoneLocation()));
-            log.debug("--fillAppraisalDetailReport. {}",report);
+            report.setZoneLocation(Util.checkNullString(getZoneLocation()));
         } else {
             log.debug("--fillAppraisalDetailReport is Null.");
         }
@@ -97,12 +133,11 @@ public class PDFAppraisalAppointment implements Serializable {
     }
 
     public List<AppraisalDetailViewReport> fillAppraisalDetailViewReport(String pathsub){
-//        init();
         List<AppraisalDetailViewReport> appraisalDetailViewReportList = new ArrayList<AppraisalDetailViewReport>();
 
         int count = 1;
-        if (!Util.isNull(appraisalView.getAppraisalDetailViewList()) && !Util.isZero(appraisalView.getAppraisalDetailViewList().size())){
-            log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList());
+        if (Util.isSafetyList(appraisalView.getAppraisalDetailViewList())){
+            log.debug("--AppraisalDetailViewList. {}",appraisalView.getAppraisalDetailViewList().size());
             for (AppraisalDetailView view : appraisalView.getAppraisalDetailViewList()){
                 AppraisalDetailViewReport report = new AppraisalDetailViewReport();
                 report.setCount(count++);
@@ -113,7 +148,6 @@ public class PDFAppraisalAppointment implements Serializable {
                 report.setNumberOfDocuments(view.getNumberOfDocuments());
                 appraisalDetailViewReportList.add(report);
             }
-            log.debug("--appraisalDetailViewReportList. {}",appraisalDetailViewReportList);
         } else {
             AppraisalDetailViewReport report = new AppraisalDetailViewReport();
             report.setPath(pathsub);
@@ -151,16 +185,16 @@ public class PDFAppraisalAppointment implements Serializable {
         List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
         int count = 1;
 
-        if (Util.safetyList(appraisalView.getContactRecordDetailViewList()).size() > 0){
-            log.debug("--detailViewList. {}",detailViewList);
+        if (Util.isSafetyList(appraisalView.getContactRecordDetailViewList())){
+            log.debug("--appraisalView.getContactRecordDetailViewList(). {}",appraisalView.getContactRecordDetailViewList().size());
             for (ContactRecordDetailView view : appraisalView.getContactRecordDetailViewList()){
                 ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
                 report.setCount(count++);
                 report.setPath(pathsub);
-                report.setCallingDate(DateTimeUtil.getCurrentDateTH(view.getCallingDate()));
+                report.setCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getCallingDate()));
                 report.setCallingResult(view.getCallingResult());
                 report.setAcceptResult(view.getAcceptResult());
-                report.setNextCallingDate(view.getNextCallingDate());
+                report.setNextCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getNextCallingDate()));
                 report.setReasonDescription(Util.checkNullString(!Util.isNull(view.getReason()) ? view.getReason().getDescription() : SPACE));
                 report.setRemark(Util.checkNullString(view.getRemark()));
                 report.setStatusDescription(Util.checkNullString(!Util.isNull(view.getStatus()) ? view.getStatus().getDescription() : SPACE));
@@ -170,8 +204,75 @@ public class PDFAppraisalAppointment implements Serializable {
         } else {
             ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
             contactRecordDetailViewReports.add(report);
-            log.debug("--detailViewList is Null.");
+            log.debug("--appraisalView.getContactRecordDetailViewList() is Null.");
         }
         return contactRecordDetailViewReports;
+    }
+
+    public HeaderAndFooterReport fillHeader(){
+        HeaderAndFooterReport report = new HeaderAndFooterReport();
+
+        HttpSession session = FacesUtil.getSession(false);
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+
+
+        //Detail 1
+        if (!Util.isNull(appHeaderView)){
+            log.debug("--Header. {}",appHeaderView);
+            report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
+            report.setBdmName(Util.checkNullString(appHeaderView.getBdmName()));
+            report.setBdmPhoneNumber(Util.checkNullString(appHeaderView.getBdmPhoneNumber()));
+            report.setBdmPhoneExtNumber(Util.checkNullString(appHeaderView.getBdmPhoneExtNumber()));
+            report.setBdmZoneName(Util.checkNullString(appHeaderView.getBdmZoneName()));
+            report.setBdmRegionName(Util.checkNullString(appHeaderView.getBdmRegionName()));
+            report.setSubmitDate(Util.checkNullString(appHeaderView.getSubmitDate()));
+            report.setUwName(Util.checkNullString(appHeaderView.getUwName()));
+            report.setUwPhoneNumber(Util.checkNullString(appHeaderView.getUwPhoneNumber()));
+            report.setUwPhoneExtNumber(Util.checkNullString(appHeaderView.getUwPhoneExtNumber()));
+            report.setUwTeamName(Util.checkNullString(appHeaderView.getUwTeamName()));
+            report.setRequestType(Util.checkNullString(appHeaderView.getRequestType()));
+            report.setAppNo(Util.checkNullString(appHeaderView.getAppNo()));
+            report.setAppRefNo(Util.checkNullString(appHeaderView.getAppRefNo()));
+            report.setAppRefDate(Util.checkNullString(appHeaderView.getAppRefDate()));
+            report.setProductGroup(Util.checkNullString(appHeaderView.getProductGroup()));
+            report.setRefinance(Util.checkNullString(appHeaderView.getRefinance()));
+
+
+
+            if (Util.isSafetyList(appHeaderView.getBorrowerHeaderViewList())){
+                log.debug("--getBorrowerHeaderViewList Size. {}",appHeaderView.getBorrowerHeaderViewList().size());
+                for (int i = 0;i < appHeaderView.getBorrowerHeaderViewList().size() && i < 5; i++){
+                    switch (i){
+                        case 0 : report.setBorrowerName(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 1 : report.setBorrowerName2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId2(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 2 : report.setBorrowerName3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId3(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 3 : report.setBorrowerName4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId4(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                        case 4 : report.setBorrowerName5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getBorrowerName()));
+                            report.setPersonalId5(Util.checkNullString(appHeaderView.getBorrowerHeaderViewList().get(i).getPersonalId()));
+                            break;
+                    }
+                }
+            }
+
+            report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+
+            if (!Util.isNull(workCase)){
+                report.setApprovedDate(DateTimeUtil.getCurrentDateTH(workCase.getCompleteDate()));
+            } else {
+                report.setApprovedDate(DateTimeUtil.getCurrentDateTH(workCasePrescreen.getCompleteDate()));
+            }
+
+        } else {
+            log.debug("--Header is Null. {}",appHeaderView);
+        }
+        return report;
     }
 }

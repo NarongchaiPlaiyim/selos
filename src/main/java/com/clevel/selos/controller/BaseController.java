@@ -78,6 +78,13 @@ public class BaseController implements Serializable {
         return field.isReadOnly();
     }
 
+    public boolean isMandate(String name) {
+        FieldsControlView field = fieldMap.get(name);
+        if (field == null)
+            return true;
+        return field.isMandate();
+    }
+
     public void setDisabledValue(String name, boolean disabled){
         FieldsControlView field = fieldMap.get(name);
         if (field == null)

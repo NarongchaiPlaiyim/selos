@@ -5,11 +5,13 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.slf4j.Logger;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class ReportService implements Serializable {
 
     }
 
-    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
+    public void generatePDF(String fileName, Map<String,Object> parameters,String pdfName) throws JRException, IOException {
         log.debug("generate pdf.");
         JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
 
@@ -36,24 +38,37 @@ public class ReportService implements Serializable {
 
         log.info("parameters: {}",parameters);
 
-//        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
-//        if(dataSource != null && reportList != null && reportList.size() > 0){
-//            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-//        } else {
-             print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-//        }
+        print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
         log.debug("--Pring report.");
 
         try {
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
-            ServletOutputStream servletOutputStream=response.getOutputStream();
-            JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            String userAgent = getUserAgent(externalContext);
+
+            if (userAgent.contains("MSIE 8")){
+                externalContext.responseReset();
+                externalContext.addResponseHeader("Cache-Control","max-age=0");
+            }
+            externalContext.addResponseHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+
+            OutputStream outputStream =  externalContext.getResponseOutputStream();
+            JasperExportManager.exportReportToPdfStream(print, outputStream);
             FacesContext.getCurrentInstance().responseComplete();
             log.debug("generatePDF completed.");
 
         } catch (JRException e) {
             log.error("Error generating pdf report!", e);
         }
+    }
+
+    private String getUserAgent(ExternalContext externalContext){
+        Map<String, String> requestHeaderMap = externalContext.getRequestHeaderMap();
+        for (String key : requestHeaderMap.keySet()){
+            if (key.equalsIgnoreCase("User-Agent")){
+                return requestHeaderMap.get(key);
+            }
+        }
+        return "";
     }
 }

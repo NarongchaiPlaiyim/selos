@@ -91,15 +91,39 @@ public class DateTimeUtil implements Serializable {
     }
 
     public static Date convertToDateTH(Date date){
-        DateTime dateConvert = new DateTime(date, BuddhistChronology.getInstance());
-        log.debug("dateConvert : {}", dateConvert);
-        log.debug("dateConvert.toDate() : {}", dateConvert.toDate());
+        DateTime dateConvert;
+        if (!Util.isNull(date)){
+            dateConvert = new DateTime(date, BuddhistChronology.getInstance());
+        } else {
+            return null;
+        }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateString = simpleDateFormat.format(dateConvert.toDate());
         log.debug("Date String TH : {}", dateString);
         try{
             Date dateTH = simpleDateFormat.parse(dateConvert.toString("dd/MM/yyyy"));
+            log.debug("Date TH : {}", dateTH);
+            return dateTH;
+        } catch (ParseException e){
+            log.error("error, parsing date");
+        }
+        return null;
+    }
+
+    public static Date convertToDateTimeTH(Date date){
+        DateTime dateConvert;
+        if (!Util.isNull(date)){
+            dateConvert = new DateTime(date, BuddhistChronology.getInstance());
+        } else {
+            return null;
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String dateString = simpleDateFormat.format(dateConvert.toDate());
+        log.debug("Date String TH : {}", dateString);
+        try{
+            Date dateTH = simpleDateFormat.parse(dateConvert.toString("dd/MM/yyyy HH:mm"));
             log.debug("Date TH : {}", dateTH);
             return dateTH;
         } catch (ParseException e){
@@ -198,6 +222,10 @@ public class DateTimeUtil implements Serializable {
 
     public static Date getCurrentDateTH(final Date date){
         return convertToDateTH(date);
+    }
+
+    public static Date getCurrentDateTimeTH(final Date date){
+        return convertToDateTimeTH(date);
     }
 
     public static int daysBetween2Dates(Date date1, Date date2) {

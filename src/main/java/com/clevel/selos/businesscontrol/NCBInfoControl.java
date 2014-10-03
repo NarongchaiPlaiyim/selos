@@ -17,6 +17,7 @@ import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
@@ -52,6 +53,8 @@ public class NCBInfoControl extends BusinessControl {
     private CustomerDAO customerDAO;
     @Inject
     private BaseRateControl baseRateControl;
+    @Inject
+    UserSysParameterControl userSysParameterControl;
 
     @Inject
     NCBDetailTransform ncbDetailTransform;
@@ -123,6 +126,8 @@ public class NCBInfoControl extends BusinessControl {
             Date lastInfoDate = null;
 
             for(NCBDetailView ncbDetailView: ncbDetailViewList){
+                boolean isTDRFlag = false;
+                boolean isNPLFlag = false;
                 //get current payment
                 if(ncbDetailView.getCurrentPayment()!=null && ncbDetailView.getCurrentPayment().getNcbCode()!=null) {
                     if((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()) !=null)
@@ -143,6 +148,7 @@ public class NCBInfoControl extends BusinessControl {
 
                 //get TDR
                 if(ncbDetailView.getDateOfDebtRestructuring()!=null){
+                    isTDRFlag = true;
                     if(ncbDetailView.getTmbCheck()){
                         isTDRTMB = true;
                         if(lastTDRDateTMB!=null){
@@ -179,6 +185,7 @@ public class NCBInfoControl extends BusinessControl {
                         if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 6)
                                 || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 6))
                                 && ncbDetailView.getDateOfInfo()!=null) {
+                            isNPLFlag = true;
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
@@ -214,6 +221,7 @@ public class NCBInfoControl extends BusinessControl {
                         if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 7)
                                 || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 7))
                                 && ncbDetailView.getDateOfInfo()!=null) {
+                            isNPLFlag =true;
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
@@ -252,6 +260,18 @@ public class NCBInfoControl extends BusinessControl {
                     }
                 } else {
                     lastInfoDate = ncbDetailView.getDateOfInfo();
+                }
+
+                if(isNPLFlag){
+                    ncbDetailView.setNplFlag(RadioValue.YES.value());
+                } else {
+                    ncbDetailView.setNplFlag(RadioValue.NO.value());
+                }
+
+                if(isTDRFlag){
+                    ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                } else {
+                    ncbDetailView.setTdrFlag(RadioValue.NO.value());
                 }
             }
 
@@ -465,7 +485,13 @@ public class NCBInfoControl extends BusinessControl {
                 ncbDetailView.setInstallment(ncbDetail.getInstallment());
                 BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                BigDecimal dbrInterest = baseRateControl.getDBRInterest();
+                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+                int dbrInt = 0;
+                if(!Util.isNull(userSysParameterView)){
+                    dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
+                }
+                BigDecimal dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
+
                 switch (accountType.getCalculateType()){
                     case 1:
                         if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
