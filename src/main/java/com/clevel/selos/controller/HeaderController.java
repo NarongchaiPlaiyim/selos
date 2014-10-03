@@ -2771,7 +2771,7 @@ public class HeaderController extends BaseController {
                         message = "Request for Check Criteria Success.";
                         success = true;
                     }else {
-                        messageHeader = "Exception.";
+                        messageHeader = "Failed.";
                         message = uwRuleResponseView.getReason();
                         mandateFieldMessageViewList = uwRuleResponseView.getMandateFieldMessageViewList();
                     }
