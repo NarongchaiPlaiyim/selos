@@ -139,6 +139,8 @@ public class PledgeDetail implements Serializable {
 		}
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
 		pledgeId = Util.parseLong(params.get("pledgeId"),-1);
+
+        log.debug("pledge detail : init (workCaseId: {}, stepId: {}, pldgedId: {})", workCaseId,stepId,pledgeId);
 		_loadFieldControl();
 		_loadInitData();
 	}
@@ -247,12 +249,16 @@ public class PledgeDetail implements Serializable {
 	 * Private method
 	 */
 	private void _loadInitData() {
+        log.debug("pledge detail : _loadInitData");
 		preRenderCheck = false;
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+            log.debug("_loadInitData (basicInfoView: {})",basicInfoView);
 		}
 		
 		pledgeInfoView = pledgeDetailControl.getPledgeInfoFull(pledgeId);
+        log.debug("_loadInitData (pledgeInfoView: {})",pledgeInfoView);
+
 		if (pledgeInfoView.getId() <= 0 || pledgeInfoView.getWorkCaseId() != workCaseId) {
 			String redirectPage = "/site/mortgageSummary.jsf";
 			try {
