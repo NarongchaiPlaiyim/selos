@@ -231,8 +231,8 @@ public class PostAppBusinessControl extends BusinessControl {
     		_Before_3035_ConfirmSign(workCase, actionId, fields);
     	} else if ("3036".equals(stepCode)) { //regenerate agreement
     		_Before_3036_RegenAgree(workCase, actionId, fields);
-    	} else if ("3038".equals(stepCode)) { //review signed agreement
-    		_Before_3038_ReviewSign(workCase, actionId, fields);
+    	} else if ("3037".equals(stepCode)) { //review signed agreement
+    		_Before_3037_ReviewSign(workCase, actionId, fields);
     	} else if ("3045".equals(stepCode)) {
     		_Before_3045_ReviewPerfection(workCase, actionId, fields);
     	} else if ("3046".equals(stepCode)) {
@@ -263,8 +263,10 @@ public class PostAppBusinessControl extends BusinessControl {
         	_3035_ConfirmSign(workCase, actionId);
         } else if ("3036".equals(stepCode)) {
         	_3036_RegenAgree(workCase, actionId);
+        } else if ("3037".equals(stepCode)) {
+        	_3037_ReviewSign(workCase, actionId);
         } else if ("3038".equals(stepCode)) {
-        	_3038_ReviewSign(workCase, actionId);
+            _3038_ReviewSign(workCase, actionId);
         } else if ("3040".equals(stepCode)) {
         	_3040_PledgeCash(workCase, actionId);
         } else if ("3042".equals(stepCode)) {
@@ -369,8 +371,8 @@ public class PostAppBusinessControl extends BusinessControl {
 		}
 		fields.put("AppointmentDate", appointDateStr);
 	}
-	private void _Before_3038_ReviewSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
-		log.debug("_Before_3038_ReviewSign");
+	private void _Before_3037_ReviewSign(WorkCase workCase, long actionId,HashMap<String, String> fields) {
+		log.debug("_Before_3037_ReviewSign");
 		String pledgeRequired = "N";
 		if (pledgeInfoDAO.countAllByWorkCaseId(workCase.getId()) > 0)
 			pledgeRequired = "Y";
@@ -540,8 +542,8 @@ public class PostAppBusinessControl extends BusinessControl {
 		//Step Regenerate Agreement(3036), Action Generate Agreement (1036)
 		comsInterface.generateAgreement(getCurrentUserID(), workCase.getId());
 	}
-	private void _3038_ReviewSign(WorkCase workCase,long actionId) {
-		log.debug("_3038_ReviewSign");
+	private void _3037_ReviewSign(WorkCase workCase,long actionId) {
+		log.debug("_3037_ReviewSign");
 		if (actionId != ACTION_SUBMIT)
 			return;
 		//Step Reviewed Signed Agreement(Re-sign agreement)(3038), Action Submit CA (1015)
@@ -549,6 +551,15 @@ public class PostAppBusinessControl extends BusinessControl {
 		model.setRemark("Agreement Sign Complete");
 		persist(model);
 	}
+    private void _3038_ReviewSign(WorkCase workCase,long actionId) {
+        log.debug("_3038_ReviewSign");
+        if (actionId != ACTION_SUBMIT)
+            return;
+        //Step Reviewed Signed Agreement(Re-sign agreement)(3038), Action Submit CA (1015)
+        PerfectionReview model = createPerfectionReview(workCase,PerfectReviewType.CONTRACT,PerfectReviewStatus.COMPLETE);
+        model.setRemark("Agreement Sign Complete");
+        persist(model);
+    }
 	private void _3040_PledgeCash(WorkCase workCase,long actionId) {
 		log.debug("_3040_PledgeCash");
 		if (actionId != ACTION_SUBMIT)
