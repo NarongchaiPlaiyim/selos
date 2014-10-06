@@ -178,6 +178,8 @@ public class MortgageSummary implements Serializable {
 		map.put("mortgageId", id);
 		map.put("fromPage", "mortgageSummary");
 		FacesUtil.getFlash().put("mortgageParams",map);
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("mortgageParams", map);
         String redirectPage = "/site/mortgageDetail.jsf";
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -193,6 +195,8 @@ public class MortgageSummary implements Serializable {
 		map.put("pledgeId", id);
 		map.put("fromPage", "mortgageSummary");
 		FacesUtil.getFlash().put("pledgeParams",map);
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("pledgeParams", map);
         String redirectPage = "/site/pledgeDetail.jsf";
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -208,6 +212,8 @@ public class MortgageSummary implements Serializable {
 		map.put("guarantorId", id);
 		map.put("fromPage", "mortgageSummary");
 		FacesUtil.getFlash().put("guarantorParams",map);
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("guarantorParams", map);
         String redirectPage = "/site/guarantorDetail.jsf";
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

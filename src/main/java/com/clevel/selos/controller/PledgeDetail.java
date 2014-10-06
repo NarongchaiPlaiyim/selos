@@ -133,11 +133,14 @@ public class PledgeDetail implements Serializable {
 	@PostConstruct
 	private void init() {
 		HttpSession session = FacesUtil.getSession(false);
+        Map<String,Object> params = new HashMap<String, Object>();
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+            params = (Map<String,Object>)session.getAttribute("pledgeParams");
 		}
-		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
+		//Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
+        if(params!=null)
 		pledgeId = Util.parseLong(params.get("pledgeId"),-1);
 
         log.debug("pledge detail : init (workCaseId: {}, stepId: {}, pldgedId: {})", workCaseId,stepId,pledgeId);

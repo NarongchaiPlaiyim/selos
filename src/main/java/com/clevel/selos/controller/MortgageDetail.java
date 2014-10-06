@@ -245,11 +245,14 @@ public class MortgageDetail implements Serializable {
 	@PostConstruct
 	private void init() {
 		HttpSession session = FacesUtil.getSession(false);
+        Map<String,Object> params = new HashMap<String, Object>();
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+            params = (Map<String,Object>)session.getAttribute("mortgageParams");
 		}
-		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");
+		//Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");
+        if(params!=null)
 		mortgageId = Util.parseLong(params.get("mortgageId"),-1);
 		if (mortgageId <= 0)
 			mortgageId = Util.parseLong(FacesUtil.getParameter("mortgageId"),-1);
