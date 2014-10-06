@@ -29,30 +29,30 @@ public class DBRControl extends BusinessControl {
 
     @Inject
     private UserDAO userDAO;
+    @Inject
+    private DBRDAO dbrDAO;
+    @Inject
+    private DBRDetailDAO dbrDetailDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private BizInfoSummaryDAO bizInfoSummaryDAO;
+    @Inject
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
+    @Inject
+    private ProposeLineDAO newCreditFacilityDAO;
 
     @Inject
-    DBRDAO dbrDAO;
+    private DBRTransform dbrTransform;
     @Inject
-    DBRDetailDAO dbrDetailDAO;
-    @Inject
-    WorkCaseDAO workCaseDAO;
-    @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
-    @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
-    @Inject
-    DBRTransform dbrTransform;
-    @Inject
-    DBRDetailTransform dbrDetailTransform;
-    @Inject
-    ProposeLineDAO newCreditFacilityDAO;
+    private DBRDetailTransform dbrDetailTransform;
 
     @Inject
-    NCBInfoControl ncbInfoControl;
+    private NCBInfoControl ncbInfoControl;
     @Inject
-    BaseRateControl baseRateControl;
+    private BaseRateControl baseRateControl;
     @Inject
-    UserSysParameterControl userSysParameterControl;
+    private UserSysParameterControl userSysParameterControl;
 
     @Inject
     public DBRControl() {
