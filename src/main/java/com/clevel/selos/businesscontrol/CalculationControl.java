@@ -61,6 +61,8 @@ public class CalculationControl extends BusinessControl{
     private DecisionDAO decisionDAO;
     @Inject
     private CustomerDAO customerDAO;
+    @Inject
+    private ExistingCreditFacilityDAO existingCreditFacilityDAO;
 
     @Inject
     private CustomerTransform customerTransform;
@@ -709,7 +711,6 @@ public class CalculationControl extends BusinessControl{
     }
 
     public void calculateFinalDBR(long workCaseId){
-
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         if(Util.isNull(dbr)){
             dbr = new DBR();
@@ -728,5 +729,158 @@ public class CalculationControl extends BusinessControl{
         dbr.setFinalDBR(Util.multiply(Util.divide(Util.add(Util.add(totalMonthDebtBorrowerFinal, totalMonthDebtRelated),totalProposeLoanDBR), netMonthlyIncome), BigDecimal.valueOf(100)));
 
         dbrDAO.persist(dbr);
+    }
+
+    public void calculateTotalProposeAmount(long workCaseId, boolean isFromDecision) {
+        log.debug("calculateTotalProposeAmount :: workCaseId :: {}, isFromDecision :: {}",workCaseId, isFromDecision);
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        User user = getCurrentUser();
+        if (!Util.isNull(proposeLine)) {
+            BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
+            BigDecimal sumTotalCommercial = BigDecimal.ZERO;   // Commercial of Propose
+            BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
+            BigDecimal sumTotalBorrowerCommercial = BigDecimal.ZERO;   // Without : OBOD  Propose and Existing
+            BigDecimal sumTotalBorrowerCommercialAndOBOD = BigDecimal.ZERO;  //All Propose and Existing
+            BigDecimal sumTotalGroupExposure = BigDecimal.ZERO;
+            BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
+            BigDecimal sumTotalApproveLoanDbr = BigDecimal.ZERO;
+            BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
+            BigDecimal borrowerComOBOD = BigDecimal.ZERO;
+            BigDecimal borrowerCom = BigDecimal.ZERO;
+            BigDecimal groupExposure = BigDecimal.ZERO;
+
+            ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+            if (!Util.isNull(existingCreditFacility)) {
+                borrowerComOBOD = existingCreditFacility.getTotalBorrowerComOBOD();
+                borrowerCom = existingCreditFacility.getTotalBorrowerCom();
+                groupExposure = existingCreditFacility.getTotalBorrowerExposure();
+            }
+
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+
+            if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
+                List<ProposeCreditInfo> proposeCreditInfoList = proposeLine.getProposeCreditInfoList();
+                if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
+                    for (ProposeCreditInfo creditInfo : proposeCreditInfoList) {
+                        if (!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getProductProgram()) && !Util.isZero(creditInfo.getProductProgram().getId()) && !Util.isNull(creditInfo.getCreditType()) && !Util.isZero(creditInfo.getCreditType().getId())) {
+                            PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
+                            if(!Util.isNull(prdProgramToCreditType)) {
+                                DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+                                if(!Util.isNull(dbr)) {
+                                    ProductFormula productFormula;
+                                    if(basicInfo.getApplySpecialProgram() == 1) {
+                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                    } else {
+                                        if(!Util.isNull(basicInfo.getSpecialProgram())) {
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                        } else {
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                        }
+                                    }
+                                    if (!Util.isNull(productFormula)) {
+                                        if(creditInfo.getProposeType() == ProposeType.A) {
+                                            //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
+                                            if(creditInfo.getRequestType() == RequestTypes.NEW.value() && creditInfo.getUwDecision() == DecisionType.APPROVED) {
+                                                if (productFormula.getDbrCalculate() == 2) {// Yes
+                                                    if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
+                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
+                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
+                                                //ExposureMethod for check to use limit or limit*PCE%
+                                                if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                    sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
+                                                } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                    sumTotalOBOD = sumTotalOBOD.add(creditInfo.getLimit());
+                                                } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
+                                                    sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
+                                                }
+                                            } else {
+                                                //ExposureMethod for check to use limit or limit*PCE%
+                                                if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                    sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
+                                                } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                    sumTotalCommercial = sumTotalCommercial.add(creditInfo.getLimit());
+                                                } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                                    sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
+                                                }
+                                            }
+                                            sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
+
+                                            if(creditInfo.getRequestType() == RequestTypes.NEW.value()) {
+                                                if (productFormula.getDbrCalculate() == 1) {// No
+                                                    sumTotalNonLoanDbr = BigDecimal.ZERO;
+                                                } else if (productFormula.getDbrCalculate() == 2) {// Yes
+                                                    if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                                        sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                                        sumTotalLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
+                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
+                                                        sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    sumTotalBorrowerCommercialAndOBOD = Util.add(borrowerComOBOD, sumTotalPropose); // Total Commercial&OBOD  ของ Borrower (จาก Existing credit) +Total Propose Credit
+                    sumTotalBorrowerCommercial = Util.add(borrowerCom, sumTotalCommercial); //Total Commercial  ของ Borrower (จาก Existing credit) + *Commercial ของ propose
+                    sumTotalGroupExposure = Util.add(groupExposure, sumTotalPropose); //ให้เปลี่ยนเป็น Total Exposure ของ Group  (จาก Existing credit) +  Total Propose Credit
+                }
+            }
+
+            log.debug("sumTotalApproveLoanDbr :: {}", sumTotalApproveLoanDbr);
+            log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
+            log.debug("sumTotalPropose :: {}", sumTotalPropose);
+            log.debug("sumTotalNonLoanDbr :: {}", sumTotalNonLoanDbr);
+            log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
+            log.debug("sumTotalBorrowerCommercialAndOBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
+            log.debug("sumTotalGroupExposure :: {}", sumTotalGroupExposure);
+
+            if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // for check if uw save propose or existing do not save loan dbr
+                if(isFromDecision) {
+                    proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);             //sumTotalLoanDbr
+                }
+                proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
+                proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
+                proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
+                proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
+                proposeLine.setTotalExposure(sumTotalGroupExposure);
+            } else {
+                proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                    //sumTotalLoanDbr
+                proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
+                proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
+                proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
+                proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
+                proposeLine.setTotalExposure(sumTotalGroupExposure);
+            }
+        }
+        proposeLineDAO.persist(proposeLine);
+    }
+
+    public BigDecimal calTotalProposeLoanDBRForIntYear(ProposeCreditInfo proposeCreditInfo, BigDecimal dbrSpread) {
+        BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
+        if (!Util.isNull(proposeCreditInfo) && !Util.isNull(proposeCreditInfo.getProposeCreditInfoTierDetailList()) && !Util.isZero(proposeCreditInfo.getProposeCreditInfoTierDetailList().size())) {
+            BigDecimal oneHundred = BigDecimal.valueOf(100);
+            BigDecimal twelve = BigDecimal.valueOf(12);
+            for (ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+                if (!Util.isNull(proposeCreditInfoTierDetail)) {
+                    sumTotalLoanDbr = Util.add(sumTotalLoanDbr, Util.divide(Util.multiply(Util.divide(Util.add(Util.add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue(), proposeCreditInfoTierDetail.getFinalInterest()), dbrSpread), oneHundred), proposeCreditInfo.getLimit()), twelve));
+                }
+            }
+        }
+        return sumTotalLoanDbr;
     }
 }
