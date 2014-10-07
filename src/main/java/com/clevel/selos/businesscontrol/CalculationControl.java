@@ -790,13 +790,18 @@ public class CalculationControl extends BusinessControl{
                                     if (!Util.isNull(productFormula)) {
                                         if(creditInfo.getProposeType() == ProposeType.A) {
                                             //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
+                                            log.debug("ProposeType A");
                                             if(creditInfo.getRequestType() == RequestTypes.NEW.value() && creditInfo.getUwDecision() == DecisionType.APPROVED) {
+                                                log.debug("RequestType New, Approved");
                                                 if (productFormula.getDbrCalculate() == 2) {// Yes
                                                     if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                                        log.debug("Method 1");
                                                         sumTotalApproveLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
                                                     } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                                        log.debug("Method 2");
                                                         sumTotalApproveLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
                                                     } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
+                                                        log.debug("Method 3");
                                                         sumTotalApproveLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                     }
                                                 }
