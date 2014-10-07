@@ -695,6 +695,22 @@
     </p:dialog>
 </p:panel>
 
+<p:confirmDialog widgetVar="confirmDeleteReturn" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnReturn" widgetVar="wOkBtnReturn" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoDlgPanel"
+                         oncomplete="confirmDeleteReturn.hide(); wOkBtnReturn.enable(); wCancelBtnReturn.enable()"
+                         onclick="wOkBtnReturn.disable(); wCancelBtnReturn.disable()"
+                         actionListener="#{headerController.onDeleteReturnInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnReturn" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturn.hide()"/>
+    </div>
+</p:confirmDialog>
+
 <p:panel id="returnInfoAADPanel" styleClass="panel">
     <p:dialog id="returnInfoAADDialog" widgetVar="returnInfoAADDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -702,6 +718,22 @@
         <ui:include src="/site/dialog/returnInfoAADDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<p:confirmDialog widgetVar="confirmDeleteReturnAAD" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnAAD" widgetVar="wOkBtnAAD" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoAADDlgPanel"
+                         oncomplete="confirmDeleteReturnAAD.hide(); wOkBtnAAD.enable(); wCancelBtnAAD.enable()"
+                         onclick="wOkBtnAAD.disable(); wCancelBtnAAD.disable()"
+                         actionListener="#{headerController.onDeleteReturnAADInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnAAD" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnAAD.hide()"/>
+    </div>
+</p:confirmDialog>
 
 <p:panel id="returnInfoBDMPanel" styleClass="panel">
     <p:dialog id="returnInfoBDMDialog" widgetVar="returnInfoBDMDlg" header="Return Summary"
@@ -711,6 +743,22 @@
     </p:dialog>
 </p:panel>
 
+<p:confirmDialog widgetVar="confirmDeleteReturnBDM" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnBDM" widgetVar="wOkBtnBDM" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoBDMDlgPanel"
+                         oncomplete="confirmDeleteReturnBDM.hide(); wOkBtnBDM.enable(); wCancelBtnBDM.enable()"
+                         onclick="wOkBtnBDM.disable(); wCancelBtnBDM.disable()"
+                         actionListener="#{headerController.onDeleteReturnBDMInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnBDM" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnBDM.hide()"/>
+    </div>
+</p:confirmDialog>
+
 <p:panel id="returnInfoBUPanel" styleClass="panel">
     <p:dialog id="returnInfoBUDialog" widgetVar="returnInfoBUDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -718,6 +766,22 @@
         <ui:include src="/site/dialog/returnInfoBUDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<p:confirmDialog widgetVar="confirmDeleteReturnBU" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnBU" widgetVar="wOkBtnBU" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoBUDlgPanel"
+                         oncomplete="confirmDeleteReturnBU.hide(); wOkBtnBU.enable(); wCancelBtnBU.enable()"
+                         onclick="wOkBtnBU.disable(); wCancelBtnBU.disable()"
+                         actionListener="#{headerController.onDeleteReturnBUInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnBU" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnBU.hide()"/>
+    </div>
+</p:confirmDialog>
 
 <p:panel id="returnInfoMakerPanel" styleClass="panel">
     <p:dialog id="returnInfoMakerDialog" widgetVar="returnInfoMakerDlg" header="Return Summary"
@@ -727,6 +791,22 @@
     </p:dialog>
 </p:panel>
 
+<p:confirmDialog widgetVar="confirmDeleteReturnMaker" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnMaker" widgetVar="wOkBtnMaker" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoMakerDlgPanel"
+                         oncomplete="confirmDeleteReturnMaker.hide(); wOkBtnMaker.enable(); wCancelBtnMaker.enable()"
+                         onclick="wOkBtnMaker.disable(); wCancelBtnMaker.disable()"
+                         actionListener="#{headerController.onDeleteReturnMakerInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnMaker" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnMaker.hide()"/>
+    </div>
+</p:confirmDialog>
+
 <p:panel id="returnInfoAADUWPanel" styleClass="panel">
     <p:dialog id="returnInfoAADUWDialog" widgetVar="returnInfoAADUWDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -734,6 +814,22 @@
         <ui:include src="/site/dialog/returnInfoAADUWDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<p:confirmDialog widgetVar="confirmDeleteReturnAADUW" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnAADUW" widgetVar="wOkBtnAADUW" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoAADUWDlgPanel"
+                         oncomplete="confirmDeleteReturnAADUW.hide(); wOkBtnAADUW.enable(); wCancelBtnAADUW.enable()"
+                         onclick="wOkBtnAADUW.disable(); wCancelBtnAADUW.disable()"
+                         actionListener="#{headerController.onDeleteReturnAADUWInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnAADUW" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnAADUW.hide()"/>
+    </div>
+</p:confirmDialog>
 
 <p:panel id="addReturnInfoPanel" styleClass="panel">
     <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"

@@ -29,30 +29,30 @@ public class DBRControl extends BusinessControl {
 
     @Inject
     private UserDAO userDAO;
+    @Inject
+    private DBRDAO dbrDAO;
+    @Inject
+    private DBRDetailDAO dbrDetailDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private BizInfoSummaryDAO bizInfoSummaryDAO;
+    @Inject
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
+    @Inject
+    private ProposeLineDAO newCreditFacilityDAO;
 
     @Inject
-    DBRDAO dbrDAO;
+    private DBRTransform dbrTransform;
     @Inject
-    DBRDetailDAO dbrDetailDAO;
-    @Inject
-    WorkCaseDAO workCaseDAO;
-    @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
-    @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
-    @Inject
-    DBRTransform dbrTransform;
-    @Inject
-    DBRDetailTransform dbrDetailTransform;
-    @Inject
-    ProposeLineDAO newCreditFacilityDAO;
+    private DBRDetailTransform dbrDetailTransform;
 
     @Inject
-    NCBInfoControl ncbInfoControl;
+    private NCBInfoControl ncbInfoControl;
     @Inject
-    BaseRateControl baseRateControl;
+    private BaseRateControl baseRateControl;
     @Inject
-    UserSysParameterControl userSysParameterControl;
+    private UserSysParameterControl userSysParameterControl;
 
     @Inject
     public DBRControl() {
@@ -261,10 +261,10 @@ public class DBRControl extends BusinessControl {
             if(!Util.isNull(bizInfoSummary)){
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
+
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-            DBR dbr = null;
             try {
-                dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+                DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
                 dbrDAO.persist(dbr);
             } catch (Exception e) {
                 log.debug("Exception updateValueOfDBR", e);
@@ -275,7 +275,7 @@ public class DBRControl extends BusinessControl {
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
-        BigDecimal monthlyIncome = BigDecimal.ZERO;
+        BigDecimal monthlyIncome;
         int roleId = getCurrentUser().getRole().getId();
         if(roleId == RoleValue.UW.id()){
             if(bankStatementSummary.getGrdTotalIncomeNetUW() == null)
@@ -287,29 +287,5 @@ public class DBRControl extends BusinessControl {
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
         return monthlyIncome;
-    }
-
-    public void updateAdjustIncome(long workCaseId){
-        DBRView dbrView =  getDBRByWorkCase(workCaseId);
-
-        if(!Util.isNull(dbrView)){
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
-            List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-            if (!Util.isNull(dbrView)){
-                if(!Util.isNull(bankStatementSummary)){
-                    dbrView.setMonthlyIncome(BigDecimal.ZERO);
-                    dbrView.setMonthlyIncomeAdjust(BigDecimal.ZERO);
-                }
-            }
-
-            DBR dbr = null;
-            try {
-                dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
-                dbrDAO.persist(dbr);
-            } catch (Exception e) {
-                log.debug("Exception updateValueOfDBR", e);
-            }
-        }
     }
 }

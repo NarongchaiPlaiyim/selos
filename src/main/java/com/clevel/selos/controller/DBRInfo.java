@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
@@ -59,6 +60,7 @@ public class DBRInfo extends BaseController {
     // message //
     private String messageHeader;
     private String message;
+    private String severity;
 
     // *** Content ***///
     private DBRView dbr;
@@ -74,13 +76,10 @@ public class DBRInfo extends BaseController {
 
     //session
     private long workCaseId;
-    private String lastUpdated;
 
     private boolean isComplete;
 
-
     public DBRInfo() {
-
     }
 
     public boolean checkSession(HttpSession session){
@@ -91,7 +90,6 @@ public class DBRInfo extends BaseController {
 
         return checkSession;
     }
-
 
     public void preRender(){
         log.debug("preRender");
@@ -168,23 +166,14 @@ public class DBRInfo extends BaseController {
 
     }
 
-
-
     public void initEditDBRDetail() {
         isComplete = false;
         log.debug("initEditDBRDetail :{}", selectedItem);
         log.debug("initEditDBRDetail rowIndex:{}", rowIndex);
     }
 
-    public void onEditDBRDetail() {
-        log.debug("initEditDBRDetail :{}", selectedItem);
-        log.debug("initEditDBRDetail rowIndex:{}", rowIndex);
-        dbrDetails.set(rowIndex, selectedItem);
-    }
-
     public void onDeletedDBRDetail() {
         dbrDetails.remove(rowIndex);
-
     }
 
     public void onSaveDBRInfo() {
@@ -193,28 +182,22 @@ public class DBRInfo extends BaseController {
             dbr.setWorkCaseId(workCaseId);
             dbrControl.saveDBRInfo(dbr, ncbDetails);
 
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.dbr.message.save");
-
-            //update Display
-            dbr = new DBRView();
-            dbr = dbrControl.getDBRByWorkCase(workCaseId);
-            dbrDetails = new ArrayList<DBRDetailView>();
-
-            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
-                dbrDetails = dbr.getDbrDetailViews();
-            }
-
             calculationControl.calForDBR(workCaseId);
             calculationControl.calWC(workCaseId);
+
+            //update Display
+            onCreation();
+
+            messageHeader = msg.get("app.header.save.success");
+            message = msg.get("app.dbr.message.save");
+            severity = MessageDialogSeverity.INFO.severity();
         } catch (Exception e) {
             messageHeader = "Exception.";
             message = Util.getMessageException(e);
+            severity = MessageDialogSeverity.ALERT.severity();
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
-
-
 
     public BigDecimal getTotalMonthDebtBorrower(){
         BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
@@ -316,5 +299,11 @@ public class DBRInfo extends BaseController {
         isComplete = complete;
     }
 
+    public String getSeverity() {
+        return severity;
+    }
 
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
 }
