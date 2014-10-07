@@ -812,7 +812,7 @@ public class ProposeLine extends BaseController {
         try {
             HttpSession session = FacesUtil.getSession(false);
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
-            calculationControl.calculateTotalProposeAmount(workCaseId, false);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
             calculationControl.calWC(workCaseId);
             calculationControl.calForProposeLine(workCaseId);
             calculationControl.calculateFinalDBR(workCaseId);

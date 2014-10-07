@@ -33,7 +33,7 @@ public class RelatedRetailDecisionReport extends ReportModel{
     private String code;
 
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
-    private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
+    private List<ExistingCreditTierDetailReport> existingCreditTierDetailReports;
 
     public RelatedRetailDecisionReport() {
         count = 0;
@@ -47,7 +47,6 @@ public class RelatedRetailDecisionReport extends ReportModel{
         projectCode = "";
 
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
-        existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
     }
 
 
@@ -164,14 +163,6 @@ public class RelatedRetailDecisionReport extends ReportModel{
         this.existingCreditTierDetailViewList = existingCreditTierDetailViewList;
     }
 
-    public List<ExistingSplitLineDetailView> getExistingSplitLineDetailViewList() {
-        return existingSplitLineDetailViewList;
-    }
-
-    public void setExistingSplitLineDetailViewList(List<ExistingSplitLineDetailView> existingSplitLineDetailViewList) {
-        this.existingSplitLineDetailViewList = existingSplitLineDetailViewList;
-    }
-
     public int getCount() {
         return count;
     }
@@ -212,6 +203,14 @@ public class RelatedRetailDecisionReport extends ReportModel{
         this.code = code;
     }
 
+    public List<ExistingCreditTierDetailReport> getExistingCreditTierDetailReports() {
+        return existingCreditTierDetailReports;
+    }
+
+    public void setExistingCreditTierDetailReports(List<ExistingCreditTierDetailReport> existingCreditTierDetailReports) {
+        this.existingCreditTierDetailReports = existingCreditTierDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -234,7 +233,7 @@ public class RelatedRetailDecisionReport extends ReportModel{
                 .append("account", account)
                 .append("code", code)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
-                .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
+                .append("existingCreditTierDetailReports", existingCreditTierDetailReports)
                 .toString();
     }
 }

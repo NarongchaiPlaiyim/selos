@@ -107,7 +107,7 @@ public class UserDAO extends GenericDAO<User,String> {
     }
 
     public void createNewUserByISA(final User user){
-        log.debug("-- createNewUserByISA()");
+        log.debug("-- createNewUserByISA(). {}",user);
         if(!Util.isNull(user)){
             user.setUserStatus(UserStatus.NORMAL);
             persist(user);

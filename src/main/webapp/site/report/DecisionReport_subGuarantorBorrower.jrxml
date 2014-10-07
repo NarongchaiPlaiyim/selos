@@ -42,10 +42,10 @@
 	<field name="totalLimitGuaranteeAmount" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[totalLimitGuaranteeAmount]]></fieldDescription>
 	</field>
-	<field name="existingCreditTypeDetailViewList" class="java.util.List">
-		<fieldDescription><![CDATA[existingCreditTypeDetailViewList]]></fieldDescription>
-	</field>
 	<field name="path" class="java.lang.String"/>
+	<field name="existingCreditTypeDetailReports" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTypeDetailReports]]></fieldDescription>
+	</field>
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
@@ -128,9 +128,7 @@
 				</box>
 				<subreport>
 					<reportElement uuid="40902c54-b8ec-4927-a8df-b7aa66d327b5" stretchType="RelativeToBandHeight" x="0" y="0" width="261" height="14"/>
-					<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViewList}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViewList})]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailReports})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subGuarantorBorrower_subGuarantorBorrowerCreditType.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>

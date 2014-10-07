@@ -21,6 +21,7 @@ public class ApprovedGuarantorDecisionReport extends ReportModel{
     private BigDecimal totalLimitGuaranteeAmount;
     private String uwDecision;
     private String guarantorType;
+    private List<ProposeCreditInfoDetailReport> proposeCreditInfoDetailReports;
 
     public ApprovedGuarantorDecisionReport() {
         count = 0;
@@ -94,16 +95,26 @@ public class ApprovedGuarantorDecisionReport extends ReportModel{
         this.guarantorType = guarantorType;
     }
 
+    public List<ProposeCreditInfoDetailReport> getProposeCreditInfoDetailReports() {
+        return proposeCreditInfoDetailReports;
+    }
+
+    public void setProposeCreditInfoDetailReports(List<ProposeCreditInfoDetailReport> proposeCreditInfoDetailReports) {
+        this.proposeCreditInfoDetailReports = proposeCreditInfoDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("count", count)
                 .append("name", name)
                 .append("tcgLgNo", tcgLgNo)
+                .append("path", path)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("uwDecision", uwDecision)
                 .append("guarantorType", guarantorType)
+                .append("proposeCreditInfoDetailReports", proposeCreditInfoDetailReports)
                 .toString();
     }
 }

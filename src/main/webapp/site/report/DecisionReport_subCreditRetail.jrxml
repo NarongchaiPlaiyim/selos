@@ -58,9 +58,6 @@
 	<field name="outstanding" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[outstanding]]></fieldDescription>
 	</field>
-	<field name="existingCreditTierDetailViewList" class="java.util.List">
-		<fieldDescription><![CDATA[existingCreditTierDetailViewList]]></fieldDescription>
-	</field>
 	<field name="count" class="java.lang.Integer">
 		<fieldDescription><![CDATA[count]]></fieldDescription>
 	</field>
@@ -70,6 +67,9 @@
 	</field>
 	<field name="code" class="java.lang.String">
 		<fieldDescription><![CDATA[code]]></fieldDescription>
+	</field>
+	<field name="existingCreditTierDetailReports" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTierDetailReports]]></fieldDescription>
 	</field>
 	<columnHeader>
 		<band height="38">
@@ -214,11 +214,30 @@
 			</textField>
 			<subreport>
 				<reportElement uuid="7ca3135c-8228-4a4e-a2f2-7b4103a58286" stretchType="RelativeToTallestObject" x="411" y="0" width="144" height="15"/>
-				<dataSourceExpression><![CDATA[$F{existingCreditTierDetailViewList}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailReports})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCreditRetail_subCommercial.jasper"]]></subreportExpression>
 			</subreport>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="9346bf4b-b3ce-40d7-9226-f8dd01e8373b" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="411" y="0" width="56" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1" tabStopWidth="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="0f572f3b-eb3d-4e1e-866e-e792a8291e15" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="467" y="0" width="41" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1" tabStopWidth="1"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="8a31fa8e-3f0c-4aef-98a1-e1bceb3d6107" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="508" y="0" width="47" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1" tabStopWidth="1"/>
+				</textElement>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

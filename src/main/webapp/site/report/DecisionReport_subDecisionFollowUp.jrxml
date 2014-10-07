@@ -69,16 +69,16 @@
 				<reportElement uuid="4cf5d76b-f903-4f8b-a5be-288e1e0826a1" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="18" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{count}.intValue() == 0?
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a48460a0-66bf-4e95-8b5a-ac73de2d6526" style="detail" stretchType="RelativeToBandHeight" x="18" y="0" width="312" height="17"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{conditionView}]]></textFieldExpression>
 			</textField>
@@ -86,7 +86,7 @@
 				<reportElement uuid="f6161f33-4fb0-48ee-aeed-8ced5a6e0133" style="detail" stretchType="RelativeToBandHeight" x="330" y="0" width="160" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{detail}]]></textFieldExpression>
 			</textField>
@@ -94,7 +94,7 @@
 				<reportElement uuid="a3735f14-e51e-480f-9619-18d8e046e77f" style="detail" stretchType="RelativeToBandHeight" x="490" y="0" width="65" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{followDate}.equals( null ) ?
 "" : $F{followDate}]]></textFieldExpression>

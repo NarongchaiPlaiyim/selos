@@ -31,8 +31,8 @@
 	<field name="tcgLgNo" class="java.lang.String">
 		<fieldDescription><![CDATA[tcgLgNo]]></fieldDescription>
 	</field>
-	<field name="proposeCreditDetailViewList" class="java.util.List">
-		<fieldDescription><![CDATA[proposeCreditDetailViewList]]></fieldDescription>
+	<field name="proposeCreditInfoDetailReports" class="java.util.List">
+		<fieldDescription><![CDATA[proposeCreditInfoDetailReports]]></fieldDescription>
 	</field>
 	<field name="totalLimitGuaranteeAmount" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[totalLimitGuaranteeAmount]]></fieldDescription>
@@ -114,9 +114,7 @@
 			</textField>
 			<subreport>
 				<reportElement uuid="4e21ca30-042c-47da-a4c5-8c061b1a2d07" x="194" y="0" width="290" height="14"/>
-				<dataSourceExpression><![CDATA[$F{proposeCreditDetailViewList}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditDetailViewList})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditInfoDetailReports})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subProposedGuarantor_subCreditType.jasper"]]></subreportExpression>
 			</subreport>
 		</band>

@@ -184,7 +184,7 @@ public class DBRInfo extends BaseController {
 
             calculationControl.calForDBR(workCaseId);
             calculationControl.calWC(workCaseId);
-            calculationControl.calculateTotalProposeAmount(workCaseId, false);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
             calculationControl.calculateFinalDBR(workCaseId);
 
             //update Display

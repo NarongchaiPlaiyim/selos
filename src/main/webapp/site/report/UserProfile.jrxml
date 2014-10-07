@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UserProfile" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a36a0c05-476f-41de-a9ea-85aa73012031">
+	<property name="ireport.zoom" value="0.8264462809917354"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Header" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" isBlankWhenNull="false" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true">
+		<box>
+			<topPen lineWidth="0.5"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" isBlankWhenNull="true" fontSize="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true">
+		<box>
+			<topPen lineWidth="0.5"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<field name="row" class="java.lang.Integer"/>
+	<field name="adminTask" class="java.lang.String"/>
+	<field name="empID" class="java.lang.String"/>
+	<field name="empName" class="java.lang.String"/>
+	<field name="oldData" class="java.lang.String"/>
+	<field name="newData" class="java.lang.String"/>
+	<field name="modifyDate" class="java.sql.Timestamp"/>
+	<field name="modifyBy" class="java.lang.String"/>
+	<field name="adminName" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bbcc96e7-6a06-4359-9b32-a41aaaaf3ffb" style="Header" x="0" y="0" width="25" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Seq.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c0b9479-a0e7-4d4a-a94d-1a2cc05651a5" style="Header" x="200" y="0" width="210" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Old data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="07a705d9-8092-4ff0-b47c-ff87dd50c0c4" style="Header" x="622" y="0" width="55" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Modify Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45c493c9-eeef-4bdb-b37e-6fda58d181c7" style="Header" x="410" y="0" width="212" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[New data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbae3e28-9a82-4aba-87d7-6844ad4a34a0" style="Header" x="130" y="0" width="70" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Employee Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f42eabed-92a4-4038-921d-143ee0851152" style="Header" x="25" y="0" width="55" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Admin. Task]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f32efb29-1684-4fa7-b9e9-b1d6f2260879" style="Header" x="80" y="0" width="50" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Employee ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9defdf2d-c5f7-4a3d-8428-c93fd114a65e" style="Header" x="677" y="0" width="60" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Modify By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="82f338a3-7baa-4f6f-b8c4-60ce8a5638c1" style="Header" x="737" y="0" width="65" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<text><![CDATA[Admin Name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a68c27e6-9551-4467-b714-33edef33fe0b" style="Detail" x="200" y="0" width="210" height="20"/>
+				<textElement textAlignment="Left">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{oldData}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7a67dd1b-2f98-4de0-960c-7723192f44c8" style="Detail" x="80" y="0" width="50" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0d54f1b2-cc08-4e8d-8bc0-0fa200a4ea65" style="Detail" x="130" y="0" width="70" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1e4680be-8279-455e-bcd5-f4c5abbfda6e" style="Detail" x="410" y="0" width="212" height="20"/>
+				<textElement textAlignment="Left">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="2" leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{newData}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="946475ff-e730-4514-aa68-670426207d5a" style="Detail" x="25" y="0" width="55" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adminTask}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a0b32f60-3e53-4d39-8377-a571f1c7ae2a" style="Detail" x="0" y="0" width="25" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{row}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="64152e3a-9dc5-4e96-951a-7d83033efa5c" style="Detail" x="622" y="0" width="55" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{modifyDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d60647e7-cefa-4411-b629-df805292bc25" style="Detail" x="677" y="0" width="60" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{modifyBy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ebe6ea14-895c-48d3-9490-ec86e1662665" style="Detail" x="737" y="0" width="65" height="20"/>
+				<textElement>
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adminName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
