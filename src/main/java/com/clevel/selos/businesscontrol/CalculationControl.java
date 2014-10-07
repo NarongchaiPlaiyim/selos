@@ -770,13 +770,21 @@ public class CalculationControl extends BusinessControl{
                                 DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
                                 if(!Util.isNull(dbr)) {
                                     ProductFormula productFormula;
-                                    if(basicInfo.getApplySpecialProgram() == 1) {
-                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                    if(creditInfo.getCreditType().getId() == CreditTypeGroup.OD.value()) {
+                                        if(basicInfo.getApplySpecialProgram() == 1) {
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                        } else {
+                                            if(!Util.isNull(basicInfo.getSpecialProgram())) {
+                                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            } else {
+                                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            }
+                                        }
                                     } else {
                                         if(!Util.isNull(basicInfo.getSpecialProgram())) {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag());
                                         } else {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag());
                                         }
                                     }
                                     if (!Util.isNull(productFormula)) {
