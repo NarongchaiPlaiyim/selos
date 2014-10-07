@@ -3037,7 +3037,7 @@ public class ProposeLineControl extends BusinessControl {
                         ProductFormula productFormula;
 
                         for (ProposeCreditInfo proposeCreditInfo : proposeCreditInfoList) {
-                            if(!Util.isNull(proposeCreditInfo)) {
+                            if(!Util.isNull(proposeCreditInfo) && proposeCreditInfo.getRequestType() == RequestTypes.NEW.value()) {
                                 if(proposeCreditInfo.getProposeType() == ProposeType.A && proposeCreditInfo.getUwDecision() == DecisionType.APPROVED) {
                                     if (!Util.isNull(proposeCreditInfo.getProductProgram()) && !Util.isZero(proposeCreditInfo.getProductProgram().getId()) &&
                                             !Util.isNull(proposeCreditInfo.getCreditType()) && !Util.isZero(proposeCreditInfo.getCreditType().getId())) {

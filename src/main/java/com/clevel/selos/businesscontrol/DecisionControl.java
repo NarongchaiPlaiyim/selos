@@ -891,51 +891,53 @@ public class DecisionControl extends BusinessControl {
                 BigDecimal sumTotalOBOD = BigDecimal.ZERO;
 
                 for (ProposeCreditInfoDetailView approveCredit : approveCreditList) {
-                    if(!Util.isNull(approveCredit) && !Util.isNull(approveCredit.getProductProgramView()) && !Util.isNull(approveCredit.getCreditTypeView())) {
-                        productProgram = productProgramDAO.findById(approveCredit.getProductProgramView().getId());
-                        creditType = creditTypeDAO.findById(approveCredit.getCreditTypeView().getId());
+                    if(!Util.isNull(approveCredit) && approveCredit.getUwDecision() == DecisionType.APPROVED) {
+                        if(!Util.isNull(approveCredit.getProductProgramView()) && !Util.isNull(approveCredit.getCreditTypeView())) {
+                            productProgram = productProgramDAO.findById(approveCredit.getProductProgramView().getId());
+                            creditType = creditTypeDAO.findById(approveCredit.getCreditTypeView().getId());
 
-                        if(!Util.isNull(productProgram) && !Util.isNull(creditType)) {
-                            prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
-                            if(!Util.isNull(prdProgramToCreditType)) {
-                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, decisionView.getCreditCustomerType().value(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
-                                if(!Util.isNull(productFormula)) {
-                                    if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
-                                        //ExposureMethod for check to use limit or limit*PCE%
-                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            sumTotalOBOD = sumTotalOBOD.add(approveCredit.getLimit());
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
-                                            sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(approveCredit.getLimit(),approveCredit.getPCEPercent()),100));
+                            if(!Util.isNull(productProgram) && !Util.isNull(creditType)) {
+                                prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
+                                if(!Util.isNull(prdProgramToCreditType)) {
+                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, decisionView.getCreditCustomerType().value(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
+                                    if(!Util.isNull(productFormula)) {
+                                        if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
+                                            //ExposureMethod for check to use limit or limit*PCE%
+                                            if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                sumTotalOBOD = sumTotalOBOD.add(approveCredit.getLimit());
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
+                                                sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(approveCredit.getLimit(),approveCredit.getPCEPercent()),100));
+                                            }
+                                        } else {
+                                            //ExposureMethod for check to use limit or limit*PCE%
+                                            if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                sumTotalCommercial = sumTotalCommercial.add(approveCredit.getLimit());
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                                sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(approveCredit.getLimit(),approveCredit.getPCEPercent()),100));
+                                            }
                                         }
-                                    } else {
-                                        //ExposureMethod for check to use limit or limit*PCE%
-                                        if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            sumTotalCommercial = sumTotalCommercial.add(approveCredit.getLimit());
-                                        } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
-                                            sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(approveCredit.getLimit(),approveCredit.getPCEPercent()),100));
-                                        }
+                                        totalApproveCredit = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
                                     }
-                                    totalApproveCredit = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
                                 }
                             }
-                        }
-                        // Count All 'New' propose credit
-                        totalNumProposeCreditFac = Util.add(totalNumProposeCreditFac, BigDecimal.ONE);
+                            // Count All 'New' propose credit
+                            totalNumProposeCreditFac = Util.add(totalNumProposeCreditFac, BigDecimal.ONE);
 
-                        CreditTypeView creditTypeView = approveCredit.getCreditTypeView();
-                        if (creditTypeView != null) {
-                            // Count propose credit which credit facility = 'OD'
-                            if (CreditTypeGroup.OD.value() == creditTypeView.getCreditGroup()) {
-                                totalNumOfNewOD = Util.add(totalNumOfNewOD, BigDecimal.ONE);
-                                totalODLimit = Util.add(totalODLimit, approveCredit.getLimit());
-                            }
-                            // Count the 'New' propose credit which has Contingent Flag 'Y'
-                            if (creditTypeView.isContingentFlag()) {
-                                totalNumContingentPropose = Util.add(totalNumContingentPropose, BigDecimal.ONE);
+                            CreditTypeView creditTypeView = approveCredit.getCreditTypeView();
+                            if (creditTypeView != null) {
+                                // Count propose credit which credit facility = 'OD'
+                                if (CreditTypeGroup.OD.value() == creditTypeView.getCreditGroup()) {
+                                    totalNumOfNewOD = Util.add(totalNumOfNewOD, BigDecimal.ONE);
+                                    totalODLimit = Util.add(totalODLimit, approveCredit.getLimit());
+                                }
+                                // Count the 'New' propose credit which has Contingent Flag 'Y'
+                                if (creditTypeView.isContingentFlag()) {
+                                    totalNumContingentPropose = Util.add(totalNumContingentPropose, BigDecimal.ONE);
+                                }
                             }
                         }
                     }
@@ -947,26 +949,28 @@ public class DecisionControl extends BusinessControl {
             BigDecimal totalApproveExposure = Util.add(decisionView.getExtBorrowerTotalExposure(), totalApproveCredit);
 
             List<ProposeCollateralInfoView> approveCollateralList = decisionView.getApproveCollateralList();
-            if (approveCollateralList != null && approveCollateralList.size() > 0) {
+            if (!Util.isNull(approveCollateralList) && !Util.isZero(approveCollateralList.size())) {
                 for (ProposeCollateralInfoView collateralView : approveCollateralList) {
-                    List<ProposeCollateralInfoHeadView> collHeadViewList = collateralView.getProposeCollateralInfoHeadViewList();
-                    if (collHeadViewList != null && collHeadViewList.size() > 0) {
-                        for (ProposeCollateralInfoHeadView collHeadView : collHeadViewList) {
-                            PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
-                            if(!Util.isNull(potentialCollateral)) {
-                                // Count core asset and none core asset
-                                if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                    totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
+                    if(!Util.isNull(collateralView) && collateralView.getUwDecision() == DecisionType.APPROVED) {
+                        List<ProposeCollateralInfoHeadView> collHeadViewList = collateralView.getProposeCollateralInfoHeadViewList();
+                        if (collHeadViewList != null && collHeadViewList.size() > 0) {
+                            for (ProposeCollateralInfoHeadView collHeadView : collHeadViewList) {
+                                PotentialCollateral potentialCollateral = collHeadView.getPotentialCollateral();
+                                if(!Util.isNull(potentialCollateral)) {
+                                    // Count core asset and none core asset
+                                    if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                        totalNumOfCoreAsset = Util.add(totalNumOfCoreAsset, BigDecimal.ONE);
+                                    }
+                                    else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                                        totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
+                                    }
                                 }
-                                else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
-                                    totalNumOfNonCoreAsset = Util.add(totalNumOfNonCoreAsset, BigDecimal.ONE);
-                                }
-                            }
-                            // Sum total mortgage value
-                            List<ProposeCollateralInfoSubView> collSubViewList = collHeadView.getProposeCollateralInfoSubViewList();
-                            if (collSubViewList != null && collSubViewList.size() > 0) {
-                                for (ProposeCollateralInfoSubView collSubView : collSubViewList) {
-                                    totalMortgageValue = Util.add(totalMortgageValue, collSubView.getMortgageValue());
+                                // Sum total mortgage value
+                                List<ProposeCollateralInfoSubView> collSubViewList = collHeadView.getProposeCollateralInfoSubViewList();
+                                if (collSubViewList != null && collSubViewList.size() > 0) {
+                                    for (ProposeCollateralInfoSubView collSubView : collSubViewList) {
+                                        totalMortgageValue = Util.add(totalMortgageValue, collSubView.getMortgageValue());
+                                    }
                                 }
                             }
                         }
@@ -976,23 +980,25 @@ public class DecisionControl extends BusinessControl {
 
             // Guarantor Detail
             List<ProposeGuarantorInfoView> approveGuarantorList = decisionView.getApproveGuarantorList();
-            if (approveGuarantorList != null && approveGuarantorList.size() > 0) {
+            if (!Util.isNull(approveGuarantorList) && !Util.isZero(approveGuarantorList.size())) {
                 for (ProposeGuarantorInfoView approveGuarantor : approveGuarantorList) {
-                    // Sum total approve guarantee amount
-                    totalApproveGuaranteeAmt = Util.add(totalApproveGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
-                    // Sum total guarantee amount (TCG, Individual, Juristic)
-                    CustomerInfoView customerInfoView = approveGuarantor.getGuarantorName();
-                    if (customerInfoView != null) {
-                        CustomerEntity customerEntity = customerInfoView.getCustomerEntity();
-                        if (customerEntity != null) {
-                            if (GuarantorCategory.INDIVIDUAL.value() == customerEntity.getId()) {
-                                totalIndiGuaranteeAmt = Util.add(totalIndiGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
-                            }
-                            else if (GuarantorCategory.JURISTIC.value() == customerEntity.getId()) {
-                                totalJuriGuaranteeAmt = Util.add(totalJuriGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
-                            }
-                            else if (GuarantorCategory.TCG.value() == customerEntity.getId()) {
-                                totalTCGGuaranteeAmt = Util.add(totalTCGGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
+                    if(!Util.isNull(approveGuarantor) && approveGuarantor.getUwDecision() == DecisionType.APPROVED) {
+                        // Sum total approve guarantee amount
+                        totalApproveGuaranteeAmt = Util.add(totalApproveGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
+                        // Sum total guarantee amount (TCG, Individual, Juristic)
+                        CustomerInfoView customerInfoView = approveGuarantor.getGuarantorName();
+                        if (customerInfoView != null) {
+                            CustomerEntity customerEntity = customerInfoView.getCustomerEntity();
+                            if (customerEntity != null) {
+                                if (GuarantorCategory.INDIVIDUAL.value() == customerEntity.getId()) {
+                                    totalIndiGuaranteeAmt = Util.add(totalIndiGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
+                                }
+                                else if (GuarantorCategory.JURISTIC.value() == customerEntity.getId()) {
+                                    totalJuriGuaranteeAmt = Util.add(totalJuriGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
+                                }
+                                else if (GuarantorCategory.TCG.value() == customerEntity.getId()) {
+                                    totalTCGGuaranteeAmt = Util.add(totalTCGGuaranteeAmt, approveGuarantor.getGuaranteeAmount());
+                                }
                             }
                         }
                     }
@@ -1017,18 +1023,6 @@ public class DecisionControl extends BusinessControl {
     }
 
     //Get value pass to PDFOfferLetter by Bird
-    public BigDecimal getMRRValue(){
-        return Util.convertNullToZERO(baseRateControl.getMRRValue());
-    }
-
-    public BigDecimal getMLRValue(){
-        return Util.convertNullToZERO(baseRateControl.getMLRValue());
-    }
-
-    public BigDecimal getMORValue(){
-        return Util.convertNullToZERO(baseRateControl.getMORValue());
-    }
-
     public String getCurrentUserID(){
         return Util.checkNullString(super.getCurrentUserID());
     }
