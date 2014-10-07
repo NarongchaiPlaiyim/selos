@@ -167,8 +167,8 @@ public class HeaderControl extends BusinessControl {
             User uwUser = userDAO.findById(uwUserId);
             if (uwUser != null) {
                 appHeaderView.setUwName(uwUser.getUserName());
-                appHeaderView.setUwPhoneNumber(uwUser.getPhoneExt());
-                appHeaderView.setUwTeamName(uwUser.getTeam().getName());
+                appHeaderView.setUwPhoneNumber(uwUser.getPhoneNumber());
+                appHeaderView.setUwTeamName(uwUser.getTeam().getTeam_name());
             }
         }
 

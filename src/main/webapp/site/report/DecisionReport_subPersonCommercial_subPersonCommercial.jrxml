@@ -14,14 +14,11 @@
 	<field name="installment" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[installment]]></fieldDescription>
 	</field>
-	<field name="finalBasePrice" class="java.lang.Object">
-		<fieldDescription><![CDATA[finalBasePrice.name]]></fieldDescription>
+	<field name="finalBasePriceAndInterest" class="java.lang.String">
+		<fieldDescription><![CDATA[finalBasePriceAndInterest]]></fieldDescription>
 	</field>
 	<field name="tenor" class="java.lang.Integer">
 		<fieldDescription><![CDATA[tenor]]></fieldDescription>
-	</field>
-	<field name="finalInterest" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[finalInterest]]></fieldDescription>
 	</field>
 	<detail>
 		<band height="29" splitType="Stretch">
@@ -39,8 +36,7 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{finalBasePrice}+
-($F{finalInterest}.intValue() > 0 ? "+" + $F{finalInterest} : "" )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{finalBasePriceAndInterest}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="4d71734e-bd52-4719-8f5d-a59b49c9bbbe" style="detail" stretchType="RelativeToBandHeight" x="97" y="0" width="44" height="29"/>

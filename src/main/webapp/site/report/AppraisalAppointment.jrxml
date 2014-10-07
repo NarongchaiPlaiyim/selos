@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AppraisalAppointment" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c8626b90-09bf-4ee1-8d9e-eb95ce1ef9db">
 	<property name="ireport.zoom" value="1.1000000000000016"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="48"/>
 	<style name="text" vAlign="Middle" isBlankWhenNull="true" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
 			<pen lineColor="#000000"/>
@@ -415,6 +415,9 @@
 				</textElement>
 				<text><![CDATA[Appraisal Request]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="7d2b9c14-a360-456a-96b1-109087628598" x="0" y="165" width="555" height="1" forecolor="#CCCCCC"/>
+			</line>
 		</band>
 		<band height="212">
 			<staticText>
@@ -584,7 +587,7 @@ $P{path} + "false.jpg"]]></imageExpression>
 				<text><![CDATA[Internal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="300dad6b-2a16-495a-afe1-b567f994772b" x="163" y="27" width="45" height="16"/>
+				<reportElement uuid="300dad6b-2a16-495a-afe1-b567f994772b" x="163" y="23" width="45" height="16"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>

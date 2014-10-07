@@ -35,6 +35,8 @@ public class ExistingCollateralRelatedDecisionReport extends ReportModel{
 
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViews;
 
+    private List<ExistingCreditTypeDetailReport> existingCreditTypeDetailReports;
+
     public ExistingCollateralRelatedDecisionReport() {
         potentialCollateral = "";
         collateralType = "";
@@ -213,10 +215,17 @@ public class ExistingCollateralRelatedDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public List<ExistingCreditTypeDetailReport> getExistingCreditTypeDetailReports() {
+        return existingCreditTypeDetailReports;
+    }
+
+    public void setExistingCreditTypeDetailReports(List<ExistingCreditTypeDetailReport> existingCreditTypeDetailReports) {
+        this.existingCreditTypeDetailReports = existingCreditTypeDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("accountNumber", accountNumber)
                 .append("count", count)
                 .append("potentialCollateral", potentialCollateral)
                 .append("collateralType", collateralType)
@@ -227,6 +236,7 @@ public class ExistingCollateralRelatedDecisionReport extends ReportModel{
                 .append("collateralLocation", collateralLocation)
                 .append("remark", remark)
                 .append("cusName", cusName)
+                .append("accountNumber", accountNumber)
                 .append("accountSuffix", accountSuffix)
                 .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
@@ -234,7 +244,9 @@ public class ExistingCollateralRelatedDecisionReport extends ReportModel{
                 .append("mortgageType", mortgageType)
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)
+                .append("path", path)
                 .append("existingCreditTypeDetailViews", existingCreditTypeDetailViews)
+                .append("existingCreditTypeDetailReports", existingCreditTypeDetailReports)
                 .toString();
     }
 }

@@ -394,10 +394,10 @@ public class GenPDF extends ReportService implements Serializable {
         map.put("fillCreditBorrower",pdfExecutiveSummary.fillCreditBorrower(pathsub));
         map.put("fillCondition",pdfExecutiveSummary.fillCondition());
         map.put("fillBorrowerRetail",pdfExecutiveSummary.fillBorrowerRetail(pathsub));
-        map.put("fillAppInRLOS",pdfExecutiveSummary.fillAppInRLOS(pathsub));
+//        map.put("fillAppInRLOS",pdfExecutiveSummary.fillAppInRLOS(pathsub));
         map.put("fillRelatedCommercial",pdfExecutiveSummary.fillRelatedCommercial(pathsub));
         map.put("fillRelatedRetail",pdfExecutiveSummary.fillRelatedRetail(pathsub));
-        map.put("fillRelatedAppInRLOS",pdfExecutiveSummary.fillRelatedAppInRLOS(pathsub));
+//        map.put("fillRelatedAppInRLOS",pdfExecutiveSummary.fillRelatedAppInRLOS(pathsub));
         map.put("fillExistingCollateralBorrower",pdfExecutiveSummary.fillExistingCollateralBorrower(pathsub));
         map.put("fillExistingCollateralRelated",pdfExecutiveSummary.fillExistingCollateralRelated(pathsub));
         map.put("fillGuarantorBorrower",pdfExecutiveSummary.fillGuarantorBorrower(pathsub));
