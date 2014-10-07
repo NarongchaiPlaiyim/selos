@@ -52,24 +52,44 @@ public class UserTransform extends Transform {
             model.setPhoneExt(view.getPhoneExt());
             model.setPhoneNumber(view.getPhoneNumber());
             model.setEmailAddress(view.getEmailAddress());
-            if(!Util.isNull(view.getRole())){
+
+            if(!Util.isNull(view.getRole()) && !Util.isZero(view.getRole().getId())){
                 model.setRole(view.getRole());
+            } else {
+                model.setRole(null);
             }
-            if(!Util.isNull(view.getUserTeam())){
+
+            if(!Util.isNull(view.getUserTeam()) && !Util.isZero(view.getUserTeam().getId())){
                 model.setTeam(view.getUserTeam());
+            } else {
+                model.setTeam(null);
             }
-            if(!Util.isNull(view.getUserDepartment())){
+
+            if(!Util.isNull(view.getUserDepartment()) && !Util.isZero(view.getUserDepartment().getId())){
                 model.setDepartment(view.getUserDepartment());
+            } else {
+                model.setDepartment(null);
             }
-            if(!Util.isNull(view.getUserDivision())){
+
+            if(!Util.isNull(view.getUserDivision()) && !Util.isZero(view.getUserDivision().getId())){
                 model.setDivision(view.getUserDivision());
+            } else {
+                model.setDivision(null);
             }
-            if(!Util.isNull(view.getUserRegion())){
+
+            if(!Util.isNull(view.getUserRegion()) && !Util.isZero(view.getUserRegion().getId())){
                 model.setRegion(view.getUserRegion());
+            } else {
+                model.setRegion(null);
             }
-            if(!Util.isNull(view.getUserTitle())){
+
+            if(!Util.isNull(view.getUserTitle()) && !Util.isZero(view.getUserTitle().getId())){
                 model.setTitle(view.getUserTitle());
+            } else {
+                model.setTitle(null);
             }
+
+            model.setActive(view.getActive());
             model.setUserStatus(view.getUserStatus());
         }
         return model;
@@ -94,33 +114,44 @@ public class UserTransform extends Transform {
             model.setPhoneExt(view.getPhoneExt());
             model.setPhoneNumber(view.getPhoneNumber());
             model.setEmailAddress(view.getEmailAddress());
-            if(!Util.isNull(view.getRole())){
+
+            if(!Util.isNull(view.getRole()) && !Util.isZero(view.getRole().getId())){
                 model.setRole(view.getRole());
+            } else {
+                model.setRole(null);
             }
-            if(!Util.isNull(view.getUserTeam())){
+
+            if(!Util.isNull(view.getUserTeam()) && !Util.isZero(view.getUserTeam().getId())){
                 model.setTeam(view.getUserTeam());
+            } else {
+                model.setTeam(null);
             }
+
             if(!Util.isNull(view.getUserDepartment()) && view.getUserDepartment().getId() != 0){
                 model.setDepartment(view.getUserDepartment());
             } else {
                 model.setDepartment(null);
             }
+
             if(!Util.isNull(view.getUserDivision()) && view.getUserDivision().getId() != 0){
                 model.setDivision(view.getUserDivision());
             } else {
                 model.setDivision(null);
             }
+
             if(!Util.isNull(view.getUserRegion()) && view.getUserRegion().getId() != 0){
                 model.setRegion(view.getUserRegion());
             } else {
                 model.setRegion(null);
             }
+
             if(!Util.isNull(view.getUserTitle()) && view.getUserTitle().getId() != 0 ){
                 model.setTitle(view.getUserTitle());
             } else {
                 model.setTitle(null);
             }
-            model.setActive(ManageUserActive.ACTIVE.getValue());
+
+            model.setActive(view.getActive());
             model.setUserStatus(UserStatus.NORMAL);
         }
         return model;
@@ -145,25 +176,44 @@ public class UserTransform extends Transform {
             model.setPhoneExt(view.getPhoneExt());
             model.setPhoneNumber(view.getPhoneNumber());
             model.setEmailAddress(view.getEmailAddress());
-            if(!Util.isNull(view.getRole())){
+
+            if(!Util.isNull(view.getRole()) && !Util.isZero(view.getRole().getId())){
                 model.setRole(view.getRole());
+            } else {
+                model.setRole(null);
             }
-            if(!Util.isNull(view.getUserTeam())){
+
+            if(!Util.isNull(view.getUserTeam()) && !Util.isZero(view.getUserTeam().getId())){
                 model.setTeam(view.getUserTeam());
+            } else {
+                model.setTeam(null);
             }
-            if(!Util.isNull(view.getUserDepartment())){
+
+            if(!Util.isNull(view.getUserDepartment()) && view.getUserDepartment().getId() != 0){
                 model.setDepartment(view.getUserDepartment());
+            } else {
+                model.setDepartment(null);
             }
-            if(!Util.isNull(view.getUserDivision())){
+
+            if(!Util.isNull(view.getUserDivision()) && view.getUserDivision().getId() != 0){
                 model.setDivision(view.getUserDivision());
+            } else {
+                model.setDivision(null);
             }
-            if(!Util.isNull(view.getUserRegion())){
+
+            if(!Util.isNull(view.getUserRegion()) && view.getUserRegion().getId() != 0){
                 model.setRegion(view.getUserRegion());
+            } else {
+                model.setRegion(null);
             }
-            if(!Util.isNull(view.getUserTitle())){
+
+            if(!Util.isNull(view.getUserTitle()) && view.getUserTitle().getId() != 0 ){
                 model.setTitle(view.getUserTitle());
+            } else {
+                model.setTitle(null);
             }
-            model.setActive(ManageUserActive.ACTIVE.getValue());
+
+            model.setActive(view.getActive());
             model.setUserStatus(UserStatus.NORMAL);
         }
         return model;
@@ -180,26 +230,41 @@ public class UserTransform extends Transform {
             model.setPhoneExt(view.getPhoneExt());
             model.setPhoneNumber(view.getPhoneNumber());
             model.setEmailAddress(view.getEmailAddress());
+
             if(!Util.isNull(view.getRole())){
                 model.setRole(view.getRole());
             }
+
             if(!Util.isNull(view.getUserTeam()) && !Util.isZero(view.getUserTeam().getId())){
                 model.setTeam(view.getUserTeam());
             } else {
                 model.setTeam(null);
             }
-            if(!Util.isNull(view.getUserDepartment())){
+
+            if(!Util.isNull(view.getUserDepartment()) && !Util.isZero(view.getUserDepartment().getId())){
                 model.setDepartment(view.getUserDepartment());
+            } else {
+                model.setDepartment(null);
             }
-            if(!Util.isNull(view.getUserDivision())){
+
+            if(!Util.isNull(view.getUserDivision()) && !Util.isZero(view.getUserDivision().getId())){
                 model.setDivision(view.getUserDivision());
+            } else {
+                model.setDivision(null);
             }
-            if(!Util.isNull(view.getUserRegion())){
+
+            if(!Util.isNull(view.getUserRegion()) && !Util.isZero(view.getUserRegion().getId())){
                 model.setRegion(view.getUserRegion());
+            } else {
+                model.setRegion(null);
             }
-            if(!Util.isNull(view.getUserTitle())){
+
+            if(!Util.isNull(view.getUserTitle()) && !Util.isZero(view.getUserTitle().getId())){
                 model.setTitle(view.getUserTitle());
+            } else {
+                model.setTitle(null);
             }
+
             model.setActive(view.getActive());
             model.setUserStatus(view.getUserStatus());
             model.setCreateBy(user);

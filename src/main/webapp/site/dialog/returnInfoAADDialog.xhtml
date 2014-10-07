@@ -55,11 +55,10 @@
                                              oncomplete="addReturnAADInfoDlg.show()"
                                              update=":frmMain:reasonAADId, :frmMain:remarkAAD">
                             </p:commandButton>
-                            <p:commandButton title="Remove" process="@form"
+                            <p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfoAAD.canEdit}"
-                                             action="#{headerController.onDeleteReturnAADInfo(rowIndex)}"
-                                             update=":frmMain:returnInfoAADDlgPanel">
+                                             oncomplete="confirmDeleteReturnAAD.show()">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

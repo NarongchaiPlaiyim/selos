@@ -304,6 +304,8 @@ public class HeaderController extends BaseController {
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.debug("HeaderController ::: appHeader : {}", appHeaderView);
 
+        loadUserAccessMenu();
+
         canSubmitCA = false;
         canCheckCriteria = false;
         if(workCaseId != 0){
@@ -2899,6 +2901,43 @@ public class HeaderController extends BaseController {
         FacesUtil.redirect("/site/inbox.jsf");
     }
 
+    public String defaultPage(String mainPage){
+        if(mainPage.equals("borrowerInfo")){
+            if(!canAccessMenu(Screen.CUSTOMER_INFO_SUMMARY.value()) && !canAccessMenu(Screen.QUALITATIVE.value()) && !canAccessMenu(Screen.NCB_SUMMARY.value()) && !canAccessMenu(Screen.TCG_INFO.value())){
+                return "";
+            }else if(canAccessMenu(Screen.CUSTOMER_INFO_SUMMARY.value())){
+                return "customerInfoSummary";
+            }else if(canAccessMenu(Screen.NCB_SUMMARY.value())){
+                return "NCBSummary";
+            }else if(canAccessMenu(Screen.QUALITATIVE.value())){
+                return "qualitative";
+            }else if(canAccessMenu(Screen.TCG_INFO.value())){
+                return "TCGInfo";
+            }
+        }else if(mainPage.equals("financialInfo")){
+            if(!canAccessMenu(Screen.BANK_STATEMENT_SUMMARY.value()) && !canAccessMenu(Screen.DBR_INFO.value()) && !canAccessMenu(Screen.CREDIT_FACILITY_EXISTING.value()) && !canAccessMenu(Screen.CREDIT_FACILITY_PROPOSE.value())){
+                return "";
+            }else if(canAccessMenu(Screen.BANK_STATEMENT_SUMMARY.value())){
+                return "bankStatementSummary";
+            }else if(canAccessMenu(Screen.DBR_INFO.value())){
+                return "dbrInfo";
+            }else if(canAccessMenu(Screen.CREDIT_FACILITY_EXISTING.value())){
+                return "creditFacExisting";
+            }else if(canAccessMenu(Screen.CREDIT_FACILITY_PROPOSE.value())){
+                return "proposeLine";
+            }
+        }else if(mainPage.equals("decision")){
+            if(!canAccessMenu(Screen.DECISION.value()) && !canAccessMenu(Screen.EXECUTIVE_SUMMARY.value())){
+                return "";
+            }else if(canAccessMenu(Screen.EXECUTIVE_SUMMARY.value())){
+                return "exSummary";
+            }else if(canAccessMenu(Screen.DECISION.value())){
+                return "decision";
+            }
+        }
+
+        return "";
+    }
 
     //************** Variable Getter/Setter **************//
     public int getQualitativeType() {

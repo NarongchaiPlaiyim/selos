@@ -35,6 +35,9 @@ public class BorrowerCreditDecisionReport extends ReportModel{
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
+    private List<ExistingCreditTierDetailReport> existingCreditTierDetailReports;
+    private List<ExistingSplitLineDetailReport> existingSplitLineDetailReports;
+
     public BorrowerCreditDecisionReport() {
         accountName = "";
         accountNumber = "";
@@ -46,6 +49,8 @@ public class BorrowerCreditDecisionReport extends ReportModel{
         projectCode = "";
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
         existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
+        existingCreditTierDetailReports = new ArrayList<ExistingCreditTierDetailReport>();
+        existingSplitLineDetailReports = new ArrayList<ExistingSplitLineDetailReport>();
     }
 
 
@@ -202,18 +207,32 @@ public class BorrowerCreditDecisionReport extends ReportModel{
         this.code = code;
     }
 
+    public List<ExistingCreditTierDetailReport> getExistingCreditTierDetailReports() {
+        return existingCreditTierDetailReports;
+    }
+
+    public void setExistingCreditTierDetailReports(List<ExistingCreditTierDetailReport> existingCreditTierDetailReports) {
+        this.existingCreditTierDetailReports = existingCreditTierDetailReports;
+    }
+
+    public List<ExistingSplitLineDetailReport> getExistingSplitLineDetailReports() {
+        return existingSplitLineDetailReports;
+    }
+
+    public void setExistingSplitLineDetailReports(List<ExistingSplitLineDetailReport> existingSplitLineDetailReports) {
+        this.existingSplitLineDetailReports = existingSplitLineDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("account", account)
-                .append("accountName", accountName)
                 .append("count", count)
+                .append("accountName", accountName)
                 .append("accountNumber", accountNumber)
                 .append("accountSuf", accountSuf)
                 .append("description", description)
                 .append("productProgramName", productProgramName)
                 .append("creditTypeName", creditTypeName)
-                .append("code", code)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("limit", limit)
@@ -222,8 +241,12 @@ public class BorrowerCreditDecisionReport extends ReportModel{
                 .append("pceLimit", pceLimit)
                 .append("outstanding", outstanding)
                 .append("path", path)
+                .append("account", account)
+                .append("code", code)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
+                .append("existingCreditTierDetailReports", existingCreditTierDetailReports)
+                .append("existingSplitLineDetailReports", existingSplitLineDetailReports)
                 .toString();
     }
 }

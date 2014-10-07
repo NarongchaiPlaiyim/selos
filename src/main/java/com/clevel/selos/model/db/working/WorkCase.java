@@ -21,7 +21,7 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "step_owner")
     private User stepOwner;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
