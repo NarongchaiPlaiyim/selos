@@ -534,9 +534,10 @@
                     <p:spacer width="10" height=""/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
+                                     onclick="PF('blockCollateralDlg').show()"
+                                     onsuccess="blockCollateralDlg.hide()"
                                      update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      action="#{proposeLine.onCancelCollateralInfo()}"
-                                     disabled="#{proposeLine.isDisabled('collateral.cancelButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'collateralInfoDlg')"/>
                 </td>
             </tr>
@@ -546,11 +547,9 @@
             </tr>
         </table>
     </h:form>
+    <p:blockUI widgetVar="blockCollateralDlg" block="collateralDlgPanel" trigger=":collateralDlgForm:btnSaveCollateral,:collateralDlgForm:retrieveButton">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
-
-<p:blockUI widgetVar="blockCollateralDlg" block="collateralDlgPanel" trigger=":collateralDlgForm:btnSaveCollateral,:collateralDlgForm:retrieveButton">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
-
 </ui:composition>

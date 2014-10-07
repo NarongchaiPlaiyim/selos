@@ -1255,10 +1255,11 @@
                                                     <td class="right" colspan="2">
                                                         <p:commandButton value="Edit" id="editCollBtn" styleClass="small"
                                                                          action="#{proposeLine.onEditCollateralInfo()}"
+                                                                         onclick="PF('blockUI').show()" onsuccess="blockUI.hide()"
                                                                          update=":collateralDlgForm"
                                                                          process="@form"
                                                                          oncomplete="collateralInfoDlg.show();"
-                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton') or proposeCollView.appraisalRequest == 2}">
+                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton')}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                             <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
                                                             <p:resetInput target=":collateralDlgForm"/>
@@ -1266,8 +1267,9 @@
                                                         <p:spacer width="10" height="0"/>
                                                         <p:commandButton value="Remove"
                                                                          process="@form" styleClass="small"
+                                                                         onclick="PF('blockUI').show()" onsuccess="blockUI.hide()"
                                                                          oncomplete="confirmDeleteCollateralInfoDlg.show()"
-                                                                         disabled="#{proposeLine.isDisabled('removeProposeCollateralButton') or proposeCollView.appraisalRequest == 2}}">
+                                                                         disabled="#{proposeLine.isDisabled('removeProposeCollateralButton') or proposeCollView.appraisalRequest == 2}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                         </p:commandButton>
                                                     </td>

@@ -12,10 +12,12 @@
                 <td style="width: 180px;">
                     <p:inputText id="jobID" value="#{appraisalResult.newCollateralView.jobID}"
                                  required="#{not empty param[searchButton.clientId]}"
+                                 disabled="#{appraisalResult.isDisabled('collateral.retrieveAppraisalButton')}"
                                  readonly="#{appraisalResult.flagReadOnly}"/>
                 </td>
                 <td>
                     <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"
+                                     disabled="#{appraisalResult.isDisabled('collateral.retrieveAppraisalButton')}"
                                      binding="#{searchButton}"
                                      process="@form"
                                      action="#{appraisalResult.onCallRetrieveAppraisalReportInfo()}"
@@ -191,6 +193,7 @@
             <tr>
                 <td>
                     <p:commandButton id="btnSaveAppraisalComs" styleClass="smaller"
+                                     disabled="#{appraisalResult.isDisabled('collateral.okButton')}"
                                      value="#{msg.get('app.button.ok')}"
                                      action="#{appraisalResult.onSaveCollateralDetailView()}"
                                      process="@form"

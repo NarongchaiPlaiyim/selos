@@ -22,7 +22,7 @@ public class BusinessGroup implements Serializable {
     @Column(name = "description", length = 100)
     private String description;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "create_by")
     private User createBy;
 
@@ -30,7 +30,7 @@ public class BusinessGroup implements Serializable {
     @Column(name = "create_date")
     private Date createDate;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "modify_by")
     private User modifyBy;
 

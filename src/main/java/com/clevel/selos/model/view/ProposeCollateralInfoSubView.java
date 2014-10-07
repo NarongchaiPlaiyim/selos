@@ -24,6 +24,8 @@ public class ProposeCollateralInfoSubView implements Serializable {
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
     private String subId;
+    private int createdByAAD;
+    private int createdByBDM;
 
     //create by bird
     private String path;
@@ -45,6 +47,8 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue = BigDecimal.ZERO;
         this.subId = "";
+        this.createdByAAD = 0;
+        this.createdByBDM = 0;
     }
 
     public long getId() {
@@ -159,6 +163,22 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.no = no;
     }
 
+    public int getCreatedByAAD() {
+        return createdByAAD;
+    }
+
+    public void setCreatedByAAD(int createdByAAD) {
+        this.createdByAAD = createdByAAD;
+    }
+
+    public int getCreatedByBDM() {
+        return createdByBDM;
+    }
+
+    public void setCreatedByBDM(int createdByBDM) {
+        this.createdByBDM = createdByBDM;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -174,6 +194,8 @@ public class ProposeCollateralInfoSubView implements Serializable {
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)
                 .append("subId", subId)
+                .append("createdByAAD", createdByAAD)
+                .append("createdByBDM", createdByBDM)
                 .append("path", path)
                 .append("no", no)
                 .toString();
