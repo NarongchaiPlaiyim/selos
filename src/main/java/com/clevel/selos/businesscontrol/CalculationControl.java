@@ -731,8 +731,8 @@ public class CalculationControl extends BusinessControl{
         dbrDAO.persist(dbr);
     }
 
-    public void calculateTotalProposeAmount(long workCaseId, boolean isFromDecision) {
-        log.debug("calculateTotalProposeAmount :: workCaseId :: {}, isFromDecision :: {}",workCaseId, isFromDecision);
+    public void calculateTotalProposeAmount(long workCaseId) {
+        log.debug("calculateTotalProposeAmount :: workCaseId :: {}", workCaseId);
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         User user = getCurrentUser();
         if (!Util.isNull(proposeLine)) {
@@ -841,25 +841,15 @@ public class CalculationControl extends BusinessControl{
                 }
             }
 
-            log.debug("sumTotalApproveLoanDbr :: {}", sumTotalApproveLoanDbr);
-            log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
-            log.debug("sumTotalPropose :: {}", sumTotalPropose);
-            log.debug("sumTotalNonLoanDbr :: {}", sumTotalNonLoanDbr);
-            log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
-            log.debug("sumTotalBorrowerCommercialAndOBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
-            log.debug("sumTotalGroupExposure :: {}", sumTotalGroupExposure);
-
-            if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // for check if uw save propose or existing do not save loan dbr
-                if(isFromDecision) {
-                    proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);             //sumTotalLoanDbr
-                }
+            if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // If UW Save will update loan dbr
+                proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);                 //sumTotalLoanDbr
                 proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
                 proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
                 proposeLine.setTotalExposure(sumTotalGroupExposure);
             } else {
-                proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                    //sumTotalLoanDbr
+                proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                        //sumTotalLoanDbr
                 proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
