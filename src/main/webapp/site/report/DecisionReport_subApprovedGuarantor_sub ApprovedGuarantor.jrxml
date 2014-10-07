@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedGuarantor_sub ApprovedGuarantor" pageWidth="230" pageHeight="802" columnWidth="230" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1a7e5f0d-ac61-4e8e-94fc-bc91083a284d">
-	<property name="ireport.zoom" value="2.143588810000002"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedGuarantor_sub ApprovedGuarantor" pageWidth="251" pageHeight="802" columnWidth="251" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1a7e5f0d-ac61-4e8e-94fc-bc91083a284d">
+	<property name="ireport.zoom" value="2.143588810000003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="detail" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" vAlign="Middle" fontSize="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -11,29 +11,22 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<field name="accountName" class="java.lang.String">
-		<fieldDescription><![CDATA[accountName]]></fieldDescription>
+	<field name="account" class="java.lang.String">
+		<fieldDescription><![CDATA[account]]></fieldDescription>
 	</field>
-	<field name="accountNumber" class="java.lang.String"/>
-	<field name="accountSuf" class="java.lang.String">
-		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
-	</field>
-	<field name="productProgramView" class="java.lang.Object">
-		<fieldDescription><![CDATA[productProgramView.name]]></fieldDescription>
-	</field>
-	<field name="creditFacilityView" class="java.lang.Object">
-		<fieldDescription><![CDATA[creditFacilityView.name]]></fieldDescription>
+	<field name="productProgramAndCreditType" class="java.lang.String">
+		<fieldDescription><![CDATA[productProgramAndCreditType]]></fieldDescription>
 	</field>
 	<field name="limit" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[limit]]></fieldDescription>
 	</field>
-	<field name="guaranteeAmount" class="java.math.BigDecimal">
+	<field name="guaranteeAmount" class="java.lang.String">
 		<fieldDescription><![CDATA[guaranteeAmount]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="23" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="126" y="0" width="54" height="23"/>
+				<reportElement uuid="640983d8-bdcf-47a5-b6af-3ecc85edf855" style="detail" stretchType="RelativeToBandHeight" x="126" y="0" width="54" height="37"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -43,74 +36,41 @@
 				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="865fdb05-b4a6-4c86-9f4c-a9a9ec7bf3e9" style="detail" stretchType="RelativeToBandHeight" x="59" y="9" width="67" height="14"/>
-				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Left">
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{creditFacilityView}.equals( null ) ? "" : $F{creditFacilityView}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="65b885e2-ac5d-4c1b-bd07-e1fd91aa2ad0" style="detail" stretchType="RelativeToBandHeight" x="25" y="9" width="34" height="14"/>
-				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{accountSuf}.equals( null ) ? "Suf.:" : "Suf.:" +$F{accountSuf}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="180" y="0" width="49" height="23"/>
+				<reportElement uuid="6152bece-b8fa-42fb-afc5-83d92b4564cb" style="detail" stretchType="RelativeToBandHeight" x="180" y="0" width="69" height="37"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Top">
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{guaranteeAmount}.equals( null ) ? "" : "Guarantee Amount: " + $F{guaranteeAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{guaranteeAmount}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="07ae2a57-c5cf-4112-b31b-c5850887562c" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="59" height="9"/>
+				<reportElement uuid="07ae2a57-c5cf-4112-b31b-c5850887562c" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="59" height="37"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA[$F{accountName}.equals( null ) ? "" : $F{accountName}]]></textFieldExpression>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<paragraph firstLineIndent="2" leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{account}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f81c28b8-994e-4c5a-aae0-fa8f6c0241c4" style="detail" stretchType="RelativeToBandHeight" x="59" y="0" width="67" height="9"/>
+				<reportElement uuid="f81c28b8-994e-4c5a-aae0-fa8f6c0241c4" style="detail" stretchType="RelativeToBandHeight" x="59" y="0" width="67" height="37"/>
 				<box>
 					<topPen lineWidth="0.0"/>
 					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[$F{productProgramView}.equals( null ) ? "" : $F{productProgramView}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="62c398d7-2596-4261-84a2-7cb4e9f4b9af" style="detail" stretchType="RelativeToBandHeight" x="0" y="9" width="25" height="14"/>
-				<box>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Acc No.:" : "Acc No " +$F{accountNumber}]]></textFieldExpression>
+				<textElement textAlignment="Left" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{productProgramAndCreditType}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

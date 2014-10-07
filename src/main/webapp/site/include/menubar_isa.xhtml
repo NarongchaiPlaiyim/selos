@@ -1,6 +1,7 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
         xmlns:h="http://java.sun.com/jsf/html"
         >
 
@@ -20,18 +21,32 @@
 
     <div id="selosmenu" class="selosmenu">
         <ul>
-            <li id="mnuinbox">
-                <a href="manageUser.jsf" title="Admin">Admin</a>
-                <ul>
-                    <li id="submnuprescreen"><a href="manageUser.jsf" title="ManageUser">ManageUser</a></li>
-                </ul>
-            </li>
-            <li id="mnuprescreen">
-                <a href="isaReport.jsf" title="Report">Report</a>
-                <ul>
-                    <li id="submnuprescreenresult"><a href="isaReport.jsf" title="ISA Report">ISA Report</a></li>
-                </ul>
-            </li>
+            <h:panelGroup id="pnl_menu_isa" styleClass="panel">
+                <li id="managebox">
+                    <a href="manageUser.jsf" title="#{msg.get('app.menu.admin')}">#{msg.get('app.menu.admin')}</a>
+                    <ul>
+                        <li id="submanage">
+                            <a href="manageUser.jsf" title="#{msg.get('app.menu.manageUser')}">#{msg.get('app.menu.manageUser')}</a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="uploadbox">
+                    <a href="userProfileUpload.jsf" title="#{msg.get('app.menu.upload')}">#{msg.get('app.menu.upload')}</a>
+                    <ul>
+                        <li id="subupload">
+                            <a href="userProfileUpload.jsf" title="#{msg.get('app.menu.uploadUserProfile')}">#{msg.get('app.menu.uploadUserProfile')}</a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="reportbox">
+                    <a href="isaReport.jsf" title="#{msg.get('app.menu.report')}">#{msg.get('app.menu.report')}</a>
+                    <ul>
+                        <li id="subreport">
+                            <a href="isaReport.jsf" title="#{msg.get('app.menu.isaReport')}">#{msg.get('app.menu.isaReport')}</a>
+                        </li>
+                    </ul>
+                </li>
+            </h:panelGroup>
         </ul>
         <br style="clear: left"/>
     </div>

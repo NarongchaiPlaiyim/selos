@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetterReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7807b48b-7db8-442b-aba7-a40737540d02">
 	<property name="ireport.zoom" value="1.331000000000011"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/SLOSSharedLib/reportTemplate/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="path" class="java.lang.String"/>
 	<parameter name="fillApprovedCredit" class="java.util.Collection"/>
@@ -15,10 +15,19 @@
 	<parameter name="fillFeecalculationNonAgreement" class="java.util.Collection"/>
 	<parameter name="fillDisbursment" class="java.util.Collection"/>
 	<pageHeader>
-		<band height="73">
-			<image>
-				<reportElement uuid="7b7ca4a0-0f18-4cc6-9ffa-ba6e53002222" x="0" y="0" width="523" height="73"/>
-				<imageExpression><![CDATA["D:\\ProjectSELOS\\selos\\src\\main\\webapp\\site\\report\\logo_tmb.jpg"]]></imageExpression>
+		<band height="54">
+			<staticText>
+				<reportElement uuid="5701bff6-06b2-44ca-8c3b-947edb3576ad" x="0" y="36" width="555" height="18" forecolor="#09499C"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111
+3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
+			</staticText>
+			<image scaleImage="RealSize" isUsingCache="false">
+				<reportElement uuid="8a16753a-dc9e-4b87-b3a5-67fee0137592" x="0" y="0" width="300" height="36"/>
+				<imageExpression><![CDATA[$P{path} + "tmb.gif"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -150,11 +159,10 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{fillMasterOfferLetter}.getDateValue()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="062dd23f-054a-4f2c-8371-235fab1ac81e" x="38" y="44" width="33" height="13"/>

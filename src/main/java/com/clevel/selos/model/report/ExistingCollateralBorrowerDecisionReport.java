@@ -31,6 +31,7 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViews;
+    private List<ExistingCreditTypeDetailReport> existingCreditTypeDetailReports;
     private String path;
 
     public ExistingCollateralBorrowerDecisionReport() {
@@ -211,6 +212,14 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public List<ExistingCreditTypeDetailReport> getExistingCreditTypeDetailReports() {
+        return existingCreditTypeDetailReports;
+    }
+
+    public void setExistingCreditTypeDetailReports(List<ExistingCreditTypeDetailReport> existingCreditTypeDetailReports) {
+        this.existingCreditTypeDetailReports = existingCreditTypeDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -233,6 +242,7 @@ public class ExistingCollateralBorrowerDecisionReport extends ReportModel{
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)
                 .append("existingCreditTypeDetailViews", existingCreditTypeDetailViews)
+                .append("existingCreditTypeDetailReports", existingCreditTypeDetailReports)
                 .append("path", path)
                 .toString();
     }

@@ -17,6 +17,7 @@ public class GuarantorBorrowerDecisionReport extends ReportModel{
     private BigDecimal totalLimitGuaranteeAmount;
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
     private String path;
+    private List<ExistingCreditTypeDetailReport> existingCreditTypeDetailReports;
 
     public GuarantorBorrowerDecisionReport() {
         count = 0;
@@ -73,13 +74,24 @@ public class GuarantorBorrowerDecisionReport extends ReportModel{
         this.path = path;
     }
 
+    public List<ExistingCreditTypeDetailReport> getExistingCreditTypeDetailReports() {
+        return existingCreditTypeDetailReports;
+    }
+
+    public void setExistingCreditTypeDetailReports(List<ExistingCreditTypeDetailReport> existingCreditTypeDetailReports) {
+        this.existingCreditTypeDetailReports = existingCreditTypeDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("count", count)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("existingCreditTypeDetailViewList", existingCreditTypeDetailViewList)
+                .append("path", path)
+                .append("existingCreditTypeDetailReports", existingCreditTypeDetailReports)
                 .toString();
     }
 }

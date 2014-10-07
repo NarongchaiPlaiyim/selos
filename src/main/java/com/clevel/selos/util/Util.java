@@ -522,7 +522,7 @@ public class Util implements Serializable {
     }
 
     public static String checkNullString(String value){
-        if (value == null){
+        if (value == null || "".equals(value)){
             return "-";
         }
         return value;
@@ -531,6 +531,13 @@ public class Util implements Serializable {
     public static BigDecimal convertNullToZERO(BigDecimal value){
         if (value == null){
             return BigDecimal.ZERO;
+        }
+        return value;
+    }
+
+    public static int convertNullToZERO(int value){
+        if (value == 0){
+            return 0;
         }
         return value;
     }

@@ -73,11 +73,11 @@
 	<field name="mortgageValue" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[mortgageValue]]></fieldDescription>
 	</field>
-	<field name="existingCreditTypeDetailViews" class="java.util.List">
-		<fieldDescription><![CDATA[existingCreditTypeDetailViews]]></fieldDescription>
-	</field>
 	<field name="path" class="java.lang.String">
 		<fieldDescription><![CDATA[path]]></fieldDescription>
+	</field>
+	<field name="existingCreditTypeDetailReports" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTypeDetailReports]]></fieldDescription>
 	</field>
 	<columnHeader>
 		<band height="17" splitType="Stretch">
@@ -137,7 +137,7 @@
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8b527ede-d413-4dc7-b880-5ba797cfb120" style="detail" stretchType="RelativeToBandHeight" x="23" y="0" width="168" height="16"/>
+				<reportElement uuid="8b527ede-d413-4dc7-b880-5ba797cfb120" style="detail" x="23" y="0" width="168" height="16"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -146,7 +146,7 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="2" spacingAfter="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{collateralType}]]></textFieldExpression>
 			</textField>
@@ -174,11 +174,17 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mortgageValue}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5220f8e2-ad09-4dc3-ad0b-68b89fa89101" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="191" y="0" width="144" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
 			<subreport>
 				<reportElement uuid="c3f7b926-db84-4c76-843b-723c8a833fcc" stretchType="RelativeToTallestObject" mode="Transparent" x="191" y="0" width="144" height="16"/>
-				<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailReports})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCollateralPerson_subExtRelated.jasper"]]></subreportExpression>
 			</subreport>
 		</band>

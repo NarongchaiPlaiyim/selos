@@ -11,28 +11,13 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<field name="accountName" class="java.lang.String">
-		<fieldDescription><![CDATA[accountName]]></fieldDescription>
-	</field>
-	<field name="accountNumber" class="java.lang.String">
-		<fieldDescription><![CDATA[accountNumber]]></fieldDescription>
-	</field>
-	<field name="accountSuf" class="java.lang.String">
-		<fieldDescription><![CDATA[accountSuf]]></fieldDescription>
-	</field>
-	<field name="productProgram" class="java.lang.String">
-		<fieldDescription><![CDATA[productProgram]]></fieldDescription>
-	</field>
-	<field name="creditFacility" class="java.lang.String">
-		<fieldDescription><![CDATA[creditFacility]]></fieldDescription>
-	</field>
-	<field name="limit" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[limit]]></fieldDescription>
+	<field name="creditType" class="java.lang.String">
+		<fieldDescription><![CDATA[creditType]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="30" splitType="Stretch">
+		<band height="41" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="300a3658-1275-41e1-814f-cf0e9d9c4410" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="144" height="10"/>
+				<reportElement uuid="300a3658-1275-41e1-814f-cf0e9d9c4410" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="144" height="41"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -43,49 +28,7 @@
 					<font pdfFontName="fonts/TAHOMA.TTF"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{accountName}.equals( null ) ? ""
-: $F{accountName}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="28ea4f3a-1321-45a1-8946-b7215fdda457" style="detail" stretchType="RelativeToBandHeight" x="66" y="10" width="78" height="10"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{accountSuf}.equals( null ) ? "Suf.:" : "Suf.: " + $F{accountSuf}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="bdff306d-d759-442f-94d7-566970771a4e" style="detail" stretchType="RelativeToBandHeight" x="0" y="10" width="66" height="10"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{accountNumber}.equals( null ) ? "Acc No.:" : "Acc No.:" + $F{accountNumber}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="0ac40b79-e78c-4ed7-9b68-ef796bb489a0" style="detail" stretchType="RelativeToBandHeight" x="0" y="20" width="144" height="10"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{creditFacility}.equals( null ) ? $F{limit} : $F{creditFacility} + " " +$F{limit}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{creditType}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

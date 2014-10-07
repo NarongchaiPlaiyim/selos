@@ -35,6 +35,9 @@ public class RelatedCommercialDecisionReport extends ReportModel{
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
+    private List<ExistingCreditTierDetailReport> existingCreditTierDetailReports;
+    private List<ExistingSplitLineDetailReport> existingSplitLineDetailReports;
+
     public RelatedCommercialDecisionReport() {
         count = 0;
         accountName = "";
@@ -212,6 +215,22 @@ public class RelatedCommercialDecisionReport extends ReportModel{
         this.code = code;
     }
 
+    public List<ExistingCreditTierDetailReport> getExistingCreditTierDetailReports() {
+        return existingCreditTierDetailReports;
+    }
+
+    public void setExistingCreditTierDetailReports(List<ExistingCreditTierDetailReport> existingCreditTierDetailReports) {
+        this.existingCreditTierDetailReports = existingCreditTierDetailReports;
+    }
+
+    public List<ExistingSplitLineDetailReport> getExistingSplitLineDetailReports() {
+        return existingSplitLineDetailReports;
+    }
+
+    public void setExistingSplitLineDetailReports(List<ExistingSplitLineDetailReport> existingSplitLineDetailReports) {
+        this.existingSplitLineDetailReports = existingSplitLineDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -235,6 +254,8 @@ public class RelatedCommercialDecisionReport extends ReportModel{
                 .append("code", code)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
+                .append("existingCreditTierDetailReports", existingCreditTierDetailReports)
+                .append("existingSplitLineDetailReports", existingSplitLineDetailReports)
                 .toString();
     }
 }

@@ -34,6 +34,8 @@ public class BorrowerRetailDecisionReport extends ReportModel{
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
+    private List<ExistingCreditTierDetailReport> existingCreditTierDetailReports;
+
     public BorrowerRetailDecisionReport() {
         accountName = "";
         accountNumber = "";
@@ -201,6 +203,14 @@ public class BorrowerRetailDecisionReport extends ReportModel{
         this.code = code;
     }
 
+    public List<ExistingCreditTierDetailReport> getExistingCreditTierDetailReports() {
+        return existingCreditTierDetailReports;
+    }
+
+    public void setExistingCreditTierDetailReports(List<ExistingCreditTierDetailReport> existingCreditTierDetailReports) {
+        this.existingCreditTierDetailReports = existingCreditTierDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -223,6 +233,7 @@ public class BorrowerRetailDecisionReport extends ReportModel{
                 .append("code", code)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
+                .append("existingCreditTierDetailReports", existingCreditTierDetailReports)
                 .toString();
     }
 }
