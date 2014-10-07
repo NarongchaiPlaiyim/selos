@@ -105,6 +105,9 @@ public class ProposeCollateralInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
+    @Column(name = "created_by_aad", columnDefinition = "int default 0")
+    private int createdByAAD;
+
     public long getId() {
         return id;
     }
@@ -313,35 +316,44 @@ public class ProposeCollateralInfo implements Serializable {
         this.workCase = workCase;
     }
 
+    public int getCreatedByAAD() {
+        return createdByAAD;
+    }
+
+    public void setCreatedByAAD(int createdByAAD) {
+        this.createdByAAD = createdByAAD;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("proposeType", proposeType).
-                append("uwDecision", uwDecision).
-                append("appraisalRequest", appraisalRequest).
-                append("coms", coms).
-                append("jobID", jobID).
-                append("appraisalDate", appraisalDate).
-                append("numberMonthsFromApprDate", numberMonthsFromApprDate).
-                append("aadDecision", aadDecision).
-                append("aadDecisionReason", aadDecisionReason).
-                append("aadDecisionReasonDetail", aadDecisionReasonDetail).
-                append("usage", usage).
-                append("typeOfUsage", typeOfUsage).
-                append("uwRemark", uwRemark).
-                append("mortgageCondition", mortgageCondition).
-                append("mortgageConditionDetail", mortgageConditionDetail).
-                append("bdmComments", bdmComments).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                append("proposeLine", proposeLine).
-                append("proposeCollateralInfoHeadList", proposeCollateralInfoHeadList).
-                append("proposeCollateralInfoRelationList", proposeCollateralInfoRelationList).
-                append("premiumAmount", premiumAmount).
-                append("workCase", workCase).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("proposeType", proposeType)
+                .append("uwDecision", uwDecision)
+                .append("appraisalRequest", appraisalRequest)
+                .append("coms", coms)
+                .append("jobID", jobID)
+                .append("appraisalDate", appraisalDate)
+                .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
+                .append("aadDecision", aadDecision)
+                .append("aadDecisionReason", aadDecisionReason)
+                .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
+                .append("usage", usage)
+                .append("typeOfUsage", typeOfUsage)
+                .append("uwRemark", uwRemark)
+                .append("mortgageCondition", mortgageCondition)
+                .append("mortgageConditionDetail", mortgageConditionDetail)
+                .append("bdmComments", bdmComments)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("proposeLine", proposeLine)
+                .append("proposeCollateralInfoHeadList", proposeCollateralInfoHeadList)
+                .append("proposeCollateralInfoRelationList", proposeCollateralInfoRelationList)
+                .append("premiumAmount", premiumAmount)
+                .append("workCase", workCase)
+                .append("createdByAAD", createdByAAD)
+                .toString();
     }
 }

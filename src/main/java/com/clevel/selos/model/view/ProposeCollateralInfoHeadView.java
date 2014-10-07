@@ -4,6 +4,8 @@ import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,6 +30,10 @@ public class ProposeCollateralInfoHeadView implements Serializable {
 
     private List<PotentialColToTCGCol> potentialColToTCGColList;
 
+    private int removedByAAD;
+    private int createdByAAD;
+    private int createdByBDM;
+
     public ProposeCollateralInfoHeadView(){
           reset();
     }
@@ -45,6 +51,9 @@ public class ProposeCollateralInfoHeadView implements Serializable {
         this.deleteSubColHeadIdList = new ArrayList<Long>();
         this.haveSubColl = false;
         this.potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+        this.removedByAAD = 0;
+        this.createdByAAD = 0;
+        this.createdByBDM = 0;
     }
 
     public long getId() {
@@ -149,5 +158,51 @@ public class ProposeCollateralInfoHeadView implements Serializable {
 
     public void setPotentialColToTCGColList(List<PotentialColToTCGCol> potentialColToTCGColList) {
         this.potentialColToTCGColList = potentialColToTCGColList;
+    }
+
+    public int getRemovedByAAD() {
+        return removedByAAD;
+    }
+
+    public void setRemovedByAAD(int removedByAAD) {
+        this.removedByAAD = removedByAAD;
+    }
+
+    public int getCreatedByAAD() {
+        return createdByAAD;
+    }
+
+    public void setCreatedByAAD(int createdByAAD) {
+        this.createdByAAD = createdByAAD;
+    }
+
+    public int getCreatedByBDM() {
+        return createdByBDM;
+    }
+
+    public void setCreatedByBDM(int createdByBDM) {
+        this.createdByBDM = createdByBDM;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("titleDeed", titleDeed)
+                .append("collateralLocation", collateralLocation)
+                .append("appraisalValue", appraisalValue)
+                .append("headCollType", headCollType)
+                .append("potentialCollateral", potentialCollateral)
+                .append("tcgCollateralType", tcgCollateralType)
+                .append("existingCredit", existingCredit)
+                .append("insuranceCompany", insuranceCompany)
+                .append("proposeCollateralInfoSubViewList", proposeCollateralInfoSubViewList)
+                .append("deleteSubColHeadIdList", deleteSubColHeadIdList)
+                .append("haveSubColl", haveSubColl)
+                .append("potentialColToTCGColList", potentialColToTCGColList)
+                .append("removedByAAD", removedByAAD)
+                .append("createdByAAD", createdByAAD)
+                .append("createdByBDM", createdByBDM)
+                .toString();
     }
 }

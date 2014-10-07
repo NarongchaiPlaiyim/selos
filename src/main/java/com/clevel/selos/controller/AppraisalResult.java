@@ -13,6 +13,7 @@ import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.AppraisalCompany;
 import com.clevel.selos.model.db.master.AppraisalDivision;
@@ -190,7 +191,6 @@ public class AppraisalResult extends BaseController {
         log.info("onCreation...");
         _initial(session);
         if(checkSession(session)){
-
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId, statusId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
             if(!Util.isNull(appraisalView)){
@@ -202,6 +202,13 @@ public class AppraisalResult extends BaseController {
             } else {
                 appraisalView = new AppraisalView();
                 log.debug("-- AppraisalView[New] created");
+            }
+
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            if(workCaseId != 0){
+                loadFieldControl(workCaseId, Screen.AppraisalResult, ownerCaseUserId);
+            }else if(workCasePreScreenId != 0){
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.AppraisalResult, ownerCaseUserId);
             }
         }else{
             //TODO show message exception
@@ -255,8 +262,8 @@ public class AppraisalResult extends BaseController {
                             saveAndEditFlag = true;
                         } else {
                             saveAndEditFlag = false;
-                            messageHeader = "Result "+appraisalDataResult.getActionResult();
-                            message = "Result" +  appraisalDataResult.getReason();
+                            messageHeader = "Result " + appraisalDataResult.getActionResult();
+                            message = "Result" + appraisalDataResult.getReason();
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         }
                     } else {
@@ -269,7 +276,8 @@ public class AppraisalResult extends BaseController {
                     if (flag){
                         AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
                         if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
-                            newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
+                            ProposeCollateralInfoView tempAppraisalResult = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
+                            newCollateralView = appraisalResultControl.updateCollateral(newCollateralView, tempAppraisalResult);
                             saveAndEditFlag = true;
                         } else {
                             saveAndEditFlag = false;
@@ -367,6 +375,7 @@ public class AppraisalResult extends BaseController {
         modeForButton = ModeForButton.EDIT;
         Cloner cloner = new Cloner();
         newCollateralView = cloner.deepClone(selectCollateralDetailView);
+        log.debug("-- newCollateralView : {}", newCollateralView);
         if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
             flagReadOnly = false;
         } else {

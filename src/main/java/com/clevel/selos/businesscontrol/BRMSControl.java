@@ -598,11 +598,22 @@ public class BRMSControl extends BusinessControl {
 
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
-            if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
-                accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
+            if(_proposeType.equals(ProposeType.P)) {
+                if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
+                    accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
-                if(!newCreditDetail.getProductProgram().isBa())
-                    totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                    if (!newCreditDetail.getProductProgram().isBa())
+                        totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                }
+            }else if(_proposeType.equals(ProposeType.A)){
+                if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
+                    if(newCreditDetail.getUwDecision() != null && newCreditDetail.getUwDecision().equals(DecisionType.APPROVED)) {
+                        accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
+
+                        if (!newCreditDetail.getProductProgram().isBa())
+                            totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                    }
+                }
             }
         }
         applicationInfo.setAccountRequestedList(accountRequestedList);
