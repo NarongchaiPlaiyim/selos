@@ -120,6 +120,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
 	public AppraisalView getAppraisalAppointment(long workCaseId, long workCasePreScreenId, long statusId){
         log.info("-- getAppraisalAppointment WorkCaseId : {}, WorkCasePreScreenId [{}], User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
+        appraisalView = null;
         if(!Util.isZero(workCaseId)){
             appraisal  = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
@@ -223,14 +224,15 @@ public class AppraisalAppointmentControl extends BusinessControl {
             log.debug("onSaveAppraisalAppointment ::: appraisalDetailViewList : {}", appraisalDetailViewList);
 
             //remove all collateral head from list in database
+            ProposeType proposeType;
+            if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
+                proposeType = ProposeType.P;
+            }else{
+                proposeType = ProposeType.A;
+            }
+
             if(newCreditFacility.getId() != 0){
-                ProposeType proposeType;
-                if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
-                    proposeType = ProposeType.P;
-                }else{
-                    proposeType = ProposeType.A;
-                }
-                newCollateralList = newCollateralDAO.findCollateralForAppraisalAppointment(newCreditFacility, proposeType);
+                newCollateralList = newCollateralDAO.findCollateralForAppraisal(newCreditFacility, proposeType);
                 //set flag 0 for all collateral
                 log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
                 for(ProposeCollateralInfo newCollateral : newCollateralList){
@@ -247,7 +249,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             try {
                 newCollateralList.clear();
-                newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED));
+                newCollateralList = Util.safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, proposeType));
                 log.debug("onSaveAppraisalAppointment ::: before persist newCollateralList : {}", newCollateralList);
                 if(!Util.isNull(newCollateralList) && !Util.isZero(newCollateralList.size())){
                     newCollateralDAO.persist(newCollateralList);

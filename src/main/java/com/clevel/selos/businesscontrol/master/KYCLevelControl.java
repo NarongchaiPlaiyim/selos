@@ -53,7 +53,6 @@ public class KYCLevelControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(kycLevelView.getName());
                 selectItem.setValue(kycLevelView.getId());
-                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }

@@ -28,6 +28,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
     private String approved;
 
     private List<ProposeCreditInfoDetailView> proposeCreditDetailViewList;
+    private List<ProposeCreditInfoDetailReport> proposeCreditInfoDetailReports;
 
     //Coll Head
     private String collateralDescription;
@@ -42,6 +43,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
 
     //Sub Collateral
     private List<ProposeCollateralInfoSubView> subViewList;
+    private List<ProposeCollateralInfoSubReport> proposeCollateralInfoSubReports;
 
 
     public ApprovedCollateralDecisionReport() {
@@ -55,6 +57,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         mortgageConditionDetail = "";
         proposeCreditDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
         subViewList = new ArrayList<ProposeCollateralInfoSubView>();
+        proposeCreditInfoDetailReports = new ArrayList<ProposeCreditInfoDetailReport>();
         bdmComments = "";
         collateralDescription = "";
         percentLTVDescription = "";
@@ -259,6 +262,22 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         this.approved = approved;
     }
 
+    public List<ProposeCreditInfoDetailReport> getProposeCreditInfoDetailReports() {
+        return proposeCreditInfoDetailReports;
+    }
+
+    public void setProposeCreditInfoDetailReports(List<ProposeCreditInfoDetailReport> proposeCreditInfoDetailReports) {
+        this.proposeCreditInfoDetailReports = proposeCreditInfoDetailReports;
+    }
+
+    public List<ProposeCollateralInfoSubReport> getProposeCollateralInfoSubReports() {
+        return proposeCollateralInfoSubReports;
+    }
+
+    public void setProposeCollateralInfoSubReports(List<ProposeCollateralInfoSubReport> proposeCollateralInfoSubReports) {
+        this.proposeCollateralInfoSubReports = proposeCollateralInfoSubReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -276,6 +295,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
                 .append("UwDecision", UwDecision)
                 .append("approved", approved)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
+                .append("proposeCreditInfoDetailReports", proposeCreditInfoDetailReports)
                 .append("collateralDescription", collateralDescription)
                 .append("percentLTVDescription", percentLTVDescription)
                 .append("existingCredit", existingCredit)
@@ -286,6 +306,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
                 .append("headCollTypeDescription", headCollTypeDescription)
                 .append("insuranceCompany", insuranceCompany)
                 .append("subViewList", subViewList)
+                .append("proposeCollateralInfoSubReports", proposeCollateralInfoSubReports)
                 .toString();
     }
 }

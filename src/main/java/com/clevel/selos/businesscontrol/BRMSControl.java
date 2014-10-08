@@ -598,11 +598,22 @@ public class BRMSControl extends BusinessControl {
 
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
-            if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
-                accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
+            if(_proposeType.equals(ProposeType.P)) {
+                if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
+                    accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
-                if(!newCreditDetail.getProductProgram().isBa())
-                    totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                    if (!newCreditDetail.getProductProgram().isBa())
+                        totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                }
+            }else if(_proposeType.equals(ProposeType.A)){
+                if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
+                    if(newCreditDetail.getUwDecision() != null && newCreditDetail.getUwDecision().equals(DecisionType.APPROVED)) {
+                        accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
+
+                        if (!newCreditDetail.getProductProgram().isBa())
+                            totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                    }
+                }
             }
         }
         applicationInfo.setAccountRequestedList(accountRequestedList);
@@ -1293,12 +1304,14 @@ public class BRMSControl extends BusinessControl {
             } else {
                 if(isActive(individual.getMaritalStatus().getSpouseFlag())) {
                     //Customer spouse = customerDAO.findMainCustomerBySpouseId(customer.getId());
-                    Customer spouse = customerDAO.findById(customer.getSpouseId());
-                    Individual spouseIndv = spouse.getIndividual();
-                    customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
+                    if(!Util.isZero(customer.getSpouseId())){
+                        Customer spouse = customerDAO.findById(customer.getSpouseId());
+                        Individual spouseIndv = spouse.getIndividual();
+                        customerInfo.setSpousePersonalID(spouseIndv.getCitizenId());
 
-                    if(spouse.getRelation() != null)
-                        customerInfo.setSpouseRelationType(spouse.getRelation().getBrmsCode());
+                        if(spouse.getRelation() != null)
+                            customerInfo.setSpouseRelationType(spouse.getRelation().getBrmsCode());
+                    }
                         //customerInfo.setRelation(spouse.getRelation().getBrmsCode());   //REMOVE BECAUSE IT'S OVERIDE MAIN CUSTOMER RELATION
                 }
             }

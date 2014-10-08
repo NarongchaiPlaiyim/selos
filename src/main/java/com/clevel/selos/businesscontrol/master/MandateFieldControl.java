@@ -7,7 +7,7 @@ import com.clevel.selos.integration.ADMIN;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MandateDependConType;
 import com.clevel.selos.model.MandateDependType;
-import com.clevel.selos.model.MandateFieldType;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
@@ -62,7 +62,7 @@ public class MandateFieldControl extends BusinessControl {
     public MandateFieldControl(){}
 
     public List<MandateFieldClassView> getMandateFieldClass(Set<Class<?>> classSet){
-        logger.debug("-- begin getMandateFieldClass class size{} + ", classSet == null?0:classSet.size());
+        logger.debug("-- begin getMandateFieldClass class size {}", classSet == null?0:classSet.size());
         List<MandateFieldClass> mandateFieldClassList = mandateFieldClassDAO.findAll();
 
         logger.debug("number of mandateFieldClass: {}", mandateFieldClassList.size());
@@ -164,7 +164,6 @@ public class MandateFieldControl extends BusinessControl {
                 } else {
                     mandateFieldView = new MandateFieldView();
                     mandateFieldView.setMandateFieldClassView(mandateFieldClassView);
-                    mandateFieldView.setMandateFieldType(MandateFieldType.FIELD_TYPE);
                     mandateFieldView.setFieldName(field.getName());
                 }
                 mandateFieldViewList.add(mandateFieldView);
@@ -422,7 +421,6 @@ public class MandateFieldControl extends BusinessControl {
         Map<String, List<MandateFieldView>> _tmpClassMap = new ConcurrentHashMap<String, List<MandateFieldView>>();
         for(MandateFieldStepAction mandateFieldStepAction : mandateFieldStepActionList){
             MandateFieldView mandateFieldView = mandateFieldTransform.transformToView(mandateFieldStepAction.getMandateField());
-            logger.debug("Mandate Field View: {}", mandateFieldView);
 
             MandateFieldClassView mandateFieldClassView = mandateFieldView.getMandateFieldClassView();
             String className = mandateFieldClassView.getClassName();
@@ -485,20 +483,14 @@ public class MandateFieldControl extends BusinessControl {
         logger.debug("-- begin saveMandateClassRequiredStepAction: {}", classSAAdminView);
         if(classSAAdminView != null){
             MandateFieldClassStepAction mandateFieldClassStepAction = mandateFieldClassStepActionDAO.findByActionAndClass(step.getId(), action.getId(), classSAAdminView.getId());
-            if(classSAAdminView.isNeedUpdate()){
-                if(mandateFieldClassStepAction == null){
-                    mandateFieldClassStepAction = new MandateFieldClassStepAction();
-                }
-                mandateFieldClassStepAction.setAction(action);
-                mandateFieldClassStepAction.setStep(step);
-                mandateFieldClassStepAction.setRequired(classSAAdminView.isClassRequired());
-                mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
-                mandateFieldClassStepActionDAO.persist(mandateFieldClassStepAction);
+            if(mandateFieldClassStepAction == null){
+                mandateFieldClassStepAction = new MandateFieldClassStepAction();
             }
-            /*else {
-                if(mandateFieldClassStepAction != null)
-                    mandateFieldClassStepActionDAO.delete(mandateFieldClassStepAction);
-            }*/
+            mandateFieldClassStepAction.setAction(action);
+            mandateFieldClassStepAction.setStep(step);
+            mandateFieldClassStepAction.setRequired(classSAAdminView.isClassRequired());
+            mandateFieldClassStepAction.setMandateFieldClass(mandateFieldClassDAO.findById(classSAAdminView.getId()));
+            mandateFieldClassStepActionDAO.persist(mandateFieldClassStepAction);
         }
     }
 

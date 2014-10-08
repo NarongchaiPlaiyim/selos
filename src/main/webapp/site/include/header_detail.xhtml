@@ -63,14 +63,32 @@
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel">
     </p:commandButton>
     <!-- Request Appraisal Prescreen -->
-    <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
                      disabled="#{not headerController.canRequestAppraisal}"
                      oncomplete="reqApprDlg.show()"
                      update=":frmMain:reqApprDialogPanel">
         <p:resetInput target=":frmMain:reqApprDialogPanel"/>
+    </p:commandButton>-->
+    <p:commandButton id="btnReqApprPreScreenRedirect" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                     disabled="#{not headerController.canRequestAppraisal}"
+                     onclick="PF('confirmReqParallelAppraisal').show()">
     </p:commandButton>
+    <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request Parallel Appraisal" styleClass="left"
+                     icon="ui-icon-alert" closable="false"
+                     widgetVar="confirmReqParallelAppraisal" global="false" showEffect="fade">
+        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                         actionListener="#{headerController.onRequestParallelAppraisal()}"
+                         process="@this" widgetVar="subParallelOkBtn"
+                         oncomplete="confirmReqParallelAppraisal.hide(); subParallelOkBtn.enable(); subParallelCancelBtn.enable()"
+                         onclick="PF('blockUI').show(); subParallelOkBtn.disable(); subParallelCancelBtn.disable()"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmReqParallelAppraisal').hide()"
+                         styleClass="ui-confirmdialog-no"
+                         widgetVar="subParallelCancelBtn"/>
+    </p:confirmDialog>
     <!-- Cancel CA -->
     <p:commandButton id="btnCancelCA_PreScreen" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel CA')}"
@@ -151,14 +169,32 @@
         <p:resetInput target=":frmMain:returnInfoPanel"/>
     </p:commandButton>
     <!--Request Appraisal Fullapp-->
-    <p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+    <!--<p:commandButton id="btnReqApprFullapp" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
                      actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
                      disabled="#{not headerController.canRequestAppraisal}"
                      oncomplete="reqApprDlg.show()"
                      update=":frmMain:reqApprDialogPanel">
         <p:resetInput target=":frmMain:reqApprDialogPanel"/>
+    </p:commandButton>-->
+    <p:commandButton id="btnReqApprFullAppRedirect" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                     disabled="#{not headerController.canRequestAppraisal}"
+                     onclick="PF('confirmFullAppReqParallelAppraisal').show()">
     </p:commandButton>
+    <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request Parallel Appraisal" styleClass="left"
+                     icon="ui-icon-alert" closable="false"
+                     widgetVar="confirmFullAppReqParallelAppraisal" global="false" showEffect="fade">
+        <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                         actionListener="#{headerController.onRequestParallelAppraisal()}"
+                         process="@this" widgetVar="subParallelOkBtn"
+                         oncomplete="confirmFullAppReqParallelAppraisal.hide(); subParallelOkBtn.enable(); subParallelCancelBtn.enable()"
+                         onclick="PF('blockUI').show(); subParallelOkBtn.disable(); subParallelCancelBtn.disable()"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="PF('confirmFullAppReqParallelAppraisal').hide()"
+                         styleClass="ui-confirmdialog-no"
+                         widgetVar="subParallelCancelBtn"/>
+    </p:confirmDialog>
     <!--Cancel CA FullApplication-->
     <p:commandButton id="btnCancelCAFullApp" value="#{msg.get('app.header.button.cancelCA')}" title="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel CA')}"
@@ -333,17 +369,17 @@
                      actionListener="#{headerController.onOpenRequestAppraisalCustomerAccepted()}" process="@this"
                      update=":frmMain:reqAppr_BDMPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel">
     </p:commandButton>
-    <!-- Cancel Parallel Appraisal -->
+    <!-- Cancel Parallel Appraisal [ Return from AAD ] -->
     <p:commandButton id="btnCancelReqAppr_BDM" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Cancel Appraisal Request') and headerController.stepId == 2007}"
                      actionListener="#{headerController.onOpenCancelAppraisalRequest()}"
                      oncomplete="cancelReqApprDlg.show()"
                      update=":frmMain:cancelReqApprPanel, :frmMain:msgBoxBaseMessagePanel">
     </p:commandButton>
-    <!-- Submit to AAD Admin [ From BDM ] -->
+    <!-- Return to AAD Admin [ From BDM ] -->
     <p:commandButton id="btnReturnAADM_BDM" value="#{msg.get('app.header.button.returnToAADAdmin')}" title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2007}"
-                     onclick="confirmReturnAADM_BDM.show()"/>
+                     onclick="PF('confirmReturnAADM_BDM').show()"/>
     <p:confirmDialog header="Confirmation" message="Please click 'OK' to submit case" styleClass="left"
                      icon="ui-icon-alert"
                      widgetVar="confirmReturnAADM_BDM" global="false" showEffect="fade"
@@ -352,8 +388,8 @@
                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
                          actionListener="#{headerController.onReturnToAADAdminByBDM()}"
                          process="@this" widgetVar="conRetAADMSaveBtn"
-                         oncomplete="confirmReturnAADM_BDM.hide();conRetAADMSaveBtn.enable();conRetAADMCancelBtn.enable()"
-                         onclick="conRetAADMSaveBtn.disable();conRetAADMCancelBtn.disable()"/>
+                         oncomplete="confirmReturnAADM_BDM.hide(); conRetAADMSaveBtn.enable(); conRetAADMCancelBtn.enable();"
+                         onclick="conRetAADMSaveBtn.disable(); conRetAADMCancelBtn.disable()"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" type="button" onclick="confirmReturnAADM_BDM.hide()"
                          styleClass="ui-confirmdialog-no"
                          widgetVar="conRetAADMCancelBtn"/>
@@ -411,13 +447,13 @@
                      update=":frmMain:checkMandatePanel, :frmMain:msgBoxBaseMessagePanel">
         <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
-    <!-- Submit to AAD Committee [ From AAD Admin ]-->
+    <!-- Submit to AAD Committee [ From AAD Admin to AAD Committee ]-->
     <p:commandButton id="btnSubmitAADC_AADM" value="#{msg.get('app.header.button.submitCA')}" title="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}"
-                     actionListener="#{headerController.onOpenSubmitAADCommittee()}"
+                     actionListener="#{headerController.onOpenSubmitForAADAdmin()}"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:submitAADCPanel">
     </p:commandButton>
-    <!-- Return to AAD Admin [ FROM AAD Committee ]-->
+    <!-- Return to AAD Admin [ From AAD Committee to AAD Admin ]-->
     <p:commandButton id="btnReturnAADM_AADC" value="#{msg.get('app.header.button.returnToAADAdmin')}"
                      title="#{msg.get('app.header.button.returnToAADAdmin')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Return to AAD Admin') and headerController.stepId == 2008}"
@@ -436,7 +472,7 @@
                      rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2008}">
         <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
                          update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         actionListener="#{headerController.onSubmitAppraisalToUW()}"
+                         actionListener="#{headerController.onSubmitForAADCommittee()}"
                          process="@this" widgetVar="conSubAppUWSaveBtn"
                          oncomplete="confirmSubmitApprToUw.hide();conSubAppUWSaveBtn.enable();conSubAppUWCancelBtn.enable()"
                          onclick="conSubAppUWSaveBtn.disable();conSubAppUWCancelBtn.disable()"/>
@@ -535,6 +571,7 @@
 </p:panel>
 <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
     <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="mandateFieldDialog" resizable="false"
+              dynamic="true" height="500" width="900"
               header="#{headerController.messageHeader}" closable="false" modal="true">
         <ui:include src="/site/dialog/mandateFieldDialog.xhtml"/>
     </p:dialog>
@@ -658,6 +695,22 @@
     </p:dialog>
 </p:panel>
 
+<!--<p:confirmDialog widgetVar="confirmDeleteReturn" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnReturn" widgetVar="wOkBtnReturn" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoDlgPanel"
+                         oncomplete="confirmDeleteReturn.hide(); wOkBtnReturn.enable(); wCancelBtnReturn.enable()"
+                         onclick="wOkBtnReturn.disable(); wCancelBtnReturn.disable()"
+                         actionListener="#{headerController.onDeleteReturnInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnReturn" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturn.hide()"/>
+    </div>
+</p:confirmDialog>-->
+
 <p:panel id="returnInfoAADPanel" styleClass="panel">
     <p:dialog id="returnInfoAADDialog" widgetVar="returnInfoAADDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -665,6 +718,22 @@
         <ui:include src="/site/dialog/returnInfoAADDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnAAD" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnAAD" widgetVar="wOkBtnAAD" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoAADDlgPanel"
+                         oncomplete="confirmDeleteReturnAAD.hide(); wOkBtnAAD.enable(); wCancelBtnAAD.enable()"
+                         onclick="wOkBtnAAD.disable(); wCancelBtnAAD.disable()"
+                         actionListener="#{headerController.onDeleteReturnAADInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnAAD" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnAAD.hide()"/>
+    </div>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoBDMPanel" styleClass="panel">
     <p:dialog id="returnInfoBDMDialog" widgetVar="returnInfoBDMDlg" header="Return Summary"
@@ -674,6 +743,22 @@
     </p:dialog>
 </p:panel>
 
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnBDM" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnBDM" widgetVar="wOkBtnBDM" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoBDMDlgPanel"
+                         oncomplete="confirmDeleteReturnBDM.hide(); wOkBtnBDM.enable(); wCancelBtnBDM.enable()"
+                         onclick="wOkBtnBDM.disable(); wCancelBtnBDM.disable()"
+                         actionListener="#{headerController.onDeleteReturnBDMInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnBDM" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnBDM.hide()"/>
+    </div>
+</p:confirmDialog>-->
+
 <p:panel id="returnInfoBUPanel" styleClass="panel">
     <p:dialog id="returnInfoBUDialog" widgetVar="returnInfoBUDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -681,6 +766,22 @@
         <ui:include src="/site/dialog/returnInfoBUDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnBU" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnBU" widgetVar="wOkBtnBU" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoBUDlgPanel"
+                         oncomplete="confirmDeleteReturnBU.hide(); wOkBtnBU.enable(); wCancelBtnBU.enable()"
+                         onclick="wOkBtnBU.disable(); wCancelBtnBU.disable()"
+                         actionListener="#{headerController.onDeleteReturnBUInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnBU" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnBU.hide()"/>
+    </div>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoMakerPanel" styleClass="panel">
     <p:dialog id="returnInfoMakerDialog" widgetVar="returnInfoMakerDlg" header="Return Summary"
@@ -690,6 +791,22 @@
     </p:dialog>
 </p:panel>
 
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnMaker" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnMaker" widgetVar="wOkBtnMaker" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoMakerDlgPanel"
+                         oncomplete="confirmDeleteReturnMaker.hide(); wOkBtnMaker.enable(); wCancelBtnMaker.enable()"
+                         onclick="wOkBtnMaker.disable(); wCancelBtnMaker.disable()"
+                         actionListener="#{headerController.onDeleteReturnMakerInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnMaker" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnMaker.hide()"/>
+    </div>
+</p:confirmDialog>-->
+
 <p:panel id="returnInfoAADUWPanel" styleClass="panel">
     <p:dialog id="returnInfoAADUWDialog" widgetVar="returnInfoAADUWDlg" header="Return Summary"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
@@ -697,6 +814,22 @@
         <ui:include src="/site/dialog/returnInfoAADUWDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnAADUW" header="Confirm Delete"
+                 message="#{msg.get('dialog.delete.confirm.message')}"
+                 showEffect="fade" hideEffect="fade" width="380" severity="alert"
+                 closable="false" closeOnEscape="false">
+    <div class="onRight">
+        <p:commandButton id="OkBtnAADUW" widgetVar="wOkBtnAADUW" styleClass="smallest"
+                         value="#{msg.get('app.button.ok')}" update=":frmMain:returnInfoAADUWDlgPanel"
+                         oncomplete="confirmDeleteReturnAADUW.hide(); wOkBtnAADUW.enable(); wCancelBtnAADUW.enable()"
+                         onclick="wOkBtnAADUW.disable(); wCancelBtnAADUW.disable()"
+                         actionListener="#{headerController.onDeleteReturnAADUWInfo(rowIndex)}"/>
+        <p:commandButton widgetVar="wCancelBtnAADUW" styleClass="smaller"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="confirmDeleteReturnAADUW.hide()"/>
+    </div>
+</p:confirmDialog>-->
 
 <p:panel id="addReturnInfoPanel" styleClass="panel">
     <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"

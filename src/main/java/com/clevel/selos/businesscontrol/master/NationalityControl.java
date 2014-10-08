@@ -48,7 +48,6 @@ public class NationalityControl extends BusinessControl{
                     selectItemList.add(selectItem);
                 else
                     selectItemList.add(0, selectItem);
-                logger.debug("add SelectItem: {}", selectItem);
             }
         }
         logger.debug("getNationalitySelectItemActiveList return nationalityView size: {}", selectItemList.size());

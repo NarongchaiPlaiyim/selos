@@ -46,7 +46,6 @@ public class TitleControl extends BusinessControl{
                 selectItem.setLabel(titleView.getTitleEn());
                 selectItem.setValue(titleView.getId());
                 titleSelectItemList.add(selectItem);
-                logger.debug("add SelectItem: {}", selectItem);
             }
         }
         logger.debug("getTitleEnSelectItemByCustomerEntity return TitleView size: {}", titleSelectItemList.size());
@@ -69,7 +68,6 @@ public class TitleControl extends BusinessControl{
                 selectItem.setLabel(titleView.getTitleTh());
                 selectItem.setValue(titleView.getId());
                 titleList.add(selectItem);
-                logger.debug("add SelectItem: {}", selectItem);
             }
         }
         logger.debug("getTitleThSelectItemByCustomerEntity return titleView size: {}", titleList.size());

@@ -1,7 +1,6 @@
 package com.clevel.selos.model.db.master;
 
 
-import com.clevel.selos.model.MandateFieldType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -25,10 +24,6 @@ public class MandateField implements Serializable{
 
     @Column(name = "field_description", length = 100)
     private String fieldDescription;
-
-    @Column(name = "field_type", length = 1, columnDefinition = "int default 0")
-    @Enumerated(EnumType.ORDINAL)
-    private MandateFieldType mandateFieldType;
 
     @Column(name = "page_name", length = 100)
     private String page;
@@ -128,13 +123,7 @@ public class MandateField implements Serializable{
         this.notMatchedValue = notMatchedValue;
     }
 
-    public MandateFieldType getMandateFieldType() {
-        return mandateFieldType;
-    }
 
-    public void setMandateFieldType(MandateFieldType mandateFieldType) {
-        this.mandateFieldType = mandateFieldType;
-    }
 
     @Override
     public String toString() {
@@ -143,7 +132,7 @@ public class MandateField implements Serializable{
                 .append("mandateFieldClass", mandateFieldClass)
                 .append("fieldName", fieldName)
                 .append("fieldDescription", fieldDescription)
-                .append("mandateFieldType", mandateFieldType)
+                .append("page", page)
                 .append("page", page)
                 .append("minValue", minValue)
                 .append("maxValue", maxValue)

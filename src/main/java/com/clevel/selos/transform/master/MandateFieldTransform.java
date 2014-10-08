@@ -77,7 +77,6 @@ public class MandateFieldTransform extends Transform {
             else
                 mandateFieldView.setNotMatchedEmpty(RadioValue.NO.value());
         }
-        mandateFieldView.setMandateFieldType(mandateField.getMandateFieldType());
         logger.debug("-- end transformToView return mandateFieldView: {}", mandateFieldView);
         return mandateFieldView;
     }
@@ -106,13 +105,14 @@ public class MandateFieldTransform extends Transform {
 
         MandateFieldConditionView mandateFieldConditionView = new MandateFieldConditionView();
         mandateFieldConditionView.setId(mandateFieldCondition.getId());
+        mandateFieldConditionView.setMandateConditionType(mandateFieldCondition.getMandateConditionType());
         mandateFieldConditionView.setName(mandateFieldCondition.getName());
         mandateFieldConditionView.setMandateFieldClassView(transformToView(mandateFieldCondition.getMandateFieldClass()));
         mandateFieldConditionView.setConditionDesc(mandateFieldCondition.getConditionDesc());
 
         mandateFieldConditionView.setDependType(mandateFieldCondition.getDependType());
         mandateFieldConditionView.setDependConType(mandateFieldCondition.getDependConType());
-        mandateFieldConditionView.setMandateConditionType(mandateFieldCondition.getMandateConditionType());
+        mandateFieldConditionView.setMandateConDetailType(mandateFieldCondition.getMandateConDetailType());
 
         List<MandateFieldConditionDetailView> conditionDetailViewList = new ArrayList<MandateFieldConditionDetailView>();
         for(MandateFieldConditionDetail conditionDetail : mandateFieldCondition.getMandateFieldConditionDetailList()){
@@ -240,7 +240,6 @@ public class MandateFieldTransform extends Transform {
         if(mandateFieldView.getId() > 0)
             mandateField = mandateFieldDAO.findById(mandateFieldView.getId());
 
-        mandateField.setMandateFieldType(mandateFieldView.getMandateFieldType());
         mandateField.setPage(mandateFieldView.getPage());
         mandateField.setFieldDescription(mandateFieldView.getFieldDesc());
         mandateField.setFieldName(mandateFieldView.getFieldName());
@@ -288,6 +287,7 @@ public class MandateFieldTransform extends Transform {
 
         mandateFieldCondition.setName(mandateFieldConditionView.getName());
         mandateFieldCondition.setMandateConditionType(mandateFieldConditionView.getMandateConditionType());
+        mandateFieldCondition.setMandateConDetailType(mandateFieldConditionView.getMandateConDetailType());
         mandateFieldCondition.setConditionDesc(mandateFieldConditionView.getConditionDesc());
         mandateFieldCondition.setDependType(mandateFieldConditionView.getDependType());
         mandateFieldCondition.setDependConType(mandateFieldConditionView.getDependConType());

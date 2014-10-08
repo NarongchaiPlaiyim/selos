@@ -61,6 +61,11 @@
                                              action="#{headerController.onDeleteReturnAADUWInfo(rowIndex)}"
                                              update=":frmMain:returnInfoAADUWDlgPanel">
                             </p:commandButton>
+                            <!--<p:commandButton title="#{msg.get('app.button.remove')}"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfoAADUW.canEdit}"
+                                             oncomplete="confirmDeleteReturnAADUW.show()">
+                            </p:commandButton>-->
                         </p:column>
                     </p:dataTable>
                 </td>

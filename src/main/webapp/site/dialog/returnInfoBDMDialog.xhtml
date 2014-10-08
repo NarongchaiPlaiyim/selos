@@ -61,6 +61,11 @@
                                              action="#{headerController.onDeleteReturnBDMInfo(rowIndex)}"
                                              update=":frmMain:returnInfoBDMDlgPanel">
                             </p:commandButton>
+                            <!--<p:commandButton title="#{msg.get('app.button.remove')}"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfoBDM.canEdit}"
+                                             oncomplete="confirmDeleteReturnBDM.show()">
+                            </p:commandButton>-->
                         </p:column>
                     </p:dataTable>
                 </td>

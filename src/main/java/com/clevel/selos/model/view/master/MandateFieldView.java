@@ -1,11 +1,9 @@
 package com.clevel.selos.model.view.master;
 
 
-import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserSysParameterKey;
-import com.clevel.selos.model.view.ActionView;
-import com.clevel.selos.model.view.StepView;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,7 +15,6 @@ public class MandateFieldView implements Serializable{
     private String fieldName;
     private String fieldDesc;
     private String page;
-    private MandateFieldType mandateFieldType;
     private boolean checkFieldDetail;
     private String minValue;
     private String maxValue;
@@ -65,14 +62,6 @@ public class MandateFieldView implements Serializable{
 
     public void setPage(String page) {
         this.page = page;
-    }
-
-    public MandateFieldType getMandateFieldType() {
-        return mandateFieldType;
-    }
-
-    public void setMandateFieldType(MandateFieldType mandateFieldType) {
-        this.mandateFieldType = mandateFieldType;
     }
 
     public boolean isCheckFieldDetail() {
@@ -172,7 +161,6 @@ public class MandateFieldView implements Serializable{
                 .append("fieldName", fieldName)
                 .append("fieldDesc", fieldDesc)
                 .append("page", page)
-                .append("mandateFieldType", mandateFieldType)
                 .append("minValue", minValue)
                 .append("maxValue", maxValue)
                 .append("matchedValue", matchedValue)

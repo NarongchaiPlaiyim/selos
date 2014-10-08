@@ -12,6 +12,12 @@
         <h:outputStylesheet name="css/style.css" />
         <h:outputScript library="js" name="custom.js" />
         <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+        <style>
+            .ui-datatable td,.ui-datatable th,.ui-datatable span {
+                white-space: normal!important;
+                word-wrap: break-word;
+            }
+        </style>
     </h:head>
 
     <h:body>
@@ -110,6 +116,7 @@
                     <!-- End Footer -->
                     <p:panel id="msgBoxMandateMessagePanel" styleClass="panel">
                         <p:dialog id="msgBoxMandateMessageDialog" widgetVar="msgBoxMandateMessageDlg" styleClass="mandateFieldDialog" resizable="false"
+                                  dynamic="true" height="500" width="900"
                                   header="#{mandateFieldSum.messageHeader}" closable="false" modal="true">
                             <ui:include src="/admin/dialog/testMandateFieldDialog.xhtml"/>
                         </p:dialog>

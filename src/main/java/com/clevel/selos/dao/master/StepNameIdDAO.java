@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.StepNameId;
 import com.clevel.selos.system.Config;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
@@ -47,6 +48,7 @@ public class StepNameIdDAO  extends GenericDAO<StepNameId,Integer>
 
         criteria.setProjection( Projections.projectionList().add(Projections.property("id"),"id").add(Projections.projectionList().add(Projections.property("description"),"description")));
         criteria.add(Restrictions.not(Restrictions.in("id",numbers)));
+        criteria.addOrder(Order.asc("id"));
         criteria.setResultTransformer(Transformers.aliasToBean(StepNameId.class));
 
         //criteria.setProjection( Projections.projectionList().add(Projections.property("description"),"description"));

@@ -6,6 +6,9 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
@@ -70,6 +73,7 @@ public class AppraisalRequest extends BaseController {
     private long workCaseId;
     private long workCasePreScreenId;
     private long stepId;
+    private long statusId;
     private AppraisalView appraisalView;
 
     private AppraisalDetailView appraisalDetailView;
@@ -108,7 +112,8 @@ public class AppraisalRequest extends BaseController {
         contactFlag2 = false;
         contactFlag3 = false;
 
-        stepId = (Long)session.getAttribute("stepId");
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
     }
@@ -117,7 +122,15 @@ public class AppraisalRequest extends BaseController {
         log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
-            //TODO Check Step is PreScreen, PreScreenMaker, Prepare FullApp ( 1001, 1003, 2001 )
+            //Check Step is PreScreen, PreScreenMaker, Prepare FullApp ( 1001, 1003, 2001, 2011 )
+            stepId = getCurrentStep(session);
+            if(!(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_MAKER.value() ||
+                    stepId == StepValue.FULLAPP_BDM.value() || stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value() ||
+                        stepId == StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId == StepValue.REQUEST_APPRAISAL.value())){
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+
+            }
             /*stepId = getCurrentStep(session);
             if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
                 log.debug("preRender ::: Invalid step id : {}", stepId);
@@ -140,17 +153,27 @@ public class AppraisalRequest extends BaseController {
         String bdmUserId = "";
 
         if(checkSession(session)){
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
             if (!Util.isZero(workCaseId)){
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
+                loadFieldControl(workCaseId, Screen.AppraisalRequest, ownerCaseUserId);
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePreScreenDAO.findById(workCasePreScreenId);
                 bdmUserId = workCasePrescreen.getCreateBy() != null ? workCasePrescreen.getCreateBy().getId() : "";
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.AppraisalRequest, ownerCaseUserId);
             }
 
-            log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}]", workCasePreScreenId, workCaseId);
+            ProposeType proposeType;
+            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+                proposeType = ProposeType.P;
+            }else{
+                proposeType = ProposeType.A;
+            }
 
-            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId);
+            log.debug("onCreation ::: workCasePreScreenId : [{}], workCaseId : [{}], proposeType : [{}]", workCasePreScreenId, workCaseId, proposeType);
+
+            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, workCasePreScreenId, proposeType);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
 
             if(!Util.isNull(appraisalView)){
@@ -237,7 +260,7 @@ public class AppraisalRequest extends BaseController {
                 try{
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");

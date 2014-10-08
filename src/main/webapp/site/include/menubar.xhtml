@@ -44,7 +44,7 @@
                             <li id="submnuappraisalrequest"><a href="appraisalRequest.jsf"
                                                               title="#{msg.get('app.menu.appraisalRequest')}">#{msg.get('app.menu.appraisalRequest')}</a></li>
                         </p:panel>
-                        <p:panel id="pnlMmenu_appraisal_appointment" rendered="#{headerController.stepId == 2006}" styleClass="panel">
+                        <p:panel id="pnlMmenu_appraisal_appointment" rendered="#{headerController.stepId == 2006 or headerController.stepId == 2008}" styleClass="panel">
                             <li id="submnuappraisalappointment"><a href="appraisalAppointment.jsf"
                                                                title="#{msg.get('app.menu.appraisalAppointment')}">#{msg.get('app.menu.appraisalAppointment')}</a></li>
                         </p:panel>
@@ -56,44 +56,83 @@
                 </li>
             </h:panelGroup>
             <h:panelGroup id="pnl_menu_fullapp" rendered="#{headerController.checkAccessStage('FULLAPP')}" styleClass="panel">
-                <li id="mnuprescreen">
-                    <a href="prescreenResult.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
-                    <ul>
-                        <li id="submnuprescreenresult"><a href="prescreenResult.jsf" title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>
-                    </ul>
-                </li>
-                <li id="mnubasicinfo"><a href="basicInfo.jsf" title="#{msg.get('app.menu.basicInfo')}">#{msg.get('app.menu.basicInfo')}</a></li>
+                <c:if test="#{headerController.canAccessMenu(1400)}">
+                    <li id="mnuprescreen">
+                        <a href="prescreenResult.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
+                        <ul>
+                            <li id="submnuprescreenresult"><a href="prescreenResult.jsf" title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>
+                        </ul>
+                    </li>
+                </c:if>
+                <c:if test="#{headerController.canAccessMenu(2100)}">
+                    <li id="mnubasicinfo"><a href="basicInfo.jsf" title="#{msg.get('app.menu.basicInfo')}">#{msg.get('app.menu.basicInfo')}</a></li>
+                </c:if>
                 <li id="mnuborrowerinfo">
-                    <a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.borrowerInfo')}">#{msg.get('app.menu.borrowerInfo')}</a>
+                    <c:if test="#{headerController.defaultPage('borrowerInfo') != ''}">
+                    <h:link title="#{msg.get('app.menu.borrowerInfo')}" value="#{msg.get('app.menu.borrowerInfo')}" outcome="#{headerController.defaultPage('borrowerInfo')}"/>
+                    </c:if>
                     <ul>
-                        <li id="submnucustomerinfo"><a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.customerInfo')}">#{msg.get('app.menu.customerInfo')}</a></li>
-                        <li id="submnucredithistory"><a href="NCBSummary.jsf" title="#{msg.get('app.menu.creditHistory')}">#{msg.get('app.menu.creditHistory')}</a></li>
-                        <li id="submnuqualitative"><a href="qualitative.jsf" title="#{msg.get('app.menu.qualitative')}">#{msg.get('app.menu.qualitative')}</a></li>
-                        <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="#{msg.get('app.menu.tcgCalculation')}">#{msg.get('app.menu.tcgCalculation')}</a></li>
+                        <c:if test="#{headerController.canAccessMenu(2200)}">
+                            <li id="submnucustomerinfo"><a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.customerInfo')}">#{msg.get('app.menu.customerInfo')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2500)}">
+                            <li id="submnucredithistory"><a href="NCBSummary.jsf" title="#{msg.get('app.menu.creditHistory')}">#{msg.get('app.menu.creditHistory')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2800)}">
+                            <li id="submnuqualitative"><a href="qualitative.jsf" title="#{msg.get('app.menu.qualitative')}">#{msg.get('app.menu.qualitative')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2600)}">
+                            <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="#{msg.get('app.menu.tcgCalculation')}">#{msg.get('app.menu.tcgCalculation')}</a></li>
+                        </c:if>
                     </ul>
                 </li>
-                <li id="mnubusinessinfo"><a href="bizInfoSummary.jsf" title="#{msg.get('app.menu.businessInfo')}">#{msg.get('app.menu.businessInfo')}</a></li>
+                <c:if test="#{headerController.canAccessMenu(2700)}">
+                    <li id="mnubusinessinfo"><a href="bizInfoSummary.jsf" title="#{msg.get('app.menu.businessInfo')}">#{msg.get('app.menu.businessInfo')}</a></li>
+                </c:if>
                 <li id="mnufinancialinfo">
-                    <a href="bankStatementSummary.jsf" title="#{msg.get('app.menu.financialInfo')}">#{msg.get('app.menu.financialInfo')}</a>
+                    <c:if test="#{headerController.defaultPage('financialInfo') != ''}">
+                    <h:link title="#{msg.get('app.menu.financialInfo')}" value="#{msg.get('app.menu.financialInfo')}" outcome="#{headerController.defaultPage('financialInfo')}"/>
+                    </c:if>
                     <ul>
-                        <li id="submnubankstatement"><a href="bankStatementSummary.jsf" title="#{msg.get('app.menu.bankStatement')}">#{msg.get('app.menu.bankStatement')}</a></li>
-                        <li id="submnudbr"><a href="dbrInfo.jsf" title="#{msg.get('app.menu.dbr')}">#{msg.get('app.menu.dbr')}</a></li>
-                        <li id="submnuexistingline"><a href="creditFacExisting.jsf" title="#{msg.get('app.menu.existingLine')}">#{msg.get('app.menu.existingLine')}</a></li>
-                        <li id="submnuproposeline"><a href="proposeLine.jsf" title="#{msg.get('app.menu.proposeLine')}">#{msg.get('app.menu.proposeLine')}</a></li>
+                        <c:if test="#{headerController.canAccessMenu(2810)}">
+                            <li id="submnubankstatement"><a href="bankStatementSummary.jsf" title="#{msg.get('app.menu.bankStatement')}">#{msg.get('app.menu.bankStatement')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2830)}">
+                            <li id="submnudbr"><a href="dbrInfo.jsf" title="#{msg.get('app.menu.dbr')}">#{msg.get('app.menu.dbr')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2850)}">
+                            <li id="submnuexistingline"><a href="creditFacExisting.jsf" title="#{msg.get('app.menu.existingLine')}">#{msg.get('app.menu.existingLine')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2880)}">
+                            <li id="submnuproposeline"><a href="proposeLine.jsf" title="#{msg.get('app.menu.proposeLine')}">#{msg.get('app.menu.proposeLine')}</a></li>
+                        </c:if>
                     </ul>
                 </li>
                 <li id="mnudecision">
-                    <a href="exSummary.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a>
+                    <c:if test="#{headerController.defaultPage('decision') != ''}">
+                    <h:link title="#{msg.get('app.menu.decision')}" value="#{msg.get('app.menu.decision')}" outcome="#{headerController.defaultPage('decision')}"/>
+                    </c:if>
                     <ul>
-                        <li id="submnuexsum"><a href="exSummary.jsf" title="#{msg.get('app.menu.exSummary')}">#{msg.get('app.menu.exSummary')}</a></li>
-                        <li id="submnudecision"><a href="decision.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a></li>
+                        <c:if test="#{headerController.canAccessMenu(2910)}">
+                            <li id="submnuexsum"><a href="exSummary.jsf" title="#{msg.get('app.menu.exSummary')}">#{msg.get('app.menu.exSummary')}</a></li>
+                        </c:if>
+                        <c:if test="#{headerController.canAccessMenu(2920)}">
+                            <li id="submnudecision"><a href="decision.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a></li>
+                        </c:if>
                     </ul>
                 </li>
             </h:panelGroup>
             <h:panelGroup id="pnl_menu_custacceptance" rendered="#{headerController.stageId == 205}" styleClass="panel">
-                <li id="mnucustacceptpre">
-                    <a href="customerAcceptancePre.jsf" title="#{msg.get('app.menu.customerAcceptancePre')}">#{msg.get('app.menu.customerAcceptancePre')}</a>
-                </li>
+                <c:if test="#{headerController.canAccessMenu(2920)}">
+                    <li id="mnudecision">
+                        <a href="decision.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a>
+                    </li>
+                </c:if>
+                <c:if test="#{headerController.canAccessMenu(2930)}">
+                    <li id="mnucustacceptpre">
+                        <a href="customerAcceptancePre.jsf" title="#{msg.get('app.menu.customerAcceptancePre')}">#{msg.get('app.menu.customerAcceptancePre')}</a>
+                    </li>
+                </c:if>
             </h:panelGroup>
             <h:panelGroup id="pnl_menu_step3" rendered="#{headerController.step3Screen}"
                      styleClass="panel">

@@ -207,6 +207,8 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
 
                     completedCasesWKItems.setWobnumber(workCasePrescreen.getWobNumber());
 
+                    completedCasesWKItems.setStepid(workCasePrescreen.getStatus()!=null ? Integer.parseInt(Long.toString(workCasePrescreen.getStep().getId())) : null);
+
                     completedCasesWKItems.setDoalevelid(workCasePrescreen.getAuthorizationDOA() != null ? workCasePrescreen.getAuthorizationDOA().getDoapriorityorder():null);
 
                     completedCasesWKItems.setCreateBy(workCasePrescreen.getCreateBy().getId());
