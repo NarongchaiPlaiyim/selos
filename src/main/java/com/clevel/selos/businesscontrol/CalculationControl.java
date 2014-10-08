@@ -754,7 +754,7 @@ public class CalculationControl extends BusinessControl{
             if (!Util.isNull(existingCreditFacility)) {
                 borrowerComOBOD = existingCreditFacility.getTotalBorrowerComOBOD();
                 borrowerCom = existingCreditFacility.getTotalBorrowerCom();
-                groupExposure = existingCreditFacility.getTotalBorrowerExposure();
+                groupExposure = existingCreditFacility.getTotalGroupExposure();
             }
 
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
