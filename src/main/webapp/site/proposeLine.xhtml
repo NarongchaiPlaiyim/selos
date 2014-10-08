@@ -1259,7 +1259,7 @@
                                                                          update=":collateralDlgForm"
                                                                          process="@form"
                                                                          oncomplete="collateralInfoDlg.show();"
-                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton')}">
+                                                                         disabled="#{proposeLine.isDisabled('editProposeCollateralButton') or proposeCollView.appraisalRequest == 2}">
                                                             <f:setPropertyActionListener value="#{proposeCollView}" target="#{proposeLine.proposeCollateralInfoView}"/>
                                                             <f:setPropertyActionListener value="#{collIndex.index}" target="#{proposeLine.rowIndex}"/>
                                                             <p:resetInput target=":collateralDlgForm"/>
