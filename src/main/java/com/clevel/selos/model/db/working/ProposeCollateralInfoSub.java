@@ -71,6 +71,12 @@ public class ProposeCollateralInfoSub implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
+    @Column(name = "created_by_aad", columnDefinition = "int default 0")
+    private int createdByAAD;
+
+    @Column(name = "created_by_bdm", columnDefinition = "int default 0")
+    private int createdByBDM;
+
     public long getId() {
         return id;
     }
@@ -205,5 +211,21 @@ public class ProposeCollateralInfoSub implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public int getCreatedByAAD() {
+        return createdByAAD;
+    }
+
+    public void setCreatedByAAD(int createdByAAD) {
+        this.createdByAAD = createdByAAD;
+    }
+
+    public int getCreatedByBDM() {
+        return createdByBDM;
+    }
+
+    public void setCreatedByBDM(int createdByBDM) {
+        this.createdByBDM = createdByBDM;
     }
 }

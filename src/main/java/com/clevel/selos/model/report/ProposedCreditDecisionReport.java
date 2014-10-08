@@ -15,8 +15,7 @@ public class ProposedCreditDecisionReport extends ReportModel{
     private int count;
     private String prodName;
     private String credittypeName;
-    private String prodCode;
-    private String projectCode;
+    private String ProductAndProject;
     private BigDecimal limit;
     private String standardPriceLabel;
     private String suggestPriceLabel;
@@ -39,13 +38,13 @@ public class ProposedCreditDecisionReport extends ReportModel{
 
     private List<ProposeCreditInfoTierDetailView> newCreditTierDetailViews;
 
+    private List<ProposeCreditInfoTierDetailReport> proposeCreditInfoTierDetailReports;
+
 
     public ProposedCreditDecisionReport() {
         count = 0;
         prodName = "";
         credittypeName = "";
-        prodCode = "";
-        projectCode = "";
         standardPriceLabel = "";
         suggestPriceLabel = "";
         finalPriceLabel = "";
@@ -82,20 +81,12 @@ public class ProposedCreditDecisionReport extends ReportModel{
         this.credittypeName = credittypeName;
     }
 
-    public String getProdCode() {
-        return prodCode;
+    public String getProductAndProject() {
+        return ProductAndProject;
     }
 
-    public void setProdCode(String prodCode) {
-        this.prodCode = prodCode;
-    }
-
-    public String getProjectCode() {
-        return projectCode;
-    }
-
-    public void setProjectCode(String projectCode) {
-        this.projectCode = projectCode;
+    public void setProductAndProject(String productAndProject) {
+        ProductAndProject = productAndProject;
     }
 
     public BigDecimal getLimit() {
@@ -234,14 +225,21 @@ public class ProposedCreditDecisionReport extends ReportModel{
         this.proposedDetail = proposedDetail;
     }
 
+    public List<ProposeCreditInfoTierDetailReport> getProposeCreditInfoTierDetailReports() {
+        return proposeCreditInfoTierDetailReports;
+    }
+
+    public void setProposeCreditInfoTierDetailReports(List<ProposeCreditInfoTierDetailReport> proposeCreditInfoTierDetailReports) {
+        this.proposeCreditInfoTierDetailReports = proposeCreditInfoTierDetailReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("count", count)
                 .append("prodName", prodName)
                 .append("credittypeName", credittypeName)
-                .append("prodCode", prodCode)
-                .append("projectCode", projectCode)
+                .append("ProductAndProject", ProductAndProject)
                 .append("limit", limit)
                 .append("standardPriceLabel", standardPriceLabel)
                 .append("suggestPriceLabel", suggestPriceLabel)
@@ -259,6 +257,7 @@ public class ProposedCreditDecisionReport extends ReportModel{
                 .append("proposedDetail", proposedDetail)
                 .append("uwDecision", uwDecision)
                 .append("newCreditTierDetailViews", newCreditTierDetailViews)
+                .append("proposeCreditInfoTierDetailReports", proposeCreditInfoTierDetailReports)
                 .toString();
     }
 }

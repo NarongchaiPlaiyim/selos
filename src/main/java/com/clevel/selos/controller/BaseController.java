@@ -28,6 +28,7 @@ public class BaseController implements Serializable {
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, UserAccessView> userAccessMap = new HashMap<String, UserAccessView>();
+    private final HashMap<String, UserAccessView> userAccessMenuMap = new HashMap<String, UserAccessView>();
 
     protected void loadFieldControl(long workCaseId, Screen screenId, String ownerCaseUserId) {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
@@ -149,12 +150,35 @@ public class BaseController implements Serializable {
         }
     }
 
+    //Function for User Access Matrix
+    protected void loadUserAccessMenu(){
+        HttpSession session = FacesUtil.getSession(false);
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        List<UserAccessView> userAccessViewList = userAccessControl.getUserAccessList(stepId);
+        userAccessMenuMap.clear();
+        for(UserAccessView userAccessView : userAccessViewList){
+            userAccessMenuMap.put(Integer.toString(userAccessView.getScreenId()), userAccessView);
+        }
+        log.debug("userAccessMenuMap : {}", userAccessMenuMap);
+    }
+
     /*public boolean isDialogMandate(String name) {
         FieldsControlView field = dialogFieldMap.get(name);
         if (field == null)
             return false;
         return field.isMandate();
     }*/
+
+    public boolean canAccessMenu(int screenId){
+        if(userAccessMenuMap.containsKey(Integer.toString(screenId))){
+            UserAccessView userAccessView = userAccessMenuMap.get(Integer.toString(screenId));
+            if(userAccessView == null)
+                return false;
+
+            return userAccessView.isAccessFlag();
+        }
+        return false;
+    }
 
     public boolean canAccess(Screen screen){
         String screenId = Integer.toString(screen.value());

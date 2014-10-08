@@ -60,7 +60,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="95cd4fee-8f21-4d09-b908-14054a5371f5" style="detail" x="205" y="0" width="39" height="21"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>

@@ -102,6 +102,15 @@ public class ProposeCollateralInfoHead implements Serializable {
     @Column(name = "existing_insurance_type", columnDefinition = "int default 0")
     private int existingInsuranceType;
 
+    @Column(name = "removed_by_aad", columnDefinition = "int default 0")
+    private int removedByAAD;
+
+    @Column(name = "created_by_aad", columnDefinition = "int default 0")
+    private int createdByAAD;
+
+    @Column(name = "created_by_bdm", columnDefinition = "int default 0")
+    private int createdByBDM;
+
     public long getId() {
         return id;
     }
@@ -294,33 +303,60 @@ public class ProposeCollateralInfoHead implements Serializable {
         this.existingInsuranceType = existingInsuranceType;
     }
 
+    public int getRemovedByAAD() {
+        return removedByAAD;
+    }
+
+    public void setRemovedByAAD(int removedByAAD) {
+        this.removedByAAD = removedByAAD;
+    }
+
+    public int getCreatedByAAD() {
+        return createdByAAD;
+    }
+
+    public void setCreatedByAAD(int createdByAAD) {
+        this.createdByAAD = createdByAAD;
+    }
+
+    public int getCreatedByBDM() {
+        return createdByBDM;
+    }
+
+    public void setCreatedByBDM(int createdByBDM) {
+        this.createdByBDM = createdByBDM;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("proposeType", proposeType).
-                append("potentialCollateral", potentialCollateral).
-                append("collateralType", collateralType).
-                append("existingCredit", existingCredit).
-                append("titleDeed", titleDeed).
-                append("collateralLocation", collateralLocation).
-                append("appraisalValue", appraisalValue).
-                append("headCollType", headCollType).
-                append("insuranceCompany", insuranceCompany).
-                append("proposeCollateral", proposeCollateral).
-                append("proposeCollateralInfoSubList", proposeCollateralInfoSubList).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                append("collateralChar", collateralChar).
-                append("numberOfDocuments", numberOfDocuments).
-                append("purposeReviewAppraisal", purposeReviewAppraisal).
-                append("purposeNewAppraisal", purposeNewAppraisal).
-                append("purposeReviewBuilding", purposeReviewBuilding).
-                append("appraisalRequest", appraisalRequest).
-                append("insuranceComType", insuranceComType).
-                append("existingInsuranceType", existingInsuranceType).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("proposeType", proposeType)
+                .append("potentialCollateral", potentialCollateral)
+                .append("collateralType", collateralType)
+                .append("existingCredit", existingCredit)
+                .append("titleDeed", titleDeed)
+                .append("collateralLocation", collateralLocation)
+                .append("appraisalValue", appraisalValue)
+                .append("headCollType", headCollType)
+                .append("insuranceCompany", insuranceCompany)
+                .append("proposeCollateral", proposeCollateral)
+                .append("proposeCollateralInfoSubList", proposeCollateralInfoSubList)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("collateralChar", collateralChar)
+                .append("numberOfDocuments", numberOfDocuments)
+                .append("purposeReviewAppraisal", purposeReviewAppraisal)
+                .append("purposeNewAppraisal", purposeNewAppraisal)
+                .append("purposeReviewBuilding", purposeReviewBuilding)
+                .append("appraisalRequest", appraisalRequest)
+                .append("insuranceComType", insuranceComType)
+                .append("existingInsuranceType", existingInsuranceType)
+                .append("removedByAAD", removedByAAD)
+                .append("createdByAAD", createdByAAD)
+                .append("createdByBDM", createdByBDM)
+                .toString();
     }
 }
