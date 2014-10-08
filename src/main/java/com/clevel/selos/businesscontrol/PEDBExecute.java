@@ -766,6 +766,10 @@ public class PEDBExecute extends BusinessControl
                 peRoster = null;
             }
 
+            rs.close();
+            conn.close();
+            conn = null;
+
         } catch (Exception e) {
 
             log.error("Error :",e);
@@ -2209,6 +2213,10 @@ public class PEDBExecute extends BusinessControl
 
 
             }
+
+            rs.close();
+            conn.close();
+            conn = null;
 
         } catch (Exception e) {
 
