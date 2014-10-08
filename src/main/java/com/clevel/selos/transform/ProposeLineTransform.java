@@ -1429,6 +1429,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setBdmComments(proposeCollateralInfo.getBdmComments());
 
             proposeCollateralInfoView.setUwDecision(proposeCollateralInfo.getUwDecision());
+            proposeCollateralInfoView.setPremiumAmount(proposeCollateralInfo.getPremiumAmount());
 
             List<ProposeCollateralInfoRelation> proposeCollateralInfoRelations = proposeCollateralInfoRelationDAO.findByCollateralId(proposeCollateralInfo.getId(), proposeType);
 
@@ -1484,6 +1485,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setBdmComments(proposeCollateralInfo.getBdmComments());
 
             proposeCollateralInfoView.setUwDecision(proposeCollateralInfo.getUwDecision());
+            proposeCollateralInfoView.setPremiumAmount(proposeCollateralInfo.getPremiumAmount());
 
             List<ProposeCollateralInfoRelation> proposeCollateralInfoRelations = proposeCollateralInfoRelationDAO.findByCollateralId(proposeCollateralInfo.getId(), proposeType);
 
