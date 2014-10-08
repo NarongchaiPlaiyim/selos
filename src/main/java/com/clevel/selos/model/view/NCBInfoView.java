@@ -52,6 +52,16 @@ public class NCBInfoView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    private boolean nplTMBFlagNCB;
+    private boolean nplOtherFlagNCB;
+    private boolean tdrTMBFlagNCB;
+    private boolean tdrOtherFlagNCB;
+    private Date nplTMBDateNCB;
+    private Date nplOtherDateNCB;
+    private Date tdrTMBDateNCB;
+    private Date tdrOtherDateNCB;
+
+
     //** dbr **//
     private NCBDetailView ncbDetailView;
     private CustomerInfoView customerInfoView;
@@ -494,6 +504,70 @@ public class NCBInfoView implements Serializable {
 
     public void setTdrOtherMonthStr(String tdrOtherMonthStr) {
         this.tdrOtherMonthStr = tdrOtherMonthStr;
+    }
+
+    public boolean isNplTMBFlagNCB() {
+        return nplTMBFlagNCB;
+    }
+
+    public void setNplTMBFlagNCB(boolean nplTMBFlagNCB) {
+        this.nplTMBFlagNCB = nplTMBFlagNCB;
+    }
+
+    public boolean isNplOtherFlagNCB() {
+        return nplOtherFlagNCB;
+    }
+
+    public void setNplOtherFlagNCB(boolean nplOtherFlagNCB) {
+        this.nplOtherFlagNCB = nplOtherFlagNCB;
+    }
+
+    public boolean isTdrTMBFlagNCB() {
+        return tdrTMBFlagNCB;
+    }
+
+    public void setTdrTMBFlagNCB(boolean tdrTMBFlagNCB) {
+        this.tdrTMBFlagNCB = tdrTMBFlagNCB;
+    }
+
+    public boolean isTdrOtherFlagNCB() {
+        return tdrOtherFlagNCB;
+    }
+
+    public void setTdrOtherFlagNCB(boolean tdrOtherFlagNCB) {
+        this.tdrOtherFlagNCB = tdrOtherFlagNCB;
+    }
+
+    public Date getNplTMBDateNCB() {
+        return nplTMBDateNCB;
+    }
+
+    public void setNplTMBDateNCB(Date nplTMBDateNCB) {
+        this.nplTMBDateNCB = nplTMBDateNCB;
+    }
+
+    public Date getNplOtherDateNCB() {
+        return nplOtherDateNCB;
+    }
+
+    public void setNplOtherDateNCB(Date nplOtherDateNCB) {
+        this.nplOtherDateNCB = nplOtherDateNCB;
+    }
+
+    public Date getTdrTMBDateNCB() {
+        return tdrTMBDateNCB;
+    }
+
+    public void setTdrTMBDateNCB(Date tdrTMBDateNCB) {
+        this.tdrTMBDateNCB = tdrTMBDateNCB;
+    }
+
+    public Date getTdrOtherDateNCB() {
+        return tdrOtherDateNCB;
+    }
+
+    public void setTdrOtherDateNCB(Date tdrOtherDateNCB) {
+        this.tdrOtherDateNCB = tdrOtherDateNCB;
     }
 
     @Override
