@@ -284,27 +284,17 @@ public class BasicInfoControl extends BusinessControl {
             log.error("Exception while update product group to BPM : ", ex);
         }
 
-        //for new Open Account
-        //delete
+        //Delete Open Account
         for (Long openAccountId : basicInfoView.getDeleteTmpList()){
             if(openAccountId != 0){
-                log.debug("Delete Item ( openAccountId ) : {}",openAccountId);
                 OpenAccount openAccount = openAccountDAO.findById(openAccountId);
-
-                List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByOpenAccount(openAccount);
-                openAccountNameDAO.delete(openAccountNameList);
-
-                List<OpenAccountPurpose> openAccountPurposeList = openAccPurposeDAO.findByOpenAccount(openAccount);
-                openAccPurposeDAO.delete(openAccountPurposeList);
-
                 openAccountDAO.delete(openAccount);
             }
         }
 
-        //add new
+        //Add new Open Account
         for (OpenAccountView bav : basicInfoView.getOpenAccountViews()) {
             OpenAccount openAccount = openAccountTransform.transformToModel(bav,workCase);
-            //remove all open account name in open account
             if(openAccount.getId() != 0){
                 List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByOpenAccount(openAccount);
                 openAccountNameDAO.delete(openAccountNameList);
@@ -313,14 +303,6 @@ public class BasicInfoControl extends BusinessControl {
                 openAccPurposeDAO.delete(openAccountPurposeList);
             }
             openAccountDAO.persist(openAccount);
-
-            if(!Util.isNull(openAccount.getOpenAccountNameList()) && !Util.isZero(openAccount.getOpenAccountNameList().size())){
-                openAccountNameDAO.persist(openAccount.getOpenAccountNameList());
-            }
-
-            if(!Util.isNull(openAccount.getOpenAccountPurposeList()) && !Util.isZero(openAccount.getOpenAccountPurposeList().size())){
-                openAccPurposeDAO.persist(openAccount.getOpenAccountPurposeList());
-            }
         }
 
         //Update BOT Class

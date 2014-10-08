@@ -1951,6 +1951,7 @@ public class CreditFacExisting extends BaseController {
         try {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
             calculationControl.calculateTotalProposeAmount(workCaseId);
+            calculationControl.calculateMaximumSMELimit(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageRefreshDlg.show()");

@@ -2548,7 +2548,7 @@
                                                                  :msgBoxSystemMessagePanel"
                                                          actionListener="#{custInfoSumIndi.onSave}" binding="#{saveCustomer}"
                                                          rendered="#{not custInfoSumIndi.fromJuristic}"
-                                                         disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                         disabled="#{not custInfoSumIndi.enableAllFieldCus or custInfoSumIndi.isDisabled('saveButton')}"/>
                                         <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave2"
                                                          process="@form" update=":frmMain:relation,:frmMain:reference,:frmMain:docType,:frmMain:citiId,:frmMain:gender,
                                                                  :frmMain:titleTh,:frmMain:firstNameTh,:frmMain:lastNameTh,:frmMain:maritalStatus,:frmMain:kycLv,
@@ -2557,7 +2557,7 @@
                                                                  :msgBoxSystemMessagePanel"
                                                          action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                          rendered="#{custInfoSumIndi.fromJuristic}"
-                                                         disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                         disabled="#{not custInfoSumIndi.enableAllFieldCus or custInfoSumIndi.isDisabled('saveButton')}"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel"
                                                          styleClass="small" process="@form" update=":msgBoxSystemMessagePanel"
                                                          actionListener="#{custInfoSumIndi.onCancelForm(false)}"
