@@ -763,14 +763,14 @@ public class CalculationControl extends BusinessControl{
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
                 List<ProposeCreditInfo> proposeCreditInfoList = proposeLine.getProposeCreditInfoList();
                 if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
+                    DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
                     for (ProposeCreditInfo creditInfo : proposeCreditInfoList) {
                         if (!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getProductProgram()) && !Util.isZero(creditInfo.getProductProgram().getId()) && !Util.isNull(creditInfo.getCreditType()) && !Util.isZero(creditInfo.getCreditType().getId())) {
                             PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
                             if(!Util.isNull(prdProgramToCreditType)) {
-                                DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
                                 if(!Util.isNull(dbr)) {
                                     ProductFormula productFormula;
-                                    if(creditInfo.getCreditType().getId() == CreditTypeGroup.OD.value()) {
+                                    if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
                                         if(basicInfo.getApplySpecialProgram() == 1) {
                                             productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
                                         } else {
@@ -790,19 +790,14 @@ public class CalculationControl extends BusinessControl{
                                     if (!Util.isNull(productFormula)) {
                                         if(creditInfo.getProposeType() == ProposeType.A) {
                                             //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
-                                            log.debug("ProposeType A");
                                             if(creditInfo.getRequestType() == RequestTypes.NEW.value() && creditInfo.getUwDecision() == DecisionType.APPROVED) {
-                                                log.debug("RequestType New, Approved");
                                                 if (productFormula.getDbrCalculate() == 2) {// Yes
                                                     if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                                        log.debug("Method 1");
-                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(BigDecimal.ZERO);
                                                     } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                                        log.debug("Method 2");
-                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
+                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(creditInfo.getInstallment());
                                                     } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
-                                                        log.debug("Method 3");
-                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
+                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                     }
                                                 }
                                             }
@@ -874,16 +869,25 @@ public class CalculationControl extends BusinessControl{
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(ProposeCreditInfo proposeCreditInfo, BigDecimal dbrSpread) {
+        log.debug("calTotalProposeLoanDBRForIntYear :: DBR Spread :: {}", dbrSpread);
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
         if (!Util.isNull(proposeCreditInfo) && !Util.isNull(proposeCreditInfo.getProposeCreditInfoTierDetailList()) && !Util.isZero(proposeCreditInfo.getProposeCreditInfoTierDetailList().size())) {
+            log.debug("calTotalProposeLoanDBRForIntYear :: Limit :: {}", proposeCreditInfo.getLimit());
             BigDecimal oneHundred = BigDecimal.valueOf(100);
             BigDecimal twelve = BigDecimal.valueOf(12);
+            int index = 1;
             for (ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+                log.debug("########## Index :: {}", index);
                 if (!Util.isNull(proposeCreditInfoTierDetail)) {
+                    log.debug("Final Base Rate :: {}", proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
+                    log.debug("Final Interest :: {}", proposeCreditInfoTierDetail.getFinalInterest());
                     sumTotalLoanDbr = Util.add(sumTotalLoanDbr, Util.divide(Util.multiply(Util.divide(Util.add(Util.add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue(), proposeCreditInfoTierDetail.getFinalInterest()), dbrSpread), oneHundred), proposeCreditInfo.getLimit()), twelve));
+                    log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
                 }
+                index++;
             }
         }
+        log.debug("######## Return - sumTotalLoanDbr :: {}", sumTotalLoanDbr);
         return sumTotalLoanDbr;
     }
 }

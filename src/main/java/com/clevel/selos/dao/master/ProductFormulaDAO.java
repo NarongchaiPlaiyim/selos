@@ -52,8 +52,10 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
         List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
 
         if(productFormulaList != null && productFormulaList.size() > 0){
+            log.debug("Return Product Formula :: {}", productFormulaList.get(0).getId());
             return productFormulaList.get(0);
         }
+        log.debug("Return Null");
         return null;
     }
 
@@ -67,8 +69,10 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
         List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
 
         if(productFormulaList != null && productFormulaList.size() > 0){
+            log.debug("Return Product Formula :: {}", productFormulaList.get(0).getId());
             return productFormulaList.get(0);
         }
+        log.debug("Return Null");
         return null;
     }
 
@@ -83,8 +87,10 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
         List<ProductFormula> productFormulaList = getSession().createQuery(query).list();
 
         if(productFormulaList != null && productFormulaList.size() > 0){
+            log.debug("Return Product Formula :: {}", productFormulaList.get(0).getId());
             return productFormulaList.get(0);
         }
+        log.debug("Return Null");
         return null;
     }
 }
