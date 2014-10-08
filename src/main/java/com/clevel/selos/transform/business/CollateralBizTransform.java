@@ -129,6 +129,7 @@ public class CollateralBizTransform extends BusinessTransform {
                     proposeCollateralInfoHeadView.setTitleDeed(headCollateralData.getTitleDeed());
                     proposeCollateralInfoHeadView.setCollateralLocation(headCollateralData.getCollateralLocation());
                     proposeCollateralInfoHeadView.setAppraisalValue(headCollateralData.getAppraisalValue());
+                    proposeCollateralInfoHeadView.setComs(1);
 
                     CollateralType collateralType = collateralTypeDAO.findByCollateralCode(headCollateralData.getHeadCollType());
                     proposeCollateralInfoHeadView.setHeadCollType(collateralType);
@@ -151,6 +152,7 @@ public class CollateralBizTransform extends BusinessTransform {
                             proposeCollateralInfoSubView.setTitleDeed(subCollateralData.getTitleDeed());
                             proposeCollateralInfoSubView.setAppraisalValue(subCollateralData.getAppraisalValue());
                             proposeCollateralInfoSubView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
+                            proposeCollateralInfoSubView.setComs(1);
 //                            proposeCollateralInfoSubView.setCollateralOwner(subCollateralData.getCollateralOwner());
 //                            proposeCollateralInfoSubView.setUsage(subCollateralData.getUsage());
 //                            proposeCollateralInfoSubView.setTypeOfUsage(subCollateralData.getTypeOfUsage());

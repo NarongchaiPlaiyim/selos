@@ -811,6 +811,9 @@ public class FullApplicationControl extends BusinessControl {
                 newCollateralDAO.persist(proposeCol);
             }
         }
+
+        //Duplicate Data From Propose ( Requested ) to Approve Requested...
+        duplicateCollateralData(workCaseId, workCasePreScreenId);
     }
 
     /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( Customer Acceptance ) ] **/
@@ -1057,7 +1060,6 @@ public class FullApplicationControl extends BusinessControl {
 
     /** Appraisal [ Submit Appraisal Result to UW ] **/
     public void submitForAADCommittee(String queueName, String wobNumber, long workCaseId, long workCasePreScreenId) throws Exception{
-        duplicateCollateralData(workCaseId, workCasePreScreenId);
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
     //---------- End Function for Appraisal ----------//

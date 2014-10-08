@@ -188,7 +188,7 @@
                                     <td colspan="3">
                                         <p:inputTextarea cols="69" rows="4"
                                                          value="#{appraisalAppointment.appraisalView.bdmRemark}"
-                                                         disabled="#{appraisalAppointment.isDisabled('bdmRemark')}"
+                                                         readonly="#{appraisalAppointment.isDisabled('bdmRemark')}"
                                                          maxlength="150" />
                                     </td>
                                 </tr>
@@ -481,7 +481,7 @@
                                                                                  target="#{appraisalAppointment.rowIndex}"/>
                                                 </p:commandButton>
 
-                                                <p:commandButton title="Remove" process="@this"
+                                                <!--<p:commandButton title="Remove" process="@this"
                                                                  icon="ui-icon-trash"
                                                                  disabled="#{appraisalAppointment.isDisabled('record.deleteButton')}"
                                                                  oncomplete="confirmDeleteContactRecordViewDlg.show()" >
@@ -489,7 +489,7 @@
                                                                                  target="#{appraisalAppointment.contactRecord}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                                  target="#{appraisalAppointment.rowIndex}"/>
-                                                </p:commandButton>
+                                                </p:commandButton>-->
                                             </p:column>
 
                                         </p:dataTable>

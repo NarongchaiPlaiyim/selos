@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
@@ -26,9 +27,12 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Stateless
@@ -36,6 +40,9 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     @SELOS
     private Logger log;
+
+    @Inject
+    private STPExecutor stpExecutor;
 
     @Inject
     private WorkCaseDAO workCaseDAO;
@@ -109,14 +116,7 @@ public class AppraisalResultControl extends BusinessControl {
             newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
             if(!Util.isNull(newCreditFacility)){
-                //Check Return from UW2 or not?
-                ProposeType proposeType;
-                if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()) {
-                    proposeType = ProposeType.P;
-                }else{
-                    proposeType = ProposeType.A;
-                }
-                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, proposeType);
+                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, ProposeType.A);
 
                 newCollateralViewList = proposeLineTransform.transformProposeCollateralToViewList(newCollateralList, ProposeType.BOTH);
                 appraisalView.setNewCollateralViewList(newCollateralViewList);
@@ -126,6 +126,7 @@ public class AppraisalResultControl extends BusinessControl {
         return appraisalView;
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onSaveAppraisalResultModify(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId, long statusId) {
         log.debug("onSaveAppraisalResultModify ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
@@ -138,15 +139,8 @@ public class AppraisalResultControl extends BusinessControl {
             }
             log.debug("onSaveAppraisalResultModify ::: newCreditFacility : {}", newCreditFacility);
             if (!Util.isNull(newCreditFacility)){
-                ProposeType proposeType;
-                if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
-                    proposeType = ProposeType.P;
-                }else{
-                    proposeType = ProposeType.A;
-                }
-
                 //Update All Collateral : Set appraisal flag = 0
-                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, proposeType);
+                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, ProposeType.A);
                 //set flag 0 for all collateral
                 log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
                 for(ProposeCollateralInfo newCollateral : newCollateralList){
@@ -159,10 +153,9 @@ public class AppraisalResultControl extends BusinessControl {
                 }
 
                 newCollateralList.clear();
-                newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, proposeType, null));
+                newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, ProposeType.A, null));
                 log.debug("onSaveAppraisalResultModify :: after transform newCollateralList : {}", newCollateralList);
                 proposeCollateralInfoDAO.persist(newCollateralList);
-
 
                 //Do not delete old collateral .. update and add new only
                 /*List<ProposeCollateralInfo> newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, proposeType);
@@ -211,6 +204,45 @@ public class AppraisalResultControl extends BusinessControl {
         }*/
 
         log.debug("-- done.");
+    }
+
+    public void deleteUnUseCollateral(long workCaseId, long workCasePreScreenId){
+        try {
+            stpExecutor.deleteCollateralData(workCaseId, workCasePreScreenId);
+        }catch (Exception ex){
+            log.error("Exception while deleteCollateralData : ", ex);
+        }
+        /*if(!Util.isZero(workCaseId)){
+            newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }else if(!Util.isZero(workCasePreScreenId)){
+            newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }
+        //Delete for Sub Collateral that not use after retrieve
+        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, ProposeType.A);
+        log.debug("newCollateralList after persist : {}", proposeCollateralInfoList);
+
+        for(ProposeCollateralInfo collateralInfo : proposeCollateralInfoList){
+            if(!Util.isEmpty(collateralInfo.getJobID())){
+                if(!Util.isNull(collateralInfo.getProposeCollateralInfoHeadList())) {
+                    for(int i=0; i<collateralInfo.getProposeCollateralInfoHeadList().size(); i++){
+                        ProposeCollateralInfoHead collateralInfoHead = collateralInfo.getProposeCollateralInfoHeadList().get(i);
+                        if(!Util.isNull(collateralInfoHead.getProposeCollateralInfoSubList())){
+                            for(int j=0; j<collateralInfoHead.getProposeCollateralInfoSubList().size(); j++){
+                                ProposeCollateralInfoSub collateralInfoSub = collateralInfoHead.getProposeCollateralInfoSubList().get(j);
+                                if(collateralInfoSub.getComs() == 0){
+                                    log.debug("collateralInfoSub not use : {}", collateralInfoSub);
+                                    proposeCollateralInfoSubDAO.delete(collateralInfoSub);
+                                }
+                            }
+                        }
+                        if(collateralInfoHead.getComs() == 0){
+                            log.debug("collateralInfoHead not use : {}", collateralInfoHead);
+                            proposeCollateralInfoHeadDAO.delete(collateralInfoHead);
+                        }
+                    }
+                }
+            }
+        }*/
     }
 
     public void saveCollateral(List<ProposeCollateralInfoView> proposeCollateralInfoViewList){
@@ -432,39 +464,31 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     public ProposeCollateralInfoView updateCollateral(ProposeCollateralInfoView original, ProposeCollateralInfoView retrieveCollateral){
-        ProposeCollateralInfoView returnCollateral = original;
+        ProposeCollateralInfoView tempReturnCollateral = original;
+        ProposeCollateralInfoView returnCollateral = new ProposeCollateralInfoView();
+        tempReturnCollateral.setComs(true);
         List<ProposeCollateralInfoHeadView> returnCollateralHeadList = original.getProposeCollateralInfoHeadViewList();
         if(!Util.isNull(retrieveCollateral)){
             //Update Exist Collateral check by TitleDeed
             if(!Util.isNull(retrieveCollateral.getProposeCollateralInfoHeadViewList()) && !Util.isNull(original.getProposeCollateralInfoHeadViewList()) &&
                     retrieveCollateral.getProposeCollateralInfoHeadViewList().size() > 0 && original.getProposeCollateralInfoHeadViewList().size() > 0){
-                log.debug("originalCollateralHeadList.size() : {}, retrieveCollateralHeadList.size() : {}", original.getProposeCollateralInfoHeadViewList().size(), retrieveCollateral.getProposeCollateralInfoHeadViewList().size());
-                log.debug("set original collateral head list for addByAAD = 0");
-                for(ProposeCollateralInfoHeadView originalHeadView : original.getProposeCollateralInfoHeadViewList()){
-                    originalHeadView.setCreatedByAAD(0);
-                }
                 log.debug("original.getProposeCollateralInfoHeadViewList() : {}", original.getProposeCollateralInfoHeadViewList());
                 for(int i=0; i<retrieveCollateral.getProposeCollateralInfoHeadViewList().size(); i++) {
                     ProposeCollateralInfoHeadView retrieveHeadCollateral = retrieveCollateral.getProposeCollateralInfoHeadViewList().get(i);
+                    retrieveHeadCollateral.setComs(1);
                     boolean matched = false;
                     for(int j=0; j<original.getProposeCollateralInfoHeadViewList().size(); j++) {
                         ProposeCollateralInfoHeadView originalHeadCollateral = original.getProposeCollateralInfoHeadViewList().get(j);
-
+                        originalHeadCollateral.setComs(0);
                         if(!Util.isNull(retrieveHeadCollateral) && !Util.isNull(originalHeadCollateral)) {
                             if (retrieveHeadCollateral.getTitleDeed().equals(originalHeadCollateral.getTitleDeed())) {
                                 retrieveHeadCollateral.setId(originalHeadCollateral.getId());
-                                retrieveHeadCollateral.setCreatedByAAD(1);
-                                retrieveHeadCollateral.setCreatedByBDM(1);
                                 log.debug("Title deed is matched : originalHeadCol : {}, retrieveHeadCol : {}", originalHeadCollateral, retrieveHeadCollateral);
                                 if(!Util.isNull(retrieveHeadCollateral.getProposeCollateralInfoSubViewList()) && retrieveHeadCollateral.getProposeCollateralInfoSubViewList().size() > 0) {
                                     List<ProposeCollateralInfoSubView> originalSubList = originalHeadCollateral.getProposeCollateralInfoSubViewList();
-                                    log.debug("Update sub collateral original set create by aad = 0");
-                                    for (ProposeCollateralInfoSubView originalSub : originalSubList) {
-                                        originalSub.setCreatedByAAD(0);
-                                    }
                                     log.debug("Update sub collateral ( add new and keep original ) originalSubList : {}, retrieveSubList : {}", originalSubList, retrieveHeadCollateral.getProposeCollateralInfoSubViewList());
                                     for (ProposeCollateralInfoSubView retrieveSub : retrieveHeadCollateral.getProposeCollateralInfoSubViewList()) {
-                                        retrieveSub.setCreatedByAAD(1);
+                                        retrieveSub.setComs(1);
                                         originalSubList.add(retrieveSub);
                                     }
                                     retrieveHeadCollateral.setProposeCollateralInfoSubViewList(originalSubList);
@@ -477,19 +501,48 @@ public class AppraisalResultControl extends BusinessControl {
                                 }catch (IndexOutOfBoundsException indexEx){
                                     log.warn("IndexOutOfBound : {}", indexEx);
                                 }
+                            }else{
+                                if(!Util.isNull(retrieveHeadCollateral.getProposeCollateralInfoSubViewList())) {
+                                    for (int k = 0; k < retrieveHeadCollateral.getProposeCollateralInfoSubViewList().size(); k++) {
+                                        retrieveHeadCollateral.getProposeCollateralInfoSubViewList().get(k).setComs(1);
+                                    }
+                                }
                             }
                         }
                     }
 
                     if(!matched){
-                        retrieveHeadCollateral.setCreatedByAAD(1);
-                        retrieveHeadCollateral.setCreatedByBDM(0);
                         log.debug("Title deed is not match : add retrieve to new head : {}", retrieveCollateral);
                         returnCollateralHeadList.add(retrieveHeadCollateral);
                     }
                 }
             }
+
+            log.debug("tempReturnCollateral : {}", tempReturnCollateral);
+            List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList = new ArrayList<ProposeCollateralInfoHeadView>();
+            if(!Util.isNull(tempReturnCollateral.getProposeCollateralInfoHeadViewList())) {
+                for (ProposeCollateralInfoHeadView collateralInfoHeadView : tempReturnCollateral.getProposeCollateralInfoHeadViewList()) {
+                    if (collateralInfoHeadView.getComs() == 1) {
+                        ProposeCollateralInfoHeadView tempCollateralHeadView = collateralInfoHeadView;
+                        List<ProposeCollateralInfoSubView> tempCollateralSubList = new ArrayList<ProposeCollateralInfoSubView>();
+                        for (ProposeCollateralInfoSubView collateralInfoSubView : collateralInfoHeadView.getProposeCollateralInfoSubViewList()) {
+                            if (collateralInfoSubView.getComs() == 1) {
+                                tempCollateralSubList.add(collateralInfoSubView);
+                            }
+                        }
+                        tempCollateralHeadView.setProposeCollateralInfoSubViewList(tempCollateralSubList);
+                        proposeCollateralInfoHeadViewList.add(tempCollateralHeadView);
+                    }
+                }
+            }
+            returnCollateral = original;
+            returnCollateral.setProposeCollateralInfoHeadViewList(Collections.<ProposeCollateralInfoHeadView>emptyList());
+            returnCollateral.setProposeCollateralInfoHeadViewList(proposeCollateralInfoHeadViewList);
+        }else{
+            returnCollateral = original;
         }
+
+        log.debug("returnCollateral : {}", returnCollateral);
 
         return returnCollateral;
     }

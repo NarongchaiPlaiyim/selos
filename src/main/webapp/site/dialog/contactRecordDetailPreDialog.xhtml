@@ -10,7 +10,7 @@
     	<!--<p:messages/>-->
         <table class="content_form">
             <tr>
-                <td class="title" style="width:190px">
+                <td class="title" style="width:200px">
                 	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callDateTime')}" for='calling_datetime'/>
                 </td>
                 <td style="width: 320px;">
@@ -22,14 +22,14 @@
             <tr>
                 <td class="title">
                 	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callResult')}" for='calling_result'/>
-                    <p:outputLabel value="#{customerAcceptancePre.mandate('record.callingResult')}" for='calling_result'/>
                 </td>
                 <td>
                     <p:selectOneRadio id="calling_result"
                                       value="#{customerAcceptancePre.contactRecord.callingResult}"
                                       disabled="#{customerAcceptancePre.isDisabled('record.callingResult')}"
-                    	              required="#{customerAcceptancePre.isMandate('record.callingResult') or ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
+                    	              required="#{customerAcceptancePre.isMandate('record.callingResult') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
                                       requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}">
+                        <p:ajax process="@form" update=":contactRecordViewDlgFrm:remark"/>
                         <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
                         <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
                     </p:selectOneRadio>
@@ -37,8 +37,21 @@
             </tr>
             <tr>
                 <td class="title">
+                    <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.acceptResult')}"
+                                   for='accept_result'/>
+                </td>
+                <td>
+                    <p:selectOneRadio id="accept_result"
+                                      value="#{customerAcceptancePre.contactRecord.acceptResult}"
+                                      disabled="#{customerAcceptancePre.isDisabled('record.AcceptResult')}">
+                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.accept')}"  itemValue="2" />
+                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.notaccept')}" itemValue="1" />
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
                 	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.nextCallDateTime')}" for='nextcalling_datetime'/>
-                    <p:outputLabel value="#{customerAcceptancePre.mandate('record.nextCallingDate')}" for='nextcalling_datetime'/>
                 </td>
                 <td>
                     <clv:BECalendar id='nextcalling_datetime' readonlyInput="true"
@@ -48,7 +61,7 @@
                                     locale='th_TH'
                                     mindate="#{customerAcceptancePre.minDate}"
                                     autocomplete="false"
-                                    required="#{customerAcceptancePre.isMandate('record.nextCallingDate') or ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
+                                    required="#{customerAcceptancePre.isMandate('record.nextCallingDate') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
                                     requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
                                     disabled="#{customerAcceptancePre.isDisabled('record.nextCallingDate')}"/>
                        
@@ -58,14 +71,16 @@
                 <td class="title">
                 </td>
                 <td>
+                    <h:outputText value="HH"/>
                     <p:spinner value="#{customerAcceptancePre.contactRecord.nextCallingHour}"
-                               min="0" max="23" size="3" style="margin-right : 5px"
+                               min="0" max="23" size="3" style="margin-right : 5px; margin-left: 5px;"
                                required="#{customerAcceptancePre.isMandate('record.nextCallingTime')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
                                disabled="#{customerAcceptancePre.isDisabled('record.nextCallingTime')}"/>
                     :
+                    <h:outputText value="MM"/>
                     <p:spinner value="#{customerAcceptancePre.contactRecord.nextCallingMin}"
                                min="0" max="59"  size="3" style="margin-left:5px"
-                               required="#{customerAcceptancePre.isMandate('record.nextCallingTime') or ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
+                               required="#{customerAcceptancePre.isMandate('record.nextCallingTime') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
                                requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
                                disabled="#{customerAcceptancePre.isDisabled('record.nextCallingTime')}"/>
                 </td>
@@ -73,13 +88,12 @@
             <tr>
                 <td class="title">
                 	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.reason')}" for='reason'/>
-                    <p:outputLabel value="#{customerAcceptancePre.mandate('record.reason')}" for='reason'/>
                 </td>
                 <td>
                 	<p:selectOneMenu id='reason'
                                      value='#{customerAcceptancePre.contactRecord.updReasonId}'
                                      disabled="#{customerAcceptancePre.isDisabled('record.reason')}"
-                		             required="#{customerAcceptancePre.isMandate('record.reason') or ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
+                		             required="#{customerAcceptancePre.isMandate('record.reason') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
                                      requiredMessage="#{msg.get('app.cusaccept.validate.reason')}">
                 		<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                 		<f:selectItems value="#{customerAcceptancePre.reasons}"
@@ -91,13 +105,12 @@
             <tr>
                 <td class="title">
                 	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.remark')}" for='remark'/>
-                    <p:outputLabel value="#{customerAcceptancePre.mandate('record.remark')}" for='remark'/>
                 </td>
                 <td>
                     <p:inputTextarea id='remark'
                                      value="#{customerAcceptancePre.contactRecord.remark}"
                                      autoResize="false"
-                                     required="#{customerAcceptancePre.isDialogMandate('record.remark') or ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
+                                     required="#{customerAcceptancePre.isDialogMandate('record.remark') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] ) or customerAcceptancePre.contactRecord.callingResult == 1}"
                                      requiredMessage="#{msg.get('app.cusaccept.validate.remark')}"
                                      readonly="#{customerAcceptancePre.isDisabled('record.remark')}"
                                      rows="3" cols="40" />
