@@ -189,12 +189,664 @@ public class NCBBizTransform extends BusinessTransform {
 
                                     boolean isClosedAllAccount = true;
 
-                                    //Check all account closed
+                                    //Check all account closed and get NPL, TDR
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
                                         if(!isAccountClosedInd(subjectAccountModel.getAccountstatus())){
                                             isClosedAllAccount = false;
                                             break;
                                         }
+
+                                        boolean isTMBAccount = false;
+                                        if (subjectAccountModel.getShortname().equals(TMB_BANK)) {
+                                            isTMBAccount = true;
+                                        }
+
+                                        //TDR
+                                        if (!Util.isEmpty(subjectAccountModel.getLastrestructureddate())) {
+                                            //get TDR last date
+                                            if (isTMBAccount) {
+                                                isTDRTMB = true;
+                                                if (!Util.isEmpty(lastTDRDateTMB)) {
+                                                    lastTDRDateTMB = subjectAccountModel.getCloseddate();
+                                                } else {
+                                                    lastTDRDateTMB = getLastDateYYYYMMDD(lastTDRDateTMB, subjectAccountModel.getCloseddate());
+                                                }
+                                            } else {
+                                                isTDROther = true;
+                                                if (!Util.isEmpty(lastTDRDateOther)) {
+                                                    lastTDRDateOther = subjectAccountModel.getCloseddate();
+                                                } else {
+                                                    lastTDRDateOther = getLastDateYYYYMMDD(lastTDRDateOther, subjectAccountModel.getCloseddate());
+                                                }
+                                            }
+                                        }
+
+                                        //NPL
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt01())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate01();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate01());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate01();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate01());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt02())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate02();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate02());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate02();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate02());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt03())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate03();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate03());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate03();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate03());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt04())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate04();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate04());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate04();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate04());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt05())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate05();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate05());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate05();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate05());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt06())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate06();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate06());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate06();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate06());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt07())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate07();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate07());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate07();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate07());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt08())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate08();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate08());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate08();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate08());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt09())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate09();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate09());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate09();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate09());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt10())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate10();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate10());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate10();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate10());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt11())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate11();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate11());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate11();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate11());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt12())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate12();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate12());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate12();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate12());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt13())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate13();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate13());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate13();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate13());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt14())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate14();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate14());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate14();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate14());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt15())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate15();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate15());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate15();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate15());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt16())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate16();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate16());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate16();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate16());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt17())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate17();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate17());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate17();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate17());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt18())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate18();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate18());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate18();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate18());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt19())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate19();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate19());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate19();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate19());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt20())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate20();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate20());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate20();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate20());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt21())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate21();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate21());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate21();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate21());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt22())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate22();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate22());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate22();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate22());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt23())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate23();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate23());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate23();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate23());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt24())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate24();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate24());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate24();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate24());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt25())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate25();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate25());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate25();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate25());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt26())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate26();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate26());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate26();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate26());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt27())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate27();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate27());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate27();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate27());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt28())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate28();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate28());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate28();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate28());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt29())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate29();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate29());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate29();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate29());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt30())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate30();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate30());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate30();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate30());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt31())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate31();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate31());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate31();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate31());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt32())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate32();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate32());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate32();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate32());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt33())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate33();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate33());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate33();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate33());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt34())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate34();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate34());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate34();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate34());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt35())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate35();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate35());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate35();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate35());
+                                                }
+                                            }
+                                        }
+                                        if (isNPLIndividual(subjectAccountModel.getPaymt36())) {
+                                            if (isTMBAccount) {
+                                                isNPLTMB = true;
+                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate36();
+                                                } else {
+                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, subjectAccountModel.getPaymtdate36());
+                                                }
+                                            } else {
+                                                isNPLOther = true;
+                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate36();
+                                                } else {
+                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, subjectAccountModel.getPaymtdate36());
+                                                }
+                                            }
+                                        }
+
+                                        ncbInfoView.setNplOtherFlagNCB(isNPLOther);
+                                        ncbInfoView.setNplOtherDateNCB(Util.strYYYYMMDDtoDateFormat(lastNPLDateOther));
+                                        ncbInfoView.setNplTMBFlagNCB(isNPLTMB);
+                                        ncbInfoView.setNplTMBDateNCB(Util.strYYYYMMDDtoDateFormat(lastNPLDateTMB));
+
+                                        ncbInfoView.setTdrOtherFlagNCB(isTDROther);
+                                        ncbInfoView.setTdrOtherDateNCB(Util.strYYYYMMDDtoDateFormat(lastTDRDateOther));
+                                        ncbInfoView.setTdrTMBFlagNCB(isTDRTMB);
+                                        ncbInfoView.setTdrTMBDateNCB(Util.strYYYYMMDDtoDateFormat(lastTDRDateTMB));
+
+                                        log.debug("isTDRTMB : {}, isTDROther : {}, lastTDRDateTMB : {}, lastTDRDateOther : {}", isTDRTMB, isTDROther, lastTDRDateTMB, lastTDRDateOther);
+                                        log.debug("isNPLTMB : {}, isNPLOther : {}, lastNPLDateTMB : {}, lastNPLDateOther : {}", isNPLTMB, isNPLOther, lastNPLDateTMB, lastNPLDateOther);
                                     }
 
                                     //Check lastAsOfDate
@@ -1614,6 +2266,27 @@ public class NCBBizTransform extends BusinessTransform {
                                                     currentWorstPaymentStatus = creditHistModelList.get(0).getDaypastdue();
                                                 }
 
+                                                //get NPL
+                                                for (CreditHistModel creditHistModel : creditHistModelList) {
+                                                    if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                        if (isTMBAccount) {
+                                                            isNPLTMB = true;
+                                                            if (Util.isEmpty(lastNPLDateTMB)) {
+                                                                lastNPLDateTMB = creditHistModel.getAsofdate();
+                                                            } else {
+                                                                lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
+                                                            }
+                                                        } else {
+                                                            isNPLOther = true;
+                                                            if (Util.isEmpty(lastNPLDateOther)) {
+                                                                lastNPLDateOther = creditHistModel.getAsofdate();
+                                                            } else {
+                                                                lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
                                                 //check for last 6,12 months for get worst payment, calculate number of outstanding and number of over limit
                                                 if (accountModel.getCreditinfo() != null && !Util.isEmpty(accountModel.getCreditinfo().getCredittype())) {
                                                     creditType = accountModel.getCreditinfo().getCredittype();
@@ -1866,6 +2539,27 @@ public class NCBBizTransform extends BusinessTransform {
                                                         currentWorstPaymentStatus = getWorstCode(creditHistModelList.get(0).getDaypastdue(), currentWorstPaymentStatus);
                                                     } else {
                                                         currentWorstPaymentStatus = creditHistModelList.get(0).getDaypastdue();
+                                                    }
+
+                                                    //get NPL
+                                                    for (ClosedAccountsAccountCreditHistModel creditHistModel : creditHistModelList) {
+                                                        if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                            if (isTMBAccount) {
+                                                                isNPLTMB = true;
+                                                                if (Util.isEmpty(lastNPLDateTMB)) {
+                                                                    lastNPLDateTMB = creditHistModel.getAsofdate();
+                                                                } else {
+                                                                    lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
+                                                                }
+                                                            } else {
+                                                                isNPLOther = true;
+                                                                if (Util.isEmpty(lastNPLDateOther)) {
+                                                                    lastNPLDateOther = creditHistModel.getAsofdate();
+                                                                } else {
+                                                                    lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
+                                                                }
+                                                            }
+                                                        }
                                                     }
 
                                                     //check for last 6,12 months for get worst payment, calculate number of outstanding and number of over limit
@@ -2127,6 +2821,27 @@ public class NCBBizTransform extends BusinessTransform {
                                                     currentWorstPaymentStatus = creditHistModelList.get(0).getDaypastdue();
                                                 }
 
+                                                //get NPL
+                                                for (ClosedAccountsAccountCreditHistModel creditHistModel : creditHistModelList) {
+                                                    if (isNPLJuristic(creditHistModel.getDaypastdue())) {
+                                                        if (isTMBAccount) {
+                                                            isNPLTMB = true;
+                                                            if (Util.isEmpty(lastNPLDateTMB)) {
+                                                                lastNPLDateTMB = creditHistModel.getAsofdate();
+                                                            } else {
+                                                                lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
+                                                            }
+                                                        } else {
+                                                            isNPLOther = true;
+                                                            if (Util.isEmpty(lastNPLDateOther)) {
+                                                                lastNPLDateOther = creditHistModel.getAsofdate();
+                                                            } else {
+                                                                lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
                                                 //check for last 6,12 months for get worst payment, calculate number of outstanding and number of over limit
                                                 if (accountModel.getCreditinfo() != null && !Util.isEmpty(accountModel.getCreditinfo().getCredittype())) {
                                                     creditType = accountModel.getCreditinfo().getCredittype();
@@ -2353,6 +3068,16 @@ public class NCBBizTransform extends BusinessTransform {
                                     } else {
                                         ncbInfoView.setTdrFlag(RadioValue.NO.value()); //false
                                     }
+
+                                    ncbInfoView.setNplOtherFlagNCB(isNPLOther);
+                                    ncbInfoView.setNplOtherDateNCB(Util.strYYYYMMDDtoDateFormat(lastNPLDateOther));
+                                    ncbInfoView.setNplTMBFlagNCB(isNPLTMB);
+                                    ncbInfoView.setNplTMBDateNCB(Util.strYYYYMMDDtoDateFormat(lastNPLDateTMB));
+
+                                    ncbInfoView.setTdrOtherFlagNCB(isTDROther);
+                                    ncbInfoView.setTdrOtherDateNCB(Util.strYYYYMMDDtoDateFormat(lastTDRDateOther));
+                                    ncbInfoView.setTdrTMBFlagNCB(isTDRTMB);
+                                    ncbInfoView.setTdrTMBDateNCB(Util.strYYYYMMDDtoDateFormat(lastTDRDateTMB));
                                 } else {
                                     //no account detail data
                                 }

@@ -122,6 +122,28 @@ public class NCBInfoControl extends BusinessControl {
 
             Date lastInfoDate = null;
 
+            isNPLOther = ncbInfoView.isNplOtherFlagNCB();
+            isNPLTMB = ncbInfoView.isNplTMBFlagNCB();
+
+            isTDROther = ncbInfoView.isTdrOtherFlagNCB();
+            isTDRTMB = ncbInfoView.isNplTMBFlagNCB();
+
+            if(isNPLOther){
+                lastNPLDateOther = ncbInfoView.getNplOtherDateNCB();
+            }
+
+            if(isNPLTMB){
+                lastNPLDateTMB = ncbInfoView.getNplTMBDateNCB();
+            }
+
+            if(isTDROther){
+                lastTDRDateOther = ncbInfoView.getTdrOtherDateNCB();
+            }
+
+            if(isTDRTMB){
+                lastTDRDateTMB = ncbInfoView.getTdrTMBDateNCB();
+            }
+
             for(NCBDetailView ncbDetailView: ncbDetailViewList){
                 boolean isTDRFlag = false;
                 boolean isNPLFlag = false;
