@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.BAPAType;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -184,4 +186,22 @@ public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCredi
 		expenseAmount = view.expenseAmount;
 		needUpdate = view.needUpdate;
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("type", type)
+                .append("creditId", creditId)
+                .append("productProgram", productProgram)
+                .append("creditType", creditType)
+                .append("loanPurpose", loanPurpose)
+                .append("payByCustomer", payByCustomer)
+                .append("fromCredit", fromCredit)
+                .append("limit", limit)
+                .append("premiumAmount", premiumAmount)
+                .append("expenseAmount", expenseAmount)
+                .append("needUpdate", needUpdate)
+                .toString();
+    }
 }
