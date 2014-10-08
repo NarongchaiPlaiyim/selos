@@ -55,11 +55,17 @@
                                              oncomplete="addReturnMakerInfoDlg.show()"
                                              update=":frmMain:reasonMakerId, :frmMain:remarkMaker">
                             </p:commandButton>
-                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                            <p:commandButton title="Remove" process="@form"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfoMaker.canEdit}"
+                                             action="#{headerController.onDeleteReturnMakerInfo(rowIndex)}"
+                                             update=":frmMain:returnInfoMakerDlgPanel">
+                            </p:commandButton>
+                            <!--<p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfoMaker.canEdit}"
                                              oncomplete="confirmDeleteReturnMaker.show()">
-                            </p:commandButton>
+                            </p:commandButton>-->
                         </p:column>
                     </p:dataTable>
                 </td>
