@@ -31,6 +31,7 @@ public class InsuranceInfoTransform extends Transform {
         for (ProposeCollateralInfoView newCollateralView : newCollateralViewList) {
         	insuranceInfoView = new InsuranceInfoView();
         	insuranceInfoView.setNewCollateralView(newCollateralView);
+            insuranceInfoView.setPremium(newCollateralView.getPremiumAmount());
         	log.debug("transformsNewCollateralToView : newCollateralView id: " + newCollateralView.getId());
         	List<InsuranceInfoSectionView> insuranceInfoSectionViewList = new ArrayList<InsuranceInfoSectionView>();
         	List<ProposeCollateralInfoHeadView> newCollateralHeadViewList = newCollateralView.getProposeCollateralInfoHeadViewList();

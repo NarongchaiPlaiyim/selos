@@ -302,6 +302,7 @@ public class BAInfo implements Serializable {
             bapaInfoCreditView.setProductProgram(selectedCredit.getProductProgram());
             bapaInfoCreditView.setCreditType(selectedCredit.getCreditType());
             bapaInfoCreditView.setLoanPurpose(selectedCredit.getLoanPurpose());
+            bapaInfoCreditView.setLimit(selectedCredit.getLimit());
         } else {
             bapaInfoCreditView.setProductProgram("-");
             bapaInfoCreditView.setCreditType("-");
@@ -339,6 +340,7 @@ public class BAInfo implements Serializable {
                 bapaInfoCreditView.setProductProgram(selectedCredit.getProductProgram());
                 bapaInfoCreditView.setCreditType(selectedCredit.getCreditType());
                 bapaInfoCreditView.setLoanPurpose(selectedCredit.getLoanPurpose());
+                bapaInfoCreditView.setLimit(selectedCredit.getLimit());
             } else {
                 bapaInfoCreditView.setCreditId(0);
                 bapaInfoCreditView.setProductProgram("-");
@@ -390,6 +392,7 @@ public class BAInfo implements Serializable {
             return;
         BigDecimal expense = BigDecimal.ZERO;
         BAPAType type = bapaInfoCreditView.getType();
+        log.debug("onCalculateExpense (bapaInfoCreditView: {}, selectedCredit: {})",bapaInfoCreditView,selectedCredit);
         if (type != null) {
             switch (type) {
                 case BA:
@@ -398,9 +401,10 @@ public class BAInfo implements Serializable {
                     if (bapaInfoCreditView.isFromCredit()) {
                         limit = bapaInfoCreditView.getLimit();
                     } else {
-                        if (selectedCredit != null && selectedCredit.isTopupBA())
+                        if (selectedCredit != null)
                             limit = selectedCredit.getLimit();
                     }
+                    log.debug("onCalculateExpense (premium: {}, limit: {})",premium, limit);
                     if (limit != null && premium != null)
                         expense = limit.subtract(premium);
                     else if (limit != null)

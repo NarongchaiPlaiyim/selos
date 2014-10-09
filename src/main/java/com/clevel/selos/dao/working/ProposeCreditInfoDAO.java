@@ -50,6 +50,18 @@ public class ProposeCreditInfoDAO extends GenericDAO<ProposeCreditInfo, Long> {
         return newCreditDetailList;
     }
 
+    public List<ProposeCreditInfo> findNewCreditDetailByWorkCaseId(long workCaseId,boolean isTopUpBA) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("proposeType",ProposeType.A));
+        criteria.add(Restrictions.eq("uwDecision",DecisionType.APPROVED));
+/*        criteria.createAlias("productProgram", "product_program")
+                .add(Restrictions.eq("product_program.ba",isTopUpBA));*/
+        criteria.addOrder(Order.asc("id"));
+        List<ProposeCreditInfo> newCreditDetailList = (List<ProposeCreditInfo>) criteria.list();
+        return newCreditDetailList;
+    }
+
     public List<ProposeCreditInfo> findNewCreditDetailByWorkCaseIdForBA(long workCaseId,boolean isTopUpBA) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));

@@ -248,7 +248,7 @@ public class BAPAInfoControl extends BusinessControl {
 	 public List<BAPAInfoCreditToSelectView> getBAPAInfoCreditToSelectView(long workCaseId) {
 		 if (workCaseId <= 0)
 			 return Collections.emptyList();
-		 List<ProposeCreditInfo> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,false);
+		 List<ProposeCreditInfo> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseId(workCaseId,false);
 		 ArrayList<BAPAInfoCreditToSelectView> rtnDatas = new ArrayList<BAPAInfoCreditToSelectView>();
 		 for (ProposeCreditInfo credit : credits) {
 			 BAPAInfoCreditToSelectView view = new BAPAInfoCreditToSelectView();
