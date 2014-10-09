@@ -254,7 +254,7 @@ public class AppraisalRequest extends BaseController {
                 try{
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, stepId);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");

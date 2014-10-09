@@ -481,7 +481,7 @@
                                                                                  target="#{appraisalAppointment.rowIndex}"/>
                                                 </p:commandButton>
 
-                                                <!--<p:commandButton title="Remove" process="@this"
+                                                <p:commandButton title="Remove" process="@this"
                                                                  icon="ui-icon-trash"
                                                                  disabled="#{appraisalAppointment.isDisabled('record.deleteButton')}"
                                                                  oncomplete="confirmDeleteContactRecordViewDlg.show()" >
@@ -489,7 +489,7 @@
                                                                                  target="#{appraisalAppointment.contactRecord}"/>
                                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                                  target="#{appraisalAppointment.rowIndex}"/>
-                                                </p:commandButton>-->
+                                                </p:commandButton>
                                             </p:column>
 
                                         </p:dataTable>
