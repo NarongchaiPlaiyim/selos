@@ -9,12 +9,13 @@
 	<h:head>
 		<title>#{msg.get('app.disbursement.header.disbursement')}</title>
 		<h:outputStylesheet name="css/style.css" />
-		<script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+		<script type="text/javascript"
+			src="#{request.contextPath}/resources/js/jquery.numeric.js" />
 		<h:outputScript library="js" name="custom.js" />
 		<script type="text/javascript" src="../resources/js/superfish.js"></script>
 	</h:head>
 	<h:body>
-	<f:event type="preRenderView"
+		<f:event type="preRenderView"
 			listener="#{disbursementInfo.preRender()}" />
 		<p:panel id="pnl_maincontainer" styleClass="panel">
 			<h:form id="frmMain">
@@ -207,7 +208,8 @@
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.mc.tb.issuedBy')}"
 												style="width: 150px;">
-												<h:outputText value="#{disbursementInfo.bankBranchMap.get(mcItem.issuedBy)}" />
+												<h:outputText
+													value="#{disbursementInfo.bankBranchMap.get(mcItem.issuedBy)}" />
 											</p:column>
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.mc.tb.mcIssuedDate')}"
@@ -219,18 +221,21 @@
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.mc.tb.payeeName')}"
 												style="width:150px;">
-												<h:outputText value="#{disbursementInfo.bankMap.get(mcItem.payeeName)}" />
+												<h:outputText
+													value="#{disbursementInfo.bankMap.get(mcItem.payeeName)}" />
 											</p:column>
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.mc.tb.crossType')}"
 												style="width:130px;" styleClass="right">
-												<h:outputText value="#{disbursementInfo.crossTypeMap.get(mcItem.crossType)}" />
+												<h:outputText
+													value="#{disbursementInfo.crossTypeMap.get(mcItem.crossType)}" />
 											</p:column>
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.mc.tb.creditType')}"
 												style="width: 450px;" styleClass="right">
 												<table style="width: 100%; border-style: none !important;">
-													<ui:repeat value="#{mcItem.disbursementCreditTypeView}" var="mcCreditType">
+													<ui:repeat value="#{mcItem.disbursementCreditTypeView}"
+														var="mcCreditType">
 														<tr>
 															<td style="width: 40%; border-style: none !important;"><h:outputText
 																	value="#{mcCreditType.productProgram}" /></td>
@@ -329,7 +334,8 @@
 												headerText="#{msg.get('app.disbursement.detail.deposit.tb.creditType')}"
 												style="width:450px;">
 												<table style="width: 100%; border-style: none !important;">
-													<ui:repeat value="#{depositItem.disbursementCreditTypeView}"
+													<ui:repeat
+														value="#{depositItem.disbursementCreditTypeView}"
 														var="depositCreditType">
 														<tr>
 															<td style="width: 40%; border-style: none !important;"><h:outputText
@@ -418,7 +424,8 @@
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.bankName')}"
 												style="width: 350px;">
-												<h:outputText value="#{disbursementInfo.bankMap.get(bahtnetItem.bankCode)}" />
+												<h:outputText
+													value="#{disbursementInfo.bankMap.get(bahtnetItem.bankCode)}" />
 											</p:column>
 											<p:column
 												headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.accountNumber')}"
@@ -434,7 +441,8 @@
 												headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.creditType')}"
 												style="width:400px;">
 												<table style="width: 100%; border-style: none !important;">
-													<ui:repeat value="#{bahtnetItem.disbursementCreditTypeView}"
+													<ui:repeat
+														value="#{bahtnetItem.disbursementCreditTypeView}"
 														var="bahtnetCreditType">
 														<tr>
 															<td style="width: 40%; border-style: none !important;"><h:outputText
@@ -444,7 +452,7 @@
 															<td style="border-style: none !important;"><h:outputText
 																	value="#{msg.get('app.disbursement.detail.deposit.tb.creditType.disburse')}" />
 															</td>
-															<td  align="left" style="border-style: none !important;"><h:outputText
+															<td align="left" style="border-style: none !important;"><h:outputText
 																	value="#{bahtnetCreditType.disburseAmount}">
 																	<f:convertNumber pattern="#,##0" maxFractionDigits="2"
 																		minFractionDigits="2" maxIntegerDigits="14" />
@@ -571,8 +579,10 @@
 								<tr>
 									<td colspan="100%" style="text-align: center"><p:commandButton
 											id="btnSave" value="#{msg.get('app.button.save')}"
-											action="#{disbursementInfo.save}" styleClass="smaller" /> <p:commandButton
-											value="#{msg.get('app.button.cancel')}" styleClass="smaller" />
+											process="@form" action="#{disbursementInfo.save}"
+											styleClass="smaller"
+											update=":frmMain,:msgBoxSystemMessagePanel" /> <p:commandButton
+											id="btnCancel" value="#{msg.get('app.button.cancel')}" styleClass="smaller" />
 									</td>
 								</tr>
 
@@ -588,6 +598,13 @@
 					<ui:include src="include/footer.xhtml" />
 					<!-- End Footer -->
 				</div>
+				<p:blockUI widgetVar="blockUI" block=":frmMain"
+                   trigger="
+               :frmMain:btnSave,
+               :frmMain:btnCancel">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
 			</h:form>
 		</p:panel>
 
@@ -638,6 +655,17 @@
 			<ui:param name="action" value="onDeleteDisbursementBahtnetList" />
 			<ui:param name="update" value=":frmMain" />
 		</ui:include>
+
+		<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+	    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+	                     header="#{msg.get('app.messageHeader.info')}" message="Save Disbursement data success."
+	                     closable="false" closeOnEscape="false">
+	        <p:commandButton value="#{msg.get('app.button.ok')}"
+	                         process="@this"
+	                         update="frmMain"
+	                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
+	    </p:confirmDialog>
+	    </p:panel>
 		<ui:include src="include/footer_outside_frmmain.xhtml" />
 	</h:body>
 

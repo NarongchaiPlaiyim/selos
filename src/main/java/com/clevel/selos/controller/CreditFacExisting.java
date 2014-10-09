@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.CreditFacExistingControl;
-import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.ExistingCreditControl;
-import com.clevel.selos.businesscontrol.ProposeLineControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -16,9 +13,9 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.BaseRateTransform;
 import com.clevel.selos.transform.ProductTransform;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -163,6 +160,8 @@ public class CreditFacExisting extends BaseController {
     private MortgageTypeDAO mortgageTypeDAO;
     @Inject
     private CreditFacExistingControl creditFacExistingControl;
+    @Inject
+    private CalculationControl calculationControl;
     @Inject
     private ExistingCreditControl existingCreditControl;
     @Inject
@@ -1951,7 +1950,7 @@ public class CreditFacExisting extends BaseController {
         onSetInUsed();
         try {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
-            proposeLineControl.calculateTotalProposeAmountForExisting(existingCreditFacilityView, workCaseId);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.credit.facility.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageRefreshDlg.show()");
@@ -2058,7 +2057,7 @@ public class CreditFacExisting extends BaseController {
         for(CustomerInfoView item : customerInfoViews){
             customerInfoList.add(item);
             if(item.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getSpouseFlag() == 1){
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse = item.getSpouse();
                     if(spouse != null){

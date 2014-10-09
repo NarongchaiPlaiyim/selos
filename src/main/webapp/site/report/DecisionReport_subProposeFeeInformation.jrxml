@@ -88,7 +88,7 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="a662c53f-ec22-477c-94d0-0f23a8ae719b" style="detail" x="0" y="0" width="105" height="20"/>
 				<textElement>
 					<font pdfFontName="fonts/TAHOMA.TTF"/>

@@ -172,7 +172,7 @@
 																	<!-- Standard price  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText
@@ -185,7 +185,7 @@
 																	<!-- Suggest price  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText
@@ -198,7 +198,7 @@
 																	<!-- Final price  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText
@@ -211,7 +211,7 @@
 																	<!--  installment  -->
 																	<table class="table_noborder">
 																		<ui:repeat varStatus="rowStatus"
-																			value="#{item.newCreditTierDetailViewList}"
+																			value="#{item.proposeCreditInfoTierDetailViewList}"
 																			var="creditItem">
 																			<tr style="border-bottom: 1;">
 																				<h:outputText value="#{creditItem.installment}" />
@@ -220,12 +220,22 @@
 																	</table>
 																</td>
 																<td class="right">
-																	<!--  tenor  --> <h:outputText value="#{item.tenor}">
-																		<f:convertNumber pattern="0" />
-																	</h:outputText>
+																	<!--  tenor  -->
+                                                                    <table class="table_noborder">
+                                                                        <ui:repeat varStatus="rowStatus"
+                                                                                   value="#{item.proposeCreditInfoTierDetailViewList}"
+                                                                                   var="creditItem">
+                                                                            <tr style="border-bottom: 1;">
+                                                                                <h:outputText value="#{creditItem.tenor}">
+                                                                                    <f:convertNumber pattern="0" />
+                                                                                </h:outputText>
+                                                                            </tr>
+                                                                        </ui:repeat>
+                                                                    </table>
 																</td>
 																<td class="right">
-																	<!--  tenor  --> <h:outputText
+																	<!--  frontEndFee  -->
+                                                                    <h:outputText
 																		value="#{item.frontEndFee}">
 																		<f:convertNumber pattern="#,##0.00" />
 																	</h:outputText>
@@ -258,7 +268,7 @@
 																				#{msg.get('app.approveDetail.approvedCredit.table.detail.purposeDetail')}
 																			</td>
 																			<td colspan="3"><h:outputText
-																					value="#{item.remark}" /></td>
+																					value="#{item.proposeDetail}" /></td>
 																		</tr>
 																		<tr>
 																			<td class="title">
@@ -310,7 +320,7 @@
 										</tr>
 										<tr>
 											<td colspan="100%"><p:dataTable
-													value="#{approveDetailInformation.approveDetailInformationView.newCreditFacilityView.newConditionDetailViewList}"
+													value="#{approveDetailInformation.approveDetailInformationView.newCreditFacilityView.proposeConditionInfoViewList}"
 													var="item" rowIndexVar="rowIdx" styleClass="full_table">
 													<p:column style="width:30px" styleClass="center">
 	                        				#{rowIdx+1}
@@ -352,7 +362,7 @@
 	                        			</p:column>
 													<p:column style="width:200px"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountName')}">
-														<h:outputText value="#{item.allAccountNames}" />
+														<h:outputText value="#{item.allAccountNames}" escape="false"/>
 													</p:column>
 													<p:column style="width:150px"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.accountNumber')}">

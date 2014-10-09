@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reject_Letter2" pageWidth="595" pageHeight="842" columnWidth="539" leftMargin="36" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17d95c3e-3985-40bb-98c1-ddcbcc9398a9">
+	<property name="ireport.zoom" value="1.3310000000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="279"/>
+	<parameter name="fillRejectLetter" class="com.clevel.selos.model.report.RejectLetterReport"/>
+	<parameter name="fillAllNameReject" class="java.util.List"/>
+	<parameter name="path" class="java.lang.String"/>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<image scaleImage="RealSize" isUsingCache="false">
+				<reportElement uuid="7198002b-1389-428b-a815-4fdb8f9b64eb" x="0" y="0" width="300" height="36"/>
+				<imageExpression><![CDATA[$P{path} + "tmb.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="1684a6b0-71c4-4f00-a34f-de24b0870471" x="0" y="36" width="555" height="18" forecolor="#09499C"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="5" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[3000 ถนนพหลโยธิน แขวงจอมพล เขตจตุจักร กรุงเทพฯ 10900 ทะเบียนเลขที่/เลขประจำตัวผู้เสียภาษีอากร 010753000017 โทร 0-2299-1111, 0-2617-9111
+3000 PHAHOLYOTHIN ROAD, CHOMPON, CHATUCHAK, BANGKOK 10900 REG No./TAX ID No. 010753000017  TEL.0-2299-1111, 0-2617-9111]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d3b8778a-fbc1-46ae-b4b4-16fe236b1363" x="0" y="16" width="100" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ใบคำขอสินเชื่อเลขที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6ad279b0-5409-45cc-80ee-56f0fb1230e1" x="0" y="49" width="33" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[เรียน]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="835fc446-08ae-4bc3-9e05-7c1b5d143f50" x="33" y="49" width="239" height="20" isPrintWhenDetailOverflows="true"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{fillAllNameReject})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{path} + "Reject_Letter4_subreportName.jasper"]]></subreportExpression>
+			</subreport>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e501cce5-875e-41be-94e5-91621cc3a44c" x="100" y="16" width="172" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillRejectLetter}.getAppNumber()]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="589">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="4b3a036c-d90b-422b-8ec1-21137c1f5135" x="33" y="0" width="239" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillRejectLetter}.getAddress()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3c8ffd21-4e7a-48da-978c-2c83cb0eeece" x="0" y="520" width="62" height="17"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[หมายเหตุ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="befa855b-e7a8-4a5f-b697-8618a1a238d0" x="0" y="0" width="33" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ที่อยู่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d6de9679-65fc-499b-b545-d61514eb8689" x="35" y="432" width="123" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[จึงเรียนมาเพื่อโปรดทราบ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1cdb563f-d216-4739-94f0-6d1de667a74f" x="303" y="83" width="108" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillRejectLetter}.getDate()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="87d66245-17f3-4ac2-9e42-09588d9d7280" x="280" y="83" width="23" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[วันที่]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="49d59e74-db8f-4102-8c7c-7d3346cb0e4d" x="159" y="119" width="196" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[เรื่อง  แจ้งผลการพิจารณาสินเชื่อ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ec70cbd8-778e-4b67-8974-4d1f8dab3527" x="371" y="469" width="89" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ขอแสดงความนับถือ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fe231f07-eaa4-4cfc-af38-93336fe3020e" x="341" y="489" width="153" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ธนาคารทหารไทย จำกัด (มหาชน)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bc7e6d45-37c9-45dd-8dc7-a582f418da71" x="2" y="176" width="555" height="56"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[ 	ธนาคารทหารไทย จำกัด (มหาชน) ขอขอบคุณเป็นอย่างสูงที่ท่านได้ให้ความสนใจผลิตภัณฑ์ของธนาคารโดยได้
+รับเกียรติจากท่านสมัครใช้ผลิตภัณฑ์สินเชื่อกับทางธนาคารฯ   และได้ลงนามในหนังสือให้ความยินยอมเปิดเผยข้อมูลของท่าน
+ที่จัดเก็บอยู่กับ  บริษัท ข้อมูลเครดิตแห่งชาติ จำกัด   เพื่อวัตถุประสงค์สำหรับการใช้ข้อมูลตามพระราชบัญญัติการประกอบธุรกิจ
+ข้อมูลเครดิต พ.ศ.2545 และที่แก้ไขเพิ่มเติม แล้วนั้น]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a5c900f1-54b0-4acf-b750-b676c8190aa4" x="0" y="537" width="554" height="52"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[*  จดหมายฉบับนี้จัดพิมพ์โดยระบบอัตโนมัติจึงไม่มีลายมือชื่อบนเอกสาร
+*  กรณีที่ท่านมีเหตุจำเป็นต้องขอเอกสารประกอบการพิจารณาคืนจากธนาคาร  กรุณาติดต่อขอรับคืนที่สำนักงานเขตพัฒนาธุรกิจฯ ที่ท่านติดต่อ  ภายใน 30 วัน นับจากวันที่ออกหนังสือฉบับนี้ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="452c2a73-df3b-4a12-8792-c9748fa1f2e1" x="2" y="237" width="555" height="67"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[	ธนาคารฯ ได้ดำเนินการเรียกดูข้อมูลเครดิตของท่านในระบบฐานข้อมูลของ บริษัท ข้อมูลเครดิตแห่งชาติ จำกัด
+เพื่อนำมาประกอบการพิจารณาให้สินเชื่อ      ซึ่งธนาคารฯ ขอเรียนให้ท่านทราบว่า ธนาคารฯ ไม่สามารถอนุมัติผลิตภัณฑ์
+ดังกล่าวแก่ท่านได้ในขณะนี้  เนื่องจากข้อมูลเครดิตของท่านที่ธนาคารฯ ตรวจสอบจากระบบฐานข้อมูลดังกล่าวข้างต้น
+ท่านมี หรือเคยมีประวัติผิดนัด หรือ ค้างชำระหนี้ หรือ มีประวัติสินเชื่อเกินกำหนดเวลากับสถาบันการเงิน  หากท่านมีข้อสงสัย
+สามารถติดต่อสอบถามได้ที่ ผู้จัดการพัฒนาธุรกิจที่ดูแลท่านสำนักงานเขตพัฒนาธุรกิจฯ โทรศัพท์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9b1fc72b-604c-4500-8017-9c6164388f29" x="2" y="309" width="555" height="55"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[	ทั้งนี้  หากท่านเห็นว่าข้อมูลดังกล่าวอาจไม่ถูกต้อง  ท่านสามารถตรวจสอบข้อมูลได้ที่   บริษัท ข้อมูลเครดิตแห่งชาติ
+จำกัด อาคาร 2 ชั้น 2 ธนาคารอาคารสงเคราะห์ สำนักงานใหญ่ เลขที่ 63 ถนนพระราม 9 เขตห้วยขวาง กรุงเทพมหานคร 10320
+โทรศัพท์ 0-2643-1250 หรือโทรสาร 0-2612-5895 หรือสาขาของบริษัทฯ โดยไม่เสีย - ค่าธรรมเนียม   ภายใน 30 วัน
+นับแต่วันที่ได้รับหนังสือปฏิเสธการขอสินเชื่อ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0bdc62b4-34fc-447e-9241-344cb9acd127" x="2" y="369" width="555" height="30"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+				</textElement>
+				<text><![CDATA[	ธนาคารฯ หวังเป็นอย่างยิ่งว่า ธนาคารฯ จะมีโอกาสได้รับใช้ท่าน จากการเลือกใช้ผลิตภัณฑ์อื่นที่เหมาะสมของธนาคารฯ
+ในโอกาสต่อไป  โดยท่านสามารถศึกษารายละเอียดข้อมูลผลิตภัณฑ์อื่นๆ ได้ที่ www.tmbbank.com]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b4123e2a-9975-4de8-b5d1-9048bd36c721" x="397" y="279" width="169" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fillRejectLetter}.getTeam_phone()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

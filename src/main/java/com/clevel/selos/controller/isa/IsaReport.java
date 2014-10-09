@@ -1,9 +1,11 @@
 package com.clevel.selos.controller.isa;
 
+import com.clevel.selos.businesscontrol.isa.CSVService;
 import com.clevel.selos.businesscontrol.isa.DownloadService;
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.report.ISAViewReport;
 import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
@@ -50,6 +52,7 @@ public class IsaReport implements Serializable {
     //dialogMessage
     private String messageHeader;
     private String message;
+    private CSVService csvService;
     @Inject
     CsvExport csvExport;
     private enum Result{Success};
@@ -86,372 +89,487 @@ public class IsaReport implements Serializable {
         dateTo = DateTime.now().toDate();
     }
 
-    public void notLogonOver() {
-        log.debug("notLogonOver()");
+    public void onSubmitExportCSV(){
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+        StringBuilder nameISAUserProfile = new StringBuilder();
+        nameISAUserProfile = nameISAUserProfile.append("USERPROFILE_").append(Util.getFileNameForISA());
 
-        List<IsaUserDetailView> list=new ArrayList<IsaUserDetailView>();
-        StringBuilder builder = new StringBuilder();
-        builder.append("No");builder.append(COMMA_DELIMITED);
-        builder.append("User ID");builder.append(COMMA_DELIMITED);
-        builder.append("User Name");builder.append(COMMA_DELIMITED);
-        builder.append("Email Address");builder.append(COMMA_DELIMITED);
-        builder.append("Bu Code");builder.append(COMMA_DELIMITED);
-        builder.append("Last IP");builder.append(COMMA_DELIMITED);
-        builder.append("Last Logon");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Ext");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Number");builder.append(COMMA_DELIMITED);
-        builder.append("Role");builder.append(COMMA_DELIMITED);
-        builder.append("Department");builder.append(COMMA_DELIMITED);
-        builder.append("Division");builder.append(COMMA_DELIMITED);
-        builder.append("Region");builder.append(COMMA_DELIMITED);
-        builder.append("Team");builder.append(COMMA_DELIMITED);
-        builder.append("Title");builder.append(COMMA_DELIMITED);
-        builder.append("Zone");builder.append(COMMA_DELIMITED);
-        builder.append("Active");builder.append(COMMA_DELIMITED);
-        builder.append("Status");builder.append("\n");
+//        StringBuilder builder =  new StringBuilder();
+//        builder.append("Seq"); builder.append(COMMA_DELIMITED);
+//        builder.append("EmployeeID"); builder.append(COMMA_DELIMITED);
+//        builder.append("EmployeeName"); builder.append(COMMA_DELIMITED);
+//        builder.append("TeamID"); builder.append(COMMA_DELIMITED);
+//        builder.append("TeamName"); builder.append(COMMA_DELIMITED);
+//        builder.append("CreateDate"); builder.append(COMMA_DELIMITED);
+//        builder.append("LastSignOnDate"); builder.append(COMMA_DELIMITED);
+//        builder.append("Status"); builder.append(COMMA_DELIMITED);
+//        builder.append("NumberOfDays"); builder.append('\n');
 
-        try{
-            list=isaBusinessControl.getUserNotLogonOver(notLogonOverDay);
-        }catch (Exception e){
-            log.debug("Excepion : {}",e.getMessage());
+        StringBuilder builder =  new StringBuilder();
+        builder.append("Seq"); builder.append(COMMA_DELIMITED);
+        builder.append("User Id"); builder.append(COMMA_DELIMITED);
+        builder.append("User Name"); builder.append(COMMA_DELIMITED);
+        builder.append("Active"); builder.append(COMMA_DELIMITED);
+        builder.append("Role"); builder.append(COMMA_DELIMITED);
+        builder.append("Team"); builder.append(COMMA_DELIMITED);
+        builder.append("Department"); builder.append(COMMA_DELIMITED);
+        builder.append("Division"); builder.append(COMMA_DELIMITED);
+        builder.append("Region"); builder.append(COMMA_DELIMITED);
+        builder.append("Title"); builder.append(COMMA_DELIMITED);
+        builder.append("Cteate date"); builder.append(COMMA_DELIMITED);
+        builder.append("Last sign on date"); builder.append('\n');
+
+        try {
+            viewReportList = isaBusinessControl.getUserProFileByUser();
+        } catch (SQLException e) {
+            log.debug("--on getuserProfile. {}",e.getMessage());
         }
-        int number=1;
-        for(IsaUserDetailView isaUserDetailView :list){
-            builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getUserId()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getUserName()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getEmailAddress()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getBuCode()+"'");builder.append(COMMA_DELIMITED);
-//            builder.append("'"+ isaUserDetailView.getLastIp()+"'");builder.append(COMMA_DELIMITED);
-//            builder.append("'"+ isaUserDetailView.getLastLogon()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getPhoneExt()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getPhoneNumber()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getRole()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getDepartment()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getDivision()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getRegion()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getTeam()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getTitle()+"'");builder.append(COMMA_DELIMITED);
-//            builder.append("'"+ isaUserDetailView.getZone()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getActive()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+ isaUserDetailView.getUserStatus()+"'");builder.append("\n");
 
-            number++;
-        }
-        System.out.println(builder.toString());
+        int rowNumber = 1;
 
-        csvExport.exportCSV("notLogonOver_"+dateFormatFile.format(new Date()),builder.toString());
+        if (!Util.isNull(viewReportList)){
+            log.debug("--viewReportList is not null. [{}]",viewReportList.size());
+            for (ISAViewReport report : viewReportList){
+                builder.append(rowNumber).append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getUserId()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getUserName()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getActive()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getRole()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getTeam()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getDepartment()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getDivision()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getRegion()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getTitle()) + '"').append(COMMA_DELIMITED);
+                if (!Util.isNull(report.getCreateDate())){
+                    builder.append('"' + DateTimeUtil.convertToStringDDMMYYYYHHmmss(report.getCreateDate()) + '"').append(COMMA_DELIMITED);
+                } else {
+                    builder.append(COMMA_DELIMITED);
+                }
+                if (!Util.isNull(report.getLastLogOn())){
+                    builder.append('"' + DateTimeUtil.convertToStringDDMMYYYYHHmmss(report.getLastLogOn()) + '"').append('\n');
+                } else {
+                    builder.append(COMMA_DELIMITED).append('\n');
+                }
 
-
-    }
-
-
-    public void userReport() {
-        log.debug("userReport()");
-
-        List<IsaUserDetailView> list=new ArrayList<IsaUserDetailView>();
-        StringBuilder builder = new StringBuilder();
-        builder.append("No");builder.append(COMMA_DELIMITED);
-        builder.append("User ID");builder.append(COMMA_DELIMITED);
-        builder.append("User Name");builder.append(COMMA_DELIMITED);
-        builder.append("Email Address");builder.append(COMMA_DELIMITED);
-        builder.append("Bu Code");builder.append(COMMA_DELIMITED);
-        builder.append("Last IP");builder.append(COMMA_DELIMITED);
-        builder.append("Last Logon");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Ext");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Number");builder.append(COMMA_DELIMITED);
-        builder.append("Role");builder.append(COMMA_DELIMITED);
-        builder.append("Department");builder.append(COMMA_DELIMITED);
-        builder.append("Division");builder.append(COMMA_DELIMITED);
-        builder.append("Region");builder.append(COMMA_DELIMITED);
-        builder.append("Team");builder.append(COMMA_DELIMITED);
-        builder.append("Title");builder.append(COMMA_DELIMITED);
-        builder.append("Zone");builder.append(COMMA_DELIMITED);
-        builder.append("Active");builder.append(COMMA_DELIMITED);
-        builder.append("Status");builder.append("\n");
-
-        try{
-            list=isaBusinessControl.getUserReportList();
-        }catch (Exception e){
-            log.debug("Excepion : {}",e.getMessage());
-        }
-        int number=1;
-        if(list!=null){
-            for(IsaUserDetailView isaUserDetailView :list){
-                builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getUserId()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getUserName()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getEmailAddress()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getBuCode()+"'");builder.append(COMMA_DELIMITED);
-//                builder.append("'"+ isaUserDetailView.getLastIp()+"'");builder.append(COMMA_DELIMITED);
-//                builder.append("'"+ isaUserDetailView.getLastLogon()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getPhoneExt()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getPhoneNumber()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getRole()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getDepartment()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getDivision()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getRegion()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getTeam()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getTitle()+"'");builder.append(COMMA_DELIMITED);
-//                builder.append("'"+ isaUserDetailView.getZone()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getActive()+"'");builder.append(COMMA_DELIMITED);
-                builder.append("'"+ isaUserDetailView.getUserStatus()+"'");builder.append("\n");
-
-                number++;
+                rowNumber++;
             }
+            csvExport.exportCSV(nameISAUserProfile.toString(),builder.toString());
         }
-        System.out.println(builder.toString());
-
-        csvExport.exportCSV("userReport_"+dateFormatFile.format(new Date()),builder.toString());
-
     }
 
+//    public static void main(String[] args) {
+//        System.out.println("ACTIVE".equalsIgnoreCase("ACtive"));
+//    }
 
-    public void violationReport() {
-        log.debug("userReport()");
+    public void onPrintActivity(){
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+        StringBuilder nameISAUserProfile = new StringBuilder();
+        HashMap map = new HashMap<String, Object>();
+        nameISAUserProfile = nameISAUserProfile.append("Activity_").append(Util.getFileNameForISA());
 
-        List<IsaAuditLogView> list=new ArrayList<IsaAuditLogView>();
         StringBuilder builder =  new StringBuilder();
         builder.append("No"); builder.append(COMMA_DELIMITED);
-        builder.append("User ID"); builder.append(COMMA_DELIMITED);
-        builder.append("User Name"); builder.append(COMMA_DELIMITED);
-        builder.append("IP Address"); builder.append(COMMA_DELIMITED);
-        builder.append("Login Date"); builder.append(COMMA_DELIMITED);
-        builder.append("Status"); builder.append(COMMA_DELIMITED);
-        builder.append("Description"); builder.append('\n');
+        builder.append("ADMIN_TASK"); builder.append(COMMA_DELIMITED);
+        builder.append("EMP_ID"); builder.append(COMMA_DELIMITED);
+        builder.append("EMP_NAME"); builder.append(COMMA_DELIMITED);
+        builder.append("OLD_DATA"); builder.append(COMMA_DELIMITED);
+        builder.append("NEW_DATA"); builder.append(COMMA_DELIMITED);
+        builder.append("MODIFY_DATE"); builder.append(COMMA_DELIMITED);
+        builder.append("MODIFY_BY"); builder.append(COMMA_DELIMITED);
+        builder.append("ADMIN_NAME"); builder.append('\n');
 
-        try{
-            list=isaBusinessControl.getViolationReport();
-        }catch (Exception e){
-             log.debug("Excepion : {}",e.getMessage());
+        try {
+            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom,Locale.ENGLISH));
+            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo,Locale.ENGLISH));
+            viewReportList = isaBusinessControl.getUserProFileByISA(map);
+        } catch (SQLException e) {
+            log.debug("--on getuserProfile. {}",e.getMessage());
         }
-        int number=1;
-        if(list!=null){
-            for(IsaAuditLogView isaAuditLogView :list){
-                builder.append('"'+number+'"');builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getUserId()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getUserName()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getIpAddress()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getActionDate()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getResult()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getResultDesc()+'"'); builder.append('\n');
-                System.out.println(isaAuditLogView.getActionDate());
-                number++;
+
+        int rowNumber = 1;
+
+        if (!Util.isNull(viewReportList)){
+            log.debug("--viewReportList is not null. [{}]",viewReportList.size());
+            for (ISAViewReport report : viewReportList){
+                builder.append(rowNumber).append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getAdminTask()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getEmpID()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getEmpName()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getOldData()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getNewData()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(DateTimeUtil.convertToStringDDMMYYYY(report.getModifyDate())) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getModifyBy()) + '"').append(COMMA_DELIMITED);
+                builder.append('"' + Util.EmptyString(report.getAdminName()) + '"').append('\n');
+
+                rowNumber++;
             }
+            csvExport.exportCSV(nameISAUserProfile.toString(),builder.toString());
         }
-        System.out.println(builder.toString());
-
-        csvExport.exportCSV("violationReport_"+dateFormatFile.format(new Date()),builder.toString());
-
     }
 
-    public void userMaintenanceReport() {
-        log.debug("userMaintenanceReport()");
+//    public void notLogonOver() {
+//        log.debug("notLogonOver()");
+//
+//        List<IsaUserDetailView> list=new ArrayList<IsaUserDetailView>();
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("No");builder.append(COMMA_DELIMITED);
+//        builder.append("User ID");builder.append(COMMA_DELIMITED);
+//        builder.append("User Name");builder.append(COMMA_DELIMITED);
+//        builder.append("Email Address");builder.append(COMMA_DELIMITED);
+//        builder.append("Bu Code");builder.append(COMMA_DELIMITED);
+//        builder.append("Last IP");builder.append(COMMA_DELIMITED);
+//        builder.append("Last Logon");builder.append(COMMA_DELIMITED);
+//        builder.append("Phone Ext");builder.append(COMMA_DELIMITED);
+//        builder.append("Phone Number");builder.append(COMMA_DELIMITED);
+//        builder.append("Role");builder.append(COMMA_DELIMITED);
+//        builder.append("Department");builder.append(COMMA_DELIMITED);
+//        builder.append("Division");builder.append(COMMA_DELIMITED);
+//        builder.append("Region");builder.append(COMMA_DELIMITED);
+//        builder.append("Team");builder.append(COMMA_DELIMITED);
+//        builder.append("Title");builder.append(COMMA_DELIMITED);
+//        builder.append("Zone");builder.append(COMMA_DELIMITED);
+//        builder.append("Active");builder.append(COMMA_DELIMITED);
+//        builder.append("Status");builder.append("\n");
+//
+//        try{
+//            list=isaBusinessControl.getUserNotLogonOver(notLogonOverDay);
+//        }catch (Exception e){
+//            log.debug("Excepion : {}",e.getMessage());
+//        }
+//        int number=1;
+//        for(IsaUserDetailView isaUserDetailView :list){
+//            builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getUserId()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getUserName()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getEmailAddress()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getBuCode()+"'");builder.append(COMMA_DELIMITED);
+////            builder.append("'"+ isaUserDetailView.getLastIp()+"'");builder.append(COMMA_DELIMITED);
+////            builder.append("'"+ isaUserDetailView.getLastLogon()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getPhoneExt()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getPhoneNumber()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getRole()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getDepartment()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getDivision()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getRegion()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getTeam()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getTitle()+"'");builder.append(COMMA_DELIMITED);
+////            builder.append("'"+ isaUserDetailView.getZone()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getActive()+"'");builder.append(COMMA_DELIMITED);
+//            builder.append("'"+ isaUserDetailView.getUserStatus()+"'");builder.append("\n");
+//
+//            number++;
+//        }
+//        System.out.println(builder.toString());
+//
+//        csvExport.exportCSV("notLogonOver_"+dateFormatFile.format(new Date()),builder.toString());
+//    }
 
-        List<IsaAuditLogView> list=new ArrayList<IsaAuditLogView>();
-        StringBuilder builder =  new StringBuilder();
-        builder.append("No"); builder.append(COMMA_DELIMITED);
-        builder.append("User ID"); builder.append(COMMA_DELIMITED);
-        builder.append("User Name"); builder.append(COMMA_DELIMITED);
-        builder.append("Action"); builder.append(COMMA_DELIMITED);
-        builder.append("Action Desc"); builder.append(COMMA_DELIMITED);
-        builder.append("IP Address"); builder.append(COMMA_DELIMITED);
-        builder.append("Login Date"); builder.append(COMMA_DELIMITED);
-        builder.append("Status"); builder.append(COMMA_DELIMITED);
-        builder.append("Description"); builder.append('\n');
 
-        try{
-            System.out.println(dateFrom +" "+ dateTo);
-            list=isaBusinessControl.getUserMaintenanceReport(dateFrom,dateTo);
-        }catch (Exception e){
-            log.debug("Excepion : {}",e.getMessage());
-        }
-        int number=1;
-        if(list!=null){
-            for(IsaAuditLogView isaAuditLogView :list){
-                builder.append('"'+number+'"');builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getUserId()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getUserName()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getAction()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getActionDesc()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getIpAddress()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getActionDate()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getResult()+'"'); builder.append(COMMA_DELIMITED);
-                builder.append('"'+ isaAuditLogView.getResultDesc()+'"'); builder.append('\n');
+//    public void userReport() {
+//        log.debug("userReport()");
+//
+//        List<IsaUserDetailView> list=new ArrayList<IsaUserDetailView>();
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("No");builder.append(COMMA_DELIMITED);
+//        builder.append("User ID");builder.append(COMMA_DELIMITED);
+//        builder.append("User Name");builder.append(COMMA_DELIMITED);
+//        builder.append("Email Address");builder.append(COMMA_DELIMITED);
+//        builder.append("Bu Code");builder.append(COMMA_DELIMITED);
+//        builder.append("Last IP");builder.append(COMMA_DELIMITED);
+//        builder.append("Last Logon");builder.append(COMMA_DELIMITED);
+//        builder.append("Phone Ext");builder.append(COMMA_DELIMITED);
+//        builder.append("Phone Number");builder.append(COMMA_DELIMITED);
+//        builder.append("Role");builder.append(COMMA_DELIMITED);
+//        builder.append("Department");builder.append(COMMA_DELIMITED);
+//        builder.append("Division");builder.append(COMMA_DELIMITED);
+//        builder.append("Region");builder.append(COMMA_DELIMITED);
+//        builder.append("Team");builder.append(COMMA_DELIMITED);
+//        builder.append("Title");builder.append(COMMA_DELIMITED);
+//        builder.append("Zone");builder.append(COMMA_DELIMITED);
+//        builder.append("Active");builder.append(COMMA_DELIMITED);
+//        builder.append("Status");builder.append("\n");
+//
+//        try{
+//            list=isaBusinessControl.getUserReportList();
+//        }catch (Exception e){
+//            log.debug("Excepion : {}",e.getMessage());
+//        }
+//        int number=1;
+//        if(list!=null){
+//            for(IsaUserDetailView isaUserDetailView :list){
+//                builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getUserId()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getUserName()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getEmailAddress()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getBuCode()+"'");builder.append(COMMA_DELIMITED);
+////                builder.append("'"+ isaUserDetailView.getLastIp()+"'");builder.append(COMMA_DELIMITED);
+////                builder.append("'"+ isaUserDetailView.getLastLogon()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getPhoneExt()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getPhoneNumber()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getRole()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getDepartment()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getDivision()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getRegion()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getTeam()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getTitle()+"'");builder.append(COMMA_DELIMITED);
+////                builder.append("'"+ isaUserDetailView.getZone()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getActive()+"'");builder.append(COMMA_DELIMITED);
+//                builder.append("'"+ isaUserDetailView.getUserStatus()+"'");builder.append("\n");
+//
+//                number++;
+//            }
+//        }
+//        System.out.println(builder.toString());
+//
+//        csvExport.exportCSV("userReport_"+dateFormatFile.format(new Date()),builder.toString());
+//
+//    }
 
-                number++;
-            }
-        }
-        System.out.println(builder.toString());
 
-        csvExport.exportCSV("userMaintenanceReport_"+dateFormatFile.format(new Date()),builder.toString());
+//    public void violationReport() {
+//        log.debug("userReport()");
+//
+//        List<IsaAuditLogView> list=new ArrayList<IsaAuditLogView>();
+//        StringBuilder builder =  new StringBuilder();
+//        builder.append("No"); builder.append(COMMA_DELIMITED);
+//        builder.append("User ID"); builder.append(COMMA_DELIMITED);
+//        builder.append("User Name"); builder.append(COMMA_DELIMITED);
+//        builder.append("IP Address"); builder.append(COMMA_DELIMITED);
+//        builder.append("Login Date"); builder.append(COMMA_DELIMITED);
+//        builder.append("Status"); builder.append(COMMA_DELIMITED);
+//        builder.append("Description"); builder.append('\n');
+//
+//        try{
+//            list=isaBusinessControl.getViolationReport();
+//        }catch (Exception e){
+//             log.debug("Excepion : {}",e.getMessage());
+//        }
+//        int number=1;
+//        if(list!=null){
+//            for(IsaAuditLogView isaAuditLogView :list){
+//                builder.append('"'+number+'"');builder.append(COMMA_DELIMITED);
+//                builder.append('"'+ isaAuditLogView.getUserId()+'"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"'+ isaAuditLogView.getUserName()+'"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"'+ isaAuditLogView.getIpAddress()+'"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"'+ isaAuditLogView.getActionDate()+'"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"'+ isaAuditLogView.getResult()+'"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"'+ isaAuditLogView.getResultDesc()+'"'); builder.append('\n');
+//                System.out.println(isaAuditLogView.getActionDate());
+//                number++;
+//            }
+//        }
+//        System.out.println(builder.toString());
+//
+//        csvExport.exportCSV("violationReport_"+dateFormatFile.format(new Date()),builder.toString());
+//
+//    }
 
-    }
+//    public void userMaintenanceReport() {
+//        log.debug("userMaintenanceReport()");
+//
+//        List<IsaAuditLogView> list=new ArrayList<IsaAuditLogView>();
+//        StringBuilder builder =  new StringBuilder();
+//        builder.append("No"); builder.append(COMMA_DELIMITED);
+//        builder.append("User ID"); builder.append(COMMA_DELIMITED);
+//        builder.append("User Name"); builder.append(COMMA_DELIMITED);
+//        builder.append("Action"); builder.append(COMMA_DELIMITED);
+//        builder.append("Action Desc"); builder.append(COMMA_DELIMITED);
+//        builder.append("IP Address"); builder.append(COMMA_DELIMITED);
+//        builder.append("Login Date"); builder.append(COMMA_DELIMITED);
+//        builder.append("Status"); builder.append(COMMA_DELIMITED);
+//        builder.append("Description"); builder.append('\n');
+//
+//        try{
+//            System.out.println(dateFrom +" "+ dateTo);
+//            list=isaBusinessControl.getUserMaintenanceReport(dateFrom,dateTo);
+//        }catch (Exception e){
+//            log.debug("Excepion : {}",e.getMessage());
+//        }
+//        int number=1;
+//        if(list!=null){
+//            for(IsaAuditLogView isaAuditLogView :list){
+//                builder.append('"'+number+'"');builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getUserId() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getUserName() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getAction() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getActionDesc() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getIpAddress() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getActionDate() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getResult() + '"'); builder.append(COMMA_DELIMITED);
+//                builder.append('"' + isaAuditLogView.getResultDesc() + '"'); builder.append('\n');
+//
+//                number++;
+//            }
+//        }
+//        System.out.println(builder.toString());
+//
+//        csvExport.exportCSV("userMaintenanceReport_"+dateFormatFile.format(new Date()),builder.toString());
+//
+//    }
 
 //    public void onSubmitReport(){
 //        log.debug("--On onSubmitReport. fromdate. {}, and todate.{}",dateFrom,dateTo);
 //        onPrintViolation(dateFrom, dateTo);
 //    }
 
-    public void onPrintLogonOver90(){
-        log.debug("--on onPrintLogonOver90.");
-//        reportView.setNameISAReportLogonOver90(nameLogonOver90.toString());
+//    public void onPrintLogonOver90(){
+//        log.debug("--on onPrintLogonOver90.");
+////        reportView.setNameISAReportLogonOver90(nameLogonOver90.toString());
+//
+//        try {
+////            HashMap map = new HashMap<String, Object>();
+//            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+//            ResultSet rs = stpExecutor.getLogonOver90();
+//            StringBuilder nameLogonOver90 = new StringBuilder();
+//            nameLogonOver90 = nameLogonOver90.append("NotLogonOver_90_").append(Util.getFileNameForISA());
+//            int i = 1;
+//
+//            if (!Util.isNull(rs)){
+//                while (rs.next()){
+//                    ISAViewReport viewReport = new ISAViewReport();
+//                    viewReport.setRow(i++);
+//                    viewReport.setUserId(rs.getString("USER_ID"));
+//                    viewReport.setUserName(rs.getString("USER_NAME"));
+//                    viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+//                    viewReport.setLogin(rs.getTimestamp("LAST_LOGIN"));
+//                    viewReport.setStatus(rs.getString("STATUS"));
+//                    viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
+//                    viewReportList.add(viewReport);
+//                }
+//                generatePDF(pathISALogonOver90, new HashMap<String, Object>(), nameLogonOver90.toString(), viewReportList);
+//            } else {
+//                ISAViewReport viewReport = new ISAViewReport();
+//                viewReportList.add(viewReport);
+//            }
+//        } catch (SQLException e) {
+//            log.debug("on getLogonOver90. {}",e);
+//        } catch (Exception e) {
+//            log.debug("onPrintLogonOver90. {}",e);
+//        }
+//    }
 
-        try {
+//    public void onPrintViolation(){
+//        log.debug("--on onPrintViolation.");
+//        try {
+//            StringBuilder nameISAViolation = new StringBuilder();
+//            nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());
 //            HashMap map = new HashMap<String, Object>();
-            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            ResultSet rs = stpExecutor.getLogonOver90();
-            StringBuilder nameLogonOver90 = new StringBuilder();
-            nameLogonOver90 = nameLogonOver90.append("NotLogonOver_90_").append(Util.getFileNameForISA());
-            int i = 1;
+//            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+//            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom));
+//            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo));
+//            ResultSet rs = stpExecutor.getViolation(map);
+//            int i = 1;
+//
+//            if (!Util.isNull(rs)){
+//                while (rs.next()){
+//                    ISAViewReport viewReport = new ISAViewReport();
+//                    viewReport.setRow(i++);
+//                    viewReport.setUserId(rs.getString("USER_ID"));
+//                    viewReport.setUserName(rs.getString("USER_NAME"));
+//                    viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
+//                    viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
+//                    viewReport.setStatus(rs.getString("STATUS"));
+//                    viewReportList.add(viewReport);
+//                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
+//                }
+//                generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
+//            } else {
+//                ISAViewReport viewReport = new ISAViewReport();
+//                viewReportList.add(viewReport);
+//            }
+//        } catch (SQLException e) {
+//            log.debug("----on getViolation. {}",e);
+//        } catch (Exception e) {
+//            log.debug("onPrintViolation. {}",e);
+//        }
+//    }
 
-            if (!Util.isNull(rs)){
-                while (rs.next()){
-                    ISAViewReport viewReport = new ISAViewReport();
-                    viewReport.setRow(i++);
-                    viewReport.setUserId(rs.getString("USER_ID"));
-                    viewReport.setUserName(rs.getString("USER_NAME"));
-                    viewReport.setCreateDate(rs.getTimestamp("CREATE_DATE"));
-                    viewReport.setLogin(rs.getTimestamp("LAST_LOGIN"));
-                    viewReport.setStatus(rs.getString("STATUS"));
-                    viewReport.setNumberOfDay(rs.getString("NUMBER_OF_DAY"));
-                    viewReportList.add(viewReport);
-                }
-                generatePDF(pathISALogonOver90, new HashMap<String, Object>(), nameLogonOver90.toString(), viewReportList);
-            } else {
-                ISAViewReport viewReport = new ISAViewReport();
-                viewReportList.add(viewReport);
-            }
-        } catch (SQLException e) {
-            log.debug("on getLogonOver90. {}",e);
-        } catch (Exception e) {
-            log.debug("onPrintLogonOver90. {}",e);
-        }
-    }
+//    public void onPrintUserProfile(){
+//
+//        try {
+//            StringBuilder nameISAUserProfile = new StringBuilder();
+//            nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
+////            HashMap map = new HashMap<String, Object>();
+//            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+//            ResultSet rs = stpExecutor.getUserProfile();
+//            int i = 1;
+//
+//            if (!Util.isNull(rs)){
+//                while (rs.next()){
+//                    ISAViewReport viewReport = new ISAViewReport();
+//                    viewReport.setRow(i++);
+//                    viewReport.setAdminTask(rs.getString("ADMIN_TASK"));
+//                    viewReport.setEmpID(rs.getString("EMP_ID"));
+//                    viewReport.setEmpName(rs.getString("EMP_NAME"));
+//                    viewReport.setOldData(rs.getString("OLD_DATA"));
+//                    viewReport.setNewData(rs.getString("NEW_DATA"));
+//                    viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
+//                    viewReport.setModifyBy(rs.getString("MODIFY_BY"));
+//                    viewReport.setAdminName(rs.getString("ADMIN_NAME"));
+//                    viewReportList.add(viewReport);
+//                }
+//                generatePDF(pathISAUserProfile, new HashMap<String, Object>(), nameISAUserProfile.toString(), viewReportList);
+//            } else {
+//                ISAViewReport viewReport = new ISAViewReport();
+//                viewReportList.add(viewReport);
+//            }
+//        } catch (SQLException e) {
+//            log.debug("----on getuserProfile. {}",e);
+//        } catch (Exception e) {
+//            log.debug("onPrintUserProfile. {}",e);
+//        }
+//    }
 
-    public void onPrintViolation(){
-        log.debug("--on onPrintViolation.");
-        try {
-            StringBuilder nameISAViolation = new StringBuilder();
-            nameISAViolation = nameISAViolation.append("Violation_").append(Util.getFileNameForISA());
-            HashMap map = new HashMap<String, Object>();
-            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            map.put("fromDate", DateTimeUtil.convertToStringDDMMYYYY(dateFrom));
-            map.put("toDate", DateTimeUtil.convertToStringDDMMYYYY(dateTo));
-            ResultSet rs = stpExecutor.getViolation(map);
-            int i = 1;
-
-            if (!Util.isNull(rs)){
-                while (rs.next()){
-                    ISAViewReport viewReport = new ISAViewReport();
-                    viewReport.setRow(i++);
-                    viewReport.setUserId(rs.getString("USER_ID"));
-                    viewReport.setUserName(rs.getString("USER_NAME"));
-                    viewReport.setIpAddress(rs.getString("IP_ADDRESS"));
-                    viewReport.setLogin(rs.getTimestamp("LOGIN_DATE"));
-                    viewReport.setStatus(rs.getString("STATUS"));
-                    viewReportList.add(viewReport);
-                    viewReport.setDescrition(rs.getString("DESCRIPTION"));
-                }
-                generatePDF(pathISAViolation, map, nameISAViolation.toString(), viewReportList);
-            } else {
-                ISAViewReport viewReport = new ISAViewReport();
-                viewReportList.add(viewReport);
-            }
-        } catch (SQLException e) {
-            log.debug("----on getViolation. {}",e);
-        } catch (Exception e) {
-            log.debug("onPrintViolation. {}",e);
-        }
-    }
-
-    public void onPrintUserProfile(){
-
-        try {
-            StringBuilder nameISAUserProfile = new StringBuilder();
-            nameISAUserProfile = nameISAUserProfile.append("UserProfile_").append(Util.getFileNameForISA());
-//            HashMap map = new HashMap<String, Object>();
-            List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
-            ResultSet rs = stpExecutor.getUserProfile();
-            int i = 1;
-
-            if (!Util.isNull(rs)){
-                while (rs.next()){
-                    ISAViewReport viewReport = new ISAViewReport();
-                    viewReport.setRow(i++);
-                    viewReport.setAdminTask(rs.getString("ADMIN_TASK"));
-                    viewReport.setEmpID(rs.getString("EMP_ID"));
-                    viewReport.setEmpName(rs.getString("EMP_NAME"));
-                    viewReport.setOldData(rs.getString("OLD_DATA"));
-                    viewReport.setNewData(rs.getString("NEW_DATA"));
-                    viewReport.setModifyDate(rs.getTimestamp("MODIFY_DATE"));
-                    viewReport.setModifyBy(rs.getString("MODIFY_BY"));
-                    viewReport.setAdminName(rs.getString("ADMIN_NAME"));
-                    viewReportList.add(viewReport);
-                }
-                generatePDF(pathISAUserProfile, new HashMap<String, Object>(), nameISAUserProfile.toString(), viewReportList);
-            } else {
-                ISAViewReport viewReport = new ISAViewReport();
-                viewReportList.add(viewReport);
-            }
-        } catch (SQLException e) {
-            log.debug("----on getuserProfile. {}",e);
-        } catch (Exception e) {
-            log.debug("onPrintUserProfile. {}",e);
-        }
-    }
-
-    private void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
-        log.debug("generate pdf.");
-        JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
-
-        JasperPrint print ;
-
-        log.info("parameters: {}",parameters);
-
-        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
-        if(dataSource != null && reportList != null && reportList.size() > 0){
-            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-        } else {
-            print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-        }
-        log.debug("--Pring report.");
-
-        try {
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
-            ServletOutputStream servletOutputStream=response.getOutputStream();
-            JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
-            FacesContext.getCurrentInstance().responseComplete();
-            log.debug("generatePDF completed.");
-
-        } catch (JRException e) {
-            log.error("Error generating pdf report!", e);
-        }
-    }
+//    private void generatePDF(String fileName, Map<String,Object> parameters,String pdfName,Collection reportList) throws JRException, IOException {
+//        log.debug("generate pdf.");
+//        JasperReport jasperReport = JasperCompileManager.compileReport(fileName);
+//
+//        JasperPrint print ;
+//
+//        log.info("parameters: {}",parameters);
+//
+//        JRDataSource dataSource = new JRBeanCollectionDataSource(reportList);
+//        if(dataSource != null && reportList != null && reportList.size() > 0){
+//            print = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+//        } else {
+//            print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+//        }
+//        log.debug("--Pring report.");
+//
+//        try {
+//            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//            response.addHeader("Content-disposition", "attachment; filename="+pdfName+".pdf");
+//            ServletOutputStream servletOutputStream=response.getOutputStream();
+//            JasperExportManager.exportReportToPdfStream(print, servletOutputStream);
+//            FacesContext.getCurrentInstance().responseComplete();
+//            log.debug("generatePDF completed.");
+//
+//        } catch (JRException e) {
+//            log.error("Error generating pdf report!", e);
+//        }
+//    }
 
 
 
-    public void onSubmitExportCSV(){
-        log.debug("-- onSubmitExportCSV()");
-        RequestContext context = RequestContext.getCurrentInstance();
-        messageHeader = "Export to CSV";
-        try {
-            final String fullPath = isaBusinessControl.exportProcess();
-            if(!Util.isNull(fullPath)){
-                streamedContent = downloadService.process(fullPath);
-            }
-            message = Result.Success.toString();
-        } catch (Exception e){
-            if (e.getCause() != null) {
-                message = e.getCause().getMessage();
-            } else {
-                message = e.getMessage();
-            }
-        }
-        context.execute("msgBoxSystemMessageDlg.show()");
-    }
-
+//    public void onSubmitExportCSV(){
+//        log.debug("-- onSubmitExportCSV()");
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        messageHeader = "Export to CSV";
+//        try {
+//            final String fullPath = isaBusinessControl.exportProcess();
+//            if(!Util.isNull(fullPath)){
+//                streamedContent = downloadService.process(fullPath);
+//            }
+//            message = Result.Success.toString();
+//        } catch (Exception e){
+//            if (e.getCause() != null) {
+//                message = e.getCause().getMessage();
+//            } else {
+//                message = e.getMessage();
+//            }
+//        }
+//        context.execute("msgBoxSystemMessageDlg.show()");
+//    }
 
 
 

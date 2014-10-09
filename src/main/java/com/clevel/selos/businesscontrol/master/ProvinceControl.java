@@ -50,7 +50,6 @@ public class ProvinceControl extends BusinessControl {
                 selectItem.setLabel(provinceView.getName());
                 selectItem.setValue(provinceView.getCode());
                 selectItemList.add(selectItem);
-                logger.debug("add SelectItem: {}", selectItem);
             }
         }
         logger.debug("getProviceSelectItemActiveList return provinceView size: {}", selectItemList.size());

@@ -2,21 +2,16 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.master.BaseRateControl;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.NCBDAO;
-import com.clevel.selos.dao.working.NCBDetailDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.NCBPaymentCode;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.NCB;
-import com.clevel.selos.model.db.working.NCBDetail;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
@@ -41,30 +36,32 @@ public class NCBInfoControl extends BusinessControl {
     private Logger log;
 
     @Inject
-    NCBDAO ncbDAO;
+    private NCBDAO ncbDAO;
     @Inject
-    NCBDetailDAO ncbDetailDAO;
+    private NCBDetailDAO ncbDetailDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    SettlementStatusDAO settlementStatusDAO;
+    private SettlementStatusDAO settlementStatusDAO;
     @Inject
     private CustomerDAO customerDAO;
     @Inject
-    private BaseRateControl baseRateControl;
+    private DBRDAO dbrDAO;
 
     @Inject
-    NCBDetailTransform ncbDetailTransform;
+    private BaseRateControl baseRateControl;
     @Inject
-    NCBTransform ncbTransform;
+    private UserSysParameterControl userSysParameterControl;
+
+    @Inject
+    private NCBDetailTransform ncbDetailTransform;
+    @Inject
+    private NCBTransform ncbTransform;
     @Inject
     private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
     public NCBInfoControl() {}
-
-    private final BigDecimal plusMRR = BigDecimal.valueOf(6);
-
 
     public void onSaveNCBToDB(NCBInfoView ncbInfoView, List<NCBDetailView> ncbDetailViewList, Customer customerInfo, long workCaseId) {
         log.info("onSaveNCBToDB begin");
@@ -123,6 +120,8 @@ public class NCBInfoControl extends BusinessControl {
             Date lastInfoDate = null;
 
             for(NCBDetailView ncbDetailView: ncbDetailViewList){
+                boolean isTDRFlag = false;
+                boolean isNPLFlag = false;
                 //get current payment
                 if(ncbDetailView.getCurrentPayment()!=null && ncbDetailView.getCurrentPayment().getNcbCode()!=null) {
                     if((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()) !=null)
@@ -143,6 +142,7 @@ public class NCBInfoControl extends BusinessControl {
 
                 //get TDR
                 if(ncbDetailView.getDateOfDebtRestructuring()!=null){
+                    isTDRFlag = true;
                     if(ncbDetailView.getTmbCheck()){
                         isTDRTMB = true;
                         if(lastTDRDateTMB!=null){
@@ -179,6 +179,7 @@ public class NCBInfoControl extends BusinessControl {
                         if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 6)
                                 || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 6))
                                 && ncbDetailView.getDateOfInfo()!=null) {
+                            isNPLFlag = true;
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
@@ -214,6 +215,7 @@ public class NCBInfoControl extends BusinessControl {
                         if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 7)
                                 || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 7))
                                 && ncbDetailView.getDateOfInfo()!=null) {
+                            isNPLFlag =true;
                             if(ncbDetailView.getTmbCheck()){
                                 isNPLTMB = true;
                                 if(lastNPLDateTMB!=null){
@@ -252,6 +254,18 @@ public class NCBInfoControl extends BusinessControl {
                     }
                 } else {
                     lastInfoDate = ncbDetailView.getDateOfInfo();
+                }
+
+                if(isNPLFlag){
+                    ncbDetailView.setNplFlag(RadioValue.YES.value());
+                } else {
+                    ncbDetailView.setNplFlag(RadioValue.NO.value());
+                }
+
+                if(isTDRFlag){
+                    ncbDetailView.setTdrFlag(RadioValue.YES.value());
+                } else {
+                    ncbDetailView.setTdrFlag(RadioValue.NO.value());
                 }
             }
 
@@ -439,14 +453,9 @@ public class NCBInfoControl extends BusinessControl {
 
     public List<NCBDetailView> getNCBForCalDBR(long workcaseId){
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
-        log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
+        log.debug("BegetNCBForCalDBRBR workCaseId :: {}", workcaseId);
+        DBR dbr = dbrDAO.findByWorkCaseId(workcaseId);
 
-        /*List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
-
-        if(customers == null || customers.size() == 0) return ncbDetailViews;
-
-        List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
-        List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();*/
         List<NCBDetail> ncbDetailList = ncbDetailDAO.getNCBForDBRList(workcaseId);
         log.debug("ncbDetails size:{}", ncbDetailList.size());
         AccountType accountType;
@@ -465,7 +474,16 @@ public class NCBInfoControl extends BusinessControl {
                 ncbDetailView.setInstallment(ncbDetail.getInstallment());
                 BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                BigDecimal dbrInterest = baseRateControl.getDBRInterest();
+                BigDecimal dbrInterest = baseRateControl.getMRRValue();
+                if(!Util.isNull(dbr) && dbr.getMarketableFlag() != 2) {
+                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+                    int dbrInt = 0;
+                    if(!Util.isNull(userSysParameterView)){
+                        dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
+                    }
+                    dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
+                }
+
                 switch (accountType.getCalculateType()){
                     case 1:
                         if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){

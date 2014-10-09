@@ -76,8 +76,8 @@
 	<field name="path" class="java.lang.String">
 		<fieldDescription><![CDATA[path]]></fieldDescription>
 	</field>
-	<field name="existingCreditTypeDetailViews" class="java.util.List">
-		<fieldDescription><![CDATA[existingCreditTypeDetailViews]]></fieldDescription>
+	<field name="existingCreditTypeDetailReports" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTypeDetailReports]]></fieldDescription>
 	</field>
 	<columnHeader>
 		<band height="17" splitType="Stretch">
@@ -142,7 +142,7 @@
 "" : $F{count}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="77f9dfdd-918a-4654-8caf-18e47d06e64a" style="detail" stretchType="RelativeToBandHeight" x="23" y="0" width="168" height="16"/>
+				<reportElement uuid="77f9dfdd-918a-4654-8caf-18e47d06e64a" style="detail" x="23" y="0" width="168" height="16"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -197,11 +197,22 @@
 			</textField>
 			<subreport>
 				<reportElement uuid="6d8d396d-bdb5-4e6d-9c26-cf1da0494033" stretchType="RelativeToBandHeight" x="191" y="0" width="144" height="16"/>
-				<dataSourceExpression><![CDATA[$F{existingCreditTypeDetailViews}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailViews})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTypeDetailReports})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path} + "DecisionReport_subCollateralBorrower_subExtBorrower.jasper"]]></subreportExpression>
 			</subreport>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="cefc3e61-96e6-42e0-8a8e-df0197955aa0" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="191" y="0" width="144" height="16"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font pdfFontName="fonts/TAHOMA.TTF"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

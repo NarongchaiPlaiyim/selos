@@ -55,7 +55,7 @@ public class InsuranceInformation implements Serializable {
 	private int approvedType;
 
 	// Total Premium
-	private BigDecimal total;
+	private BigDecimal total = BigDecimal.ZERO;
 
 	// *** Mode for check Add or Edit ***//
 	enum ModeForButton {
@@ -144,6 +144,12 @@ public class InsuranceInformation implements Serializable {
 		for (InsuranceInfoView view : insuranceInfoViewList) {
 			total = total.add(view.getPremium());
 		}
+		if ( BigDecimal.ZERO.equals(total)){
+			if (infoSummaryView.getTotalPremiumAmount() != null && infoSummaryView.getTotalPremiumAmount().intValue() > 0){
+				total = infoSummaryView.getTotalPremiumAmount();
+			}
+		}
+		
 	}
 
 	public List<InsuranceInfoView> getInsuranceInfoViewList() {

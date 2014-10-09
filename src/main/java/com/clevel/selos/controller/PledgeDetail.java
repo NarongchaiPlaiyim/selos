@@ -133,12 +133,17 @@ public class PledgeDetail implements Serializable {
 	@PostConstruct
 	private void init() {
 		HttpSession session = FacesUtil.getSession(false);
+        Map<String,Object> params = new HashMap<String, Object>();
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+            params = (Map<String,Object>)session.getAttribute("pledgeParams");
 		}
-		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
+		//Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
+        if(params!=null)
 		pledgeId = Util.parseLong(params.get("pledgeId"),-1);
+
+        log.debug("pledge detail : init (workCaseId: {}, stepId: {}, pldgedId: {})", workCaseId,stepId,pledgeId);
 		_loadFieldControl();
 		_loadInitData();
 	}
@@ -247,12 +252,16 @@ public class PledgeDetail implements Serializable {
 	 * Private method
 	 */
 	private void _loadInitData() {
+        log.debug("pledge detail : _loadInitData");
 		preRenderCheck = false;
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+            log.debug("_loadInitData (basicInfoView: {})",basicInfoView);
 		}
 		
 		pledgeInfoView = pledgeDetailControl.getPledgeInfoFull(pledgeId);
+        log.debug("_loadInitData (pledgeInfoView: {})",pledgeInfoView);
+
 		if (pledgeInfoView.getId() <= 0 || pledgeInfoView.getWorkCaseId() != workCaseId) {
 			String redirectPage = "/site/mortgageSummary.jsf";
 			try {

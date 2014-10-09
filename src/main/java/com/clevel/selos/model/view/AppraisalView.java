@@ -47,23 +47,19 @@ public class AppraisalView implements Serializable {
     private List<Long> removeCollListId;
 
     public AppraisalView(){
-        init();
+        reset();
     }
 
     public void reset(){
-        init();
-    }
-
-    private void init(){
-        appraisalCompany = new AppraisalCompany();
-        appraisalDivision = new AppraisalDivision();
-        locationOfProperty = new LocationProperty();
-        provinceOfProperty = new Province();
-        workCase = new WorkCase();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        removeCollListId = new ArrayList<Long>();
+        this.appraisalCompany = new AppraisalCompany();
+        this.appraisalDivision = new AppraisalDivision();
+        this.locationOfProperty = new LocationProperty();
+        this.provinceOfProperty = new Province();
+        this.appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+        this.contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+        this.appraisalContactDetailView = new AppraisalContactDetailView();
+        this.removeCollListId = new ArrayList<Long>();
+        this.workCase = new WorkCase();
 //        appraisalDate = DateTime.now().toDate();
 //        dueDate = DateTime.now().toDate();
 //        appointmentDate = DateTime.now().toDate();

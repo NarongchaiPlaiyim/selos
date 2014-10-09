@@ -19,8 +19,8 @@
 			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 		</box>
 	</style>
-	<field name="description" class="java.lang.String">
-		<fieldDescription><![CDATA[description]]></fieldDescription>
+	<field name="action" class="java.lang.String">
+		<fieldDescription><![CDATA[action]]></fieldDescription>
 	</field>
 	<field name="userName" class="java.lang.String">
 		<fieldDescription><![CDATA[userName]]></fieldDescription>
@@ -99,7 +99,7 @@
 				<reportElement uuid="83a8f89e-6319-4819-b6d3-6253ddd575a0" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="18" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{count}.intValue() == 0?
 "" : $F{count}]]></textFieldExpression>
@@ -108,15 +108,15 @@
 				<reportElement uuid="070c9939-74bb-4a51-bd71-51c3bb94cd66" style="detail" stretchType="RelativeToBandHeight" x="18" y="0" width="87" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{action}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="ede7ff38-5247-4ea3-ba76-6bc334624ddd" style="detail" stretchType="RelativeToBandHeight" x="105" y="0" width="87" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{userName}]]></textFieldExpression>
 			</textField>
@@ -124,7 +124,7 @@
 				<reportElement uuid="2d93d655-e3e1-4f0c-a7db-e83774a3f9fd" style="detail" stretchType="RelativeToBandHeight" x="192" y="0" width="87" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{roleDescription}]]></textFieldExpression>
 			</textField>
@@ -132,15 +132,15 @@
 				<reportElement uuid="cebba19b-32dd-4d83-875b-d60a1582851d" style="detail" stretchType="RelativeToBandHeight" x="279" y="0" width="87" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{titleName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
 				<reportElement uuid="5640ce1c-ecd3-45b8-8a74-bc8dae01a3b7" style="detail" stretchType="RelativeToBandHeight" x="366" y="0" width="87" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{submitDate}]]></textFieldExpression>
 			</textField>
@@ -148,7 +148,7 @@
 				<reportElement uuid="d463591f-6e4b-430b-beec-792953069158" style="detail" stretchType="RelativeToBandHeight" x="453" y="0" width="102" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comments}]]></textFieldExpression>
 			</textField>

@@ -2123,7 +2123,16 @@ public class PEDBExecute extends BusinessControl
         tableName = actionDAO.getRosterTableName();
         query = " select "+queryForRosterColumns+" from ";
 
-        queryChangeOwner = query +prefix+"."+tableName+ " where AppNumber in(" + applicationNos + ") or lower(CurrentUser) = lower('"+selectedUser+"')";
+        if(applicationNos != null && applicationNos.length() > 0)
+        {
+            queryChangeOwner = query +prefix+"."+tableName+ " where AppNumber in(" + applicationNos + ") or lower(CurrentUser) = lower('"+selectedUser+"')";
+        }
+
+        else
+        {
+            queryChangeOwner = query +prefix+"."+tableName+ " where lower(CurrentUser) = lower('"+selectedUser+"')";
+        }
+
 
         sqlpequery = queryChangeOwner;
         log.info("sql query for Changeowner search ::::::::::::::::::::::::::: {}", sqlpequery);

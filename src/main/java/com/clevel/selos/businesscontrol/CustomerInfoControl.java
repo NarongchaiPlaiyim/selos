@@ -152,43 +152,52 @@ public class CustomerInfoControl extends BusinessControl {
         if(customer.getIndividual().getMaritalStatus() != null
                 && customer.getIndividual().getMaritalStatus().getSpouseFlag() == 1){
 
-            customerInfoView.getSpouse().getCustomerEntity().setId(1);
+            if(!Util.isNull(customerInfoView.getSpouse())) {
 
-            //set marital status for spouse
-            customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
-            Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase, getCurrentUser());
+                if(!Util.isNull(customerInfoView.getSpouse().getCustomerEntity())) {
+                    customerInfoView.getSpouse().getCustomerEntity().setId(1);
+                } else {
+                    CustomerEntity customerEntity = new CustomerEntity();
+                    customerEntity.setId(1);
+                    customerInfoView.getSpouse().setCustomerEntity(customerEntity);
+                }
 
-            if(spouse.getCustomerOblInfo() != null){
-                customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
+                //set marital status for spouse
+                customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
+                Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase, getCurrentUser());
 
-                if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
-                    List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customer);
-                    if(customerOblAccountInfoList.size() > 0){
-                        deleteCustomerOblAccountInfo(customer);
-                        customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                if(spouse.getCustomerOblInfo() != null){
+                    customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
+
+                    if(customerInfoView.getCustomerOblAccountInfoViewList() != null && customerInfoView.getCustomerOblAccountInfoViewList().size() > 0){
+                        List<CustomerOblAccountInfo> customerOblAccountInfoList = customerTransform.getCustomerOblAccountInfo(customerInfoView, customer);
+                        if(customerOblAccountInfoList.size() > 0){
+                            deleteCustomerOblAccountInfo(customer);
+                            customerOblAccountInfoDAO.persist(customerOblAccountInfoList);
+                        }
                     }
                 }
+
+                if(spouse.getIsCommittee() == 1){
+                    Customer cusJuristic = customerDAO.findById(spouse.getJuristicId());
+                    BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
+                    BigDecimal share = spouse.getShares();
+                    BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
+                    spouse.setPercentShare(percentShare);
+                }
+
+                spouse.setIsSpouse(1);
+                spouse.setSpouseId(0);
+                customerDAO.persist(spouse);
+
+                customer.setSpouseId(spouse.getId());
+                customerDAO.persist(customer);
+
+                individualDAO.persist(spouse.getIndividual());
+                addressDAO.persist(spouse.getAddressesList());
             }
-
-            if(spouse.getIsCommittee() == 1){
-                Customer cusJuristic = customerDAO.findById(spouse.getJuristicId());
-                BigDecimal totalShare = cusJuristic.getJuristic().getTotalShare();
-                BigDecimal share = spouse.getShares();
-                BigDecimal percentShare = Util.multiply(Util.divide(share,totalShare),100);
-                spouse.setPercentShare(percentShare);
-            }
-
-            spouse.setIsSpouse(1);
-            spouse.setSpouseId(0);
-            customerDAO.persist(spouse);
-
-            customer.setSpouseId(spouse.getId());
-            customerDAO.persist(customer);
-
-            individualDAO.persist(spouse.getIndividual());
-            addressDAO.persist(spouse.getAddressesList());
-        }else if(customer.getIndividual().getMaritalStatus() != null
-                && customer.getIndividual().getMaritalStatus().getSpouseFlag() != 1){
+        } else if(customer.getIndividual().getMaritalStatus() != null
+                && customer.getIndividual().getMaritalStatus().getSpouseFlag() != 1) {
             if(customer.getSpouseId() != 0){
                 Customer cus = customerDAO.findById(customer.getSpouseId());
                 if(cus != null){
@@ -300,18 +309,34 @@ public class CustomerInfoControl extends BusinessControl {
 
         List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId());
         List<CustomerInfoView> cusIndViewList = new ArrayList<CustomerInfoView>();
+        List<CustomerInfoView> cusIndViewShowList = new ArrayList<CustomerInfoView>();
         if(cusIndList != null && cusIndList.size() > 0){
+            int index = 0;
             for (Customer cusInd : cusIndList){
                 CustomerInfoView cusIndView = customerTransform.transformToView(cusInd);
-                if(cusInd.getSpouseId() != 0){
+
+                cusIndView.setListIndex(index);
+                cusIndViewShowList.add(cusIndView);
+
+                if(!Util.isZero(cusInd.getSpouseId())){
                     Customer spouse = customerDAO.findById(cusInd.getSpouseId());
                     CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
+                    spouseInfoView.setListIndex(index);
                     cusIndView.setSpouse(spouseInfoView);
+                    if(!Util.isNull(spouseInfoView) && !Util.isNull(spouseInfoView.getReference())) {
+                        if(checkSpouseForShowOnJuristicScreen(spouseInfoView.getReference().getId())) {
+                            cusIndViewShowList.add(spouseInfoView);
+                        }
+                    }
                 }
-                cusIndViewList.add(cusIndView);
+
+                cusIndViewList.add(index, cusIndView);
+
+                index++;
             }
         }
         customerInfoView.setIndividualViewList(cusIndViewList);
+        customerInfoView.setIndividualViewForShowList(cusIndViewShowList);
         return customerInfoView;
     }
 
@@ -760,9 +785,19 @@ public class CustomerInfoControl extends BusinessControl {
             List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findByCustomerId(customerId);
             List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList = proposeCollateralSubOwnerDAO.findByCustomerId(customerId);
             List<ExistingGuarantorDetail> existingGuarantorDetails = existingGuarantorDetailDAO.findByCustomerId(customerId);
+            log.debug("#### openAccountNameList size :: {}", openAccountNameList != null ? openAccountNameList.size() : "nul");
+            log.debug("#### proposeGuarantorInfoList size :: {}", proposeGuarantorInfoList != null ? proposeGuarantorInfoList.size() : "nul");
+            log.debug("#### proposeCollateralSubOwnerList size :: {}", proposeCollateralSubOwnerList != null ? proposeCollateralSubOwnerList.size() : "nul");
+            log.debug("#### existingGuarantorDetails size :: {}", existingGuarantorDetails != null ? existingGuarantorDetails.size() : "nul");
             if(openAccountNameList != null && openAccountNameList.size() > 0){
-                isExist = true;
-                return isExist;
+                for(OpenAccountName openAccountName : openAccountNameList) {
+                    if(openAccountName.getOpenAccount() != null && openAccountName.getOpenAccount().getId() != 0) {
+                        isExist = true;
+                        return isExist;
+                    } else {
+                        openAccountNameDAO.delete(openAccountName);
+                    }
+                }
             } else if(proposeGuarantorInfoList != null && proposeGuarantorInfoList.size() > 0) {
                 isExist = true;
                 return isExist;
@@ -775,9 +810,9 @@ public class CustomerInfoControl extends BusinessControl {
             } else {
                 return isExist;
             }
-        } else {
-            return isExist;
         }
+
+        return isExist;
     }
 
     public CustomerInfoView getCustomerInfoViewById(long id, List<CustomerInfoView> customerInfoViewList) {
@@ -801,6 +836,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public boolean isDuplicateCustomerIndv(String citizenId, long customerId, long workCaseId){
+        log.debug("isDuplicateCustomerIndv :: citizenId : {}, customerId : {}, workCaseId : {}", citizenId, customerId, workCaseId);
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(citizenId, workCaseId);
         if(customer != null && customer.getId() != 0) {
             if(customer.getId() != customerId)
@@ -814,6 +850,14 @@ public class CustomerInfoControl extends BusinessControl {
         if(customer != null && customer.getId() != 0) {
             if(customer.getId() != customerId)
                 return true;
+        }
+        return false;
+    }
+
+    public boolean checkSpouseForShowOnJuristicScreen(int refId) {
+        //Juristic as Borrower
+        if(refId == 4 || refId == 5 || refId == 6 || refId == 7 || refId == 12 || refId == 13 || refId == 14 || refId == 18) {
+            return true;
         }
         return false;
     }

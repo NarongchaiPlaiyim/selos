@@ -21,7 +21,7 @@ public class MandateFieldClassStepActionDAO extends GenericDAO<MandateFieldClass
     public MandateFieldClassStepActionDAO() {
     }
 
-    public List<MandateFieldClassStepAction> findByActionAndCon(long stepId, long actionId){
+    public List<MandateFieldClassStepAction> findByStepAction(long stepId, long actionId){
         logger.debug("findByCriteria Step:{}, Action:{}", stepId, actionId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("step.id", stepId));
@@ -32,7 +32,7 @@ public class MandateFieldClassStepActionDAO extends GenericDAO<MandateFieldClass
     }
 
     public MandateFieldClassStepAction findByActionAndClass(long stepId, long actionId, long classId){
-        logger.debug("findByActionAndCon Step:{}, Action:{}", stepId, actionId);
+        logger.debug("findByStepAction Step:{}, Action:{}", stepId, actionId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("step.id", stepId));
         criteria.add(Restrictions.eq("action.id", actionId));

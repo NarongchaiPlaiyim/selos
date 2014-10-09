@@ -64,7 +64,7 @@ public class ProposeLine extends BaseController {
     @Inject
     private DisbursementTypeControl disbursementTypeControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
@@ -810,10 +810,13 @@ public class ProposeLine extends BaseController {
 
     public void onSaveProposeLine() {
         try {
+            HttpSession session = FacesUtil.getSession(false);
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
-            proposeLineControl.calWC(workCaseId);
-            exSummaryControl.calForCreditFacility(workCaseId);
-            fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
+            calculationControl.calWC(workCaseId);
+            calculationControl.calForProposeLine(workCaseId);
+            calculationControl.calculateFinalDBR(workCaseId);
+            fullApplicationControl.calculateApprovedPricingDOA(workCaseId, ProposeType.P, getCurrentStep(session));
 
             onCreation();
 

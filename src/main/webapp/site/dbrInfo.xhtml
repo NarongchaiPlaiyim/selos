@@ -45,7 +45,7 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td class="title">
+                                            <td class="title" style="min-width: 250px; width: 250px; max-width: 250px">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}"/>
                                                 <h:outputText value="#{dbrInfo.mandate('incomeFactor')}" styleClass="require-field"/>
                                                 <h:outputText value=" :"/>
@@ -57,22 +57,34 @@
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
-                                            <td style="min-width: 250px; width: 250px; max-width: 250px"></td>
-                                            <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
-                                                <h:outputText value="#{dbrInfo.mandate('DBRInterest')}" styleClass="require-field"/>
+                                            <td style="min-width: 150px; width: 150px; max-width: 150px"></td>
+                                            <td class="title" style="min-width: 350px; width: 350px; max-width: 350px">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrMarketableFlag')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('DBRMarketableFlag')}" styleClass="require-field"/>
                                                 <h:outputText value=" :"/>
                                             </td>
-                                            <td >
-                                                <p:inputText id="dbrInterest" maxlength="18" value="#{dbrInfo.dbr.dbrInterest}"
-                                                             readonly="#{dbrInfo.isDisabled('DBRInterest')}"
-                                                             style="text-align: right">
-                                                    <f:convertNumber  type="number" minFractionDigits="2" maxFractionDigits="2"/>
-                                                </p:inputText>
+                                            <td>
+                                                <p:selectOneMenu id="dbrMarketableFlag"
+                                                                 value="#{dbrInfo.dbr.dbrMarketableFlag}"
+                                                                 disabled="#{dbrInfo.isDisabled('DBRMarketableFlag')}">
+                                                    <f:selectItem itemLabel="#{msg.get('app.label.no')}" itemValue="1"/>
+                                                    <f:selectItem itemLabel="#{msg.get('app.label.yes')}" itemValue="2"/>
+                                                    <p:ajax event="change" process="@this" update="@this"/>
+                                                </p:selectOneMenu>
                                             </td>
-                                            <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest.MRR')}" styleClass="center"/>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td rowspan="5">
+                                                <table style="border: 1px solid #acacac; border-spacing: 0; margin-top: 10px;">
+                                                    <tr>
+                                                        <td style="min-width: 300px; width: 300px; max-width: 300px; margin-left: 2px;">
+                                                            <h:outputText value="#{msg.get('app.dbr.label.dbrMarketableFlagRemark')}" escape="false"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -87,7 +99,22 @@
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </p:inputText>
                                             </td>
-                                            <td colspan="3"></td>
+                                            <td></td>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('DBRInterest')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
+                                            </td>
+                                            <td >
+                                                <p:inputText id="dbrInterest" maxlength="18" value="#{dbrInfo.dbr.dbrInterest}"
+                                                             readonly="#{dbrInfo.isDisabled('DBRInterest')}"
+                                                             style="text-align: right">
+                                                    <f:convertNumber  type="number" minFractionDigits="3" maxFractionDigits="3"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest.MRR')}" styleClass="center"/>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -105,7 +132,7 @@
 
                                                 </p:inputText>
                                             </td>
-                                            <td colspan="3"></td>
+                                            <td colspan="4"></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -122,7 +149,20 @@
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>
                                             </td>
-                                            <td colspan="2"></td>
+                                            <td></td>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
+                                                <h:outputText value="#{dbrInfo.mandate('currentDBR')}" styleClass="require-field"/>
+                                                <h:outputText value=" :"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="currentDBR" maxlength="14" value="#{dbrInfo.dbr.currentDBR}"
+                                                             readonly="#{dbrInfo.isDisabled('currentDBR')}"
+                                                             style="text-align: right">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -137,23 +177,7 @@
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
-                                            <td style="min-width: 250px; width: 250px; max-width: 250px;"></td>
-                                            <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
-                                                <h:outputText value="#{dbrInfo.mandate('currentDBR')}" styleClass="require-field"/>
-                                                <h:outputText value=" :"/>
-                                            </td>
-                                            <td>
-                                                <p:inputText id="currentDBR" maxlength="14" value="#{dbrInfo.dbr.currentDBR}"
-                                                             readonly="#{dbrInfo.isDisabled('currentDBR')}"
-                                                             style="text-align: right">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </p:inputText>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" ></td>
-
+                                            <td></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
                                                 <h:outputText value="#{dbrInfo.mandate('DBRBeforeRequest')}" styleClass="require-field"/>
@@ -167,6 +191,7 @@
                                                     <p:ajax event="change" update=":frmMain:dbrBeforeRequest"/>
                                                 </p:inputText>
                                             </td>
+                                            <td></td>
                                         </tr>
                                     </table>
                                  </td>
@@ -389,8 +414,8 @@
 </p:panel>
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{dbrInfo.messageHeader}" message="#{dbrInfo.message}">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{dbrInfo.severity}"
+                     header="#{dbrInfo.messageHeader}" message="#{dbrInfo.message}" closable="false">
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"

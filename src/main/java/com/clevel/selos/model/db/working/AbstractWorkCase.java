@@ -94,6 +94,10 @@ public class AbstractWorkCase implements Serializable{
     @Column(name = "bpm_active", columnDefinition = "int default 1")
     protected int bpmActive;
 
+    @OneToOne
+    @JoinColumn(name = "cancel_step_id")
+    protected Step cancelStepId;
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -276,5 +280,13 @@ public class AbstractWorkCase implements Serializable{
 
     public void setCompleteDate(Date completeDate) {
         this.completeDate = completeDate;
+    }
+
+    public Step getCancelStepId() {
+        return cancelStepId;
+    }
+
+    public void setCancelStepId(Step cancelStepId) {
+        this.cancelStepId = cancelStepId;
     }
 }

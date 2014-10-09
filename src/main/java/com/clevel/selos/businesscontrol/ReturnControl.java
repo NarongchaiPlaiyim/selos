@@ -220,6 +220,25 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
+    public List<ReturnInfoView> getReturnNoReplyDetailList(long workCaseId, long workCasePrescreenId){
+        List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
+        if(workCaseId!=0 || workCasePrescreenId!=0){
+            List<ReturnInfo> returnInfoList;
+            if(workCaseId!=0){
+                returnInfoList = returnInfoDAO.findByNotReplyDetailList(workCaseId);
+            } else {
+                returnInfoList = returnInfoDAO.findByNotReplyDetailListPrescreen(workCasePrescreenId);
+            }
+
+            for(ReturnInfo returnInfo: returnInfoList){
+                ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(returnInfo);
+                returnInfoViews.add(returnInfoView);
+            }
+        }
+
+        return returnInfoViews;
+    }
+
     public List<ReturnInfoView> getReturnNoReviewList(long workCaseId, long workCasePrescreenId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
         if(workCaseId!=0 || workCasePrescreenId!=0){
@@ -605,6 +624,24 @@ public class ReturnControl extends BusinessControl {
         }
 
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void updateReplyDate(long workCaseId, long workCasePrescreenId) throws Exception {
+        List<ReturnInfo> returnInfoList;
+        if(workCaseId!=0){
+            returnInfoList = returnInfoDAO.findReturnList(workCaseId);
+        } else {
+            returnInfoList = returnInfoDAO.findReturnListPrescreen(workCasePrescreenId);
+        }
+
+        if(returnInfoList!=null && returnInfoList.size()>0){
+            Date replyDate = new Date();
+            for(int i=0; i<returnInfoList.size(); i++){
+                returnInfoList.get(i).setDateOfReply(replyDate);
+            }
+
+            returnInfoDAO.persist(returnInfoList);
+        }
     }
 
     public boolean getReturnHistoryHaveRG001(long workCaseId){

@@ -20,40 +20,37 @@
                     <h:form id="reportForm">
                         <ui:include src="../site/include/header_logo.xhtml"/>
                         <ui:include src="../site/include/menubar_isa.xhtml"/>
-                        <!-- L pane-->
-                        <div class="body_lpane">
-                            <label class="subject">Manage User</label>
-                            <a class="step_border" href="manageUser.xhtml">User Profile</a>
-                            <a class="step_border" href="userProfileUpload.xhtml">Upload User Profile</a>
-                            <label class="subject">Report</label>
-                            <a class="step_border_select" >ISA Reports</a>
-                        </div>
 
                         <div class="body_rpane">
                             <label class="subject">ISA Reports</label>
                             <table border="0">
                                 <tr>
-                                    <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                                    <td style="width: 300px; min-width: 300px; max-width: 300px;" />
-                                    <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                                    <td style="width: 300px; min-width: 300px; max-width: 300px;" />
+                                    <td style="width: 50px; min-width: 50px; max-width: 50px;" />
+                                    <td style="width: 200px; min-width: 200px; max-width: 300px;" />
+                                    <td style="width: 80px; min-width: 50px; max-width: 80px;" />
+                                    <td style="width: 220px; min-width: 220px; max-width: 220px;" />
+                                    <td style="width: 120px; min-width: 120px; max-width: 120px;" />
+                                    <td style="width: 220px; min-width: 220px; max-width: 220px;" />
                                     <td style="width: 120px; min-width: 120px; max-width: 120px;" />
 
                                 </tr>
                                 <tr>
+                                    <td class="title" colspan="2" >
+                                        <p:outputLabel value="รายงานสิทธิของกลุ่มผู้ใช้งาน : " />
+                                    </td>
                                     <td class="title" >
                                         <p:outputLabel value="จากวันที่ : " />
                                     </td>
-                                    <td >
+                                    <td>
                                         <clv:BECalendar value="#{isaReport.dateFrom}"
-                                                        id="dateOfFrom"
-                                                        showOn="button"
-                                                        pattern="dd/MM/yyyy"
-                                                        yearRange="1950:2100"
-                                                        mindate="01/01/1950"
-                                                        navigator="true"
-                                                        locale="th_TH"
-                                                        showButtonPanel="true">
+                                        id="dateOfFrom"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        navigator="true"
+                                        locale="th_TH"
+                                        showButtonPanel="true">
                                         </clv:BECalendar>
                                     </td>
                                     <td class="title" >
@@ -61,53 +58,21 @@
                                     </td>
                                     <td >
                                         <clv:BECalendar value="#{isaReport.dateTo}"
-                                                        id="dateOfTo"
-                                                        showOn="button"
-                                                        pattern="dd/MM/yyyy"
-                                                        yearRange="1950:2100"
-                                                        mindate="01/01/1950"
-                                                        navigator="true"
-                                                        locale="th_TH"
-                                                        showButtonPanel="true">
+                                        id="dateOfTo"
+                                        showOn="button"
+                                        pattern="dd/MM/yyyy"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        navigator="true"
+                                        locale="th_TH"
+                                        showButtonPanel="true">
                                         </clv:BECalendar>
                                     </td>
                                     <td>
                                         <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
-                                                         actionListener="#{isaReport.onPrintViolation()}"
-                                                         ajax="false" >
-                                        </p:commandButton>
-                                    </td >
-                                </tr>
-                                <tr>
-                                    <td class="title" colspan="2" >
-                                        <p:outputLabel value="รายงานผู้ใช้งานที่ไม่เข้าสู่ระบบมากกว่า 90 วัน : " />
-                                    </td>
-                                    <td>
-                                        <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
-                                                         actionListener="#{isaReport.onPrintLogonOver90()}"
-                                                         ajax="false" >
-                                        </p:commandButton>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title" colspan="2" >
-                                        <p:outputLabel value="รายงานการละเมิดหรือการเข้าสู่ระบบล้มเหลวของผู้ใช้งาน : " />
-                                    </td>
-                                    <td>
-                                        <!--<p:commandButton value="ส่งออกรายงาน" styleClass="medium"-->
-                                                         <!--update="@form"-->
-                                                         <!--ajax="false"-->
-                                                         <!--actionListener="#{isaReport.onPrintViolation()}" >-->
-                                        <!--</p:commandButton>-->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title" colspan="2" >
-                                        <p:outputLabel value="รายงานสิทธิของกลุ่มผู้ใช้งาน : " />
-                                    </td>
-                                    <td>
-                                        <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
-                                                         actionListener="#{isaReport.onPrintUserProfile()}"
+                                                         actionListener="#{isaReport.onPrintActivity()}"
+                                                         update=":msgBoxSystemMessagePanel, @form"
+                                                         allowTypes="/(\.|\/)(csv)$/"
                                                          ajax="false" >
                                         </p:commandButton>
                                     </td>

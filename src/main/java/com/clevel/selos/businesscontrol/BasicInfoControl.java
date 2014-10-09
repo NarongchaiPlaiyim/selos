@@ -63,6 +63,9 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     BPMExecutor bpmExecutor;
 
+    /*@Inject
+    ExSummaryControl exSummaryControl;*/
+
     @Inject
     public BasicInfoControl(){
 
@@ -311,25 +314,17 @@ public class BasicInfoControl extends BusinessControl {
             }
             openAccountDAO.persist(openAccount);
 
-            if(openAccount.getOpenAccountNameList() != null){
-                for (OpenAccountName oan : openAccount.getOpenAccountNameList()){
-                    OpenAccountName openAccountName = new OpenAccountName();
-                    openAccountName.setCustomer(oan.getCustomer());
-                    openAccountName.setOpenAccount(openAccount);
-                    openAccountNameDAO.persist(openAccountName);
-                }
+            if(!Util.isNull(openAccount.getOpenAccountNameList()) && !Util.isZero(openAccount.getOpenAccountNameList().size())){
+                openAccountNameDAO.persist(openAccount.getOpenAccountNameList());
             }
 
-            if(openAccount.getOpenAccountPurposeList() != null){
-                for (OpenAccountPurpose oap : openAccount.getOpenAccountPurposeList()){
-                    OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
-                    openAccountPurpose.setAccountPurpose(oap.getAccountPurpose());
-                    openAccountPurpose.setOpenAccount(openAccount);
-                    openAccPurposeDAO.persist(openAccountPurpose);
-                }
+            if(!Util.isNull(openAccount.getOpenAccountPurposeList()) && !Util.isZero(openAccount.getOpenAccountPurposeList().size())){
+                openAccPurposeDAO.persist(openAccount.getOpenAccountPurposeList());
             }
         }
 
+        //Update BOT Class
+        //exSummaryControl.calculateBOTClass(workCaseId);
         //update product group to BPM
         //bpmExecutor.updateProductGroup(basicInfo.get)
     }

@@ -100,6 +100,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private BigDecimal totalShare;
     private Country registrationCountry;
     private List<CustomerInfoView> individualViewList;
+    private List<CustomerInfoView> individualViewForShowList; // 24-09-14
     private Date documentIssueDate;
     private BigDecimal salesFromFinancialStmt;
     private BigDecimal shareHolderRatio;
@@ -119,7 +120,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private CustomerInfoView spouse;
 
     // for show in Summary
-//    private BigDecimal percentShareSummary;
     private String indLv; // new 11-12-13
     private String jurLv; // new 11-12-13
 
@@ -208,6 +208,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.sourceIncome = new IncomeSource();
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
+        this.individualViewForShowList = new ArrayList<CustomerInfoView>();
 //        this.percentShareSummary = BigDecimal.ZERO;
         this.unpaidFeeInsurance = BigDecimal.ZERO;
         this.pendingClaimLG = BigDecimal.ZERO;
@@ -647,14 +648,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    /*public List<ChildrenView> getChildrenList() {
-        return childrenList;
-    }
-
-    public void setChildrenList(List<ChildrenView> childrenList) {
-        this.childrenList = childrenList;
-    }*/
-
     public Country getCitizenCountry() {
         return citizenCountry;
     }
@@ -886,14 +879,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
         return isCommittee;
     }
 
-//    public BigDecimal getPercentShareSummary() {
-//        return percentShareSummary;
-//    }
-//
-//    public void setPercentShareSummary(BigDecimal percentShareSummary) {
-//        this.percentShareSummary = percentShareSummary;
-//    }
-
     public int getExistingSMECustomer() {
         return existingSMECustomer;
     }
@@ -1057,6 +1042,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setBusinessDescription(BusinessDescription businessDescription) {
         this.businessDescription = businessDescription;
+    }
+
+    public List<CustomerInfoView> getIndividualViewForShowList() {
+        return individualViewForShowList;
+    }
+
+    public void setIndividualViewForShowList(List<CustomerInfoView> individualViewForShowList) {
+        this.individualViewForShowList = individualViewForShowList;
     }
 
     @Override

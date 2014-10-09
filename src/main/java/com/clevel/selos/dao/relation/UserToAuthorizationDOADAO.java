@@ -28,10 +28,11 @@ public class UserToAuthorizationDOADAO extends GenericDAO<UserToAuthorizationDOA
     {
     }
 
-    List<Long> doaIdList = new ArrayList<Long>();
-
     public List<AuthorizationDOA> findbyusernameasid(String userName)
     {
+
+        log.info("User Name in findbyusernameasid : {}"+userName);
+
         Criteria cr = getSession().createCriteria(UserToAuthorizationDOA.class).setProjection(Projections.projectionList()
                       .add(Projections.property("doa_id"), "doa_id"))
                       .add(Restrictions.eq("userId",userName))
@@ -40,6 +41,8 @@ public class UserToAuthorizationDOADAO extends GenericDAO<UserToAuthorizationDOA
         List<UserToAuthorizationDOA> doaList = cr.list();
 
         Iterator it = doaList.iterator();
+
+        List<Long> doaIdList = new ArrayList<Long>();
 
         while(it.hasNext()==true)
         {

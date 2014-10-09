@@ -28,6 +28,7 @@ public class BaseController implements Serializable {
     private final HashMap<String, FieldsControlView> fieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, UserAccessView> userAccessMap = new HashMap<String, UserAccessView>();
+    private final HashMap<String, UserAccessView> userAccessMenuMap = new HashMap<String, UserAccessView>();
 
     protected void loadFieldControl(long workCaseId, Screen screenId, String ownerCaseUserId) {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
@@ -49,11 +50,12 @@ public class BaseController implements Serializable {
 
     }
 
-    protected void loadFieldControlPrescreen(long workCasePreScreenId, Screen screenId, String ownerCaseUserId) {
+    protected void loadFieldControlPreScreen(long workCasePreScreenId, Screen screenId, String ownerCaseUserId) {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
         HttpSession session = FacesUtil.getSession(false);
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlViewPreeScreen(workCasePreScreenId, stepId, screenId, ownerCaseUserId);
+        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+        List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlViewPreScreen(workCasePreScreenId, stepId, statusId, screenId, ownerCaseUserId);
         fieldMap.clear();
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
@@ -75,6 +77,13 @@ public class BaseController implements Serializable {
         if (field == null)
             return true;
         return field.isReadOnly();
+    }
+
+    public boolean isMandate(String name) {
+        FieldsControlView field = fieldMap.get(name);
+        if (field == null)
+            return true;
+        return field.isMandate();
     }
 
     public void setDisabledValue(String name, boolean disabled){
@@ -141,12 +150,35 @@ public class BaseController implements Serializable {
         }
     }
 
+    //Function for User Access Matrix
+    protected void loadUserAccessMenu(){
+        HttpSession session = FacesUtil.getSession(false);
+        long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
+        List<UserAccessView> userAccessViewList = userAccessControl.getUserAccessList(stepId);
+        userAccessMenuMap.clear();
+        for(UserAccessView userAccessView : userAccessViewList){
+            userAccessMenuMap.put(Integer.toString(userAccessView.getScreenId()), userAccessView);
+        }
+        log.debug("userAccessMenuMap : {}", userAccessMenuMap);
+    }
+
     /*public boolean isDialogMandate(String name) {
         FieldsControlView field = dialogFieldMap.get(name);
         if (field == null)
             return false;
         return field.isMandate();
     }*/
+
+    public boolean canAccessMenu(int screenId){
+        if(userAccessMenuMap.containsKey(Integer.toString(screenId))){
+            UserAccessView userAccessView = userAccessMenuMap.get(Integer.toString(screenId));
+            if(userAccessView == null)
+                return false;
+
+            return userAccessView.isAccessFlag();
+        }
+        return false;
+    }
 
     public boolean canAccess(Screen screen){
         String screenId = Integer.toString(screen.value());

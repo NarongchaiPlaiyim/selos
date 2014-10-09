@@ -9,7 +9,7 @@ import java.util.Date;
 public class ApprovalHistoryDecisionReport extends ReportModel{
 
     private int count;
-    private String description;
+    private String action;
     private String userName;
     private String roleDescription;
     private String titleName;
@@ -18,7 +18,7 @@ public class ApprovalHistoryDecisionReport extends ReportModel{
 
     public ApprovalHistoryDecisionReport() {
         count = 0;
-        description = "";
+        action = "";
         userName = "";
         roleDescription = "";
         titleName = "";
@@ -41,12 +41,12 @@ public class ApprovalHistoryDecisionReport extends ReportModel{
         this.comments = comments;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAction() {
+        return action;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAction(String action) {
+        this.action = action;
     }
 
     public String getRoleDescription() {
@@ -84,13 +84,13 @@ public class ApprovalHistoryDecisionReport extends ReportModel{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("comments", comments)
                 .append("count", count)
-                .append("description", description)
+                .append("action", action)
                 .append("userName", userName)
                 .append("roleDescription", roleDescription)
                 .append("titleName", titleName)
                 .append("submitDate", submitDate)
+                .append("comments", comments)
                 .toString();
     }
 }

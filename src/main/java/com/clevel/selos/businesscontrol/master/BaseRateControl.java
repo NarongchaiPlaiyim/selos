@@ -9,12 +9,9 @@ import com.clevel.selos.model.view.BaseRateView;
 import com.clevel.selos.transform.BaseRateTransform;
 import org.slf4j.Logger;
 
-import javax.ejb.Lock;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ejb.LockType;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +55,6 @@ public class BaseRateControl extends BusinessControl{
         BaseRateView baseRateView = baseRateViewMap.get(_baseRate.value());
         logger.debug("getBaseRate return baseRateView: {}", baseRateView);
         return baseRateView;
-    }
-
-    public BigDecimal getDBRInterest(){
-        // plus 6% MRR
-        return getMRRValue().add(BigDecimal.valueOf(6));
     }
 
     public BigDecimal getMRRValue(){

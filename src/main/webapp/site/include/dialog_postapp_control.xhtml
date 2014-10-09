@@ -79,14 +79,16 @@
 		<ui:param name="controller" value="#{postAppGeneral}"/>
 		<ui:param name="action" value="onRequestPriceReduction"/>
 	</ui:include>
-	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
-		<ui:param name="id" value="postApp_genAgreement_Dlg"/>
-		<ui:param name="name" value="p_postApp_genAgreement_Dlg"/>
-		<ui:param name="formId" value="postApp_genAgreement_DlgFrm"/>
-		<ui:param name="controller" value="#{postAppGeneral}"/>
-		<ui:param name="action" value="onGenerateAgreement"/>
-		<ui:param name="title" value="#{msg.get('app.postApp.dlg.genAgreement.title')}" />
-	</ui:include>
+    <ui:include src="/site/dialog/confirmActionDialog.xhtml">
+        <ui:param name="id" value="postApp_genAgreement_Dlg"/>
+        <ui:param name="name" value="p_postApp_genAgreement_Dlg"/>
+        <ui:param name="headerMessage" value="#{msg.get('app.postApp.dlg.gen.agreement.title')}"/>
+        <ui:param name="message" value="#{msg.get('app.postApp.dlg.gen.agreement.message')}"/>
+        <ui:param name="formId" value="postApp_genAgreement_DlgFrm"/>
+        <ui:param name="controller" value="#{postAppGeneral}"/>
+        <ui:param name="action" value="onGenerateAgreement"/>
+        <ui:param name="width" value="400"/>
+    </ui:include>
 	<ui:include src="/site/dialog/postAppSubmit02Dialog.xhtml">
 		<ui:param name="id" value="postApp_regenAgreement_Dlg"/>
 		<ui:param name="name" value="p_postApp_regenAgreement_Dlg"/>
@@ -127,5 +129,5 @@
 				type='button' onclick="p_postapp_result_dialog.hide()"
 				value="OK"/>
 		</p:panel>
-	</p:dialog>  
+	</p:dialog>
 </ui:composition>

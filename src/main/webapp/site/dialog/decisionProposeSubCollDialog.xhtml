@@ -12,12 +12,15 @@
                 <td class="title" style="width: 35%">
                     <p:outputLabel for="dlgSubCollateralType"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.collateralType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 65%">
                     <p:selectOneMenu id="dlgSubCollateralType"
                                      value="#{decision.approveCollateralInfoSubView.subCollateralType.id}"
                                      required="#{not empty param[saveSubCollButton.clientId]}"
-                                     style="min-width: 200px; width: 200px; max-width: 200px;">
+                                     style="min-width: 200px; width: 200px; max-width: 200px;"
+                                     disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.collateralType')}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.subCollateralTypeList}"
                                        var="subCollateralTypeItem"
@@ -31,10 +34,13 @@
                 <td class="title">
                     <p:outputLabel for="dlgSubCollTitleDeed"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.titleDeed')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollTitleDeed" value="#{decision.approveCollateralInfoSubView.titleDeed}"
-                                 required="#{not empty param[saveSubCollButton.clientId]}">
+                                 required="#{not empty param[saveSubCollButton.clientId]}"
+                                 readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.titleDeed')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -43,10 +49,13 @@
                 <td class="title">
                     <p:outputLabel for="dlgSubCollAddress"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.address')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollAddress" value="#{decision.approveCollateralInfoSubView.address}"
-                                 required="#{not empty param[saveSubCollButton.clientId]}">
+                                 required="#{not empty param[saveSubCollButton.clientId]}"
+                                 readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.address')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -55,10 +64,13 @@
                 <td class="title">
                     <p:outputLabel for="dlgSubCollLandOffice"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.landOffice')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollLandOffice" value="#{decision.approveCollateralInfoSubView.landOffice}"
-                                 required="#{not empty param[saveSubCollButton.clientId]}">
+                                 required="#{not empty param[saveSubCollButton.clientId]}"
+                                 readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.landOffice')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -67,10 +79,13 @@
                 <td class="title">
                     <p:outputLabel for="dlgSubCollOwnerAAD"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.collateralOwner')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.approveCollateralInfoSubView.collateralOwnerAAD}"
-                                 required="#{not empty param[saveSubCollButton.clientId]}">
+                                 required="#{not empty param[saveSubCollButton.clientId]}"
+                                 readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.collateralOwner')}">
                         <p:ajax event="blur" process="@this" update="@this"/>
                     </p:inputText>
                 </td>
@@ -78,6 +93,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.collateralName')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <table border="0" style="width: 100%">
@@ -86,7 +103,8 @@
                                 <p:selectOneMenu id="dlgSubCollOwnerUW"
                                                  value="#{decision.collOwnerId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
-                                                 required="#{not empty param[addCollOwnerUW.clientId]}">
+                                                 required="#{not empty param[addCollOwnerUW.clientId]}"
+                                                 disabled="#{decision.isDisabled('collateral.subcoll.collateralName')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.collateralOwnerUwAllList}"
                                                    var="collateralOwnerUWItem"
@@ -103,7 +121,8 @@
                                         styleClass="small"
                                         action="#{decision.onAddCollateralOwnerUW()}"
                                         process=":subCollateralDlgForm"
-                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                        disabled="#{decision.isDisabled('collateral.subcoll.collateralName')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -141,7 +160,8 @@
                                              icon="ui-icon-trash"
                                              process=":subCollateralDlgForm"
                                              actionListener="#{decision.onDeleteCollateralOwnerUW(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm"
+                                             disabled="#{decision.isDisabled('collateral.subcoll.collateralName.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -150,6 +170,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.mortgageType')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <table border="0" style="width: 100%">
@@ -158,7 +180,8 @@
                                 <p:selectOneMenu id="dlgSubCollMortgageType"
                                                  value="#{decision.mortgageTypeId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
-                                                 required="#{not empty param[addMortgageType.clientId]}">
+                                                 required="#{not empty param[addMortgageType.clientId]}"
+                                                 disabled="#{decision.isDisabled('collateral.subcoll.mortgageType')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.mortgageTypeViewList}"
                                                    var="mortgageTypeItem"
@@ -175,7 +198,8 @@
                                         styleClass="small"
                                         actionListener="#{decision.onAddMortgageType()}"
                                         process="@form"
-                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                        disabled="#{decision.isDisabled('collateral.subcoll.mortgageType')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -213,7 +237,8 @@
                                              icon="ui-icon-trash"
                                              process=":subCollateralDlgForm"
                                              actionListener="#{decision.onDeleteMortgageType(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm"
+                                             disabled="#{decision.isDisabled('collateral.subcoll.mortgageType.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -222,6 +247,8 @@
             <tr>
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.relatedWith')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <table border="0" style="width: 100%">
@@ -230,7 +257,8 @@
                                 <p:selectOneMenu id="dlgSubCollRelatedWith"
                                                  value="#{decision.relateWithSubId}"
                                                  style="min-width: 200px; width: 200px; max-width: 200px; margin-left: -2px;"
-                                                 required="#{not empty param[addRelationWith.clientId]}">>
+                                                 required="#{not empty param[addRelationWith.clientId]}"
+                                                 disabled="#{decision.isDisabled('collateral.subcoll.relatedWith')}">
                                     <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                     <f:selectItems value="#{decision.relateWithList}"
                                                    var="relatedWithItem"
@@ -247,7 +275,8 @@
                                         styleClass="small"
                                         action="#{decision.onAddRelatedWith()}"
                                         process="@form"
-                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
+                                        disabled="#{decision.isDisabled('collateral.subcoll.relatedWith')}">
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -285,7 +314,8 @@
                                              icon="ui-icon-trash"
                                              process=":subCollateralDlgForm"
                                              actionListener="#{decision.onDeleteRelatedWith(rowIndex)}"
-                                             update=":subCollateralDlgForm">
+                                             update=":subCollateralDlgForm"
+                                             disabled="#{decision.isDisabled('collateral.subcoll.relatedWith.removeButton')}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -296,6 +326,8 @@
                 <td class="title">
                     <p:outputLabel for="dlgSubCollAppraisalVal"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.appraisalValue')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollAppraisalVal"
@@ -305,7 +337,8 @@
                                  onkeydown="return onKeyDownNegMoney(event);"
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  required="#{not empty param[saveSubCollButton.clientId]}"
-                                 style="width:200px;text-align: right">
+                                 style="width:200px;text-align: right"
+                                 readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.appraisalValue')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -315,6 +348,8 @@
                 <td class="title">
                     <p:outputLabel for="dlgSubCollMortgageVal"
                                    value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
+                    <h:outputText value="#{decision.mandate('collateral.subcoll.mortgageValue')}" styleClass="require-field"/>
+                    <h:outputText value=" :"/>
                 </td>
                 <td class="left">
                     <p:inputText id="dlgSubCollMortgageVal"
@@ -324,7 +359,8 @@
                                  onkeydown="return onKeyDownNegMoney(event);"
                                  onkeypress="return onKeyPressNegMoney(event);"
                                  required="#{not empty param[addSubCollDlg.clientId]}"
-                                 style="width:200px;text-align: right">
+                                 style="width:200px;text-align: right"
+                                 readonly="#{decision.isDisabled('collateral.subcoll.mortgageValue')}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
@@ -342,13 +378,15 @@
                                      actionListener="#{decision.onSaveSubCollateral()}"
                                      process=":subCollateralDlgForm"
                                      update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
-                                     oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"
+                                     disabled="#{decision.mandate('collateral.subcoll.saveButton')}"/>
                     <p:spacer width="10" height="0"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
                                      update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
                                      action="#{decision.onCancelSubCollateralInfo()}"
-                                     oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'subCollateralInfoDlg')"
+                                     disabled="#{decision.mandate('collateral.subcoll.cancelButton')}"/>
                 </td>
             </tr>
             <tr>

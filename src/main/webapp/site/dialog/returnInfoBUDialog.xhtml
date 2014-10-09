@@ -55,11 +55,10 @@
                                              oncomplete="addReturnBUInfoDlg.show()"
                                              update=":frmMain:reasonBUId, :frmMain:remarkBU">
                             </p:commandButton>
-                            <p:commandButton title="Remove" process="@form"
+                            <p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfoBU.canEdit}"
-                                             action="#{headerController.onDeleteReturnBUInfo(rowIndex)}"
-                                             update=":frmMain:returnInfoBUDlgPanel">
+                                             oncomplete="confirmDeleteReturnBU.show()">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

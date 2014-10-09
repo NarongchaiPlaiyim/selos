@@ -80,7 +80,21 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.add(Restrictions.eq("challenge", 0));
+        criteria.add(Restrictions.or(Restrictions.eq("challenge", 0),Restrictions.isNull("replyDetail")));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findByNotAcceptList result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
+    public List<ReturnInfo> findByNotReplyDetailList(long workCaseId) {
+        log.info("findByNotAcceptList : {}", workCaseId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.isNull("replyDetail"));
         criteria.addOrder(Order.asc("id"));
         List<ReturnInfo> returnInfoList = criteria.list();
 
@@ -94,7 +108,21 @@ public class ReturnInfoDAO extends GenericDAO<ReturnInfo, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
-        criteria.add(Restrictions.eq("challenge", 0));
+        criteria.add(Restrictions.or(Restrictions.eq("challenge", 0),Restrictions.isNull("replyDetail")));
+        criteria.addOrder(Order.asc("id"));
+        List<ReturnInfo> returnInfoList = criteria.list();
+
+        log.info("findByNotReplyListPrescreen result size : {}", returnInfoList.size());
+
+        return returnInfoList;
+    }
+
+    public List<ReturnInfo> findByNotReplyDetailListPrescreen(long workCasePrescreenId) {
+        log.info("findByNotReplyListPrescreen : {}", workCasePrescreenId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        criteria.add(Restrictions.isNull("replyDetail"));
         criteria.addOrder(Order.asc("id"));
         List<ReturnInfo> returnInfoList = criteria.list();
 

@@ -154,6 +154,15 @@ public class LoginBean {
         // find user profile in database
         User user = userDAO.findById(userName.trim());
 
+        if(user == null){
+            String message = msg.get(ExceptionMapping.USER_NOT_FOUND, userName.trim());
+            log.debug("{}", message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            loginExceptionMessage = message;
+            RequestContext.getCurrentInstance().execute("blockUI.hide()");
+            return "failed";
+        }
+
 //        log.info("user id :{} ",user.getId());
 
 
@@ -171,8 +180,12 @@ public class LoginBean {
         }
         try
         {
-            log.info("team id is ::: {}",user.getTeam().getId());
-            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name(),user.getRole().getId(),user.getTeam().getId());
+            int teamId = 0;
+            if(user.getTeam() != null){
+                teamId = user.getTeam().getId();
+            }
+            log.info("team id is ::: {}", teamId);
+            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name(),user.getRole().getId(),teamId);
         }
         catch (EntityNotFoundException e)
         {

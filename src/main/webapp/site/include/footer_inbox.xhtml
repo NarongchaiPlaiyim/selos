@@ -2,17 +2,20 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
         >
     <div id="footer">
         <div id="footer_container">
             <span style="color:white; font-size:11px; font-weight:bold;">TMB SE-LOS application version. <h:outputText
                     value="#{msg.get('app.version')}"/></span><br class="clear"/><br/><br/>
                 <table style="color:white; font-size:11px;">
+                    <c:if test="#{index.checkInboxVisible}">
                     <tr>
                         <td style="width:130px; font-weight:bold;">
                             <h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/inbox.jsf" title="Inbox">Inbox</h:outputLink>
                         </td>
                     </tr>
+                    </c:if>
                     <tr>
                         <td style="font-weight: bold;">
                             <h:outputLink styleClass="bottom_menu" value="#{request.contextPath}/site/generic_search.jsf" title="Search">Search</h:outputLink>

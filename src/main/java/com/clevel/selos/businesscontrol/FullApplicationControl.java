@@ -7,16 +7,15 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelTeamUserDetailsDAO;
 import com.clevel.selos.dao.relation.UserToAuthorizationDOADAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.history.SubmitInfoHistory;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -35,6 +34,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -120,6 +120,10 @@ public class FullApplicationControl extends BusinessControl {
     private UWRuleResultSummaryDAO uwRuleResultSummaryDAO;
     @Inject
     private TCGDAO tcgDAO;
+    @Inject
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    private ProposeGuarantorInfoDAO proposeGuarantorInfoDAO;
 
     @Inject
     private ReturnInfoTransform returnInfoTransform;
@@ -130,16 +134,20 @@ public class FullApplicationControl extends BusinessControl {
 
     @Inject
     private AppraisalRequestControl appraisalRequestControl;
-    @Inject
-    private ActionValidationControl actionValidationControl;
+
     @Inject
     private ReturnControl returnControl;
+    @Inject
+    private MortgageSummaryControl mortgageSummaryControl;
 
     @Inject
     private BPMExecutor bpmExecutor;
 
     @Inject
     private STPExecutor stpExecutor;
+
+    @Inject
+    NCBInterface ncbInterface;
 
     public List<User> getABDMUserList(){
         User currentUser = getCurrentUser();
@@ -178,174 +186,12 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public void assignToABDM(String queueName, String wobNumber, String abdmUserId) throws Exception {
+        log.debug("Assign to ABDM : queueName : {}, wobNumber : {}, abdmUserId : {}", queueName, wobNumber, abdmUserId);
         bpmExecutor.assignToABDM(queueName, wobNumber, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
     }
 
-    //------ Function for Submit Case -------//
-    /*public void submitCAByBDM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, int overSLAReasonId, String overSLARemark, long workCaseId) throws Exception{
-        //Submit case from BDM to ZM ( Step 2001 )
-        log.debug("submitCAByBDM : queueName : {}, wobNumber : {}, zmUserId : {}, rgmUserId : {}, ghUserId : {}, cssoUserId : {}, submitRemark : {}, overSLAReasonId : {}, overSLARemark : {}, workCaseId : {}", queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, submitRemark, overSLAReasonId, workCaseId);
-
-        String productGroup;
-        String deviationCode = "";
-        String resultCode = "G";
-        int requestType = 0;
-        int appraisalRequestRequire = 0;
-        BigDecimal totalCommercial = BigDecimal.ZERO;
-        BigDecimal totalRetail = BigDecimal.ZERO;
-        User user = getCurrentUser();
-
-        if(workCaseId != 0){
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            if(workCase != null && workCase.getProductGroup() != null){
-                productGroup = Util.parseString(workCase.getProductGroup().getName(), "");
-                requestType = Util.parseInt(workCase.getRequestType().getId(), 0);
-                appraisalRequestRequire = Util.parseInt(workCase.getRequestAppraisalRequire(), 0);
-
-                //TODO: get total com and retail
-
-                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
-                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
-                    if(uwRuleResultSummary.getUwResultColor()!=null){
-                        resultCode = uwRuleResultSummary.getUwResultColor().code();
-                    }
-
-                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
-                        deviationCode = "AD";
-                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
-                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
-                        }
-                    }
-                }
-
-                //long stepId = workCase.getStep().getId();
-
-                bpmExecutor.submitZM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
-
-                //Insert Approval History
-                //Check if exist or not
-                //ApprovalHistory approvalHistory = approvalHistoryDAO.findExistingApprovalHistory(workCase.getId(), user.getId())
-                log.debug("submitCAByBDM : add approval History into ApprovalHistory");
-                ApprovalHistory approvalHistory = new ApprovalHistory();
-                approvalHistory.setComments(submitRemark);
-                approvalHistory.setRole(user.getRole());
-                approvalHistory.setStep(workCase.getStep());
-                approvalHistory.setSubmit(1);
-                approvalHistory.setSubmitDate(new Date());
-                approvalHistory.setUser(user);
-                approvalHistory.setWorkCase(workCase);
-                approvalHistoryDAO.persist(approvalHistory);
-            }
-        } else {
-            throw new Exception(msg.get("exception.submit.workitem.notfound"));
-        }
-    }
-
-    public void submitCAByZM(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, int overSLAReasonId, String overSLARemark, long workCaseId) throws Exception{
-        //Submit case from BDM to ZM ( Step 2001 )
-        log.debug("submitCAByZM : queueName : {}, wobNumber : {}, rgmUserId : {}, ghUserId : {}, cssoUserId : {}, submitRemark : {}, overSLAReasonId : {}, overSLARemark : {}, workCaseId : {}", queueName, wobNumber, rgmUserId, ghUserId, cssoUserId, submitRemark, overSLAReasonId, workCaseId);
-        WorkCase workCase;
-        String zmDecisionFlag = "";
-        String zmPricingRequestFlag = "";
-        BigDecimal totalCommercial = BigDecimal.ZERO; //TODO
-        BigDecimal totalRetail = BigDecimal.ZERO; //TODO
-        String resultCode = "G";
-        String deviationCode = "";
-        int requestType = 0;
-        int priceDOALevel = 0;
-        ApprovalHistory approvalHistoryEndorseCA = null;
-        ApprovalHistory approvalHistoryEndorsePricing = null;
-        boolean isPricingRequest = false;
-        if(workCaseId != 0){
-            workCase = workCaseDAO.findById(workCaseId);
-            priceDOALevel = workCase.getPricingDoaLevel();
-            isPricingRequest = Util.isTrue(workCase.getRequestPricing());
-            if(workCase != null && workCase.getProductGroup() != null){
-                requestType = workCase.getRequestType().getId();
-                if(isPricingRequest){
-                    approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
-                    //--Check for Decision from Zone --//
-                    if(approvalHistoryEndorseCA != null){
-                        if(approvalHistoryEndorseCA.getApproveDecision() != DecisionType.NO_DECISION.value()){
-                            zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                            approvalHistoryEndorseCA.setSubmit(1);
-                            approvalHistoryEndorseCA.setSubmitDate(new Date());
-                        } else {
-                            throw new Exception("Please make decision ( Endorse CA ) before submit.");
-                        }
-                    } else {
-                        throw new Exception("Please make decision before submit.");
-                    }
-                    //--Check for Decision (Pricing) from Zone--//
-                    if(approvalHistoryEndorsePricing != null){
-                        if(approvalHistoryEndorsePricing.getApproveDecision() != DecisionType.NO_DECISION.value()){
-                            if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
-                                zmPricingRequestFlag = "NA";
-                            } else {
-                                if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
-                                    zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
-                                } else {
-                                    zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                                }
-                            }
-                            approvalHistoryEndorsePricing.setSubmit(1);
-                            approvalHistoryEndorsePricing.setSubmitDate(new Date());
-                        } else {
-                            throw new Exception("Please make decision ( Endorse Pricing ) before submit.");
-                        }
-                    } else {
-                        throw new Exception("Please make decision ( Endorse Pricing ) before submit.");
-                    }
-
-                } else {
-                    approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
-                    if(approvalHistoryEndorseCA==null){
-                        throw new Exception("Please make decision before submit.");
-                    } else {
-                        if(approvalHistoryEndorseCA.getApproveDecision()==0){
-                            throw new Exception("Please make decision before submit.");
-                        }
-
-                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                        zmPricingRequestFlag = "NA";
-                        approvalHistoryEndorseCA.setSubmit(1);
-                        approvalHistoryEndorseCA.setSubmitDate(new Date());
-                    }
-                }
-
-                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
-                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
-                    if(uwRuleResultSummary.getUwResultColor()!=null){
-                        resultCode = uwRuleResultSummary.getUwResultColor().code();
-                    }
-
-                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
-                        deviationCode = "AD";
-                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
-                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
-                        }
-                    }
-                }
-
-                bpmExecutor.submitRM(queueName, wobNumber, zmDecisionFlag, zmPricingRequestFlag, totalCommercial, totalRetail, resultCode, deviationCode, requestType, ActionCode.SUBMIT_CA.getVal());
-
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
-                if(isPricingRequest){
-                    approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
-                }
-            }
-
-        } else {
-            throw new Exception(msg.get("exception.submit.workitem.notfound"));
-        }
-    }
-
-    public void submitCAByRGM(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, int overSLAReasonId, String overSLARemark, long workCaseId) throws Exception{
-
-    }*/
-
-    //------ Function for Submit CA BU ------//
+    //---------- Function for Submit Case ----------//
+    /** Submit CA form ABDM to BDM **/
     public void submitForABDM(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception{
         if(workCaseId != 0) {
             User user = getCurrentUser();
@@ -384,6 +230,7 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA from BDM to NextStep **/
     public void submitForBDM(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
         WorkCase workCase;
         String productGroup;
@@ -405,7 +252,11 @@ public class FullApplicationControl extends BusinessControl {
                 ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                 if(proposeLine != null) {
                     totalCommercial = proposeLine.getTotalExposure();
-                    totalRetail = proposeLine.getTotalPropose();
+                }
+
+                ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+                if(existingCreditFacility != null) {
+                    totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                 }
 
                 UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
@@ -458,11 +309,14 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA from ZM to NextStep **/
     public void submitForZM(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId, long stepId) throws Exception {
         if(workCaseId != 0){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if(workCase != null){
+                log.debug("submitForZM ::: stepId : {}", stepId);
                 if(stepId == StepValue.FULLAPP_ZM.value()){ //Submit case for ZM after BDM Submit ( normal flow )
+                    log.debug("submitForZM ::: stepId : FULLAPP_ZM [{}] Normal BU Flow...", stepId);
                     String zmDecisionFlag = "";
                     String zmPricingRequestFlag = "";
                     BigDecimal totalCommercial = BigDecimal.ZERO;   //TODO
@@ -481,9 +335,15 @@ public class FullApplicationControl extends BusinessControl {
 
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                     if(proposeLine != null) {
-                        totalCommercial = proposeLine.getTotalExposure();
-                        totalRetail = proposeLine.getTotalPropose();
+                        totalCommercial = proposeLine.getTotalExposure() != null ? proposeLine.getTotalExposure() : BigDecimal.ZERO;
                     }
+
+                    ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+                    if(existingCreditFacility != null) {
+                        totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
+                    }
+
+                    log.debug("submitForZM ::: totalCommercial : {}, totalRetail : {}", totalCommercial, totalRetail);
 
                     if(isPricingRequest){
                         approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
@@ -564,6 +424,7 @@ public class FullApplicationControl extends BusinessControl {
                         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
                     }
                 }else if(stepId == StepValue.CREDIT_DECISION_BU_ZM.value()){ //Submit case for ZM after BDM Submit ( F-CASH flow )
+                    log.debug("submitForZM ::: stepId : CREDIT_DECISION_BU_ZM [{}] F-Cash Flow...", stepId);
                     String zmDecisionFlag;
                     ApprovalHistory approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
                     if(approvalHistoryApprove==null){
@@ -590,6 +451,7 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA for ZM F-Cash 2nd time **/
     public void submitForZMFCash(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception{
         String zmDecisionFlag;
         ApprovalHistory approvalHistoryApprove;
@@ -602,7 +464,7 @@ public class FullApplicationControl extends BusinessControl {
                     approvalHistoryApprove.setSubmit(1);
                     approvalHistoryApprove.setSubmitDate(new Date());
 
-                    log.debug("submitForZMFCash ::: approvalHistory : {}", approvalHistoryApprove);
+                    log.debug("submitForZMFCash 2nd ::: approvalHistory : {}", approvalHistoryApprove);
 
                     bpmExecutor.submitForZMFCash(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
 
@@ -619,6 +481,7 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA for RGM to NextStep **/
     public void submitForRGM(String queueName, String wobNumber, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
         String rgmDecisionFlag;
         int priceDOALevel;
@@ -661,6 +524,7 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA for GH to NextStep **/
     public void submitForGH(String queueName, String wobNumber, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
         String ghDecisionFlag;
         WorkCase workCase;
@@ -702,6 +566,7 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA for CSSO to NextStep **/
     public void submitForCSSO(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
         String cssoDecisionFlag;
         ApprovalHistory approvalHistoryEndorsePricing = null;
@@ -726,6 +591,119 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    /** Submit CA for UW to Next Step **/
+    public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
+        String decisionFlag;
+        String haveRG001 = "N";
+        ApprovalHistory approvalHistoryEndorseCA = null;
+        AuthorizationDOA authorizationDOA = null;
+
+        if(uw2DOALevelId != 0) {
+            authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
+        }
+
+        if(workCaseId != 0){
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+
+            if(approvalHistoryEndorseCA==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                String appraisalRequired = workCase != null ? String.valueOf(workCase.getRequestAppraisalRequire()) : "0";
+
+                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
+                    haveRG001 = "Y";
+                }
+
+                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA != null ? authorizationDOA.getDescription() : "", decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
+
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistoryDAO.persist(approvalHistory);
+            }
+        }else{
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    /** Submit CA for UW2 to Next Step **/
+    public void submitForUW2(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
+        String decisionFlag;
+        String haveRG001 = "N";
+        ApprovalHistory approvalHistoryEndorseCA = null;
+
+        String insuranceRequired = "N";
+        String approvalFlag = "N";
+        String tcgRequired = "N";
+
+        if(workCaseId != 0){
+            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+
+            if(approvalHistoryEndorseCA==null){
+                throw new Exception("Please make decision before submit.");
+            } else {
+                decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+
+                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
+                    haveRG001 = "Y";
+                }
+
+                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                if(!Util.isNull(basicInfo)){
+                    approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
+                    tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
+                    insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
+                }
+
+                if(!decisionFlag.equals("R")) {
+                    mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                }
+
+                bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
+                log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistoryDAO.persist(approvalHistory);
+            }
+        }else{
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    /** Submit CA for BDM to UW **/
+    public void submitForBDMUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId) throws Exception{
+        bpmExecutor.submitForBDMUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), ActionCode.SUBMIT_CA.getVal());
+    }
+
+    /** Submit CA [ Function for merge remark for BPM ] **/
+    private String getRemark(String submitRemark, String slaRemark){
+        String remark = "";
+        if(!Util.isEmpty(submitRemark)){
+            remark = remark.concat(submitRemark);
+        }
+        if(!Util.isEmpty(slaRemark)){
+            remark = remark.concat(slaRemark);
+        }
+        return remark;
+    }
+
+    /** Submit CA [ Function to Check UW Decision ] **/
+    public boolean checkUWDecision(long workCaseId){
+        boolean isUWReject = false;
+        ApprovalHistory approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUser(workCaseId, getCurrentUserID());
+        if(!Util.isNull(approvalHistoryEndorseCA)){
+            if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
+                isUWReject = true;
+            }
+        }
+        return isUWReject;
+    }
+
+    /** Submit CA [ Function to Update Select BU User ] **/
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void saveSelectedUserBU(String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, long workCaseId){
         try {
@@ -748,269 +726,15 @@ public class FullApplicationControl extends BusinessControl {
             log.error("Exception while saveSelectedUserBU : ", ex);
         }
     }
+    //---------- End function for Submit UW ----------//
 
-    private String getRemark(String submitRemark, String slaRemark){
-        String remark = "";
-        if(!Util.isEmpty(submitRemark)){
-            remark = remark.concat(submitRemark);
-        }
-        if(!Util.isEmpty(slaRemark)){
-            remark = remark.concat(slaRemark);
-        }
-        return remark;
-    }
-    //------ End Function for Submit CA BU ----------//
-    //------ Function for Submit UW ----------------//
-    public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
-        String decisionFlag;
-        String haveRG001 = "N";
-        ApprovalHistory approvalHistoryEndorseCA = null;
-
-        AuthorizationDOA authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
-
-        if(workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
-
-            if(approvalHistoryEndorseCA==null){
-                throw new Exception("Please make decision before submit.");
-            } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
-
-                WorkCase workCase = workCaseDAO.findById(workCaseId);
-                String appraisalRequired = workCase != null ? String.valueOf(workCase.getRequestAppraisalRequire()) : "0";
-
-                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
-                    haveRG001 = "Y";
-                }
-
-                bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
-            }
-        }else{
-            throw new Exception(msg.get("exception.submit.workitem.notfound"));
-        }
-    }
-
-    public void submitForUW2(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
-        String decisionFlag;
-        String haveRG001 = "N";
-        ApprovalHistory approvalHistoryEndorseCA = null;
-
-        String insuranceRequired = "N";
-        String approvalFlag = "N";
-        String tcgRequired = "N";
-
-        if(workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
-
-            if(approvalHistoryEndorseCA==null){
-                throw new Exception("Please make decision before submit.");
-            } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
-
-                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
-                    haveRG001 = "Y";
-                }
-
-                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-                if(!Util.isNull(basicInfo)){
-                    approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
-                    tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
-                    insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
-                }
-
-                bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
-            }
-        }else{
-            throw new Exception(msg.get("exception.submit.workitem.notfound"));
-        }
-    }
-
-    public void submitForBDMUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId) throws Exception{
-        bpmExecutor.submitForBDMUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), ActionCode.SUBMIT_CA.getVal());
-    }
-    //------ End function for Submit UW ------------//
-
-
-    public void submitToRGMPriceReduce(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String zmPricingRequestFlag = "A";
-        WorkCase workCase;
-        ApprovalHistory approvalHistoryApprove = null;
-
-        if(workCaseId != 0){
-            workCase = workCaseDAO.findById(workCaseId);
-            int priceDOALevel = workCase.getPricingDoaLevel();
-            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
-            if(approvalHistoryApprove==null){
-                throw new Exception("Please make decision before submit.");
-            } else {
-                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
-                    if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
-                        zmPricingRequestFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
-                    } else {
-                        zmPricingRequestFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                    }
-                    approvalHistoryApprove.setSubmit(1);
-                    approvalHistoryApprove.setSubmitDate(new Date());
-                } else {
-                    throw new Exception("Please make decision before submit.");
-                }
-
-                bpmExecutor.submitRGMPriceReduce(queueName, wobNumber, zmPricingRequestFlag, ActionCode.SUBMIT_CA.getVal());
-
-                approvalHistoryDAO.persist(approvalHistoryApprove);
-            }
-        }
-    }
-
-    public void submitFCashZM(String queueName, String wobNumber, long workCaseId) throws Exception {
-        String zmDecisionFlag;
-        ApprovalHistory approvalHistoryApprove = null;
-
-        if(workCaseId != 0){
-            approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
-            if(approvalHistoryApprove==null){
-                throw new Exception("Please make decision before submit.");
-            } else {
-                if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
-                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                    approvalHistoryApprove.setSubmit(1);
-                    approvalHistoryApprove.setSubmitDate(new Date());
-                } else {
-                    throw new Exception("Please make decision before submit.");
-                }
-                log.debug("submitFCashZM ::: approvalHistory : {}", approvalHistoryApprove);
-                bpmExecutor.submitFCashZM(queueName, wobNumber, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
-
-                approvalHistoryDAO.persist(approvalHistoryApprove);
-            }
-        }else{
-            log.debug("submitFCashZM ::: workCaseId : {}", workCaseId);
-            throw new Exception("Exception while Submit Case, Could not found Work Item.");
-        }
-    }
-
-
-
-    /*public void submitToUWFromZM(String queueName, long workCaseId) throws Exception {
-        String zmDecisionFlag = "A";
-        WorkCase workCase;
-        ApprovalHistory approvalHistoryEndorsePricing = null;
-
-        if(Long.toString(workCaseId) != null && workCaseId != 0){
-            workCase = workCaseDAO.findById(workCaseId);
-            if(workCase.getProductGroup()!=null){
-                if(Util.isTrue(workCase.getRequestPricing())){
-                    approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId,getCurrentUser(),ApprovalType.PRICING_APPROVAL_FINAL.value());
-
-                    if(approvalHistoryEndorsePricing==null){
-                        throw new Exception("Please make decision before submit.");
-                    } else {
-                        if(approvalHistoryEndorsePricing.getApproveDecision() != 0){
-                            zmDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
-                            approvalHistoryEndorsePricing.setSubmit(1);
-                            approvalHistoryEndorsePricing.setSubmitDate(new Date());
-                        } else {
-                            throw new Exception("Please make decision before submit.");
-                        }
-                    }
-                }
-            }
-        }
-
-        bpmExecutor.submitUWFromZM(workCaseId, queueName, zmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
-
-        approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
-    }*/
-
-    /*public void submitToUW2(String uw2Name, long uw2DOALevelId, String remark, String queueName, long workCaseId) throws Exception {
-        String decisionFlag = "A";
-        String haveRG001 = "N"; //TODO
-        WorkCase workCase;
-        ApprovalHistory approvalHistoryEndorseCA = null;
-
-        AuthorizationDOA authorizationDOA = authorizationDOADAO.findById(uw2DOALevelId);
-
-        if(Long.toString(workCaseId) != null && workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
-
-            if(approvalHistoryEndorseCA==null){
-                throw new Exception("Please make decision before submit.");
-            } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
-                //approvalHistoryEndorseCA.setComments(remark);
-            }
-        }
-
-        bpmExecutor.submitUW2(workCaseId, queueName, uw2Name, authorizationDOA.getDescription(), decisionFlag, haveRG001, remark, ActionCode.SUBMIT_CA.getVal());
-        approvalHistoryDAO.persist(approvalHistoryEndorseCA);
-    }*/
-
-    public void submitCA(String wobNumber, String queueName, long workCaseId) throws Exception {
-        String decisionFlag = "A";
-        String haveRG001 = "N"; //TODO
-        WorkCase workCase;
-        ApprovalHistory approvalHistoryEndorseCA = null;
-
-        String insuranceRequired = "N";
-        String approvalFlag = "N";
-        String tcgRequired = "N";
-
-        if(Long.toString(workCaseId) != null && workCaseId != 0){
-            approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
-
-            if(approvalHistoryEndorseCA==null){
-                throw new Exception("Please make decision before submit.");
-            } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
-                approvalHistoryEndorseCA.setSubmit(1);
-                approvalHistoryEndorseCA.setSubmitDate(new Date());
-            }
-
-            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-            if(!Util.isNull(basicInfo)){
-                approvalFlag = basicInfo.getApproveResult().value() == 1 ? "Y" : "N";
-                tcgRequired = basicInfo.getTcgFlag() == 1 ? "Y" : "N";
-                insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
-            }
-        }
-
-        bpmExecutor.submitCA(wobNumber, queueName, decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
-        approvalHistoryDAO.persist(approvalHistoryEndorseCA);
-    }
-
-    /*public void requestAppraisalBDM(long workCasePreScreenId, long workCaseId) throws Exception{
-        //update request appraisal flag
-        if(workCasePreScreenId != 0){
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            workCasePrescreen.setRequestAppraisal(1);
-            workCasePrescreenDAO.persist(workCasePrescreen);
-        } else if(workCaseId != 0) {
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            workCase.setRequestAppraisal(1);
-            workCaseDAO.persist(workCase);
-        } else {
-            log.error("exception while Request Appraisal (BDM), can not find workcase or workcaseprescreen.");
-            throw new Exception("exception while Request Appraisal, can not find case.");
-        }
-    }*/
-
-    public void requestAppraisal(AppraisalView appraisalView, long workCasePreScreenId, long workCaseId) throws Exception{
-        //Update Request Appraisal Flag
+    //---------- Function for Appraisal ----------//
+    /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( PreScreen, Full App ) ] **/
+    public void requestAppraisal(long workCasePreScreenId, long workCaseId, long stepId) throws Exception{
         WorkCasePrescreen workCasePrescreen;
         WorkCase workCase;
-        String appNumber = "";
-        ProductGroup productGroup = null;
-        RequestType requestType = null;
 
-        //Create WorkCaseAppraisal
+        //Create WRK_APPRAISAL for workflow to update step and status
         WorkCaseAppraisal workCaseAppraisal = createWorkCaseAppraisal(workCasePreScreenId, workCaseId);
         log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
 
@@ -1034,15 +758,17 @@ public class FullApplicationControl extends BusinessControl {
             throw new Exception("Exception while Create Work Item for Appraisal.");
         }
 
+        ProposeLine newCreditFacility = null;
+
         if(workCasePreScreenId != 0){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
             if(workCasePrescreen != null){
                 workCasePrescreen.setRequestAppraisal(1);
-                appNumber = workCasePrescreen.getAppNumber();
-                productGroup = workCasePrescreen.getProductGroup();
-                requestType = workCasePrescreen.getRequestType();
+                workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTED_PARALLEL.value());
                 workCasePrescreenDAO.persist(workCasePrescreen);
+
+                newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             } else{
                 throw new Exception("exception while request appraisal, cause can not find data from prescreen");
             }
@@ -1051,10 +777,10 @@ public class FullApplicationControl extends BusinessControl {
 
             if(workCase != null){
                 workCase.setRequestAppraisal(1);
-                appNumber = workCase.getAppNumber();
-                productGroup = workCase.getProductGroup();
-                requestType = workCase.getRequestType();
+                workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTED_PARALLEL.value());
                 workCaseDAO.persist(workCase);
+
+                newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
             } else{
                 throw new Exception("exception while request appraisal, cause can not find data from full application");
             }
@@ -1064,20 +790,36 @@ public class FullApplicationControl extends BusinessControl {
         }
         log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
 
-        //Save Appraisal Request Detail
-        appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId);
-        log.debug("requestAppraisal ::: Save Appraisal Request Complete.");
+        ProposeType proposeType;
+        if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            proposeType = ProposeType.P;
+        }else{
+            proposeType = ProposeType.A;
+        }
+
+        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
+            for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
+                proposeCol.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                if(proposeCol.getProposeCollateralInfoHeadList() != null && proposeCol.getProposeCollateralInfoHeadList().size() > 0){
+                    for(ProposeCollateralInfoHead proposeColHead : proposeCol.getProposeCollateralInfoHeadList()){
+                        if(proposeColHead.getAppraisalRequest() == RequestAppraisalValue.READY_FOR_REQUEST.value()) {
+                            proposeColHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                        }
+                    }
+                }
+                newCollateralDAO.persist(proposeCol);
+            }
+        }
     }
 
-    //Request appraisal after Customer Acceptance
+    /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( Customer Acceptance ) ] **/
     public void requestAppraisal(long workCasePreScreenId, long workCaseId, String queueName, String wobNumber, String aadAdminUserName) throws Exception{
-        //Update Request Appraisal Flag
-
         if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
             try{
-                log.debug("requestAppraisal ::: Create WorkCaseAppraisal Complete.");
+                log.debug("requestAppraisal Customer Acceptance ::: Create WorkCaseAppraisal Complete.");
                 bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
-                log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
+                log.debug("requestAppraisal Customer Acceptance ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
                 log.error("Exception while Create Work Item for Appraisal. : ", ex);
                 throw ex;
@@ -1089,26 +831,120 @@ public class FullApplicationControl extends BusinessControl {
         log.debug("requestAppraisal ::: Update Request Appraisal Flag Complete.");
     }
 
+    /** Appraisal [ Request Appraisal - BDM at PreScreen/Full App ] **/
+    public void requestParallelAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
+        log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+
+        if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTING_PARALLEL.value());
+            workCaseDAO.persist(workCase);
+        } else if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.REQUESTING_PARALLEL.value());
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        }
+    }
+
+    /** Appraisal [ Cancel Appraisal - BDM at RequestAppraisal Screen ( PreScreen, Full App ) ] **/
+    public void cancelParallelRequestAppraisal(long workCasePreScreenId, long workCaseId, long stepId){
+        log.debug("cancelParallelRequestAppraisal : workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
+        ProposeLine newCreditFacility = null;
+        if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.NO_REQUEST.value());
+            workCasePrescreenDAO.persist(workCasePrescreen);
+            newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }else if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.NO_REQUEST.value());
+            workCaseDAO.persist(workCase);
+            newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }
+
+        //Set flag for Collateral to READY_TO_REQUEST
+        ProposeType proposeType;
+        if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            proposeType = ProposeType.P;
+        }else{
+            proposeType = ProposeType.A;
+        }
+
+        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
+            for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
+                proposeCol.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
+                if(proposeCol.getProposeCollateralInfoHeadList() != null && proposeCol.getProposeCollateralInfoHeadList().size() > 0){
+                    for(ProposeCollateralInfoHead proposeColHead : proposeCol.getProposeCollateralInfoHeadList()){
+                        proposeColHead.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
+                    }
+                }
+                newCollateralDAO.persist(proposeCol);
+            }
+        }
+    }
+
+    /** Appraisal [ Cancel Appraisal - BDM after Return from AAD Admin ] **/
+    public void cancelRequestAppraisal(String queueName, String wobNumber, int reasonId, String remark, long workCasePreScreenId, long workCaseId, long stepId) throws Exception {
+        //TODO Change Status for WorkCase/WorkCasePreScreen and flag for Collateral
+        log.debug("cancelParallelRequestAppraisal : workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
+        ProposeLine newCreditFacility = null;
+        if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setParallelAppraisalFlag(ParallelAppraisalStatus.NO_REQUEST.value());
+            workCasePrescreenDAO.persist(workCasePrescreen);
+            newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }else if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setParallelAppraisalFlag(ParallelAppraisalStatus.NO_REQUEST.value());
+            workCaseDAO.persist(workCase);
+            newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }
+
+        //Set flag for Collateral to READY_TO_REQUEST
+        ProposeType proposeType;
+        if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            proposeType = ProposeType.P;
+        }else{
+            proposeType = ProposeType.A;
+        }
+
+        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
+            for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
+                proposeCol.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
+                if(proposeCol.getProposeCollateralInfoHeadList() != null && proposeCol.getProposeCollateralInfoHeadList().size() > 0){
+                    for(ProposeCollateralInfoHead proposeColHead : proposeCol.getProposeCollateralInfoHeadList()){
+                        proposeColHead.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
+                    }
+                }
+                newCollateralDAO.persist(proposeCol);
+            }
+        }
+        bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_APPRAISAL.getVal(), getReasonDescription(reasonId), remark);
+    }
+
+    /** Appraisal [ Request Appraisal - BDM Create Parallel Appraisal Work Case ] **/
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public WorkCaseAppraisal createWorkCaseAppraisal(long workCasePreScreenId, long workCaseId) throws Exception {
-        //Find all data in WorkCase or WorkCasePreScreen
         WorkCasePrescreen workCasePrescreen;
         WorkCase workCase;
         String appNumber = "";
         ProductGroup productGroup = null;
         RequestType requestType = null;
-        log.debug("requestAppraisal ::: start...");
-        if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
+        log.debug("requestAppraisal ::: start... workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
+        if(!Util.isZero(workCasePreScreenId)){
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            log.debug("requestAppraisal ::: getAppNumber from workCasePrescreen : {}", workCasePrescreen);
+            log.debug("requestAppraisal ::: getAppNumber from workCasePreScreen : {}", workCasePrescreen);
             if(workCasePrescreen != null){
                 appNumber = workCasePrescreen.getAppNumber();
                 productGroup = workCasePrescreen.getProductGroup();
                 requestType = workCasePrescreen.getRequestType();
             } else{
+                log.error("exception while request appraisal, cause can not find data from prescreen");
                 throw new Exception("exception while request appraisal, cause can not find data from prescreen");
             }
-        }else if(Long.toString(workCaseId) != null && workCaseId != 0){
+        }else if(!Util.isZero(workCaseId)){
             workCase = workCaseDAO.findById(workCaseId);
             log.debug("requestAppraisal ::: getAppNumber from workCase : {}", workCase);
             if(workCase != null){
@@ -1134,10 +970,12 @@ public class FullApplicationControl extends BusinessControl {
         workCaseAppraisal.setRequestType(requestType);
         workCaseAppraisal.setAppraisalResult(1);
         workCaseAppraisalDAO.persist(workCaseAppraisal);
+        log.debug("createWorkCaseAppraisal : workCaseAppraisal : {}", workCaseAppraisal);
 
         return workCaseAppraisal;
     }
 
+    /** Appraisal [ Request Appraisal - BDM Check appraisal data ] **/
     public boolean checkAppraisalInformation(long workCaseId){
         Appraisal appraisal = null;
         boolean checkAppraisal = false;
@@ -1152,6 +990,7 @@ public class FullApplicationControl extends BusinessControl {
         return checkAppraisal;
     }
 
+    /** Appraisal [ Request Appraisal - BDM Check appointment data ] **/
     public boolean checkAppointmentInformation(long workCaseId, long workCasePreScreenId){
         Appraisal appraisal = null;
         boolean checkAppointment = false;
@@ -1172,22 +1011,23 @@ public class FullApplicationControl extends BusinessControl {
         return checkAppointment;
     }
 
-    public void submitToAADCommittee(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
-        log.debug("submitToAADCommittee ::: starting...");
+    /** Appraisal [ Submit Appraisal Appointment to Committee ] **/
+    public void submitForAADAdmin(String aadCommitteeUserId, long workCaseId, long workCasePreScreenId, String queueName, String wobNumber) throws Exception{
+        log.debug("submitForAADAdmin ::: starting...");
         String appNumber = "";
         Appraisal appraisal = null;
         if(!Util.isNull(workCaseId) && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             appNumber = workCase.getAppNumber();
-            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
-            log.debug("submitToAADCommittee ::: find workCase : {}", workCase);
+            log.debug("submitForAADAdmin ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitForAADAdmin ::: find workCase : {}", workCase);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             appNumber = workCasePrescreen.getAppNumber();
-            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
-            log.debug("submitToAADCommittee ::: find workCasePrescreen : {}", workCasePrescreen);
+            log.debug("submitForAADAdmin ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitForAADAdmin ::: find workCasePrescreen : {}", workCasePrescreen);
         }
 
         if(appraisal != null){
@@ -1197,29 +1037,32 @@ public class FullApplicationControl extends BusinessControl {
             //Save appointment date for appraisal work case
             if(!Util.isEmpty(appNumber)){
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-                log.debug("submitToAADCommittee ::: find workCaseAppraisal : {}", workCaseAppraisal);
+                log.debug("submitForAADAdmin ::: find workCaseAppraisal : {}", workCaseAppraisal);
                 if(!Util.isNull(workCaseAppraisal)) {
                     workCaseAppraisal.setAppointmentDate(appraisal.getAppointmentDate());
                     workCaseAppraisalDAO.persist(workCaseAppraisal);
-                    log.debug("submitToAADCommittee ::: save workCaseAppraisal : {}", workCaseAppraisal);
+                    log.debug("submitForAADAdmin ::: save workCaseAppraisal : {}", workCaseAppraisal);
                 }
                 long appraisalLocationCode = 0;
                 if(appraisal.getLocationOfProperty() != null){
                     appraisalLocationCode = appraisal.getLocationOfProperty().getCode();
                 }
-                bpmExecutor.submitAADCommittee(appNumber, aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
+                bpmExecutor.submitForAADAdmin(aadCommitteeUserId, DateTimeUtil.convertDateWorkFlowFormat(appraisal.getAppointmentDate()), appraisalLocationCode, queueName, ActionCode.SUBMIT_CA.getVal(), wobNumber);
             }
         } else {
             throw new Exception("Submit case failed, could not find appraisal data.");
         }
-        log.debug("submitToAADCommittee ::: end...");
+        log.debug("submitForAADAdmin ::: end...");
     }
 
-    public void submitToUWFromCommittee(String queueName, String wobNumber) throws Exception{
+    /** Appraisal [ Submit Appraisal Result to UW ] **/
+    public void submitForAADCommittee(String queueName, String wobNumber, long workCaseId, long workCasePreScreenId) throws Exception{
+        duplicateCollateralData(workCaseId, workCasePreScreenId);
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
+    //---------- End Function for Appraisal ----------//
 
-    public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
+    /*public void returnAADCommittee(String queueName, String wobNumber, String reason, String remark) throws Exception {
         bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
     }
 
@@ -1229,11 +1072,11 @@ public class FullApplicationControl extends BusinessControl {
         if(!Util.isNull(workCaseId) && !Util.isZero(workCaseId)){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             aadAdminName = appraisal.getAadAdmin()!=null?appraisal.getAadAdmin().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCase : {}", appraisal);
         }else if(!Util.isNull(workCasePreScreenId) && !Util.isZero(workCasePreScreenId)){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             aadAdminName = appraisal.getAadAdmin()!=null?appraisal.getAadAdmin().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCasePrescreen: {}", appraisal);
         }
 
         return aadAdminName;
@@ -1245,11 +1088,11 @@ public class FullApplicationControl extends BusinessControl {
         if(!Util.isNull(workCaseId) && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCase : {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCase : {}", appraisal);
         }else if(!Util.isNull(workCasePreScreenId) && workCasePreScreenId != 0){
             appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             aadCommitteeName = appraisal.getAadCommittee()!=null?appraisal.getAadCommittee().getUserName():"";
-            log.debug("submitToAADCommittee ::: find appraisal by workCasePrescreen: {}", appraisal);
+            log.debug("submitForAADAdmin ::: find appraisal by workCasePrescreen: {}", appraisal);
         }
 
         return aadCommitteeName;
@@ -1257,7 +1100,7 @@ public class FullApplicationControl extends BusinessControl {
 
     public void submitUW2FromAAD(){
 
-    }
+    }*/
 
     public void submitCustomerAcceptance(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
@@ -1299,18 +1142,22 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.restartCase(queueName, ActionCode.RESTART.getVal(), wobNumber);
     }
 
-    public void submitToBDM(String queueName, String wobNumber) throws Exception{
+    /*public void submitToBDM(String queueName, String wobNumber) throws Exception{
         bpmExecutor.submitCase(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
-    }
+    }*/
 
-    public void calculateApprovedPricingDOA(long workCaseId, ProposeType proposeType){
+    public void calculateApprovedPricingDOA(long workCaseId, ProposeType proposeType, long stepId){
+        boolean skipReduceFlag = false;
+        if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
+            skipReduceFlag = true;
+        }
         ProposeLine newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        workCase = calculatePricingDOA(workCase, newCreditFacility, proposeType);
+        workCase = calculatePricingDOA(workCase, newCreditFacility, proposeType, skipReduceFlag);
         workCaseDAO.persist(workCase);
     }
 
-    public WorkCase calculatePricingDOA(WorkCase workCase, ProposeLine newCreditFacility, ProposeType proposeType){
+    public WorkCase calculatePricingDOA(WorkCase workCase, ProposeLine newCreditFacility, ProposeType proposeType, boolean skipReduceFlag){
         log.debug("calculatePricingDOA ::: newCreditFacility : {}", newCreditFacility);
         PricingDOAValue pricingDOALevel = PricingDOAValue.NO_DOA;
 
@@ -1347,7 +1194,7 @@ public class FullApplicationControl extends BusinessControl {
                     int reducePricing = proposeCreditInfo.getReducePriceFlag();
                     //int reduceFrontEndFee = newCreditDetail.getReduceFrontEndFee();
                     if(proposeCreditInfo.getRequestType() == RequestTypes.NEW.value()) {
-                        if(proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1){
+                        if((proposeCreditInfo.getReduceFrontEndFee() == 1 || proposeCreditInfo.getReducePriceFlag() == 1) || skipReduceFlag){
                             //Check for Final Price first...
                             if(proposeCreditInfo.getProposeCreditInfoTierDetailList() != null && proposeCreditInfo.getProposeCreditInfoTierDetailList().size() > 0) {
                                 if (finalPrice != null) {
@@ -1550,10 +1397,6 @@ public class FullApplicationControl extends BusinessControl {
         return authorizationDOAList;
     }
 
-    public void cancelRequestAppraisal(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
-        bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_APPRAISAL.getVal(), getReasonDescription(reasonId), remark);
-    }
-
     public void cancelCA(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
         log.info("Cancel CA - queueName : {}, wobNumber : {}, reasonId : {}, remark : {}", queueName, wobNumber, reasonId, remark);
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), getReasonDescription(reasonId), remark);
@@ -1632,8 +1475,16 @@ public class FullApplicationControl extends BusinessControl {
                 }
 
                 List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                //Add default account name to check CSI
+                AccountInfoName accountInfoName = new AccountInfoName();
+                accountInfoName.setNameTh(customerInfoView.getFirstNameTh());
+                accountInfoName.setNameEn(customerInfoView.getFirstNameEn());
+                accountInfoName.setSurnameTh(customerInfoView.getLastNameTh());
+                accountInfoName.setSurnameEn(customerInfoView.getLastNameEn());
+                accountInfoNameList.add(accountInfoName);
+
                 for(CustomerAccountName customerAccountName : customerAccountNameList){
-                    AccountInfoName accountInfoName = new AccountInfoName();
+                    accountInfoName = new AccountInfoName();
 
                     accountInfoName.setNameTh(customerAccountName.getNameTh());
                     accountInfoName.setNameEn(customerAccountName.getNameEn());
@@ -1674,6 +1525,8 @@ public class FullApplicationControl extends BusinessControl {
                     List<CustomerCSI> customerCSIListDel = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
                     customerCSIDAO.delete(customerCSIListDel);
 
+                    customer.setCustomerCSIList(Collections.<CustomerCSI>emptyList());
+
                     if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
                             log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
@@ -1710,20 +1563,6 @@ public class FullApplicationControl extends BusinessControl {
                     throw ex;
                 }
             }
-        }
-    }
-
-    public void requestParallelAppraisal(long workCaseId, long workCasePreScreenId) throws Exception{
-        log.debug("requestParallelAppraisal ::: start, workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
-
-        if(!Util.isZero(workCaseId)){
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            workCase.setParallelAppraisalFlag(1);
-            workCaseDAO.persist(workCase);
-        } else if(!Util.isZero(workCasePreScreenId)){
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-            workCasePrescreen.setParallelAppraisalFlag(1);
-            workCasePrescreenDAO.persist(workCasePrescreen);
         }
     }
 
@@ -1899,17 +1738,16 @@ public class FullApplicationControl extends BusinessControl {
     public int calculateTCGFlag(long workCaseId){
         int tcgFlag = 0;
 
-        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
-
-        if(!Util.isNull(tcg)){
-            if(tcg.getTcgFlag() == RadioValue.YES.value())
-                tcgFlag = 1;
+        //Get all Approve Guarantor to find TCG As Guarantor
+        List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findApprovedTCGGuarantor(workCaseId);
+        if(Util.isSafetyList(proposeGuarantorInfoList) && proposeGuarantorInfoList.size() > 0){
+            tcgFlag = 1;
         }
 
         return tcgFlag;
     }
 
-    public User getUserOwnerByRole(long workCaseId, int roleId){
+    /*public User getUserOwnerByRole(long workCaseId, int roleId){
         WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getLatestWorkCaseOwnerByRole(workCaseId, roleId);
         User user = null;
         if(workCaseOwner != null){
@@ -1930,13 +1768,73 @@ public class FullApplicationControl extends BusinessControl {
         submitInfoHistory.setToUser(!toUserId.equalsIgnoreCase("")?userDAO.findById(toUserId):null);
         submitInfoHistory.setSubmitDate(new Date());
         submitInfoHistory.setSubmitType(submitType.value());
-    }
+    }*/
 
     public void duplicateFacilityData(long workCaseId){
         try {
             stpExecutor.duplicateFacilityData(workCaseId);
         }catch (Exception ex){
             log.error("Exception while duplicateFacilityData : ", ex);
+        }
+    }
+
+    public void duplicateCollateralData(long workCaseId, long workCasePreScreenId){
+        try {
+            stpExecutor.duplicateCollateralData(workCaseId, workCasePreScreenId);
+        }catch (Exception ex){
+            log.error("Exception while duplicateFacilityData : ", ex);
+        }
+    }
+
+    public void checkNCBReject(long workCasePreScreenId, long workCaseId) throws Exception{
+        log.debug("ncbResultValidation()");
+        UWRuleResultSummary uwRuleResultSummary = null;
+        if(!Util.isZero(workCasePreScreenId)) {
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+        }else if(!Util.isZero(workCaseId)){
+            uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+        }
+
+        boolean rejectedNCB = false;
+        if(!Util.isNull(uwRuleResultSummary)){
+            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
+                List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
+                if(Util.isSafetyList(uwRuleResultDetailList)){
+                    for(UWRuleResultDetail uwRuleResultDetail : uwRuleResultDetailList){
+                        if(uwRuleResultDetail.getUwRuleName() != null &&
+                                uwRuleResultDetail.getUwRuleName().getRuleGroup() != null &&
+                                uwRuleResultDetail.getUwRuleName().getRuleGroup().getName() != null &&
+                                uwRuleResultDetail.getUwRuleName().getRuleGroup().getName().equalsIgnoreCase("NCB")){
+                            if(uwRuleResultDetail.getUwDeviationFlag() != null &&
+                                    uwRuleResultDetail.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")){
+                                if(uwRuleResultDetail.getUwResultColor() == UWResultColor.RED){
+                                    log.debug("NCB Result is RED without Deviate, auto reject case!");
+                                    rejectedNCB = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(rejectedNCB){
+            ncbInterface.generateRejectedLetter(getCurrentUserID(), workCasePreScreenId, workCaseId);
+            //Update ncb reject flag
+            updateNCBRejectFlag(workCasePreScreenId, workCaseId, 1);
+        }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void updateNCBRejectFlag(long workCasePreScreenId, long workCaseId, int isNCBReject){
+        if(!Util.isZero(workCasePreScreenId)){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCasePrescreen.setNcbRejectFlag(isNCBReject);
+            workCasePrescreenDAO.persist(workCasePrescreen);
+        }else if(!Util.isZero(workCaseId)){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            workCase.setNcbRejectFlag(isNCBReject);
+            workCaseDAO.persist(workCase);
         }
     }
 }

@@ -65,7 +65,7 @@
                         	<p:column style="width:150px" styleClass="center"
 								headerText="#{msg.get('app.limitSetup.table.setupcomplete')}"
                         		>
-                        		<p:selectOneRadio value="#{item.isSetupCompleted}">
+                        		<p:selectOneRadio value="#{item.setupCompleted}">
                                      <f:selectItem
                                      	itemLabel="#{msg.get('app.button.yes')}" 
                                      	itemValue="2"/>
@@ -108,18 +108,34 @@
                         		</h:outputText>
                         	</p:column>
                         	<p:column style="width:100px" styleClass="right"
-                        		headerText="#{msg.get('app.limitSetup.table.installment')}"
-                        		>
-                        		<h:outputText value="#{item.installment}">
-                        			<f:convertNumber pattern="#,##0.00"/>
-                        		</h:outputText>
+                        		headerText="#{msg.get('app.limitSetup.table.installment')}">
+                                <!--  installment  -->
+                                <table class="table_noborder">
+                                    <ui:repeat varStatus="rowStatus"
+                                               value="#{item.proposeCreditInfoTierDetailViewList}"
+                                               var="creditItem">
+                                        <tr style="border-bottom: 1;">
+                                            <h:outputText value="#{creditItem.installment}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </h:outputText>
+                                        </tr>
+                                    </ui:repeat>
+                                </table>
                         	</p:column>
                         	<p:column style="width:80px" styleClass="right"
-                        		headerText="#{msg.get('app.limitSetup.table.tenor')}"
-                        		>
-                        		<h:outputText value="#{item.tenor}">
-                        			<f:convertNumber pattern="0"/>
-                        		</h:outputText>
+                        		headerText="#{msg.get('app.limitSetup.table.tenor')}">
+                                <!--  installment  -->
+                                <table class="table_noborder">
+                                    <ui:repeat varStatus="rowStatus"
+                                               value="#{item.proposeCreditInfoTierDetailViewList}"
+                                               var="creditItem">
+                                        <tr style="border-bottom: 1;">
+                                            <h:outputText value="#{creditItem.tenor}">
+                                                <f:convertNumber pattern="0"/>
+                                            </h:outputText>
+                                        </tr>
+                                    </ui:repeat>
+                                </table>
                         	</p:column>
                         	
                         	

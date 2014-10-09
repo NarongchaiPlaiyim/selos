@@ -55,11 +55,10 @@
                                              oncomplete="addReturnBDMInfoDlg.show()"
                                              update=":frmMain:reasonBDMId, :frmMain:remarkBDM">
                             </p:commandButton>
-                            <p:commandButton title="Remove" process="@form"
+                            <p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfoBDM.canEdit}"
-                                             action="#{headerController.onDeleteReturnBDMInfo(rowIndex)}"
-                                             update=":frmMain:returnInfoBDMDlgPanel">
+                                             oncomplete="confirmDeleteReturnBDM.show()">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

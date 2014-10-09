@@ -1,11 +1,9 @@
 package com.clevel.selos.model.view.master;
 
 
-import com.clevel.selos.model.MandateFieldType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserSysParameterKey;
-import com.clevel.selos.model.view.ActionView;
-import com.clevel.selos.model.view.StepView;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,13 +11,11 @@ import java.io.Serializable;
 
 public class MandateFieldView implements Serializable{
     private long id;
-    private ActionView actionView;
-    private StepView stepView;
     private MandateFieldClassView mandateFieldClassView;
     private String fieldName;
     private String fieldDesc;
     private String page;
-    private MandateFieldType mandateFieldType;
+    private boolean checkFieldDetail;
     private String minValue;
     private String maxValue;
     private String matchedValue;
@@ -27,7 +23,6 @@ public class MandateFieldView implements Serializable{
     private String notMatchedValue;
     private int notMatchedEmpty;
     private boolean needUpdate;
-    private String parameterizedName;
 
     public long getId() {
         return id;
@@ -35,22 +30,6 @@ public class MandateFieldView implements Serializable{
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public ActionView getActionView() {
-        return actionView;
-    }
-
-    public void setActionView(ActionView actionView) {
-        this.actionView = actionView;
-    }
-
-    public StepView getStepView() {
-        return stepView;
-    }
-
-    public void setStepView(StepView stepView) {
-        this.stepView = stepView;
     }
 
     public MandateFieldClassView getMandateFieldClassView() {
@@ -85,12 +64,12 @@ public class MandateFieldView implements Serializable{
         this.page = page;
     }
 
-    public MandateFieldType getMandateFieldType() {
-        return mandateFieldType;
+    public boolean isCheckFieldDetail() {
+        return checkFieldDetail;
     }
 
-    public void setMandateFieldType(MandateFieldType mandateFieldType) {
-        this.mandateFieldType = mandateFieldType;
+    public void setCheckFieldDetail(boolean checkFieldDetail) {
+        this.checkFieldDetail = checkFieldDetail;
     }
 
     public String getMinValue() {
@@ -149,14 +128,6 @@ public class MandateFieldView implements Serializable{
         this.needUpdate = needUpdate;
     }
 
-    public String getParameterizedName() {
-        return parameterizedName;
-    }
-
-    public void setParameterizedName(String parameterizedName) {
-        this.parameterizedName = parameterizedName;
-    }
-
     public void updateValues(MandateFieldView view){
         id = view.id;
         fieldName = view.fieldName;
@@ -164,6 +135,7 @@ public class MandateFieldView implements Serializable{
         page = view.page;
         minValue = view.minValue;
         maxValue = view.maxValue;
+        checkFieldDetail = view.checkFieldDetail;
 
         matchedEmpty = view.matchedEmpty;
         if(view.matchedEmpty == RadioValue.YES.value()){
@@ -185,13 +157,10 @@ public class MandateFieldView implements Serializable{
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("actionView", actionView)
-                .append("stepView", stepView)
                 .append("mandateFieldClassView", mandateFieldClassView)
                 .append("fieldName", fieldName)
                 .append("fieldDesc", fieldDesc)
                 .append("page", page)
-                .append("mandateFieldType", mandateFieldType)
                 .append("minValue", minValue)
                 .append("maxValue", maxValue)
                 .append("matchedValue", matchedValue)

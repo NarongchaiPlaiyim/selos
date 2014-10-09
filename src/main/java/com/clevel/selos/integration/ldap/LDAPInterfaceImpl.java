@@ -109,6 +109,10 @@ public class LDAPInterfaceImpl implements LDAPInterface {
             result = msg.get(ExceptionMapping.USER_OR_PASS_INCORRECT);
         } else if ("775".equals(LDAPErrorCode)) {
             result = msg.get(ExceptionMapping.USER_LOCKED);
+        } else if ("533".equals(LDAPErrorCode)){
+            result = msg.get(ExceptionMapping.USER_STATUS_DISABLED);
+        } else if ("999".equals(LDAPErrorCode)){
+            result = msg.get(ExceptionMapping.USER_OTHER_EXCEPTION);
         } else {
             result = LDAPErrorCode;
         }

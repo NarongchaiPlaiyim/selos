@@ -136,10 +136,15 @@
                 SUBMITTING CASE<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
+            <p:blockUI block="pnl_maincontainer" widgetVar="blockUIRedirect">
+                Redirecting to Inbox<br/>
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </p:panel>
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
             <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                             closable="false" closeOnEscape="false"
                              header="#{prescreenChecker.messageHeader}" >
                 <f:facet name="message">
                     <h:outputText value="#{prescreenChecker.message}" escape="false"/>
@@ -152,6 +157,7 @@
         </p:panel>
         <p:panel id="msgBoxRedirectPanel" styleClass="panel">
             <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                             closable="false" closeOnEscape="false"
                              header="#{prescreenChecker.messageHeader}" >
                 <f:facet name="message">
                     <h:outputText value="#{prescreenChecker.message}" escape="false"/>
@@ -159,6 +165,7 @@
                 <p:commandButton value="OK"
                                  process="@this"
                                  actionListener="#{headerController.onGoToInbox()}"
+                                 onclick="PF('blockUIRedirect').show()"
                                  oncomplete="msgBoxRedirectDlg.hide()" />
             </p:confirmDialog>
         </p:panel>

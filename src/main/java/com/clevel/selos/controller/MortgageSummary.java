@@ -172,26 +172,56 @@ public class MortgageSummary implements Serializable {
 		_loadInitData(true);
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
-	public String clickMorgageDetail(long id) {
+	public void clickMorgageDetail(long id) {
+        log.debug("clickMorgageDetail (id : {})",id);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("mortgageId", id);
 		map.put("fromPage", "mortgageSummary");
 		FacesUtil.getFlash().put("mortgageParams",map);
-		return "mortgageDetail?faces-redirect=true";
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("mortgageParams", map);
+        String redirectPage = "/site/mortgageDetail.jsf";
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath()+redirectPage);
+        } catch (IOException e) {
+            log.error("Fail to redirect screen to "+redirectPage,e);
+        }
+		//return "mortgageDetail?faces-redirect=true";
 	}
-	public String clickPledgeDetail(long id) {
+	public void clickPledgeDetail(long id) {
+        log.debug("clickPledgeDetail (id : {})",id);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("pledgeId", id);
 		map.put("fromPage", "mortgageSummary");
 		FacesUtil.getFlash().put("pledgeParams",map);
-		return "pledgeDetail?faces-redirect=true";
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("pledgeParams", map);
+        String redirectPage = "/site/pledgeDetail.jsf";
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath()+redirectPage);
+        } catch (IOException e) {
+            log.error("Fail to redirect screen to "+redirectPage,e);
+        }
+		//return "pledgeDetail?faces-redirect=true";
 	}
-	public String clickGuarantorDetail(long id) {
+	public void clickGuarantorDetail(long id) {
+        log.debug("clickGuarantorDetail (id : {})",id);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("guarantorId", id);
 		map.put("fromPage", "mortgageSummary");
 		FacesUtil.getFlash().put("guarantorParams",map);
-		return "guarantorDetail?faces-redirect=true";
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("guarantorParams", map);
+        String redirectPage = "/site/guarantorDetail.jsf";
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath()+redirectPage);
+        } catch (IOException e) {
+            log.error("Fail to redirect screen to "+redirectPage,e);
+        }
+		//return "guarantorDetail?faces-redirect=true";
 	}
 	public void onCancelMortgageSummary() {
 		_loadInitData(true);
@@ -216,6 +246,20 @@ public class MortgageSummary implements Serializable {
 		mortgageInfos = mortgageSummaryControl.getMortgageInfoList(workCaseId);
 		pledgeInfos = mortgageSummaryControl.getPledgeInfoList(workCaseId);
 		guarantorInfos = mortgageSummaryControl.getGuarantorInfoList(workCaseId);
+		
+		//init agreement 
+		switch(agreementInfoView.getSigningLocation()) {
+			case BRANCH :
+				locations = branches;
+				break;
+			case ZONE :
+				locations = zones;
+				break;
+			default:
+				locations = Collections.emptyList();
+				break;
+		}
+		
 	}
 	
 	/*

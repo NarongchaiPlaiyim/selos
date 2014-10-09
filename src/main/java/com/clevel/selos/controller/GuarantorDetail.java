@@ -91,11 +91,14 @@ public class GuarantorDetail implements Serializable {
 	private void init() {
 		log.info("Construct");
 		HttpSession session = FacesUtil.getSession(false);
+        Map<String,Object> params = new HashMap<String, Object>();
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+            params = (Map<String,Object>)session.getAttribute("guarantorParams");
 		}
-		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
+		//Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
+        if(params!=null)
 		guarantorId = Util.parseLong(params.get("guarantorId"),-1);
 		_loadFieldControl();
 		_loadInitData();

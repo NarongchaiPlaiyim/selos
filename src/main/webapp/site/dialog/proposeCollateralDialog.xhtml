@@ -170,7 +170,8 @@
                         </p:columnGroup>
 
                         <p:column styleClass="center">
-                            <p:selectBooleanCheckbox value="#{creditTypeItem.noFlag}" disabled="#{proposeLine.isDisabled('collateral.creditType')}">
+                            <p:selectBooleanCheckbox value="#{creditTypeItem.noFlag}"
+                                                     disabled="#{proposeLine.isDisabled('collateral.creditType')}">
                                 <p:ajax listener="#{proposeLine.onCheckNoFlag(creditTypeItem)}"/>
                             </p:selectBooleanCheckbox>
                         </p:column>
@@ -211,7 +212,7 @@
                 <td class="left" colspan="3">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.bdmComments}"
                                      cols="100" rows="3"
-                                     readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.BDMComments')}">
+                                     readonly="#{proposeLine.isDisabled('collateral.BDMComments')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
                 </td>
@@ -284,7 +285,7 @@
                                      onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)"
                                      style="width:200px;text-align: right"
-                                     readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.headcoll.existingCredit')}}">
+                                     readonly="#{proposeLine.isDisabled('collateral.headcoll.existingCredit')}}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
@@ -351,7 +352,7 @@
                                          value="#{collHeadDetView.headCollType.id}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;"
                                          required="#{not empty param[btnSaveCollateral.clientId]}"
-                                         disabled="#{collHeadDetView.haveSubColl or proposeLine.isDisabled('collateral.headcoll.headCollType')}">
+                                         disabled="#{proposeLine.proposeCollateralInfoView.coms or collHeadDetView.haveSubColl or proposeLine.isDisabled('collateral.headcoll.headCollType')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                             <f:selectItems value="#{proposeLine.headCollTypeViewList}"
                                            var="headCollateralTypeItem"
@@ -369,7 +370,7 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneRadio value="#{collHeadDetView.insuranceCompany}"
-                                          disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.headcoll.insuranceCompany')}">
+                                          disabled="#{proposeLine.isDisabled('collateral.headcoll.insuranceCompany')}">
                             <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
                             <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
                             <p:ajax event="click" update="@this"/>
@@ -489,7 +490,7 @@
                                                  update=":subCollateralDlgForm"
                                                  process="@this"
                                                  oncomplete="subCollateralInfoDlg.show();"
-                                                 disabled="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.subcoll.editButton')}">
+                                                 disabled="#{proposeLine.isDisabled('collateral.subcoll.editButton')}">
                                     <f:setPropertyActionListener value="#{rowIndex}" target="#{proposeLine.rowSubCollIndex}"/>
                                     <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{proposeLine.proposeCollateralInfoSubView}"/>
                                     <p:resetInput target=":subCollateralDlgForm"/>
@@ -533,9 +534,10 @@
                     <p:spacer width="10" height=""/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
+                                     onclick="PF('blockCollateralDlg').show()"
+                                     onsuccess="blockCollateralDlg.hide()"
                                      update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      action="#{proposeLine.onCancelCollateralInfo()}"
-                                     disabled="#{proposeLine.isDisabled('collateral.cancelButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'collateralInfoDlg')"/>
                 </td>
             </tr>
@@ -545,11 +547,9 @@
             </tr>
         </table>
     </h:form>
+    <p:blockUI widgetVar="blockCollateralDlg" block="collateralDlgPanel" trigger=":collateralDlgForm:btnSaveCollateral,:collateralDlgForm:retrieveButton">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
-
-<p:blockUI widgetVar="blockCollateralDlg" block="collateralDlgPanel" trigger=":collateralDlgForm:btnSaveCollateral,:collateralDlgForm:retrieveButton">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
-
 </ui:composition>

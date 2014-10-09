@@ -63,7 +63,7 @@ public class Decision extends BaseController {
     @Inject
     private CustomerInfoControl customerInfoControl;
     @Inject
-    private ExSummaryControl exSummaryControl;
+    private CalculationControl calculationControl;
     @Inject
     private LoanPurposeControl loanPurposeControl;
     @Inject
@@ -910,15 +910,17 @@ public class Decision extends BaseController {
                 // Delete List
                 //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
-                decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit);
+                decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit, stepId);
                 // Calculate Total Approve
-                decisionControl.calculateTotalApprove(decisionView);
+                decisionControl.calculateTotalApprove(decisionView, workCaseId);
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
+                // Calculate Total Propose Loan DBR
+                calculationControl.calculateTotalProposeAmount(workCaseId);
+                calculationControl.calculateFinalDBR(workCaseId);
+                calculationControl.calForDecision(workCaseId);
 
-                exSummaryControl.calForDecision(workCaseId);
-
-                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A);
+                fullApplicationControl.calculateApprovedPricingDOA(workCase.getId(), ProposeType.A, stepId);
             }
 
             //Check valid step to Save Approval

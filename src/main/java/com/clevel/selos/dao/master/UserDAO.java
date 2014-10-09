@@ -2,6 +2,7 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
@@ -50,9 +51,37 @@ public class UserDAO extends GenericDAO<User,String> {
         return isRecordExist(Restrictions.eq("id", id));
     }
 
+//    public boolean isExistIdAndActivityAndStatus(final String id, final int activity, final String status){
+//        log.debug("-- isExistId(id : {}, activity : {}, status : {})", id, activity, status);
+//        return isRecordExist(Restrictions.eq("id", id),Restrictions.eq("active", activity),Restrictions.eq("status", status));
+//    }
+//
+//    public User fingByIdAndActivityAndStatus(final String id, final int activity, final String status){
+//        user = new User();
+//        Criteria criteria = createCriteria();
+//        criteria.add(Restrictions.eq("id", id));
+//        criteria.add(Restrictions.eq("active", activity));
+//        criteria.add(Restrictions.eq("status", status));
+//        criteria.addOrder(Order.asc("id"));
+//        user = (User) criteria.uniqueResult();
+//
+//        return user;
+//    }
+
     public boolean isExistUserName(final String userName){
         log.debug("-- isExistUserName(userName : {})", userName);
         return isRecordExist(Restrictions.eq("userName", userName));
+    }
+
+    public User findById(final String id){
+        log.debug("-- findById. [{}]",id);
+        user = new User();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("id", id));
+        criteria.addOrder(Order.asc("id"));
+        user = (User) criteria.uniqueResult();
+
+        return user;
     }
 
     public void updateActiveOrInactive(final User model, final int value, final User user){
@@ -78,7 +107,7 @@ public class UserDAO extends GenericDAO<User,String> {
     }
 
     public void createNewUserByISA(final User user){
-        log.debug("-- createNewUserByISA()");
+        log.debug("-- createNewUserByISA(). {}",user);
         if(!Util.isNull(user)){
             user.setUserStatus(UserStatus.NORMAL);
             persist(user);
@@ -89,6 +118,7 @@ public class UserDAO extends GenericDAO<User,String> {
         log.debug("-- deleteUserByISA(Id : {})", id);
         User model = findById(id);
         if(!Util.isNull(model)){
+            model.setActive(ManageUserActive.INACTIVE.getValue());
             model.setUserStatus(UserStatus.MARK_AS_DELETED);
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());

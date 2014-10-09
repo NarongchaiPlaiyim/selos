@@ -44,7 +44,6 @@ public class IncomeSourceControl extends BusinessControl {
                 SelectItem selectItem = new SelectItem();
                 selectItem.setLabel(incomeSourceView.getName());
                 selectItem.setValue(incomeSourceView.getId());
-                logger.debug("add SelectItem: {}", selectItem);
                 selectItemList.add(selectItem);
             }
         }
