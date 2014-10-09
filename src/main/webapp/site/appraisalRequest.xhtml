@@ -43,7 +43,7 @@
 <ui:include src="include/header_logo.xhtml" />
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<c:if test="#{headerController.stepId == 2001}">
+<c:if test="#{headerController.stepId != 2032}">
     <ui:include src="include/header_detail_appraisal.xhtml" />
 </c:if>
 <c:if test="#{headerController.stepId == 2032}">

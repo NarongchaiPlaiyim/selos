@@ -515,11 +515,30 @@
                                  widgetVar="reqPriRedCancelBtn"/>
             </p:confirmDialog>
         <!-- Pending for Decision -->
-        <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
+        <!--<p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
                          title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
                          actionListener="#{headerController.onOpenPendingDecision()}"
                          update=":frmMain:pendingDecisionPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         rendered="#{headerController.checkButton('Pending for Decision')}"/>
+                         rendered="#{headerController.checkButton('Pending for Decision')}"/>-->
+        <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
+                         title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
+                         rendered="#{headerController.checkButton('Pending for Decision')}"
+                         onclick="PF('confirmPendingDecision').show()"/>
+            <p:confirmDialog header="Confirmation" message="Please click 'OK' to Pending for Decision" styleClass="left"
+                             icon="ui-icon-alert"
+                             widgetVar="confirmPendingDecision" global="false" showEffect="fade"
+                             rendered="#{headerController.checkButton('Pending for Decision')}">
+                <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                 update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                 actionListener="#{headerController.onSubmitPendingDecision()}"
+                                 process="@this" widgetVar="pendingDecisionOKBtn"
+                                 oncomplete="PF('confirmPendingDecision').hide(); pendingDecisionOKBtn.enable(); pendingDecisionCancelBtn.enable()"
+                                 onclick="pendingDecisionOKBtn.disable(); pendingDecisionCancelBtn.disable()"/>
+                <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
+                                 onclick="PF('confirmRequestPriceReduction').hide()"
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="pendingDecisionCancelBtn"/>
+            </p:confirmDialog>
         <!-- Customer Accept ( Submit to next Step ) -->
         <p:commandButton id="btnCustomerAccept_Pre" value="#{msg.get('app.header.button.customerAccept')}"
                          title="#{msg.get('app.header.button.customerAccept')}" styleClass="blueButton"
