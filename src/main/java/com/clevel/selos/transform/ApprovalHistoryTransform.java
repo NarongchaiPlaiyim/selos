@@ -116,46 +116,82 @@ public class ApprovalHistoryTransform extends Transform {
             approvalHistoryView.setAction("Produced");
         }else if(roleView.getId() == RoleValue.ZM.id()){
             if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
-                approvalHistoryView.setAction("Endorse CA");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    approvalHistoryView.setAction("Endorse CA");
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject CA");
+                }
             } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
-                if(pricingDoaLevel == PricingDOAValue.ZM_DOA.value()) {
-                    approvalHistoryView.setAction("Approve Pricing");
-                }else{
-                    approvalHistoryView.setAction("Endorse Pricing");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    if (pricingDoaLevel == PricingDOAValue.ZM_DOA.value()) {
+                        approvalHistoryView.setAction("Approve Pricing");
+                    } else {
+                        approvalHistoryView.setAction("Endorse Pricing");
+                    }
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject Pricing");
                 }
             }
         }else if(roleView.getId() == RoleValue.RGM.id()){
             if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
-                approvalHistoryView.setAction("Endorse CA");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    approvalHistoryView.setAction("Endorse CA");
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject CA");
+                }
             } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
-                if(pricingDoaLevel == PricingDOAValue.RGM_DOA.value()) {
-                    approvalHistoryView.setAction("Approve Pricing");
-                }else{
-                    approvalHistoryView.setAction("Endorse Pricing");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    if (pricingDoaLevel == PricingDOAValue.RGM_DOA.value()) {
+                        approvalHistoryView.setAction("Approve Pricing");
+                    } else {
+                        approvalHistoryView.setAction("Endorse Pricing");
+                    }
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject Pricing");
                 }
             }
         }else if(roleView.getId() == RoleValue.GH.id()){
             if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
-                approvalHistoryView.setAction("Endorse CA");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    approvalHistoryView.setAction("Endorse CA");
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject CA");
+                }
             } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
-                if(pricingDoaLevel == PricingDOAValue.GH_DOA.value()) {
-                    approvalHistoryView.setAction("Approve Pricing");
-                }else{
-                    approvalHistoryView.setAction("Endorse Pricing");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    if (pricingDoaLevel == PricingDOAValue.GH_DOA.value()) {
+                        approvalHistoryView.setAction("Approve Pricing");
+                    } else {
+                        approvalHistoryView.setAction("Endorse Pricing");
+                    }
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject Pricing");
                 }
             }
         }else if(roleView.getId() == RoleValue.CSSO.id()){
             if(approvalHistory.getApproveType() == ApprovalType.CA_APPROVAL.value()){
-                approvalHistoryView.setAction("Endorse CA");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    approvalHistoryView.setAction("Endorse CA");
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject CA");
+                }
             } else if(approvalHistory.getApproveType() == ApprovalType.PRICING_APPROVAL.value()){
-                if(pricingDoaLevel == PricingDOAValue.CSSO_DOA.value()) {
-                    approvalHistoryView.setAction("Approve Pricing");
-                }else{
-                    approvalHistoryView.setAction("Endorse Pricing");
+                if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                    if(pricingDoaLevel == PricingDOAValue.CSSO_DOA.value()) {
+                        approvalHistoryView.setAction("Approve Pricing");
+                    }else{
+                        approvalHistoryView.setAction("Endorse Pricing");
+                    }
+                }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()){
+                    approvalHistoryView.setAction("Reject Pricing");
                 }
             }
         }else if(roleView.getId() == RoleValue.UW.id()){
-            approvalHistoryView.setAction("Approve CA");
+            if(approvalHistory.getApproveDecision() == DecisionType.APPROVED.value()) {
+                approvalHistoryView.setAction("Approve CA");
+            }else if(approvalHistory.getApproveDecision() == DecisionType.REJECTED.value()) {
+                approvalHistoryView.setAction("Reject CA");
+            }
         }
         approvalHistoryView.setUserView(userTransform.transformToView(approvalHistory.getUser()));
         approvalHistoryView.setRoleView(roleView);
