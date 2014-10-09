@@ -29,7 +29,7 @@
                                       disabled="#{customerAcceptancePre.isDisabled('record.callingResult')}"
                     	              required="#{customerAcceptancePre.isMandate('record.callingResult') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
                                       requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}">
-                        <p:ajax process="@form" update=":contactRecordViewDlgFrm:remark"/>
+                        <p:ajax process="@form" update=":contactRecordViewDlgFrm:reason"/>
                         <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
                         <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
                     </p:selectOneRadio>
@@ -93,7 +93,7 @@
                 	<p:selectOneMenu id='reason'
                                      value='#{customerAcceptancePre.contactRecord.updReasonId}'
                                      disabled="#{customerAcceptancePre.isDisabled('record.reason')}"
-                		             required="#{customerAcceptancePre.isMandate('record.reason') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
+                		             required="#{customerAcceptancePre.isMandate('record.reason') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] ) or customerAcceptancePre.contactRecord.callingResult == 1}"
                                      requiredMessage="#{msg.get('app.cusaccept.validate.reason')}">
                 		<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                 		<f:selectItems value="#{customerAcceptancePre.reasons}"
@@ -110,7 +110,7 @@
                     <p:inputTextarea id='remark'
                                      value="#{customerAcceptancePre.contactRecord.remark}"
                                      autoResize="false"
-                                     required="#{customerAcceptancePre.isDialogMandate('record.remark') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] ) or customerAcceptancePre.contactRecord.callingResult == 1}"
+                                     required="#{customerAcceptancePre.isDialogMandate('record.remark') and ( not empty param[btnAddContactRecord.clientId] or not empty param[btnUpdateContactRecord.clientId] )}"
                                      requiredMessage="#{msg.get('app.cusaccept.validate.remark')}"
                                      readonly="#{customerAcceptancePre.isDisabled('record.remark')}"
                                      rows="3" cols="40" />
