@@ -1131,12 +1131,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         int count = 1;
         if (Util.isSafetyList(newCreditDetailViewList)){
             log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
-            ProposedCreditDecisionReport proposedView;
-            ProposeCreditInfoTierDetailReport proposeCreditInfoTierDetailReport;
-            List<ProposeCreditInfoTierDetailReport> creditInfoTierDetailReportList;
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
-                proposedView = new ProposedCreditDecisionReport();
-                creditInfoTierDetailReportList = new ArrayList<ProposeCreditInfoTierDetailReport>();
+                ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
+                List<ProposeCreditInfoTierDetailReport> creditInfoTierDetailReportList = new ArrayList<ProposeCreditInfoTierDetailReport>();
 
                 proposedView.setPath(pathsub);
                 proposedView.setCount(count++);
@@ -1154,9 +1151,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
 
                 if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
-                    log.debug("#################### Decision Report : detailView.getProposeCreditInfoTierDetailViewList().size()", detailView.getProposeCreditInfoTierDetailViewList().size());
+                    log.debug("detailView.getProposeCreditInfoTierDetailViewList() {}",detailView.getProposeCreditInfoTierDetailViewList().size());
                     for (ProposeCreditInfoTierDetailView proposeCreditInfoTierDetailView : detailView.getProposeCreditInfoTierDetailViewList()){
-                        proposeCreditInfoTierDetailReport = new ProposeCreditInfoTierDetailReport();
+                        ProposeCreditInfoTierDetailReport proposeCreditInfoTierDetailReport = new ProposeCreditInfoTierDetailReport();
 
                         proposeCreditInfoTierDetailReport.setStandardPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getStandardPriceLabel()));
                         proposeCreditInfoTierDetailReport.setSuggestPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getSuggestPriceLabel()));
@@ -1202,7 +1199,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     proposedView.setProposedDetail(builder.toString());
                 }
                 proposedCreditDecisionReportList.add(proposedView);
-                log.debug("################## Decision Report proposedCreditDecisionReportList : {}", proposedCreditDecisionReportList);
             }
         } else {
             ProposedCreditDecisionReport proposedView = new ProposedCreditDecisionReport();
