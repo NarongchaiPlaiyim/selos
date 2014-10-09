@@ -150,13 +150,13 @@
 	                           							 value="#{detail}" />
 	                           					</p:commandButton>
 	                                            
-	                                            <p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
+	                                            <!--<p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
                                                                  disabled="#{customerAcceptancePre.isDisabled('record.deleteButton')}"
                                                                  process="@this"
                                                                  oncomplete="p_delContactRecordDlg.show()"
                                                                  style="margin-right:0px !important">
 	                                            	<f:setPropertyActionListener target="#{customerAcceptancePre.deletedRowId}" value="#{rowIdx}" />
-	                                            </p:commandButton>
+	                                            </p:commandButton>-->
 	                           				</h:panelGroup>
 	                           			</p:column>
 	                           		</p:dataTable>
@@ -204,7 +204,7 @@
 		header="#{msg.get('app.cusaccept.dialog.contactRecord.title')}" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
 		modal='true' closeOnEscape="false" closable="false"
-        width="570" height="290"
+        width="580" height="320"
 		dynamic="true">
 		<ui:include src="dialog/contactRecordDetailPreDialog.xhtml" />
 	</p:dialog>

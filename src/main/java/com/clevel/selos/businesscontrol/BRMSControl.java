@@ -607,12 +607,12 @@ public class BRMSControl extends BusinessControl {
                 }
             }else if(_proposeType.equals(ProposeType.A)){
                 if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
-                    if(newCreditDetail.getUwDecision() != null && newCreditDetail.getUwDecision().equals(DecisionType.APPROVED)) {
+                    //if(newCreditDetail.getUwDecision() != null && newCreditDetail.getUwDecision().equals(DecisionType.APPROVED)) {
                         accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
                         if (!newCreditDetail.getProductProgram().isBa())
                             totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
-                    }
+                    //}
                 }
             }
         }
@@ -1432,7 +1432,11 @@ public class BRMSControl extends BusinessControl {
             accountRequested.setProductProgram(newCreditDetail.getProductProgram().getBrmsCode());
         if(newCreditDetail.getCreditType() != null)
             accountRequested.setCreditType(newCreditDetail.getCreditType().getBrmsCode());
-        accountRequested.setLimit(newCreditDetail.getLimit());
+        if(newCreditDetail.getUwDecision() == DecisionType.REJECTED){
+            accountRequested.setLimit(BigDecimal.ZERO);
+        }else {
+            accountRequested.setLimit(newCreditDetail.getLimit());
+        }
         if(newCreditDetail.getProposeCreditInfoTierDetailList() != null){
             List<ProposeCreditInfoTierDetail> creditTierDetailList = newCreditDetail.getProposeCreditInfoTierDetailList();
             if(creditTierDetailList.size() > 0){

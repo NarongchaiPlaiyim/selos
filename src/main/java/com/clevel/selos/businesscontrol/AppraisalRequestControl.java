@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.StatusValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
@@ -138,7 +139,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
     }
 
-    public void onSaveAppraisalRequest(AppraisalView appraisalView,long workCaseId, long workCasePreScreenId, long statusId){
+    public void onSaveAppraisalRequest(AppraisalView appraisalView,long workCaseId, long workCasePreScreenId, long stepId){
         log.info("-- onSaveAppraisalRequest ::: workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
@@ -157,7 +158,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
         //remove all collateral head from list in database
         ProposeType proposeType;
-        if(statusId != StatusValue.REQUEST_CORRECT_DOC_INFO_UW2.value()){
+        if(stepId != StepValue.REQUEST_APPRAISAL.value() && stepId != StepValue.REQUEST_APPRAISAL_RETURN.value()){
             proposeType = ProposeType.P;
         }else{
             proposeType = ProposeType.A;
@@ -191,7 +192,8 @@ public class AppraisalRequestControl extends BusinessControl {
 
             //find all collateral in credit facility
             if(newCreditFacility.getId() != 0){
-                newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+                newCollateralList = newCollateralDAO.findCollateralForAppraisal(newCreditFacility, proposeType);
+                //newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
             }else{
                 newCollateralList = new ArrayList<ProposeCollateralInfo>();
             }
@@ -216,9 +218,9 @@ public class AppraisalRequestControl extends BusinessControl {
             newCreditFacilityDAO.persist(newCreditFacility);
             log.debug("onSaveAppraisalRequest ::: after persist newCreditfacility : {}", newCreditFacility);*/
 
-            log.debug("onSaveAppraisalRequest ::: before persist newCollateralList : {}", newCollateralList);
+            //log.debug("onSaveAppraisalRequest ::: before persist newCollateralList : {}", newCollateralList);
             newCollateralDAO.persist(newCollateralList);
-            log.debug("onSaveAppraisalRequest ::: after persist newCollateralList : {}", newCollateralList);
+            //log.debug("onSaveAppraisalRequest ::: after persist newCollateralList : {}", newCollateralList);
             log.info("-- onSaveAppraisalRequest end");
         }
     }

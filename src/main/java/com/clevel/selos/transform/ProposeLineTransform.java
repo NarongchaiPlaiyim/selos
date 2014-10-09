@@ -1165,7 +1165,6 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfo.setMortgageConditionDetail(proposeCollateralInfoView.getMortgageConditionDetail());
             proposeCollateralInfo.setBdmComments(proposeCollateralInfoView.getBdmComments());
             proposeCollateralInfo.setUwDecision(proposeCollateralInfoView.getUwDecision());
-            proposeCollateralInfo.setCreatedByAAD(proposeCollateralInfoView.getCreatedByAAD());
 
             final List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList = transformProposeCollateralHeadToModelList(workCase, proposeCollateralInfo, proposeCollateralInfoView.getProposeCollateralInfoHeadViewList(), user, proposeType);
             if(Util.isSafetyList(proposeCollateralInfoHeadList)){
@@ -1226,6 +1225,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoHead.setAppraisalValue(proposeCollateralInfoHeadView.getAppraisalValue());
             proposeCollateralInfoHead.setInsuranceCompany(proposeCollateralInfoHeadView.getInsuranceCompany());
             proposeCollateralInfoHead.setProposeCollateral(proposeCollateralInfo);
+            proposeCollateralInfoHead.setComs(proposeCollateralInfoHeadView.getComs());
 
             final List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = transformProposeCollateralSubToModelList(workCase, proposeCollateralInfoHead, proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList(), user, proposeType);
             if(Util.isSafetyList(proposeCollateralInfoSubList)){
@@ -1233,10 +1233,6 @@ public class ProposeLineTransform extends Transform {
             } else {
                 proposeCollateralInfoHead.setProposeCollateralInfoSubList(null);
             }
-
-            proposeCollateralInfoHead.setCreatedByAAD(proposeCollateralInfoHeadView.getCreatedByAAD());
-            proposeCollateralInfoHead.setCreatedByBDM(proposeCollateralInfoHeadView.getCreatedByBDM());
-            proposeCollateralInfoHead.setRemovedByAAD(proposeCollateralInfoHeadView.getRemovedByAAD());
         }
 
         return proposeCollateralInfoHead;
@@ -1279,8 +1275,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setAppraisalValue(proposeCollateralInfoSubView.getAppraisalValue());
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
             proposeCollateralInfoSub.setSubId(proposeCollateralInfoSubView.getSubId());
-            proposeCollateralInfoSub.setCreatedByAAD(proposeCollateralInfoSubView.getCreatedByAAD());
-            proposeCollateralInfoSub.setCreatedByBDM(proposeCollateralInfoSubView.getCreatedByBDM());
+            proposeCollateralInfoSub.setComs(proposeCollateralInfoSubView.getComs());
 
             proposeCollateralInfoSub.setProposeCollateralHead(proposeCollateralInfoHead);
 
@@ -1432,7 +1427,6 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
             proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
             proposeCollateralInfoView.setBdmComments(proposeCollateralInfo.getBdmComments());
-            proposeCollateralInfoView.setCreatedByAAD(proposeCollateralInfo.getCreatedByAAD());
 
             proposeCollateralInfoView.setUwDecision(proposeCollateralInfo.getUwDecision());
 
@@ -1536,6 +1530,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoHeadView.setTitleDeed(proposeCollateralInfoHead.getTitleDeed());
             proposeCollateralInfoHeadView.setCollateralLocation(proposeCollateralInfoHead.getCollateralLocation());
             proposeCollateralInfoHeadView.setAppraisalValue(proposeCollateralInfoHead.getAppraisalValue());
+            proposeCollateralInfoHeadView.setComs(proposeCollateralInfoHead.getComs());
 
             if(!Util.isNull(proposeCollateralInfoHead.getHeadCollType())) {
                 proposeCollateralInfoHeadView.setHeadCollType(proposeCollateralInfoHead.getHeadCollType());
@@ -1564,10 +1559,6 @@ public class ProposeLineTransform extends Transform {
             } else {
                 proposeCollateralInfoHeadView.setHaveSubColl(false);
             }
-
-            proposeCollateralInfoHeadView.setCreatedByAAD(proposeCollateralInfoHead.getCreatedByAAD());
-            proposeCollateralInfoHeadView.setCreatedByBDM(proposeCollateralInfoHead.getCreatedByBDM());
-            proposeCollateralInfoHeadView.setRemovedByAAD(proposeCollateralInfoHead.getRemovedByAAD());
         }
 
         return proposeCollateralInfoHeadView;
@@ -1602,9 +1593,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
             proposeCollateralInfoSubView.setMortgageValue(proposeCollateralInfoSub.getMortgageValue());
             proposeCollateralInfoSubView.setSubId(proposeCollateralInfoSub.getSubId());
-
-            proposeCollateralInfoSubView.setCreatedByAAD(proposeCollateralInfoSub.getCreatedByAAD());
-            proposeCollateralInfoSubView.setCreatedByBDM(proposeCollateralInfoSub.getCreatedByBDM());
+            proposeCollateralInfoSubView.setComs(proposeCollateralInfoSub.getComs());
 
             List<ProposeCollateralSubOwner> proposeCollateralSubOwnerList = proposeCollateralSubOwnerDAO.findCollSubOwnerByCollSub(proposeCollateralInfoSub);
             if (!Util.isNull(proposeCollateralSubOwnerList) && !Util.isZero(proposeCollateralSubOwnerList.size())) {

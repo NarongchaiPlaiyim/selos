@@ -11,8 +11,8 @@ public enum Screen {
     //Full Application
     BASIC_INFO(2100),                   //2010
     CUSTOMER_INFO_SUMMARY(2200),        //2020
-//    CUSTOMER_INFO_INDIVIDUAL(3003),
-//    CUSTOMER_INFO_JURISTIC(3004),
+    CUSTOMER_INFO_JURISTIC(2300),
+    CUSTOMER_INFO_INDIVIDUAL(2400),
     NCB_SUMMARY(2500),                  //2030
     NCB_DETAIL(2510),                   //2040
     TCG_INFO(2600),                     //2050

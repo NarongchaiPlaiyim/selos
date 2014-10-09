@@ -2,6 +2,8 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -63,19 +65,16 @@ public class ProposeCollateralInfoSub implements Serializable {
     @Column(name = "modify_date")
     private Date modifyDate;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "create_user_id")
     private User createBy;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @Column(name = "created_by_aad", columnDefinition = "int default 0")
-    private int createdByAAD;
-
-    @Column(name = "created_by_bdm", columnDefinition = "int default 0")
-    private int createdByBDM;
+    @Column (name = "coms", columnDefinition = "int default 0")
+    private int coms;
 
     public long getId() {
         return id;
@@ -213,19 +212,33 @@ public class ProposeCollateralInfoSub implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public int getCreatedByAAD() {
-        return createdByAAD;
+    public int getComs() {
+        return coms;
     }
 
-    public void setCreatedByAAD(int createdByAAD) {
-        this.createdByAAD = createdByAAD;
+    public void setComs(int coms) {
+        this.coms = coms;
     }
 
-    public int getCreatedByBDM() {
-        return createdByBDM;
-    }
-
-    public void setCreatedByBDM(int createdByBDM) {
-        this.createdByBDM = createdByBDM;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("subCollateralType", subCollateralType)
+                .append("titleDeed", titleDeed)
+                .append("address", address)
+                .append("landOffice", landOffice)
+                .append("collateralOwnerAAD", collateralOwnerAAD)
+                .append("appraisalValue", appraisalValue)
+                .append("mortgageValue", mortgageValue)
+                .append("subId", subId)
+                .append("proposeCollateralHead", proposeCollateralHead)
+                .append("proposeCollateralSubOwnerList", proposeCollateralSubOwnerList)
+                .append("proposeCollateralSubMortgageList", proposeCollateralSubMortgageList)
+                .append("proposeCollateralSubRelatedList", proposeCollateralSubRelatedList)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("coms", coms)
+                .toString();
     }
 }
