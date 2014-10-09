@@ -874,25 +874,16 @@ public class CalculationControl extends BusinessControl{
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(ProposeCreditInfo proposeCreditInfo, BigDecimal dbrSpread) {
-        log.debug("calTotalProposeLoanDBRForIntYear :: DBR Spread :: {}", dbrSpread);
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
         if (!Util.isNull(proposeCreditInfo) && !Util.isNull(proposeCreditInfo.getProposeCreditInfoTierDetailList()) && !Util.isZero(proposeCreditInfo.getProposeCreditInfoTierDetailList().size())) {
-            log.debug("calTotalProposeLoanDBRForIntYear :: Limit :: {}", proposeCreditInfo.getLimit());
             BigDecimal oneHundred = BigDecimal.valueOf(100);
             BigDecimal twelve = BigDecimal.valueOf(12);
-            int index = 1;
             for (ProposeCreditInfoTierDetail proposeCreditInfoTierDetail : proposeCreditInfo.getProposeCreditInfoTierDetailList()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                log.debug("########## Index :: {}", index);
                 if (!Util.isNull(proposeCreditInfoTierDetail)) {
-                    log.debug("Final Base Rate :: {}", proposeCreditInfoTierDetail.getFinalBasePrice().getValue());
-                    log.debug("Final Interest :: {}", proposeCreditInfoTierDetail.getFinalInterest());
                     sumTotalLoanDbr = Util.add(sumTotalLoanDbr, Util.divide(Util.multiply(Util.divide(Util.add(Util.add(proposeCreditInfoTierDetail.getFinalBasePrice().getValue(), proposeCreditInfoTierDetail.getFinalInterest()), dbrSpread), oneHundred), proposeCreditInfo.getLimit()), twelve));
-                    log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
                 }
-                index++;
             }
         }
-        log.debug("######## Return - sumTotalLoanDbr :: {}", sumTotalLoanDbr);
         return sumTotalLoanDbr;
     }
 
@@ -904,7 +895,11 @@ public class CalculationControl extends BusinessControl{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         if (!Util.isNull(proposeLine)) {
-            proposeLine.setExistingSMELimit(existingCreditFacility != null ? existingCreditFacility.getTotalGroupComOBOD() : BigDecimal.ZERO);
+            if(!Util.isNull(existingCreditFacility)) {
+                proposeLine.setExistingSMELimit(existingCreditFacility.getTotalGroupComOBOD());
+            } else {
+                proposeLine.setExistingSMELimit(BigDecimal.ZERO);
+            }
             // ***** Collateral ***** //
             BigDecimal thirtyPercent = BigDecimal.valueOf(0.30);
             BigDecimal fiftyPercent = BigDecimal.valueOf(0.50);
