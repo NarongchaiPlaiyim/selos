@@ -223,6 +223,20 @@ public class STPExecutor implements Serializable {
         });
     }
 
+    public void deleteCollateralData(final long workCaseId, final long workCasePreScreenId) throws Exception{
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+
+                CallableStatement callStmt=connection.prepareCall("call SLOS.deleteCollateralData ( ?, ? )");
+                callStmt.setLong(1, workCaseId);
+                callStmt.setLong(2, workCasePreScreenId);
+                callStmt.executeUpdate();
+
+            }
+        });
+    }
+
     public ResultSet getLogonOver90(){
         final ResultSet[] rs = {null};
         ((Session) em.getDelegate()).doWork(new Work() {

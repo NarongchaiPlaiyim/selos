@@ -813,6 +813,7 @@ public class ProposeLine extends BaseController {
             HttpSession session = FacesUtil.getSession(false);
             proposeLineControl.onSaveProposeLine(workCaseId, proposeLineView, ProposeType.P, hashSeqCredit);
             calculationControl.calculateTotalProposeAmount(workCaseId);
+            calculationControl.calculateMaximumSMELimit(workCaseId);
             calculationControl.calWC(workCaseId);
             calculationControl.calForProposeLine(workCaseId);
             calculationControl.calculateFinalDBR(workCaseId);

@@ -35,8 +35,6 @@ public class ProposeCollateralInfoView implements Serializable {
     private List<ProposeCollateralInfoHeadView> proposeCollateralInfoHeadViewList;
     private List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList;
 
-    private int createdByAAD;
-
     public ProposeCollateralInfoView(){
         reset();
     }
@@ -63,7 +61,6 @@ public class ProposeCollateralInfoView implements Serializable {
         this.proposeCollateralInfoHeadViewList.add(proposeCollateralInfoHeadView);
         this.proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
         this.appraisalRequest = 1;
-        this.createdByAAD = 0;
     }
 
     public long getId() {
@@ -226,14 +223,6 @@ public class ProposeCollateralInfoView implements Serializable {
         this.appraisalRequest = appraisalRequest;
     }
 
-    public int getCreatedByAAD() {
-        return createdByAAD;
-    }
-
-    public void setCreatedByAAD(int createdByAAD) {
-        this.createdByAAD = createdByAAD;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -257,7 +246,6 @@ public class ProposeCollateralInfoView implements Serializable {
                 .append("appraisalRequest", appraisalRequest)
                 .append("proposeCollateralInfoHeadViewList", proposeCollateralInfoHeadViewList)
                 .append("proposeCreditInfoDetailViewList", proposeCreditInfoDetailViewList)
-                .append("createdByAAD", createdByAAD)
                 .toString();
     }
 }

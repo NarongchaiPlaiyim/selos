@@ -6,19 +6,24 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.db.master.AccountStatus;
+import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.transform.DBRDetailTransform;
 import com.clevel.selos.transform.DBRTransform;
+import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -41,14 +46,16 @@ public class DBRControl extends BusinessControl {
     private BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
     private ProposeLineDAO newCreditFacilityDAO;
+    @Inject
+    private NCBDetailDAO ncbDetailDAO;
 
     @Inject
     private DBRTransform dbrTransform;
     @Inject
     private DBRDetailTransform dbrDetailTransform;
-
     @Inject
-    private NCBInfoControl ncbInfoControl;
+    private LoanAccountTypeTransform loanAccountTypeTransform;
+
     @Inject
     private BaseRateControl baseRateControl;
     @Inject
@@ -58,11 +65,11 @@ public class DBRControl extends BusinessControl {
     public DBRControl() {
     }
 
-    public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
+    public ActionResult saveDBRInfo(DBRView dbrView) {
         log.debug("begin saveDBRInfo");
         try {
             WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
-            DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+            DBR dbr = calculateDBR(dbrView, workCase);
             List<DBRDetail> newDbrDetails;
             newDbrDetails = dbr.getDbrDetails();
             dbr.setDbrDetails(null);
@@ -137,7 +144,7 @@ public class DBRControl extends BusinessControl {
         return dbrView;
     }
 
-    private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews) throws Exception{
+    private DBR calculateDBR(DBRView dbrView, WorkCase workCase) throws Exception{
         log.debug("Begin calculateDBR");
         if(dbrView.getDbrMarketableFlag() != 2) {
             UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
@@ -156,6 +163,7 @@ public class DBRControl extends BusinessControl {
         BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
 
         //**NCB Borrower totalDebtForCalculate
+        List<NCBDetailView> ncbDetailViews = getNCBForDBR(workCase.getId() , dbrView.getDbrMarketableFlag());
         for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
             totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
             if(ncbDetailView.getRefinanceFlag() == 1){
@@ -262,9 +270,8 @@ public class DBRControl extends BusinessControl {
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
 
-            List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
             try {
-                DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
+                DBR dbr = calculateDBR(dbrView, workCase);
                 dbrDAO.persist(dbr);
             } catch (Exception e) {
                 log.debug("Exception updateValueOfDBR", e);
@@ -287,5 +294,70 @@ public class DBRControl extends BusinessControl {
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
         return monthlyIncome;
+    }
+
+    public List<NCBDetailView> getNCBForDBR(long workCaseId, int marketableFlag){
+        log.debug("getNCBForDBR workCaseId :: {}", workCaseId);
+        List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
+
+        List<NCBDetail> ncbDetailList = ncbDetailDAO.getNCBForDBRList(workCaseId);
+        StringBuilder accountName = new StringBuilder();
+        for(NCBDetail ncbDetail : Util.safetyList(ncbDetailList)){
+            Customer customer = ncbDetail.getNcb().getCustomer();
+            AccountType accountType = ncbDetail.getAccountType();
+            AccountStatus accountStatus = ncbDetail.getAccountStatus();
+            if(accountStatus == null || accountType == null) continue;
+
+            if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
+                NCBDetailView ncbDetailView = new NCBDetailView();
+                ncbDetailView.setId(ncbDetail.getId());
+                ncbDetailView.setLimit(ncbDetail.getLimit());
+                ncbDetailView.setInstallment(ncbDetail.getInstallment());
+                BigDecimal debtForCalculate = BigDecimal.ZERO;
+
+                BigDecimal dbrInterest = baseRateControl.getMRRValue();
+                if(marketableFlag != 2) {
+                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+                    int dbrInt = 0;
+                    if(!Util.isNull(userSysParameterView)){
+                        dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
+                    }
+                    dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
+                }
+
+                switch (accountType.getCalculateType()){
+                    case 1:
+                        if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
+                            debtForCalculate = Util.multiply(ncbDetail.getLimit(), dbrInterest);
+                            debtForCalculate = Util.divide(debtForCalculate, 100);
+                            debtForCalculate = Util.divide(debtForCalculate, 12);
+                        }else{
+                            debtForCalculate = ncbDetail.getInstallment();
+                        }
+                        break;
+                    case 2: //5%
+                        debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(5));
+                        debtForCalculate = Util.divide(debtForCalculate, 100);
+                        break;
+                    case 3: //10 %
+                        debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(10));
+                        debtForCalculate = Util.divide(debtForCalculate, 100);
+                        break;
+                    default:
+                        break;
+                }
+                ncbDetailView.setDebtForCalculate(debtForCalculate);
+                accountName.setLength(0);
+                accountName.append(customer.getTitle().getTitleTh())
+                        .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
+                        .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
+                ncbDetailView.setAccountName(accountName.toString());
+                ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+                ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
+                ncbDetailViews.add(ncbDetailView);
+            }
+
+        }
+        return ncbDetailViews;
     }
 }

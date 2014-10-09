@@ -102,14 +102,8 @@ public class ProposeCollateralInfoHead implements Serializable {
     @Column(name = "existing_insurance_type", columnDefinition = "int default 0")
     private int existingInsuranceType;
 
-    @Column(name = "removed_by_aad", columnDefinition = "int default 0")
-    private int removedByAAD;
-
-    @Column(name = "created_by_aad", columnDefinition = "int default 0")
-    private int createdByAAD;
-
-    @Column(name = "created_by_bdm", columnDefinition = "int default 0")
-    private int createdByBDM;
+    @Column (name = "coms", columnDefinition = "int default 0")
+    private int coms;
 
     public long getId() {
         return id;
@@ -303,28 +297,12 @@ public class ProposeCollateralInfoHead implements Serializable {
         this.existingInsuranceType = existingInsuranceType;
     }
 
-    public int getRemovedByAAD() {
-        return removedByAAD;
+    public int getComs() {
+        return coms;
     }
 
-    public void setRemovedByAAD(int removedByAAD) {
-        this.removedByAAD = removedByAAD;
-    }
-
-    public int getCreatedByAAD() {
-        return createdByAAD;
-    }
-
-    public void setCreatedByAAD(int createdByAAD) {
-        this.createdByAAD = createdByAAD;
-    }
-
-    public int getCreatedByBDM() {
-        return createdByBDM;
-    }
-
-    public void setCreatedByBDM(int createdByBDM) {
-        this.createdByBDM = createdByBDM;
+    public void setComs(int coms) {
+        this.coms = coms;
     }
 
     @Override
@@ -354,9 +332,7 @@ public class ProposeCollateralInfoHead implements Serializable {
                 .append("appraisalRequest", appraisalRequest)
                 .append("insuranceComType", insuranceComType)
                 .append("existingInsuranceType", existingInsuranceType)
-                .append("removedByAAD", removedByAAD)
-                .append("createdByAAD", createdByAAD)
-                .append("createdByBDM", createdByBDM)
+                .append("coms", coms)
                 .toString();
     }
 }
