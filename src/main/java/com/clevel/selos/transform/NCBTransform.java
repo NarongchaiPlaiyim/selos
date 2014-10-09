@@ -85,6 +85,18 @@ public class NCBTransform extends Transform {
             ncb.setTdrCondition(null);
         }
 
+        ncb.setNplTMBFlagNCB(ncbInfoView.isNplTMBFlagNCB());
+        ncb.setNplTMBDateNCB(ncbInfoView.getNplTMBDateNCB());
+
+        ncb.setNplOtherFlagNCB(ncbInfoView.isNplOtherFlagNCB());
+        ncb.setNplOtherDateNCB(ncbInfoView.getNplOtherDateNCB());
+
+        ncb.setTdrTMBFlagNCB(ncbInfoView.isTdrTMBFlagNCB());
+        ncb.setTdrTMBDateNCB(ncbInfoView.getTdrTMBDateNCB());
+
+        ncb.setTdrOtherFlagNCB(ncbInfoView.isTdrOtherFlagNCB());
+        ncb.setTdrOtherDateNCB(ncbInfoView.getTdrOtherDateNCB());
+
         return ncb;
     }
 
@@ -161,6 +173,18 @@ public class NCBTransform extends Transform {
                 }
             }
         }
+
+        ncbInfoView.setNplTMBFlagNCB(ncb.isNplTMBFlagNCB());
+        ncbInfoView.setNplTMBDateNCB(ncb.getNplTMBDateNCB());
+
+        ncbInfoView.setNplOtherFlagNCB(ncb.isNplOtherFlagNCB());
+        ncbInfoView.setNplOtherDateNCB(ncb.getNplOtherDateNCB());
+
+        ncbInfoView.setTdrTMBFlagNCB(ncb.isTdrTMBFlagNCB());
+        ncbInfoView.setTdrTMBDateNCB(ncb.getTdrTMBDateNCB());
+
+        ncbInfoView.setTdrOtherFlagNCB(ncb.isTdrOtherFlagNCB());
+        ncbInfoView.setTdrOtherDateNCB(ncb.getTdrOtherDateNCB());
 
         ncbInfoView.setEnquiry(ncb.getEnquiry());
         return ncbInfoView;

@@ -7,6 +7,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
@@ -200,6 +201,9 @@ public class CustomerInfoJuristic extends BaseController {
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
             initial();
+
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.CUSTOMER_INFO_JURISTIC, ownerCaseUserId);
 
             enableAllFieldCus = false;
 

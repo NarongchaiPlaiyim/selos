@@ -394,8 +394,10 @@ public class PEDBTableCount
             }
             catch (Exception e)
             {
-
+                log.error("Error in PEDBTableCount : {}",e);
             }
+            conn.close();
+            rs.close();
 
             return rowcount;
         }

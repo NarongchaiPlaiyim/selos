@@ -6,17 +6,15 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.NCBPaymentCode;
 import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.db.master.AccountStatus;
-import com.clevel.selos.model.db.master.AccountType;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.NCB;
+import com.clevel.selos.model.db.working.NCBDetail;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
-import com.clevel.selos.model.view.UserSysParameterView;
-import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -57,8 +55,6 @@ public class NCBInfoControl extends BusinessControl {
     private NCBDetailTransform ncbDetailTransform;
     @Inject
     private NCBTransform ncbTransform;
-    @Inject
-    private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
     public NCBInfoControl() {}
@@ -118,6 +114,28 @@ public class NCBInfoControl extends BusinessControl {
             boolean isNPLOther = false;
 
             Date lastInfoDate = null;
+
+            isNPLOther = ncbInfoView.isNplOtherFlagNCB();
+            isNPLTMB = ncbInfoView.isNplTMBFlagNCB();
+
+            isTDROther = ncbInfoView.isTdrOtherFlagNCB();
+            isTDRTMB = ncbInfoView.isNplTMBFlagNCB();
+
+            if(isNPLOther){
+                lastNPLDateOther = ncbInfoView.getNplOtherDateNCB();
+            }
+
+            if(isNPLTMB){
+                lastNPLDateTMB = ncbInfoView.getNplTMBDateNCB();
+            }
+
+            if(isTDROther){
+                lastTDRDateOther = ncbInfoView.getTdrOtherDateNCB();
+            }
+
+            if(isTDRTMB){
+                lastTDRDateTMB = ncbInfoView.getTdrTMBDateNCB();
+            }
 
             for(NCBDetailView ncbDetailView: ncbDetailViewList){
                 boolean isTDRFlag = false;
@@ -449,75 +467,6 @@ public class NCBInfoControl extends BusinessControl {
         }
 
         return ncbDetailViewList;
-    }
-
-    public List<NCBDetailView> getNCBForCalDBR(long workcaseId){
-        List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
-        log.debug("BegetNCBForCalDBRBR workCaseId :: {}", workcaseId);
-        DBR dbr = dbrDAO.findByWorkCaseId(workcaseId);
-
-        List<NCBDetail> ncbDetailList = ncbDetailDAO.getNCBForDBRList(workcaseId);
-        log.debug("ncbDetails size:{}", ncbDetailList.size());
-        AccountType accountType;
-        AccountStatus accountStatus;
-        StringBuilder accountName = new StringBuilder();
-        for(NCBDetail ncbDetail : Util.safetyList(ncbDetailList)){
-            Customer customer = ncbDetail.getNcb().getCustomer();
-            accountType = ncbDetail.getAccountType();
-            accountStatus = ncbDetail.getAccountStatus();
-            if(accountStatus == null || accountType == null) continue;
-
-            if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
-                NCBDetailView ncbDetailView = new NCBDetailView();
-                ncbDetailView.setId(ncbDetail.getId());
-                ncbDetailView.setLimit(ncbDetail.getLimit());
-                ncbDetailView.setInstallment(ncbDetail.getInstallment());
-                BigDecimal debtForCalculate = BigDecimal.ZERO;
-
-                BigDecimal dbrInterest = baseRateControl.getMRRValue();
-                if(!Util.isNull(dbr) && dbr.getMarketableFlag() != 2) {
-                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
-                    int dbrInt = 0;
-                    if(!Util.isNull(userSysParameterView)){
-                        dbrInt = Util.parseInt(userSysParameterView.getValue(), 0);
-                    }
-                    dbrInterest = Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInt));
-                }
-
-                switch (accountType.getCalculateType()){
-                    case 1:
-                        if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
-                            debtForCalculate = Util.multiply(ncbDetail.getLimit(), dbrInterest);
-                            debtForCalculate = Util.divide(debtForCalculate, 100);
-                            debtForCalculate = Util.divide(debtForCalculate, 12);
-                        }else{
-                            debtForCalculate = ncbDetail.getInstallment();
-                        }
-                        break;
-                    case 2: //5%
-                        debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(5));
-                        debtForCalculate = Util.divide(debtForCalculate, 100);
-                        break;
-                    case 3: //10 %
-                        debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(10));
-                        debtForCalculate = Util.divide(debtForCalculate, 100);
-                        break;
-                    default:
-                        break;
-                }
-            ncbDetailView.setDebtForCalculate(debtForCalculate);
-            accountName.setLength(0);
-            accountName.append(customer.getTitle().getTitleTh())
-                    .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
-                    .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
-            ncbDetailView.setAccountName(accountName.toString());
-            ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
-            ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
-            ncbDetailViews.add(ncbDetailView);
-        }
-
-        }
-        return ncbDetailViews;
     }
 
     public List<NCBInfoView> getNCBInfoViewByWorkCaseId(long workCaseId){

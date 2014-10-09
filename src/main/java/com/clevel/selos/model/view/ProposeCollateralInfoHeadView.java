@@ -30,9 +30,7 @@ public class ProposeCollateralInfoHeadView implements Serializable {
 
     private List<PotentialColToTCGCol> potentialColToTCGColList;
 
-    private int removedByAAD;
-    private int createdByAAD;
-    private int createdByBDM;
+    private int coms;
 
     public ProposeCollateralInfoHeadView(){
           reset();
@@ -51,9 +49,7 @@ public class ProposeCollateralInfoHeadView implements Serializable {
         this.deleteSubColHeadIdList = new ArrayList<Long>();
         this.haveSubColl = false;
         this.potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
-        this.removedByAAD = 0;
-        this.createdByAAD = 0;
-        this.createdByBDM = 0;
+        this.coms = 0;
     }
 
     public long getId() {
@@ -160,28 +156,12 @@ public class ProposeCollateralInfoHeadView implements Serializable {
         this.potentialColToTCGColList = potentialColToTCGColList;
     }
 
-    public int getRemovedByAAD() {
-        return removedByAAD;
+    public int getComs() {
+        return coms;
     }
 
-    public void setRemovedByAAD(int removedByAAD) {
-        this.removedByAAD = removedByAAD;
-    }
-
-    public int getCreatedByAAD() {
-        return createdByAAD;
-    }
-
-    public void setCreatedByAAD(int createdByAAD) {
-        this.createdByAAD = createdByAAD;
-    }
-
-    public int getCreatedByBDM() {
-        return createdByBDM;
-    }
-
-    public void setCreatedByBDM(int createdByBDM) {
-        this.createdByBDM = createdByBDM;
+    public void setComs(int coms) {
+        this.coms = coms;
     }
 
     @Override
@@ -200,9 +180,7 @@ public class ProposeCollateralInfoHeadView implements Serializable {
                 .append("deleteSubColHeadIdList", deleteSubColHeadIdList)
                 .append("haveSubColl", haveSubColl)
                 .append("potentialColToTCGColList", potentialColToTCGColList)
-                .append("removedByAAD", removedByAAD)
-                .append("createdByAAD", createdByAAD)
-                .append("createdByBDM", createdByBDM)
+                .append("coms", coms)
                 .toString();
     }
 }

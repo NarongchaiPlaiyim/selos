@@ -905,10 +905,8 @@ public class Decision extends BaseController {
         log.debug("onSaveDecision");
         try {
             log.debug("roleId :: {}", roleId);
-            if (roleId == RoleValue.UW.id()) {
+            if ((roleId == RoleValue.ZM.id() && stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) || (roleId == RoleValue.UW.id())) {
                 log.debug("Save Decision Role UW");
-                // Delete List
-                //decisionControl.deleteAllApproveByIdList(deleteCreditIdList, deleteCollIdList, deleteGuarantorIdList, deleteConditionIdList);
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit, stepId);
                 // Calculate Total Approve
@@ -916,7 +914,7 @@ public class Decision extends BaseController {
                 // Save Total Approve to Decision
                 decisionControl.saveDecision(decisionView, workCase);
                 // Calculate Total Propose Loan DBR
-                calculationControl.calculateTotalProposeAmount(workCaseId, true);
+                calculationControl.calculateTotalProposeAmount(workCaseId);
                 calculationControl.calculateFinalDBR(workCaseId);
                 calculationControl.calForDecision(workCaseId);
 

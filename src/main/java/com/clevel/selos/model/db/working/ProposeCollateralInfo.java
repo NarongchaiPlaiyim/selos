@@ -105,9 +105,6 @@ public class ProposeCollateralInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "created_by_aad", columnDefinition = "int default 0")
-    private int createdByAAD;
-
     public long getId() {
         return id;
     }
@@ -316,14 +313,6 @@ public class ProposeCollateralInfo implements Serializable {
         this.workCase = workCase;
     }
 
-    public int getCreatedByAAD() {
-        return createdByAAD;
-    }
-
-    public void setCreatedByAAD(int createdByAAD) {
-        this.createdByAAD = createdByAAD;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -353,7 +342,6 @@ public class ProposeCollateralInfo implements Serializable {
                 .append("proposeCollateralInfoRelationList", proposeCollateralInfoRelationList)
                 .append("premiumAmount", premiumAmount)
                 .append("workCase", workCase)
-                .append("createdByAAD", createdByAAD)
                 .toString();
     }
 }

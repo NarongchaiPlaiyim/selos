@@ -7,6 +7,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Reference;
@@ -35,12 +36,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumIndi")
-public class CustomerInfoIndividual implements Serializable {
+public class CustomerInfoIndividual extends BaseController {
     @Inject
     @SELOS
     Logger log;
@@ -319,6 +319,9 @@ public class CustomerInfoIndividual implements Serializable {
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
+
+            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+            loadFieldControl(workCaseId, Screen.CUSTOMER_INFO_INDIVIDUAL, ownerCaseUserId);
 
             //default value
             isFromJuristic = false;

@@ -1,12 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ProductFormulaDAO;
+import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
-import com.clevel.selos.model.db.master.ProductFormula;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -63,6 +64,10 @@ public class CalculationControl extends BusinessControl{
     private CustomerDAO customerDAO;
     @Inject
     private ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private PotentialColToTCGColDAO potentialColToTCGColDAO;
 
     @Inject
     private CustomerTransform customerTransform;
@@ -731,8 +736,8 @@ public class CalculationControl extends BusinessControl{
         dbrDAO.persist(dbr);
     }
 
-    public void calculateTotalProposeAmount(long workCaseId, boolean isFromDecision) {
-        log.debug("calculateTotalProposeAmount :: workCaseId :: {}, isFromDecision :: {}",workCaseId, isFromDecision);
+    public void calculateTotalProposeAmount(long workCaseId) {
+        log.debug("calculateTotalProposeAmount :: workCaseId :: {}", workCaseId);
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         User user = getCurrentUser();
         if (!Util.isNull(proposeLine)) {
@@ -754,7 +759,7 @@ public class CalculationControl extends BusinessControl{
             if (!Util.isNull(existingCreditFacility)) {
                 borrowerComOBOD = existingCreditFacility.getTotalBorrowerComOBOD();
                 borrowerCom = existingCreditFacility.getTotalBorrowerCom();
-                groupExposure = existingCreditFacility.getTotalBorrowerExposure();
+                groupExposure = existingCreditFacility.getTotalGroupExposure();
             }
 
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
@@ -763,20 +768,28 @@ public class CalculationControl extends BusinessControl{
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
                 List<ProposeCreditInfo> proposeCreditInfoList = proposeLine.getProposeCreditInfoList();
                 if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
+                    DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
                     for (ProposeCreditInfo creditInfo : proposeCreditInfoList) {
                         if (!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getProductProgram()) && !Util.isZero(creditInfo.getProductProgram().getId()) && !Util.isNull(creditInfo.getCreditType()) && !Util.isZero(creditInfo.getCreditType().getId())) {
                             PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
                             if(!Util.isNull(prdProgramToCreditType)) {
-                                DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
                                 if(!Util.isNull(dbr)) {
                                     ProductFormula productFormula;
-                                    if(basicInfo.getApplySpecialProgram() == 1) {
-                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                    if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
+                                        if(basicInfo.getApplySpecialProgram() == 1) {
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                        } else {
+                                            if(!Util.isNull(basicInfo.getSpecialProgram())) {
+                                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            } else {
+                                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            }
+                                        }
                                     } else {
                                         if(!Util.isNull(basicInfo.getSpecialProgram())) {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag());
                                         } else {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag());
                                         }
                                     }
                                     if (!Util.isNull(productFormula)) {
@@ -785,11 +798,11 @@ public class CalculationControl extends BusinessControl{
                                             if(creditInfo.getRequestType() == RequestTypes.NEW.value() && creditInfo.getUwDecision() == DecisionType.APPROVED) {
                                                 if (productFormula.getDbrCalculate() == 2) {// Yes
                                                     if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(BigDecimal.ZERO);
                                                     } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
+                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(creditInfo.getInstallment());
                                                     } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
-                                                        sumTotalApproveLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
+                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                     }
                                                 }
                                             }
@@ -841,25 +854,15 @@ public class CalculationControl extends BusinessControl{
                 }
             }
 
-            log.debug("sumTotalApproveLoanDbr :: {}", sumTotalApproveLoanDbr);
-            log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
-            log.debug("sumTotalPropose :: {}", sumTotalPropose);
-            log.debug("sumTotalNonLoanDbr :: {}", sumTotalNonLoanDbr);
-            log.debug("sumTotalBorrowerCommercial :: {}", sumTotalBorrowerCommercial);
-            log.debug("sumTotalBorrowerCommercialAndOBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
-            log.debug("sumTotalGroupExposure :: {}", sumTotalGroupExposure);
-
-            if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // for check if uw save propose or existing do not save loan dbr
-                if(isFromDecision) {
-                    proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);             //sumTotalLoanDbr
-                }
+            if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // If UW Save will update loan dbr
+                proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);                 //sumTotalLoanDbr
                 proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
                 proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
                 proposeLine.setTotalExposure(sumTotalGroupExposure);
             } else {
-                proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                    //sumTotalLoanDbr
+                proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                        //sumTotalLoanDbr
                 proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
@@ -882,5 +885,291 @@ public class CalculationControl extends BusinessControl{
             }
         }
         return sumTotalLoanDbr;
+    }
+
+    public void calculateMaximumSMELimit(long workCaseId) {
+        BigDecimal maximumSMELimit = BigDecimal.ZERO;
+        ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        if (!Util.isNull(proposeLine)) {
+            if(!Util.isNull(existingCreditFacility)) {
+                proposeLine.setExistingSMELimit(existingCreditFacility.getTotalGroupComOBOD());
+            } else {
+                proposeLine.setExistingSMELimit(BigDecimal.ZERO);
+            }
+            // ***** Collateral ***** //
+            BigDecimal thirtyPercent = BigDecimal.valueOf(0.30);
+            BigDecimal fiftyPercent = BigDecimal.valueOf(0.50);
+
+            BigDecimal num1 = BigDecimal.valueOf(10000000);  //10,000,000
+            BigDecimal num2 = BigDecimal.valueOf(23000000);  //23,000,000
+            BigDecimal num3 = BigDecimal.valueOf(3000000);   //3,000,000
+            BigDecimal num4 = BigDecimal.valueOf(20000000); //20,000,000
+
+            BigDecimal summaryOne = BigDecimal.ZERO;
+            BigDecimal summaryTwo;
+            BigDecimal potentialCollValue = BigDecimal.ZERO;
+
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+
+            if (!Util.isNull(workCase) && !Util.isNull(workCase.getProductGroup()) && !Util.isNull(bankStatementSummary) && !Util.isNull(tcg) && !Util.isNull(basicInfo)) {
+                ProductGroup productGroup = workCase.getProductGroup();
+                //********************************************** TCG is YES****************************************//
+                if (tcg.getTcgFlag() == RadioValue.YES.value()) {
+                    //********** ProductGroup เป็น TMB_SME_SMART_BIZ หรือ RETENTION*********//
+                    if ((ProductGroupValue.TMB_SME_SMART_BIZ.id() == productGroup.getId()) || (ProductGroupValue.RETENTION.id() == productGroup.getId())) {
+                        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
+                        if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
+                            for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
+                                if(collateral.getProposeType() == ProposeType.P) {
+                                    List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
+                                    if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
+                                        for (ProposeCollateralInfoHead collHead : collHeadList) {
+                                            PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
+                                         /* Sum of [(HeadCollateral-Appraisal of coreAsset/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
+                                            Sum of [(HeadCollateral-Appraisal of nonCoreAsset/50%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] +
+                                            Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???)/30%)-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())] */
+                                            if (!Util.isNull(potentialCollateral) && !Util.isZero(potentialCollateral.getId())) {
+                                                if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                                    potentialCollValue = Util.subtract((Util.divide(collHead.getAppraisalValue(), thirtyPercent)), collHead.getExistingCredit());
+                                                } else if (PotentialCollateralValue.NONE_CORE_ASSET.id() == potentialCollateral.getId()) {
+                                                    potentialCollValue = Util.subtract((Util.divide(collHead.getAppraisalValue(), fiftyPercent)), collHead.getExistingCredit());
+                                                } else if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
+                                                    potentialCollValue = Util.subtract((Util.divide(collHead.getAppraisalValue(), thirtyPercent)), collHead.getExistingCredit());
+                                                }
+                                            }
+                                            summaryOne = summaryOne.add(potentialCollValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId);
+                        //เอาผลลัพธ์ที่น้อยกว่าเสมอ
+                        if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
+                            maximumSMELimit = summaryOne;
+                        } else {
+                            maximumSMELimit = summaryTwo;
+                        }
+                        //********** ProductGroup เป็น F_CASH *********//
+                    } else if (ProductGroupValue.F_CASH.id() == productGroup.getId()) {
+                        //Sum of [(HeadCollateral-Appraisal of cashCollateral/BE(คือฟิลล์ไหน ???))-ภาระสินเชื่อเดิม(collHeadView.getExistingCredit())]
+                        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
+                        if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
+                            for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
+                                if(collateral.getProposeType() == ProposeType.P) {
+                                    List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
+                                    if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
+                                        for (ProposeCollateralInfoHead collHead : collHeadList) {
+                                            PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
+                                            if (!Util.isNull(potentialCollateral) && !Util.isZero(potentialCollateral.getId())) {
+                                                if (PotentialCollateralValue.CASH_COLLATERAL.id() == potentialCollateral.getId()) {
+                                                    potentialCollValue = Util.subtract(collHead.getAppraisalValue(), collHead.getExistingCredit());
+                                                }
+                                            }
+                                            summaryOne = summaryOne.add(potentialCollValue);   // Sum of [Head Coll - Appraisal of Cash Collateral / BE - ภาระสินเชื่อเดิม]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //20,000,000 - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ)
+                        summaryTwo = Util.subtract(num4, proposeLine.getExistingSMELimit());
+                        //เอาผลลัพธ์ที่น้อยกว่าเสมอ
+                        if(summaryOne.compareTo(summaryTwo) < 0){
+                            maximumSMELimit = summaryOne;
+                        } else {
+                            maximumSMELimit = summaryTwo;
+                        }
+
+                    } else if (ProductGroupValue.OD_NO_ASSET.id() == productGroup.getId()) {//********** ProductGroup เป็น OD_NO_ASSET *********//
+                        maximumSMELimit = Util.subtract(num1, proposeLine.getExistingSMELimit()); // 10 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ)
+                    } else if (ProductGroupValue.QUICK_LOAN.id() == productGroup.getId()) {   //********** ProductGroup เป็น QUICK_LOAN *********//
+                        summaryOne = num3;  // 3 ล้าน
+
+                        if (proposeLine.getExistingSMELimit().compareTo(num4) < 0) {  // if วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ) น้อยกว่า 20 ล้าน
+                            summaryTwo = Util.subtract(num2, proposeLine.getExistingSMELimit()); // 23 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ)
+                        } else {
+                            summaryTwo = BigDecimal.ZERO;
+                        }
+
+                        //เอาผลลัพธ์ที่น้อยกว่าเสมอ
+                        if (summaryOne.compareTo(summaryTwo) < 0) {
+                            maximumSMELimit = summaryOne;
+                        } else {
+                            maximumSMELimit = summaryTwo;
+                        }
+
+                    }
+                    //********************************************** TCG is NO ****************************************//
+                } else if (tcg.getTcgFlag() == RadioValue.NO.value()) {
+                    //********** ProductGroup เป็น TMB_SME_SMART_BIZ หรือ RETENTION หรือ F_CASH*********//
+                    if ((ProductGroupValue.TMB_SME_SMART_BIZ.id() == productGroup.getId()) ||
+                            (ProductGroupValue.RETENTION.id() == productGroup.getId()) ||
+                            (ProductGroupValue.F_CASH.id() == productGroup.getId())) {
+
+                        // sum of[(ราคาประเมิน (collHeadView.getAppraisalValue())*LTVPercent) - ภาระสินเชื่อเดิม]
+                        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
+                        if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
+                            for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
+                                if(collateral.getProposeType() == ProposeType.P) {
+                                    List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
+                                    if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
+                                        BigDecimal ltvValue;
+                                        BigDecimal percentLTV;
+                                        for (ProposeCollateralInfoHead collHead : collHeadList) {
+                                            percentLTV = findLTVPercent(collHead, workCaseId);
+                                            ltvValue = Util.multiply(collHead.getAppraisalValue(), percentLTV);
+                                            summaryOne = Util.add(summaryOne, (Util.subtract(ltvValue, collHead.getExistingCredit())));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId);
+
+                        //เอาผลลัพธ์ที่น้อยกว่าเสมอ
+                        if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
+                            maximumSMELimit = summaryOne;
+                        } else {
+                            maximumSMELimit = summaryTwo;
+                        }
+
+                    } else if (ProductGroupValue.OD_NO_ASSET.id() == productGroup.getId()) {   //********** ProductGroup เป็น OD_NO_ASSET *********//
+                        maximumSMELimit = Util.subtract(num1, proposeLine.getExistingSMELimit()); // 10 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ)
+                    } else if (ProductGroupValue.QUICK_LOAN.id() == productGroup.getId()) {   //********** ProductGroup เป็น QUICK_LOAN *********//
+                        summaryOne = num3;  // 3 ล้าน
+
+                        if (proposeLine.getExistingSMELimit().compareTo(num4) < 0) {  // if วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ) น้อยกว่า 20 ล้าน
+                            summaryTwo = Util.subtract(num2, proposeLine.getExistingSMELimit()); // 23 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวกลุ่ม/กิจการในเครือ)
+                        } else {
+                            summaryTwo = BigDecimal.ZERO;
+                        }
+
+                        //เอาผลลัพธ์ที่น้อยกว่าเสมอ
+                        if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
+                            maximumSMELimit = summaryOne;
+                        } else {
+                            maximumSMELimit = summaryTwo;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (maximumSMELimit.compareTo(BigDecimal.ZERO) < 0) {
+            maximumSMELimit = BigDecimal.ZERO;
+        }
+
+        proposeLine.setMaximumSMELimit(maximumSMELimit);
+
+        proposeLineDAO.persist(proposeLine);
+    }
+
+    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, long workCaseId) {
+        BigDecimal num1 = BigDecimal.valueOf(20000000);      //20,000,000
+        BigDecimal num2 = BigDecimal.valueOf(35000000);      //35,000,000
+        BigDecimal numBank = BigDecimal.valueOf(100000000);  //100,000,000
+        BigDecimal sumBank = BigDecimal.ZERO;
+        BigDecimal summary = BigDecimal.ZERO;
+        boolean flag_for_core_asset = false;
+        /*
+        1. Customer Type = Individual
+        2. มี Core Asset ใน Proposed หรือ Approved Collateral
+        3. SCF <= 13
+        4. [Sum of (Income Gross_TMB Bank Statement Summary)+Sum of (Income Gross_Other Bank Statement Summary)] x 12 >= 100,000,000
+        5. ใช้สินเชื่อทางตรงกับ TMB อย่างน้อย 1 ปี (ในหน้า Basic Info) = Yes
+        */
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+        if (!Util.isNull(bankStatementSummary)) {
+            sumBank = Util.multiply(Util.add(bankStatementSummary.getTMBTotalIncomeGross(), bankStatementSummary.getOthTotalIncomeGross()), BigDecimal.valueOf(12));
+        }
+
+        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
+        if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
+            for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
+                if(collateral.getProposeType() == ProposeType.P) {
+                    List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
+                    if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
+                        for (ProposeCollateralInfoHead collHead : collHeadList) {
+                            if(collHead.getPotentialCollateral() != null){
+                                PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
+                                if (potentialCollateral.getId() != 0) {
+                                    if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                        flag_for_core_asset = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        if (!Util.isNull(basicInfo)) {
+            if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
+                    ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
+                    ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
+                    (sumBank.doubleValue() >= numBank.doubleValue()) &&
+                    (flag_for_core_asset))
+            {
+                summary = Util.subtract(num2, proposeLine.getExistingSMELimit());   //35 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
+            } else {
+                summary = Util.subtract(num1, proposeLine.getExistingSMELimit());   //20 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
+            }
+        }
+        return summary;
+    }
+
+    public BigDecimal findLTVPercent(ProposeCollateralInfoHead proposeCollateralInfoHead, long workCaseId) {
+        BigDecimal ltvPercentBig = BigDecimal.ZERO;
+        if(!Util.isNull(proposeCollateralInfoHead)){
+            if(!Util.isNull(proposeCollateralInfoHead.getPotentialCollateral()) && !Util.isZero(proposeCollateralInfoHead.getPotentialCollateral().getId())
+                    && !Util.isNull(proposeCollateralInfoHead.getCollateralType()) && !Util.isZero(proposeCollateralInfoHead.getCollateralType().getId())){
+                PotentialCollateral potentialCollateral = proposeCollateralInfoHead.getPotentialCollateral();
+                TCGCollateralType tcgCollateralType = proposeCollateralInfoHead.getCollateralType();
+                if (!Util.isNull(potentialCollateral) && !Util.isNull(tcgCollateralType)) {
+                    PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
+                    if (potentialColToTCGCol != null) {
+                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                        WorkCase workCase = workCaseDAO.findById(workCaseId);
+                        if (basicInfo != null && workCase != null) {
+                            if (workCase.getProductGroup() != null && Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
+                                if (potentialColToTCGCol.getRetentionLTV() != null) {
+                                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
+                                } else {
+                                    if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+                                            Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
+                                            Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                            Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
+                                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                                    } else {
+                                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                                    }
+                                }
+                            } else if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+                                    Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
+                                    Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                    Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                    (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
+                                ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                            } else {
+                                ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ltvPercentBig;
     }
 }

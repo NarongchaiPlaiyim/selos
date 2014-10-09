@@ -811,13 +811,38 @@ public class FullApplicationControl extends BusinessControl {
                 newCollateralDAO.persist(proposeCol);
             }
         }
+
+        //Duplicate Data From Propose ( Requested ) to Approve Requested...
+        duplicateCollateralData(workCaseId, workCasePreScreenId);
     }
 
     /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( Customer Acceptance ) ] **/
-    public void requestAppraisal(long workCasePreScreenId, long workCaseId, String queueName, String wobNumber, String aadAdminUserName) throws Exception{
+    public void requestAppraisal(long workCaseId, String queueName, String wobNumber, String aadAdminUserName) throws Exception{
         if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
             try{
                 log.debug("requestAppraisal Customer Acceptance ::: Create WorkCaseAppraisal Complete.");
+                ProposeLine proposeLine = null;
+                if(!Util.isZero(workCaseId)) {
+                    proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+
+                    if (!Util.isNull(proposeLine)) {
+                        if (!Util.isNull(proposeLine.getProposeCollateralInfoList()) && proposeLine.getProposeCollateralInfoList().size() > 0) {
+                            for (ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()) {
+                                if (proposeCollateralInfo.getProposeType() == ProposeType.A && proposeCollateralInfo.getAppraisalRequest() == RequestAppraisalValue.READY_FOR_REQUEST.value()) {
+                                    proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                                    if (!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0) {
+                                        for (ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
+                                            if (proposeCollateralInfoHead.getProposeType() == ProposeType.A && proposeCollateralInfoHead.getAppraisalRequest() == RequestAppraisalValue.READY_FOR_REQUEST.value()) {
+                                                proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                                            }
+                                        }
+                                    }
+                                }
+                                newCollateralDAO.persist(proposeCollateralInfo);
+                            }
+                        }
+                    }
+                }
                 bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
                 log.debug("requestAppraisal Customer Acceptance ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
@@ -1057,7 +1082,30 @@ public class FullApplicationControl extends BusinessControl {
 
     /** Appraisal [ Submit Appraisal Result to UW ] **/
     public void submitForAADCommittee(String queueName, String wobNumber, long workCaseId, long workCasePreScreenId) throws Exception{
-        duplicateCollateralData(workCaseId, workCasePreScreenId);
+        //Update Appraisal Request to Completed
+        ProposeLine proposeLine = null;
+        if(!Util.isZero(workCaseId)){
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }else if(!Util.isZero(workCasePreScreenId)){
+            proposeLine = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }
+        if(!Util.isNull(proposeLine)){
+            if(!Util.isNull(proposeLine.getProposeCollateralInfoList()) && proposeLine.getProposeCollateralInfoList().size() > 0){
+                for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
+                    if(proposeCollateralInfo.getProposeType() == ProposeType.A && proposeCollateralInfo.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
+                        proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                        if(!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0){
+                            for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()){
+                                if(proposeCollateralInfoHead.getProposeType() == ProposeType.A && proposeCollateralInfoHead.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
+                                    proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                                }
+                            }
+                        }
+                    }
+                    newCollateralDAO.persist(proposeCollateralInfo);
+                }
+            }
+        }
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
     }
     //---------- End Function for Appraisal ----------//

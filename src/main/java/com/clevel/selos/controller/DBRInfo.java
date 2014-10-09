@@ -1,6 +1,9 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.*;
+import com.clevel.selos.businesscontrol.CalculationControl;
+import com.clevel.selos.businesscontrol.DBRControl;
+import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
+import com.clevel.selos.businesscontrol.ProposeLineControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
@@ -50,8 +53,6 @@ public class DBRInfo extends BaseController {
     @Inject
     LoanAccountTypeControl loanAccountTypeControl;
 
-    @Inject
-    NCBInfoControl ncbInfoControl;
     @Inject
     private CalculationControl calculationControl;
     @Inject
@@ -119,21 +120,19 @@ public class DBRInfo extends BaseController {
 
             selectedItem = new DBRDetailView();
 
-            dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
 
             dbrDetails = new ArrayList<DBRDetailView>();
-            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
+            if (!Util.isNull(dbr.getDbrDetailViews()) && !Util.isZero(dbr.getDbrDetailViews().size())) {
                 dbrDetails = dbr.getDbrDetailViews();
             }
 
             loanAccountTypes = loanAccountTypeControl.getListLoanTypeByWorkCaseId(workCaseId);
-            ncbDetails = ncbInfoControl.getNCBForCalDBR(workCaseId);
+            ncbDetails = dbrControl.getNCBForDBR(workCaseId, dbr.getDbrMarketableFlag());
         }
     }
 
     public void initAddDBRDetail() {
-        isComplete = false;
         selectedItem = new DBRDetailView();
     }
 
@@ -161,15 +160,7 @@ public class DBRInfo extends BaseController {
             dbrDetails.add(selectedItem);
         }
 
-        isComplete = true;
-        context.addCallbackParam("functionComplete", isComplete);
-
-    }
-
-    public void initEditDBRDetail() {
-        isComplete = false;
-        log.debug("initEditDBRDetail :{}", selectedItem);
-        log.debug("initEditDBRDetail rowIndex:{}", rowIndex);
+        context.addCallbackParam("functionComplete", true);
     }
 
     public void onDeletedDBRDetail() {
@@ -180,11 +171,11 @@ public class DBRInfo extends BaseController {
         try {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
-            dbrControl.saveDBRInfo(dbr, ncbDetails);
+            dbrControl.saveDBRInfo(dbr);
 
             calculationControl.calForDBR(workCaseId);
             calculationControl.calWC(workCaseId);
-            calculationControl.calculateTotalProposeAmount(workCaseId, false);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
             calculationControl.calculateFinalDBR(workCaseId);
 
             //update Display
