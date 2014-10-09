@@ -137,15 +137,17 @@ public class AppraisalResultControl extends BusinessControl {
             }else if(workCasePreScreenId != 0){
                 newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             }
-            log.debug("onSaveAppraisalResultModify ::: newCreditFacility : {}", newCreditFacility);
+            log.debug("onSaveAppraisalResultModify ::: newCreditFacility : {}", newCreditFacility != null ? newCreditFacility.getId() : null);
             if (!Util.isNull(newCreditFacility)){
                 //Update All Collateral : Set appraisal flag = 0
                 newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, ProposeType.A);
                 //set flag 0 for all collateral
-                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList);
+                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList != null ? newCollateralList.size() : null);
                 for(ProposeCollateralInfo newCollateral : newCollateralList){
+                    log.debug("onSaveAppraisalAppointment ::: newCollateral : {}", newCollateral);
                     newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
                     for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                        log.debug("onSaveAppraisalAppointment ::: newCollateralHead : {}", newCollateralHead);
                         newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
                     }
                     newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
@@ -154,55 +156,21 @@ public class AppraisalResultControl extends BusinessControl {
 
                 newCollateralList.clear();
                 newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, ProposeType.A, null));
-                log.debug("onSaveAppraisalResultModify :: after transform newCollateralList : {}", newCollateralList);
+                //log.debug("onSaveAppraisalResultModify :: after transform newCollateralList : {}", newCollateralList);
                 proposeCollateralInfoDAO.persist(newCollateralList);
 
-                //Do not delete old collateral .. update and add new only
-                /*List<ProposeCollateralInfo> newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, proposeType);
-
-                if (Util.isSafetyList(newCollateralList)){
-                    log.debug("## newCollateralList.size() ## [{}]",newCollateralList.size());
-
-                    for (ProposeCollateralInfo proposeCollateralInfo : newCollateralList){
-                        List<ProposeCollateralInfoHead> collateralInfoHeadList = proposeCollateralInfo.getProposeCollateralInfoHeadList();
-
-                        if (Util.isSafetyList(collateralInfoHeadList)){
-                            log.debug("## collateralInfoHeadList.size() ## [{}]",collateralInfoHeadList.size());
-
-                            for (ProposeCollateralInfoHead collateralInfoHead : collateralInfoHeadList){
-                                List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = collateralInfoHead.getProposeCollateralInfoSubList();
-
-                                if (Util.isSafetyList(proposeCollateralInfoSubList)){
-                                    log.debug("## proposeCollateralInfoSubList.size() ## [{}]",proposeCollateralInfoSubList.size());
-
-                                    for (ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoSubList){
-                                        List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = proposeCollateralSubRelatedDAO.findByMainCollSubId(proposeCollateralInfoSub.getId());
-                                        if (Util.isSafetyList(proposeCollateralSubRelatedList)){
-                                            log.debug("## proposeCollateralSubRelatedList.size() ## [{}]",proposeCollateralSubRelatedList.size());
-                                            for (ProposeCollateralSubRelated proposeCollateralSubRelated : proposeCollateralSubRelatedList){
-                                                proposeCollateralSubRelatedDAO.delete(proposeCollateralSubRelated);
-                                                log.debug("-------- ProposeCollateralSubRelated.id[{}] was deleted", proposeCollateralSubRelated.getId());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                //Delete Collateral which Delete by AAD
+                if(!Util.isNull(appraisalView.getRemoveCollListId()) && appraisalView.getRemoveCollListId().size() > 0){
+                    for(Long colId : appraisalView.getRemoveCollListId()){
+                        log.debug("onSaveAppraisalAppointment delete removed Collateral id : {}", colId);
+                        if(!Util.isZero(colId)) {
+                            ProposeCollateralInfo proposeCollateralInfo = proposeCollateralInfoDAO.findById(colId);
+                            proposeCollateralInfoDAO.delete(proposeCollateralInfo);
                         }
-                        proposeCollateralInfoDAO.delete(proposeCollateralInfo);
-                        log.debug("-- ProposeCollateralInfo.id[{}] was deleted", proposeCollateralInfo.getId());
                     }
-                }*/
-
+                }
             }
         }
-
-        /*if(!Util.isNull(appraisalView) && Util.isSafetyList(appraisalView.getNewCollateralViewList())){
-            if(Util.isSafetyList(appraisalView.getNewCollateralViewList())){
-                log.debug("-- ProposeCollateralInfoViewList().size()[{}]", appraisalView.getNewCollateralViewList().size());
-                insertToDB(appraisalView.getNewCollateralViewList(), currentUser);
-            }
-        }*/
-
         log.debug("-- done.");
     }
 

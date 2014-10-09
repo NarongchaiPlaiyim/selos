@@ -125,9 +125,9 @@ public class AppraisalAppointmentControl extends BusinessControl {
             appraisal  = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - appraisal: {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-            log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility);
+            log.debug("getAppraisalAppointment by workCaseId - creditFacility : {}", newCreditFacility != null ? newCreditFacility.getId() : null);
             customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCaseId(workCaseId);
-            log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance);
+            log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance != null ? customerAcceptance.getId() : null);
             contactRecordDetailList = contactRecordDetailDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - ContactRecordDetailList.size() : [{}]", contactRecordDetailList != null ? contactRecordDetailList.size() : null);
 
@@ -135,9 +135,9 @@ public class AppraisalAppointmentControl extends BusinessControl {
             appraisal  = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId : {}", appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-            log.debug("getAppraisalAppointment by workCasePreScreenId - creditFacility : {}", newCreditFacility);
+            log.debug("getAppraisalAppointment by workCasePreScreenId - creditFacility : {}", newCreditFacility != null ? newCreditFacility.getId() : null);
             customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCasePrescreenId(workCasePreScreenId);
-            log.debug("getAppraisalAppointment by workCasePreScreenId - CustomerAcceptance : {}", customerAcceptance);
+            log.debug("getAppraisalAppointment by workCasePreScreenId - CustomerAcceptance : {}", customerAcceptance != null ? customerAcceptance.getId() : null);
             contactRecordDetailList = contactRecordDetailDAO.findByWorkCasePrescreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId - ContactRecordDetailList.size()[{}]", contactRecordDetailList != null ? contactRecordDetailList.size() : null);
         }
@@ -177,7 +177,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
     }
 
     public void onSaveAppraisalAppointment(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId, List<ContactRecordDetailView> contactRecordDetailViewList, CustomerAcceptanceView cusAcceptView, long statusId){
-        log.info("-- onSaveAppraisalAppointment");
+        log.debug("-- onSaveAppraisalAppointment");
         if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
             workCase = workCaseDAO.findById(workCaseId);
             workCasePrescreen = null;
@@ -281,6 +281,17 @@ public class AppraisalAppointmentControl extends BusinessControl {
                     contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, workCase, getCurrentUser(), workCasePrescreen, workCasePrescreen.getStep(), customerAcceptance);
                     contactRecordDetailDAO.persist(contactRecordDetailList);
                     log.debug("-- ContactRecordDetailList.size()[{}] saved", contactRecordDetailList.size());
+                }
+            }
+
+            //Delete Collateral which Delete by AAD
+            if(!Util.isNull(appraisalView.getRemoveCollListId()) && appraisalView.getRemoveCollListId().size() > 0){
+                for(Long colId : appraisalView.getRemoveCollListId()){
+                    log.debug("onSaveAppraisalAppointment delete removed Collateral id : {}", colId);
+                    if(!Util.isZero(colId)) {
+                        ProposeCollateralInfo proposeCollateralInfo = newCollateralDAO.findById(colId);
+                        newCollateralDAO.delete(proposeCollateralInfo);
+                    }
                 }
             }
 

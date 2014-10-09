@@ -904,7 +904,7 @@ public class CalculationControl extends BusinessControl{
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
         if (!Util.isNull(proposeLine)) {
-            proposeLine.setExistingSMELimit(existingCreditFacility.getTotalGroupComOBOD());
+            proposeLine.setExistingSMELimit(existingCreditFacility != null ? existingCreditFacility.getTotalGroupComOBOD() : BigDecimal.ZERO);
             // ***** Collateral ***** //
             BigDecimal thirtyPercent = BigDecimal.valueOf(0.30);
             BigDecimal fiftyPercent = BigDecimal.valueOf(0.50);

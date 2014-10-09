@@ -172,7 +172,7 @@ public class AppraisalDetailTransform extends Transform {
     }
 
     public List<AppraisalDetailView> transformToView(final List<ProposeCollateralInfo> newCollateralList){
-        log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", ""+newCollateralList.size());
+        log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", newCollateralList != null ? newCollateralList.size() : null);
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         AppraisalDetailView view = null;
         List<ProposeCollateralInfoHead> newCollateralHeadList = null;

@@ -29,8 +29,9 @@
                          styleClass="ui-confirmdialog-no"
                          widgetVar="conRetAADMCancelBtn"/>
     </p:confirmDialog>
-    <!-- Request Appraisal Prescreen -->
+    <!-- Request Parallel Appraisal Prescreen -->
     <p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestForAppraisal')}" title="#{msg.get('app.header.button.requestForAppraisal')}" styleClass="blueButton"
+                     rendered="#{headerController.stepId != 2032}"
                      action="#{headerController.onOpenSubmitParallelRequestAppraisal}"
                      update=":frmMain:requestParallelAppraisal_Panel"/>
 </p:panel>
