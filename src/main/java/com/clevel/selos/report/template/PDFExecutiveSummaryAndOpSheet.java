@@ -1151,6 +1151,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 proposedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
 
                 if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
+                    log.debug("detailView.getProposeCreditInfoTierDetailViewList() {}",detailView.getProposeCreditInfoTierDetailViewList().size());
                     for (ProposeCreditInfoTierDetailView proposeCreditInfoTierDetailView : detailView.getProposeCreditInfoTierDetailViewList()){
                         ProposeCreditInfoTierDetailReport proposeCreditInfoTierDetailReport = new ProposeCreditInfoTierDetailReport();
 
