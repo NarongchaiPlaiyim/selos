@@ -6,94 +6,95 @@
         xmlns:p="http://primefaces.org/ui"
         xmlns:clv="http://clevel.com/ui">
     <p:panel id="disbursementMcDlgPanel" styleClass="panel-dialog">
-    <h:form id="disbursementMcForm">
-        <table id="content_form">
-            <tr>
-               <td><p:outputLabel for="issuedBy" value="#{msg.get('app.disbursement.detail.mc.dialog.issuedBy')}"/></td>
-               <td>
-                   <p:selectOneMenu id="issuedBy" value="#{disbursementInfo.disbursementMcDetailView.issuedBy}">
-                     <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
-                     <f:selectItems value="#{disbursementInfo.bankBranchList}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-            <tr>
-               <td><p:outputLabel for="issuedDate" value="#{msg.get('app.disbursement.detail.mc.dialog.mcIssuedDate')}"/></td>
-               <td>
-                   <clv:BECalendar  value="#{disbursementInfo.disbursementMcDetailView.issuedDate}" id="issuedDate" showOn="button" pattern="dd/MM/yyyy"
-                   				readonlyInput="true"
-                                     navigator="true" locale="th_TH" showButtonPanel="true" />
-               </td>
-            </tr>
-            <tr>
-                <td><p:outputLabel for="payeeName" value="#{msg.get('app.disbursement.detail.mc.dialog.payeeName')}"/></td>
-                <td>
-                    <p:selectOneMenu  value="#{disbursementInfo.disbursementMcDetailView.payeeName}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
-                        <f:selectItems value="#{disbursementInfo.bankList}"/>
-                    </p:selectOneMenu>
-                </td>
-                <td>
-                    <p:inputText id="payeeName" value="#{disbursementInfo.disbursementMcDetailView.payeeSubname}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><p:outputLabel for="crossType" value="#{msg.get('app.disbursement.detail.mc.dialog.crossType')}"/></td>
-                <td>
-                    <p:selectOneMenu id="crossType" value="#{disbursementInfo.disbursementMcDetailView.crossType}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
-                        <f:selectItems value="#{disbursementInfo.crossTypeList}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-            <tr>
-                <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.mc.dialog.creditType')}"/></td>
-                <td>
-                   <p:dataTable id="creditType" value="#{disbursementInfo.disbursementMcDetailView.disbursementCreditTypeView}" rowIndexVar="rowIndex" var="item">
-                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.productProgram')}">
-                           <h:outputText value="#{item.productProgram}"/>
-                       </p:column>
-                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.creditFac')}">
-                           <h:outputText value="#{item.creditFacility}"/>
-                       </p:column>
-                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.limit')}">
-                           <h:outputText value="#{item.limitAmount}">
-                               <f:convertNumber pattern="#,##0"
-                                                minFractionDigits="2"
-                                                maxFractionDigits="2"
-                                                maxIntegerDigits="14"/>
-                           </h:outputText>
-                       </p:column>
-                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.disburseAmount')}">
-                           <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" required="#{not empty param[saveDisbursementBtn.clientId]}">
-                           		<f:convertNumber pattern="#,##0"
-                                                 minFractionDigits="2"
-                                                 maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
-                           </p:inputText>
-                       </p:column>
-                   </p:dataTable>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="100%" style="text-align: center">
-                    <p:commandButton id="btnSaveMC" value="#{msg.get('app.button.save')}"
-                                     binding="#{saveDisbursementBtn}"
-                                     actionListener="#{disbursementInfo.onSubmitDisbursementMc}"
-                                     styleClass="smaller"
-                                     update=":frmMain ,:disbursementMcForm"
-                                     onclick="PF('blockDisbursementMc').show()"
-                                     oncomplete="handleDisbursementMcDialogRequest(xhr, status, args); blockDisbursementMc.hide()"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
-                                     type="button" onclick="mcDisbursementDialog.hide()"
-                                     update=":frmMain"/>
-                </td>
-            </tr>
-        </table>
-    </h:form>
+        <h:form id="disbursementMcForm">
+            <table id="content_form">
+                <tr>
+                   <td class="title"><p:outputLabel for="issuedBy" value="#{msg.get('app.disbursement.detail.mc.dialog.issuedBy')}"/></td>
+                   <td>
+                       <p:selectOneMenu id="issuedBy" value="#{disbursementInfo.disbursementMcDetailView.issuedBy}">
+                         <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                         <f:selectItems value="#{disbursementInfo.bankBranchList}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                   <td class="title"><p:outputLabel for="issuedDate" value="#{msg.get('app.disbursement.detail.mc.dialog.mcIssuedDate')}"/></td>
+                   <td>
+                       <clv:BECalendar  value="#{disbursementInfo.disbursementMcDetailView.issuedDate}" id="issuedDate" showOn="button" pattern="dd/MM/yyyy"
+                                    readonlyInput="true"
+                                         navigator="true" locale="th_TH" showButtonPanel="true" />
+                   </td>
+                </tr>
+                <tr>
+                    <td class="title"><p:outputLabel for="payeeName" value="#{msg.get('app.disbursement.detail.mc.dialog.payeeName')}"/></td>
+                    <td>
+                        <p:selectOneMenu  value="#{disbursementInfo.disbursementMcDetailView.payeeName}">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{disbursementInfo.bankList}"/>
+                        </p:selectOneMenu>
+                    </td>
+                    <td>
+                        <p:inputText id="payeeName" value="#{disbursementInfo.disbursementMcDetailView.payeeSubname}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title"><p:outputLabel for="crossType" value="#{msg.get('app.disbursement.detail.mc.dialog.crossType')}"/></td>
+                    <td>
+                        <p:selectOneMenu id="crossType" value="#{disbursementInfo.disbursementMcDetailView.crossType}">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
+                            <f:selectItems value="#{disbursementInfo.crossTypeList}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title"><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.mc.dialog.creditType')}"/></td>
+                    <td>
+                       <p:dataTable id="creditType" value="#{disbursementInfo.disbursementMcDetailView.disbursementCreditTypeView}" rowIndexVar="rowIndex" var="item">
+                           <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.productProgram')}">
+                               <h:outputText value="#{item.productProgram}"/>
+                           </p:column>
+                           <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.creditFac')}">
+                               <h:outputText value="#{item.creditFacility}"/>
+                           </p:column>
+                           <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.limit')}">
+                               <h:outputText value="#{item.limitAmount}">
+                                   <f:convertNumber pattern="#,##0"
+                                                    minFractionDigits="2"
+                                                    maxFractionDigits="2"
+                                                    maxIntegerDigits="14"/>
+                               </h:outputText>
+                           </p:column>
+                           <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.disburseAmount')}">
+                               <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" required="#{not empty param[saveDisbursementMCBtn.clientId]}">
+                                    <f:convertNumber pattern="#,##0"
+                                                     minFractionDigits="2"
+                                                     maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                               </p:inputText>
+                           </p:column>
+                       </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%" style="text-align: center">
+                        <p:commandButton id="btnSaveMC" value="#{msg.get('app.button.save')}"
+                                         binding="#{saveDisbursementMCBtn}"
+                                         actionListener="#{disbursementInfo.onSubmitDisbursementMc}"
+                                         styleClass="smaller"
+                                         update=":frmMain ,:disbursementMcForm"
+                                         onclick="PF('blockDisbursementMc').show()"
+                                         oncomplete="handleDisbursementMcDialogRequest(xhr, status, args); blockDisbursementMc.hide()"/>
+                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
+                                         type="button" onclick="PF('mcDisbursementDialog').hide()"
+                                         update=":frmMain"/>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+        <p:blockUI widgetVar="blockDisbursementMc" block="disbursementMcDlgPanel">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </p:panel>
-    <p:blockUI widgetVar="blockDisbursementMc" block=":disbursementMcForm">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+
 </ui:composition>

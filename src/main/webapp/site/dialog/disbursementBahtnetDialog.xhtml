@@ -9,7 +9,7 @@
     <h:form id="disbursementBahtnetForm">
         <table id="content_form">
             <tr>
-                <td><p:outputLabel for="bankName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.bankName')}"/></td>
+                <td class="title"><p:outputLabel for="bankName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.bankName')}"/></td>
                 <td>
                 	<p:selectOneMenu id="bankName" value="#{disbursementInfo.disbursementBahtnetDetailView.bankCode}" required="true">
                            <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
@@ -18,25 +18,25 @@
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel for="branchName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.branchName')}"/></td>
+                <td class="title"><p:outputLabel for="branchName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.branchName')}"/></td>
                 <td>
                     <p:inputText id="branchName" value="#{disbursementInfo.disbursementBahtnetDetailView.branchName}"/>
                 </td>
             </tr>
             <tr>
-                <td ><p:outputLabel for="accountNumber" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.accountNumber')}"/></td>
+                <td class="title"><p:outputLabel for="accountNumber" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.accountNumber')}"/></td>
                 <td>
                     <p:inputMask id="accountNumber" mask="999-9-99999-9" value="#{disbursementInfo.disbursementBahtnetDetailView.accountNumber}" required="true"/>
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel for="benefitName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.benefitName')}"/></td>
+                <td class="title"><p:outputLabel for="benefitName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.benefitName')}"/></td>
                 <td>
                     <p:inputText id="benefitName" value="#{disbursementInfo.disbursementBahtnetDetailView.benefitName}"/>
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.creditType')}"/></td>
+                <td class="title"><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.creditType')}"/></td>
                 <td>
                     <p:dataTable id="creditType" value="#{disbursementInfo.disbursementBahtnetDetailView.disbursementCreditTypeView}" rowIndexVar="rowIndex" var="item">
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.productProgram')}">
@@ -54,7 +54,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.disburseAmount')}">
-                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" required="#{not empty param[saveDisbursementBtn.clientId]}">
+                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" required="#{not empty param[saveDisbursementBahtBtn.clientId]}">
                             	<f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -67,7 +67,7 @@
             <tr>
                 <td colspan="100%" style="text-align: center">
                     <p:commandButton id="btnSaveBaht" value="#{msg.get('app.button.save')}"
-                                     binding="#{saveDisbursementBtn}"
+                                     binding="#{saveDisbursementBahtBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementBahtnet()}"
                                      styleClass="smaller"
                                      update=":frmMain ,:disbursementBahtnetForm"
