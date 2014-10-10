@@ -54,7 +54,7 @@ public class AppraisalDetailTransform extends Transform {
 
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
             //Find all Collateral in Application
-            newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
+            newCollateralList = Util.safetyList(newCollateralDAO.findCollateralForAppraisal(newCreditFacility, proposeType));
         }else{
             newCollateralList = new ArrayList<ProposeCollateralInfo>();
         }
@@ -76,10 +76,9 @@ public class AppraisalDetailTransform extends Transform {
                         //loop for check head collateral with appraisal detail
                         List<ProposeCollateralInfoHead> newCollateralHeadForAdd = new ArrayList<ProposeCollateralInfoHead>();
                         for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
+                            log.debug("------ NewCollateralHead.getId()[{}] == newCollateralHeadId[{}] ",newCollateralHead.getId(), newCollateralHeadId);
                             if(newCollateralHead.getId() == newCollateralHeadId){
                                 //to set collateral head from appraisalDetailView
-                                log.debug("------ NewCollateralHead.getId()[{}] == newCollateralHeadId[{}] ",newCollateralHead.getId(), newCollateralHeadId);
-
                                 newCollateralHead.setPurposeNewAppraisal(Util.isTrue(view.isPurposeNewAppraisalB()));
                                 newCollateralHead.setPurposeReviewAppraisal(Util.isTrue(view.isPurposeReviewAppraisalB()));
                                 newCollateralHead.setPurposeReviewBuilding(Util.isTrue(view.isPurposeReviewBuildingB()));
@@ -172,7 +171,7 @@ public class AppraisalDetailTransform extends Transform {
     }
 
     public List<AppraisalDetailView> transformToView(final List<ProposeCollateralInfo> newCollateralList){
-        log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", ""+newCollateralList.size());
+        log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", newCollateralList != null ? newCollateralList.size() : null);
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         AppraisalDetailView view = null;
         List<ProposeCollateralInfoHead> newCollateralHeadList = null;

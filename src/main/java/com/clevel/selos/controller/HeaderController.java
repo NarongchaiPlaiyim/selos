@@ -1774,13 +1774,10 @@ public class HeaderController extends BaseController {
     }
     public void onRequestAppraisalCustomerAccepted(){
         log.debug("onRequestAppraisal by BDM ( after customer acceptance )");
-        HttpSession session = FacesUtil.getSession(false);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        String queueName = Util.parseString(session.getAttribute("queueName"), "");
-        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+        _loadSessionVariable();
 
         try {
-            fullApplicationControl.requestAppraisal(workCaseId, 0, queueName, wobNumber, aadAdminId);
+            fullApplicationControl.requestAppraisal(workCaseId, queueName, wobNumber, aadAdminId);
             messageHeader = "Information.";
             message = "Submit case success.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");

@@ -248,22 +248,8 @@ public class AppraisalAppointment extends BaseController implements Serializable
 
                 customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceView(workCaseId, workCasePreScreenId);
 
-//                contactRecordDetailViewList = Util.safetyList(customerAcceptanceControl.getContactRecordDetails(customerAcceptanceView.getId()));
-
                 getZoneTeamId(bdmUserId);
                 updateContractFlag(appraisalContactDetailView);
-//                if(Util.isNull(appraisalView.getAppraisalDate())){
-//                    appraisalView.setAppraisalDate(DateTime.now().toDate());
-//                    log.debug("--[NEW] AppraisalDate : {}", dateString(appraisalView.getAppraisalDate()));
-//                }
-//                if(Util.isNull(appraisalView.getDueDate())){
-//                    appraisalView.setDueDate(DateTime.now().toDate());
-//                    log.debug("--[NEW] DueDate : {}", dateString(appraisalView.getDueDate()));
-//                }
-//                if(Util.isNull(appraisalView.getAppointmentDate())){
-//                    appraisalView.setAppointmentDate(DateTime.now().toDate());
-//                    log.debug("--[NEW] AppointmentDate : {}", dateString(appraisalView.getAppointmentDate()));
-//                }
             } else {
                 appraisalView = new AppraisalView();
                 appraisalView.reset();
@@ -513,6 +499,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     public void onDeleteAppraisalDetailView() {
         log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
         appraisalDetailViewList.remove(rowIndex);
+        appraisalView.getRemoveCollListId().add(appraisalDetailViewSelected.getNewCollateralId());
         log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
     }
 
@@ -541,27 +528,6 @@ public class AppraisalAppointment extends BaseController implements Serializable
 
     public void onSaveAppraisalAppointment() {
         log.info("-- onSaveAppraisalAppointment::::");
-        /*try{
-            appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-            appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView, statusId);
-            messageHeader = msg.get("app.appraisal.request.message.header.save.success");
-            message = msg.get("app.appraisal.request.message.body.save.success");
-
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
-        } catch (Exception ex) {
-            log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-            if(ex.getCause() != null){
-                message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-            } else {
-                message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }*/
-
-
-        log.info("onSaveAppraisalAppointment::::");
         log.info("appraisalDetailViewList.size()        ::: {} ", appraisalDetailViewList.size());
         log.info("appraisalContactDetailViewList.size() ::: {} ", appraisalContactDetailViewList.size());
         try{
@@ -570,18 +536,14 @@ public class AppraisalAppointment extends BaseController implements Serializable
             appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
 
             appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView, statusId);
-            messageHeader = msg.get("app.appraisal.appointment.message.header.save.success");
+            messageHeader = "Information";
             message = msg.get("app.appraisal.appointment.message.body.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.appraisal.appointment.message.header.save.fail");
-            if(ex.getCause() != null){
-                message = msg.get("app.appraisal.appointment.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-            } else {
-                message = msg.get("app.appraisal.appointment.message.body.save.fail") + ex.getMessage();
-            }
+            messageHeader = "Exception";
+            message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }

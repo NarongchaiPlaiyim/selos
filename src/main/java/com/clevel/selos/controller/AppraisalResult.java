@@ -397,7 +397,7 @@ public class AppraisalResult extends BaseController {
             appraisalView.setNewCollateralViewList(newCollateralViewList);
             log.debug("## appraisalView.getNewCollateralViewList().size() ## [{}]",appraisalView.getNewCollateralViewList().size());
             appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId, statusId);
-
+            appraisalResultControl.deleteUnUseCollateral(workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:head>
     <title>#{msg.get("app.name")} - Appraisal Request</title>
@@ -42,7 +43,12 @@
 <ui:include src="include/header_logo.xhtml" />
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<ui:include src="include/header_detail_appraisal.xhtml" />
+<c:if test="#{headerController.stepId != 2032}">
+    <ui:include src="include/header_detail_appraisal.xhtml" />
+</c:if>
+<c:if test="#{headerController.stepId == 2032}">
+    <ui:include src="include/header_detail.xhtml" />
+</c:if>
 <!-- End Header Detail -->
     <!-- Start Menu -->
     <div id="selosmenu" class="selosmenu">

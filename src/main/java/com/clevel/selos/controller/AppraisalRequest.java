@@ -131,12 +131,6 @@ public class AppraisalRequest extends BaseController {
                 return;
 
             }
-            /*stepId = getCurrentStep(session);
-            if(stepId != StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId != StepValue.REQUEST_APPRAISAL_BDM.value()) {
-                log.debug("preRender ::: Invalid step id : {}", stepId);
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }*/
         } else {
             log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -165,7 +159,7 @@ public class AppraisalRequest extends BaseController {
             }
 
             ProposeType proposeType;
-            if(stepId != StepValue.REQUEST_APPRAISAL.value()){
+            if(stepId != StepValue.REQUEST_APPRAISAL.value() && stepId != StepValue.REQUEST_APPRAISAL_RETURN.value()){
                 proposeType = ProposeType.P;
             }else{
                 proposeType = ProposeType.A;
@@ -260,7 +254,7 @@ public class AppraisalRequest extends BaseController {
                 try{
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, statusId);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, workCasePreScreenId, stepId);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");

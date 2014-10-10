@@ -110,7 +110,7 @@ public class NCB implements Serializable {
     @Column(name = "ncb_cus_address")
     private String ncbCusAddress;
 
-    @Column(name = "active")
+    @Column(name = "active", columnDefinition = "int default 0")
     private boolean active;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -145,16 +145,16 @@ public class NCB implements Serializable {
     @OneToMany(mappedBy = "ncb")
     private List<NCBDetail> ncbDetailList;
 
-    @Column(name = "npl_tmb_flag_ncb")
+    @Column(name = "npl_tmb_flag_ncb", columnDefinition = "int default 0")
     private boolean nplTMBFlagNCB;
 
-    @Column(name = "npl_other_flag_ncb")
+    @Column(name = "npl_other_flag_ncb", columnDefinition = "int default 0")
     private boolean nplOtherFlagNCB;
 
-    @Column(name = "tdr_tmb_flag_ncb")
+    @Column(name = "tdr_tmb_flag_ncb", columnDefinition = "int default 0")
     private boolean tdrTMBFlagNCB;
 
-    @Column(name = "tdr_other_flag_ncb")
+    @Column(name = "tdr_other_flag_ncb", columnDefinition = "int default 0")
     private boolean tdrOtherFlagNCB;
 
     @Temporal(TemporalType.TIMESTAMP)

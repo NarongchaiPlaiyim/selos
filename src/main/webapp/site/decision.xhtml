@@ -2632,6 +2632,7 @@
                                 <table border="0" style="width: 100%">
                                     <!-- BEGIN: Collateral -->
                                     <ui:repeat value="#{decision.decisionView.approveCollateralList}" var="approveCollView" varStatus="collIndex">
+                                    <h:panelGroup rendered="#{approveCollView.appraisalRequest != 2}">
                                     <tr>
                                         <td class="title" style="width: 15%">#{msg.get('app.decision.label.jobId')}</td>
                                         <td class="left" style="width: 35%">#{approveCollView.jobID}</td>
@@ -2901,6 +2902,7 @@
                                                 </td>
                                             </tr>
                                         </h:panelGroup>
+
                                     </ui:repeat>
                                     <!-- END: Coll Head -->
 
@@ -2911,6 +2913,7 @@
                                                 </td>
                                             </tr>
                                         </h:panelGroup>
+                                    </h:panelGroup>
                                     </ui:repeat>
                                     <!-- END: Collateral -->
                                 </table>
