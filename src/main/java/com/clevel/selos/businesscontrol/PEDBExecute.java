@@ -766,6 +766,10 @@ public class PEDBExecute extends BusinessControl
                 peRoster = null;
             }
 
+            rs.close();
+            conn.close();
+            conn = null;
+
         } catch (Exception e) {
 
             log.error("Error :",e);
@@ -1349,11 +1353,15 @@ public class PEDBExecute extends BusinessControl
                         peInbox.setRequestTypeStr(requestTypeDAO.requestTypeById(completedCasesWKItems.getRequesttypeid()));
                     }
 
-                    Integer stepId = new Integer(StepValue.COMPLETED_STEP.value());
+                    //Integer stepId = new Integer(StepValue.COMPLETED_STEP.value());
 
-                    peInbox.setStep(stepDAO.stepNameById(StepValue.COMPLETED_STEP.value()));
+                    //peInbox.setStep(stepDAO.stepNameById(StepValue.COMPLETED_STEP.value()));
 
-                    peInbox.setStepId(Long.parseLong(stepId.toString()));
+                    peInbox.setStep(stepDAO.stepNameById(completedCasesWKItems.getStepid()));
+
+                    //peInbox.setStepId(Long.parseLong(stepId.toString()));
+
+                    peInbox.setStepId(Long.parseLong(completedCasesWKItems.getStepid().toString()));
 
                     if(completedCasesWKItems.getStatusid()!=null)
                     {
@@ -2209,6 +2217,10 @@ public class PEDBExecute extends BusinessControl
 
 
             }
+
+            rs.close();
+            conn.close();
+            conn = null;
 
         } catch (Exception e) {
 

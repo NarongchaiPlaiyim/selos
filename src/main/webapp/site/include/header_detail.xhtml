@@ -515,11 +515,30 @@
                                  widgetVar="reqPriRedCancelBtn"/>
             </p:confirmDialog>
         <!-- Pending for Decision -->
-        <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
+        <!--<p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
                          title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
                          actionListener="#{headerController.onOpenPendingDecision()}"
                          update=":frmMain:pendingDecisionPanel, :frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
-                         rendered="#{headerController.checkButton('Pending for Decision')}"/>
+                         rendered="#{headerController.checkButton('Pending for Decision')}"/>-->
+        <p:commandButton id="btnPendingForDecision_Pre" value="#{msg.get('app.header.button.pendingForDecision')}"
+                         title="#{msg.get('app.header.button.pendingForDecision')}" styleClass="blueButton"
+                         rendered="#{headerController.checkButton('Pending for Decision')}"
+                         onclick="PF('confirmPendingDecision').show()"/>
+            <p:confirmDialog header="Confirmation" message="Please click 'OK' to Pending for Decision" styleClass="left"
+                             icon="ui-icon-alert"
+                             widgetVar="confirmPendingDecision" global="false" showEffect="fade"
+                             rendered="#{headerController.checkButton('Pending for Decision')}">
+                <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                                 update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRedirectPanel"
+                                 actionListener="#{headerController.onSubmitPendingDecision()}"
+                                 process="@this" widgetVar="pendingDecisionOKBtn"
+                                 oncomplete="PF('confirmPendingDecision').hide(); pendingDecisionOKBtn.enable(); pendingDecisionCancelBtn.enable()"
+                                 onclick="pendingDecisionOKBtn.disable(); pendingDecisionCancelBtn.disable()"/>
+                <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
+                                 onclick="PF('confirmRequestPriceReduction').hide()"
+                                 styleClass="ui-confirmdialog-no"
+                                 widgetVar="pendingDecisionCancelBtn"/>
+            </p:confirmDialog>
         <!-- Customer Accept ( Submit to next Step ) -->
         <p:commandButton id="btnCustomerAccept_Pre" value="#{msg.get('app.header.button.customerAccept')}"
                          title="#{msg.get('app.header.button.customerAccept')}" styleClass="blueButton"
@@ -695,7 +714,7 @@
     </p:dialog>
 </p:panel>
 
-<p:confirmDialog widgetVar="confirmDeleteReturn" header="Confirm Delete"
+<!--<p:confirmDialog widgetVar="confirmDeleteReturn" header="Confirm Delete"
                  message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="380" severity="alert"
                  closable="false" closeOnEscape="false">
@@ -709,7 +728,7 @@
                          value="#{msg.get('app.button.cancel')}"
                          onclick="confirmDeleteReturn.hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoAADPanel" styleClass="panel">
     <p:dialog id="returnInfoAADDialog" widgetVar="returnInfoAADDlg" header="Return Summary"
@@ -719,7 +738,7 @@
     </p:dialog>
 </p:panel>
 
-<p:confirmDialog widgetVar="confirmDeleteReturnAAD" header="Confirm Delete"
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnAAD" header="Confirm Delete"
                  message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="380" severity="alert"
                  closable="false" closeOnEscape="false">
@@ -733,7 +752,7 @@
                          value="#{msg.get('app.button.cancel')}"
                          onclick="confirmDeleteReturnAAD.hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoBDMPanel" styleClass="panel">
     <p:dialog id="returnInfoBDMDialog" widgetVar="returnInfoBDMDlg" header="Return Summary"
@@ -743,7 +762,7 @@
     </p:dialog>
 </p:panel>
 
-<p:confirmDialog widgetVar="confirmDeleteReturnBDM" header="Confirm Delete"
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnBDM" header="Confirm Delete"
                  message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="380" severity="alert"
                  closable="false" closeOnEscape="false">
@@ -757,7 +776,7 @@
                          value="#{msg.get('app.button.cancel')}"
                          onclick="confirmDeleteReturnBDM.hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoBUPanel" styleClass="panel">
     <p:dialog id="returnInfoBUDialog" widgetVar="returnInfoBUDlg" header="Return Summary"
@@ -767,7 +786,7 @@
     </p:dialog>
 </p:panel>
 
-<p:confirmDialog widgetVar="confirmDeleteReturnBU" header="Confirm Delete"
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnBU" header="Confirm Delete"
                  message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="380" severity="alert"
                  closable="false" closeOnEscape="false">
@@ -781,7 +800,7 @@
                          value="#{msg.get('app.button.cancel')}"
                          onclick="confirmDeleteReturnBU.hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoMakerPanel" styleClass="panel">
     <p:dialog id="returnInfoMakerDialog" widgetVar="returnInfoMakerDlg" header="Return Summary"
@@ -791,7 +810,7 @@
     </p:dialog>
 </p:panel>
 
-<p:confirmDialog widgetVar="confirmDeleteReturnMaker" header="Confirm Delete"
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnMaker" header="Confirm Delete"
                  message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="380" severity="alert"
                  closable="false" closeOnEscape="false">
@@ -805,7 +824,7 @@
                          value="#{msg.get('app.button.cancel')}"
                          onclick="confirmDeleteReturnMaker.hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 
 <p:panel id="returnInfoAADUWPanel" styleClass="panel">
     <p:dialog id="returnInfoAADUWDialog" widgetVar="returnInfoAADUWDlg" header="Return Summary"
@@ -815,7 +834,7 @@
     </p:dialog>
 </p:panel>
 
-<p:confirmDialog widgetVar="confirmDeleteReturnAADUW" header="Confirm Delete"
+<!--<p:confirmDialog widgetVar="confirmDeleteReturnAADUW" header="Confirm Delete"
                  message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="380" severity="alert"
                  closable="false" closeOnEscape="false">
@@ -829,7 +848,7 @@
                          value="#{msg.get('app.button.cancel')}"
                          onclick="confirmDeleteReturnAADUW.hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 
 <p:panel id="addReturnInfoPanel" styleClass="panel">
     <p:dialog id="addReturnInfoDialog" widgetVar="addReturnInfoDlg" header="Add Return Information"

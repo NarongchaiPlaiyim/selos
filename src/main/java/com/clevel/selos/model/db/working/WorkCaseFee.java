@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "wrk_case_fee")
-public class WorkCaseFee {
+public class WorkCaseFee extends AbstractWorkCase{
 
     @Id
     @SequenceGenerator(name = "SEQ_WRK_CASE_FEE_ID", sequenceName = "SEQ_WRK_CASE_FEE_ID", allocationSize = 1)

@@ -55,11 +55,17 @@
                                              oncomplete="addReturnAADUWInfoDlg.show()"
                                              update=":frmMain:reasonAADUWId, :frmMain:remarkAADUW">
                             </p:commandButton>
-                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                            <p:commandButton title="Remove" process="@form"
+                                             icon="ui-icon-trash"
+                                             rendered="#{returnInfoAADUW.canEdit}"
+                                             action="#{headerController.onDeleteReturnAADUWInfo(rowIndex)}"
+                                             update=":frmMain:returnInfoAADUWDlgPanel">
+                            </p:commandButton>
+                            <!--<p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              rendered="#{returnInfoAADUW.canEdit}"
                                              oncomplete="confirmDeleteReturnAADUW.show()">
-                            </p:commandButton>
+                            </p:commandButton>-->
                         </p:column>
                     </p:dataTable>
                 </td>
