@@ -5,6 +5,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
         >
+    <p:panel id="disbursementBahtnetDlgPanel" styleClass="panel-dialog">
     <h:form id="disbursementBahtnetForm">
         <table id="content_form">
             <tr>
@@ -53,7 +54,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.disburseAmount')}">
-                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" >
+                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" required="#{not empty param[saveDisbursementBtn.clientId]}">
                             	<f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -65,12 +66,14 @@
             </tr>
             <tr>
                 <td colspan="100%" style="text-align: center">
-                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                    <p:commandButton id="btnSaveBaht" value="#{msg.get('app.button.save')}"
+                                     binding="#{saveDisbursementBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementBahtnet()}"
                                      styleClass="smaller"
                                      update=":frmMain ,:disbursementBahtnetForm"
                                      process="@form"
-                                     oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args)"/>
+                                     onclick="PF('blockDisbursementBaht').show()"
+                                     oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args); blockDisbursementBaht.hide()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="bahtnetDisbursementDialog.hide()"
                                      update=":frmMain"/>
@@ -78,4 +81,9 @@
             </tr>
         </table>
     </h:form>
+    </p:panel>
+    <p:blockUI widgetVar="blockDisbursementBaht" block=":disbursementBahtnetForm">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>
