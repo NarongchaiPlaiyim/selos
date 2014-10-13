@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
 	<property name="ireport.zoom" value="1.2396694214876238"/>
 	<property name="ireport.x" value="27"/>
-	<property name="ireport.y" value="3077"/>
+	<property name="ireport.y" value="2844"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -3931,7 +3931,7 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 				<text><![CDATA[Proposed Guarantor]]></text>
 			</staticText>
 		</band>
-		<band height="15">
+		<band height="20">
 			<staticText>
 				<reportElement uuid="6266d79a-3377-402c-9acf-27703483898a" style="Total" x="0" y="0" width="484" height="15"/>
 				<textElement>

@@ -1237,12 +1237,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedView.setPath(pathsub);
                 approvedView.setCount(count++);
 
-                if (!Util.isNull(detailView.getProductProgramView())){
-                    approvedView.setProdName(Util.checkNullString(detailView.getProductProgramView().getName()));
-                } else {
-                    approvedView.setProdName(minus);
-                }
-
                 if (!Util.isNull(detailView.getUwDecision())){
                     if (detailView.getUwDecision() == DecisionType.APPROVED){
                         approvedView.setUwDecision("APPROVED");
@@ -1253,6 +1247,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     }
                 } else {
                     approvedView.setUwDecision(minus);
+                }
+
+                if (!Util.isNull(detailView.getProductProgramView())){
+                    approvedView.setProdName(Util.checkNullString(detailView.getProductProgramView().getName()));
+                } else {
+                    approvedView.setProdName(minus);
                 }
 
                 if (!Util.isNull(detailView.getCreditTypeView())){
@@ -2331,7 +2331,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvalHistoryDecisionReport.setRoleDescription(!Util.isNull(view.getUserView()) ?
                         Util.checkNullString(view.getUserView().getRoleDescription()) : minus);
                 approvalHistoryDecisionReport.setTitleName(!Util.isNull(view.getUserView()) ?
-                        Util.checkNullString(view.getUserView().getTitleName()) : minus);
+                        Util.checkNullString(view.getUserView().getPositionName()) : minus);
                 approvalHistoryDecisionReport.setSubmitDate(DateTimeUtil.getCurrentDateTimeTH(view.getSubmitDate()));
                 approvalHistoryDecisionReport.setComments(Util.checkNullString(view.getComments()));
                 approvalHistoryDecisionReportArrayList.add(approvalHistoryDecisionReport);

@@ -36,7 +36,7 @@ public class ReportService implements Serializable {
 
         JasperPrint print ;
 
-        log.info("parameters: {}",parameters);
+//        log.info("parameters: {}",parameters);
 
         print = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 
