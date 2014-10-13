@@ -65,7 +65,7 @@
                            </h:outputText>
                        </p:column>
                        <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.disburseAmount')}">
-                           <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" required="#{not empty param[saveDisbursementBtn.clientId]}">
+                           <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" required="#{not empty param[saveDisbursementMCBtn.clientId]}">
                            		<f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -78,10 +78,10 @@
             <tr>
                 <td colspan="100%" style="text-align: center">
                     <p:commandButton id="btnSaveMC" value="#{msg.get('app.button.save')}"
-                                     binding="#{saveDisbursementBtn}"
+                                     binding="#{saveDisbursementMCBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementMc}"
                                      styleClass="smaller"
-                                     update=":frmMain ,:disbursementMcForm"
+                                     update=":frmMain ,:disbursementMcForm, :msgBoxSystemMessagePanel2"
                                      onclick="PF('blockDisbursementMc').show()"
                                      oncomplete="handleDisbursementMcDialogRequest(xhr, status, args); blockDisbursementMc.hide()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
@@ -92,7 +92,7 @@
         </table>
     </h:form>
     </p:panel>
-    <p:blockUI widgetVar="blockDisbursementMc" block=":disbursementMcForm">
+    <p:blockUI widgetVar="blockDisbursementMc" block=":disbursementMcDlgPanel">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>

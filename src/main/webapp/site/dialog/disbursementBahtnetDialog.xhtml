@@ -54,7 +54,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.disburseAmount')}">
-                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" required="#{not empty param[saveDisbursementBtn.clientId]}">
+                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank" required="#{not empty param[saveDisbursementBahtBtn.clientId]}">
                             	<f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -67,10 +67,10 @@
             <tr>
                 <td colspan="100%" style="text-align: center">
                     <p:commandButton id="btnSaveBaht" value="#{msg.get('app.button.save')}"
-                                     binding="#{saveDisbursementBtn}"
+                                     binding="#{saveDisbursementBahtBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementBahtnet()}"
                                      styleClass="smaller"
-                                     update=":frmMain ,:disbursementBahtnetForm"
+                                     update=":frmMain ,:disbursementBahtnetForm, :msgBoxSystemMessagePanel2"
                                      process="@form"
                                      onclick="PF('blockDisbursementBaht').show()"
                                      oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args); blockDisbursementBaht.hide()"/>
@@ -82,7 +82,7 @@
         </table>
     </h:form>
     </p:panel>
-    <p:blockUI widgetVar="blockDisbursementBaht" block=":disbursementBahtnetForm">
+    <p:blockUI widgetVar="blockDisbursementBaht" block=":disbursementBahtnetDlgPanel">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
