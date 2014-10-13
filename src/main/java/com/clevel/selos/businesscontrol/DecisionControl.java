@@ -901,13 +901,17 @@ public class DecisionControl extends BusinessControl {
                 BigDecimal sumTotalCommercial = BigDecimal.ZERO;
                 BigDecimal sumTotalOBOD = BigDecimal.ZERO;
 
-                if(!Util.isNull(basicInfo) && !Util.isNull(tcg) && !Util.isNull(dbr)) {
+                if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
                     int tcgFlag = tcg.getTcgFlag();
                     int specialProgramId = 0;
+                    int marketTableFlag = 0;
                     if(basicInfo.getApplySpecialProgram() == 1) {
                         if(!Util.isNull(basicInfo.getSpecialProgram()) && !Util.isZero(basicInfo.getSpecialProgram().getId())) {
                             specialProgramId = basicInfo.getSpecialProgram().getId();
                         }
+                    }
+                    if(!Util.isNull(dbr)) {
+                        marketTableFlag = dbr.getMarketableFlag();
                     }
                     for (ProposeCreditInfoDetailView approveCredit : approveCreditList) {
                         if(!Util.isNull(approveCredit) && approveCredit.getUwDecision() == DecisionType.APPROVED) {
@@ -920,7 +924,7 @@ public class DecisionControl extends BusinessControl {
                                         ProductFormula productFormula;
                                         if(approveCredit.getCreditTypeView().getCreditGroup() == CreditTypeGroup.OD.value()) {
                                             log.debug("Credit Group == OD");
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, decisionView.getCreditCustomerType().value(), specialProgramId, tcgFlag, dbr.getMarketableFlag());
+                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, decisionView.getCreditCustomerType().value(), specialProgramId, tcgFlag, marketTableFlag);
                                         } else {
                                             log.debug("Credit Group != OD ");
                                             productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, decisionView.getCreditCustomerType().value(), specialProgramId, tcgFlag);
