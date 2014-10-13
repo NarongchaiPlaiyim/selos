@@ -194,8 +194,8 @@ public class NCBInfoControl extends BusinessControl {
                 if(customerInfo.getCustomerEntity()!=null && customerInfo.getCustomerEntity().getId() == 1){ //Individual
                     if((ncbDetailView.getCurrentPayment()!=null && ncbDetailView.getCurrentPayment().getNcbCode()!=null)
                         || (ncbDetailView.getHistoryPayment()!=null && ncbDetailView.getHistoryPayment().getNcbCode()!=null)){
-                        if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 6)
-                                || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 6))
+                        if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= NCBPaymentCode.CODE_003.value())
+                                || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= NCBPaymentCode.CODE_003.value()))
                                 && ncbDetailView.getDateOfInfo()!=null) {
                             isNPLFlag = true;
                             if(ncbDetailView.getTmbCheck()){
@@ -230,8 +230,8 @@ public class NCBInfoControl extends BusinessControl {
                 } else {
                     if((ncbDetailView.getCurrentPayment()!=null && ncbDetailView.getCurrentPayment().getNcbCode()!=null)
                             || (ncbDetailView.getHistoryPayment()!=null && ncbDetailView.getHistoryPayment().getNcbCode()!=null)){
-                        if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= 7)
-                                || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= 7))
+                        if(((NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getCurrentPayment().getNcbCode()).value() >= NCBPaymentCode.CODE_004.value())
+                                || (NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode())!=null && NCBPaymentCode.getValue(ncbDetailView.getHistoryPayment().getNcbCode()).value() >= NCBPaymentCode.CODE_004.value()))
                                 && ncbDetailView.getDateOfInfo()!=null) {
                             isNPLFlag =true;
                             if(ncbDetailView.getTmbCheck()){
