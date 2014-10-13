@@ -148,13 +148,17 @@ public class CalculationControl extends BusinessControl{
         if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
             totalWCTMB = proposeLine.getTotalWCTmb();
             if(!Util.isNull(proposeLine.getProposeCreditInfoList()) && !Util.isZero(proposeLine.getProposeCreditInfoList().size())) {
-                if(!Util.isNull(basicInfo) && !Util.isNull(tcg) && !Util.isNull(dbr)) {
+                if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
                     int tcgFlag = tcg.getTcgFlag();
                     int specialProgramId = 0;
+                    int marketTableFlag = 0;
                     if(basicInfo.getApplySpecialProgram() == 1) {
                         if(!Util.isNull(basicInfo.getSpecialProgram()) && !Util.isZero(basicInfo.getSpecialProgram().getId())) {
                             specialProgramId = basicInfo.getSpecialProgram().getId();
                         }
+                    }
+                    if(!Util.isNull(dbr)) {
+                        marketTableFlag = dbr.getMarketableFlag();
                     }
                     for(ProposeCreditInfo creditInfo : proposeLine.getProposeCreditInfoList()) {
                         if(!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getCreditType()) && !Util.isNull(creditInfo.getProductProgram())) {
@@ -163,7 +167,7 @@ public class CalculationControl extends BusinessControl{
                                 ProductFormula productFormula;
                                 if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
                                     log.debug("Credit Group == OD");
-                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag, dbr.getMarketableFlag());
+                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag, marketTableFlag);
                                 } else {
                                     log.debug("Credit Group != OD ");
                                     productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag);
@@ -803,63 +807,67 @@ public class CalculationControl extends BusinessControl{
                         if (!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getProductProgram()) && !Util.isZero(creditInfo.getProductProgram().getId()) && !Util.isNull(creditInfo.getCreditType()) && !Util.isZero(creditInfo.getCreditType().getId())) {
                             PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
                             if(!Util.isNull(prdProgramToCreditType)) {
+                                int marketTableFlag = RadioValue.NO.value();
                                 if(!Util.isNull(dbr)) {
                                     log.debug("calculateTotalProposeAmount :: dbr ID :: {}", dbr.getId());
-                                    ProductFormula productFormula;
-                                    if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
-                                        log.debug("calculateTotalProposeAmount :: Credit Group == OD");
-                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag, dbr.getMarketableFlag());
-                                    } else {
-                                        log.debug("calculateTotalProposeAmount :: Credit Group != OD ");
-                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag);
-                                    }
-                                    if (!Util.isNull(productFormula)) {
-                                        if(creditInfo.getProposeType() == ProposeType.A) {
-                                            //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
-                                            if(creditInfo.getRequestType() == RequestTypes.NEW.value() && creditInfo.getUwDecision() == DecisionType.APPROVED) {
-                                                if (productFormula.getDbrCalculate() == 2) {// Yes
-                                                    if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(BigDecimal.ZERO);
-                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(creditInfo.getInstallment());
-                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
-                                                        sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
-                                                    }
+                                    log.debug("calculateTotalProposeAmount :: marketTableFlag :: {}", dbr.getMarketableFlag());
+                                    marketTableFlag = dbr.getMarketableFlag();
+                                }
+
+                                ProductFormula productFormula;
+                                if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
+                                    log.debug("calculateTotalProposeAmount :: Credit Group == OD");
+                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag, marketTableFlag);
+                                } else {
+                                    log.debug("calculateTotalProposeAmount :: Credit Group != OD ");
+                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag);
+                                }
+                                if (!Util.isNull(productFormula)) {
+                                    if(creditInfo.getProposeType() == ProposeType.A) {
+                                        //For DBR  sumTotalLoanDbr and sumTotalNonLoanDbr
+                                        if(creditInfo.getRequestType() == RequestTypes.NEW.value() && creditInfo.getUwDecision() == DecisionType.APPROVED) {
+                                            if (productFormula.getDbrCalculate() == 2) {// Yes
+                                                if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                                    sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(BigDecimal.ZERO);
+                                                } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                                    sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(creditInfo.getInstallment());
+                                                } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
+                                                    sumTotalApproveLoanDbr = sumTotalApproveLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                 }
+                                            }
+                                        }
+                                    } else {
+                                        if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
+                                            //ExposureMethod for check to use limit or limit*PCE%
+                                            if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                sumTotalOBOD = sumTotalOBOD.add(creditInfo.getLimit());
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
+                                                sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
                                             }
                                         } else {
-                                            if (CreditTypeGroup.CASH_IN.value() == (productFormula.getProgramToCreditType().getCreditType().getCreditGroup())) { //OBOD or CASH_IN
-                                                //ExposureMethod for check to use limit or limit*PCE%
-                                                if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                                    sumTotalOBOD = sumTotalOBOD.add(BigDecimal.ZERO);
-                                                } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                                    sumTotalOBOD = sumTotalOBOD.add(creditInfo.getLimit());
-                                                } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) { //(limit * %PCE)/100
-                                                    sumTotalOBOD = sumTotalOBOD.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
-                                                }
-                                            } else {
-                                                //ExposureMethod for check to use limit or limit*PCE%
-                                                if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                                    sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
-                                                } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                                    sumTotalCommercial = sumTotalCommercial.add(creditInfo.getLimit());
-                                                } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
-                                                    sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
-                                                }
+                                            //ExposureMethod for check to use limit or limit*PCE%
+                                            if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                sumTotalCommercial = sumTotalCommercial.add(BigDecimal.ZERO);
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                sumTotalCommercial = sumTotalCommercial.add(creditInfo.getLimit());
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                                sumTotalCommercial = sumTotalCommercial.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
                                             }
-                                            sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
+                                        }
+                                        sumTotalPropose = Util.add(sumTotalCommercial, sumTotalOBOD);// Commercial + OBOD  All Credit
 
-                                            if(creditInfo.getRequestType() == RequestTypes.NEW.value()) {
-                                                if (productFormula.getDbrCalculate() == 1) {// No
-                                                    sumTotalNonLoanDbr = BigDecimal.ZERO;
-                                                } else if (productFormula.getDbrCalculate() == 2) {// Yes
-                                                    if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                                        sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
-                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                                        sumTotalLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
-                                                    } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
-                                                        sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
-                                                    }
+                                        if(creditInfo.getRequestType() == RequestTypes.NEW.value()) {
+                                            if (productFormula.getDbrCalculate() == 1) {// No
+                                                sumTotalNonLoanDbr = BigDecimal.ZERO;
+                                            } else if (productFormula.getDbrCalculate() == 2) {// Yes
+                                                if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                                    sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                                } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                                    sumTotalLoanDbr = sumTotalLoanDbr.add(creditInfo.getInstallment());
+                                                } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((?????????????+ Spread)/100))/12
+                                                    sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                 }
                                             }
                                         }
@@ -874,6 +882,14 @@ public class CalculationControl extends BusinessControl{
                     sumTotalGroupExposure = Util.add(groupExposure, sumTotalPropose); //ให้เปลี่ยนเป็น Total Exposure ของ Group  (จาก Existing credit) +  Total Propose Credit
                 }
             }
+
+            log.debug("calculateTotalProposeAmount :: Total Propose :: {}", sumTotalPropose);
+            log.debug("calculateTotalProposeAmount :: Total Propose Loan DBR ( Propose ) :: {}", sumTotalLoanDbr);
+            log.debug("calculateTotalProposeAmount :: Total Propose Loan DBR ( Approve ) :: {}", sumTotalApproveLoanDbr);
+            log.debug("calculateTotalProposeAmount :: Total Propose Non Loan DBR :: {}", sumTotalNonLoanDbr);
+            log.debug("calculateTotalProposeAmount :: Total Commercial :: {}", sumTotalBorrowerCommercial);
+            log.debug("calculateTotalProposeAmount :: Total Commercial And OBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
+            log.debug("calculateTotalProposeAmount :: Total Exposure :: {}", sumTotalGroupExposure);
 
             if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // If UW Save will update loan dbr
                 proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);                 //sumTotalLoanDbr
