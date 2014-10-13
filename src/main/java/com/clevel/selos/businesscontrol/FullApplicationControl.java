@@ -826,7 +826,9 @@ public class FullApplicationControl extends BusinessControl {
                 newCollateralDAO.persist(proposeCol);
             }
         }
+    }
 
+    public void duplicateCollateralForAppraisal(long workCaseId, long workCasePreScreenId){
         //Duplicate Data From Propose ( Requested ) to Approve Requested...
         log.debug("duplicateCollateralData : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         duplicateCollateralData(workCaseId, workCasePreScreenId);

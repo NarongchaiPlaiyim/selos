@@ -2824,6 +2824,7 @@ public class HeaderController extends BaseController {
     public void onSubmitParallelRequestAppraisal(){
         try{
             fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, stepId);
+            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
             messageHeader = "Information.";
             message = "Request for Appraisal complete.";
             showMessageRedirect();
