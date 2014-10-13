@@ -435,7 +435,7 @@ public class CustomerTransform extends Transform {
                 customerInfoView.setIndLv(msg.get("app.custInfoSummary.indLv") + " " + customerInfoView.getFirstNameTh() + " " + customerInfoView.getLastNameTh());
             }
             if(mainCus != null && mainCus.getIsCommittee() == 1){ // is customer from spouse is committee
-                Customer cusCommittee = customerDAO.findById(customer.getJuristicId());
+                Customer cusCommittee = customerDAO.findById(mainCus.getJuristicId());
                 if(customer.getReference() != null && cusCommittee != null){
                     customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
                 }
