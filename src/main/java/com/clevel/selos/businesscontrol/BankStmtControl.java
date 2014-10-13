@@ -378,6 +378,7 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public boolean isBorrowerAndHasODLimit(BankStmtView bankStmtView) {
+        log.debug("isBorrowerAndHasODLimit");
         // AccCharacteristic is Borrower (value = 1)
         if (bankStmtView.getAccountCharacteristic() == 1) {
             // Within 6 months, must has limit(OD Limit is NOT Blank and OD Limit > 0) at least one month
@@ -599,6 +600,7 @@ public class BankStmtControl extends BusinessControl {
             for(BankStmtView bankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
                 if(bankStmtView.getMainAccount() == 1) {
                     tmbLimit = bankStmtView.getNetIncomeLastSix();
+                    log.debug("TMB Limit :: {}", tmbLimit);
                 }
             }
         }
@@ -606,7 +608,9 @@ public class BankStmtControl extends BusinessControl {
             calculateMainAccount(bankStmtSummaryView.getOthBankStmtViewList());
             for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
                 if(bankStmtView.getMainAccount() == 1) {
+                    log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
                     if(tmbLimit.compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
+                        log.debug("TMB Compare OTH > 0");
                         bankStmtView.setMainAccount(0);
                     }
                 }
