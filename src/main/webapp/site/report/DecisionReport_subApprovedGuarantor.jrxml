@@ -133,18 +133,20 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{uwDecision}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="d2bb1778-2d89-428c-907c-0f3d02f36094" style="detail" stretchType="RelativeToBandHeight" x="235" y="0" width="249" height="14"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-				</textElement>
-			</textField>
-			<subreport>
-				<reportElement uuid="9b99df17-b56b-472e-8089-6bf8df40d4db" mode="Transparent" x="235" y="0" width="249" height="14"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditInfoDetailReports})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subApprovedGuarantor_sub ApprovedGuarantor.jasper"]]></subreportExpression>
-			</subreport>
+			<frame>
+				<reportElement uuid="b61b1d9c-1398-406a-a63c-87bc0491d51c" stretchType="RelativeToBandHeight" x="235" y="0" width="249" height="14"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<subreport>
+					<reportElement uuid="9b99df17-b56b-472e-8089-6bf8df40d4db" mode="Transparent" x="0" y="0" width="249" height="14"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditInfoDetailReports})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subApprovedGuarantor_sub ApprovedGuarantor.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
 		</band>
 	</detail>
 </jasperReport>

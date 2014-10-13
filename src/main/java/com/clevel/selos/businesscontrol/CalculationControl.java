@@ -148,17 +148,33 @@ public class CalculationControl extends BusinessControl{
         if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())) {
             totalWCTMB = proposeLine.getTotalWCTmb();
             if(!Util.isNull(proposeLine.getProposeCreditInfoList()) && !Util.isZero(proposeLine.getProposeCreditInfoList().size())) {
-                for(ProposeCreditInfo creditInfo : proposeLine.getProposeCreditInfoList()) {
-                    if(!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getCreditType()) && !Util.isNull(creditInfo.getProductProgram())) {
-                        PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
-                        if(!Util.isNull(basicInfo) && !Util.isNull(basicInfo.getSpecialProgram()) && !Util.isNull(tcg) && !Util.isNull(tcg.getTcgFlag()) && !Util.isNull(proposeLine.getCreditCustomerType())) {
-                            ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram(), tcg.getTcgFlag());
-                            if(!Util.isNull(productFormula) && !Util.isNull(productFormula.getWcCalculate())) {
-                                if(productFormula.getWcCalculate() == 2) {
-                                    if(creditInfo.getProposeType() == ProposeType.P) {
-                                        limitBDM = Util.add(limitBDM, creditInfo.getLimit());
-                                    } else {
-                                        limitUW = Util.add(limitUW, creditInfo.getLimit());
+                if(!Util.isNull(basicInfo) && !Util.isNull(tcg) && !Util.isNull(dbr)) {
+                    int tcgFlag = tcg.getTcgFlag();
+                    int specialProgramId = 0;
+                    if(basicInfo.getApplySpecialProgram() == 1) {
+                        if(!Util.isNull(basicInfo.getSpecialProgram()) && !Util.isZero(basicInfo.getSpecialProgram().getId())) {
+                            specialProgramId = basicInfo.getSpecialProgram().getId();
+                        }
+                    }
+                    for(ProposeCreditInfo creditInfo : proposeLine.getProposeCreditInfoList()) {
+                        if(!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getCreditType()) && !Util.isNull(creditInfo.getProductProgram())) {
+                            PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
+                            if(!Util.isNull(proposeLine.getCreditCustomerType()) && !Util.isNull(prdProgramToCreditType)) {
+                                ProductFormula productFormula;
+                                if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
+                                    log.debug("Credit Group == OD");
+                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag, dbr.getMarketableFlag());
+                                } else {
+                                    log.debug("Credit Group != OD ");
+                                    productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag);
+                                }
+                                if(!Util.isNull(productFormula) && !Util.isNull(productFormula.getWcCalculate())) {
+                                    if(productFormula.getWcCalculate() == 2) {
+                                        if(creditInfo.getProposeType() == ProposeType.P) {
+                                            limitBDM = Util.add(limitBDM, creditInfo.getLimit());
+                                        } else if(creditInfo.getProposeType() == ProposeType.A && creditInfo.getUwDecision().value() == DecisionType.APPROVED.value()) {
+                                            limitUW = Util.add(limitUW, creditInfo.getLimit());
+                                        }
                                     }
                                 }
                             }
@@ -740,7 +756,9 @@ public class CalculationControl extends BusinessControl{
         log.debug("calculateTotalProposeAmount :: workCaseId :: {}", workCaseId);
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         User user = getCurrentUser();
+        log.debug("calculateTotalProposeAmount :: user :: {}", user);
         if (!Util.isNull(proposeLine)) {
+            log.debug("calculateTotalProposeAmount :: proposeLine ID :: {}", proposeLine.getId());
             BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
             BigDecimal sumTotalCommercial = BigDecimal.ZERO;   // Commercial of Propose
             BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
@@ -755,8 +773,8 @@ public class CalculationControl extends BusinessControl{
             BigDecimal groupExposure = BigDecimal.ZERO;
 
             ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
-
             if (!Util.isNull(existingCreditFacility)) {
+                log.debug("calculateTotalProposeAmount :: existingCreditFacility ID :: {}", existingCreditFacility.getId());
                 borrowerComOBOD = existingCreditFacility.getTotalBorrowerComOBOD();
                 borrowerCom = existingCreditFacility.getTotalBorrowerCom();
                 groupExposure = existingCreditFacility.getTotalGroupExposure();
@@ -766,31 +784,34 @@ public class CalculationControl extends BusinessControl{
             TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
+                log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", existingCreditFacility.getId());
+                log.debug("calculateTotalProposeAmount :: tcg ID :: {}", existingCreditFacility.getId());
+                int tcgFlag = tcg.getTcgFlag();
+                int specialProgramId = 0;
+                if(basicInfo.getApplySpecialProgram() == 1) {
+                    if(!Util.isNull(basicInfo.getSpecialProgram()) && !Util.isZero(basicInfo.getSpecialProgram().getId())) {
+                        specialProgramId = basicInfo.getSpecialProgram().getId();
+                    }
+                }
+                log.debug("calculateTotalProposeAmount :: tcgFlag :: {}", tcgFlag);
+                log.debug("calculateTotalProposeAmount :: specialProgramId :: {}", specialProgramId);
                 List<ProposeCreditInfo> proposeCreditInfoList = proposeLine.getProposeCreditInfoList();
                 if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
+                    log.debug("calculateTotalProposeAmount :: proposeCreditInfoList Size :: {}", proposeCreditInfoList.size());
                     DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
                     for (ProposeCreditInfo creditInfo : proposeCreditInfoList) {
                         if (!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getProductProgram()) && !Util.isZero(creditInfo.getProductProgram().getId()) && !Util.isNull(creditInfo.getCreditType()) && !Util.isZero(creditInfo.getCreditType().getId())) {
                             PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
                             if(!Util.isNull(prdProgramToCreditType)) {
                                 if(!Util.isNull(dbr)) {
+                                    log.debug("calculateTotalProposeAmount :: dbr ID :: {}", dbr.getId());
                                     ProductFormula productFormula;
                                     if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
-                                        if(basicInfo.getApplySpecialProgram() == 1) {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
-                                        } else {
-                                            if(!Util.isNull(basicInfo.getSpecialProgram())) {
-                                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag(), dbr.getMarketableFlag());
-                                            } else {
-                                                productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag(), dbr.getMarketableFlag());
-                                            }
-                                        }
+                                        log.debug("calculateTotalProposeAmount :: Credit Group == OD");
+                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag, dbr.getMarketableFlag());
                                     } else {
-                                        if(!Util.isNull(basicInfo.getSpecialProgram())) {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), basicInfo.getSpecialProgram().getId(), tcg.getTcgFlag());
-                                        } else {
-                                            productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), 0, tcg.getTcgFlag());
-                                        }
+                                        log.debug("calculateTotalProposeAmount :: Credit Group != OD ");
+                                        productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, proposeLine.getCreditCustomerType(), specialProgramId, tcgFlag);
                                     }
                                     if (!Util.isNull(productFormula)) {
                                         if(creditInfo.getProposeType() == ProposeType.A) {

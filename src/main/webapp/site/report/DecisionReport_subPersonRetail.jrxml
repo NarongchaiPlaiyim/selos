@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subRelatedRetail" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7d6ab299-257b-4b8e-86be-6cf40296fc0d">
-	<property name="ireport.zoom" value="4.594972986357235"/>
-	<property name="ireport.x" value="1664"/>
+	<property name="ireport.zoom" value="1.1000000000000045"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
 		<box>
@@ -58,8 +58,8 @@
 	<field name="outstanding" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[outstanding]]></fieldDescription>
 	</field>
-	<field name="existingCreditTierDetailViewList" class="java.util.List">
-		<fieldDescription><![CDATA[existingCreditTierDetailViewList]]></fieldDescription>
+	<field name="existingCreditTierDetailReports" class="java.util.List">
+		<fieldDescription><![CDATA[existingCreditTierDetailReports]]></fieldDescription>
 	</field>
 	<field name="count" class="java.lang.Integer">
 		<fieldDescription><![CDATA[count]]></fieldDescription>
@@ -206,9 +206,7 @@
 			</textField>
 			<subreport>
 				<reportElement uuid="716c6077-ac80-4207-bc99-6dc936d3d853" stretchType="RelativeToTallestObject" x="413" y="0" width="142" height="16" isRemoveLineWhenBlank="true"/>
-				<dataSourceExpression><![CDATA[$F{existingCreditTierDetailViewList}.isEmpty() ?
-new net.sf.jasperreports.engine.JREmptyDataSource() :
-new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailViewList})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailReports})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subPersonRetail_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
