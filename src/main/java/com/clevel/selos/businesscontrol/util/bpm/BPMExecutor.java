@@ -664,8 +664,8 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void requestAppraisal(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName) throws Exception{
-        boolean success = bpmInterface.createParallelCase(appNumber, borrowerName, productGroup, requestType, bdmUserName);
+    public void requestAppraisal(String appNumber, String refAppNumber, String borrowerName, String productGroup, int requestType, String bdmUserName) throws Exception{
+        boolean success = bpmInterface.createParallelCase(appNumber, refAppNumber, borrowerName, productGroup, requestType, bdmUserName);
         if(!success){
             log.debug("create workcase appraisal item failed.");
             throw new Exception("exception while launch new case for appraisal");
@@ -673,15 +673,21 @@ public class BPMExecutor implements Serializable {
     }
 
     //Step after customerAcceptance
-    public void requestAppraisal(String queueName, String wobNumber, String aadAdminUserName, long actionCode) throws Exception{
+    public void requestAppraisal(String queueName, String wobNumber, long actionCode, String remark, String reason) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(!Util.isNull(action)){
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            if(!Util.isEmpty(aadAdminUserName)){
-                fields.put("AADAdminUserName", aadAdminUserName);
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
             }
+
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
             log.debug("dispatch case for [Submit AAD Committee]...,");
 
             execute(queueName, wobNumber, fields);
@@ -794,15 +800,13 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitPendingDecision(String queueName, String wobNumber, String remark, String reason, long actionCode) throws Exception{
+    public void submitPendingDecision(String queueName, String wobNumber, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
 
         if(!Util.isNull(action)){
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("Reason", reason);
-            fields.put("Remarks", remark);
 
             log.debug("dispatch case for [Submit Pending Decision Pre-Approve]...,");
 

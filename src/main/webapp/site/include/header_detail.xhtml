@@ -500,6 +500,7 @@
                          rendered="#{headerController.checkButton('Request for Price Reduction')}"
                          onclick="PF('confirmRequestPriceReduction').show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request for Price Reduction" styleClass="left"
+                             closeOnEscape="false" closable="false"
                              icon="ui-icon-alert"
                              widgetVar="confirmRequestPriceReduction" global="false" showEffect="fade"
                              rendered="#{headerController.checkButton('Request for Price Reduction')}">
@@ -976,7 +977,7 @@
     <p:dialog id="reqAppr_BDMDialog" widgetVar="reqAppr_BDMDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="240" closable="false">
-        <ui:include src="/site/dialog/submitReqApprDialog.xhtml"/>
+        <ui:include src="/site/dialog/submitReqApprCustAcceptDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

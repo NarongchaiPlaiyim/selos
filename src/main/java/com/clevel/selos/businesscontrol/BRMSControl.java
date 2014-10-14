@@ -229,8 +229,16 @@ public class BRMSControl extends BusinessControl {
             if(newCreditDetail.getRequestType() == RequestTypes.NEW.value()){
                 accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
-                if(!newCreditDetail.getProductProgram().isBa())
-                    totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                if(!newCreditDetail.getProductProgram().isBa()) {
+                    if(_proposeType.equals(ProposeType.A)){
+                        if(newCreditDetail.getUwDecision() == DecisionType.APPROVED) {
+                            totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                        }
+                    }else {
+                        totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
+                    }
+
+                }
             }
         }
 
@@ -1188,11 +1196,23 @@ public class BRMSControl extends BusinessControl {
         accountStmtInfo.setAvgSwingPercent(bankStatement.getAvgSwingPercent());
         accountStmtInfo.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
         accountStmtInfo.setAvgGrossInflowPerLimit(bankStatement.getAvgGrossInflowPerLimit());
-        accountStmtInfo.setTotalTransaction(bankStatement.getTotalTransaction());
+        BigDecimal minTransaction = BigDecimal.ZERO;
+        if(bankStatement.getBankStatementDetailList() != null && bankStatement.getBankStatementDetailList().size() > 0) {
+            int tmpMinTransaction = 9999999;
+            for (BankStatementDetail bankDetail : bankStatement.getBankStatementDetailList()){
+                if(bankDetail.getTotalTransaction() < tmpMinTransaction){
+                    tmpMinTransaction = bankDetail.getTotalTransaction();
+                }
+            }
+            minTransaction = new BigDecimal(tmpMinTransaction);
+        }
+        accountStmtInfo.setTotalTransaction(minTransaction);
         accountStmtInfo.setMainAccount(getRadioBoolean(bankStatement.getMainAccount()));
         accountStmtInfo.setHighestInflow(toBoolean(bankStatement.getHighestInflow()));
         accountStmtInfo.setTmb(toBoolean(bankStatement.getTMB()));
         accountStmtInfo.setNotCountIncome(isActive(bankStatement.getNotCountIncome()));
+        accountStmtInfo.setOverLimitDays(bankStatement.getOverLimitDays());
+        accountStmtInfo.setCheckReturn(bankStatement.getChequeReturn());
         logger.debug("transform Result {}", accountStmtInfo);
         return accountStmtInfo;
     }
@@ -1355,6 +1375,7 @@ public class BRMSControl extends BusinessControl {
         customerInfo.setCsiFullyMatchCode(warningFullMatchList);
         customerInfo.setCsiSomeMatchCode(warningSomeMatchList);
         customerInfo.setQualitativeClass("P");      //Default for PreScreen
+        customerInfo.setKycLevel(customer.getKycLevel() != null ? customer.getKycLevel().getKycLevel() : 0);
 
             /*Start setting TMB Account for each customer*/
         List<CustomerOblAccountInfo> oblAccountInfoList = customerOblAccountInfoDAO.findByCustomerId(customer.getId());
@@ -1365,7 +1386,16 @@ public class BRMSControl extends BusinessControl {
             }
         }
         customerInfo.setTmbAccountInfoList(tmbAccountInfoList);
-        customerInfo.setCreditWorthiness(customer.getWorthiness()==3? "Y":"N");
+        if(customer.getWorthiness() == 0){
+            customerInfo.setCreditWorthiness("NA");
+        }else if(customer.getWorthiness() == 3){
+            customerInfo.setCreditWorthiness("P");
+        }else if(customer.getWorthiness() == 4){
+            customerInfo.setCreditWorthiness("F");
+        }else if(customer.getWorthiness() == 5){
+            customerInfo.setCreditWorthiness("NA");
+        }
+
         return customerInfo;
     }
 
@@ -1428,15 +1458,19 @@ public class BRMSControl extends BusinessControl {
 
         BRMSAccountRequested accountRequested = new BRMSAccountRequested();
         accountRequested.setCreditDetailId(String.valueOf(newCreditDetail.getId()));
+
         if(newCreditDetail.getProductProgram() != null)
             accountRequested.setProductProgram(newCreditDetail.getProductProgram().getBrmsCode());
+
         if(newCreditDetail.getCreditType() != null)
             accountRequested.setCreditType(newCreditDetail.getCreditType().getBrmsCode());
+
         if(newCreditDetail.getUwDecision() == DecisionType.REJECTED){
             accountRequested.setLimit(BigDecimal.ZERO);
         }else {
             accountRequested.setLimit(newCreditDetail.getLimit());
         }
+
         if(newCreditDetail.getProposeCreditInfoTierDetailList() != null){
             List<ProposeCreditInfoTierDetail> creditTierDetailList = newCreditDetail.getProposeCreditInfoTierDetailList();
             if(creditTierDetailList.size() > 0){

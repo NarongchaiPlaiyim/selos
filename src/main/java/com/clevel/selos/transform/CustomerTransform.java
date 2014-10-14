@@ -13,6 +13,8 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -29,6 +31,9 @@ public class CustomerTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     private CustomerCSITransform customerCSITransform;
@@ -416,7 +421,7 @@ public class CustomerTransform extends Transform {
         //for show jurLv
         if(customer.getIsCommittee() == 1){
             Customer cusCommittee = customerDAO.findById(customer.getJuristicId());
-            if(customer.getReference() != null){
+            if(customer.getReference() != null && cusCommittee != null) {
                 customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
             }
         } else {
@@ -427,12 +432,12 @@ public class CustomerTransform extends Transform {
         if(customer.getIsSpouse() == 1){ // is spouse
             Customer mainCus = customerDAO.findMainCustomerBySpouseId(customer.getId());
             if(customer.getReference() != null && mainCus != null){
-                customerInfoView.setIndLv(customer.getReference().getDescription()+" of "+mainCus.getNameTh()+" "+mainCus.getLastNameTh());
+                customerInfoView.setIndLv(msg.get("app.custInfoSummary.indLv") + " " + customerInfoView.getFirstNameTh() + " " + customerInfoView.getLastNameTh());
             }
             if(mainCus != null && mainCus.getIsCommittee() == 1){ // is customer from spouse is committee
-                Customer mainJur = customerDAO.findById(mainCus.getJuristicId());
-                if(mainCus.getReference() != null && mainJur != null){
-                    customerInfoView.setJurLv(mainCus.getReference().getDescription()+" of "+mainJur.getNameTh());
+                Customer cusCommittee = customerDAO.findById(mainCus.getJuristicId());
+                if(customer.getReference() != null && cusCommittee != null){
+                    customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
                 }
             }
         } else {
