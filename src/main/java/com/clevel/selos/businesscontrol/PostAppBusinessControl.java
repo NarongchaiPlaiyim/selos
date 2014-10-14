@@ -614,8 +614,8 @@ public class PostAppBusinessControl extends BusinessControl {
 			model.setCreateBy(user);
 			model.setCreateDate(currDate);
 			model.setWorkCase(workCase);
-		} 
-		
+		}
+        model.setType(type);
 		model.setStatus(status);
 		model.setDate(currDate);
 		if (PerfectReviewStatus.COMPLETE.equals(status))
