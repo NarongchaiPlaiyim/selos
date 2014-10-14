@@ -498,9 +498,12 @@ public class BankStmtControl extends BusinessControl {
             long atId = 0;
 
             for(BankStmtView bankStmtView : bankStmtViewList) {
+                //Clear
+                bankStmtView.setMainAccount(RadioValue.NO.value());
+                bankStmtView.setHighestInflow("");
+
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
-                    bankStmtView.setMainAccount(RadioValue.NO.value());
                     break;
                 }
 
@@ -595,16 +598,15 @@ public class BankStmtControl extends BusinessControl {
 
     public void updateMainAccAndHighestInflow(BankStmtSummaryView bankStmtSummaryView) {
         log.debug("calculateMainAccount()");
-        BigDecimal tmbLimit = BigDecimal.ZERO;
+        BankStmtView tmb = new BankStmtView();
         boolean isHaveMainTMB = false;
         if(!Util.isNull(bankStmtSummaryView.getTmbBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getTmbBankStmtViewList());
             for(BankStmtView bankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
                 if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
-                    tmbLimit = bankStmtView.getNetIncomeLastSix();
+                    tmb = bankStmtView;
                     isHaveMainTMB = true;
-                    log.debug("TMB Limit :: {}", tmbLimit);
-                    log.debug("Have Main TMB :: {}", isHaveMainTMB);
+                    break;
                 }
             }
         }
@@ -614,9 +616,13 @@ public class BankStmtControl extends BusinessControl {
                 for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
                     if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
                         log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
-                        if(tmbLimit.compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
+                        if(tmb.getNetIncomeLastSix().compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
                             log.debug("TMB Compare OTH > 0");
                             bankStmtView.setMainAccount(RadioValue.NO.value());
+                            tmb.setHighestInflow("Y");
+                            break;
+                        } else {
+                            bankStmtView.setHighestInflow("Y");
                         }
                     }
                 }
