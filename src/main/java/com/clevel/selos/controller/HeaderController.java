@@ -1765,12 +1765,12 @@ public class HeaderController extends BaseController {
         }
 
     }
-    public void onRequestAppraisalCustomerAccepted(){
+    public void onSubmitRequestAppraisalCustomerAccepted(){
         log.debug("onRequestAppraisal by BDM ( after customer acceptance )");
         _loadSessionVariable();
 
         try {
-            fullApplicationControl.requestAppraisal(workCaseId, queueName, wobNumber, aadAdminId);
+            fullApplicationControl.requestAppraisal(queueName, wobNumber, workCaseId, submitRemark, slaReasonId, slaRemark);
             messageHeader = "Information.";
             message = "Submit case success.";
             RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");

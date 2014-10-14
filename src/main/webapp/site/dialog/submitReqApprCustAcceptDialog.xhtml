@@ -1,0 +1,76 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:panel id="submitCADlgPanel" styleClass="panel-dialog">
+        <p:panel id="submitCA_Remark" styleClass="panel">
+            <table class="content_table_form">
+                <tr>
+                    <td class="title left top" width="120px">Remark :</td>
+                    <td>
+                        <p:inputTextarea value="#{headerController.submitRemark}" autoResize="false"
+                                         cols="35" rows="5">
+                        </p:inputTextarea>
+                    </td>
+                </tr>
+            </table>
+        </p:panel>
+        <p:panel id="submitCA_SLA" rendered="#{headerController.submitOverSLA > 0}" styleClass="panel">
+            <table class="content_table_form">
+                <tr>
+                    <td colspan="2"><div class="separate"></div></td>
+                </tr>
+                <tr>
+                    <td class="title left" width="120px">Reason for over SLA :</td>
+                    <td>
+                        <p:selectOneMenu id="submitFullAppOverSlaReason" style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
+                                         value="#{headerController.slaReasonId}"
+                                         required="#{not empty param[btnSubmitFullApplication.clientId]}">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{headerController.slaReasonList}"
+                                           var="overReasonItem"
+                                           itemLabel="#{overReasonItem.code} - #{overReasonItem.description}"
+                                           itemValue="#{overReasonItem.id}"/>
+                            <p:ajax event="change" process="@form" update=":frmMain:submitFullAppOverSlaReason"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title left" width="120px">SLA Remark :</td>
+                    <td>
+                        <p:inputTextarea value="#{headerController.slaRemark}"
+                                         autoResize="false"
+                                         cols="35"
+                                         rows="5">
+                        </p:inputTextarea>
+                    </td>
+                </tr>
+            </table>
+        </p:panel>
+        <p:panel id="submitCA_Button" styleClass="panel" style="text-align: center;">
+            <p:commandButton id="dlgSubmitCABtn"
+                             binding="#{btnSubmitReqAppraisal}"
+                             value="#{msg.get('app.button.submit')}"
+                             styleClass="small"
+                             actionListener="#{headerController.onSubmitRequestAppraisalCustomerAccepted}"
+                             oncomplete="handleDialogRequest(xhr, status, args, 'requestParallelAppraisalDlg')"
+                             process="@form"
+                             update=":frmMain:submitCADlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
+            <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
+                             styleClass="small" onclick="PF('requestParallelAppraisalDlg').hide(); PF('blockUI').hide()"/>
+        </p:panel>
+        <p:blockUI widgetVar="blocksubmitCADlgPanel" block="submitCADlgPanel"
+                   trigger=":frmMain:dlgSubmitCABtn">
+            <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </p:panel>
+<p:blockUI block="submitReqAppr_BDMDlgPanel"
+           trigger=":frmMain:dlgSubmitReqAppr_BDMBtn">
+    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+</ui:composition>
