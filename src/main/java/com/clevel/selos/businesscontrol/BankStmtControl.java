@@ -408,7 +408,7 @@ public class BankStmtControl extends BusinessControl {
         }
     }
 
-    public void calculateHighestInflow(BankStmtSummaryView bankStmtSummaryView){
+    /*public void calculateHighestInflow(BankStmtSummaryView bankStmtSummaryView){
         if(!Util.isNull(bankStmtSummaryView)){
             // find highest inflow for TMB bank
             BigDecimal maxTMBAvgGrossInflowPerLimit = BigDecimal.ZERO;
@@ -489,7 +489,7 @@ public class BankStmtControl extends BusinessControl {
         }
 
 
-    }
+    }*/
 
     public void calculateMainAccount(List<BankStmtView> bankStmtViewList) {
         if (!Util.isNull(bankStmtViewList)) {
@@ -628,7 +628,7 @@ public class BankStmtControl extends BusinessControl {
                 }
             }
         }
-        calculateHighestInflow(bankStmtSummaryView);
+//        calculateHighestInflow(bankStmtSummaryView);
     }
 
     public void bankStmtDetailCalculation(BankStmtView bankStmtView, int seasonalFlag) {
