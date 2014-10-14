@@ -366,7 +366,11 @@ public class PESearch implements Serializable
                         FacesUtil.redirect("/site/prescreenMaker.jsf");
                     }
                 }else{
-                    FacesUtil.redirect(landingPage);
+                    if(stageId == 201) {
+                        FacesUtil.redirect("/site/basicInfo.jsf");
+                    }else{
+                        FacesUtil.redirect(landingPage);
+                    }
                 }
                 return;
             } else {

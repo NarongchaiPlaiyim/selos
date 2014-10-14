@@ -794,15 +794,13 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitPendingDecision(String queueName, String wobNumber, String remark, String reason, long actionCode) throws Exception{
+    public void submitPendingDecision(String queueName, String wobNumber, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
 
         if(!Util.isNull(action)){
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
-            fields.put("Reason", reason);
-            fields.put("Remarks", remark);
 
             log.debug("dispatch case for [Submit Pending Decision Pre-Approve]...,");
 

@@ -1684,22 +1684,17 @@ public class HeaderController extends BaseController {
     }
 
     public void onSubmitPendingDecision(){
-        boolean complete = false;
-        if(!Util.isNull(pendingReasonId) && !Util.isZero(pendingReasonId)){
-            try{
-                complete = true;
-                fullApplicationControl.submitPendingDecision(queueName, wobNumber, pendingRemark, pendingReasonId);
-                messageHeader = "Information.";
-                message = "Submit case success.";
-                showMessageBox();
-            } catch (Exception ex) {
-                log.error("Exception while submit pending decision, ", ex);
-                messageHeader = "Exception.";
-                message = Util.getMessageException(ex);
-                showMessageBox();
-            }
+        try{
+            fullApplicationControl.submitPendingDecision(queueName, wobNumber);
+            messageHeader = "Information.";
+            message = "Submit case success.";
+            showMessageRedirect();
+        } catch (Exception ex) {
+            log.error("Exception while submit pending decision, ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            showMessageBox();
         }
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
     public void onRequestPriceReduction(){
@@ -1727,21 +1722,19 @@ public class HeaderController extends BaseController {
 
     public void onOpenCancelRequestPriceReduction(){
         log.debug("onOpenCancelRequestPriceReduction");
-        cancelReason = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
-        reasonId = 0;
+        reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_REQUEST_PRICE_REDUCTION.getVal());
+        cancelReasonId = 0;
         cancelRemark = "";
         RequestContext.getCurrentInstance().execute("cancelRequestPriceReduceDlg.show()");
     }
 
     public void onCancelRequestPriceReduction(){
         log.debug("onCancelRequestPriceReduction");
-        HttpSession session = FacesUtil.getSession(false);
-        String queueName = Util.parseString(session.getAttribute("queueName"), "");
-        String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+        _loadSessionVariable();
 
-        if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
+        if(!Util.isNull(cancelReasonId) && !Util.isZero(cancelReasonId)){
             try{
-                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, cancelPriceReduceReasonId, cancelPriceReduceRemark);
+                fullApplicationControl.cancelRequestPriceReduction(queueName, wobNumber, cancelReasonId, cancelRemark);
                 messageHeader = "Information.";
                 message = "Cancel Request Price Reduction success.";
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -2831,6 +2824,7 @@ public class HeaderController extends BaseController {
     public void onSubmitParallelRequestAppraisal(){
         try{
             fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, stepId);
+            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
             messageHeader = "Information.";
             message = "Request for Appraisal complete.";
             showMessageRedirect();

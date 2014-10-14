@@ -81,9 +81,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
     private long workCaseId;
     private long statusId;
-//    private final String minus = " ";
+    private final String SPACE = " ";
     private WorkCase workCase;
     private String minus = "-";
+    private String add = "+";
     private char enter = '\n';
 
     @Inject
@@ -135,11 +136,22 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             for (CustomerInfoView view : customerInfoViewList){
                 BorrowerExsumReport borrowerExsumReport = new BorrowerExsumReport();
                 borrowerExsumReport.setNo(count++);
-                borrowerExsumReport.setTitleTh(!Util.isNull(view.getTitleTh()) ? Util.checkNullString(view.getTitleTh().getTitleTh()) : minus);
-                borrowerExsumReport.setFirstNameTh(Util.checkNullString(view.getFirstNameTh()));
-                borrowerExsumReport.setLastNameTh(Util.checkNullString(view.getLastNameTh()));
-                borrowerExsumReport.setCitizenId(Util.checkNullString(view.getCitizenId()));
-                borrowerExsumReport.setRegistrationId(Util.checkNullString(view.getRegistrationId()));
+
+                StringBuilder customerName = new StringBuilder();
+                if (!Util.isNull(view.getTitleTh())){
+                    customerName = customerName.append(Util.checkNullString(view.getTitleTh().getTitleTh()));
+                }
+
+                customerName = customerName.append(Util.checkNullString(view.getFirstNameTh())).append(" ").append(Util.checkNullString(view.getLastNameTh()));
+
+                borrowerExsumReport.setCustomerName(Util.checkNullString(customerName.toString()));
+
+                if (!Util.isNull(view.getCitizenId())){
+                    borrowerExsumReport.setCitizenId(Util.checkNullString(view.getCitizenId()));
+                } else {
+                    borrowerExsumReport.setCitizenId(Util.checkNullString(view.getRegistrationId()));
+                }
+
                 borrowerExsumReport.setTmbCustomerId(Util.checkNullString(view.getTmbCustomerId()));
                 borrowerExsumReport.setRelation(!Util.isNull(view.getRelation()) ? Util.checkNullString(view.getRelation().getDescription()) : minus);
                 if(view.getCollateralOwner() == 2){
@@ -552,7 +564,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 StringBuilder account = new StringBuilder();
                 account = account.append(Util.checkNullString(detailView.getAccountName())).append(enter);
                 account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
-                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountSuf())).append(enter);
 
                 if (!Util.isNull(detailView.getExistAccountStatusView())){
                     account = account.append("Acc Status : ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
@@ -593,13 +605,17 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
                             finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(minus);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
 
-                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("+").append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest()) && !Util.isNull(existingCreditTierDetailView.getFinalInterest())){
+                            if ((existingCreditTierDetailView.getFinalInterest()).compareTo(BigDecimal.ZERO) > 0){
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(add).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            } else {
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            }
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("").append(enter);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(enter);
                         }
                         existingCreditTierDetailReport.setFinalBasePriceAndInterest(finalBasePriceAndInterest.toString());
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
@@ -678,7 +694,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 StringBuilder account = new StringBuilder();
                 account = account.append(Util.checkNullString(detailView.getAccountName())).append(enter);
                 account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
-                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountSuf())).append(enter);
 
                 if (!Util.isNull(detailView.getExistAccountStatusView())){
                     account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
@@ -716,15 +732,19 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         StringBuilder finalBasePriceAndInterest = new StringBuilder();
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName())).append("+");
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(minus);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
 
-                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("+").append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest()) && !Util.isNull(existingCreditTierDetailView.getFinalInterest())){
+                            if ((existingCreditTierDetailView.getFinalInterest()).compareTo(BigDecimal.ZERO) > 0){
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(add).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            } else {
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            }
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("").append(enter);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(enter);
                         }
                         existingCreditTierDetailReport.setFinalBasePriceAndInterest(finalBasePriceAndInterest.toString());
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
@@ -760,7 +780,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 StringBuilder account = new StringBuilder();
                 account = account.append(Util.checkNullString(detailView.getAccountName())).append(enter);
                 account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
-                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountSuf())).append(enter);
 
                 if(!Util.isNull(detailView.getExistAccountStatusView())){
                     account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
@@ -798,15 +818,19 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         StringBuilder finalBasePriceAndInterest = new StringBuilder();
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName())).append("+");
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(minus);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
 
-                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("+").append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest()) && !Util.isNull(existingCreditTierDetailView.getFinalInterest())){
+                            if ((existingCreditTierDetailView.getFinalInterest()).compareTo(BigDecimal.ZERO) > 0){
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(add).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            } else {
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            }
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("").append(enter);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(enter);
                         }
                         existingCreditTierDetailReport.setFinalBasePriceAndInterest(finalBasePriceAndInterest.toString());
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
@@ -861,7 +885,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 StringBuilder account = new StringBuilder();
                 account = account.append(Util.checkNullString(detailView.getAccountName())).append(enter);
                 account = account.append("Acc No.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
-                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountNumber())).append(enter);
+                account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountSuf())).append(enter);
 
                 if (!Util.isNull(detailView.getExistAccountStatusView())){
                     account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
@@ -900,15 +924,19 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         StringBuilder finalBasePriceAndInterest = new StringBuilder();
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName())).append("+");
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(minus);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
 
-                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("+").append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest()) && !Util.isNull(existingCreditTierDetailView.getFinalInterest())){
+                            if ((existingCreditTierDetailView.getFinalInterest()).compareTo(BigDecimal.ZERO) > 0){
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(add).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            } else {
+                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
+                            }
                         } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append("").append(enter);
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(enter);
                         }
                         existingCreditTierDetailReport.setFinalBasePriceAndInterest(finalBasePriceAndInterest.toString());
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
@@ -964,8 +992,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                          creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getAccountName())).append(enter);
                          creditType = creditType.append("Acc No.: ").append(Util.checkNullString(existingCreditTypeDetailView.getAccountNumber())).append(enter);
                          creditType = creditType.append("Suf.: ").append(Util.checkNullString(existingCreditTypeDetailView.getAccountSuf())).append(enter);
-                         creditType = creditType.append("Suf.: ").append(Util.checkNullString(existingCreditTypeDetailView.getProductProgram())).append(enter);
-                         creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getCreditFacility())).append("  ")
+                         creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getProductProgram())).append(enter);
+                         creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getCreditFacility())).append(SPACE)
                                  .append(Util.formatNumber(Util.convertNullToZERO(existingCreditTypeDetailView.getLimit()))).append(enter);
 
                          existingCreditTypeDetailReport.setCreditType(creditType.toString());
@@ -1028,8 +1056,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getAccountName())).append(enter);
                             creditType = creditType.append("Acc No.: ").append(Util.checkNullString(existingCreditTypeDetailView.getAccountNumber())).append(enter);
                             creditType = creditType.append("Suf.: ").append(Util.checkNullString(existingCreditTypeDetailView.getAccountSuf())).append(enter);
-                            creditType = creditType.append("Suf.: ").append(Util.checkNullString(existingCreditTypeDetailView.getProductProgram())).append(enter);
-                            creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getCreditFacility())).append("  ")
+                            creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getProductProgram())).append(enter);
+                            creditType = creditType.append(Util.checkNullString(existingCreditTypeDetailView.getCreditFacility())).append(SPACE)
                                     .append(Util.formatNumber(Util.convertNullToZERO(existingCreditTypeDetailView.getLimit()))).append(enter);
 
                             existingCreditTypeDetailReport.setCreditType(creditType.toString());
@@ -1194,7 +1222,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : minus).append(enter);
                 builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append(enter);
                 builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
-                        Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(minus);
+                        Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(SPACE);
                 builder = builder.append("Hold Amount : ").append(Util.formatNumber(Util.convertNullToZERO(detailView.getHoldLimitAmount())));
 
                 proposedView.setProposedDetail(builder.toString());
@@ -1238,9 +1266,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedView.setCount(count++);
 
                 if (!Util.isNull(detailView.getUwDecision())){
-                    if (detailView.getUwDecision() == DecisionType.APPROVED){
+                    if ((DecisionType.APPROVED.equals(detailView.getUwDecision()))){
                         approvedView.setUwDecision("APPROVED");
-                    } else  if (detailView.getUwDecision() == DecisionType.REJECTED){
+                    } else  if ((DecisionType.REJECTED).equals(detailView.getUwDecision())){
                         approvedView.setUwDecision("REJECTED");
                     } else {
                         approvedView.setUwDecision(minus);
@@ -1293,7 +1321,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : minus).append(enter);
                 builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append(enter);
                 builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
-                        Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(minus);
+                        Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(SPACE);
                 builder = builder.append("Hold Amount : ").append(Util.formatNumber(Util.convertNullToZERO(detailView.getHoldLimitAmount())));
 
                 approvedView.setProposedDetail(builder.toString());
@@ -1321,9 +1349,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 List<ProposeCreditInfoTierDetailReport> creditInfoTierDetailReportList = new ArrayList<ProposeCreditInfoTierDetailReport>();
 
-                approvedView.setPath(pathsub);
-
-                if (detailView.getUwDecision() == DecisionType.APPROVED){
+                if ((DecisionType.APPROVED).equals(detailView.getUwDecision())){
                     if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
                         for (ProposeCreditInfoTierDetailView proposeCreditInfoTierDetailView : detailView.getProposeCreditInfoTierDetailViewList()){
                             ProposeCreditInfoTierDetailReport proposeCreditInfoTierDetailReport = new ProposeCreditInfoTierDetailReport();
@@ -1336,6 +1362,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         }
                     }
 
+                    approvedView.setPath(pathsub);
                     approvedView.setCount(count++);
 
                     if (!Util.isNull(detailView.getProductProgramView())){
@@ -1344,7 +1371,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         approvedView.setProdName(minus);
                     }
 
-                    if (detailView.getUwDecision() == DecisionType.APPROVED){
+                    if ((DecisionType.APPROVED).equals(detailView.getUwDecision())){
                         approvedView.setUwDecision("APPROVED");
                     }
 
@@ -1386,7 +1413,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                             Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : minus).append(enter);
                     builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append(enter);
                     builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
-                            Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(minus);
+                            Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(SPACE);
                     builder = builder.append("Hold Amount : ").append(Util.formatNumber(Util.convertNullToZERO(detailView.getHoldLimitAmount())));
 
                     approvedView.setProposedDetail(builder.toString());
@@ -1675,9 +1702,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
                 if (!Util.isNull(view.getUwDecision())){
-                    if(view.getUwDecision() == DecisionType.APPROVED ){
+                    if((DecisionType.APPROVED ).equals(view.getUwDecision())){
                         approvedCollateralDecisionReport.setApproved("Yes");
-                    } else if (view.getUwDecision() == DecisionType.REJECTED){
+                    } else if ((DecisionType.REJECTED).equals(view.getUwDecision())){
                         approvedCollateralDecisionReport.setApproved("No");
                     } else {
                         approvedCollateralDecisionReport.setApproved(minus);
@@ -2165,9 +2192,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
 
                 if (!Util.isNull(view.getUwDecision())){
-                    if (view.getUwDecision() == DecisionType.APPROVED){
+                    if ((DecisionType.APPROVED).equals(view.getUwDecision())){
                         approvedGuarantorDecisionReport.setUwDecision("Approved");
-                    } else if (view.getUwDecision() == DecisionType.REJECTED){
+                    } else if ((DecisionType.REJECTED).equals(view.getUwDecision())){
                         approvedGuarantorDecisionReport.setUwDecision("Rejected");
                     } else {
                         approvedGuarantorDecisionReport.setUwDecision(minus);
@@ -2209,7 +2236,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                 approvedGuarantorDecisionReport.setPath(pathsub);
                 if (!Util.isNull(view.getUwDecision())){
-                    if (view.getUwDecision() == DecisionType.APPROVED) {
+                    if ((DecisionType.APPROVED).equals(view.getUwDecision())) {
                         approvedGuarantorDecisionReport.setCount(count++);
 
                         StringBuffer name = new StringBuffer();
@@ -2264,7 +2291,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         }
                         approvedGuarantorDecisionReport.setProposeCreditInfoDetailReports(proposeCreditInfoDetailReportList);
                         approvedGuarantorDecisionReport.setTotalLimitGuaranteeAmount(Util.convertNullToZERO(view.getGuaranteeAmount()));
-                        if (view.getUwDecision() == DecisionType.APPROVED){
+                        if ((DecisionType.APPROVED).equals(view.getUwDecision())){
                             approvedGuarantorDecisionReport.setUwDecision("Approved");
                         }
 
@@ -2411,9 +2438,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         }
 
         if (!Util.isNull(decisionView.getCreditCustomerType())){
-            if (decisionView.getCreditCustomerType() == CreditCustomerType.NORMAL){
+            if ((CreditCustomerType.NORMAL).equals(decisionView.getCreditCustomerType())){
                 totalDecisionReport.setCreditCusType(1);
-            } else if (decisionView.getCreditCustomerType() == CreditCustomerType.PRIME){
+            } else if ((CreditCustomerType.PRIME).equals(decisionView.getCreditCustomerType())){
                 totalDecisionReport.setCreditCusType(2);
             } else {
                 totalDecisionReport.setCreditCusType(0);
