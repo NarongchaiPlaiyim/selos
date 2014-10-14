@@ -9,6 +9,8 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StepTransform extends Transform {
     @Inject
@@ -105,5 +107,17 @@ public class StepTransform extends Transform {
         stepView.setName(selectItem.getLabel());
         stepView.setDescription(selectItem.getDescription());
         return stepView;
+    }
+
+    public Map<Long, StepView> transformToCache(List<Step> stepList) {
+        if(stepList == null || stepList.size() == 0)
+            return null;
+
+        Map<Long, StepView> _tmpMap = new ConcurrentHashMap<Long, StepView>();
+        for(Step step : stepList){
+            StepView stepView = transformToView(step);
+            _tmpMap.put(stepView.getId(), stepView);
+        }
+        return _tmpMap;
     }
 }

@@ -7,6 +7,8 @@ import com.clevel.selos.model.view.StageView;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StageTransform extends Transform {
     @Inject
@@ -65,5 +67,17 @@ public class StageTransform extends Transform {
             stageViewList.add(transformToView(stage));
         }
         return stageViewList;
+    }
+
+    public Map<Integer, StageView> transformToCache(List<Stage> stageList) {
+        if(stageList == null || stageList.size() == 0)
+            return null;
+
+        Map<Integer, StageView> _tmpMap = new ConcurrentHashMap<Integer, StageView>();
+        for(Stage stage : stageList){
+            StageView stageView = transformToView(stage);
+            _tmpMap.put(stageView.getId(), stageView);
+        }
+        return _tmpMap;
     }
 }

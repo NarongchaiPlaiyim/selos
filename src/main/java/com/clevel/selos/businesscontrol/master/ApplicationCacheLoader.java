@@ -117,6 +117,12 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private CustomerEntityDAO customerEntityDAO;
     @Inject private CustomerEntityTransform customerEntityTransform;
 
+    @Inject private StageDAO stageDAO;
+    @Inject private StageTransform stageTransform;
+
+    @Inject private StepDAO stepDAO;
+    @Inject private StepTransform stepTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -218,6 +224,12 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<CustomerEntity> customerEntityList = customerEntityDAO.findAll();
         indexHash.put(CustomerEntity.class.getName(), customerEntityTransform.transformToCache(customerEntityList));
+
+        List<Stage> stageList = stageDAO.findAll();
+        indexHash.put(Stage.class.getName(), stageTransform.transformToCache(stageList));
+
+        List<Step> stepList = stepDAO.findAll();
+        indexHash.put(Step.class.getName(), stepTransform.transformToCache(stepList));
 
         Util.listMap(indexHash);
         logger.debug("-- finished load cache DB --");
